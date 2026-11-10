@@ -6,8 +6,17 @@ export type Team = {
 };
 export type Player = {
   id: string; name: string; teamName: string; position: string; year: string;
-  minutes: number; points: number; rebounds: number; assists: number;
-  usage: number; efg: number; ts: number; bpm: number; impact: number;
+  conference?: string | null; games?: number | null; starts?: number | null;
+  minutes: number | null; points: number | null; rebounds: number | null; assists: number | null;
+  steals?: number | null; blocks?: number | null; turnovers?: number | null;
+  usage: number | null; efg: number | null; ts: number | null; bpm: number | null; impact: number | null;
+  offensiveRating?: number | null; defensiveRating?: number | null; netRating?: number | null;
+  assistsTurnoverRatio?: number | null; offensiveReboundPct?: number | null;
+  fieldGoals?: { pct?: number | null; attempted?: number | null; made?: number | null } | null;
+  twoPointFieldGoals?: { pct?: number | null; attempted?: number | null; made?: number | null } | null;
+  threePointFieldGoals?: { pct?: number | null; attempted?: number | null; made?: number | null } | null;
+  freeThrows?: { pct?: number | null; attempted?: number | null; made?: number | null } | null;
+  winShares?: { totalPer40?: number | null; total?: number | null; defensive?: number | null; offensive?: number | null } | null;
 };
 export type Game = {
   id: string; date: string; awayTeam: string; homeTeam: string;
