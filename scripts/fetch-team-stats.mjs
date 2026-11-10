@@ -67,7 +67,8 @@ const payload = {
   fetchedAt: new Date().toISOString(),
   count: teams.length,
   status: teams.length ? "available" : "empty",
-  sources: endpoints.map(([name, path]) => ({ name, endpoint: path })),\n  warnings,
+  sources: endpoints.map(([name, path]) => ({ name, endpoint: path })),
+  warnings,
   note: "Team season box-score aggregates, adjusted efficiency, SRS, and Elo are merged by provider team ID. Missing values remain null; rankings are not inferred.",
   teams,
 };
