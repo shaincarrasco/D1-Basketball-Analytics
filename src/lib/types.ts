@@ -17,6 +17,9 @@ export type Player = {
   threePointFieldGoals?: { pct?: number | null; attempted?: number | null; made?: number | null } | null;
   freeThrows?: { pct?: number | null; attempted?: number | null; made?: number | null } | null;
   winShares?: { totalPer40?: number | null; total?: number | null; defensive?: number | null; offensive?: number | null } | null;
+  fouls?: number | null;
+  freeThrowRate?: number | null;
+  sourceStats?: Record<string, unknown>;
 };
 export type Game = {
   id: string; date: string; awayTeam: string; homeTeam: string;
