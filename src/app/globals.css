@@ -100,4 +100,9 @@ html[data-theme="light"] [class*="border-[#243044]"],
 html[data-theme="light"] [class*="border-[#263448]"],
 html[data-theme="light"] [class*="border-[#29364a]"] { border-color: var(--line) !important; }
 html[data-theme="light"] .text-lime-300 { color: #315fbd !important; }
+.text-lime-300 { color: var(--accent) !important; }
+.border-lime-300, .hover\\:border-lime-300:hover, .hover\\:border-lime-300\\/60:hover { border-color: var(--accent) !important; }
+.hover\\:text-lime-300:hover { color: var(--accent) !important; }
+h1, h2, h3 { letter-spacing: -.025em; }
+
 html[data-theme="light"] .bg-[#131e2d] { background-color: #edf2f8 !important; }
