@@ -10,6 +10,7 @@ const endpoints = [
   ["adjusted", "/ratings/adjusted"],
   ["srs", "/ratings/srs"],
   ["elo", "/ratings/elo"],
+  ["gameStats", "/games/teams"],
 ];
 
 async function fetchRows(endpoint) {
@@ -17,7 +18,7 @@ async function fetchRows(endpoint) {
   const path = endpoint[1];
   const url = new URL("https://api.collegebasketballdata.com" + path);
   url.searchParams.set("season", String(season));
-  if (name === "season") url.searchParams.set("seasonType", "regular");
+  if (name === "season" || name === "gameStats") url.searchParams.set("seasonType", "regular");
   const response = await fetch(url, { headers });
   if (!response.ok) throw new Error("CBBD " + path + " request failed with HTTP " + response.status + ".");
   const rows = await response.json();
@@ -46,10 +47,11 @@ for (const result of results) {
     const current = byTeam.get(id) ?? { teamId: row.teamId ?? null, team: row.team, conference: row.conference ?? null };
     if (kind === "season") {
       Object.assign(current, row);
-      // Keep the complete season-stat response nested as well as its record fields.
-      // The leaderboard reads from teamStats; previously this was never populated.
       current.teamStats = row.teamStats ?? row;
       current.opponentStats = row.opponentStats ?? null;
+    } else if (kind === "gameStats") {
+      current.gameStats = current.gameStats ?? [];
+      current.gameStats.push(row);
     } else current[kind] = row;
     byTeam.set(id, current);
   }
@@ -77,7 +79,7 @@ const payload = {
   status: teams.length ? "available" : "empty",
   sources: endpoints.map(([name, path]) => ({ name, endpoint: path })),
   warnings,
-  note: "Team season box-score aggregates, adjusted efficiency, SRS, and Elo are merged by provider team ID. Missing values remain null; rankings are not inferred.",
+  note: "Team season aggregates, provider ratings, and game-level team box scores are merged by provider team ID. Game-level coverage is limited to rows returned by the provider (up to 3,000 games per request). Missing values remain null.",
   teams,
 };
 
