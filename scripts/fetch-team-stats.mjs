@@ -4,7 +4,7 @@ const season = 2027;
 const key = process.env.CBBD_API_KEY;
 if (!key) throw new Error("CBBD_API_KEY is missing. Add it as a GitHub Actions secret.");
 
-const headers = { Authorization: \`Bearer \${key}\`, Accept: "application/json" };
+const headers = { Authorization: "Bearer " + key, Accept: "application/json" };
 const endpoints = [
   ["season", "/stats/team/season"],
   ["adjusted", "/ratings/adjusted"],
@@ -12,21 +12,23 @@ const endpoints = [
   ["elo", "/ratings/elo"],
 ];
 
-async function fetchRows([name, path]) {
-  const url = new URL(\`https://api.collegebasketballdata.com\${path}\`);
+async function fetchRows(endpoint) {
+  const name = endpoint[0];
+  const path = endpoint[1];
+  const url = new URL("https://api.collegebasketballdata.com" + path);
   url.searchParams.set("season", String(season));
   if (name === "season") url.searchParams.set("seasonType", "regular");
   const response = await fetch(url, { headers });
-  if (!response.ok) throw new Error(\`CBBD \${path} request failed with HTTP \${response.status}.\`);
+  if (!response.ok) throw new Error("CBBD " + path + " request failed with HTTP " + response.status + ".");
   const rows = await response.json();
-  if (!Array.isArray(rows)) throw new Error(\`CBBD \${path} returned an unexpected payload.\`);
+  if (!Array.isArray(rows)) throw new Error("CBBD " + path + " returned an unexpected payload.");
   return rows;
 }
 
 const results = await Promise.all(endpoints.map(fetchRows));
 const byTeam = new Map();
 for (let index = 0; index < endpoints.length; index += 1) {
-  const [kind] = endpoints[index];
+  const kind = endpoints[index][0];
   for (const row of results[index]) {
     if (!row || typeof row.team !== "string" || !row.team.trim()) continue;
     const id = String(row.teamId ?? row.team.trim().toLowerCase());
@@ -64,4 +66,4 @@ const payload = {
 
 await mkdir("public/data", { recursive: true });
 await writeFile("public/data/team-season-2027.json", JSON.stringify(payload, null, 2) + "\n");
-console.log(\`Published \${teams.length} current-season team records for season \${season}.\`);
+console.log("Published " + teams.length + " current-season team records for season " + season + ".");
