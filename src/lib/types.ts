@@ -21,3 +21,12 @@ export type MetricDefinition = {
 export type DataStatus = {
   mode: "demo" | "live"; provider: string; updatedAt: string; note: string;
 };
+
+export type ProviderResult<T> = {
+  data: T[];
+  provider: string;
+  fetchedAt: string;
+  status: "available" | "unavailable" | "error";
+  season: number;
+  warnings: string[];
+};
