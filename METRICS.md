@@ -24,3 +24,29 @@ Game forecasts should be calibrated on historical data with time-based validatio
 
 ## Transparency
 Every chart/table should show season, date updated, provider, coverage, sample size and a tooltip or glossary definition. Null is missing, not zero. Demo fixtures must never appear as live analytics.
+
+
+## Team leaderboard coverage (2026–27)
+
+The national team leaderboard separates provider-published ratings from calculations made from season aggregates.
+
+### Provider-published ratings
+- Adjusted offensive efficiency (AdjO), adjusted defensive efficiency (AdjD), adjusted net efficiency, SRS and Elo are displayed only when the provider supplies them.
+- These are not replaced with raw efficiency calculations when missing.
+
+### Calculated from team and opponent season totals
+- Estimated possessions: FGA − offensive rebounds + turnovers + 0.475 × FTA.
+- Offensive efficiency: points / estimated possessions × 100.
+- Defensive efficiency: opponent points / opponent estimated possessions × 100.
+- Net efficiency: calculated offensive efficiency − calculated defensive efficiency.
+- eFG%: (FGM + 0.5 × 3PM) / FGA.
+- Opponent eFG% uses the same formula on opponent totals.
+- Offensive rebound rate: ORB / (ORB + opponent DRB).
+- Defensive rebound rate: DRB / (DRB + opponent ORB).
+- Turnover rate: turnovers / estimated possessions.
+- Free-throw rate: FTA / FGA.
+- Opponent versions of turnover rate, offensive rebound rate and free-throw rate.
+- Points per possession, opponent points per possession, scoring margin per game, assist-to-turnover ratio and steals per 100 estimated possessions.
+
+### Important coverage limits
+Season aggregates cannot produce reliable home/away/neutral splits, game-by-game recent form, game-to-game consistency/volatility, opponent-specific shooting splits, lineup/on-off impact or calibrated forecasts. Those require complete game-level box scores and schedules; lineup impact additionally requires substitution/play-by-play coverage. These metrics must remain unavailable until those feeds are integrated and validated. Do not label raw efficiency as adjusted efficiency, and do not invent values when source fields are absent.
