@@ -19,7 +19,11 @@ if (!refresh) {
 }
 const seasonPayload = JSON.parse(await readFile(playerPath, "utf8"));
 const conferences = [...new Set((seasonPayload.players ?? []).map((p) => p.conference).filter((v) => typeof v === "string" && v.trim()))].sort();
-if (!conferences.length) throw new Error("No conferences were found in the current-season player feed.");
+if (!conferences.length) {
+  console.log("No current-season conferences are available yet; preserving the previous shooting snapshot.");
+  if (!previous) await writeFile(snapshotPath, JSON.stringify({ provider: "College Basketball Data", season, status: "pending", fetchedAt: new Date().toISOString(), count: 0, players: [] }, null, 2) + "\\n");
+  process.exit(0);
+}
 const playersById = new Map();
 const warnings = [];
 for (const conference of conferences) {
