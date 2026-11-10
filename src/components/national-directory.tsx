@@ -24,12 +24,25 @@ export default function NationalDirectory() {
   const loadTeams = async () => {
     setStatus("loading"); setError("");
     try {
-      const response = await fetch(`${BASE}/teams?limit=500`);
-      if (!response.ok) throw new Error(`Team directory request failed (${response.status})`);
-      const json = await response.json();
-      const raw = json.sports?.[0]?.leagues?.[0]?.teams ?? json.teams ?? [];
-      const parsed = raw.map((entry: any) => entry.team ?? entry).filter((t: any) => t.id && (t.displayName || t.name));
-      if (!parsed.length) throw new Error("The provider returned no team records.");
+      const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+      let parsed: EspnTeam[] = [];
+      // Prefer the build-time snapshot: GitHub Pages cannot proxy API requests,
+      // and some browsers/networks block direct requests to ESPN.
+      try {
+        const snapshot = await fetch(`${basePath}/data/team-directory.json`, { cache: "no-store" });
+        if (snapshot.ok) {
+          const payload = await snapshot.json();
+          if (Array.isArray(payload.teams)) parsed = payload.teams;
+        }
+      } catch { /* use live provider fallback below */ }
+      if (!parsed.length) {
+        const response = await fetch(`${BASE}/teams?limit=500`);
+        if (!response.ok) throw new Error(`Team directory request failed (${response.status})`);
+        const json = await response.json();
+        const raw = json.sports?.[0]?.leagues?.[0]?.teams ?? json.teams ?? [];
+        parsed = raw.map((entry: any) => entry.team ?? entry).filter((t: any) => t.id && (t.displayName || t.name));
+      }
+      if (!parsed.length) throw new Error("The team directory snapshot and live provider both returned no team records.");
       setTeams(parsed); setStatus("ready");
     } catch (e) {
       setError(e instanceof Error ? e.message : "Could not load the team directory.");
@@ -81,7 +94,7 @@ export default function NationalDirectory() {
   </div>;
 
   return <div className="space-y-5">
-    <div className="panel flex flex-wrap items-center justify-between gap-3 p-5"><div><div className="eyebrow">National directory · men's Division I</div><h2 className="mt-2 text-2xl font-black">Every program. Every listed roster.</h2><p className="mt-1 text-xs text-slate-400">Live directory and current roster listings from ESPN.</p></div><button onClick={() => void loadTeams()} className="inline-flex items-center gap-2 rounded-lg border border-[#29364a] px-3 py-2 text-xs hover:border-lime-300"><RefreshCw size={14}/> Refresh</button></div>
+    <div className="panel flex flex-wrap items-center justify-between gap-3 p-5"><div><div className="eyebrow">National directory · men's Division I</div><h2 className="mt-2 text-2xl font-black">Every program. Every listed roster.</h2><p className="mt-1 text-xs text-slate-400">Build-refreshed national directory and live roster listings from ESPN.</p></div><button onClick={() => void loadTeams()} className="inline-flex items-center gap-2 rounded-lg border border-[#29364a] px-3 py-2 text-xs hover:border-lime-300"><RefreshCw size={14}/> Refresh</button></div>
     <div className="flex flex-wrap gap-2"><label className="flex min-w-[220px] flex-1 items-center gap-2 rounded-xl border border-[#29364a] bg-[#101827] px-3"><Search size={15} className="text-slate-500"/><input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search all teams…" className="w-full bg-transparent py-3 text-xs outline-none"/></label><select value={conference} onChange={e=>setConference(e.target.value)} className="rounded-xl border border-[#29364a] bg-[#101827] px-3 py-2 text-xs">{conferences.map(c=><option key={c}>{c}</option>)}</select></div>
     {status === "loading" && <div className="panel flex items-center gap-3 p-8 text-sm text-slate-400"><Loader2 className="animate-spin" size={18}/> Loading the national team directory…</div>}
     {status === "error" && <div className="panel p-6"><p className="text-sm text-amber-300">{error}</p><button onClick={() => void loadTeams()} className="mt-3 text-xs text-white underline">Retry directory load</button><p className="mt-3 text-xs text-slate-500">This data source may be temporarily unavailable or may block this browser request.</p></div>}
