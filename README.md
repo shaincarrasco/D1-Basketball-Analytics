@@ -4,6 +4,8 @@ An original, free-first NCAA Division I men's college basketball analytics platf
 
 ## Live demo
 
+Deployment is managed by GitHub Actions; check the repository's Actions tab for the latest build status.
+
 Once the GitHub Pages workflow completes, visit:
 
 **https://shaincarrasco.github.io/D1-Basketball-Analytics/**
