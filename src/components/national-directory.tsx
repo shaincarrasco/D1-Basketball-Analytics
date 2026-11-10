@@ -101,32 +101,85 @@ const firstNumber = (...values: unknown[]): number | null => {
   return null;
 };
 
+const statNumber = (source: Record<string, unknown> | undefined, ...paths: string[]): number | null => {
+  if (!source) return null;
+  for (const path of paths) {
+    let value: unknown = source;
+    for (const part of path.split(".")) value = isRecord(value) ? value[part] : undefined;
+    const number = finiteNumber(value);
+    if (number !== null) return number;
+  }
+  return null;
+};
+
 const teamMetric = (team: TeamSeasonRecord, key: string): number | null => {
   const games = team.games ?? 0;
   const perGame = (value: number | null): number | null => value == null || games <= 0 ? null : value / games;
+  const t = team.teamStats;
+  const o = team.opponentStats;
+  const fga = statNumber(t, "fieldGoals.attempted", "fieldGoals.attempts", "fieldGoalsAttempted");
+  const fgm = statNumber(t, "fieldGoals.made", "fieldGoals.total", "fieldGoalsMade");
+  const threeMade = statNumber(t, "threePointFieldGoals.made", "threePointFieldGoals.total", "threePointersMade");
+  const fta = statNumber(t, "freeThrows.attempted", "freeThrows.attempts", "freeThrowsAttempted");
+  const turnovers = statNumber(t, "turnovers.total", "turnovers", "totalTurnovers");
+  const orb = statNumber(t, "offensiveRebounds.total", "offensiveRebounds", "rebounds.offensive");
+  const drb = statNumber(t, "defensiveRebounds.total", "defensiveRebounds", "rebounds.defensive");
+  const points = statNumber(t, "points", "points.total", "totalPoints");
+  const oppFga = statNumber(o, "fieldGoals.attempted", "fieldGoals.attempts", "fieldGoalsAttempted");
+  const oppFgm = statNumber(o, "fieldGoals.made", "fieldGoals.total", "fieldGoalsMade");
+  const oppThreeMade = statNumber(o, "threePointFieldGoals.made", "threePointFieldGoals.total", "threePointersMade");
+  const oppFta = statNumber(o, "freeThrows.attempted", "freeThrows.attempts", "freeThrowsAttempted");
+  const oppTurnovers = statNumber(o, "turnovers.total", "turnovers", "totalTurnovers");
+  const oppOrb = statNumber(o, "offensiveRebounds.total", "offensiveRebounds", "rebounds.offensive");
+  const oppDrb = statNumber(o, "defensiveRebounds.total", "defensiveRebounds", "rebounds.defensive");
+  const oppPoints = statNumber(o, "points", "points.total", "totalPoints");
+  const poss = fga != null && turnovers != null && fta != null ? fga - (orb ?? 0) + turnovers + 0.475 * fta : null;
+  const oppPoss = oppFga != null && oppTurnovers != null && oppFta != null ? oppFga - (oppOrb ?? 0) + oppTurnovers + 0.475 * oppFta : null;
+  const ratio = (n: number | null, d: number | null, scale = 100) => n == null || d == null || d <= 0 ? null : n / d * scale;
+  const efg = ratio(fgm != null && threeMade != null ? fgm + 0.5 * threeMade : null, fga);
+  const oppEfg = ratio(oppFgm != null && oppThreeMade != null ? oppFgm + 0.5 * oppThreeMade : null, oppFga);
+  const offense = ratio(points, poss);
+  const defense = ratio(oppPoints, oppPoss);
+  const ast = statNumber(t, "assists", "assists.total");
+  const tov = turnovers;
+  const stl = statNumber(t, "steals", "steals.total");
+  const blocks = statNumber(t, "blocks", "blocks.total");
   switch (key) {
     case "wins": return team.wins ?? null;
     case "winPct": return games > 0 && team.wins != null ? team.wins / games * 100 : null;
     case "losses": return team.losses ?? null;
     case "games": return team.games ?? null;
     case "pace": return team.pace ?? null;
-    case "netRating": return team.adjusted?.netRating ?? null;
-    case "offensiveRating": return team.adjusted?.offensiveRating ?? null;
-    case "defensiveRating": return team.adjusted?.defensiveRating ?? null;
+    case "netRating": return team.adjusted?.netRating ?? (offense != null && defense != null ? offense - defense : null);
+    case "offensiveRating": return team.adjusted?.offensiveRating ?? offense;
+    case "defensiveRating": return team.adjusted?.defensiveRating ?? defense;
     case "srs": return team.srsRating ?? null;
     case "elo": return team.eloRating ?? null;
-    case "points": return perGame(nestedNumber(team.teamStats, "points", "total"));
-    case "rebounds": return perGame(nestedNumber(team.teamStats, "rebounds", "total"));
-    case "assists": return perGame(typeof team.teamStats?.assists === "number" ? team.teamStats.assists : null);
-    case "turnovers": return perGame(nestedNumber(team.teamStats, "turnovers", "total"));
-    case "steals": return perGame(typeof team.teamStats?.steals === "number" ? team.teamStats.steals : null);
-    case "blocks": return perGame(typeof team.teamStats?.blocks === "number" ? team.teamStats.blocks : null);
-    case "fgPct": return nestedNumber(team.teamStats, "fieldGoals", "pct");
-    case "threePct": return nestedNumber(team.teamStats, "threePointFieldGoals", "pct");
-    case "efgPct": return firstNumber(nestedNumber(team.teamStats, "fourFactors", "effectiveFieldGoalPct"), team.teamStats?.effectiveFieldGoalPct);
-    case "orbPct": return firstNumber(nestedNumber(team.teamStats, "fourFactors", "offensiveReboundPct"), team.teamStats?.offensiveReboundPct);
-    case "tovPct": return firstNumber(nestedNumber(team.teamStats, "fourFactors", "turnoverRatio"), team.teamStats?.turnoverRatio, team.teamStats?.turnoverPct);
-    case "ftRate": return firstNumber(nestedNumber(team.teamStats, "fourFactors", "freeThrowRate"), team.teamStats?.freeThrowRate);
+    case "points": return perGame(points);
+    case "rebounds": return perGame(statNumber(t, "rebounds.total", "rebounds"));
+    case "assists": return perGame(ast);
+    case "turnovers": return perGame(tov);
+    case "steals": return perGame(stl);
+    case "blocks": return perGame(blocks);
+    case "fgPct": return statNumber(t, "fieldGoals.pct", "fieldGoalPct");
+    case "threePct": return statNumber(t, "threePointFieldGoals.pct", "threePointPct");
+    case "efgPct": return efg;
+    case "oppEfgPct": return oppEfg;
+    case "orbPct": return ratio(orb, orb != null && oppDrb != null ? orb + oppDrb : null);
+    case "drbPct": return ratio(drb, drb != null && oppOrb != null ? drb + oppOrb : null);
+    case "tovPct": return ratio(tov, poss);
+    case "ftRate": return ratio(fta, fga, 1);
+    case "oppTovPct": return ratio(oppTurnovers, oppPoss);
+    case "oppOrbPct": return ratio(oppOrb, oppOrb != null && drb != null ? oppOrb + drb : null);
+    case "oppFtRate": return ratio(oppFta, oppFga, 1);
+    case "offensePer100": return offense;
+    case "defensePer100": return defense;
+    case "netPer100": return offense != null && defense != null ? offense - defense : null;
+    case "pointsPerPoss": return poss != null && poss > 0 && points != null ? points / poss : null;
+    case "oppPointsPerPoss": return oppPoss != null && oppPoss > 0 && oppPoints != null ? oppPoints / oppPoss : null;
+    case "margin": return points != null && oppPoints != null && games > 0 ? (points - oppPoints) / games : null;
+    case "astTov": return ast != null && tov != null && tov > 0 ? ast / tov : null;
+    case "stealRate": return ratio(stl, poss);
     default: return null;
   }
 };
@@ -292,7 +345,7 @@ export default function NationalDirectory({ players = [], teamRecords = [] }: { 
         <div className="flex flex-wrap items-center gap-2">
           <label className="text-xs text-slate-500" htmlFor="team-ranking-metric">Rank by</label>
           <select id="team-ranking-metric" value={rankingMetric} onChange={e=>{const key=e.target.value;setRankingMetric(key);setRankingDirection(["defensiveRating","turnovers","losses","tovPct"].includes(key)?"asc":"desc");}} className="rounded-lg border border-[#29364a] bg-[#101827] px-3 py-2 text-xs">
-            <option value="netRating">Adjusted net rating</option><option value="offensiveRating">Adjusted offense</option><option value="defensiveRating">Adjusted defense</option><option value="srs">SRS</option><option value="elo">Elo</option><option value="wins">Wins</option><option value="winPct">Win percentage</option><option value="losses">Losses</option><option value="points">Points per game</option><option value="rebounds">Rebounds per game</option><option value="assists">Assists per game</option><option value="turnovers">Turnovers per game</option><option value="steals">Steals per game</option><option value="blocks">Blocks per game</option><option value="pace">Pace</option><option value="fgPct">FG%</option><option value="threePct">3P%</option><option value="efgPct">eFG%</option><option value="orbPct">Offensive rebound %</option><option value="tovPct">Turnover %</option><option value="ftRate">Free-throw rate</option>
+            <option value="netRating">Adjusted net rating</option><option value="offensiveRating">Adjusted offense</option><option value="defensiveRating">Adjusted defense</option><option value="offensePer100">Offensive efficiency / 100</option><option value="defensePer100">Defensive efficiency / 100</option><option value="netPer100">Net efficiency / 100</option><option value="srs">SRS</option><option value="elo">Elo</option><option value="margin">Scoring margin / game</option><option value="pointsPerPoss">Points per possession</option><option value="oppPointsPerPoss">Opponent points per possession</option><option value="wins">Wins</option><option value="winPct">Win percentage</option><option value="losses">Losses</option><option value="points">Points per game</option><option value="rebounds">Rebounds per game</option><option value="assists">Assists per game</option><option value="astTov">Assist / turnover ratio</option><option value="turnovers">Turnovers per game</option><option value="steals">Steals per game</option><option value="stealRate">Steals per 100 possessions</option><option value="blocks">Blocks per game</option><option value="pace">Pace</option><option value="fgPct">FG%</option><option value="threePct">3P%</option><option value="efgPct">Effective FG%</option><option value="oppEfgPct">Opponent effective FG%</option><option value="orbPct">Offensive rebound %</option><option value="drbPct">Defensive rebound %</option><option value="tovPct">Turnover %</option><option value="ftRate">Free-throw rate</option><option value="oppTovPct">Opponent turnover %</option><option value="oppOrbPct">Opponent offensive rebound %</option><option value="oppFtRate">Opponent free-throw rate</option>
           </select>
           <button onClick={()=>setRankingDirection(v=>v==="asc"?"desc":"asc")} className="rounded-lg border border-[#29364a] px-3 py-2 text-xs" aria-label="Toggle ranking direction">{rankingDirection==="asc"?"↑ Lowest first":"↓ Highest first"}</button>
         </div>
