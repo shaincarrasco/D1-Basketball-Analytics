@@ -101,10 +101,10 @@ try {
     }));
   if (!teams.length) throw new Error("ESPN returned no recognizable team records");
   const directory = { provider: "ESPN", fetchedAt: new Date().toISOString(), count: teams.length, status: "available", teams };
-  await writeFile("public/data/team-directory.json", JSON.stringify(directory, null, 2) + "\\n");
+  await writeFile("public/data/team-directory.json", JSON.stringify(directory, null, 2) + "\n");
   console.log(`Published ${teams.length} team directory records.`);
 } catch (error) {
   const message = error instanceof Error ? error.message : "Unknown directory fetch error";
-  await writeFile("public/data/team-directory.json", JSON.stringify({ provider: "ESPN", fetchedAt: new Date().toISOString(), count: 0, status: "unavailable", warning: message, teams: [] }, null, 2) + "\\n");
+  await writeFile("public/data/team-directory.json", JSON.stringify({ provider: "ESPN", fetchedAt: new Date().toISOString(), count: 0, status: "unavailable", warning: message, teams: [] }, null, 2) + "\n");
   console.log("Team directory snapshot unavailable; browser fallback will remain enabled.");
 }
