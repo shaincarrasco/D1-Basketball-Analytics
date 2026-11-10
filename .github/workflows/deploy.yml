@@ -28,6 +28,10 @@ jobs:
           node-version: 20
       - name: Install dependencies
         run: npm install
+      - name: Fetch current-season team statistics and ratings
+        run: node scripts/fetch-team-stats.mjs
+        env:
+          CBBD_API_KEY: ${{ secrets.CBBD_API_KEY }}
       - name: Fetch and validate current-season player stats
         run: node scripts/fetch-player-stats.mjs
         env:
