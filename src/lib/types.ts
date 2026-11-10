@@ -62,5 +62,6 @@ export type TeamSeasonRecord = {
   } | null;
   srsRating?: number | null;
   eloRating?: number | null;
+  sosRating?: number | null;
   gameStats?: Array<Record<string, unknown>>;
 };
