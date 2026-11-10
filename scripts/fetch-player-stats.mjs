@@ -47,6 +47,8 @@ const players = rows.flatMap((row) => {
     defensiveRating: numeric(row.defensiveRating),
     netRating: numeric(row.netRating),
     porpag: numeric(row.PORPAG),
+    bpm: null,
+    impact: numeric(row.PORPAG),
     efg: numeric(row.effectiveFieldGoalPct),
     ts: numeric(row.trueShootingPct),
     assistsTurnoverRatio: numeric(row.assistsTurnoverRatio),
