@@ -23,6 +23,64 @@ const flattenStats = (input: unknown, prefix = ""): FlatStat[] => {
 const BASE = "https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball";
 
 const normalizeTeam = (value: string) => value.toLowerCase().replace(/\b(the|university|college)\b/g, "").replace(/[^a-z0-9]/g, "");
+
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  value !== null && typeof value === "object" && !Array.isArray(value);
+
+const asString = (value: unknown): string | undefined =>
+  typeof value === "string" && value.trim() ? value.trim() : undefined;
+
+const parseEspnTeam = (value: unknown): EspnTeam | null => {
+  if (!isRecord(value)) return null;
+  const record = isRecord(value.team) ? value.team : value;
+  const id = record.id;
+  const displayName = asString(record.displayName) ?? asString(record.name);
+  if ((typeof id !== "string" && typeof id !== "number") || !displayName) return null;
+  const logos = Array.isArray(record.logos) ? record.logos : [];
+  const firstLogo = logos.find(isRecord);
+  const logo = asString(record.logo) ?? (firstLogo ? asString(firstLogo.href) : undefined);
+  return {
+    id: String(id),
+    displayName,
+    name: asString(record.name),
+    abbreviation: asString(record.abbreviation),
+    location: asString(record.location),
+    logo,
+  };
+};
+
+const parseEspnAthlete = (value: unknown): EspnAthlete | null => {
+  if (!isRecord(value)) return null;
+  const id = value.id;
+  const fullName = asString(value.fullName) ?? asString(value.displayName);
+  if ((typeof id !== "string" && typeof id !== "number") || !fullName) return null;
+  const position = isRecord(value.position) ? value.position : undefined;
+  const experience = isRecord(value.experience) ? value.experience : undefined;
+  const birthPlace = isRecord(value.birthPlace) ? value.birthPlace : undefined;
+  const headshot = isRecord(value.headshot) ? value.headshot : undefined;
+  return {
+    id: String(id),
+    fullName,
+    displayName: asString(value.displayName),
+    jersey: asString(value.jersey),
+    height: asString(value.height),
+    weight: asString(value.weight),
+    age: typeof value.age === "number" ? value.age : undefined,
+    position: position ? {
+      abbreviation: asString(position.abbreviation),
+      name: asString(position.name),
+      displayName: asString(position.displayName),
+    } : undefined,
+    experience: experience ? { displayValue: asString(experience.displayValue) } : undefined,
+    birthPlace: birthPlace ? {
+      city: asString(birthPlace.city),
+      state: asString(birthPlace.state),
+      country: asString(birthPlace.country),
+    } : undefined,
+    headshot: headshot ? { href: asString(headshot.href) } : undefined,
+  };
+};
+
 const nestedNumber = (source: Record<string, unknown> | undefined, group: string, field: string): number | null => {
   const value = source?.[group];
   if (!value || typeof value !== "object") return null;
@@ -109,16 +167,23 @@ export default function NationalDirectory({ players = [], teamRecords = [] }: { 
       try {
         const snapshot = await fetch(`${basePath}/data/team-directory.json`, { cache: "no-store" });
         if (snapshot.ok) {
-          const payload = await snapshot.json();
-          if (Array.isArray(payload.teams)) parsed = payload.teams;
+          const payload: unknown = await snapshot.json();
+          if (isRecord(payload) && Array.isArray(payload.teams)) {
+            parsed = payload.teams.map(parseEspnTeam).filter((team): team is EspnTeam => team !== null);
+          }
         }
       } catch { /* use live provider fallback below */ }
       if (!parsed.length) {
         const response = await fetch(`${BASE}/teams?limit=500`);
         if (!response.ok) throw new Error(`Team directory request failed (${response.status})`);
-        const json = await response.json();
-        const raw = json.sports?.[0]?.leagues?.[0]?.teams ?? json.teams ?? [];
-        parsed = raw.map((entry: any) => entry.team ?? entry).filter((t: any) => t.id && (t.displayName || t.name));
+        const json: unknown = await response.json();
+        const root = isRecord(json) ? json : {};
+        const sports = Array.isArray(root.sports) ? root.sports : [];
+        const firstSport = isRecord(sports[0]) ? sports[0] : {};
+        const leagues = Array.isArray(firstSport.leagues) ? firstSport.leagues : [];
+        const firstLeague = isRecord(leagues[0]) ? leagues[0] : {};
+        const raw = Array.isArray(firstLeague.teams) ? firstLeague.teams : Array.isArray(root.teams) ? root.teams : [];
+        parsed = raw.map(parseEspnTeam).filter((team): team is EspnTeam => team !== null);
       }
       if (!parsed.length) throw new Error("The team directory snapshot and live provider both returned no team records.");
       setTeams(parsed); setStatus("ready");
@@ -159,10 +224,12 @@ export default function NationalDirectory({ players = [], teamRecords = [] }: { 
     try {
       const response = await fetch(`${BASE}/teams/${team.id}?enable=roster`);
       if (!response.ok) throw new Error(`Roster request failed (${response.status})`);
-      const json = await response.json();
-      const raw = json.team?.athletes ?? json.athletes ?? [];
-      const flattened = raw.flatMap((group: any) => Array.isArray(group.items) ? group.items : Array.isArray(group) ? group : [group]);
-      setRoster(flattened.filter((a: any) => a && a.id && (a.fullName || a.displayName)));
+      const json: unknown = await response.json();
+      const root = isRecord(json) ? json : {};
+      const teamRecord = isRecord(root.team) ? root.team : root;
+      const raw = Array.isArray(teamRecord.athletes) ? teamRecord.athletes : Array.isArray(root.athletes) ? root.athletes : [];
+      const flattened = raw.flatMap(group => isRecord(group) && Array.isArray(group.items) ? group.items : Array.isArray(group) ? group : [group]);
+      setRoster(flattened.map(parseEspnAthlete).filter((athlete): athlete is EspnAthlete => athlete !== null));
       setRosterStatus("ready");
     } catch (e) {
       setRosterError(e instanceof Error ? e.message : "Could not load this roster.");
