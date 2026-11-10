@@ -1,4 +1,4 @@
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 
 const season = 2027;
 const key = process.env.CBBD_API_KEY;
@@ -17,6 +17,13 @@ if (!response.ok) {
 }
 const rows = await response.json();
 if (!Array.isArray(rows)) throw new Error("CBBD returned an unexpected player stats payload.");
+
+let shootingRows = [];
+try {
+  const savedShooting = JSON.parse(await readFile("public/data/player-shooting-season-2027.json", "utf8"));
+  if (Array.isArray(savedShooting.players)) shootingRows = savedShooting.players;
+} catch { /* first build: no saved shooting snapshot yet */ }
+const shootingByAthleteId = new Map(shootingRows.map((row) => [String(row.athleteId), row]));
 
 const numeric = (value) => typeof value === "number" && Number.isFinite(value) ? value : null;
 const safeDivide = (value, games) => numeric(value) !== null && numeric(games) > 0 ? value / games : null;
@@ -62,7 +69,8 @@ const players = rows.flatMap((row) => {
     winShares: row.winShares ?? null,
     // Preserve every provider field so the player profile can expose the complete
     // source record, including fields added by CBBD in future schema revisions.
-    sourceStats: row,
+    sourceStats: { ...row, shootingProfile: shootingByAthleteId.get(String(row.athleteId)) ?? null },
+    shootingProfile: shootingByAthleteId.get(String(row.athleteId)) ?? null,
   }];
 });
 
