@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import type { Player } from "@/lib/types";
+import type { Player, TeamSeasonRecord } from "@/lib/types";
 import { ArrowLeft, ChevronRight, Search, Users, Trophy, Loader2, RefreshCw } from "lucide-react";
 
 type EspnTeam = { id: string; displayName: string; name?: string; abbreviation?: string; location?: string; logo?: string; links?: { web?: { href?: string } } };
@@ -23,8 +23,45 @@ const flattenStats = (input: unknown, prefix = ""): FlatStat[] => {
 const BASE = "https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball";
 
 const normalizeTeam = (value: string) => value.toLowerCase().replace(/\b(the|university|college)\b/g, "").replace(/[^a-z0-9]/g, "");
+const nestedNumber = (source: Record<string, unknown> | undefined, group: string, field: string): number | null => {
+  const value = source?.[group];
+  if (!value || typeof value !== "object") return null;
+  const result = (value as Record<string, unknown>)[field];
+  return typeof result === "number" && Number.isFinite(result) ? result : null;
+};
 
-export default function NationalDirectory({ players = [] }: { players?: Player[] }) {
+const teamMetric = (team: TeamSeasonRecord, key: string): number | null => {
+  const games = team.games ?? 0;
+  const perGame = (value: number | null): number | null => value == null || games <= 0 ? null : value / games;
+  switch (key) {
+    case "wins": return team.wins ?? null;
+    case "winPct": return games > 0 && team.wins != null ? team.wins / games * 100 : null;
+    case "losses": return team.losses ?? null;
+    case "games": return team.games ?? null;
+    case "pace": return team.pace ?? null;
+    case "netRating": return team.adjusted?.netRating ?? null;
+    case "offensiveRating": return team.adjusted?.offensiveRating ?? null;
+    case "defensiveRating": return team.adjusted?.defensiveRating ?? null;
+    case "srs": return team.srsRating ?? null;
+    case "elo": return team.eloRating ?? null;
+    case "points": return perGame(nestedNumber(team.teamStats, "points", "total"));
+    case "rebounds": return perGame(nestedNumber(team.teamStats, "rebounds", "total"));
+    case "assists": return perGame(typeof team.teamStats?.assists === "number" ? team.teamStats.assists : null);
+    case "turnovers": return perGame(nestedNumber(team.teamStats, "turnovers", "total"));
+    case "steals": return perGame(typeof team.teamStats?.steals === "number" ? team.teamStats.steals : null);
+    case "blocks": return perGame(typeof team.teamStats?.blocks === "number" ? team.teamStats.blocks : null);
+    case "fgPct": return nestedNumber(team.teamStats, "fieldGoals", "pct");
+    case "threePct": return nestedNumber(team.teamStats, "threePointFieldGoals", "pct");
+    case "efgPct": return nestedNumber(team.teamStats, "fourFactors", "effectiveFieldGoalPct");
+    case "orbPct": return nestedNumber(team.teamStats, "fourFactors", "offensiveReboundPct");
+    case "tovPct": return nestedNumber(team.teamStats, "fourFactors", "turnoverRatio");
+    case "ftRate": return nestedNumber(team.teamStats, "fourFactors", "freeThrowRate");
+    default: return null;
+  }
+};
+
+
+export default function NationalDirectory({ players = [], teamRecords = [] }: { players?: Player[]; teamRecords?: TeamSeasonRecord[] }) {
   const [teams, setTeams] = useState<EspnTeam[]>([]);
   const [status, setStatus] = useState<DirectoryState>("loading");
   const [error, setError] = useState("");
@@ -40,6 +77,8 @@ export default function NationalDirectory({ players = [] }: { players?: Player[]
   const [directoryDirection, setDirectoryDirection] = useState<"asc" | "desc">("asc");
   const [statsSort, setStatsSort] = useState<keyof Player>("points");
   const [statsDirection, setStatsDirection] = useState<"asc" | "desc">("desc");
+  const [rankingMetric, setRankingMetric] = useState("netRating");
+  const [rankingDirection, setRankingDirection] = useState<"asc" | "desc">("desc");
   const teamStats = useMemo(() => {
     if (!selected) return [];
     const candidates = [selected.name, selected.displayName].filter(Boolean).map((v) => normalizeTeam(v as string));
@@ -101,6 +140,13 @@ export default function NationalDirectory({ players = [] }: { players?: Player[]
     return directoryDirection === "asc" ? comparison : -comparison;
   }), [teams, query, conference, directorySort, directoryDirection]);
 
+  const rankedRecords = useMemo(() => [...teamRecords].sort((a, b) => {
+    const av = teamMetric(a, rankingMetric);
+    const bv = teamMetric(b, rankingMetric);
+    if (av == null || bv == null) return av == null ? (bv == null ? 0 : 1) : -1;
+    return rankingDirection === "asc" ? av - bv : bv - av;
+  }), [teamRecords, rankingMetric, rankingDirection]);
+
   const openTeam = async (team: EspnTeam) => {
     setSelected(team); setPlayer(null); setRoster([]); setRosterStatus("loading"); setRosterError("");
     try {
@@ -152,6 +198,20 @@ export default function NationalDirectory({ players = [] }: { players?: Player[]
     <div className="flex flex-wrap gap-2"><label className="flex min-w-[220px] flex-1 items-center gap-2 rounded-xl border border-[#29364a] bg-[#101827] px-3"><Search size={15} className="text-slate-500"/><input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search all teams…" className="w-full bg-transparent py-3 text-xs outline-none"/></label><label className="flex items-center gap-2 rounded-xl border border-[#29364a] bg-[#101827] px-3 text-xs text-slate-500">Sort<select value={directorySort} onChange={e=>setDirectorySort(e.target.value as "name"|"location")} className="bg-transparent py-3 text-slate-100"><option value="name">Team name</option><option value="location">Location</option></select></label><button onClick={() => setDirectoryDirection(v => v === "asc" ? "desc" : "asc")} className="rounded-xl border border-[#29364a] bg-[#101827] px-3 py-2 text-xs" aria-label="Toggle team sort direction">{directoryDirection === "asc" ? "A–Z" : "Z–A"}</button><select value={conference} onChange={e=>setConference(e.target.value)} className="rounded-xl border border-[#29364a] bg-[#101827] px-3 py-2 text-xs">{conferences.map(c=><option key={c}>{c}</option>)}</select></div>
     {status === "loading" && <div className="panel flex items-center gap-3 p-8 text-sm text-slate-400"><Loader2 className="animate-spin" size={18}/> Loading the national team directory…</div>}
     {status === "error" && <div className="panel p-6"><p className="text-sm text-amber-300">{error}</p><button onClick={() => void loadTeams()} className="mt-3 text-xs text-white underline">Retry directory load</button><p className="mt-3 text-xs text-slate-500">This data source may be temporarily unavailable or may block this browser request.</p></div>}
+    {teamRecords.length > 0 && <section className="panel overflow-hidden">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#263448] p-5">
+        <div><div className="eyebrow">2026–27 national rankings · live provider data</div><h3 className="mt-1 text-lg font-bold">Division I team leaderboard</h3><p className="mt-1 text-xs text-slate-500">{rankedRecords.length} teams with at least one provider record · choose a metric to rerank</p></div>
+        <div className="flex flex-wrap items-center gap-2">
+          <label className="text-xs text-slate-500" htmlFor="team-ranking-metric">Rank by</label>
+          <select id="team-ranking-metric" value={rankingMetric} onChange={e=>setRankingMetric(e.target.value)} className="rounded-lg border border-[#29364a] bg-[#101827] px-3 py-2 text-xs">
+            <option value="netRating">Adjusted net rating</option><option value="offensiveRating">Adjusted offense</option><option value="defensiveRating">Adjusted defense</option><option value="srs">SRS</option><option value="elo">Elo</option><option value="wins">Wins</option><option value="winPct">Win percentage</option><option value="losses">Losses</option><option value="points">Points per game</option><option value="rebounds">Rebounds per game</option><option value="assists">Assists per game</option><option value="turnovers">Turnovers per game</option><option value="steals">Steals per game</option><option value="blocks">Blocks per game</option><option value="pace">Pace</option><option value="fgPct">FG%</option><option value="threePct">3P%</option><option value="efgPct">eFG%</option><option value="orbPct">Offensive rebound %</option><option value="tovPct">Turnover %</option><option value="ftRate">Free-throw rate</option>
+          </select>
+          <button onClick={()=>setRankingDirection(v=>v==="asc"?"desc":"asc")} className="rounded-lg border border-[#29364a] px-3 py-2 text-xs" aria-label="Toggle ranking direction">{rankingDirection==="asc"?"↑ Lowest first":"↓ Highest first"}</button>
+        </div>
+      </div>
+      <div className="overflow-x-auto"><table className="w-full min-w-[760px] text-left text-xs"><thead className="bg-[#131e2d] text-[10px] uppercase tracking-wider text-slate-500"><tr><th className="px-4 py-3">Rank</th><th className="px-4 py-3">Team</th><th className="px-4 py-3">Conference</th><th className="px-4 py-3">Record</th><th className="px-4 py-3">GP</th><th className="px-4 py-3 text-right">Value</th></tr></thead><tbody>{rankedRecords.map((record,index)=>{const team=teams.find(t=>normalizeTeam(t.displayName||t.name||"")===normalizeTeam(record.team));const value=teamMetric(record,rankingMetric);return <tr key={record.teamId??record.team} className="border-t border-[#243044] hover:bg-[#172438]"><td className="px-4 py-3 font-mono text-slate-500">{index+1}</td><td className="px-4 py-3 font-semibold text-lime-300">{team?<button onClick={()=>void openTeam(team)} className="text-left hover:underline">{record.team}</button>:record.team}</td><td className="px-4 py-3 text-slate-400">{record.conference||"—"}</td><td className="px-4 py-3 font-mono">{record.wins??"—"}–{record.losses??"—"}</td><td className="px-4 py-3 font-mono">{record.games??"—"}</td><td className="px-4 py-3 text-right font-mono">{value==null?"—":value.toFixed(1)}</td></tr>})}</tbody></table></div>
+      <p className="border-t border-[#263448] px-5 py-3 text-[11px] text-slate-500">Provider values only. Missing values are shown as — and excluded from ranking. Adjusted defense ranks lowest-first for best defense.</p>
+    </section>}
     {status === "ready" && <><div className="text-xs text-slate-500">Showing {filtered.length} of {teams.length} programs · select any team to open its roster</div><div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-3">{filtered.map(t=><button key={t.id} onClick={() => void openTeam(t)} className="flex items-center gap-3 rounded-xl border border-[#263448] bg-[#101827] p-4 text-left transition hover:border-lime-300/60 hover:bg-[#172438]">{t.logo ? <img src={t.logo} alt="" className="h-10 w-10 object-contain"/> : <div className="grid h-10 w-10 place-items-center rounded-lg bg-[#1c2939]"><Trophy size={17}/></div>}<span className="min-w-0 flex-1"><b className="block truncate text-sm">{t.displayName || t.name}</b><span className="text-xs text-slate-500">{t.abbreviation || "D-I program"}</span></span><ChevronRight size={16} className="text-lime-300"/></button>)}</div></>}
     <p className="text-xs leading-5 text-slate-600">Roster listings are provider-supplied and may be incomplete or change during the season. ESPN roster data does not itself provide a verified statistical profile. No missing player or stat records are invented.</p>
   </div>;
