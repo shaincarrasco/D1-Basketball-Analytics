@@ -16,7 +16,7 @@ export const players: Player[] = [
   {id:"p2",name:"Hunter Dickinson",team:"Kansas",position:"C",year:"Senior",mpg:27.8,ppg:17.0,rpg:9.0,apg:2.1,usage:27.4,efg:58.2,ts:62.1,bpm:7.8,impact:8.9},
   {id:"p3",name:"RJ Luis Jr.",team:"St. John's",position:"G/F",year:"Senior",mpg:31.2,ppg:18.5,rpg:7.2,apg:2.0,usage:25.7,efg:51.2,ts:55.4,bpm:6.9,impact:8.2},
   {id:"p4",name:"Walter Clayton Jr.",team:"Florida",position:"G",year:"Senior",mpg:32.1,ppg:18.3,rpg:3.8,apg:4.2,usage:26.4,efg:56.1,ts:60.2,bpm:8.1,impact:8.7},
-  {id:"p5",name:"Johni Broome",team:"Auburn",position:"F/C",year:"Senior",mpg:27.4,ppg:18. broome,rpg:10.8,apg:3.1,usage:29.2,efg:57.0,ts:61.5,bpm:9.1,impact:9.1}
+  {id:"p5",name:"Johni Broome",team:"Auburn",position:"F/C",year:"Senior",mpg:27.4,ppg:18.0,rpg:10.8,apg:3.1,usage:29.2,efg:57.0,ts:61.5,bpm:9.1,impact:9.1}
 ];
 
 export const games: Game[] = [
