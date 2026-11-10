@@ -42,3 +42,24 @@ export type ProviderResult<T> = {
   season: number;
   warnings: string[];
 };
+
+
+export type TeamSeasonRecord = {
+  teamId?: number | null;
+  team: string;
+  conference?: string | null;
+  games?: number | null;
+  wins?: number | null;
+  losses?: number | null;
+  pace?: number | null;
+  teamStats?: Record<string, unknown>;
+  opponentStats?: Record<string, unknown>;
+  adjusted?: {
+    offensiveRating?: number | null;
+    defensiveRating?: number | null;
+    netRating?: number | null;
+    rankings?: Record<string, number> | null;
+  } | null;
+  srsRating?: number | null;
+  eloRating?: number | null;
+};
