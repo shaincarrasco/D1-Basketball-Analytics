@@ -121,14 +121,27 @@ const teamMetric = (team: TeamSeasonRecord, key: string): number | null => {
     const opp = isRecord(row.opponentStats) ? row.opponentStats : undefined;
     const ownPoints = statNumber(own, "points.total", "points");
     const oppPoints = statNumber(opp, "points.total", "points");
-    return ownPoints == null || oppPoints == null ? null : { ownPoints, oppPoints, margin: ownPoints - oppPoints, win: ownPoints > oppPoints };
+    const ownPoss = statNumber(own, "possessions");
+    const oppPoss = statNumber(opp, "possessions");
+    return ownPoints == null || oppPoints == null ? null : { ownPoints, oppPoints, ownPoss, oppPoss, ownEff: ownPoss && ownPoss > 0 ? ownPoints / ownPoss * 100 : null, oppEff: oppPoss && oppPoss > 0 ? oppPoints / oppPoss * 100 : null, margin: ownPoints - oppPoints, win: ownPoints > oppPoints };
   };
-  const validGames = gameRows.map(row => ({ row, result: gameResult(row) })).filter((item): item is { row: Record<string, unknown>; result: { ownPoints: number; oppPoints: number; margin: number; win: boolean } } => item.result !== null);
+  const validGames = gameRows.map(row => ({ row, result: gameResult(row) })).filter((item): item is { row: Record<string, unknown>; result: { ownPoints: number; oppPoints: number; ownPoss: number | null; oppPoss: number | null; ownEff: number | null; oppEff: number | null; margin: number; win: boolean } } => item.result !== null);
   const sortedGames = [...validGames].sort((a, b) => String(b.row.startDate ?? "").localeCompare(String(a.row.startDate ?? "")));
   const pct = (rows: typeof validGames) => rows.length ? rows.filter(item => item.result.win).length / rows.length * 100 : null;
+  const mean = (values: Array<number | null>) => {
+    const present = values.filter((value): value is number => value !== null && Number.isFinite(value));
+    return present.length ? present.reduce((sum, value) => sum + value, 0) / present.length : null;
+  };
+  const deviation = (values: Array<number | null>) => {
+    const avg = mean(values);
+    const present = values.filter((value): value is number => value !== null && Number.isFinite(value));
+    return avg == null ? null : Math.sqrt(present.reduce((sum, value) => sum + (value - avg) ** 2, 0) / present.length);
+  };
   const margins = validGames.map(item => item.result.margin);
   const marginMean = margins.length ? margins.reduce((sum, value) => sum + value, 0) / margins.length : null;
   const marginStd = marginMean == null ? null : Math.sqrt(margins.reduce((sum, value) => sum + (value - marginMean) ** 2, 0) / margins.length);
+  const recentOffense = mean(lastFive.map(item => item.result.ownEff));
+  const recentDefense = mean(lastFive.map(item => item.result.oppEff));
   const homeGames = validGames.filter(item => item.row.isHome === true && item.row.neutralSite !== true);
   const awayGames = validGames.filter(item => item.row.isHome === false && item.row.neutralSite !== true);
   const neutralGames = validGames.filter(item => item.row.neutralSite === true);
@@ -182,6 +195,14 @@ const teamMetric = (team: TeamSeasonRecord, key: string): number | null => {
     case "homeMargin": return homeGames.length ? homeGames.reduce((sum, item) => sum + item.result.margin, 0) / homeGames.length : null;
     case "awayMargin": return awayGames.length ? awayGames.reduce((sum, item) => sum + item.result.margin, 0) / awayGames.length : null;
     case "marginStd": return marginStd;
+    case "recentOffense": return recentOffense;
+    case "recentDefense": return recentDefense;
+    case "offenseStd": return deviation(validGames.map(item => item.result.ownEff));
+    case "defenseStd": return deviation(validGames.map(item => item.result.oppEff));
+    case "homeOffense": return mean(homeGames.map(item => item.result.ownEff));
+    case "awayOffense": return mean(awayGames.map(item => item.result.ownEff));
+    case "homeDefense": return mean(homeGames.map(item => item.result.oppEff));
+    case "awayDefense": return mean(awayGames.map(item => item.result.oppEff));
     case "points": return perGame(points);
     case "rebounds": return perGame(statNumber(t, "rebounds.total", "rebounds"));
     case "assists": return perGame(ast);
@@ -372,7 +393,7 @@ export default function NationalDirectory({ players = [], teamRecords = [] }: { 
         <div className="flex flex-wrap items-center gap-2">
           <label className="text-xs text-slate-500" htmlFor="team-ranking-metric">Rank by</label>
           <select id="team-ranking-metric" value={rankingMetric} onChange={e=>{const key=e.target.value;setRankingMetric(key);setRankingDirection(["defensiveRating","defensePer100","oppPointsPerPoss","oppEfgPct","oppTovPct","oppOrbPct","oppFtRate","turnovers","losses","tovPct","marginStd"].includes(key)?"asc":"desc");}} className="rounded-lg border border-[#29364a] bg-[#101827] px-3 py-2 text-xs">
-            <option value="netRating">Adjusted net rating</option><option value="offensiveRating">Adjusted offense</option><option value="defensiveRating">Adjusted defense</option><option value="sos">Strength of schedule (opp. SRS)</option><option value="homeWinPct">Home win %</option><option value="awayWinPct">Away win %</option><option value="neutralWinPct">Neutral-site win %</option><option value="recentWinPct">Last 5 win %</option><option value="recentMargin">Last 5 scoring margin</option><option value="homeMargin">Home scoring margin</option><option value="awayMargin">Away scoring margin</option><option value="marginStd">Scoring-margin volatility</option><option value="offensePer100">Offensive efficiency / 100</option><option value="defensePer100">Defensive efficiency / 100</option><option value="netPer100">Net efficiency / 100</option><option value="srs">SRS</option><option value="elo">Elo</option><option value="margin">Scoring margin / game</option><option value="pointsPerPoss">Points per possession</option><option value="oppPointsPerPoss">Opponent points per possession</option><option value="wins">Wins</option><option value="winPct">Win percentage</option><option value="losses">Losses</option><option value="points">Points per game</option><option value="rebounds">Rebounds per game</option><option value="assists">Assists per game</option><option value="astTov">Assist / turnover ratio</option><option value="turnovers">Turnovers per game</option><option value="steals">Steals per game</option><option value="stealRate">Steals per 100 possessions</option><option value="blocks">Blocks per game</option><option value="pace">Pace</option><option value="fgPct">FG%</option><option value="threePct">3P%</option><option value="efgPct">Effective FG%</option><option value="oppEfgPct">Opponent effective FG%</option><option value="orbPct">Offensive rebound %</option><option value="drbPct">Defensive rebound %</option><option value="tovPct">Turnover %</option><option value="ftRate">Free-throw rate</option><option value="oppTovPct">Opponent turnover %</option><option value="oppOrbPct">Opponent offensive rebound %</option><option value="oppFtRate">Opponent free-throw rate</option>
+            <option value="netRating">Adjusted net rating</option><option value="offensiveRating">Adjusted offense</option><option value="defensiveRating">Adjusted defense</option><option value="sos">Strength of schedule (opp. SRS)</option><option value="homeWinPct">Home win %</option><option value="awayWinPct">Away win %</option><option value="neutralWinPct">Neutral-site win %</option><option value="recentWinPct">Last 5 win %</option><option value="recentMargin">Last 5 scoring margin</option><option value="homeMargin">Home scoring margin</option><option value="awayMargin">Away scoring margin</option><option value="marginStd">Scoring-margin volatility</option><option value="recentOffense">Last 5 offensive efficiency</option><option value="recentDefense">Last 5 defensive efficiency</option><option value="offenseStd">Offensive-efficiency volatility</option><option value="defenseStd">Defensive-efficiency volatility</option><option value="homeOffense">Home offensive efficiency</option><option value="awayOffense">Away offensive efficiency</option><option value="homeDefense">Home defensive efficiency</option><option value="awayDefense">Away defensive efficiency</option><option value="offensePer100">Offensive efficiency / 100</option><option value="defensePer100">Defensive efficiency / 100</option><option value="netPer100">Net efficiency / 100</option><option value="srs">SRS</option><option value="elo">Elo</option><option value="margin">Scoring margin / game</option><option value="pointsPerPoss">Points per possession</option><option value="oppPointsPerPoss">Opponent points per possession</option><option value="wins">Wins</option><option value="winPct">Win percentage</option><option value="losses">Losses</option><option value="points">Points per game</option><option value="rebounds">Rebounds per game</option><option value="assists">Assists per game</option><option value="astTov">Assist / turnover ratio</option><option value="turnovers">Turnovers per game</option><option value="steals">Steals per game</option><option value="stealRate">Steals per 100 possessions</option><option value="blocks">Blocks per game</option><option value="pace">Pace</option><option value="fgPct">FG%</option><option value="threePct">3P%</option><option value="efgPct">Effective FG%</option><option value="oppEfgPct">Opponent effective FG%</option><option value="orbPct">Offensive rebound %</option><option value="drbPct">Defensive rebound %</option><option value="tovPct">Turnover %</option><option value="ftRate">Free-throw rate</option><option value="oppTovPct">Opponent turnover %</option><option value="oppOrbPct">Opponent offensive rebound %</option><option value="oppFtRate">Opponent free-throw rate</option>
           </select>
           <button onClick={()=>setRankingDirection(v=>v==="asc"?"desc":"asc")} className="rounded-lg border border-[#29364a] px-3 py-2 text-xs" aria-label="Toggle ranking direction">{rankingDirection==="asc"?"↑ Lowest first":"↓ Highest first"}</button>
         </div>
