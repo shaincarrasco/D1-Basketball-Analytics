@@ -11,11 +11,9 @@ export const metricDefinitions: MetricDefinition[] = [
   {key:"ftRate",label:"Free-throw rate",description:"Free-throw attempts relative to field-goal attempts.",unit:"%",higherIsBetter:true,formula:"FTA / FGA × 100",caveat:"Provider conventions may vary."}
 ];
 
-export function rankTeams(teams: Team[], key: keyof Team, higherIsBetter = true) {
+export function rankTeams(teams: Team[], key: "netRating" | "adjOffense" | "adjDefense" | "pace", higherIsBetter = true) {
   return [...teams].sort((a,b) => {
     const av=a[key], bv=b[key];
-    if (av == null) return 1;
-    if (bv == null) return -1;
-    return higherIsBetter ? Number(bv)-Number(av) : Number(av)-Number(bv);
+    return higherIsBetter ? bv-av : av-bv;
   });
 }
