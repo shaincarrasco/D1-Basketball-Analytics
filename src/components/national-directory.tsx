@@ -10,7 +10,7 @@ type DirectoryState = "loading" | "ready" | "error";
 
 const BASE = "https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball";
 
-const normalizeTeam = (value: string) => value.toLowerCase().replace(/\\b(the|university|college)\\b/g, "").replace(/[^a-z0-9]/g, "");
+const normalizeTeam = (value: string) => value.toLowerCase().replace(/\b(the|university|college)\b/g, "").replace(/[^a-z0-9]/g, "");
 
 export default function NationalDirectory({ players = [] }: { players?: Player[] }) {
   const [teams, setTeams] = useState<EspnTeam[]>([]);
