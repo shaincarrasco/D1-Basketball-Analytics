@@ -3,6 +3,8 @@ name: Deploy D1 Hoops to GitHub Pages
 on:
   push:
     branches: [main]
+  schedule:
+    - cron: "30 11 * * *"
   workflow_dispatch:
 
 permissions:
@@ -26,8 +28,14 @@ jobs:
           node-version: 20
       - name: Install dependencies
         run: npm install
+      - name: Fetch and validate current-season player stats
+        run: node scripts/fetch-player-stats.mjs
+        env:
+          CBBD_API_KEY: ${{ secrets.CBBD_API_KEY }}
       - name: Build static site
         run: npm run build
+        env:
+          NEXT_PUBLIC_BASE_PATH: /D1-Basketball-Analytics
       - name: Configure Pages
         uses: actions/configure-pages@v5
         with:
