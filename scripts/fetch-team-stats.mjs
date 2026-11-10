@@ -34,6 +34,9 @@ const results = await Promise.all(endpoints.map(async endpoint => {
   }
 }));
 const warnings = results.filter(result => result.warning).map(result => result.kind + ": " + result.warning);
+for (const result of results) {
+  console.log("[team-rankings] " + result.kind + ": " + result.rows.length + " source rows" + (result.warning ? " · " + result.warning : ""));
+}
 const byTeam = new Map();
 for (const result of results) {
   const kind = result.kind;
@@ -80,4 +83,7 @@ const payload = {
 
 await mkdir("public/data", { recursive: true });
 await writeFile("public/data/team-season-2027.json", JSON.stringify(payload, null, 2) + "\n");
-console.log("Published " + teams.length + " current-season team records for season " + season + ".");
+console.log("[team-rankings] Published " + teams.length + " current-season team records for season " + season + ".");
+if (!teams.length) {
+  console.warn("[team-rankings] No team rows were returned. Verify CBBD season coverage, API access, and endpoint response.");
+}
