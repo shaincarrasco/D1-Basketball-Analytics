@@ -57,17 +57,25 @@ for (const result of results) {
   }
 }
 
-const teams = [...byTeam.values()].map(team => ({
-  ...team,
-  adjusted: team.adjusted ? {
-    offensiveRating: team.adjusted.offensiveRating ?? team.adjusted.adjO ?? team.adjusted.adjOffense ?? null,
-    defensiveRating: team.adjusted.defensiveRating ?? team.adjusted.adjD ?? team.adjusted.adjDefense ?? null,
-    netRating: team.adjusted.netRating ?? team.adjusted.adjEM ?? team.adjusted.adjNetRating ?? null,
-    rankings: team.adjusted.rankings ?? null,
-  } : null,
-  srsRating: team.srs?.rating ?? team.srs?.srs ?? team.srs?.value ?? null,
-  eloRating: team.elo?.elo ?? team.elo?.rating ?? team.elo?.value ?? null,
-}));
+const srsById = new Map([...byTeam.values()].map(team => [
+  String(team.teamId ?? ""), team.srs?.rating ?? team.srs?.srs ?? team.srs?.value ?? null,
+]));
+const teams = [...byTeam.values()].map(team => {
+  const gameStats = Array.isArray(team.gameStats) ? team.gameStats : [];
+  const opponentRatings = gameStats.map(game => srsById.get(String(game.opponentId ?? ""))).filter(value => typeof value === "number" && Number.isFinite(value));
+  return {
+    ...team,
+    adjusted: team.adjusted ? {
+      offensiveRating: team.adjusted.offensiveRating ?? team.adjusted.adjO ?? team.adjusted.adjOffense ?? null,
+      defensiveRating: team.adjusted.defensiveRating ?? team.adjusted.adjD ?? team.adjusted.adjDefense ?? null,
+      netRating: team.adjusted.netRating ?? team.adjusted.adjEM ?? team.adjusted.adjNetRating ?? null,
+      rankings: team.adjusted.rankings ?? null,
+    } : null,
+    srsRating: team.srs?.rating ?? team.srs?.srs ?? team.srs?.value ?? null,
+    eloRating: team.elo?.elo ?? team.elo?.rating ?? team.elo?.value ?? null,
+    sosRating: opponentRatings.length ? opponentRatings.reduce((sum, value) => sum + value, 0) / opponentRatings.length : null,
+  };
+});
 
 const payload = {
   provider: "College Basketball Data",
