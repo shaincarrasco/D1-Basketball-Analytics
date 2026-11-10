@@ -41,8 +41,13 @@ for (const result of results) {
     if (!row || typeof row.team !== "string" || !row.team.trim()) continue;
     const id = String(row.teamId ?? row.team.trim().toLowerCase());
     const current = byTeam.get(id) ?? { teamId: row.teamId ?? null, team: row.team, conference: row.conference ?? null };
-    if (kind === "season") Object.assign(current, row);
-    else current[kind] = row;
+    if (kind === "season") {
+      Object.assign(current, row);
+      // Keep the complete season-stat response nested as well as its record fields.
+      // The leaderboard reads from teamStats; previously this was never populated.
+      current.teamStats = row.teamStats ?? row;
+      current.opponentStats = row.opponentStats ?? null;
+    } else current[kind] = row;
     byTeam.set(id, current);
   }
 }
