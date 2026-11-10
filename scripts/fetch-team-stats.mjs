@@ -25,11 +25,19 @@ async function fetchRows(endpoint) {
   return rows;
 }
 
-const results = await Promise.all(endpoints.map(fetchRows));
+const results = await Promise.all(endpoints.map(async endpoint => {
+  try {
+    return { kind: endpoint[0], rows: await fetchRows(endpoint), warning: null };
+  } catch (error) {
+    if (endpoint[0] === "season") throw error;
+    return { kind: endpoint[0], rows: [], warning: error instanceof Error ? error.message : "Unknown provider error" };
+  }
+}));
+const warnings = results.filter(result => result.warning).map(result => result.kind + ": " + result.warning);
 const byTeam = new Map();
-for (let index = 0; index < endpoints.length; index += 1) {
-  const kind = endpoints[index][0];
-  for (const row of results[index]) {
+for (const result of results) {
+  const kind = result.kind;
+  for (const row of result.rows) {
     if (!row || typeof row.team !== "string" || !row.team.trim()) continue;
     const id = String(row.teamId ?? row.team.trim().toLowerCase());
     const current = byTeam.get(id) ?? { teamId: row.teamId ?? null, team: row.team, conference: row.conference ?? null };
@@ -59,7 +67,7 @@ const payload = {
   fetchedAt: new Date().toISOString(),
   count: teams.length,
   status: teams.length ? "available" : "empty",
-  sources: endpoints.map(([name, path]) => ({ name, endpoint: path })),
+  sources: endpoints.map(([name, path]) => ({ name, endpoint: path })),\n  warnings,
   note: "Team season box-score aggregates, adjusted efficiency, SRS, and Elo are merged by provider team ID. Missing values remain null; rankings are not inferred.",
   teams,
 };
