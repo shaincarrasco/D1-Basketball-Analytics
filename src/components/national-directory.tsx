@@ -79,6 +79,7 @@ export default function NationalDirectory({ players = [], teamRecords = [] }: { 
   const [statsDirection, setStatsDirection] = useState<"asc" | "desc">("desc");
   const [rankingMetric, setRankingMetric] = useState("netRating");
   const [rankingDirection, setRankingDirection] = useState<"asc" | "desc">("desc");
+  const [rosterSort, setRosterSort] = useState<"name" | "position" | "jersey">("name");
   const teamStats = useMemo(() => {
     if (!selected) return [];
     const candidates = [selected.name, selected.displayName].filter(Boolean).map((v) => normalizeTeam(v as string));
@@ -140,6 +141,12 @@ export default function NationalDirectory({ players = [], teamRecords = [] }: { 
     return directoryDirection === "asc" ? comparison : -comparison;
   }), [teams, query, conference, directorySort, directoryDirection]);
 
+  const sortedRoster = useMemo(() => [...roster].sort((a, b) => {
+    const av = rosterSort === "position" ? (a.position?.displayName || a.position?.name || "") : rosterSort === "jersey" ? (a.jersey || "") : (a.fullName || a.displayName || "");
+    const bv = rosterSort === "position" ? (b.position?.displayName || b.position?.name || "") : rosterSort === "jersey" ? (b.jersey || "") : (b.fullName || b.displayName || "");
+    return av.localeCompare(bv, undefined, { numeric: rosterSort === "jersey" });
+  }), [roster, rosterSort]);
+
   const rankedRecords = useMemo(() => [...teamRecords].sort((a, b) => {
     const av = teamMetric(a, rankingMetric);
     const bv = teamMetric(b, rankingMetric);
@@ -189,7 +196,7 @@ export default function NationalDirectory({ players = [], teamRecords = [] }: { 
       {rosterStatus === "loading" && <div className="flex items-center gap-2 py-8 text-sm text-slate-400"><Loader2 className="animate-spin" size={17}/> Loading roster…</div>}
       {rosterStatus === "error" && <div className="py-6 text-sm text-amber-300">{rosterError} <button onClick={() => void openTeam(selected)} className="ml-2 underline">Try again</button></div>}
       {rosterStatus === "ready" && roster.length === 0 && <p className="py-6 text-sm text-slate-400">No roster entries were returned for this team.</p>}
-      <div className="grid gap-2 sm:grid-cols-2">{roster.map(a=><button key={a.id} onClick={() => setPlayer(a)} className="flex items-center gap-3 rounded-xl border border-[#263448] bg-[#0c1420] p-3 text-left hover:border-lime-300/60">{a.headshot?.href ? <img src={a.headshot.href} alt="" className="h-11 w-11 rounded-full object-cover"/> : <div className="grid h-11 w-11 place-items-center rounded-full bg-[#1c2939]"><Users size={18}/></div>}<span className="min-w-0 flex-1"><b className="block truncate text-sm">{a.fullName || a.displayName}</b><span className="text-xs text-slate-500">{a.position?.abbreviation || a.position?.name || "Position —"} · #{a.jersey || "—"}</span></span><ChevronRight size={16} className="text-lime-300"/></button>)}</div>
+      <div className="mb-3 flex items-center gap-2"><label htmlFor="roster-sort" className="text-xs text-slate-500">Sort roster</label><select id="roster-sort" value={rosterSort} onChange={e=>setRosterSort(e.target.value as "name"|"position"|"jersey")} className="rounded-lg border border-[#29364a] bg-[#101827] px-3 py-2 text-xs"><option value="name">Player name</option><option value="position">Position</option><option value="jersey">Jersey number</option></select></div><div className="grid gap-2 sm:grid-cols-2">{sortedRoster.map(a=><button key={a.id} onClick={() => setPlayer(a)} className="flex items-center gap-3 rounded-xl border border-[#263448] bg-[#0c1420] p-3 text-left hover:border-lime-300/60">{a.headshot?.href ? <img src={a.headshot.href} alt="" className="h-11 w-11 rounded-full object-cover"/> : <div className="grid h-11 w-11 place-items-center rounded-full bg-[#1c2939]"><Users size={18}/></div>}<span className="min-w-0 flex-1"><b className="block truncate text-sm">{a.fullName || a.displayName}</b><span className="text-xs text-slate-500">{a.position?.abbreviation || a.position?.name || "Position —"} · #{a.jersey || "—"}</span></span><ChevronRight size={16} className="text-lime-300"/></button>)}</div>
     </div>
   </div>;
 
@@ -203,7 +210,7 @@ export default function NationalDirectory({ players = [], teamRecords = [] }: { 
         <div><div className="eyebrow">2026–27 national rankings · live provider data</div><h3 className="mt-1 text-lg font-bold">Division I team leaderboard</h3><p className="mt-1 text-xs text-slate-500">{rankedRecords.length} teams with at least one provider record · choose a metric to rerank</p></div>
         <div className="flex flex-wrap items-center gap-2">
           <label className="text-xs text-slate-500" htmlFor="team-ranking-metric">Rank by</label>
-          <select id="team-ranking-metric" value={rankingMetric} onChange={e=>setRankingMetric(e.target.value)} className="rounded-lg border border-[#29364a] bg-[#101827] px-3 py-2 text-xs">
+          <select id="team-ranking-metric" value={rankingMetric} onChange={e=>{const key=e.target.value;setRankingMetric(key);setRankingDirection(["defensiveRating","turnovers","losses","tovPct"].includes(key)?"asc":"desc");}} className="rounded-lg border border-[#29364a] bg-[#101827] px-3 py-2 text-xs">
             <option value="netRating">Adjusted net rating</option><option value="offensiveRating">Adjusted offense</option><option value="defensiveRating">Adjusted defense</option><option value="srs">SRS</option><option value="elo">Elo</option><option value="wins">Wins</option><option value="winPct">Win percentage</option><option value="losses">Losses</option><option value="points">Points per game</option><option value="rebounds">Rebounds per game</option><option value="assists">Assists per game</option><option value="turnovers">Turnovers per game</option><option value="steals">Steals per game</option><option value="blocks">Blocks per game</option><option value="pace">Pace</option><option value="fgPct">FG%</option><option value="threePct">3P%</option><option value="efgPct">eFG%</option><option value="orbPct">Offensive rebound %</option><option value="tovPct">Turnover %</option><option value="ftRate">Free-throw rate</option>
           </select>
           <button onClick={()=>setRankingDirection(v=>v==="asc"?"desc":"asc")} className="rounded-lg border border-[#29364a] px-3 py-2 text-xs" aria-label="Toggle ranking direction">{rankingDirection==="asc"?"↑ Lowest first":"↓ Highest first"}</button>
