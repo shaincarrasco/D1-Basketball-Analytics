@@ -4,7 +4,7 @@ const season = 2027;
 const key = process.env.CBBD_API_KEY;
 if (!key) throw new Error("CBBD_API_KEY is missing.");
 const event = process.env.GITHUB_EVENT_NAME ?? "";
-const refresh = event === "workflow_dispatch" || (event === "schedule" && new Date().getUTCDay() === 0);
+const refresh = event === "workflow_dispatch" || (event === "schedule" && new Date().getUTCDay() === 0) || (event === "push" && !previous);
 const snapshotPath = "public/data/player-shooting-season-2027.json";
 const playerPath = "public/data/player-season-2027.json";
 let previous = null;
