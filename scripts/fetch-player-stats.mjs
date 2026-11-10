@@ -42,6 +42,7 @@ const players = rows.flatMap((row) => {
     steals: safeDivide(row.steals, games),
     blocks: safeDivide(row.blocks, games),
     turnovers: safeDivide(row.turnovers, games),
+    fouls: safeDivide(row.fouls, games),
     usage: numeric(row.usage),
     offensiveRating: numeric(row.offensiveRating),
     defensiveRating: numeric(row.defensiveRating),
@@ -52,12 +53,16 @@ const players = rows.flatMap((row) => {
     efg: numeric(row.effectiveFieldGoalPct),
     ts: numeric(row.trueShootingPct),
     assistsTurnoverRatio: numeric(row.assistsTurnoverRatio),
+    freeThrowRate: numeric(row.freeThrowRate),
     offensiveReboundPct: numeric(row.offensiveReboundPct),
     fieldGoals: row.fieldGoals ?? null,
     twoPointFieldGoals: row.twoPointFieldGoals ?? null,
     threePointFieldGoals: row.threePointFieldGoals ?? null,
     freeThrows: row.freeThrows ?? null,
     winShares: row.winShares ?? null,
+    // Preserve every provider field so the player profile can expose the complete
+    // source record, including fields added by CBBD in future schema revisions.
+    sourceStats: row,
   }];
 });
 
