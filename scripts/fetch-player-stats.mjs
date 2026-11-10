@@ -78,3 +78,33 @@ const payload = {
 await mkdir("public/data", { recursive: true });
 await writeFile("public/data/player-season-2027.json", JSON.stringify(payload, null, 2) + "\n");
 console.log(`Fetched ${players.length} validated player records for season ${season}.`);
+
+ 
+// Publish the national team directory at build time so GitHub Pages does not
+// depend on a browser-to-ESPN request (which can be blocked by CORS/network policy).
+try {
+  const directoryResponse = await fetch("https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/teams?limit=500", {
+    headers: { Accept: "application/json" },
+  });
+  if (!directoryResponse.ok) throw new Error(`ESPN team directory returned HTTP ${directoryResponse.status}`);
+  const directoryJson = await directoryResponse.json();
+  const rawTeams = directoryJson.sports?.[0]?.leagues?.[0]?.teams ?? directoryJson.teams ?? [];
+  const teams = rawTeams.map((entry) => entry.team ?? entry)
+    .filter((team) => team?.id && (team.displayName || team.name))
+    .map((team) => ({
+      id: String(team.id),
+      displayName: team.displayName || team.name,
+      name: team.name || team.displayName,
+      abbreviation: team.abbreviation || "",
+      location: team.location || team.groups?.name || "Other",
+      logo: team.logos?.[0]?.href || team.logo || "",
+    }));
+  if (!teams.length) throw new Error("ESPN returned no recognizable team records");
+  const directory = { provider: "ESPN", fetchedAt: new Date().toISOString(), count: teams.length, status: "available", teams };
+  await writeFile("public/data/team-directory.json", JSON.stringify(directory, null, 2) + "\\n");
+  console.log(`Published ${teams.length} team directory records.`);
+} catch (error) {
+  const message = error instanceof Error ? error.message : "Unknown directory fetch error";
+  await writeFile("public/data/team-directory.json", JSON.stringify({ provider: "ESPN", fetchedAt: new Date().toISOString(), count: 0, status: "unavailable", warning: message, teams: [] }, null, 2) + "\\n");
+  console.log("Team directory snapshot unavailable; browser fallback will remain enabled.");
+}
