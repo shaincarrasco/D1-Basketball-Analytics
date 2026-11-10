@@ -55,13 +55,13 @@ for (const result of results) {
 const teams = [...byTeam.values()].map(team => ({
   ...team,
   adjusted: team.adjusted ? {
-    offensiveRating: team.adjusted.offensiveRating ?? null,
-    defensiveRating: team.adjusted.defensiveRating ?? null,
-    netRating: team.adjusted.netRating ?? null,
+    offensiveRating: team.adjusted.offensiveRating ?? team.adjusted.adjO ?? team.adjusted.adjOffense ?? null,
+    defensiveRating: team.adjusted.defensiveRating ?? team.adjusted.adjD ?? team.adjusted.adjDefense ?? null,
+    netRating: team.adjusted.netRating ?? team.adjusted.adjEM ?? team.adjusted.adjNetRating ?? null,
     rankings: team.adjusted.rankings ?? null,
   } : null,
-  srsRating: team.srs?.rating ?? null,
-  eloRating: team.elo?.elo ?? null,
+  srsRating: team.srs?.rating ?? team.srs?.srs ?? team.srs?.value ?? null,
+  eloRating: team.elo?.elo ?? team.elo?.rating ?? team.elo?.value ?? null,
 }));
 
 const payload = {
