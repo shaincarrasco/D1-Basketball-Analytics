@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import type { Player } from "@/lib/types";
 import { ArrowLeft, ChevronRight, Search, Users, Trophy, Loader2, RefreshCw } from "lucide-react";
 
 type EspnTeam = { id: string; displayName: string; name?: string; abbreviation?: string; location?: string; logo?: string; links?: { web?: { href?: string } } };
@@ -9,7 +10,9 @@ type DirectoryState = "loading" | "ready" | "error";
 
 const BASE = "https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball";
 
-export default function NationalDirectory() {
+const normalizeTeam = (value: string) => value.toLowerCase().replace(/\\b(the|university|college)\\b/g, "").replace(/[^a-z0-9]/g, "");
+
+export default function NationalDirectory({ players = [] }: { players?: Player[] }) {
   const [teams, setTeams] = useState<EspnTeam[]>([]);
   const [status, setStatus] = useState<DirectoryState>("loading");
   const [error, setError] = useState("");
@@ -20,6 +23,14 @@ export default function NationalDirectory() {
   const [rosterStatus, setRosterStatus] = useState<DirectoryState>("ready");
   const [rosterError, setRosterError] = useState("");
   const [player, setPlayer] = useState<EspnAthlete | null>(null);
+  const teamStats = useMemo(() => {
+    if (!selected) return [];
+    const candidates = [selected.name, selected.displayName].filter(Boolean).map((v) => normalizeTeam(v as string));
+    return players.filter((p) => {
+      const team = normalizeTeam(p.teamName || "");
+      return team.length > 0 && candidates.some((candidate) => candidate === team || candidate.startsWith(team) || team.startsWith(candidate));
+    }).sort((a, b) => (b.points ?? -1) - (a.points ?? -1));
+  }, [players, selected]);
 
   const loadTeams = async () => {
     setStatus("loading"); setError("");
@@ -85,7 +96,10 @@ export default function NationalDirectory() {
   if (selected) return <div className="space-y-5">
     <button onClick={() => setSelected(null)} className="inline-flex items-center gap-2 rounded-lg border border-[#29364a] px-3 py-2 text-sm text-slate-300 hover:border-lime-300"><ArrowLeft size={15}/> Back to all teams</button>
     <div className="panel flex flex-wrap items-center justify-between gap-4 p-6"><div><div className="eyebrow">Division I team · live directory</div><h2 className="mt-2 text-3xl font-black">{selected.displayName || selected.name}</h2><p className="mt-2 text-sm text-slate-400">{selected.abbreviation || "Team"} · ESPN team ID {selected.id}</p></div>{selected.logo && <img src={selected.logo} alt="" className="h-16 w-16 object-contain"/>}</div>
-    <div className="panel p-5"><div className="mb-4 flex items-center justify-between"><div><h3 className="font-bold">Team roster</h3><p className="mt-1 text-xs text-slate-500">Select a player to open their bio</p></div><span className="text-xs text-lime-300">{rosterStatus === "ready" ? `${roster.length} listed` : "Loading"}</span></div>
+    <div className="panel p-5"><div className="mb-4 flex flex-wrap items-center justify-between gap-2"><div><h3 className="font-bold">2026–27 player stats</h3><p className="mt-1 text-xs text-slate-500">Season-to-date · per-game counting stats from provider totals</p></div><span className="text-xs text-lime-300">{teamStats.length} statistical profiles</span></div>
+      {teamStats.length > 0 ? <div className="overflow-x-auto"><table className="w-full min-w-[900px] text-left text-xs"><thead className="text-[10px] uppercase tracking-wider text-slate-500"><tr>{["Player","GP","MPG","PTS","REB","AST","STL","BLK","TOV","USG%","eFG%","TS%","PORPAG"].map(h=><th key={h} className="px-3 py-3">{h}</th>)}</tr></thead><tbody>{teamStats.map(p=><tr key={p.id} className="border-t border-[#243044] hover:bg-[#172438]"><td className="px-3 py-3 font-semibold text-slate-200">{p.name}<span className="mt-1 block text-[10px] font-normal text-slate-500">{p.position || "Position unavailable"}</span></td><td className="px-3 py-3">{p.games ?? "—"}</td><td className="px-3 py-3">{p.minutes?.toFixed(1) ?? "—"}</td><td className="px-3 py-3">{p.points?.toFixed(1) ?? "—"}</td><td className="px-3 py-3">{p.rebounds?.toFixed(1) ?? "—"}</td><td className="px-3 py-3">{p.assists?.toFixed(1) ?? "—"}</td><td className="px-3 py-3">{p.steals?.toFixed(1) ?? "—"}</td><td className="px-3 py-3">{p.blocks?.toFixed(1) ?? "—"}</td><td className="px-3 py-3">{p.turnovers?.toFixed(1) ?? "—"}</td><td className="px-3 py-3">{p.usage?.toFixed(1) ?? "—"}</td><td className="px-3 py-3">{p.efg?.toFixed(1) ?? "—"}</td><td className="px-3 py-3">{p.ts?.toFixed(1) ?? "—"}</td><td className="px-3 py-3">{p.impact?.toFixed(2) ?? "—"}</td></tr>)}</tbody></table></div> : <p className="py-5 text-sm text-slate-400">No current-season statistical records match this team yet. The feed may not have recorded a game, or the provider team name may differ.</p>}
+    </div>
+    <div className="panel p-5"><div className="mb-4 flex items-center justify-between"><div><h3 className="font-bold">ESPN roster & player bios</h3><p className="mt-1 text-xs text-slate-500">Biographical listings are separate from the stats table</p></div><span className="text-xs text-lime-300">{rosterStatus === "ready" ? `${roster.length} listed` : "Loading"}</span></div>
       {rosterStatus === "loading" && <div className="flex items-center gap-2 py-8 text-sm text-slate-400"><Loader2 className="animate-spin" size={17}/> Loading roster…</div>}
       {rosterStatus === "error" && <div className="py-6 text-sm text-amber-300">{rosterError} <button onClick={() => void openTeam(selected)} className="ml-2 underline">Try again</button></div>}
       {rosterStatus === "ready" && roster.length === 0 && <p className="py-6 text-sm text-slate-400">No roster entries were returned for this team.</p>}
