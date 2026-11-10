@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { ArrowLeft, ChevronRight, Search, Users, Trophy, Loader2, RefreshCw } from "lucide-react";
 
 type EspnTeam = { id: string; displayName: string; name?: string; abbreviation?: string; location?: string; logo?: string; links?: { web?: { href?: string } } };
-type EspnAthlete = { id: string; fullName?: string; displayName?: string; position?: { abbreviation?: string; name?: string }; jersey?: string; height?: string; weight?: string; age?: number; experience?: { displayValue?: string }; birthPlace?: { city?: string; state?: string; country?: string }; headshot?: { href?: string } };
+type EspnAthlete = { id: string; fullName?: string; displayName?: string; position?: { abbreviation?: string; name?: string; displayName?: string }; jersey?: string; height?: string; weight?: string; age?: number; experience?: { displayValue?: string }; birthPlace?: { city?: string; state?: string; country?: string }; headshot?: { href?: string } };
 type DirectoryState = "loading" | "ready" | "error";
 
 const BASE = "https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball";
@@ -14,7 +14,7 @@ export default function NationalDirectory() {
   const [status, setStatus] = useState<DirectoryState>("loading");
   const [error, setError] = useState("");
   const [query, setQuery] = useState("");
-  const [conference, setConference] = useState("All conferences");
+  const [conference, setConference] = useState("All locations");
   const [selected, setSelected] = useState<EspnTeam | null>(null);
   const [roster, setRoster] = useState<EspnAthlete[]>([]);
   const [rosterStatus, setRosterStatus] = useState<DirectoryState>("ready");
@@ -39,10 +39,10 @@ export default function NationalDirectory() {
 
   useEffect(() => { void loadTeams(); }, []);
 
-  const conferences = useMemo(() => ["All conferences", ...Array.from(new Set(teams.map(t => t.location || "Other"))).sort()], [teams]);
+  const conferences = useMemo(() => ["All locations", ...Array.from(new Set(teams.map(t => t.location || "Other"))).sort()], [teams]);
   const filtered = useMemo(() => teams.filter(t => {
     const name = t.displayName || t.name || "";
-    return name.toLowerCase().includes(query.toLowerCase()) && (conference === "All conferences" || (t.location || "Other") === conference);
+    return name.toLowerCase().includes(query.toLowerCase()) && (conference === "All locations" || (t.location || "Other") === conference);
   }).sort((a,b) => (a.displayName || a.name || "").localeCompare(b.displayName || b.name || "")), [teams, query, conference]);
 
   const openTeam = async (team: EspnTeam) => {
