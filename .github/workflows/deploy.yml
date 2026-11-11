@@ -29,17 +29,17 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Fetch current-season team statistics and ratings
-        if: github.event_name != 'push' || !hashFiles('public/data/team-season-2027.json') || !hashFiles('public/data/player-season-2027.json') || !hashFiles('public/data/games-season-2027.json')
+        if: github.event_name != 'push' || !hashFiles('public/data/team-season-2027.json') || !hashFiles('public/data/player-season-2027.json') || !hashFiles('public/data/games-season-2027.json') || !hashFiles('public/data/game-team-boxscores-2027.json') || !hashFiles('public/data/player-details-2027/*.json')
         run: node scripts/fetch-team-stats.mjs
         env:
           CBBD_API_KEY: ${{ secrets.CBBD_API_KEY }}
       - name: Fetch and validate current-season player stats
-        if: github.event_name != 'push' || !hashFiles('public/data/team-season-2027.json') || !hashFiles('public/data/player-season-2027.json') || !hashFiles('public/data/games-season-2027.json')
+        if: github.event_name != 'push' || !hashFiles('public/data/team-season-2027.json') || !hashFiles('public/data/player-season-2027.json') || !hashFiles('public/data/games-season-2027.json') || !hashFiles('public/data/game-team-boxscores-2027.json') || !hashFiles('public/data/player-details-2027/*.json')
         run: node scripts/fetch-player-stats.mjs
         env:
           CBBD_API_KEY: ${{ secrets.CBBD_API_KEY }}
       - name: Fetch and validate current-season game schedule and results
-        if: github.event_name != 'push' || !hashFiles('public/data/team-season-2027.json') || !hashFiles('public/data/player-season-2027.json') || !hashFiles('public/data/games-season-2027.json')
+        if: github.event_name != 'push' || !hashFiles('public/data/team-season-2027.json') || !hashFiles('public/data/player-season-2027.json') || !hashFiles('public/data/games-season-2027.json') || !hashFiles('public/data/game-team-boxscores-2027.json') || !hashFiles('public/data/player-details-2027/*.json')
         run: node scripts/fetch-games.mjs
         env:
           CBBD_API_KEY: ${{ secrets.CBBD_API_KEY }}
@@ -53,7 +53,7 @@ jobs:
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add public/data/*.json
+          git add public/data/
           if ! git diff --cached --quiet; then
             git commit -m 'Update 2026-27 basketball data snapshots'
             git push
