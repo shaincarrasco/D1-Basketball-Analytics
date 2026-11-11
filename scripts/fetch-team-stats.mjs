@@ -21,8 +21,10 @@ async function fetchRows(endpoint) {
   if (name === "season" || name === "gameStats") url.searchParams.set("seasonType", "regular");
   if (name === "gameStats") {
     const windows = [
-      ["early-season", "2026-08-01T00:00:00Z", "2026-12-31T23:59:59Z"],
-      ["late-season", "2027-01-01T00:00:00Z", "2027-08-01T00:00:00Z"],
+      ["aug-oct", "2026-08-01T00:00:00Z", "2026-10-31T23:59:59Z"],
+      ["nov-dec", "2026-11-01T00:00:00Z", "2026-12-31T23:59:59Z"],
+      ["jan-feb", "2027-01-01T00:00:00Z", "2027-02-28T23:59:59Z"],
+      ["mar-aug", "2027-03-01T00:00:00Z", "2027-08-01T00:00:00Z"],
     ];
     const batches = await Promise.all(windows.map(async ([label, startDateRange, endDateRange]) => {
       const batchUrl = new URL("https://api.collegebasketballdata.com" + path);
@@ -97,6 +99,43 @@ const teams = [...byTeam.values()].map(team => {
   };
 });
 
+const gameRows = results.find(result => result.kind === "gameStats")?.rows ?? [];
+const gamesById = new Map();
+for (const row of gameRows) {
+  if (!row || !Number.isInteger(row.gameId) || typeof row.team !== "string") continue;
+  const id = String(row.gameId);
+  const game = gamesById.get(id) ?? {
+    id,
+    date: row.startDate ?? null,
+    neutralSite: row.neutralSite === true,
+    conferenceGame: row.conferenceGame === true,
+    gameType: row.gameType ?? null,
+    teams: [],
+  };
+  game.teams.push({
+    teamId: row.teamId ?? null,
+    team: row.team,
+    conference: row.conference ?? null,
+    opponentId: row.opponentId ?? null,
+    opponent: row.opponent ?? null,
+    isHome: row.isHome === true,
+    pace: typeof row.pace === "number" ? row.pace : null,
+    gameMinutes: typeof row.gameMinutes === "number" ? row.gameMinutes : null,
+    stats: row.teamStats ?? null,
+  });
+  gamesById.set(id, game);
+}
+const gameBoxScorePayload = {
+  provider: "College Basketball Data",
+  season,
+  seasonLabel: "2026–27",
+  fetchedAt: new Date().toISOString(),
+  count: gamesById.size,
+  status: gamesById.size ? "available" : "empty",
+  note: "Team box scores are grouped from the provider game-team endpoint. Only fields actually supplied by the provider are included.",
+  games: [...gamesById.values()].sort((a,b) => String(b.date ?? "").localeCompare(String(a.date ?? ""))),
+};
+
 const payload = {
   provider: "College Basketball Data",
   season,
@@ -113,7 +152,9 @@ const payload = {
 
 await mkdir("public/data", { recursive: true });
 await writeFile("public/data/team-season-2027.json", JSON.stringify(payload, null, 2) + "\n");
+await writeFile("public/data/game-team-boxscores-2027.json", JSON.stringify(gameBoxScorePayload, null, 2) + "\n");
 console.log("[team-rankings] Published " + teams.length + " current-season team records for season " + season + ".");
+console.log("[team-rankings] Published " + gamesById.size + " game-level team box-score records.");
 if (!teams.length) {
   console.warn("[team-rankings] No team rows were returned. Verify CBBD season coverage, API access, and endpoint response.");
 }
