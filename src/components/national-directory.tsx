@@ -34,7 +34,7 @@ const TEAM_METRIC_GROUPS = [
 
 const BASE = "https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball";
 
-const normalizeTeam = (value: string) => value.toLowerCase().replace(/\b(the|university|college)\b/g, "").replace(/[^a-z0-9]/g, "");
+const normalizeTeam = (value: string) => { const normalized = value.toLowerCase().replace(/\b(the|university|college)\b/g, "").replace(/[^a-z0-9]/g, ""); return ({ neworleans: "lsuneworleans", stthomasminnesota: "stthomas" } as Record<string,string>)[normalized] ?? normalized; };
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   value !== null && typeof value === "object" && !Array.isArray(value);
