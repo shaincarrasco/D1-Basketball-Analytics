@@ -1,4 +1,4 @@
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { mkdir, writeFile } from "node:fs/promises";
 
 const season = 2027;
 const key = process.env.CBBD_API_KEY;
@@ -7,37 +7,36 @@ if (!key) throw new Error("CBBD_API_KEY is missing. Add it as a GitHub Actions s
 const url = new URL("https://api.collegebasketballdata.com/stats/player/season");
 url.searchParams.set("season", String(season));
 url.searchParams.set("seasonType", "regular");
-
 const response = await fetch(url, {
   headers: { Authorization: `Bearer ${key}`, Accept: "application/json" },
 });
-if (!response.ok) {
-  // Never print request headers or the secret.
-  throw new Error(`CBBD player stats request failed with HTTP ${response.status}.`);
-}
+if (!response.ok) throw new Error(`CBBD player stats request failed with HTTP ${response.status}.`);
 const rows = await response.json();
 if (!Array.isArray(rows)) throw new Error("CBBD returned an unexpected player stats payload.");
 
-let shootingRows = [];
-try {
-  const savedShooting = JSON.parse(await readFile("public/data/player-shooting-season-2027.json", "utf8"));
-  if (Array.isArray(savedShooting.players)) shootingRows = savedShooting.players;
-} catch { /* first build: no saved shooting snapshot yet */ }
-const shootingByAthleteId = new Map(shootingRows.map((row) => [String(row.athleteId), row]));
-
-const numeric = (value) => typeof value === "number" && Number.isFinite(value) ? value : null;
+const numeric = value => typeof value === "number" && Number.isFinite(value) ? value : null;
 const safeDivide = (value, games) => numeric(value) !== null && numeric(games) > 0 ? value / games : null;
-const players = rows.flatMap((row) => {
-  if (!row || typeof row !== "object" ||
-      !Number.isInteger(row.athleteId) ||
-      typeof row.name !== "string" || !row.name.trim() ||
-      typeof row.team !== "string" || !row.team.trim()) return [];
+const detailGroupFor = conference => String(conference || "unclassified")
+  .toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g, "")
+  .replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "unclassified";
+
+const validRows = rows.filter(row => row && typeof row === "object" &&
+  Number.isInteger(row.athleteId) && typeof row.name === "string" && row.name.trim() &&
+  typeof row.team === "string" && row.team.trim());
+const detailsByGroup = new Map();
+const players = validRows.map(row => {
   const games = numeric(row.games);
-  return [{
+  const conference = typeof row.conference === "string" ? row.conference : null;
+  const detailGroup = detailGroupFor(conference);
+  const detailRows = detailsByGroup.get(detailGroup) ?? [];
+  detailRows.push({ id: String(row.athleteId), sourceStats: row, shootingProfile: null });
+  detailsByGroup.set(detailGroup, detailRows);
+  return {
     id: String(row.athleteId),
     name: row.name.trim(),
     teamName: row.team.trim(),
-    conference: typeof row.conference === "string" ? row.conference : null,
+    conference,
+    detailGroup,
     position: typeof row.position === "string" ? row.position : "",
     year: "",
     games,
@@ -67,13 +66,23 @@ const players = rows.flatMap((row) => {
     threePointFieldGoals: row.threePointFieldGoals ?? null,
     freeThrows: row.freeThrows ?? null,
     winShares: row.winShares ?? null,
-    // Preserve every provider field so the player profile can expose the complete
-    // source record, including fields added by CBBD in future schema revisions.
-    sourceStats: { ...row, shootingProfile: shootingByAthleteId.get(String(row.athleteId)) ?? null },
-    shootingProfile: shootingByAthleteId.get(String(row.athleteId)) ?? null,
-  }];
+  };
 });
 
+await mkdir("public/data", { recursive: true });
+await mkdir("public/data/player-details-2027", { recursive: true });
+for (const [group, detailPlayers] of detailsByGroup) {
+  const detailPayload = {
+    provider: "College Basketball Data",
+    season,
+    seasonLabel: "2026–27",
+    conferenceKey: group,
+    fetchedAt: new Date().toISOString(),
+    count: detailPlayers.length,
+    players: detailPlayers,
+  };
+  await writeFile(`public/data/player-details-2027/${group}.json`, JSON.stringify(detailPayload) + "\n");
+}
 const payload = {
   provider: "College Basketball Data",
   season,
@@ -81,18 +90,14 @@ const payload = {
   seasonType: "regular",
   fetchedAt: new Date().toISOString(),
   count: players.length,
+  detailGroups: detailsByGroup.size,
   status: players.length ? "available" : "empty",
-  note: players.length
-    ? "Per-game counting stats are calculated from provider season totals and games played. Missing source fields remain null."
-    : "The provider returned no regular-season player records yet. This is not a substitute for missing stats.",
+  note: "The searchable player index contains normalized leaderboard fields. Full provider records and shooting profiles are split into conference files and fetched only when a player profile is opened.",
   players,
 };
+await writeFile("public/data/player-season-2027.json", JSON.stringify(payload) + "\n");
+console.log(`Fetched ${players.length} validated player records across ${detailsByGroup.size} lazy-loaded conference detail files.`);
 
-await mkdir("public/data", { recursive: true });
-await writeFile("public/data/player-season-2027.json", JSON.stringify(payload, null, 2) + "\n");
-console.log(`Fetched ${players.length} validated player records for season ${season}.`);
-
- 
 // Publish the national team directory at build time so GitHub Pages does not
 // depend on a browser-to-ESPN request (which can be blocked by CORS/network policy).
 try {
@@ -102,9 +107,9 @@ try {
   if (!directoryResponse.ok) throw new Error(`ESPN team directory returned HTTP ${directoryResponse.status}`);
   const directoryJson = await directoryResponse.json();
   const rawTeams = directoryJson.sports?.[0]?.leagues?.[0]?.teams ?? directoryJson.teams ?? [];
-  const teams = rawTeams.map((entry) => entry.team ?? entry)
-    .filter((team) => team?.id && (team.displayName || team.name))
-    .map((team) => ({
+  const teams = rawTeams.map(entry => entry.team ?? entry)
+    .filter(team => team?.id && (team.displayName || team.name))
+    .map(team => ({
       id: String(team.id),
       displayName: team.displayName || team.name,
       name: team.name || team.displayName,
