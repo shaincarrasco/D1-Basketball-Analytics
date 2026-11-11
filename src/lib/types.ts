@@ -20,11 +20,15 @@ export type Player = {
   fouls?: number | null;
   freeThrowRate?: number | null;
   sourceStats?: Record<string, unknown>;
+  shootingProfile?: Record<string, unknown> | null;
 };
 export type Game = {
   id: string; date: string; awayTeam: string; homeTeam: string;
   awayScore?: number; homeScore?: number;
-  status: "scheduled" | "live" | "final"; conferenceGame?: boolean;
+  status: "scheduled" | "in_progress" | "final" | "postponed" | "cancelled";
+  conferenceGame?: boolean; neutralSite?: boolean; venue?: string | null; city?: string | null; state?: string | null;
+  homePeriodPoints?: number[] | null; awayPeriodPoints?: number[] | null;
+  homeConference?: string | null; awayConference?: string | null; source?: Record<string, unknown>;
 };
 export type MetricDefinition = {
   key: string; label: string; description: string; unit: string;
