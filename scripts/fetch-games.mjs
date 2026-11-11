@@ -35,7 +35,8 @@ const isD1Team = name => d1TeamNames.has(normalizeTeamName(name));
 
 const games = rows.flatMap((row) => {
   if (!row || !Number.isInteger(row.id) || typeof row.startDate !== "string" ||
-      typeof row.homeTeam !== "string" || typeof row.awayTeam !== "string" ||\n      (!isD1Team(row.homeTeam) && !isD1Team(row.awayTeam))) return [];
+      typeof row.homeTeam !== "string" || typeof row.awayTeam !== "string" ||
+      (!isD1Team(row.homeTeam) && !isD1Team(row.awayTeam))) return [];
   const rawStatus = String(row.status ?? row.gameStatus ?? "").toLowerCase();
   const status = rawStatus.includes("final") ? "final"
     : rawStatus.includes("progress") || rawStatus.includes("live") ? "in_progress"
