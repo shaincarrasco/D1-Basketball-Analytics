@@ -10,31 +10,23 @@ const [teamPayload, playerPayload, gamePayload] = await Promise.all([
 const numeric = value => typeof value === "number" && Number.isFinite(value) ? value : null;
 const get = (source, path) => path.split(".").reduce((value, key) => value && typeof value === "object" ? value[key] : undefined, source);
 const ratio = (a,b) => numeric(a) !== null && numeric(b) !== null && b > 0 ? a / b : null;
-const teams = (teamPayload.teams ?? []).map(team => {
-  const t = team.teamStats ?? {};
-  const o = team.opponentStats ?? {};
-  const fga = get(t,"fieldGoals.attempted");
-  const fta = get(t,"freeThrows.attempted");
-  const orb = get(t,"rebounds.offensive") ?? get(t,"offensiveRebounds");
-  const turnovers = get(t,"turnovers.total") ?? get(t,"turnovers");
-  const points = get(t,"points.total") ?? get(t,"points");
-  const oppFga = get(o,"fieldGoals.attempted");
-  const oppFta = get(o,"freeThrows.attempted");
-  const oppOrb = get(o,"rebounds.offensive") ?? get(o,"offensiveRebounds");
-  const oppTurnovers = get(o,"turnovers.total") ?? get(o,"turnovers");
-  const oppPoints = get(o,"points.total") ?? get(o,"points");
-  const poss = numeric(fga) !== null && numeric(fta) !== null && numeric(turnovers) !== null ? fga - (numeric(orb) ?? 0) + turnovers + 0.475 * fta : null;
-  const oppPoss = numeric(oppFga) !== null && numeric(oppFta) !== null && numeric(oppTurnovers) !== null ? oppFga - (numeric(oppOrb) ?? 0) + oppTurnovers + 0.475 * oppFta : null;
-  const offense = ratio(points,poss) === null ? null : ratio(points,poss) * 100;
-  const defense = ratio(oppPoints,oppPoss) === null ? null : ratio(oppPoints,oppPoss) * 100;
-  return {
+const teams = (teamPayload.teams ?? [])
+  .filter(team => team.powerRatings && Number.isFinite(team.powerRatings.adjEM))
+  .sort((a,b) => b.powerRatings.adjEM - a.powerRatings.adjEM)
+  .slice(0,8)
+  .map(team => ({
     team: team.team,
     conference: team.conference ?? null,
     wins: team.wins ?? null,
     losses: team.losses ?? null,
-    netEfficiency: offense !== null && defense !== null ? offense - defense : null,
-  };
-}).filter(team => team.netEfficiency !== null).sort((a,b) => b.netEfficiency - a.netEfficiency).slice(0,8);
+    netEfficiency: team.powerRatings.adjEM,
+    adjO: team.powerRatings.adjO,
+    adjD: team.powerRatings.adjD,
+    rank: team.powerRatings.rank,
+    sample: team.powerRatings.sample,
+    games: team.powerRatings.games,
+    ratingSource: "D1 Hoops Power Rating",
+  }));
 const players = [...(playerPayload.players ?? [])]
   .filter(player => numeric(player.points) !== null)
   .sort((a,b) => (b.points ?? -Infinity) - (a.points ?? -Infinity))
