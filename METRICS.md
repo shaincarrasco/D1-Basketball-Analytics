@@ -57,3 +57,6 @@ Opponent-specific shooting splits still require validated matchup-level shot dat
 ## Division I scope
 
 The current-season team, player, and game snapshots are filtered against a canonical Division I conference allowlist, including common provider naming variants. Records outside that conference set are excluded from the national rankings and player index. A D-I vs. non-D-I matchup remains in the schedule when either participating team belongs to a recognized D-I conference; game-level team box scores retain the D-I side only.
+
+
+Provider school-name aliases are normalized before matching team records to the directory (including New Orleans and St. Thomas).
