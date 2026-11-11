@@ -55,7 +55,6 @@ const payload = {
   provider: "College Basketball Data",
   season,
   seasonLabel: "2026–27",
-  builtAt: new Date().toISOString(),
   overview: [{
     teamCount: teamPayload.count ?? (teamPayload.teams ?? []).length,
     playerCount: playerPayload.count ?? (playerPayload.players ?? []).length,
