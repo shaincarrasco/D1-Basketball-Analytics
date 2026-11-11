@@ -2,8 +2,8 @@
 
 import { useEffect, useMemo, useState } from "react";
 import {
-  Activity, ArrowDownUp, ArrowRight, BarChart3, CalendarDays, CheckCircle2,
-  ChevronRight, CircleHelp, Clock3, Command, Database, Gauge, Home,
+  Activity, ArrowDownUp, ArrowRight, CalendarDays,
+  ChevronRight, CircleHelp, Clock3, Database, Gauge, Home,
   Menu, Moon, Search, ShieldCheck, Sun, Trophy, Users, X
 } from "lucide-react";
 import type { Player, TeamSeasonRecord } from "@/lib/types";
@@ -56,8 +56,7 @@ function useFeed<T>(path: string, key: string, fallback: string) {
   return feed;
 }
 function MetricCard({ label, value, detail, onClick }: { label: string; value: string; detail: string; onClick?: () => void }) {
-  const Tag = onClick ? "button" : "div";
-  return <Tag onClick={onClick} className="metric-card panel w-full p-4 text-left"><div className="flex items-center justify-between gap-2 text-xs text-muted"><span>{label}</span>{onClick && <ArrowRight size={14}/>}</div><div className="mt-3 text-2xl font-semibold tracking-tight tabular-nums">{value}</div><div className="mt-1 text-[11px] text-muted">{detail}</div></Tag>;
+  return <button type="button" onClick={onClick} className="metric-card panel w-full p-4 text-left"><div className="flex items-center justify-between gap-2 text-xs text-muted"><span>{label}</span><ArrowRight size={14}/></div><div className="mt-3 text-2xl font-semibold tracking-tight tabular-nums">{value}</div><div className="mt-1 text-[11px] text-muted">{detail}</div></button>;
 }
 function EmptyState({ title, detail, retry }: { title: string; detail: string; retry?: () => void }) {
   return <div className="panel flex flex-col items-center px-6 py-12 text-center"><Database size={25} className="mb-4 text-muted"/><h3 className="font-semibold">{title}</h3><p className="mt-2 max-w-lg text-sm leading-6 text-muted">{detail}</p>{retry && <button onClick={retry} className="mt-4 rounded-lg border px-4 py-2 text-sm">Retry</button>}</div>;
