@@ -132,7 +132,8 @@ const output = teamRecords.map(team => {
 const ranked = output.filter(team => team.powerRatings).sort((a,b) => b.powerRatings.adjEM - a.powerRatings.adjEM);
 ranked.forEach((team, index) => { team.powerRatings.rank = index + 1; });
 if (!ranked.length) throw new Error("DHR produced no rankable Division I teams; refusing to publish an empty national ranking.");
-const payload = { ...teamPayload, fetchedAt: new Date().toISOString(), ratingModel: {
+const modelUpdatedAt = teamPayload.fetchedAt ?? new Date().toISOString();
+const payload = { ...teamPayload, ratingModel: {
   name: "D1 Hoops Power Rating",
   version: "1.0.0",
   method: "Iterative opponent-adjusted offensive and defensive efficiency with neutral-site normalization and five-game league-average prior shrinkage.",
@@ -142,7 +143,7 @@ const payload = { ...teamPayload, fetchedAt: new Date().toISOString(), ratingMod
   gameCoverage: games.size,
   rankedTeams: ranked.length,
   minimumGames: 1,
-  updatedAt: new Date().toISOString(),
+  updatedAt: modelUpdatedAt,
 }, teams: output };
 await writeFile(teamPath, JSON.stringify(payload, null, 2) + "\n");
 console.log("[power-ratings] D1 Hoops Power Rating v1: " + ranked.length + " teams ranked from " + games.size + " box-score games; league efficiency " + leagueEfficiency.toFixed(2) + "; home edge " + homeEdge.toFixed(2) + ".");
