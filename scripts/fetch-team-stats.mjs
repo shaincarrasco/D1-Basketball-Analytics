@@ -104,7 +104,7 @@ const allTeamCount = teams.length;
 const d1Teams = teams.filter(team => isD1Conference(team.conference));
 const directoryPayload = JSON.parse(await readFile("public/data/team-directory.json", "utf8"));
 const directoryTeams = Array.isArray(directoryPayload.teams) ? directoryPayload.teams : [];
-const normalizeTeamName = value => String(value ?? "").toLowerCase().replace(/\b(the|university|college)\b/g, "").replace(/[^a-z0-9]/g, "");
+const normalizeTeamName = value => { const normalized = String(value ?? "").toLowerCase().replace(/\b(the|university|college)\b/g, "").replace(/[^a-z0-9]/g, ""); return ({ neworleans: "lsuneworleans", stthomasminnesota: "stthomas" })[normalized] ?? normalized; };
 const directoryTeamNames = new Set(directoryTeams.map(team => normalizeTeamName(team.location || team.displayName)));
 const matchedD1Teams = d1Teams.filter(team => directoryTeamNames.has(normalizeTeamName(team.team)));
 const unmatchedProviderTeams = d1Teams.filter(team => !directoryTeamNames.has(normalizeTeamName(team.team)));
