@@ -102,7 +102,7 @@ const teams = [...byTeam.values()].map(team => {
 const directoryPayload = JSON.parse(await readFile("public/data/team-directory.json", "utf8"));
 const directoryTeams = Array.isArray(directoryPayload.teams) ? directoryPayload.teams : [];
 if (directoryPayload.status !== "available" || !directoryTeams.length) throw new Error("A verified ESPN Division I team directory is required to filter team statistics.");
-const normalizeTeamName = value => String(value ?? "").toLowerCase().replace(/\\b(the|university|college)\\b/g, "").replace(/[^a-z0-9]/g, "");
+const normalizeTeamName = value => String(value ?? "").toLowerCase().replace(/\b(the|university|college)\b/g, "").replace(/[^a-z0-9]/g, "");
 const d1TeamNames = new Set(directoryTeams.flatMap(team => [team.location, team.displayName].filter(Boolean).map(normalizeTeamName)));
 const isD1Team = name => d1TeamNames.has(normalizeTeamName(name));
 const allTeamCount = teams.length;
