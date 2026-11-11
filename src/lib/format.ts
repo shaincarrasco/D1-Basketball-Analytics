@@ -4,8 +4,13 @@ export const fmt = (v: number | null | undefined, digits = 1) =>
   typeof v === "number" && Number.isFinite(v) ? v.toFixed(digits) : "—";
 export const signed = (v: number | null | undefined, digits = 1) =>
   typeof v === "number" && Number.isFinite(v) ? (v > 0 ? "+" : v < 0 ? "−" : "") + Math.abs(v).toFixed(digits) : "—";
-export const pctFmt = (p: number | null | undefined, digits = 0) =>
-  typeof p === "number" && Number.isFinite(p) ? `${(p * 100).toFixed(digits)}%` : "—";
+export const pctFmt = (p: number | null | undefined, digits = 0) => {
+  if (typeof p !== "number" || !Number.isFinite(p)) return "—";
+  // Never claim certainty: a 99.7% favourite still loses sometimes.
+  if (p > 0.995 && digits === 0) return ">99%";
+  if (p < 0.005 && digits === 0) return "<1%";
+  return `${(p * 100).toFixed(digits)}%`;
+};
 export const record = (w: number, l: number) => `${w}–${l}`;
 
 const ET = "America/New_York";

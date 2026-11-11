@@ -17,3 +17,8 @@ export const getConferences = () => load<Conference[]>("conferences.json");
 export const getPlayers = () => load<PlayerTable>("players.json");
 export const getTeam = (slug: string) => getTeams().find(t => t.slug === slug) ?? null;
 export const getTeamDetail = (slug: string) => load<TeamDetail>(`team/${slug}.json`);
+
+export const getGameIndex = () => load<import("./types").GameIndex>("games/index.json");
+export const getGameDay = (day: string) => load<import("./types").GameDay>(`games/${day}.json`);
+/** Every game in the season (build-time only; ~6k rows). */
+export const getAllGames = () => getGameIndex().days.flatMap(d => getGameDay(d.day).games.map(g => ({ ...g, day: d.day })));
