@@ -325,7 +325,7 @@ export default function NationalDirectory({ players = [], teamRecords = [], init
 
   useEffect(() => { void loadTeams(); }, []);
 
-  const conferenceByTeam = useMemo(() => new Map(teamRecords.map(record => [normalizeTeam(record.team), record.conference || "Conference unavailable"])), [teamRecords]);
+  const conferenceByTeam = useMemo(() => new Map(teamRecords.map(record => [normalizeTeam(record.team), record.conference || "Conference unavailable"] as const)), [teamRecords]);
   const conferences = useMemo(() => ["All conferences", ...Array.from(new Set(teamRecords.map(record => record.conference).filter((value): value is string => Boolean(value)))).sort()], [teamRecords]);
   const filtered = useMemo(() => teams.filter(t => {
     const name = t.displayName || t.name || "";
