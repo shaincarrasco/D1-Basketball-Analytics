@@ -257,6 +257,7 @@ export default function NationalDirectory({ players = [], teamRecords = [] }: { 
   const [rosterError, setRosterError] = useState("");
   const [player, setPlayer] = useState<EspnAthlete | null>(null);
   const [selectedStatsPlayer, setSelectedStatsPlayer] = useState<Player | null>(null);
+  const [compareIds, setCompareIds] = useState<string[]>([]);
   const [directorySort, setDirectorySort] = useState<"name" | "location">("name");
   const [directoryDirection, setDirectoryDirection] = useState<"asc" | "desc">("asc");
   const [statsSort, setStatsSort] = useState<keyof Player>("points");
@@ -282,6 +283,8 @@ export default function NationalDirectory({ players = [], teamRecords = [] }: { 
       return statsDirection === "asc" ? comparison : -comparison;
     });
   }, [players, selected, statsSort, statsDirection]);
+
+  const comparisonRecords = teamRecords.filter(record => compareIds.includes(String(record.teamId ?? record.team)));
 
   const loadTeams = async () => {
     setStatus("loading"); setError("");
@@ -399,6 +402,19 @@ export default function NationalDirectory({ players = [], teamRecords = [] }: { 
     <div className="flex flex-wrap gap-2"><label className="flex min-w-[220px] flex-1 items-center gap-2 rounded-xl border border-[#29364a] bg-[#101827] px-3"><Search size={15} className="text-slate-500"/><input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search all teams…" className="w-full bg-transparent py-3 text-xs outline-none"/></label><label className="flex items-center gap-2 rounded-xl border border-[#29364a] bg-[#101827] px-3 text-xs text-slate-500">Sort<select value={directorySort} onChange={e=>setDirectorySort(e.target.value as "name"|"location")} className="bg-transparent py-3 text-slate-100"><option value="name">Team name</option><option value="location">Location</option></select></label><button onClick={() => setDirectoryDirection(v => v === "asc" ? "desc" : "asc")} className="rounded-xl border border-[#29364a] bg-[#101827] px-3 py-2 text-xs" aria-label="Toggle team sort direction">{directoryDirection === "asc" ? "A–Z" : "Z–A"}</button><select value={conference} onChange={e=>setConference(e.target.value)} className="rounded-xl border border-[#29364a] bg-[#101827] px-3 py-2 text-xs">{conferences.map(c=><option key={c}>{c}</option>)}</select></div>
     {status === "loading" && <div className="panel flex items-center gap-3 p-8 text-sm text-slate-400"><Loader2 className="animate-spin" size={18}/> Loading the national team directory…</div>}
     {status === "error" && <div className="panel p-6"><p className="text-sm text-amber-300">{error}</p><button onClick={() => void loadTeams()} className="mt-3 text-xs text-white underline">Retry directory load</button><p className="mt-3 text-xs text-slate-500">This data source may be temporarily unavailable or may block this browser request.</p></div>}
+    {comparisonRecords.length > 0 && <section className="panel overflow-hidden">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#263448] p-4">
+        <div><div className="eyebrow">Side-by-side research</div><h3 className="mt-1 font-semibold">Team comparison · {comparisonRecords.length}/3 selected</h3></div>
+        <button type="button" onClick={() => setCompareIds([])} className="rounded-lg border border-[#29364a] px-3 py-2 text-xs">Clear comparison</button>
+      </div>
+      <div className="overflow-x-auto"><table className="w-full min-w-[640px] text-xs tabular-nums">
+        <thead><tr className="bg-[#131e2d] text-[10px] uppercase tracking-wider text-slate-400"><th className="sticky left-0 bg-[#131e2d] px-3 py-3 text-left">Metric</th>{comparisonRecords.map(record=><th key={String(record.teamId ?? record.team)} className="px-3 py-3 text-right">{record.team}</th>)}</tr></thead>
+        <tbody>{TEAM_METRIC_GROUPS.flatMap(group=>[
+          <tr key={group.label}><td colSpan={comparisonRecords.length+1} className="border-t border-[#263448] bg-[#172438] px-3 py-2 text-left font-semibold text-lime-300">{group.label}</td></tr>,
+          ...group.columns.map(([key,label])=><tr key={key} className="border-t border-[#243044]"><td className="sticky left-0 bg-[#101827] px-3 py-2 text-left text-slate-400">{label}</td>{comparisonRecords.map(record=><td key={String(record.teamId ?? record.team)} className="px-3 py-2 text-right">{teamMetric(record,key)?.toFixed(1) ?? "—"}</td>)}</tr>)
+        ])}</tbody>
+      </table></div>
+    </section>}
     <section className="panel overflow-hidden">
       <div className="flex flex-wrap items-end justify-between gap-3 border-b border-[#263448] p-5">
         <div><div className="eyebrow">2026–27 national analytics · all available team metrics</div><h3 className="mt-1 text-lg font-bold">The complete team table</h3><p className="mt-1 text-xs text-slate-500">{rankedRecords.length} teams · {TEAM_METRIC_GROUPS.reduce((n,g)=>n+g.columns.length,0)} stat columns · select any column heading to sort</p></div>
@@ -418,7 +434,7 @@ export default function NationalDirectory({ players = [], teamRecords = [] }: { 
           </thead>
           <tbody>{rankedRecords.map(({record},index)=>{const team=teams.find(t=>normalizeTeam(t.displayName||t.name||"")===normalizeTeam(record.team));return <tr key={record.teamId??record.team} className="group hover:bg-[#172438]">
             <td className="sticky left-0 z-10 border-b border-r border-[#243044] bg-[#0d1521] px-3 py-3 font-mono text-slate-500 group-hover:bg-[#172438]">{index+1}</td>
-            <td className="sticky left-[42px] z-10 border-b border-r border-[#243044] bg-[#0d1521] px-3 py-3 font-semibold text-lime-300 group-hover:bg-[#172438]">{team?<button onClick={()=>void openTeam(team)} className="max-w-[180px] truncate text-left hover:underline">{record.team}</button>:<span className="text-slate-200">{record.team}</span>}<span className="mt-1 block text-[10px] font-normal text-slate-500">{record.wins??"—"}–{record.losses??"—"} · {record.conference||"D-I"}</span></td>
+            <td className="sticky left-[42px] z-10 border-b border-r border-[#243044] bg-[#0d1521] px-3 py-3 font-semibold text-lime-300 group-hover:bg-[#172438]"><div className="flex items-center gap-2">{team?<button onClick={()=>void openTeam(team)} className="max-w-[180px] truncate text-left hover:underline">{record.team}</button>:<span className="text-slate-200">{record.team}</span>}<button type="button" onClick={()=>{const id=String(record.teamId??record.team);setCompareIds(current=>current.includes(id)?current.filter(value=>value!==id):current.length<3?[...current,id]:[...current.slice(1),id]);}} className="rounded-md border border-[#29364a] px-1.5 py-1 text-[9px] text-slate-400 hover:text-lime-300">{compareIds.includes(String(record.teamId??record.team))?"Selected":"+ Compare"}</button></div><span className="mt-1 block text-[10px] font-normal text-slate-500">{record.wins??"—"}–{record.losses??"—"} · {record.conference||"D-I"}</span></td>
             {TEAM_METRIC_GROUPS.flatMap(group=>group.columns.map(([key])=>{const value=teamMetric(record,key);const isPct=String(key).toLowerCase().includes("pct")||["fgPct","threePct","efgPct","oppEfgPct","orbPct","drbPct","tovPct"].includes(key);const digits=["wins","losses","games"].includes(key)?0:["elo"].includes(key)?0:["astTov","ftRate","oppFtRate"].includes(key)?2:1;return <td key={key} className={`border-b border-r border-[#243044] px-3 py-3 text-right whitespace-nowrap ${rankingMetric===key?"bg-lime-300/[0.06] text-lime-200 font-semibold":"text-slate-300"}`}>{value==null?"—":`${value.toFixed(digits)}${isPct?"%":""}`}</td>}))}
           </tr>})}</tbody>
         </table>
