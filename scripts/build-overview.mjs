@@ -39,7 +39,7 @@ const players = [...(playerPayload.players ?? [])]
   .filter(player => numeric(player.points) !== null)
   .sort((a,b) => (b.points ?? -Infinity) - (a.points ?? -Infinity))
   .slice(0,8)
-  .map(player => ({ id: player.id, name: player.name, teamName: player.teamName, conference: player.conference ?? null, points: player.points, rebounds: player.rebounds ?? null, assists: player.assists ?? null }));
+  .map(player => ({ id: player.id, name: player.name, teamName: player.teamName, conference: player.conference ?? null, detailGroup: player.detailGroup ?? "unclassified", points: player.points, rebounds: player.rebounds ?? null, assists: player.assists ?? null }));
 const now = Date.now();
 const games = [...(gamePayload.games ?? [])];
 const upcoming = games.filter(game => new Date(game.date).getTime() >= now).sort((a,b) => a.date.localeCompare(b.date));
