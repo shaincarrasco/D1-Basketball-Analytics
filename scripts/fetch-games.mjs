@@ -1,4 +1,5 @@
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { mkdir, writeFile } from "node:fs/promises";
+import { isD1Conference } from "./d1-conferences.mjs";
 
 const season = 2027;
 const key = process.env.CBBD_API_KEY;
@@ -26,17 +27,10 @@ const batches = await Promise.all(windows.map(async ([label, startDateRange, end
   return rows;
 }));
 const rows = [...new Map(batches.flat().map(row => [String(row?.id), row])).values()];
-const directoryPayload = JSON.parse(await readFile("public/data/team-directory.json", "utf8"));
-const directoryTeams = Array.isArray(directoryPayload.teams) ? directoryPayload.teams : [];
-if (directoryPayload.status !== "available" || !directoryTeams.length) throw new Error("A verified ESPN Division I directory is required before publishing game records.");
-const normalizeTeamName = value => String(value ?? "").toLowerCase().replace(/\b(the|university|college)\b/g, "").replace(/[^a-z0-9]/g, "");
-const d1TeamNames = new Set(directoryTeams.flatMap(team => [team.location, team.displayName].filter(Boolean).map(normalizeTeamName)));
-const isD1Team = name => d1TeamNames.has(normalizeTeamName(name));
-
 const games = rows.flatMap((row) => {
   if (!row || !Number.isInteger(row.id) || typeof row.startDate !== "string" ||
       typeof row.homeTeam !== "string" || typeof row.awayTeam !== "string" ||
-      (!isD1Team(row.homeTeam) && !isD1Team(row.awayTeam))) return [];
+      (!isD1Conference(row.homeConference) && !isD1Conference(row.awayConference))) return [];
   const rawStatus = String(row.status ?? row.gameStatus ?? "").toLowerCase();
   const status = rawStatus.includes("final") ? "final"
     : rawStatus.includes("progress") || rawStatus.includes("live") ? "in_progress"
