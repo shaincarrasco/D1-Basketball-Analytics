@@ -1,6 +1,6 @@
 {
   "provider": "ESPN",
-  "fetchedAt": "2026-11-11T01:09:47.740Z",
+  "fetchedAt": "2026-11-11T01:11:07.350Z",
   "count": 365,
   "status": "available",
   "teams": [
@@ -10,6 +10,7 @@
       "name": "Wildcats",
       "abbreviation": "ACU",
       "location": "Abilene Christian",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2000.png"
     },
     {
@@ -18,6 +19,7 @@
       "name": "Falcons",
       "abbreviation": "AF",
       "location": "Air Force",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2005.png"
     },
     {
@@ -26,6 +28,7 @@
       "name": "Zips",
       "abbreviation": "AKR",
       "location": "Akron",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2006.png"
     },
     {
@@ -34,6 +37,7 @@
       "name": "Bulldogs",
       "abbreviation": "AAMU",
       "location": "Alabama A&M",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2010.png"
     },
     {
@@ -42,6 +46,7 @@
       "name": "Crimson Tide",
       "abbreviation": "ALA",
       "location": "Alabama",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/333.png"
     },
     {
@@ -50,6 +55,7 @@
       "name": "Hornets",
       "abbreviation": "ALST",
       "location": "Alabama State",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2011.png"
     },
     {
@@ -58,6 +64,7 @@
       "name": "Braves",
       "abbreviation": "ALCN",
       "location": "Alcorn State",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2016.png"
     },
     {
@@ -66,6 +73,7 @@
       "name": "Eagles",
       "abbreviation": "AMER",
       "location": "American University",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/44.png"
     },
     {
@@ -74,6 +82,7 @@
       "name": "Mountaineers",
       "abbreviation": "APP",
       "location": "App State",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2026.png"
     },
     {
@@ -82,6 +91,7 @@
       "name": "Sun Devils",
       "abbreviation": "ASU",
       "location": "Arizona State",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/9.png"
     },
     {
@@ -90,6 +100,7 @@
       "name": "Wildcats",
       "abbreviation": "ARIZ",
       "location": "Arizona",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/12.png"
     },
     {
@@ -98,6 +109,7 @@
       "name": "Razorbacks",
       "abbreviation": "ARK",
       "location": "Arkansas",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/8.png"
     },
     {
@@ -106,6 +118,7 @@
       "name": "Red Wolves",
       "abbreviation": "ARST",
       "location": "Arkansas State",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2032.png"
     },
     {
@@ -114,6 +127,7 @@
       "name": "Golden Lions",
       "abbreviation": "UAPB",
       "location": "Arkansas-Pine Bluff",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2029.png"
     },
     {
@@ -122,6 +136,7 @@
       "name": "Black Knights",
       "abbreviation": "ARMY",
       "location": "Army",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/349.png"
     },
     {
@@ -130,6 +145,7 @@
       "name": "Tigers",
       "abbreviation": "AUB",
       "location": "Auburn",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2.png"
     },
     {
@@ -138,6 +154,7 @@
       "name": "Governors",
       "abbreviation": "APSU",
       "location": "Austin Peay",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2046.png"
     },
     {
@@ -146,6 +163,7 @@
       "name": "Cougars",
       "abbreviation": "BYU",
       "location": "BYU",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/252.png"
     },
     {
@@ -154,6 +172,7 @@
       "name": "Cardinals",
       "abbreviation": "BALL",
       "location": "Ball State",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2050.png"
     },
     {
@@ -162,6 +181,7 @@
       "name": "Bears",
       "abbreviation": "BAY",
       "location": "Baylor",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/239.png"
     },
     {
@@ -170,6 +190,7 @@
       "name": "Knights",
       "abbreviation": "BELL",
       "location": "Bellarmine",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/91.png"
     },
     {
@@ -178,6 +199,7 @@
       "name": "Bruins",
       "abbreviation": "BEL",
       "location": "Belmont",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2057.png"
     },
     {
@@ -186,6 +208,7 @@
       "name": "Wildcats",
       "abbreviation": "BCU",
       "location": "Bethune-Cookman",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2065.png"
     },
     {
@@ -194,6 +217,7 @@
       "name": "Bearcats",
       "abbreviation": "BING",
       "location": "Binghamton",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2066.png"
     },
     {
@@ -202,6 +226,7 @@
       "name": "Broncos",
       "abbreviation": "BOIS",
       "location": "Boise State",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/68.png"
     },
     {
@@ -210,6 +235,7 @@
       "name": "Eagles",
       "abbreviation": "BC",
       "location": "Boston College",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/103.png"
     },
     {
@@ -218,6 +244,7 @@
       "name": "Terriers",
       "abbreviation": "BU",
       "location": "Boston University",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/104.png"
     },
     {
@@ -226,6 +253,7 @@
       "name": "Falcons",
       "abbreviation": "BGSU",
       "location": "Bowling Green",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/189.png"
     },
     {
@@ -234,6 +262,7 @@
       "name": "Braves",
       "abbreviation": "BRAD",
       "location": "Bradley",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/71.png"
     },
     {
@@ -242,6 +271,7 @@
       "name": "Bears",
       "abbreviation": "BRWN",
       "location": "Brown",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/225.png"
     },
     {
@@ -250,6 +280,7 @@
       "name": "Bulldogs",
       "abbreviation": "BRY",
       "location": "Bryant",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2803.png"
     },
     {
@@ -258,6 +289,7 @@
       "name": "Bison",
       "abbreviation": "BUCK",
       "location": "Bucknell",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2083.png"
     },
     {
@@ -266,6 +298,7 @@
       "name": "Bulls",
       "abbreviation": "BUF",
       "location": "Buffalo",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2084.png"
     },
     {
@@ -274,6 +307,7 @@
       "name": "Bulldogs",
       "abbreviation": "BTLR",
       "location": "Butler",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2086.png"
     },
     {
@@ -282,6 +316,7 @@
       "name": "Mustangs",
       "abbreviation": "CP",
       "location": "Cal Poly",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/13.png"
     },
     {
@@ -290,6 +325,7 @@
       "name": "Roadrunners",
       "abbreviation": "CSUB",
       "location": "Cal State Bakersfield",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2934.png"
     },
     {
@@ -298,6 +334,7 @@
       "name": "Titans",
       "abbreviation": "CSUF",
       "location": "Cal State Fullerton",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2239.png"
     },
     {
@@ -306,6 +343,7 @@
       "name": "Matadors",
       "abbreviation": "CSUN",
       "location": "Cal State Northridge",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2463.png"
     },
     {
@@ -314,6 +352,7 @@
       "name": "Lancers",
       "abbreviation": "CBU",
       "location": "California Baptist",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2856.png"
     },
     {
@@ -322,6 +361,7 @@
       "name": "Golden Bears",
       "abbreviation": "CAL",
       "location": "California",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/25.png"
     },
     {
@@ -330,6 +370,7 @@
       "name": "Fighting Camels",
       "abbreviation": "CAM",
       "location": "Campbell",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2097.png"
     },
     {
@@ -338,6 +379,7 @@
       "name": "Golden Griffins",
       "abbreviation": "CAN",
       "location": "Canisius",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2099.png"
     },
     {
@@ -346,6 +388,7 @@
       "name": "Bears",
       "abbreviation": "CARK",
       "location": "Central Arkansas",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2110.png"
     },
     {
@@ -354,6 +397,7 @@
       "name": "Blue Devils",
       "abbreviation": "CCSU",
       "location": "Central Connecticut",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2115.png"
     },
     {
@@ -362,6 +406,7 @@
       "name": "Chippewas",
       "abbreviation": "CMU",
       "location": "Central Michigan",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2117.png"
     },
     {
@@ -370,6 +415,7 @@
       "name": "Cougars",
       "abbreviation": "COFC",
       "location": "Charleston",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/232.png"
     },
     {
@@ -378,6 +424,7 @@
       "name": "Buccaneers",
       "abbreviation": "CHSO",
       "location": "Charleston Southern",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2127.png"
     },
     {
@@ -386,6 +433,7 @@
       "name": "49ers",
       "abbreviation": "CLT",
       "location": "Charlotte",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2429.png"
     },
     {
@@ -394,6 +442,7 @@
       "name": "Mocs",
       "abbreviation": "UTC",
       "location": "Chattanooga",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/236.png"
     },
     {
@@ -402,6 +451,7 @@
       "name": "Cougars",
       "abbreviation": "CHST",
       "location": "Chicago State",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2130.png"
     },
     {
@@ -410,6 +460,7 @@
       "name": "Bearcats",
       "abbreviation": "CIN",
       "location": "Cincinnati",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2132.png"
     },
     {
@@ -418,6 +469,7 @@
       "name": "Tigers",
       "abbreviation": "CLEM",
       "location": "Clemson",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/228.png"
     },
     {
@@ -426,6 +478,7 @@
       "name": "Vikings",
       "abbreviation": "CLE",
       "location": "Cleveland State",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/325.png"
     },
     {
@@ -434,6 +487,7 @@
       "name": "Chanticleers",
       "abbreviation": "CCU",
       "location": "Coastal Carolina",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/324.png"
     },
     {
@@ -442,6 +496,7 @@
       "name": "Raiders",
       "abbreviation": "COLG",
       "location": "Colgate",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2142.png"
     },
     {
@@ -450,6 +505,7 @@
       "name": "Buffaloes",
       "abbreviation": "COLO",
       "location": "Colorado",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/38.png"
     },
     {
@@ -458,6 +514,7 @@
       "name": "Rams",
       "abbreviation": "CSU",
       "location": "Colorado State",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/36.png"
     },
     {
@@ -466,6 +523,7 @@
       "name": "Lions",
       "abbreviation": "COLU",
       "location": "Columbia",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/171.png"
     },
     {
@@ -474,6 +532,7 @@
       "name": "Eagles",
       "abbreviation": "COPP",
       "location": "Coppin State",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2154.png"
     },
     {
@@ -482,6 +541,7 @@
       "name": "Big Red",
       "abbreviation": "COR",
       "location": "Cornell",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/172.png"
     },
     {
@@ -490,6 +550,7 @@
       "name": "Bluejays",
       "abbreviation": "CREI",
       "location": "Creighton",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/156.png"
     },
     {
@@ -498,6 +559,7 @@
       "name": "Big Green",
       "abbreviation": "DART",
       "location": "Dartmouth",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/159.png"
     },
     {
@@ -506,6 +568,7 @@
       "name": "Wildcats",
       "abbreviation": "DAV",
       "location": "Davidson",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2166.png"
     },
     {
@@ -514,6 +577,7 @@
       "name": "Flyers",
       "abbreviation": "DAY",
       "location": "Dayton",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2168.png"
     },
     {
@@ -522,6 +586,7 @@
       "name": "Blue Demons",
       "abbreviation": "DEP",
       "location": "DePaul",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/305.png"
     },
     {
@@ -530,6 +595,7 @@
       "name": "Blue Hens",
       "abbreviation": "DEL",
       "location": "Delaware",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/48.png"
     },
     {
@@ -538,6 +604,7 @@
       "name": "Hornets",
       "abbreviation": "DSU",
       "location": "Delaware State",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2169.png"
     },
     {
@@ -546,6 +613,7 @@
       "name": "Pioneers",
       "abbreviation": "DEN",
       "location": "Denver",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2172.png"
     },
     {
@@ -554,6 +622,7 @@
       "name": "Titans",
       "abbreviation": "DETM",
       "location": "Detroit Mercy",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2174.png"
     },
     {
@@ -562,6 +631,7 @@
       "name": "Bulldogs",
       "abbreviation": "DRKE",
       "location": "Drake",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2181.png"
     },
     {
@@ -570,6 +640,7 @@
       "name": "Dragons",
       "abbreviation": "DREX",
       "location": "Drexel",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2182.png"
     },
     {
@@ -578,6 +649,7 @@
       "name": "Blue Devils",
       "abbreviation": "DUKE",
       "location": "Duke",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/150.png"
     },
     {
@@ -586,6 +658,7 @@
       "name": "Dukes",
       "abbreviation": "DUQ",
       "location": "Duquesne",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2184.png"
     },
     {
@@ -594,6 +667,7 @@
       "name": "Pirates",
       "abbreviation": "ECU",
       "location": "East Carolina",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/151.png"
     },
     {
@@ -602,6 +676,7 @@
       "name": "Buccaneers",
       "abbreviation": "ETSU",
       "location": "East Tennessee State",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2193.png"
     },
     {
@@ -610,6 +685,7 @@
       "name": "Lions",
       "abbreviation": "ETAM",
       "location": "East Texas A&M",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2837.png"
     },
     {
@@ -618,6 +694,7 @@
       "name": "Panthers",
       "abbreviation": "EIU",
       "location": "Eastern Illinois",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2197.png"
     },
     {
@@ -626,6 +703,7 @@
       "name": "Colonels",
       "abbreviation": "EKU",
       "location": "Eastern Kentucky",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2198.png"
     },
     {
@@ -634,6 +712,7 @@
       "name": "Eagles",
       "abbreviation": "EMU",
       "location": "Eastern Michigan",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2199.png"
     },
     {
@@ -642,6 +721,7 @@
       "name": "Eagles",
       "abbreviation": "EWU",
       "location": "Eastern Washington",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/331.png"
     },
     {
@@ -650,6 +730,7 @@
       "name": "Phoenix",
       "abbreviation": "ELON",
       "location": "Elon",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2210.png"
     },
     {
@@ -658,6 +739,7 @@
       "name": "Purple Aces",
       "abbreviation": "EVAN",
       "location": "Evansville",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/339.png"
     },
     {
@@ -666,6 +748,7 @@
       "name": "Stags",
       "abbreviation": "FAIR",
       "location": "Fairfield",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2217.png"
     },
     {
@@ -674,6 +757,7 @@
       "name": "Knights",
       "abbreviation": "FDU",
       "location": "Fairleigh Dickinson",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/161.png"
     },
     {
@@ -682,6 +766,7 @@
       "name": "Rattlers",
       "abbreviation": "FAMU",
       "location": "Florida A&M",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/50.png"
     },
     {
@@ -690,6 +775,7 @@
       "name": "Owls",
       "abbreviation": "FAU",
       "location": "Florida Atlantic",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2226.png"
     },
     {
@@ -698,6 +784,7 @@
       "name": "Gators",
       "abbreviation": "FLA",
       "location": "Florida",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/57.png"
     },
     {
@@ -706,6 +793,7 @@
       "name": "Eagles",
       "abbreviation": "FGCU",
       "location": "Florida Gulf Coast",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/526.png"
     },
     {
@@ -714,6 +802,7 @@
       "name": "Panthers",
       "abbreviation": "FIU",
       "location": "Florida International",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2229.png"
     },
     {
@@ -722,6 +811,7 @@
       "name": "Seminoles",
       "abbreviation": "FSU",
       "location": "Florida State",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/52.png"
     },
     {
@@ -730,6 +820,7 @@
       "name": "Rams",
       "abbreviation": "FOR",
       "location": "Fordham",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2230.png"
     },
     {
@@ -738,6 +829,7 @@
       "name": "Bulldogs",
       "abbreviation": "FRES",
       "location": "Fresno State",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/278.png"
     },
     {
@@ -746,6 +838,7 @@
       "name": "Paladins",
       "abbreviation": "FUR",
       "location": "Furman",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/231.png"
     },
     {
@@ -754,6 +847,7 @@
       "name": "Runnin' Bulldogs",
       "abbreviation": "GWEB",
       "location": "Gardner-Webb",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2241.png"
     },
     {
@@ -762,6 +856,7 @@
       "name": "Patriots",
       "abbreviation": "GMU",
       "location": "George Mason",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2244.png"
     },
     {
@@ -770,6 +865,7 @@
       "name": "Revolutionaries",
       "abbreviation": "GW",
       "location": "George Washington",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/45.png"
     },
     {
@@ -778,6 +874,7 @@
       "name": "Hoyas",
       "abbreviation": "GTWN",
       "location": "Georgetown",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/46.png"
     },
     {
@@ -786,6 +883,7 @@
       "name": "Bulldogs",
       "abbreviation": "UGA",
       "location": "Georgia",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/61.png"
     },
     {
@@ -794,6 +892,7 @@
       "name": "Eagles",
       "abbreviation": "GASO",
       "location": "Georgia Southern",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/290.png"
     },
     {
@@ -802,6 +901,7 @@
       "name": "Panthers",
       "abbreviation": "GAST",
       "location": "Georgia State",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2247.png"
     },
     {
@@ -810,6 +910,7 @@
       "name": "Yellow Jackets",
       "abbreviation": "GT",
       "location": "Georgia Tech",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/59.png"
     },
     {
@@ -818,6 +919,7 @@
       "name": "Bulldogs",
       "abbreviation": "GONZ",
       "location": "Gonzaga",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2250.png"
     },
     {
@@ -826,6 +928,7 @@
       "name": "Tigers",
       "abbreviation": "GRAM",
       "location": "Grambling",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2755.png"
     },
     {
@@ -834,6 +937,7 @@
       "name": "Lopes",
       "abbreviation": "GCU",
       "location": "Grand Canyon",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2253.png"
     },
     {
@@ -842,6 +946,7 @@
       "name": "Phoenix",
       "abbreviation": "GB",
       "location": "Green Bay",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2739.png"
     },
     {
@@ -850,6 +955,7 @@
       "name": "Pirates",
       "abbreviation": "HAMP",
       "location": "Hampton",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2261.png"
     },
     {
@@ -858,6 +964,7 @@
       "name": "Crimson",
       "abbreviation": "HARV",
       "location": "Harvard",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/108.png"
     },
     {
@@ -866,6 +973,7 @@
       "name": "Rainbow Warriors",
       "abbreviation": "HAW",
       "location": "Hawai'i",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/62.png"
     },
     {
@@ -874,6 +982,7 @@
       "name": "Panthers",
       "abbreviation": "HPU",
       "location": "High Point",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2272.png"
     },
     {
@@ -882,6 +991,7 @@
       "name": "Pride",
       "abbreviation": "HOF",
       "location": "Hofstra",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2275.png"
     },
     {
@@ -890,6 +1000,7 @@
       "name": "Crusaders",
       "abbreviation": "HC",
       "location": "Holy Cross",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/107.png"
     },
     {
@@ -898,6 +1009,7 @@
       "name": "Huskies",
       "abbreviation": "HCU",
       "location": "Houston Christian",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2277.png"
     },
     {
@@ -906,6 +1018,7 @@
       "name": "Cougars",
       "abbreviation": "HOU",
       "location": "Houston",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/248.png"
     },
     {
@@ -914,6 +1027,7 @@
       "name": "Bison",
       "abbreviation": "HOW",
       "location": "Howard",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/47.png"
     },
     {
@@ -922,6 +1036,7 @@
       "name": "Jaguars",
       "abbreviation": "IUIN",
       "location": "IU Indianapolis",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/85.png"
     },
     {
@@ -930,6 +1045,7 @@
       "name": "Bengals",
       "abbreviation": "IDST",
       "location": "Idaho State",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/304.png"
     },
     {
@@ -938,6 +1054,7 @@
       "name": "Vandals",
       "abbreviation": "IDHO",
       "location": "Idaho",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/70.png"
     },
     {
@@ -946,6 +1063,7 @@
       "name": "Fighting Illini",
       "abbreviation": "ILL",
       "location": "Illinois",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/356.png"
     },
     {
@@ -954,6 +1072,7 @@
       "name": "Redbirds",
       "abbreviation": "ILST",
       "location": "Illinois State",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2287.png"
     },
     {
@@ -962,6 +1081,7 @@
       "name": "Cardinals",
       "abbreviation": "UIW",
       "location": "Incarnate Word",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2916.png"
     },
     {
@@ -970,6 +1090,7 @@
       "name": "Hoosiers",
       "abbreviation": "IU",
       "location": "Indiana",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/84.png"
     },
     {
@@ -978,6 +1099,7 @@
       "name": "Sycamores",
       "abbreviation": "INST",
       "location": "Indiana State",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/282.png"
     },
     {
@@ -986,6 +1108,7 @@
       "name": "Gaels",
       "abbreviation": "IONA",
       "location": "Iona",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/314.png"
     },
     {
@@ -994,6 +1117,7 @@
       "name": "Hawkeyes",
       "abbreviation": "IOWA",
       "location": "Iowa",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2294.png"
     },
     {
@@ -1002,6 +1126,7 @@
       "name": "Cyclones",
       "abbreviation": "ISU",
       "location": "Iowa State",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/66.png"
     },
     {
@@ -1010,6 +1135,7 @@
       "name": "Tigers",
       "abbreviation": "JKST",
       "location": "Jackson State",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2296.png"
     },
     {
@@ -1018,6 +1144,7 @@
       "name": "Dolphins",
       "abbreviation": "JAX",
       "location": "Jacksonville",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/294.png"
     },
     {
@@ -1026,6 +1153,7 @@
       "name": "Gamecocks",
       "abbreviation": "JXST",
       "location": "Jacksonville State",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/55.png"
     },
     {
@@ -1034,6 +1162,7 @@
       "name": "Dukes",
       "abbreviation": "JMU",
       "location": "James Madison",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/256.png"
     },
     {
@@ -1042,6 +1171,7 @@
       "name": "Roos",
       "abbreviation": "KC",
       "location": "Kansas City",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/140.png"
     },
     {
@@ -1050,6 +1180,7 @@
       "name": "Jayhawks",
       "abbreviation": "KU",
       "location": "Kansas",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2305.png"
     },
     {
@@ -1058,6 +1189,7 @@
       "name": "Wildcats",
       "abbreviation": "KSU",
       "location": "Kansas State",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2306.png"
     },
     {
@@ -1066,6 +1198,7 @@
       "name": "Owls",
       "abbreviation": "KENN",
       "location": "Kennesaw State",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/338.png"
     },
     {
@@ -1074,6 +1207,7 @@
       "name": "Golden Flashes",
       "abbreviation": "KENT",
       "location": "Kent State",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2309.png"
     },
     {
@@ -1082,6 +1216,7 @@
       "name": "Wildcats",
       "abbreviation": "UK",
       "location": "Kentucky",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/96.png"
     },
     {
@@ -1090,6 +1225,7 @@
       "name": "Privateers",
       "abbreviation": "NOLA",
       "location": "LSU New Orleans",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2443.png"
     },
     {
@@ -1098,6 +1234,7 @@
       "name": "Tigers",
       "abbreviation": "LSU",
       "location": "LSU",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/99.png"
     },
     {
@@ -1106,6 +1243,7 @@
       "name": "Explorers",
       "abbreviation": "LAS",
       "location": "La Salle",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2325.png"
     },
     {
@@ -1114,6 +1252,7 @@
       "name": "Leopards",
       "abbreviation": "LAF",
       "location": "Lafayette",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/322.png"
     },
     {
@@ -1122,6 +1261,7 @@
       "name": "Cardinals",
       "abbreviation": "LAM",
       "location": "Lamar",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2320.png"
     },
     {
@@ -1130,6 +1270,7 @@
       "name": "Dolphins",
       "abbreviation": "LEM",
       "location": "Le Moyne",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2330.png"
     },
     {
@@ -1138,6 +1279,7 @@
       "name": "Mountain Hawks",
       "abbreviation": "LEH",
       "location": "Lehigh",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2329.png"
     },
     {
@@ -1146,6 +1288,7 @@
       "name": "Flames",
       "abbreviation": "LIB",
       "location": "Liberty",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2335.png"
     },
     {
@@ -1154,6 +1297,7 @@
       "name": "Lions",
       "abbreviation": "LIN",
       "location": "Lindenwood",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2815.png"
     },
     {
@@ -1162,6 +1306,7 @@
       "name": "Bisons",
       "abbreviation": "LIP",
       "location": "Lipscomb",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/288.png"
     },
     {
@@ -1170,6 +1315,7 @@
       "name": "Trojans",
       "abbreviation": "LR",
       "location": "Little Rock",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2031.png"
     },
     {
@@ -1178,6 +1324,7 @@
       "name": "Beach",
       "abbreviation": "LBSU",
       "location": "Long Beach State",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/299.png"
     },
     {
@@ -1186,6 +1333,7 @@
       "name": "Sharks",
       "abbreviation": "LIU",
       "location": "Long Island University",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/112358.png"
     },
     {
@@ -1194,6 +1342,7 @@
       "name": "Lancers",
       "abbreviation": "LONG",
       "location": "Longwood",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2344.png"
     },
     {
@@ -1202,6 +1351,7 @@
       "name": "Ragin' Cajuns",
       "abbreviation": "UL",
       "location": "Louisiana",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/309.png"
     },
     {
@@ -1210,6 +1360,7 @@
       "name": "Bulldogs",
       "abbreviation": "LT",
       "location": "Louisiana Tech",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2348.png"
     },
     {
@@ -1218,6 +1369,7 @@
       "name": "Cardinals",
       "abbreviation": "LOU",
       "location": "Louisville",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/97.png"
     },
     {
@@ -1226,6 +1378,7 @@
       "name": "Ramblers",
       "abbreviation": "LUC",
       "location": "Loyola Chicago",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2350.png"
     },
     {
@@ -1234,6 +1387,7 @@
       "name": "Greyhounds",
       "abbreviation": "L-MD",
       "location": "Loyola Maryland",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2352.png"
     },
     {
@@ -1242,6 +1396,7 @@
       "name": "Lions",
       "abbreviation": "LMU",
       "location": "Loyola Marymount",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2351.png"
     },
     {
@@ -1250,6 +1405,7 @@
       "name": "Black Bears",
       "abbreviation": "ME",
       "location": "Maine",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/311.png"
     },
     {
@@ -1258,6 +1414,7 @@
       "name": "Jaspers",
       "abbreviation": "MAN",
       "location": "Manhattan",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2363.png"
     },
     {
@@ -1266,6 +1423,7 @@
       "name": "Red Foxes",
       "abbreviation": "MRST",
       "location": "Marist",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2368.png"
     },
     {
@@ -1274,6 +1432,7 @@
       "name": "Golden Eagles",
       "abbreviation": "MARQ",
       "location": "Marquette",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/269.png"
     },
     {
@@ -1282,6 +1441,7 @@
       "name": "Thundering Herd",
       "abbreviation": "MRSH",
       "location": "Marshall",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/276.png"
     },
     {
@@ -1290,6 +1450,7 @@
       "name": "Hawks",
       "abbreviation": "UMES",
       "location": "Maryland Eastern Shore",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2379.png"
     },
     {
@@ -1298,6 +1459,7 @@
       "name": "Terrapins",
       "abbreviation": "MD",
       "location": "Maryland",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/120.png"
     },
     {
@@ -1306,6 +1468,7 @@
       "name": "Minutemen",
       "abbreviation": "MASS",
       "location": "Massachusetts",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/113.png"
     },
     {
@@ -1314,6 +1477,7 @@
       "name": "Cowboys",
       "abbreviation": "MCN",
       "location": "McNeese",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2377.png"
     },
     {
@@ -1322,6 +1486,7 @@
       "name": "Tigers",
       "abbreviation": "MEM",
       "location": "Memphis",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/235.png"
     },
     {
@@ -1330,6 +1495,7 @@
       "name": "Bears",
       "abbreviation": "MER",
       "location": "Mercer",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2382.png"
     },
     {
@@ -1338,6 +1504,7 @@
       "name": "Lakers",
       "abbreviation": "MERC",
       "location": "Mercyhurst",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2385.png"
     },
     {
@@ -1346,6 +1513,7 @@
       "name": "Warriors",
       "abbreviation": "MRMK",
       "location": "Merrimack",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2771.png"
     },
     {
@@ -1354,6 +1522,7 @@
       "name": "RedHawks",
       "abbreviation": "M-OH",
       "location": "Miami (OH)",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/193.png"
     },
     {
@@ -1362,6 +1531,7 @@
       "name": "Hurricanes",
       "abbreviation": "MIA",
       "location": "Miami",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2390.png"
     },
     {
@@ -1370,6 +1540,7 @@
       "name": "Spartans",
       "abbreviation": "MSU",
       "location": "Michigan State",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/127.png"
     },
     {
@@ -1378,6 +1549,7 @@
       "name": "Wolverines",
       "abbreviation": "MICH",
       "location": "Michigan",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/130.png"
     },
     {
@@ -1386,6 +1558,7 @@
       "name": "Blue Raiders",
       "abbreviation": "MTSU",
       "location": "Middle Tennessee",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2393.png"
     },
     {
@@ -1394,6 +1567,7 @@
       "name": "Panthers",
       "abbreviation": "MILW",
       "location": "Milwaukee",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/270.png"
     },
     {
@@ -1402,6 +1576,7 @@
       "name": "Golden Gophers",
       "abbreviation": "MINN",
       "location": "Minnesota",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/135.png"
     },
     {
@@ -1410,6 +1585,7 @@
       "name": "Bulldogs",
       "abbreviation": "MSST",
       "location": "Mississippi State",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/344.png"
     },
     {
@@ -1418,6 +1594,7 @@
       "name": "Delta Devils",
       "abbreviation": "MVSU",
       "location": "Mississippi Valley State",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2400.png"
     },
     {
@@ -1426,6 +1603,7 @@
       "name": "Bears",
       "abbreviation": "MOST",
       "location": "Missouri State",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2623.png"
     },
     {
@@ -1434,6 +1612,7 @@
       "name": "Tigers",
       "abbreviation": "MIZ",
       "location": "Missouri",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/142.png"
     },
     {
@@ -1442,6 +1621,7 @@
       "name": "Hawks",
       "abbreviation": "MONM",
       "location": "Monmouth",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2405.png"
     },
     {
@@ -1450,6 +1630,7 @@
       "name": "Grizzlies",
       "abbreviation": "MONT",
       "location": "Montana",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/149.png"
     },
     {
@@ -1458,6 +1639,7 @@
       "name": "Bobcats",
       "abbreviation": "MTST",
       "location": "Montana State",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/147.png"
     },
     {
@@ -1466,6 +1648,7 @@
       "name": "Eagles",
       "abbreviation": "MORE",
       "location": "Morehead State",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2413.png"
     },
     {
@@ -1474,6 +1657,7 @@
       "name": "Bears",
       "abbreviation": "MORG",
       "location": "Morgan State",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2415.png"
     },
     {
@@ -1482,6 +1666,7 @@
       "name": "Mountaineers",
       "abbreviation": "MSM",
       "location": "Mount St. Mary's",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/116.png"
     },
     {
@@ -1490,6 +1675,7 @@
       "name": "Racers",
       "abbreviation": "MUR",
       "location": "Murray State",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/93.png"
     },
     {
@@ -1498,6 +1684,7 @@
       "name": "Wolfpack",
       "abbreviation": "NCSU",
       "location": "NC State",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/152.png"
     },
     {
@@ -1506,6 +1693,7 @@
       "name": "Highlanders",
       "abbreviation": "NJIT",
       "location": "NJIT",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2885.png"
     },
     {
@@ -1514,6 +1702,7 @@
       "name": "Midshipmen",
       "abbreviation": "NAVY",
       "location": "Navy",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2426.png"
     },
     {
@@ -1522,6 +1711,7 @@
       "name": "Cornhuskers",
       "abbreviation": "NEB",
       "location": "Nebraska",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/158.png"
     },
     {
@@ -1530,6 +1720,7 @@
       "name": "Wolf Pack",
       "abbreviation": "NEV",
       "location": "Nevada",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2440.png"
     },
     {
@@ -1538,6 +1729,7 @@
       "name": "Wildcats",
       "abbreviation": "UNH",
       "location": "New Hampshire",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/160.png"
     },
     {
@@ -1546,6 +1738,7 @@
       "name": "Chargers",
       "abbreviation": "NHVN",
       "location": "New Haven",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2441.png"
     },
     {
@@ -1554,6 +1747,7 @@
       "name": "Lobos",
       "abbreviation": "UNM",
       "location": "New Mexico",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/167.png"
     },
     {
@@ -1562,6 +1756,7 @@
       "name": "Aggies",
       "abbreviation": "NMSU",
       "location": "New Mexico State",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/166.png"
     },
     {
@@ -1570,6 +1765,7 @@
       "name": "Purple Eagles",
       "abbreviation": "NIA",
       "location": "Niagara",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/315.png"
     },
     {
@@ -1578,6 +1774,7 @@
       "name": "Colonels",
       "abbreviation": "NICH",
       "location": "Nicholls",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2447.png"
     },
     {
@@ -1586,6 +1783,7 @@
       "name": "Spartans",
       "abbreviation": "NORF",
       "location": "Norfolk State",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2450.png"
     },
     {
@@ -1594,6 +1792,7 @@
       "name": "Lions",
       "abbreviation": "UNA",
       "location": "North Alabama",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2453.png"
     },
     {
@@ -1602,6 +1801,7 @@
       "name": "Aggies",
       "abbreviation": "NCAT",
       "location": "North Carolina A&T",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2448.png"
     },
     {
@@ -1610,6 +1810,7 @@
       "name": "Eagles",
       "abbreviation": "NCCU",
       "location": "North Carolina Central",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2428.png"
     },
     {
@@ -1618,6 +1819,7 @@
       "name": "Tar Heels",
       "abbreviation": "UNC",
       "location": "North Carolina",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/153.png"
     },
     {
@@ -1626,6 +1828,7 @@
       "name": "Fighting Hawks",
       "abbreviation": "UND",
       "location": "North Dakota",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/155.png"
     },
     {
@@ -1634,6 +1837,7 @@
       "name": "Bison",
       "abbreviation": "NDSU",
       "location": "North Dakota State",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2449.png"
     },
     {
@@ -1642,6 +1846,7 @@
       "name": "Ospreys",
       "abbreviation": "UNF",
       "location": "North Florida",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2454.png"
     },
     {
@@ -1650,6 +1855,7 @@
       "name": "Mean Green",
       "abbreviation": "UNT",
       "location": "North Texas",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/249.png"
     },
     {
@@ -1658,6 +1864,7 @@
       "name": "Huskies",
       "abbreviation": "NE",
       "location": "Northeastern",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/111.png"
     },
     {
@@ -1666,6 +1873,7 @@
       "name": "Lumberjacks",
       "abbreviation": "NAU",
       "location": "Northern Arizona",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2464.png"
     },
     {
@@ -1674,6 +1882,7 @@
       "name": "Bears",
       "abbreviation": "UNCO",
       "location": "Northern Colorado",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2458.png"
     },
     {
@@ -1682,6 +1891,7 @@
       "name": "Huskies",
       "abbreviation": "NIU",
       "location": "Northern Illinois",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2459.png"
     },
     {
@@ -1690,6 +1900,7 @@
       "name": "Panthers",
       "abbreviation": "UNI",
       "location": "Northern Iowa",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2460.png"
     },
     {
@@ -1698,6 +1909,7 @@
       "name": "Norse",
       "abbreviation": "NKU",
       "location": "Northern Kentucky",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/94.png"
     },
     {
@@ -1706,6 +1918,7 @@
       "name": "Demons",
       "abbreviation": "NWST",
       "location": "Northwestern State",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2466.png"
     },
     {
@@ -1714,6 +1927,7 @@
       "name": "Wildcats",
       "abbreviation": "NU",
       "location": "Northwestern",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/77.png"
     },
     {
@@ -1722,6 +1936,7 @@
       "name": "Fighting Irish",
       "abbreviation": "ND",
       "location": "Notre Dame",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/87.png"
     },
     {
@@ -1730,6 +1945,7 @@
       "name": "Golden Grizzlies",
       "abbreviation": "OAK",
       "location": "Oakland",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2473.png"
     },
     {
@@ -1738,6 +1954,7 @@
       "name": "Bobcats",
       "abbreviation": "OHIO",
       "location": "Ohio",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/195.png"
     },
     {
@@ -1746,6 +1963,7 @@
       "name": "Buckeyes",
       "abbreviation": "OSU",
       "location": "Ohio State",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/194.png"
     },
     {
@@ -1754,6 +1972,7 @@
       "name": "Sooners",
       "abbreviation": "OU",
       "location": "Oklahoma",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/201.png"
     },
     {
@@ -1762,6 +1981,7 @@
       "name": "Cowboys",
       "abbreviation": "OKST",
       "location": "Oklahoma State",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/197.png"
     },
     {
@@ -1770,6 +1990,7 @@
       "name": "Monarchs",
       "abbreviation": "ODU",
       "location": "Old Dominion",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/295.png"
     },
     {
@@ -1778,6 +1999,7 @@
       "name": "Rebels",
       "abbreviation": "MISS",
       "location": "Ole Miss",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/145.png"
     },
     {
@@ -1786,6 +2008,7 @@
       "name": "Mavericks",
       "abbreviation": "OMA",
       "location": "Omaha",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2437.png"
     },
     {
@@ -1794,6 +2017,7 @@
       "name": "Golden Eagles",
       "abbreviation": "ORU",
       "location": "Oral Roberts",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/198.png"
     },
     {
@@ -1802,6 +2026,7 @@
       "name": "Ducks",
       "abbreviation": "ORE",
       "location": "Oregon",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2483.png"
     },
     {
@@ -1810,6 +2035,7 @@
       "name": "Beavers",
       "abbreviation": "ORST",
       "location": "Oregon State",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/204.png"
     },
     {
@@ -1818,6 +2044,7 @@
       "name": "Tigers",
       "abbreviation": "PAC",
       "location": "Pacific",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/279.png"
     },
     {
@@ -1826,6 +2053,7 @@
       "name": "Nittany Lions",
       "abbreviation": "PSU",
       "location": "Penn State",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/213.png"
     },
     {
@@ -1834,6 +2062,7 @@
       "name": "Quakers",
       "abbreviation": "PENN",
       "location": "Pennsylvania",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/219.png"
     },
     {
@@ -1842,6 +2071,7 @@
       "name": "Waves",
       "abbreviation": "PEPP",
       "location": "Pepperdine",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2492.png"
     },
     {
@@ -1850,6 +2080,7 @@
       "name": "Panthers",
       "abbreviation": "PITT",
       "location": "Pittsburgh",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/221.png"
     },
     {
@@ -1858,6 +2089,7 @@
       "name": "Pilots",
       "abbreviation": "PORT",
       "location": "Portland",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2501.png"
     },
     {
@@ -1866,6 +2098,7 @@
       "name": "Vikings",
       "abbreviation": "PRST",
       "location": "Portland State",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2502.png"
     },
     {
@@ -1874,6 +2107,7 @@
       "name": "Panthers",
       "abbreviation": "PV",
       "location": "Prairie View A&M",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2504.png"
     },
     {
@@ -1882,6 +2116,7 @@
       "name": "Blue Hose",
       "abbreviation": "PRES",
       "location": "Presbyterian",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2506.png"
     },
     {
@@ -1890,6 +2125,7 @@
       "name": "Tigers",
       "abbreviation": "PRIN",
       "location": "Princeton",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/163.png"
     },
     {
@@ -1898,6 +2134,7 @@
       "name": "Friars",
       "abbreviation": "PROV",
       "location": "Providence",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2507.png"
     },
     {
@@ -1906,6 +2143,7 @@
       "name": "Boilermakers",
       "abbreviation": "PUR",
       "location": "Purdue",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2509.png"
     },
     {
@@ -1914,6 +2152,7 @@
       "name": "Mastodons",
       "abbreviation": "PFW",
       "location": "Purdue Fort Wayne",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2870.png"
     },
     {
@@ -1922,6 +2161,7 @@
       "name": "Royals",
       "abbreviation": "QUC",
       "location": "Queens University",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2511.png"
     },
     {
@@ -1930,6 +2170,7 @@
       "name": "Bobcats",
       "abbreviation": "QUIN",
       "location": "Quinnipiac",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2514.png"
     },
     {
@@ -1938,6 +2179,7 @@
       "name": "Highlanders",
       "abbreviation": "RAD",
       "location": "Radford",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2515.png"
     },
     {
@@ -1946,6 +2188,7 @@
       "name": "Rams",
       "abbreviation": "URI",
       "location": "Rhode Island",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/227.png"
     },
     {
@@ -1954,6 +2197,7 @@
       "name": "Owls",
       "abbreviation": "RICE",
       "location": "Rice",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/242.png"
     },
     {
@@ -1962,6 +2206,7 @@
       "name": "Spiders",
       "abbreviation": "RICH",
       "location": "Richmond",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/257.png"
     },
     {
@@ -1970,6 +2215,7 @@
       "name": "Broncs",
       "abbreviation": "RID",
       "location": "Rider",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2520.png"
     },
     {
@@ -1978,6 +2224,7 @@
       "name": "Colonials",
       "abbreviation": "RMU",
       "location": "Robert Morris",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2523.png"
     },
     {
@@ -1986,6 +2233,7 @@
       "name": "Scarlet Knights",
       "abbreviation": "RUTG",
       "location": "Rutgers",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/164.png"
     },
     {
@@ -1994,6 +2242,7 @@
       "name": "Lions",
       "abbreviation": "SELA",
       "location": "SE Louisiana",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2545.png"
     },
     {
@@ -2002,6 +2251,7 @@
       "name": "Cougars",
       "abbreviation": "SIUE",
       "location": "SIU Edwardsville",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2565.png"
     },
     {
@@ -2010,6 +2260,7 @@
       "name": "Mustangs",
       "abbreviation": "SMU",
       "location": "SMU",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2567.png"
     },
     {
@@ -2018,6 +2269,7 @@
       "name": "Hornets",
       "abbreviation": "SAC",
       "location": "Sacramento State",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/16.png"
     },
     {
@@ -2026,6 +2278,7 @@
       "name": "Pioneers",
       "abbreviation": "SHU",
       "location": "Sacred Heart",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2529.png"
     },
     {
@@ -2034,6 +2287,7 @@
       "name": "Hawks",
       "abbreviation": "JOES",
       "location": "Saint Joseph's",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2603.png"
     },
     {
@@ -2042,6 +2296,7 @@
       "name": "Billikens",
       "abbreviation": "SLU",
       "location": "Saint Louis",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/139.png"
     },
     {
@@ -2050,6 +2305,7 @@
       "name": "Gaels",
       "abbreviation": "SMC",
       "location": "Saint Mary's",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2608.png"
     },
     {
@@ -2058,6 +2314,7 @@
       "name": "Peacocks",
       "abbreviation": "SPU",
       "location": "Saint Peter's",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2612.png"
     },
     {
@@ -2066,6 +2323,7 @@
       "name": "Bearkats",
       "abbreviation": "SHSU",
       "location": "Sam Houston",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2534.png"
     },
     {
@@ -2074,6 +2332,7 @@
       "name": "Bulldogs",
       "abbreviation": "SAM",
       "location": "Samford",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2535.png"
     },
     {
@@ -2082,6 +2341,7 @@
       "name": "Aztecs",
       "abbreviation": "SDSU",
       "location": "San Diego State",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/21.png"
     },
     {
@@ -2090,6 +2350,7 @@
       "name": "Toreros",
       "abbreviation": "USD",
       "location": "San Diego",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/301.png"
     },
     {
@@ -2098,6 +2359,7 @@
       "name": "Dons",
       "abbreviation": "SF",
       "location": "San Francisco",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2539.png"
     },
     {
@@ -2106,6 +2368,7 @@
       "name": "Spartans",
       "abbreviation": "SJSU",
       "location": "San José State",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/23.png"
     },
     {
@@ -2114,6 +2377,7 @@
       "name": "Broncos",
       "abbreviation": "SCU",
       "location": "Santa Clara",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2541.png"
     },
     {
@@ -2122,6 +2386,7 @@
       "name": "Redhawks",
       "abbreviation": "SEA",
       "location": "Seattle U",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2547.png"
     },
     {
@@ -2130,6 +2395,7 @@
       "name": "Pirates",
       "abbreviation": "HALL",
       "location": "Seton Hall",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2550.png"
     },
     {
@@ -2138,6 +2404,7 @@
       "name": "Saints",
       "abbreviation": "SIE",
       "location": "Siena",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2561.png"
     },
     {
@@ -2146,6 +2413,7 @@
       "name": "Jaguars",
       "abbreviation": "USA",
       "location": "South Alabama",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/6.png"
     },
     {
@@ -2154,6 +2422,7 @@
       "name": "Gamecocks",
       "abbreviation": "SC",
       "location": "South Carolina",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2579.png"
     },
     {
@@ -2162,6 +2431,7 @@
       "name": "Bulldogs",
       "abbreviation": "SCST",
       "location": "South Carolina State",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2569.png"
     },
     {
@@ -2170,6 +2440,7 @@
       "name": "Spartans",
       "abbreviation": "UPST",
       "location": "South Carolina Upstate",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2908.png"
     },
     {
@@ -2178,6 +2449,7 @@
       "name": "Coyotes",
       "abbreviation": "SDAK",
       "location": "South Dakota",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/233.png"
     },
     {
@@ -2186,6 +2458,7 @@
       "name": "Jackrabbits",
       "abbreviation": "SDST",
       "location": "South Dakota State",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2571.png"
     },
     {
@@ -2194,6 +2467,7 @@
       "name": "Bulls",
       "abbreviation": "USF",
       "location": "South Florida",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/58.png"
     },
     {
@@ -2202,6 +2476,7 @@
       "name": "Redhawks",
       "abbreviation": "SEMO",
       "location": "Southeast Missouri State",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2546.png"
     },
     {
@@ -2210,6 +2485,7 @@
       "name": "Salukis",
       "abbreviation": "SIU",
       "location": "Southern Illinois",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/79.png"
     },
     {
@@ -2218,6 +2494,7 @@
       "name": "Screaming Eagles",
       "abbreviation": "USI",
       "location": "Southern Indiana",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/88.png"
     },
     {
@@ -2226,6 +2503,7 @@
       "name": "Jaguars",
       "abbreviation": "SOU",
       "location": "Southern",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2582.png"
     },
     {
@@ -2234,6 +2512,7 @@
       "name": "Golden Eagles",
       "abbreviation": "USM",
       "location": "Southern Miss",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2572.png"
     },
     {
@@ -2242,6 +2521,7 @@
       "name": "Thunderbirds",
       "abbreviation": "SUU",
       "location": "Southern Utah",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/253.png"
     },
     {
@@ -2250,6 +2530,7 @@
       "name": "Bonnies",
       "abbreviation": "SBU",
       "location": "St. Bonaventure",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/179.png"
     },
     {
@@ -2258,6 +2539,7 @@
       "name": "Red Storm",
       "abbreviation": "SJU",
       "location": "St. John's",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2599.png"
     },
     {
@@ -2266,6 +2548,7 @@
       "name": "Tommies",
       "abbreviation": "STMN",
       "location": "St. Thomas",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2900.png"
     },
     {
@@ -2274,6 +2557,7 @@
       "name": "Cardinal",
       "abbreviation": "STAN",
       "location": "Stanford",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/24.png"
     },
     {
@@ -2282,6 +2566,7 @@
       "name": "Lumberjacks",
       "abbreviation": "SFA",
       "location": "Stephen F. Austin",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2617.png"
     },
     {
@@ -2290,6 +2575,7 @@
       "name": "Hatters",
       "abbreviation": "STET",
       "location": "Stetson",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/56.png"
     },
     {
@@ -2298,6 +2584,7 @@
       "name": "Skyhawks",
       "abbreviation": "STO",
       "location": "Stonehill",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/284.png"
     },
     {
@@ -2306,6 +2593,7 @@
       "name": "Seawolves",
       "abbreviation": "STBK",
       "location": "Stony Brook",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2619.png"
     },
     {
@@ -2314,6 +2602,7 @@
       "name": "Orange",
       "abbreviation": "SYR",
       "location": "Syracuse",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/183.png"
     },
     {
@@ -2322,6 +2611,7 @@
       "name": "Horned Frogs",
       "abbreviation": "TCU",
       "location": "TCU",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2628.png"
     },
     {
@@ -2330,6 +2620,7 @@
       "name": "Texans",
       "abbreviation": "TAR",
       "location": "Tarleton State",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2627.png"
     },
     {
@@ -2338,6 +2629,7 @@
       "name": "Owls",
       "abbreviation": "TEM",
       "location": "Temple",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/218.png"
     },
     {
@@ -2346,6 +2638,7 @@
       "name": "Tigers",
       "abbreviation": "TNST",
       "location": "Tennessee State",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2634.png"
     },
     {
@@ -2354,6 +2647,7 @@
       "name": "Golden Eagles",
       "abbreviation": "TNTC",
       "location": "Tennessee Tech",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2635.png"
     },
     {
@@ -2362,6 +2656,7 @@
       "name": "Volunteers",
       "abbreviation": "TENN",
       "location": "Tennessee",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2633.png"
     },
     {
@@ -2370,6 +2665,7 @@
       "name": "Aggies",
       "abbreviation": "TA&M",
       "location": "Texas A&M",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/245.png"
     },
     {
@@ -2378,6 +2674,7 @@
       "name": "Islanders",
       "abbreviation": "AMCC",
       "location": "Texas A&M-Corpus Christi",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/357.png"
     },
     {
@@ -2386,6 +2683,7 @@
       "name": "Longhorns",
       "abbreviation": "TEX",
       "location": "Texas",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/251.png"
     },
     {
@@ -2394,6 +2692,7 @@
       "name": "Tigers",
       "abbreviation": "TXSO",
       "location": "Texas Southern",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2640.png"
     },
     {
@@ -2402,6 +2701,7 @@
       "name": "Bobcats",
       "abbreviation": "TXST",
       "location": "Texas State",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/326.png"
     },
     {
@@ -2410,6 +2710,7 @@
       "name": "Red Raiders",
       "abbreviation": "TTU",
       "location": "Texas Tech",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2641.png"
     },
     {
@@ -2418,6 +2719,7 @@
       "name": "Bulldogs",
       "abbreviation": "CIT",
       "location": "The Citadel",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2643.png"
     },
     {
@@ -2426,6 +2728,7 @@
       "name": "Rockets",
       "abbreviation": "TOL",
       "location": "Toledo",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2649.png"
     },
     {
@@ -2434,6 +2737,7 @@
       "name": "Tigers",
       "abbreviation": "TOW",
       "location": "Towson",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/119.png"
     },
     {
@@ -2442,6 +2746,7 @@
       "name": "Trojans",
       "abbreviation": "TROY",
       "location": "Troy",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2653.png"
     },
     {
@@ -2450,6 +2755,7 @@
       "name": "Green Wave",
       "abbreviation": "TULN",
       "location": "Tulane",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2655.png"
     },
     {
@@ -2458,6 +2764,7 @@
       "name": "Golden Hurricane",
       "abbreviation": "TLSA",
       "location": "Tulsa",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/202.png"
     },
     {
@@ -2466,6 +2773,7 @@
       "name": "Blazers",
       "abbreviation": "UAB",
       "location": "UAB",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/5.png"
     },
     {
@@ -2474,6 +2782,7 @@
       "name": "Great Danes",
       "abbreviation": "UALB",
       "location": "UAlbany",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/399.png"
     },
     {
@@ -2482,6 +2791,7 @@
       "name": "Aggies",
       "abbreviation": "UCD",
       "location": "UC Davis",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/302.png"
     },
     {
@@ -2490,6 +2800,7 @@
       "name": "Anteaters",
       "abbreviation": "UCI",
       "location": "UC Irvine",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/300.png"
     },
     {
@@ -2498,6 +2809,7 @@
       "name": "Highlanders",
       "abbreviation": "UCR",
       "location": "UC Riverside",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/27.png"
     },
     {
@@ -2506,6 +2818,7 @@
       "name": "Tritons",
       "abbreviation": "UCSD",
       "location": "UC San Diego",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/28.png"
     },
     {
@@ -2514,6 +2827,7 @@
       "name": "Gauchos",
       "abbreviation": "UCSB",
       "location": "UC Santa Barbara",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2540.png"
     },
     {
@@ -2522,6 +2836,7 @@
       "name": "Knights",
       "abbreviation": "UCF",
       "location": "UCF",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2116.png"
     },
     {
@@ -2530,6 +2845,7 @@
       "name": "Bruins",
       "abbreviation": "UCLA",
       "location": "UCLA",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/26.png"
     },
     {
@@ -2538,6 +2854,7 @@
       "name": "Huskies",
       "abbreviation": "CONN",
       "location": "UConn",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/41.png"
     },
     {
@@ -2546,6 +2863,7 @@
       "name": "Flames",
       "abbreviation": "UIC",
       "location": "UIC",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/82.png"
     },
     {
@@ -2554,6 +2872,7 @@
       "name": "Warhawks",
       "abbreviation": "ULM",
       "location": "UL Monroe",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2433.png"
     },
     {
@@ -2562,6 +2881,7 @@
       "name": "Retrievers",
       "abbreviation": "UMBC",
       "location": "UMBC",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2378.png"
     },
     {
@@ -2570,6 +2890,7 @@
       "name": "River Hawks",
       "abbreviation": "UML",
       "location": "UMass Lowell",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2349.png"
     },
     {
@@ -2578,6 +2899,7 @@
       "name": "Bulldogs",
       "abbreviation": "UNCA",
       "location": "UNC Asheville",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2427.png"
     },
     {
@@ -2586,6 +2908,7 @@
       "name": "Spartans",
       "abbreviation": "UNCG",
       "location": "UNC Greensboro",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2430.png"
     },
     {
@@ -2594,6 +2917,7 @@
       "name": "Seahawks",
       "abbreviation": "UNCW",
       "location": "UNC Wilmington",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/350.png"
     },
     {
@@ -2602,6 +2926,7 @@
       "name": "Rebels",
       "abbreviation": "UNLV",
       "location": "UNLV",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2439.png"
     },
     {
@@ -2610,6 +2935,7 @@
       "name": "Trojans",
       "abbreviation": "USC",
       "location": "USC",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/30.png"
     },
     {
@@ -2618,6 +2944,7 @@
       "name": "Mavericks",
       "abbreviation": "UTA",
       "location": "UT Arlington",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/250.png"
     },
     {
@@ -2626,6 +2953,7 @@
       "name": "Skyhawks",
       "abbreviation": "UTM",
       "location": "UT Martin",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2630.png"
     },
     {
@@ -2634,6 +2962,7 @@
       "name": "Vaqueros",
       "abbreviation": "RGV",
       "location": "UT Rio Grande Valley",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/292.png"
     },
     {
@@ -2642,6 +2971,7 @@
       "name": "Miners",
       "abbreviation": "UTEP",
       "location": "UTEP",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2638.png"
     },
     {
@@ -2650,6 +2980,7 @@
       "name": "Roadrunners",
       "abbreviation": "UTSA",
       "location": "UTSA",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2636.png"
     },
     {
@@ -2658,6 +2989,7 @@
       "name": "Aggies",
       "abbreviation": "USU",
       "location": "Utah State",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/328.png"
     },
     {
@@ -2666,6 +2998,7 @@
       "name": "Trailblazers",
       "abbreviation": "UTU",
       "location": "Utah Tech",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/3101.png"
     },
     {
@@ -2674,6 +3007,7 @@
       "name": "Utes",
       "abbreviation": "UTAH",
       "location": "Utah",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/254.png"
     },
     {
@@ -2682,6 +3016,7 @@
       "name": "Wolverines",
       "abbreviation": "UVU",
       "location": "Utah Valley",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/3084.png"
     },
     {
@@ -2690,6 +3025,7 @@
       "name": "Rams",
       "abbreviation": "VCU",
       "location": "VCU",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2670.png"
     },
     {
@@ -2698,6 +3034,7 @@
       "name": "Keydets",
       "abbreviation": "VMI",
       "location": "VMI",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2678.png"
     },
     {
@@ -2706,6 +3043,7 @@
       "name": "Beacons",
       "abbreviation": "VAL",
       "location": "Valparaiso",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2674.png"
     },
     {
@@ -2714,6 +3052,7 @@
       "name": "Commodores",
       "abbreviation": "VAN",
       "location": "Vanderbilt",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/238.png"
     },
     {
@@ -2722,6 +3061,7 @@
       "name": "Catamounts",
       "abbreviation": "UVM",
       "location": "Vermont",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/261.png"
     },
     {
@@ -2730,6 +3070,7 @@
       "name": "Wildcats",
       "abbreviation": "VILL",
       "location": "Villanova",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/222.png"
     },
     {
@@ -2738,6 +3079,7 @@
       "name": "Cavaliers",
       "abbreviation": "UVA",
       "location": "Virginia",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/258.png"
     },
     {
@@ -2746,6 +3088,7 @@
       "name": "Hokies",
       "abbreviation": "VT",
       "location": "Virginia Tech",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/259.png"
     },
     {
@@ -2754,6 +3097,7 @@
       "name": "Seahawks",
       "abbreviation": "WAG",
       "location": "Wagner",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2681.png"
     },
     {
@@ -2762,6 +3106,7 @@
       "name": "Demon Deacons",
       "abbreviation": "WAKE",
       "location": "Wake Forest",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/154.png"
     },
     {
@@ -2770,6 +3115,7 @@
       "name": "Huskies",
       "abbreviation": "WASH",
       "location": "Washington",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/264.png"
     },
     {
@@ -2778,6 +3124,7 @@
       "name": "Cougars",
       "abbreviation": "WSU",
       "location": "Washington State",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/265.png"
     },
     {
@@ -2786,6 +3133,7 @@
       "name": "Wildcats",
       "abbreviation": "WEB",
       "location": "Weber State",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2692.png"
     },
     {
@@ -2794,6 +3142,7 @@
       "name": "Argonauts",
       "abbreviation": "UWF",
       "location": "West Florida",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2697.png"
     },
     {
@@ -2802,6 +3151,7 @@
       "name": "Wolves",
       "abbreviation": "WGA",
       "location": "West Georgia",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2698.png"
     },
     {
@@ -2810,6 +3160,7 @@
       "name": "Mountaineers",
       "abbreviation": "WVU",
       "location": "West Virginia",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/277.png"
     },
     {
@@ -2818,6 +3169,7 @@
       "name": "Catamounts",
       "abbreviation": "WCU",
       "location": "Western Carolina",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2717.png"
     },
     {
@@ -2826,6 +3178,7 @@
       "name": "Leathernecks",
       "abbreviation": "WIU",
       "location": "Western Illinois",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2710.png"
     },
     {
@@ -2834,6 +3187,7 @@
       "name": "Hilltoppers",
       "abbreviation": "WKU",
       "location": "Western Kentucky",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/98.png"
     },
     {
@@ -2842,6 +3196,7 @@
       "name": "Broncos",
       "abbreviation": "WMU",
       "location": "Western Michigan",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2711.png"
     },
     {
@@ -2850,6 +3205,7 @@
       "name": "Shockers",
       "abbreviation": "WICH",
       "location": "Wichita State",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2724.png"
     },
     {
@@ -2858,6 +3214,7 @@
       "name": "Tribe",
       "abbreviation": "W&M",
       "location": "William & Mary",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2729.png"
     },
     {
@@ -2866,6 +3223,7 @@
       "name": "Eagles",
       "abbreviation": "WIN",
       "location": "Winthrop",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2737.png"
     },
     {
@@ -2874,6 +3232,7 @@
       "name": "Badgers",
       "abbreviation": "WIS",
       "location": "Wisconsin",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/275.png"
     },
     {
@@ -2882,6 +3241,7 @@
       "name": "Terriers",
       "abbreviation": "WOF",
       "location": "Wofford",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2747.png"
     },
     {
@@ -2890,6 +3250,7 @@
       "name": "Raiders",
       "abbreviation": "WRST",
       "location": "Wright State",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2750.png"
     },
     {
@@ -2898,6 +3259,7 @@
       "name": "Cowboys",
       "abbreviation": "WYO",
       "location": "Wyoming",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2751.png"
     },
     {
@@ -2906,6 +3268,7 @@
       "name": "Musketeers",
       "abbreviation": "XAV",
       "location": "Xavier",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2752.png"
     },
     {
@@ -2914,6 +3277,7 @@
       "name": "Bulldogs",
       "abbreviation": "YALE",
       "location": "Yale",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/43.png"
     },
     {
@@ -2922,6 +3286,7 @@
       "name": "Penguins",
       "abbreviation": "YSU",
       "location": "Youngstown State",
+      "conference": null,
       "logo": "https://a.espncdn.com/i/teamlogos/ncaa/500/2754.png"
     }
   ]
