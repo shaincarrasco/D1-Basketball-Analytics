@@ -6,7 +6,7 @@ export type Team = {
 };
 export type Player = {
   id: string; name: string; teamName: string; position: string; year: string;
-  conference?: string | null; games?: number | null; starts?: number | null;
+  conference?: string | null; detailGroup?: string; games?: number | null; starts?: number | null;
   minutes: number | null; points: number | null; rebounds: number | null; assists: number | null;
   steals?: number | null; blocks?: number | null; turnovers?: number | null;
   usage: number | null; efg: number | null; ts: number | null; bpm: number | null; impact: number | null;
