@@ -52,3 +52,8 @@ The national team leaderboard separates provider-published ratings from calculat
 The pipeline fetches CBBD game-level team box scores in four date partitions to stay below the endpoint’s 3,000-row-per-request cap; each partition logs a warning if it reaches that limit. Where the game rows contain scores, venue flags and possession counts, the leaderboard calculates home/away/neutral win rates and scoring margins, last-five record and efficiency, and season game-to-game scoring/efficiency volatility. Strength of schedule is the average published SRS of the opponents in the returned game rows.
 
 Opponent-specific shooting splits still require validated matchup-level shot data. Lineup/on-off impact requires substitution and play-by-play coverage; calibrated forecasts require a separate historical model with time-based validation and uncertainty intervals. Those are not presented as available merely because a game box score exists. Game-level metrics inherit the provider's per-partition coverage cap and missing-record limitations; any partition reaching the cap must be split further before full-season coverage is claimed. Do not label raw efficiency as adjusted efficiency, and do not invent values when source fields are absent.
+
+
+## Division I scope
+
+The current-season team, player, and game snapshots are filtered against a canonical Division I conference allowlist, including common provider naming variants. Records outside that conference set are excluded from the national rankings and player index. A D-I vs. non-D-I matchup remains in the schedule when either participating team belongs to a recognized D-I conference; game-level team box scores retain the D-I side only.
