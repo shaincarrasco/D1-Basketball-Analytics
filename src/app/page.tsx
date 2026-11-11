@@ -1,114 +1,168 @@
 "use client";
+
 import { useEffect, useMemo, useState } from "react";
-import { Activity, ArrowLeft, BarChart3, CalendarDays, ChevronRight, CircleHelp, Home, Search, Shield, Trophy, Users, Gauge, Menu, X, TrendingUp, Layers, Target } from "lucide-react";
-import { demoGames, demoTeams } from "@/lib/demo-data";
+import {
+  Activity, ArrowDownUp, ArrowRight, BarChart3, CalendarDays, CheckCircle2,
+  ChevronRight, CircleHelp, Clock3, Command, Database, Gauge, Home,
+  Menu, Moon, Search, ShieldCheck, Sun, Trophy, Users, X
+} from "lucide-react";
 import type { Player, TeamSeasonRecord } from "@/lib/types";
 import NationalDirectory from "@/components/national-directory";
-import { metricDefinitions, rankTeams } from "@/lib/metrics";
+import { metricDefinitions } from "@/lib/metrics";
 
 type Section = "Overview" | "Teams" | "Players" | "Games" | "Metrics";
-type Detail = { kind: "team"; id: string } | { kind: "player"; id: string } | { kind: "game"; id: string } | { kind: "metric"; id: string } | null;
-const nav: {name:Section; icon: typeof Home; desc:string}[] = [
- {name:"Overview",icon:Home,desc:"National dashboard"},{name:"Teams",icon:Trophy,desc:"Program ratings & profiles"},{name:"Players",icon:Users,desc:"Player production & impact"},{name:"Games",icon:CalendarDays,desc:"Schedule & matchups"},{name:"Metrics",icon:Gauge,desc:"Definitions & methodology"}
-];
-const n=(v:number|undefined|null,s="")=>v==null?"—":v.toFixed(1)+s;
-const flattenRawStats=(input:unknown,prefix=""):Array<{label:string;value:string}>=>{
- if(!input||typeof input!=="object"||Array.isArray(input))return[];
- const ignored=new Set(["season","seasonLabel","teamId","team","conference","athleteId","athleteSourceId","name","position"]);
- return Object.entries(input as Record<string,unknown>).flatMap(([key,value])=>{
-  if(ignored.has(key))return[];
-  const label=prefix?prefix+" · "+key:key;
-  if(value&&typeof value==="object"&&!Array.isArray(value))return flattenRawStats(value,label);
-  const display=value==null?"Not supplied":typeof value==="number"?value.toLocaleString(undefined,{maximumFractionDigits:3}):String(value);
-  return[{label:label.replace(/([A-Z])/g," $1").replace(/^./,s=>s.toUpperCase()),value:display}];
- });
+type Feed<T> = { items: T[]; updatedAt: string | null; status: "loading" | "ready" | "empty" | "error"; note: string };
+type AppGame = {
+  id: string; date: string; status: string; homeTeam: string; awayTeam: string;
+  homeScore: number | null; awayScore: number | null; homeConference?: string | null;
+  awayConference?: string | null; conferenceGame?: boolean; neutralSite?: boolean;
+  tournament?: string | null; venue?: string | null; city?: string | null; state?: string | null;
+  homePeriodPoints?: number[] | null; awayPeriodPoints?: number[] | null;
+  source?: Record<string, unknown>;
 };
-function ClickCard({children,onClick}:{children:React.ReactNode;onClick:()=>void}) { return <button onClick={onClick} className="panel w-full p-4 text-left transition hover:-translate-y-0.5 hover:border-lime-300/60 hover:bg-[#172438] focus:outline-none focus:ring-2 focus:ring-lime-300">{children}</button>; }
-export default function HomePage(){
- const [section,setSection]=useState<Section>("Overview");
- const [theme,setTheme]=useState<"dark"|"light">("dark");
- const [livePlayers,setLivePlayers]=useState<Player[]>([]);
- const [liveTeams,setLiveTeams]=useState<TeamSeasonRecord[]>([]);
- const [teamFeedUpdatedAt,setTeamFeedUpdatedAt]=useState<string|null>(null);
- const [playerFeedUpdatedAt,setPlayerFeedUpdatedAt]=useState<string | null>(null);
- const [playerFeedNote,setPlayerFeedNote]=useState("Current-season player feed has not loaded.");
- useEffect(()=>{document.documentElement.dataset.theme=theme;},[theme]);
- useEffect(()=>{
-   const basePath=process.env.NEXT_PUBLIC_BASE_PATH ?? "";
-   fetch(`${basePath}/data/player-season-2027.json`)
-     .then(response=>{if(!response.ok) throw new Error("Player data file is not available"); return response.json();})
-     .then(payload=>{
-       if(!payload || !Array.isArray(payload.players)) throw new Error("Player data file has an invalid format");
-       setLivePlayers(payload.players as Player[]);
-       setPlayerFeedUpdatedAt(typeof payload.fetchedAt==="string"?payload.fetchedAt:null);
-       setPlayerFeedNote(typeof payload.note==="string"?payload.note:"Verified current-season player stats.");
-     })
-     .catch(()=>setPlayerFeedNote("The current-season player feed is not published yet. The GitHub Actions data refresh must complete successfully."));
- },[]);
- useEffect(()=>{
-  const basePath=process.env.NEXT_PUBLIC_BASE_PATH ?? "";
-  fetch(`${basePath}/data/team-season-2027.json`)
-   .then(response=>{if(!response.ok)throw new Error("Team data file is not available");return response.json();})
-   .then(payload=>{
-    if(!payload||!Array.isArray(payload.teams))throw new Error("Team data file has an invalid format");
-    setLiveTeams(payload.teams as TeamSeasonRecord[]);
-    setTeamFeedUpdatedAt(typeof payload.fetchedAt==="string"?payload.fetchedAt:null);
-   })
-   .catch(()=>setLiveTeams([]));
- },[]);
- const [detail,setDetail]=useState<Detail>(null);
- const [query,setQuery]=useState("");
- const [conference,setConference]=useState("All conferences");
- const [mobileOpen,setMobileOpen]=useState(false);
- const [sort,setSort]=useState<"netRating"|"adjOffense"|"adjDefense"|"pace">("netRating");
- const [listSort,setListSort]=useState("points");
- const [listDirection,setListDirection]=useState<"asc"|"desc">("desc");
- const teams=useMemo(()=>rankTeams(demoTeams.filter(t=>(conference==="All conferences"||t.conference===conference)&&t.name.toLowerCase().includes(query.toLowerCase())),sort,sort!=="adjDefense"),[conference,query,sort]);
- const players=useMemo(()=>{
-  const rows=livePlayers.filter(p=>(p.name+" "+p.teamName+" "+p.position).toLowerCase().includes(query.toLowerCase()));
-  return rows.sort((a,b)=>{
-   const av=(a as unknown as Record<string,unknown>)[listSort];
-   const bv=(b as unknown as Record<string,unknown>)[listSort];
-   if(av==null||bv==null)return av==null?(bv==null?0:1):-1;
-   const an=Number(av),bn=Number(bv);
-   const cmp=Number.isFinite(an)&&Number.isFinite(bn)?an-bn:String(av).localeCompare(String(bv));
-   return listDirection==="asc"?cmp:-cmp;
+const NAV: { name: Section; description: string; icon: typeof Home }[] = [
+  { name: "Overview", description: "National command center", icon: Home },
+  { name: "Teams", description: "Every D-I program", icon: Trophy },
+  { name: "Players", description: "Player discovery", icon: Users },
+  { name: "Games", description: "Schedule & results", icon: CalendarDays },
+  { name: "Metrics", description: "Methods & definitions", icon: Gauge },
+];
+const number = (value: number | null | undefined, digits = 1) =>
+  typeof value === "number" && Number.isFinite(value) ? value.toFixed(digits) : "—";
+const flatten = (input: unknown, prefix = ""): { label: string; value: string }[] => {
+  if (!input || typeof input !== "object" || Array.isArray(input)) return [];
+  return Object.entries(input as Record<string, unknown>).flatMap(([key, value]) => {
+    if (["season", "seasonLabel", "teamId", "athleteId", "athleteSourceId", "sourceId"].includes(key)) return [];
+    const label = (prefix ? prefix + " · " : "") + key.replace(/([A-Z])/g, " $1");
+    if (value && typeof value === "object" && !Array.isArray(value)) return flatten(value, label);
+    return [{ label: label.replace(/^./, c => c.toUpperCase()), value: value == null ? "Not supplied" : typeof value === "number" ? value.toLocaleString(undefined, { maximumFractionDigits: 3 }) : String(value) }];
   });
- },[livePlayers,query,listSort,listDirection]);
- const games=useMemo(()=>demoGames.filter(g=>(g.homeTeam+" "+g.awayTeam).toLowerCase().includes(query.toLowerCase())).sort((a,b)=>{
-  const cmp=listSort==="status"?a.status.localeCompare(b.status):listSort==="matchup"?(a.awayTeam+" "+a.homeTeam).localeCompare(b.awayTeam+" "+b.homeTeam):a.date.localeCompare(b.date);
-  return listDirection==="asc"?cmp:-cmp;
- }),[query,listSort,listDirection]);
- const overviewTeams=useMemo(()=>liveTeams.filter(t=>t.adjusted?.netRating!=null).sort((a,b)=>(b.adjusted?.netRating??-Infinity)-(a.adjusted?.netRating??-Infinity)).slice(0,6),[liveTeams]);
- const sortedMetrics=useMemo(()=>[...metricDefinitions].sort((a,b)=>{
-  const av=listSort==="unit"?a.unit:a.label; const bv=listSort==="unit"?b.unit:b.label;
-  const cmp=av.localeCompare(bv); return listDirection==="asc"?cmp:-cmp;
- }),[listSort,listDirection]);
- const team=detail?.kind==="team"?demoTeams.find(t=>t.id===detail.id):undefined;
- const player=detail?.kind==="player"?livePlayers.find(p=>p.id===detail.id):undefined;
- const game=detail?.kind==="game"?demoGames.find(g=>g.id===detail.id):undefined;
- const metric=detail?.kind==="metric"?metricDefinitions.find(m=>m.key===detail.id):undefined;
- const go=(s:Section)=>{setSection(s);setDetail(null);setQuery("");setMobileOpen(false);setListSort(s==="Players"?"points":s==="Games"?"date":"label");setListDirection("desc");};
- const title: string = detail ? (team?.name ?? player?.name ?? metric?.label ?? (game ? `${game.awayTeam} @ ${game.homeTeam}` : "Details")) : section;
- const openTeam=(name:string)=>{const t=demoTeams.find(x=>x.name===name||x.shortName===name);if(t)setDetail({kind:"team",id:t.id});};
- const Sidebar=()=> <><div className="mb-8 flex items-center gap-3"><div className="grid h-10 w-10 place-items-center rounded-xl bg-lime-300 text-slate-950"><Activity size={22}/></div><div><div className="font-black tracking-tight">D1 <span className="text-lime-300">HOOPS</span></div><div className="text-[10px] uppercase tracking-[.22em] text-slate-500">Analytics lab</div></div></div><div className="mb-3 px-3 text-[10px] font-bold uppercase tracking-[.2em] text-slate-500">Workspace</div><nav className="space-y-1">{nav.map(({name,icon:Icon,desc})=><button key={name} onClick={()=>go(name)} className={`flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left text-sm transition ${section===name&&!detail?"bg-[#1c2939] font-semibold text-lime-300":"text-slate-400 hover:bg-[#141e2c] hover:text-white"}`}><Icon size={17}/><span className="flex-1">{name}<span className="block text-[10px] font-normal text-slate-600">{desc}</span></span><ChevronRight size={14}/></button>)}</nav><div className="mt-8 rounded-2xl border border-[#263448] bg-[#111b29] p-4"><div className="mb-2 flex items-center gap-2 text-xs font-bold text-lime-300"><Shield size={14}/> DATA COVERAGE</div><p className="text-xs leading-5 text-slate-400">Current-season player and team data refresh from College Basketball Data. Missing provider fields remain unavailable.</p><a href="/api/status" className="mt-3 inline-block text-xs text-white underline">View API status</a></div><div className="mt-auto pt-8 text-[10px] text-slate-600">D1 HOOPS • 2026–27 PLAYER DATA</div></>;
- const Header=({label}:{label:string})=><header className="sticky top-0 z-20 flex min-h-[68px] items-center justify-between gap-3 border-b border-[#243044] bg-[#090d16]/95 px-4 backdrop-blur-xl md:px-8"><div className="flex items-center gap-3"><button onClick={()=>setMobileOpen(true)} className="rounded-lg border border-[#29364a] p-2 text-slate-300 lg:hidden" aria-label="Open navigation"><Menu size={18}/></button><div><div className="text-[10px] text-slate-500">2026–27 SEASON / MEN'S DIVISION I</div><div className="font-semibold">{label}</div></div></div><div className="flex items-center gap-2"><span className="rounded-lg border border-[#29364a] px-3 py-2 text-[10px] font-bold tracking-wider text-slate-400">{livePlayers.length>0?`PLAYER FEED LIVE · ${livePlayers.length}`:"PLAYER FEED PENDING"}</span><button onClick={()=>setTheme(theme==="dark"?"light":"dark")} className="rounded-lg border border-[#29364a] px-3 py-2 text-xs font-semibold">{theme==="dark"?"Light mode":"Dark mode"}</button></div></header>;
- const searchBox=<div className="flex flex-wrap items-center gap-2"><div className="flex min-w-[190px] flex-1 items-center gap-2 rounded-xl border border-[#29364a] bg-[#101827] px-3"><Search size={15} className="text-slate-500"/><input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search this section..." className="w-full bg-transparent py-3 text-xs outline-none placeholder:text-slate-600"/></div>{section!=="Teams"&&<><label className="flex items-center gap-2 rounded-xl border border-[#29364a] bg-[#101827] px-3 text-xs text-slate-500">Sort by<select value={listSort} onChange={e=>setListSort(e.target.value)} className="bg-transparent py-3 text-slate-100">{section==="Players"?<><option value="points">Points</option><option value="rebounds">Rebounds</option><option value="assists">Assists</option><option value="minutes">Minutes</option><option value="impact">PORPAG</option><option value="usage">Usage</option><option value="efg">eFG%</option><option value="ts">True shooting</option><option value="name">Player name</option><option value="teamName">Team</option></>:section==="Games"?<><option value="date">Date</option><option value="matchup">Matchup</option><option value="status">Status</option></>:<><option value="label">Metric name</option><option value="unit">Unit</option></>}</select></label><button onClick={()=>setListDirection(v=>v==="asc"?"desc":"asc")} className="rounded-xl border border-[#29364a] bg-[#101827] px-3 py-3 text-xs" aria-label="Toggle sort direction">{listDirection==="asc"?"↑ Asc":"↓ Desc"}</button></>}</div>;
- const teamRows=<div className="overflow-hidden rounded-2xl border border-[#243044] bg-[#101827]"><div className="overflow-x-auto"><table className="w-full min-w-[720px] text-left text-sm"><thead className="bg-[#131e2d] text-[10px] uppercase tracking-wider text-slate-500"><tr>{["Rank","Program","Conference","Record","Adj O","Adj D","Net","Tempo",""].map(h=><th key={h} className="px-4 py-4">{h}</th>)}</tr></thead><tbody>{teams.map((t,i)=><tr key={t.id} onClick={()=>setDetail({kind:"team",id:t.id})} className="cursor-pointer border-t border-[#202b3b] hover:bg-[#1a293d] focus-within:bg-[#1a293d]"><td className="px-4 py-4 font-mono text-xs text-slate-500">{i+1}</td><td className="px-4 py-4 font-semibold">{t.name}</td><td className="px-4 py-4 text-xs text-slate-400">{t.conference}</td><td className="px-4 py-4 font-mono text-xs">{t.record}</td><td className="px-4 py-4 font-mono text-xs">{n(t.adjOffense)}</td><td className="px-4 py-4 font-mono text-xs">{n(t.adjDefense)}</td><td className="px-4 py-4 font-mono text-xs text-lime-300">{n(t.netRating)}</td><td className="px-4 py-4 font-mono text-xs">{n(t.pace)}</td><td className="px-4 py-4 text-lime-300"><ChevronRight size={16}/></td></tr>)}</tbody></table></div><div className="border-t border-[#263448] px-4 py-3 text-xs text-slate-500">Select any row to open its team profile • {teams.length} sample programs</div></div>;
- return <main className="min-h-screen"><aside className="fixed left-0 top-0 z-30 hidden h-screen w-[250px] flex-col border-r border-[#243044] bg-[#0c121e] p-5 lg:flex"><Sidebar/></aside>
- {mobileOpen&&<div className="fixed inset-0 z-40 bg-black/70 lg:hidden" onClick={()=>setMobileOpen(false)}><aside className="flex h-full w-[290px] flex-col bg-[#0c121e] p-5" onClick={e=>e.stopPropagation()}><div className="mb-4 flex justify-end"><button onClick={()=>setMobileOpen(false)} aria-label="Close navigation"><X/></button></div><Sidebar/></aside></div>}
- <section className="lg:pl-[250px]"><Header label={detail?title:section+" explorer"}/><div className="mx-auto max-w-[1500px] p-4 md:p-8">
- {detail&&<div className="mb-5 flex flex-wrap items-center gap-2 text-xs text-slate-500"><button onClick={()=>{setDetail(null);}} className="flex items-center gap-2 rounded-lg border border-[#29364a] px-3 py-2 text-slate-300 hover:bg-[#172438]"><ArrowLeft size={14}/> Back to {section}</button><span>/</span><span className="text-lime-300">{title}</span></div>}
- {!detail&&<div className="mb-7 flex flex-wrap items-end justify-between gap-4"><div><div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[.2em] text-lime-300"><Activity size={13}/> Interactive basketball intelligence</div><h1 className="text-3xl font-black tracking-tight md:text-4xl">{section==="Overview"?"College basketball,":section+" explorer,"}<br/><span className="text-slate-500">{section==="Overview"?"measured deeper.":"drill down into every detail."}</span></h1><p className="mt-3 max-w-xl text-sm leading-6 text-slate-400">Choose a section, open a profile, and follow the data through nested views. Selectable rows and cards are designed to take you somewhere.</p></div>{section!=="Overview"&&section!=="Teams"&&searchBox}</div>}
- {detail?.kind==="team"&&team&&<><div className="mb-6 grid gap-4 md:grid-cols-4"><div className="panel p-5 md:col-span-2"><div className="eyebrow">Team profile • {team.conference}</div><h1 className="mt-2 text-3xl font-black">{team.name}</h1><p className="mt-2 text-sm text-slate-400">Record {team.record} · Sample profile</p></div>{[{l:"Net rating",v:n(team.netRating)},{l:"Adj. offense",v:n(team.adjOffense)},{l:"Adj. defense",v:n(team.adjDefense)}].map(x=><div className="panel p-5" key={x.l}><div className="text-xs text-slate-500">{x.l}</div><div className="mt-3 text-3xl font-bold text-lime-300">{x.v}</div></div>)}</div><div className="grid gap-4 lg:grid-cols-2"><div className="panel p-5"><h2 className="mb-4 font-bold">Team metrics</h2>{[{l:"Pace",v:n(team.pace)},{l:"Strength of schedule",v:n(team.sos)},{l:"Offensive efficiency",v:n(team.adjOffense)},{l:"Defensive efficiency",v:n(team.adjDefense)}].map(x=><div key={x.l} className="flex justify-between border-t border-[#243044] py-3 text-sm"><span className="text-slate-400">{x.l}</span><b>{x.v}</b></div>)}</div><div className="panel p-5"><h2 className="mb-4 font-bold">Players recorded for this team</h2>{livePlayers.filter(p=>p.teamName===team.name).map(p=><button key={p.id} onClick={()=>setDetail({kind:"player",id:p.id})} className="flex w-full items-center justify-between border-t border-[#243044] py-3 text-left hover:text-lime-300"><span><b className="text-sm">{p.name}</b><span className="block text-xs text-slate-500">{p.position} · {p.year}</span></span><ChevronRight size={16}/></button>)}{!livePlayers.some(p=>p.teamName===team.name)&&<p className="text-sm text-slate-500">No current-season player records are available for this team.</p>}</div></div></>}
- {detail?.kind==="player"&&player&&<><div className="mb-6 panel p-6"><div className="eyebrow">Player profile • {player.teamName}</div><h1 className="mt-2 text-3xl font-black">{player.name}</h1><p className="mt-2 text-sm text-slate-400">{player.position} · {player.year} · 2026–27 regular season</p></div><div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">{[{l:"Points / game",v:n(player.points)},{l:"Rebounds / game",v:n(player.rebounds)},{l:"Assists / game",v:n(player.assists)},{l:"Impact",v:n(player.impact)}].map(x=><div className="panel p-5" key={x.l}><div className="text-xs text-slate-500">{x.l}</div><div className="mt-3 text-3xl font-bold text-lime-300">{x.v}</div></div>)}</div><div className="mt-4 panel p-5"><h2 className="mb-4 font-bold">Advanced player profile</h2>{[{l:"Minutes",v:n(player.minutes)},{l:"Usage rate",v:n(player.usage)},{l:"Effective FG%",v:n(player.efg)},{l:"True shooting%",v:n(player.ts)},{l:"Box plus/minus",v:n(player.bpm)}].map(x=><div key={x.l} className="flex justify-between border-t border-[#243044] py-3 text-sm"><span className="text-slate-400">{x.l}</span><b>{x.v}</b></div>)}<div className="mt-4 panel p-5"><h2 className="mb-4 font-bold">Complete provider stat record</h2><div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-3">{flattenRawStats(player.sourceStats ?? player).map(stat=><div key={stat.label} className="rounded-xl border border-[#263448] bg-[#0c1420] p-3"><div className="text-[10px] uppercase tracking-wider text-slate-500">{stat.label}</div><div className="mt-2 break-words text-sm font-semibold tabular-nums">{stat.value}</div></div>)}</div><p className="mt-4 text-xs text-slate-500">Every field supplied by the connected provider is shown here. Missing source values are labeled Not supplied.</p></div></div></>}
- {detail?.kind==="game"&&game&&<div className="panel p-6"><div className="eyebrow">{game.date} · {game.status.toUpperCase()}</div><h1 className="my-5 text-3xl font-black">{game.awayTeam} <span className="text-slate-500">@</span> {game.homeTeam}</h1><div className="text-sm text-slate-400">{game.status==="final"?`Final score: ${game.awayScore??"—"} – ${game.homeScore??"—"}`:"Schedule listing · matchup data pending"}</div><div className="mt-5 flex flex-wrap gap-2"><button onClick={()=>openTeam(game.awayTeam)} className="rounded-lg border border-[#29364a] px-4 py-2 text-sm hover:border-lime-300">Away team profile</button><button onClick={()=>openTeam(game.homeTeam)} className="rounded-lg border border-[#29364a] px-4 py-2 text-sm hover:border-lime-300">Home team profile</button></div></div>}
- {detail?.kind==="metric"&&metric&&<div className="panel p-6"><div className="eyebrow">Metric glossary</div><h1 className="my-3 text-3xl font-black">{metric.label}</h1><p className="max-w-3xl text-sm leading-7 text-slate-300">{metric.description}</p><div className="mt-6 grid gap-3 md:grid-cols-2"><div className="rounded-xl bg-[#0c1420] p-4"><div className="eyebrow">Formula</div><p className="mt-2 text-sm">{metric.formula}</p></div><div className="rounded-xl bg-[#0c1420] p-4"><div className="eyebrow">Interpretation</div><p className="mt-2 text-sm">{metric.higherIsBetter?"Higher is generally better.":"Lower is generally better."}</p></div></div><p className="mt-4 text-xs text-slate-500">Caveat: {metric.caveat}</p></div>}
- {!detail&&section==="Overview"&&<><div className="mb-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">{[{l:"D-I programs",v:"365+",s:"Full national scope",i:Trophy,to:"Teams" as Section},{l:"Validated team ratings",v:liveTeams.length?String(liveTeams.length):"Awaiting data",s:"Live team records",i:Shield,to:"Teams" as Section},{l:"Validated player stats",v:livePlayers.length?livePlayers.length.toLocaleString():"Awaiting data",s:"Current-season players",i:Users,to:"Players" as Section},{l:"Verified game records",v:"Not connected",s:"Open game center",i:CalendarDays,to:"Games" as Section}].map(x=><ClickCard key={x.l} onClick={()=>go(x.to)}><div className="flex items-center justify-between text-xs text-slate-500"><span>{x.l}</span><x.i size={17}/></div><div className="mt-3 text-3xl font-bold">{x.v}</div><div className="mt-1 flex items-center justify-between text-xs text-lime-300">{x.s}<ChevronRight size={14}/></div></ClickCard>)}</div><div className="mb-6 grid gap-4 xl:grid-cols-[1.4fr_1fr]"><div className="panel p-5"><div className="mb-5 flex items-center justify-between"><div><h2 className="font-bold">National power index</h2><p className="mt-1 text-xs text-slate-500">Current-season adjusted efficiency · sourced from the live provider feed</p></div><BarChart3 className="text-lime-300"/></div><div className="space-y-2">{overviewTeams.map((t,i)=><button key={t.teamId??t.team} onClick={()=>go("Teams")} className="grid w-full grid-cols-[25px_1fr_45px] items-center gap-3 rounded-lg p-2 text-left text-sm hover:bg-[#1a293d]"><span className="text-xs text-slate-600">{i+1}</span><span className="font-semibold">{t.team}</span><span className="text-right font-mono text-xs">{t.adjusted?.netRating?.toFixed(1)??"—"}</span></button>)}{overviewTeams.length===0&&<p className="py-4 text-xs text-slate-500">Team ratings will populate as 2026–27 games are recorded.</p>}</div></div><div className="panel p-5"><h2 className="mb-4 font-bold">Schedule feed</h2>{demoGames.slice(0,4).map(g=><button key={g.id} onClick={()=>setDetail({kind:"game",id:g.id})} className="mb-2 w-full rounded-xl border border-[#263448] bg-[#0c1420] p-4 text-left hover:border-lime-300/60"><div className="mb-2 text-[10px] uppercase tracking-widest text-slate-500">{g.date} · {g.status}</div><div className="flex items-center justify-between text-sm font-semibold"><span>{g.awayTeam}</span><span className="text-xs text-slate-600">@</span><span>{g.homeTeam}</span><ChevronRight size={14}/></div></button>)}</div></div><div className="grid gap-4 md:grid-cols-2"><ClickCard onClick={()=>go("Teams")}><div className="flex items-center gap-3"><Trophy className="text-lime-300"/><div><b>Explore national team directory</b><p className="mt-1 text-xs text-slate-500">Browse live program listings and provider rosters</p></div><ChevronRight className="ml-auto"/></div></ClickCard><ClickCard onClick={()=>go("Metrics")}><div className="flex items-center gap-3"><CircleHelp className="text-lime-300"/><div><b>Open the metric glossary</b><p className="mt-1 text-xs text-slate-500">Understand every rating and formula</p></div><ChevronRight className="ml-auto"/></div></ClickCard></div></>}
- {!detail&&section==="Teams"&&<NationalDirectory players={livePlayers} teamRecords={liveTeams}/> }
- {!detail&&section==="Players"&&<div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">{players.map(p=><ClickCard key={p.id} onClick={()=>setDetail({kind:"player",id:p.id})}><div className="flex items-start justify-between"><div><div className="font-bold">{p.name}</div><div className="mt-1 text-xs text-slate-500">{p.teamName} · {p.position} · {p.year}</div></div><ChevronRight size={16} className="text-lime-300"/></div><div className="mt-5 grid grid-cols-3 gap-2"><div><div className="text-xl font-bold">{n(p.points)}</div><div className="text-[10px] text-slate-500">PTS</div></div><div><div className="text-xl font-bold">{n(p.rebounds)}</div><div className="text-[10px] text-slate-500">REB</div></div><div><div className="text-xl font-bold">{n(p.assists)}</div><div className="text-[10px] text-slate-500">AST</div></div></div></ClickCard>)}{players.length===0&&<p className="text-sm text-slate-500">{livePlayers.length===0?playerFeedNote:"No verified players match this search."}</p>}</div>}
- {!detail&&section==="Games"&&<div className="space-y-3">{games.map(g=><ClickCard key={g.id} onClick={()=>setDetail({kind:"game",id:g.id})}><div className="flex flex-wrap items-center justify-between gap-3"><div><div className="text-[10px] uppercase tracking-widest text-slate-500">{g.date} · {g.status} · {g.conferenceGame?"Conference":"Non-conference"}</div><div className="mt-2 text-lg font-bold">{g.awayTeam} <span className="text-slate-500">@</span> {g.homeTeam}</div></div><div className="flex items-center gap-4"><span className="font-mono text-sm">{g.status==="final"?`${g.awayScore} – ${g.homeScore}`:"—"}</span><ChevronRight className="text-lime-300"/></div></div></ClickCard>)}</div>}
- {!detail&&section==="Metrics"&&<div className="grid gap-3 md:grid-cols-2">{sortedMetrics.map(m=><ClickCard key={m.key} onClick={()=>setDetail({kind:"metric",id:m.key})}><div className="flex items-center justify-between"><b>{m.label}</b><ChevronRight size={16} className="text-lime-300"/></div><p className="mt-2 text-xs leading-5 text-slate-400">{m.description}</p><div className="mt-3 text-[10px] uppercase tracking-widest text-slate-600">{m.unit} · {m.higherIsBetter?"Higher is better":"Lower is better"}</div></ClickCard>)}</div>}
- <footer className="mt-10 border-t border-[#243044] py-5 text-[10px] leading-5 text-slate-600">Player season statistics are sourced from College Basketball Data. Counting stats shown per game are calculated from season totals divided by games played; unavailable source fields remain blank. Last team-data refresh: {teamFeedUpdatedAt ? new Date(teamFeedUpdatedAt).toLocaleString() : "not published"}. Team ratings are from provider adjusted-efficiency, SRS, and Elo feeds. Last player-data refresh: {playerFeedUpdatedAt ? new Date(playerFeedUpdatedAt).toLocaleString() : "not published"}.</footer>
- </div></section></main>;
+};
+function useFeed<T>(path: string, key: string, fallback: string) {
+  const [feed, setFeed] = useState<Feed<T>>({ items: [], updatedAt: null, status: "loading", note: fallback });
+  useEffect(() => {
+    const base = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+    const controller = new AbortController();
+    fetch(`${base}${path}`, { signal: controller.signal, cache: "no-store" })
+      .then(response => { if (!response.ok) throw new Error(`Feed request failed (${response.status})`); return response.json(); })
+      .then(payload => {
+        if (!payload || !Array.isArray(payload[key])) throw new Error("Feed schema is invalid");
+        const items = payload[key] as T[];
+        setFeed({ items, updatedAt: typeof payload.fetchedAt === "string" ? payload.fetchedAt : null, status: items.length ? "ready" : "empty", note: typeof payload.note === "string" ? payload.note : fallback });
+      })
+      .catch(error => { if (error instanceof Error && error.name === "AbortError") return; setFeed(current => ({ ...current, status: "error", note: error instanceof Error ? error.message : "Feed unavailable" })); });
+    return () => controller.abort();
+  }, [path, key, fallback]);
+  return feed;
+}
+function MetricCard({ label, value, detail, onClick }: { label: string; value: string; detail: string; onClick?: () => void }) {
+  const Tag = onClick ? "button" : "div";
+  return <Tag onClick={onClick} className="metric-card panel w-full p-4 text-left"><div className="flex items-center justify-between gap-2 text-xs text-muted"><span>{label}</span>{onClick && <ArrowRight size={14}/>}</div><div className="mt-3 text-2xl font-semibold tracking-tight tabular-nums">{value}</div><div className="mt-1 text-[11px] text-muted">{detail}</div></Tag>;
+}
+function EmptyState({ title, detail, retry }: { title: string; detail: string; retry?: () => void }) {
+  return <div className="panel flex flex-col items-center px-6 py-12 text-center"><Database size={25} className="mb-4 text-muted"/><h3 className="font-semibold">{title}</h3><p className="mt-2 max-w-lg text-sm leading-6 text-muted">{detail}</p>{retry && <button onClick={retry} className="mt-4 rounded-lg border px-4 py-2 text-sm">Retry</button>}</div>;
+}
+export default function HomePage() {
+  const [section, setSection] = useState<Section>("Overview");
+  const [theme, setTheme] = useState<"dark" | "light">("dark");
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const [playerSort, setPlayerSort] = useState<keyof Player>("points");
+  const [direction, setDirection] = useState<"asc" | "desc">("desc");
+  const [gameStatus, setGameStatus] = useState("all");
+  const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
+  const [selectedGame, setSelectedGame] = useState<AppGame | null>(null);
+  const playerFeed = useFeed<Player>("/data/player-season-2027.json", "players", "Current-season player statistics are not published yet.");
+  const teamFeed = useFeed<TeamSeasonRecord>("/data/team-season-2027.json", "teams", "Current-season team ratings are not published yet.");
+  const gameFeed = useFeed<AppGame>("/data/games-season-2027.json", "games", "Current-season games have not been published yet.");
+  const players = playerFeed.items;
+  const teams = teamFeed.items;
+  const games = gameFeed.items;
+  useEffect(() => {
+    const saved = window.localStorage.getItem("d1-hoops-theme");
+    if (saved === "light" || saved === "dark") setTheme(saved);
+  }, []);
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+    window.localStorage.setItem("d1-hoops-theme", theme);
+  }, [theme]);
+  const filteredPlayers = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return [...players].filter(player => `${player.name} ${player.teamName} ${player.position} ${player.conference ?? ""}`.toLowerCase().includes(q)).sort((a,b) => {
+      const av = a[playerSort], bv = b[playerSort];
+      if (av == null) return bv == null ? 0 : 1;
+      if (bv == null) return -1;
+      const cmp = typeof av === "number" && typeof bv === "number" ? av - bv : String(av).localeCompare(String(bv));
+      return direction === "asc" ? cmp : -cmp;
+    });
+  }, [players, query, playerSort, direction]);
+  const filteredGames = useMemo(() => [...games].filter(game => {
+    const matches = `${game.homeTeam} ${game.awayTeam} ${game.homeConference ?? ""} ${game.awayConference ?? ""} ${game.venue ?? ""}`.toLowerCase().includes(query.toLowerCase());
+    return matches && (gameStatus === "all" || game.status === gameStatus);
+  }).sort((a,b) => direction === "asc" ? a.date.localeCompare(b.date) : b.date.localeCompare(a.date)), [games, query, gameStatus, direction]);
+  const leaders = useMemo(() => [...players].filter(p => p.points != null).sort((a,b) => (b.points ?? -Infinity) - (a.points ?? -Infinity)).slice(0,8), [players]);
+  const topTeams = useMemo(() => [...teams].filter(t => t.adjusted?.netRating != null).sort((a,b) => (b.adjusted?.netRating ?? -Infinity) - (a.adjusted?.netRating ?? -Infinity)).slice(0,8), [teams]);
+  const latestGames = useMemo(() => [...games].sort((a,b) => b.date.localeCompare(a.date)).slice(0,6), [games]);
+  const feedReady = [playerFeed, teamFeed, gameFeed].filter(f => f.status === "ready").length;
+  const changeSection = (next: Section) => { setSection(next); setQuery(""); setSelectedPlayer(null); setSelectedGame(null); setMobileOpen(false); };
+  const pageTitle = selectedPlayer?.name ?? (selectedGame ? `${selectedGame.awayTeam} at ${selectedGame.homeTeam}` : section);
+  const refresh = () => window.location.reload();
+  const Sidebar = () => <div className="flex h-full flex-col">
+    <div className="mb-9 flex items-center gap-3 px-2"><div className="brand-mark"><Activity size={20}/></div><div><div className="text-[15px] font-bold tracking-tight">D1 Hoops</div><div className="text-[10px] uppercase tracking-[.17em] text-muted">Basketball intelligence</div></div></div>
+    <div className="mb-3 px-3 text-[10px] font-semibold uppercase tracking-[.16em] text-muted">Workspace</div>
+    <nav className="space-y-1" aria-label="Main navigation">{NAV.map(({name,description,icon:Icon}) => <button key={name} onClick={() => changeSection(name)} aria-current={section === name ? "page" : undefined} className={`nav-item ${section === name ? "active" : ""}`}><Icon size={17}/><span className="min-w-0 flex-1 text-left"><span className="block text-[13px] font-medium">{name}</span><span className="mt-0.5 block truncate text-[10px] text-muted">{description}</span></span>{section === name && <span className="nav-indicator"/>}</button>)}</nav>
+    <div className="mt-auto space-y-4"><div className="rounded-xl border p-3"><div className="flex items-center gap-2 text-xs font-semibold"><ShieldCheck size={14}/> Data integrity</div><div className="mt-3 grid grid-cols-3 gap-2 text-center">{[["Teams",teamFeed.status],["Players",playerFeed.status],["Games",gameFeed.status]].map(([label,status])=><div key={label}><div className={`status-dot ${status === "ready" ? "good" : status === "error" ? "bad" : ""}`}/><div className="mt-1 text-[10px] text-muted">{label}</div></div>)}</div></div><div className="px-3 text-[10px] text-muted">2026–27 MEN'S DIVISION I</div></div>
+  </div>;
+  const SearchBar = () => <label className="search-field"><Search size={16}/><input value={query} onChange={e => setQuery(e.target.value)} placeholder={section === "Players" ? "Search player, team or conference" : "Search teams, matchups, venues…"}/>{query && <button type="button" onClick={() => setQuery("")} aria-label="Clear search"><X size={14}/></button>}<kbd>⌘ K</kbd></label>;
+  return <main className="app-shell">
+    <aside className="desktop-sidebar"><Sidebar/></aside>
+    {mobileOpen && <div className="mobile-scrim" onClick={() => setMobileOpen(false)}><aside className="mobile-sidebar" onClick={e => e.stopPropagation()}><div className="mb-5 flex justify-end"><button onClick={() => setMobileOpen(false)} aria-label="Close navigation"><X/></button></div><Sidebar/></aside></div>}
+    <section className="app-main">
+      <header className="topbar"><div className="flex min-w-0 items-center gap-3"><button className="icon-button lg:hidden" onClick={() => setMobileOpen(true)} aria-label="Open navigation"><Menu size={18}/></button><div className="min-w-0"><div className="text-[10px] font-medium uppercase tracking-[.14em] text-muted">2026–27 season <span className="mx-1 opacity-40">/</span> Men's Division I</div><div className="truncate text-sm font-semibold">{pageTitle}</div></div></div><div className="flex items-center gap-2"><span className="hidden text-[11px] text-muted sm:inline-flex"><span className="status-dot good mr-2"/>{feedReady}/3 feeds published</span><button className="icon-button" onClick={() => setTheme(v => v === "dark" ? "light" : "dark")} aria-label={theme === "dark" ? "Switch to light appearance" : "Switch to dark appearance"}>{theme === "dark" ? <Sun size={17}/> : <Moon size={17}/>}</button></div></header>
+      <div className="page-content">
+        {section === "Overview" && <>
+          <div className="page-heading"><div><div className="eyebrow">Season intelligence · 2026–27</div><h1>College basketball,<br/><span>without the guesswork.</span></h1><p>One place to explore the teams, players, games and numbers shaping Division I.</p></div><div className="season-pill"><span className="status-dot good"/> Regular season · live feed snapshots</div></div>
+          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+            <MetricCard label="Team records" value={teams.length ? teams.length.toLocaleString() : "—"} detail={teamFeed.status === "ready" ? "Provider records published" : "Awaiting verified feed"} onClick={() => changeSection("Teams")}/>
+            <MetricCard label="Player profiles" value={players.length ? players.length.toLocaleString() : "—"} detail={playerFeed.status === "ready" ? "Season statistics available" : "Awaiting verified feed"} onClick={() => changeSection("Players")}/>
+            <MetricCard label="Games indexed" value={games.length ? games.length.toLocaleString() : "—"} detail={gameFeed.status === "ready" ? "Schedule and results" : "Awaiting verified feed"} onClick={() => changeSection("Games")}/>
+            <MetricCard label="Data feeds" value={`${feedReady}/3`} detail="Team · player · game snapshots" onClick={refresh}/>
+          </div>
+          <div className="overview-grid">
+            <section className="panel section-panel"><div className="section-heading"><div><div className="eyebrow">Power index</div><h2>Top teams by adjusted net rating</h2></div><button className="text-link" onClick={() => changeSection("Teams")}>Full directory <ArrowRight size={14}/></button></div>
+              {topTeams.length ? <div className="leader-list">{topTeams.map((team,index)=><div className="leader-row" key={team.teamId ?? team.team}><span className="leader-rank">{String(index+1).padStart(2,"0")}</span><span className="min-w-0 flex-1"><b>{team.team}</b><small>{team.conference ?? "Conference unavailable"} · {team.wins ?? "—"}–{team.losses ?? "—"}</small></span><strong>{number(team.adjusted?.netRating)}</strong></div>)}</div> : <EmptyState title="Team ratings not published" detail={teamFeed.note}/>}
+            </section>
+            <section className="panel section-panel"><div className="section-heading"><div><div className="eyebrow">Recent schedule</div><h2>Games & results</h2></div><button className="text-link" onClick={() => changeSection("Games")}>Game center <ArrowRight size={14}/></button></div>
+              {latestGames.length ? <div className="space-y-2">{latestGames.map(game=><button key={game.id} className="game-compact" onClick={() => setSelectedGame(game)}><span className="min-w-0 flex-1"><small>{new Date(game.date).toLocaleDateString()} · {game.status.replace("_"," ")}</small><b>{game.awayTeam} <span>@</span> {game.homeTeam}</b></span><strong>{game.awayScore == null || game.homeScore == null ? "—" : `${game.awayScore}–${game.homeScore}`}</strong><ChevronRight size={15}/></button>)}</div> : <EmptyState title="No game records yet" detail={gameFeed.note}/>}
+            </section>
+          </div>
+          <section className="panel section-panel"><div className="section-heading"><div><div className="eyebrow">Player spotlight</div><h2>Scoring leaders</h2></div><button className="text-link" onClick={() => changeSection("Players")}>All players <ArrowRight size={14}/></button></div>
+            {leaders.length ? <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-4">{leaders.slice(0,8).map((player,index)=><button className="player-spotlight" key={player.id} onClick={() => setSelectedPlayer(player)}><span className="text-[10px] text-muted">#{index+1} SCORING</span><b>{player.name}</b><span>{player.teamName}</span><strong>{number(player.points)} <small>PPG</small></strong></button>)}</div> : <EmptyState title="Player leaders unavailable" detail={playerFeed.note}/>}
+          </section>
+          <div className="data-footnote"><Clock3 size={13}/> Team data: {teamFeed.updatedAt ? new Date(teamFeed.updatedAt).toLocaleString() : "not published"} · Player data: {playerFeed.updatedAt ? new Date(playerFeed.updatedAt).toLocaleString() : "not published"} · Game data: {gameFeed.updatedAt ? new Date(gameFeed.updatedAt).toLocaleString() : "not published"}</div>
+        </>}
+        {section === "Teams" && <><div className="section-title-row"><div><div className="eyebrow">National directory</div><h1>Teams</h1><p>Search the national directory and inspect every available team metric in one place.</p></div></div><NationalDirectory players={players} teamRecords={teams}/></>}
+        {section === "Players" && <>
+          {selectedPlayer ? <><button className="back-link" onClick={() => setSelectedPlayer(null)}>← All players</button><div className="profile-hero"><div className="eyebrow">Player profile · 2026–27 season</div><h1>{selectedPlayer.name}</h1><p>{selectedPlayer.teamName} · {selectedPlayer.position || "Position not supplied"} · {selectedPlayer.games ?? "—"} games</p><div className="profile-kpis">{[["PTS/G",selectedPlayer.points],["REB/G",selectedPlayer.rebounds],["AST/G",selectedPlayer.assists],["MPG",selectedPlayer.minutes],["USG%",selectedPlayer.usage],["eFG%",selectedPlayer.efg],["TS%",selectedPlayer.ts],["PORPAG",selectedPlayer.impact]].map(([label,value])=><div key={label}><small>{label}</small><b>{number(value as number | null)}</b></div>)}</div></div><section className="panel section-panel"><div className="section-heading"><h2>Complete provider stat record</h2><span className="text-xs text-muted">{flatten(selectedPlayer.sourceStats ?? selectedPlayer).length} source fields</span></div><div className="stat-grid">{flatten(selectedPlayer.sourceStats ?? selectedPlayer).map(stat=><div className="raw-stat" key={stat.label}><small>{stat.label}</small><b>{stat.value}</b></div>)}</div><p className="mt-4 text-xs text-muted">Raw values are preserved from the College Basketball Data provider. Missing source fields are not estimated.</p></section></> : <>
+            <div className="section-title-row"><div><div className="eyebrow">Player discovery</div><h1>Players</h1><p>Search and sort the current-season player statistical universe.</p></div><div className="text-xs text-muted">{players.length.toLocaleString()} records · refreshed {playerFeed.updatedAt ? new Date(playerFeed.updatedAt).toLocaleDateString() : "—"}</div></div>
+            <div className="toolbar"><SearchBar/><label className="control-label">Sort by<select value={String(playerSort)} onChange={e => setPlayerSort(e.target.value as keyof Player)}><option value="points">Points</option><option value="rebounds">Rebounds</option><option value="assists">Assists</option><option value="minutes">Minutes</option><option value="usage">Usage</option><option value="efg">eFG%</option><option value="ts">True shooting</option><option value="impact">PORPAG</option><option value="name">Name</option><option value="teamName">Team</option></select></label><button className="control-button" onClick={() => setDirection(v => v === "asc" ? "desc" : "asc")}><ArrowDownUp size={14}/> {direction === "desc" ? "High to low" : "Low to high"}</button></div>
+            {playerFeed.status === "loading" ? <EmptyState title="Loading player records" detail="Reading the published 2026–27 snapshot…"/> : playerFeed.status === "error" || playerFeed.status === "empty" ? <EmptyState title="Player feed unavailable" detail={playerFeed.note} retry={refresh}/> : <section className="panel table-panel"><div className="table-scroll"><table className="data-table min-w-[1050px]"><thead><tr>{["Player","Team","GP","MPG","PTS","REB","AST","STL","BLK","TOV","USG%","eFG%","TS%","PORPAG","ORtg","DRtg","Net","FT rate","AST/TO","WS"].map(label=><th key={label}>{label}</th>)}</tr></thead><tbody>{filteredPlayers.map(player=><tr key={player.id} onClick={() => setSelectedPlayer(player)} tabIndex={0} onKeyDown={e => { if (e.key === "Enter" || e.key === " ") setSelectedPlayer(player); }}><td><b className="text-link">{player.name}</b><small>{player.position || "Position —"}</small></td><td>{player.teamName}</td><td>{player.games ?? "—"}</td><td>{number(player.minutes)}</td><td>{number(player.points)}</td><td>{number(player.rebounds)}</td><td>{number(player.assists)}</td><td>{number(player.steals)}</td><td>{number(player.blocks)}</td><td>{number(player.turnovers)}</td><td>{number(player.usage)}</td><td>{number(player.efg)}</td><td>{number(player.ts)}</td><td>{number(player.impact,2)}</td><td>{number(player.offensiveRating)}</td><td>{number(player.defensiveRating)}</td><td>{number(player.netRating)}</td><td>{number(player.freeThrowRate,3)}</td><td>{number(player.assistsTurnoverRatio,2)}</td><td>{number(player.winShares?.total,2)}</td></tr>)}</tbody></table></div><div className="table-footer">Showing {filteredPlayers.length.toLocaleString()} of {players.length.toLocaleString()} players · select a row to inspect all source fields</div></section>}
+          </>}
+        </>}
+        {section === "Games" && <>
+          {selectedGame ? <><button className="back-link" onClick={() => setSelectedGame(null)}>← All games</button><div className="profile-hero"><div className="eyebrow">{new Date(selectedGame.date).toLocaleString()} · {selectedGame.status.replace("_"," ")}</div><h1>{selectedGame.awayTeam} <span>@</span> {selectedGame.homeTeam}</h1><div className="game-scoreline"><div><small>{selectedGame.awayConference ?? "Away"}</small><b>{selectedGame.awayScore ?? "—"}</b><span>{selectedGame.awayTeam}</span></div><div className="text-muted">FINAL / SCHEDULE</div><div><small>{selectedGame.homeConference ?? "Home"}</small><b>{selectedGame.homeScore ?? "—"}</b><span>{selectedGame.homeTeam}</span></div></div></div><section className="panel section-panel"><div className="eyebrow">Game information</div><div className="stat-grid mt-4">{[["Venue",selectedGame.venue],["Location",[selectedGame.city,selectedGame.state].filter(Boolean).join(", ")],["Site",selectedGame.neutralSite ? "Neutral" : "Home court"],["Game type",selectedGame.conferenceGame ? "Conference" : "Non-conference"],["Tournament",selectedGame.tournament],["Period scores",selectedGame.awayPeriodPoints && selectedGame.homePeriodPoints ? `Away ${selectedGame.awayPeriodPoints.join("–")} · Home ${selectedGame.homePeriodPoints.join("–")}` : null]].map(([label,value])=><div className="raw-stat" key={label}><small>{label}</small><b>{value || "Not supplied"}</b></div>)}</div><p className="mt-4 text-xs text-muted">The published game feed supplies schedule and result data. No player box score or play-by-play is inferred where it is not supplied.</p></section></> : <>
+            <div className="section-title-row"><div><div className="eyebrow">Schedule & results</div><h1>Games</h1><p>Browse verified 2026–27 regular-season matchups and scores.</p></div><span className="text-xs text-muted">{games.length.toLocaleString()} records</span></div>
+            <div className="toolbar"><SearchBar/><label className="control-label">Status<select value={gameStatus} onChange={e => setGameStatus(e.target.value)}><option value="all">All games</option><option value="scheduled">Scheduled</option><option value="in_progress">In progress</option><option value="final">Final</option><option value="postponed">Postponed</option><option value="cancelled">Cancelled</option></select></label><button className="control-button" onClick={() => setDirection(v => v === "asc" ? "desc" : "asc")}><ArrowDownUp size={14}/> {direction === "desc" ? "Newest first" : "Oldest first"}</button></div>
+            {gameFeed.status === "loading" ? <EmptyState title="Loading games" detail="Reading the published schedule and results snapshot…"/> : gameFeed.status === "error" || gameFeed.status === "empty" ? <EmptyState title="Game feed unavailable" detail={gameFeed.note} retry={refresh}/> : <section className="panel table-panel"><div className="table-scroll"><table className="data-table min-w-[850px]"><thead><tr>{["Date","Away","Score","Home","Status","Conference","Venue"].map(label=><th key={label}>{label}</th>)}</tr></thead><tbody>{filteredGames.map(game=><tr key={game.id} onClick={() => setSelectedGame(game)} tabIndex={0} onKeyDown={e => { if (e.key === "Enter" || e.key === " ") setSelectedGame(game); }}><td>{new Date(game.date).toLocaleString()}</td><td>{game.awayTeam}</td><td className="font-semibold">{game.awayScore == null || game.homeScore == null ? "—" : `${game.awayScore}–${game.homeScore}`}</td><td>{game.homeTeam}</td><td><span className={`game-status ${game.status === "final" ? "complete" : game.status === "in_progress" ? "live" : ""}`}>{game.status.replace("_"," ")}</span></td><td>{game.conferenceGame ? "Conference" : "Non-conference"}</td><td>{game.venue ?? "—"}</td></tr>)}</tbody></table></div><div className="table-footer">Showing {filteredGames.length.toLocaleString()} of {games.length.toLocaleString()} games</div></section>}
+          </>}
+        </>}
+        {section === "Metrics" && <>
+          <div className="section-title-row"><div><div className="eyebrow">Methods & definitions</div><h1>Metrics</h1><p>Know what every number means, how it is calculated, and where it can mislead.</p></div></div>
+          <div className="metric-intro"><div><Database size={18}/><b>Source transparency</b><p>Provider-supplied adjusted ratings are kept distinct from statistics calculated from season aggregates or game-level box scores. A blank means unavailable, not zero.</p></div><div><ShieldCheck size={18}/><b>Known limitations</b><p>Shot-quality models, lineup/on-off impact and a separately calibrated forecast model are not represented as available metrics.</p></div></div>
+          <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">{metricDefinitions.map(metric=><article className="panel metric-definition" key={metric.key}><div className="flex items-start justify-between gap-3"><h2>{metric.label}</h2><span>{metric.unit}</span></div><p>{metric.description}</p><div className="metric-formula"><small>Formula</small><b>{metric.formula}</b></div><div className="metric-caveat">{metric.higherIsBetter ? "Higher is generally better" : "Lower is generally better"} · {metric.caveat}</div></article>)}</div>
+        </>}
+        <footer className="app-footer">D1 HOOPS ANALYTICS <span>·</span> 2026–27 MEN'S DIVISION I <span>·</span> College Basketball Data</footer>
+      </div>
+    </section>
+  </main>;
 }
