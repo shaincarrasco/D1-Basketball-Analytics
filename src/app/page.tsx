@@ -149,7 +149,8 @@ export default function HomePage() {
   const topTeams = overview?.teams ?? [];
   const latestGames = overview?.games ?? [];
   const selectedGameBoxscore = gameBoxscoreFeed.items.find(game => game.id === selectedGame?.id);
-  const feedReady = [playerFeed, teamFeed, gameFeed].filter(feed => feed.status === "ready").length;
+  const activeFeeds = section === "Teams" ? [teamFeed, playerFeed] : section === "Players" ? [playerFeed] : section === "Games" ? [gameFeed] : section === "Overview" ? [overviewFeed] : [];
+  const feedReady = activeFeeds.filter(feed => feed.status === "ready").length;
   const changeSection = (next: Section) => { setSection(next); setQuery(""); setSelectedPlayer(null); setSelectedGame(null); setMobileOpen(false); if (next !== "Teams") setTeamSearchTerm(""); };
   const openTeamDirectory = (teamName: string) => { changeSection("Teams"); setTeamSearchTerm(teamName); };
   const openGame = (game: AppGame) => { changeSection("Games"); setSelectedGame(game); };
@@ -157,9 +158,9 @@ export default function HomePage() {
   const pageTitle = selectedPlayer?.name ?? (selectedGame ? `${selectedGame.awayTeam} at ${selectedGame.homeTeam}` : section);
   const refresh = () => window.location.reload();
   const integrityStatuses = [
-    ["Teams", teamFeed.status === "ready" || (overview?.teamCount ?? 0) > 0 ? "ready" : teamFeed.status],
-    ["Players", playerFeed.status === "ready" || (overview?.playerCount ?? 0) > 0 ? "ready" : playerFeed.status],
-    ["Games", gameFeed.status === "ready" || (overview?.gameCount ?? 0) > 0 ? "ready" : gameFeed.status],
+    ["Teams", teamFeed.status === "error" ? "error" : teamFeed.status === "ready" || (overview?.teamCount ?? 0) > 0 ? "ready" : teamFeed.status],
+    ["Players", playerFeed.status === "error" ? "error" : playerFeed.status === "ready" || (overview?.playerCount ?? 0) > 0 ? "ready" : playerFeed.status],
+    ["Games", gameFeed.status === "error" ? "error" : gameFeed.status === "ready" || (overview?.gameCount ?? 0) > 0 ? "ready" : gameFeed.status],
   ];
   const Sidebar = () => <div className="flex h-full flex-col">
     <div className="mb-9 flex items-center gap-3 px-2"><div className="brand-mark"><Activity size={20}/></div><div><div className="text-[15px] font-bold tracking-tight">D1 Hoops</div><div className="text-[10px] uppercase tracking-[.17em] text-muted">Basketball intelligence</div></div></div>
@@ -172,7 +173,7 @@ export default function HomePage() {
     <aside className="desktop-sidebar"><Sidebar/></aside>
     {mobileOpen && <div className="mobile-scrim" onClick={() => setMobileOpen(false)}><aside className="mobile-sidebar" onClick={e => e.stopPropagation()}><div className="mb-5 flex justify-end"><button onClick={() => setMobileOpen(false)} aria-label="Close navigation"><X/></button></div><Sidebar/></aside></div>}
     <section className="app-main">
-      <header className="topbar"><div className="flex min-w-0 items-center gap-3"><button className="icon-button lg:hidden" onClick={() => setMobileOpen(true)} aria-label="Open navigation"><Menu size={18}/></button><div className="min-w-0"><div className="text-[10px] font-medium uppercase tracking-[.14em] text-muted">2026–27 season <span className="mx-1 opacity-40">/</span> Men's Division I</div><div className="truncate text-sm font-semibold">{pageTitle}</div></div></div><div className="flex items-center gap-2"><span className="hidden text-[11px] text-muted sm:inline-flex"><span className={`status-dot mr-2 ${section === "Overview" ? (overviewFeed.status === "ready" ? "good" : overviewFeed.status === "error" ? "bad" : "") : (feedReady === 3 ? "good" : [playerFeed,teamFeed,gameFeed].some(feed => feed.status === "error") ? "bad" : "")}`}/>{section === "Overview" ? (overviewFeed.status === "ready" ? "Overview snapshot ready" : "Overview data pending") : `${feedReady}/3 feeds ready`}</span><button className="icon-button" onClick={() => setTheme(v => v === "dark" ? "light" : "dark")} aria-label={theme === "dark" ? "Switch to light appearance" : "Switch to dark appearance"}>{theme === "dark" ? <Sun size={17}/> : <Moon size={17}/>}</button></div></header>
+      <header className="topbar"><div className="flex min-w-0 items-center gap-3"><button className="icon-button lg:hidden" onClick={() => setMobileOpen(true)} aria-label="Open navigation"><Menu size={18}/></button><div className="min-w-0"><div className="text-[10px] font-medium uppercase tracking-[.14em] text-muted">2026–27 season <span className="mx-1 opacity-40">/</span> Men's Division I</div><div className="truncate text-sm font-semibold">{pageTitle}</div></div></div><div className="flex items-center gap-2"><span className="hidden text-[11px] text-muted sm:inline-flex"><span className={`status-dot mr-2 ${section === "Metrics" ? "" : (feedReady === activeFeeds.length && feedReady > 0 ? "good" : activeFeeds.some(feed => feed.status === "error") ? "bad" : "")}`}/>{section === "Metrics" ? "Metric methodology" : `${feedReady}/${activeFeeds.length} active feeds ready`}</span><button className="icon-button" onClick={() => setTheme(v => v === "dark" ? "light" : "dark")} aria-label={theme === "dark" ? "Switch to light appearance" : "Switch to dark appearance"}>{theme === "dark" ? <Sun size={17}/> : <Moon size={17}/>}</button></div></header>
       <div className="page-content">
         {section === "Overview" && <>
           <div className="page-heading"><div><div className="eyebrow">Season intelligence · 2026–27</div><h1>College basketball,<br/><span>without the guesswork.</span></h1><p>One place to explore the teams, players, games and numbers shaping Division I.</p></div><div className="season-pill"><span className="status-dot good"/> Regular season · source snapshots</div></div>
