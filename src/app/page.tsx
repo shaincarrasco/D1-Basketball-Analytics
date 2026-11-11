@@ -13,7 +13,7 @@ import { metricDefinitions } from "@/lib/metrics";
 type Section = "Overview" | "Teams" | "Players" | "Games" | "Metrics";
 type Feed<T> = { items: T[]; updatedAt: string | null; status: "loading" | "ready" | "empty" | "error"; note: string };
 type OverviewTeam = { team: string; conference?: string | null; wins?: number | null; losses?: number | null; netEfficiency: number };
-type OverviewPlayer = { id: string; name: string; teamName: string; conference?: string | null; points: number; rebounds?: number | null; assists?: number | null };
+type OverviewPlayer = { id: string; name: string; teamName: string; conference?: string | null; detailGroup?: string; points: number; rebounds?: number | null; assists?: number | null };
 type OverviewSnapshot = { teamCount: number; playerCount: number; gameCount: number; teams: OverviewTeam[]; players: OverviewPlayer[]; games: AppGame[]; updatedAt: { teams: string | null; players: string | null; games: string | null } };
 type GameBoxscoreTeam = { teamId: number | null; team: string; conference?: string | null; opponent?: string | null; isHome: boolean; pace?: number | null; stats?: Record<string, unknown> | null };
 type GameBoxscore = { id: string; date: string | null; neutralSite: boolean; conferenceGame: boolean; teams: GameBoxscoreTeam[] };
