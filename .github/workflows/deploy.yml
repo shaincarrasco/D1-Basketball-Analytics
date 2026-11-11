@@ -38,7 +38,7 @@ jobs:
         env:
           CBBD_API_KEY: ${{ secrets.CBBD_API_KEY }}
       - name: Fetch current-season team statistics and ratings
-        if: github.event_name != 'push' || !hashFiles('public/data/team-season-2027.json') || !hashFiles('public/data/player-season-2027.json') || !hashFiles('public/data/games-season-2027.json') || !hashFiles('public/data/game-team-boxscores-2027.json') || !hashFiles('public/data/player-details-2027/*.json') || !hashFiles('public/data/overview-2027.json')
+        if: github.event_name != 'push' || contains(github.event.head_commit.message, '[refresh-data]') || !hashFiles('public/data/team-season-2027.json') || !hashFiles('public/data/player-season-2027.json') || !hashFiles('public/data/games-season-2027.json') || !hashFiles('public/data/game-team-boxscores-2027.json') || !hashFiles('public/data/player-details-2027/*.json') || !hashFiles('public/data/overview-2027.json')
         run: node scripts/fetch-team-stats.mjs
         env:
           CBBD_API_KEY: ${{ secrets.CBBD_API_KEY }}
