@@ -23,7 +23,8 @@ const flattenStats = (input: unknown, prefix = ""): FlatStat[] => {
 
 const TEAM_METRIC_GROUPS = [
   { label: "Record", columns: [["wins","W"],["losses","L"],["games","GP"],["winPct","Win %"],["margin","Margin/G"]] },
-  { label: "Ratings", columns: [["netRating","Adj Net"],["offensiveRating","Adj O"],["defensiveRating","Adj D"],["srs","SRS"],["elo","Elo"],["sos","SOS"]] },
+  { label: "D1 Hoops model", columns: [["modelRank","DHR #"],["modelAdjEM","DHR EM"],["modelAdjO","DHR O"],["modelAdjD","DHR D"],["modelTempo","DHR Tempo"],["modelSOS","DHR SOS"],["modelGames","DHR GP"]] },
+  { label: "External ratings", columns: [["netRating","CBBD Adj Net"],["offensiveRating","CBBD Adj O"],["defensiveRating","CBBD Adj D"],["srs","SRS"],["elo","Elo"],["sos","SOS"]] },
   { label: "Scoring & pace", columns: [["points","PTS/G"],["pointsPerPoss","PTS/Poss"],["offensePer100","Off/100"],["defensePer100","Def/100"],["netPer100","Net/100"],["pace","Pace"]] },
   { label: "Shooting", columns: [["fgPct","FG %"],["threePct","3P %"],["efgPct","eFG %"],["oppEfgPct","Opp eFG %"],["ftRate","FT Rate"],["oppFtRate","Opp FT Rate"]] },
   { label: "Four factors", columns: [["orbPct","ORB %"],["drbPct","DRB %"],["tovPct","TOV %"],["oppTovPct","Opp TOV %"],["oppOrbPct","Opp ORB %"]] },
@@ -199,6 +200,13 @@ const teamMetric = (team: TeamSeasonRecord, key: string): number | null => {
     case "srs": return team.srsRating ?? null;
     case "elo": return team.eloRating ?? null;
     case "sos": return team.sosRating ?? null;
+    case "modelRank": return team.powerRatings?.rank ?? null;
+    case "modelAdjEM": return team.powerRatings?.adjEM ?? null;
+    case "modelAdjO": return team.powerRatings?.adjO ?? null;
+    case "modelAdjD": return team.powerRatings?.adjD ?? null;
+    case "modelTempo": return team.powerRatings?.tempo ?? null;
+    case "modelSOS": return team.powerRatings?.sos ?? null;
+    case "modelGames": return team.powerRatings?.games ?? null;
     case "homeWinPct": return pct(homeGames);
     case "awayWinPct": return pct(awayGames);
     case "neutralWinPct": return pct(neutralGames);
@@ -264,7 +272,7 @@ export default function NationalDirectory({ players = [], teamRecords = [], init
   const [directoryDirection, setDirectoryDirection] = useState<"asc" | "desc">("asc");
   const [statsSort, setStatsSort] = useState<keyof Player>("points");
   const [statsDirection, setStatsDirection] = useState<"asc" | "desc">("desc");
-  const [rankingMetric, setRankingMetric] = useState("netPer100");
+  const [rankingMetric, setRankingMetric] = useState("modelAdjEM");
   const [rankingDirection, setRankingDirection] = useState<"asc" | "desc">("desc");
   const [rosterSort, setRosterSort] = useState<"name" | "position" | "jersey">("name");
   useEffect(() => { if (initialQuery) setQuery(initialQuery); }, [initialQuery]);
@@ -447,7 +455,7 @@ export default function NationalDirectory({ players = [], teamRecords = [], init
     <section className="panel overflow-hidden">
       <div className="flex flex-wrap items-end justify-between gap-3 border-b border-[#263448] p-5">
         <div><div className="eyebrow">2026–27 national analytics · all available team metrics</div><h3 className="mt-1 text-lg font-bold">The complete team table</h3><p className="mt-1 text-xs text-slate-500">{rankedRecords.length} teams · {TEAM_METRIC_GROUPS.reduce((n,g)=>n+g.columns.length,0)} stat columns · select any column heading to sort</p></div>
-        <div className="text-right text-xs text-slate-500"><div>Season-to-date</div><div className="mt-1 font-medium text-slate-300">All metrics shown together</div></div>
+        <div className="flex flex-wrap items-end gap-3 text-xs text-slate-500"><label className="flex flex-col gap-1 text-left">National ranking<select value={rankingMetric} onChange={event=>{const key=event.target.value;setRankingMetric(key);setRankingDirection(["modelRank","modelAdjD","defensiveRating","defensePer100","srs","elo","sos","modelSOS"].includes(key)?"asc":"desc");}} className="min-w-[220px] rounded-lg border border-[#29364a] bg-[#101827] px-3 py-2 text-slate-100"><option value="modelAdjEM">D1 Hoops Power Rating · AdjEM</option><option value="modelAdjO">D1 Hoops · Adjusted offense</option><option value="modelAdjD">D1 Hoops · Adjusted defense</option><option value="modelSOS">D1 Hoops · Strength of schedule</option><option value="modelTempo">D1 Hoops · Adjusted tempo</option><option value="srs">CBBD · SRS</option><option value="elo">CBBD · Elo</option><option value="netRating">CBBD · Adjusted net rating</option><option value="netPer100">Raw · Net efficiency</option></select></label><div className="pb-2 text-right"><div>Season-to-date</div><div className="mt-1 font-medium text-slate-300">All metrics shown together</div></div></div>
       </div>
       {rankedRecords.length ? <div className="max-h-[72vh] overflow-auto">
         <table className="w-full min-w-[2600px] border-separate border-spacing-0 text-left text-[11px] tabular-nums">
@@ -458,17 +466,17 @@ export default function NationalDirectory({ players = [], teamRecords = [], init
               {TEAM_METRIC_GROUPS.map(group=><th key={group.label} colSpan={group.columns.length} className="border-b border-l border-[#263448] px-3 py-2 text-center">{group.label}</th>)}
             </tr>
             <tr className="bg-[#172438] text-[10px] font-semibold text-slate-400">
-              {TEAM_METRIC_GROUPS.flatMap(group=>group.columns.map(([key,label])=><th key={key} title={label} className={`border-b border-r border-[#263448] px-3 py-2 text-right whitespace-nowrap ${rankingMetric===key?"text-lime-300":""}`}><button type="button" onClick={()=>{if(rankingMetric===key)setRankingDirection(v=>v==="asc"?"desc":"asc");else{setRankingMetric(key);setRankingDirection(["defensiveRating","defensePer100","oppPointsPerPoss","oppEfgPct","oppOrbPct","oppFtRate","turnovers","losses","tovPct","marginStd","offenseStd","defenseStd"].includes(key)?"asc":"desc");}}} className="hover:text-white">{label}{rankingMetric===key?(rankingDirection==="asc"?" ↑":" ↓"):""}</button></th>))}
+              {TEAM_METRIC_GROUPS.flatMap(group=>group.columns.map(([key,label])=><th key={key} title={label} className={`border-b border-r border-[#263448] px-3 py-2 text-right whitespace-nowrap ${rankingMetric===key?"text-lime-300":""}`}><button type="button" onClick={()=>{if(rankingMetric===key)setRankingDirection(v=>v==="asc"?"desc":"asc");else{setRankingMetric(key);setRankingDirection(["modelRank","modelAdjD","defensiveRating","defensePer100","oppPointsPerPoss","oppEfgPct","oppOrbPct","oppFtRate","turnovers","losses","tovPct","marginStd","offenseStd","defenseStd"].includes(key)?"asc":"desc");}}} className="hover:text-white">{label}{rankingMetric===key?(rankingDirection==="asc"?" ↑":" ↓"):""}</button></th>))}
             </tr>
           </thead>
           <tbody>{rankedRecords.map(({record,value},index)=>{const team=teams.find(t=>normalizeTeam(t.displayName||t.name||"")===normalizeTeam(record.team));return <tr key={record.teamId??record.team} className="group hover:bg-[#172438]">
             <td className="sticky left-0 z-10 border-b border-r border-[#243044] bg-[#0d1521] px-3 py-3 font-mono text-slate-500 group-hover:bg-[#172438]">{value==null?"—":index+1}</td>
             <td className="sticky left-[42px] z-10 border-b border-r border-[#243044] bg-[#0d1521] px-3 py-3 font-semibold text-lime-300 group-hover:bg-[#172438]"><div className="flex items-center gap-2">{team?<button onClick={()=>void openTeam(team)} className="max-w-[180px] truncate text-left hover:underline">{record.team}</button>:<span className="text-slate-200">{record.team}</span>}<button type="button" onClick={()=>{const id=String(record.teamId??record.team);setCompareIds(current=>current.includes(id)?current.filter(value=>value!==id):current.length<3?[...current,id]:[...current.slice(1),id]);}} className="rounded-md border border-[#29364a] px-1.5 py-1 text-[9px] text-slate-400 hover:text-lime-300">{compareIds.includes(String(record.teamId??record.team))?"Selected":"+ Compare"}</button></div><span className="mt-1 block text-[10px] font-normal text-slate-500">{record.wins??"—"}–{record.losses??"—"} · {record.conference||"D-I"}</span></td>
-            {TEAM_METRIC_GROUPS.flatMap(group=>group.columns.map(([key])=>{const value=teamMetric(record,key);const isPct=String(key).toLowerCase().includes("pct")||["fgPct","threePct","efgPct","oppEfgPct","orbPct","drbPct","tovPct"].includes(key);const digits=["wins","losses","games"].includes(key)?0:["elo"].includes(key)?0:["astTov","ftRate","oppFtRate"].includes(key)?2:1;return <td key={key} className={`border-b border-r border-[#243044] px-3 py-3 text-right whitespace-nowrap ${rankingMetric===key?"bg-lime-300/[0.06] text-lime-200 font-semibold":"text-slate-300"}`}>{value==null?"—":`${value.toFixed(digits)}${isPct?"%":""}`}</td>}))}
+            {TEAM_METRIC_GROUPS.flatMap(group=>group.columns.map(([key])=>{const value=teamMetric(record,key);const isPct=String(key).toLowerCase().includes("pct")||["fgPct","threePct","efgPct","oppEfgPct","orbPct","drbPct","tovPct"].includes(key);const digits=["wins","losses","games","modelRank","modelGames","elo"].includes(key)?0:["astTov","ftRate","oppFtRate"].includes(key)?2:1;return <td key={key} className={`border-b border-r border-[#243044] px-3 py-3 text-right whitespace-nowrap ${rankingMetric===key?"bg-lime-300/[0.06] text-lime-200 font-semibold":"text-slate-300"}`}>{value==null?"—":`${value.toFixed(digits)}${isPct?"%":""}`}</td>}))}
           </tr>})}</tbody>
         </table>
       </div> : <div className="px-5 py-8 text-sm text-slate-400">No current-season team records are available yet. The table will populate from the 2026–27 provider feed after the data-refresh workflow succeeds.</div>}
-      <p className="border-t border-[#263448] px-5 py-3 text-[11px] leading-5 text-slate-500">Every metric is displayed in one horizontally scrollable table. Click a column heading to sort the entire national field. “—” means the provider has not supplied enough data to calculate that value; missing values are never replaced with zero. Adjusted ratings are provider metrics; other efficiency, four-factor, game-split and recent-form values are calculated from the listed source data.</p>
+      <p className="border-t border-[#263448] px-5 py-3 text-[11px] leading-5 text-slate-500">Every metric is displayed in one horizontally scrollable table. The default national order is D1 Hoops Power Rating (DHR), our free opponent-adjusted model—not KenPom. DHR adjusts each game for opponent offense/defense and venue, then applies a five-game league-average prior to stabilize small samples. Click any column heading or use National ranking to change the order. “—” means there is not enough verified data; missing values are never replaced with zero. CBBD ratings remain separate from DHR.</p>
       {!teamRecords.length && <div className="px-5 py-3 text-xs text-amber-300">2026–27 team statistics have not loaded. Check the latest GitHub Actions data-refresh run; no rankings are fabricated.</div>}
     </section>
     {status === "ready" && <><div className="text-xs text-slate-500">Showing {filtered.length} of {teams.length} programs · select any team to open its roster</div><div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-3">{filtered.map(t=><button key={t.id} onClick={() => void openTeam(t)} className="flex items-center gap-3 rounded-xl border border-[#263448] bg-[#101827] p-4 text-left transition hover:border-lime-300/60 hover:bg-[#172438]">{t.logo ? <img src={t.logo} alt="" className="h-10 w-10 object-contain"/> : <div className="grid h-10 w-10 place-items-center rounded-lg bg-[#1c2939]"><Trophy size={17}/></div>}<span className="min-w-0 flex-1"><b className="block truncate text-sm">{t.displayName || t.name}</b><span className="text-xs text-slate-500">{t.abbreviation || "D-I program"}</span></span><ChevronRight size={16} className="text-lime-300"/></button>)}</div></>}
