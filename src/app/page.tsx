@@ -159,7 +159,7 @@ export default function HomePage() {
     const day = game.date.slice(0, 10);
     const inDateRange = (!gameDateFrom || day >= gameDateFrom) && (!gameDateTo || day <= gameDateTo);
     return matches && inDateRange && (gameStatus === "all" || game.status === gameStatus);
-  }).sort((a,b) => direction === "asc" ? a.date.localeCompare(b.date) : b.date.localeCompare(a.date)), [games, query, gameStatus, direction]);
+  }).sort((a,b) => direction === "asc" ? a.date.localeCompare(b.date) : b.date.localeCompare(a.date)), [games, query, gameStatus, direction, gameDateFrom, gameDateTo]);
   const leaders = overview?.players ?? [];
   const topTeams = overview?.teams ?? [];
   const latestGames = overview?.games ?? [];
