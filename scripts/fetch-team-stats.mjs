@@ -106,7 +106,7 @@ const directoryPayload = JSON.parse(await readFile("public/data/team-directory.j
 const directoryTeams = Array.isArray(directoryPayload.teams) ? directoryPayload.teams : [];
 const normalizeTeamName = value => String(value ?? "").toLowerCase().replace(/\b(the|university|college)\b/g, "").replace(/[^a-z0-9]/g, "");
 const providerTeamNames = new Set(d1Teams.map(team => normalizeTeamName(team.team)));
-const d1DirectoryTeams = directoryTeams.filter(team => isD1Conference(team.conference));
+const d1DirectoryTeams = directoryTeams;
 const missingDirectoryTeams = d1DirectoryTeams.filter(team => !providerTeamNames.has(normalizeTeamName(team.location || team.displayName)));
 const placeholderTeams = missingDirectoryTeams.map(team => ({
   team: team.location || team.displayName,
