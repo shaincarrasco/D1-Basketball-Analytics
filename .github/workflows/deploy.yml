@@ -36,6 +36,10 @@ jobs:
         run: node scripts/fetch-player-stats.mjs
         env:
           CBBD_API_KEY: ${{ secrets.CBBD_API_KEY }}
+      - name: Fetch and validate current-season game schedule and results
+        run: node scripts/fetch-games.mjs
+        env:
+          CBBD_API_KEY: ${{ secrets.CBBD_API_KEY }}
       - name: Fetch player shooting profiles weekly
         run: node scripts/fetch-player-shooting.mjs
         env:
