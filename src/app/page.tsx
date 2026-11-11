@@ -12,13 +12,18 @@ import { metricDefinitions } from "@/lib/metrics";
 
 type Section = "Overview" | "Teams" | "Players" | "Games" | "Metrics";
 type Feed<T> = { items: T[]; updatedAt: string | null; status: "loading" | "ready" | "empty" | "error"; note: string };
+type OverviewTeam = { team: string; conference?: string | null; wins?: number | null; losses?: number | null; netEfficiency: number };
+type OverviewPlayer = { id: string; name: string; teamName: string; conference?: string | null; points: number; rebounds?: number | null; assists?: number | null };
+type OverviewSnapshot = { teamCount: number; playerCount: number; gameCount: number; teams: OverviewTeam[]; players: OverviewPlayer[]; games: AppGame[]; updatedAt: { teams: string | null; players: string | null; games: string | null } };
+type GameBoxscoreTeam = { teamId: number | null; team: string; conference?: string | null; opponent?: string | null; isHome: boolean; pace?: number | null; stats?: Record<string, unknown> | null };
+type GameBoxscore = { id: string; date: string | null; neutralSite: boolean; conferenceGame: boolean; teams: GameBoxscoreTeam[] };
+type PlayerDetailRecord = { id: string; sourceStats: Record<string, unknown>; shootingProfile?: Record<string, unknown> | null };
 type AppGame = {
   id: string; date: string; status: string; homeTeam: string; awayTeam: string;
   homeScore: number | null; awayScore: number | null; homeConference?: string | null;
   awayConference?: string | null; conferenceGame?: boolean; neutralSite?: boolean;
   tournament?: string | null; venue?: string | null; city?: string | null; state?: string | null;
   homePeriodPoints?: number[] | null; awayPeriodPoints?: number[] | null;
-  source?: Record<string, unknown>;
 };
 const NAV: { name: Section; description: string; icon: typeof Home }[] = [
   { name: "Overview", description: "National command center", icon: Home },
@@ -38,21 +43,24 @@ const flatten = (input: unknown, prefix = ""): { label: string; value: string }[
     return [{ label: label.replace(/^./, c => c.toUpperCase()), value: value == null ? "Not supplied" : typeof value === "number" ? value.toLocaleString(undefined, { maximumFractionDigits: 3 }) : String(value) }];
   });
 };
-function useFeed<T>(path: string, key: string, fallback: string) {
+function useFeed<T>(path: string, key: string, fallback: string, enabled = true) {
   const [feed, setFeed] = useState<Feed<T>>({ items: [], updatedAt: null, status: "loading", note: fallback });
+  const loaded = useRef(false);
   useEffect(() => {
+    if (!enabled || loaded.current) return;
     const base = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
     const controller = new AbortController();
-    fetch(`${base}${path}`, { signal: controller.signal, cache: "no-store" })
+    fetch(`${base}${path}`, { signal: controller.signal, cache: "force-cache" })
       .then(response => { if (!response.ok) throw new Error(`Feed request failed (${response.status})`); return response.json(); })
       .then(payload => {
         if (!payload || !Array.isArray(payload[key])) throw new Error("Feed schema is invalid");
         const items = payload[key] as T[];
+        loaded.current = true;
         setFeed({ items, updatedAt: typeof payload.fetchedAt === "string" ? payload.fetchedAt : null, status: items.length ? "ready" : "empty", note: typeof payload.note === "string" ? payload.note : fallback });
       })
       .catch(error => { if (error instanceof Error && error.name === "AbortError") return; setFeed(current => ({ ...current, status: "error", note: error instanceof Error ? error.message : "Feed unavailable" })); });
     return () => controller.abort();
-  }, [path, key, fallback]);
+  }, [path, key, fallback, enabled]);
   return feed;
 }
 function MetricCard({ label, value, detail, onClick }: { label: string; value: string; detail: string; onClick?: () => void }) {
@@ -76,12 +84,33 @@ export default function HomePage() {
   const [gameStatus, setGameStatus] = useState("all");
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
   const [selectedGame, setSelectedGame] = useState<AppGame | null>(null);
-  const playerFeed = useFeed<Player>("/data/player-season-2027.json", "players", "Current-season player statistics are not published yet.");
-  const teamFeed = useFeed<TeamSeasonRecord>("/data/team-season-2027.json", "teams", "Current-season team ratings are not published yet.");
-  const gameFeed = useFeed<AppGame>("/data/games-season-2027.json", "games", "Current-season games have not been published yet.");
+  const overviewFeed = useFeed<OverviewSnapshot>("/data/overview-2027.json", "overview", "The compact season overview is not published yet.", section === "Overview");
+  const playerFeed = useFeed<Player>("/data/player-season-2027.json", "players", "Current-season player statistics are not published yet.", section === "Players" || section === "Teams");
+  const teamFeed = useFeed<TeamSeasonRecord>("/data/team-season-2027.json", "teams", "Current-season team ratings are not published yet.", section === "Teams");
+  const gameFeed = useFeed<AppGame>("/data/games-season-2027.json", "games", "Current-season games have not been published yet.", section === "Games");
+  const gameBoxscoreFeed = useFeed<GameBoxscore>("/data/game-team-boxscores-2027.json", "games", "Game box scores are not published yet.", selectedGame !== null);
+  const overview = overviewFeed.items[0];
   const players = playerFeed.items;
   const teams = teamFeed.items;
   const games = gameFeed.items;
+  const [playerDetails, setPlayerDetails] = useState<PlayerDetailRecord | null>(null);
+  const [playerDetailsStatus, setPlayerDetailsStatus] = useState<"idle" | "loading" | "ready" | "error">("idle");
+  useEffect(() => {
+    if (!selectedPlayer) { setPlayerDetails(null); setPlayerDetailsStatus("idle"); return; }
+    const base = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+    const controller = new AbortController();
+    setPlayerDetails(null);
+    setPlayerDetailsStatus("loading");
+    fetch(`${base}/data/player-details-2027/${selectedPlayer.detailGroup || "unclassified"}.json`, { signal: controller.signal, cache: "force-cache" })
+      .then(response => { if (!response.ok) throw new Error(`Player detail request failed (${response.status})`); return response.json(); })
+      .then(payload => {
+        const detail = Array.isArray(payload?.players) ? payload.players.find((entry: PlayerDetailRecord) => entry.id === selectedPlayer.id) : null;
+        setPlayerDetails(detail ?? null);
+        setPlayerDetailsStatus(detail ? "ready" : "error");
+      })
+      .catch(error => { if (error instanceof Error && error.name === "AbortError") return; setPlayerDetailsStatus("error"); });
+    return () => controller.abort();
+  }, [selectedPlayer?.id, selectedPlayer?.detailGroup]);
   useEffect(() => {
     const saved = window.localStorage.getItem("d1-hoops-theme");
     if (saved === "light" || saved === "dark") setTheme(saved);
