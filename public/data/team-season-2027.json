@@ -443,7 +443,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.087,
+        "adjD": 106.944,
+        "adjEM": -1.856,
+        "tempo": 71.731,
+        "sos": 1.439,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 316
+      }
     },
     {
       "teamId": 2,
@@ -1001,7 +1014,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.966,
+        "adjD": 106.212,
+        "adjEM": -0.246,
+        "tempo": 72.943,
+        "sos": -0.081,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 228
+      }
     },
     {
       "teamId": 3,
@@ -1415,7 +1441,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 107.944,
+        "adjD": 105.09,
+        "adjEM": 2.854,
+        "tempo": 71.488,
+        "sos": -3.103,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 26
+      }
     },
     {
       "teamId": 4,
@@ -1973,7 +2012,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.023,
+        "adjD": 104.335,
+        "adjEM": 0.688,
+        "tempo": 72.115,
+        "sos": -0.935,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 159
+      }
     },
     {
       "teamId": 5,
@@ -2531,7 +2583,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.954,
+        "adjD": 106.743,
+        "adjEM": 0.211,
+        "tempo": 72.908,
+        "sos": 0.196,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 194
+      }
     },
     {
       "teamId": 6,
@@ -2801,7 +2866,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.572,
+        "adjD": 105.756,
+        "adjEM": -0.184,
+        "tempo": 71.959,
+        "sos": 1.703,
+        "games": 1,
+        "rawGames": 1,
+        "reliability": 0.167,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 222
+      }
     },
     {
       "teamId": 7,
@@ -3215,7 +3293,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.256,
+        "adjD": 107.969,
+        "adjEM": -2.714,
+        "tempo": 71.496,
+        "sos": 2.669,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 345
+      }
     },
     {
       "teamId": 8,
@@ -3629,7 +3720,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.146,
+        "adjD": 105.293,
+        "adjEM": 0.852,
+        "tempo": 71.285,
+        "sos": -1.744,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 152
+      }
     },
     {
       "teamId": 9,
@@ -4187,7 +4291,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 107.322,
+        "adjD": 104.17,
+        "adjEM": 3.151,
+        "tempo": 69.984,
+        "sos": -0.597,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 22
+      }
     },
     {
       "teamId": 10,
@@ -4601,7 +4718,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.326,
+        "adjD": 106.35,
+        "adjEM": -0.024,
+        "tempo": 70.815,
+        "sos": 1.377,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 209
+      }
     },
     {
       "teamId": 11,
@@ -5015,7 +5145,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.852,
+        "adjD": 106.68,
+        "adjEM": -0.828,
+        "tempo": 72.259,
+        "sos": 0.628,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 271
+      }
     },
     {
       "teamId": 12,
@@ -5429,7 +5572,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.548,
+        "adjD": 106.63,
+        "adjEM": -0.082,
+        "tempo": 71.796,
+        "sos": -0.295,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 212
+      }
     },
     {
       "teamId": 13,
@@ -5843,7 +5999,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.017,
+        "adjD": 105.692,
+        "adjEM": -0.675,
+        "tempo": 72.536,
+        "sos": 1.453,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 260
+      }
     },
     {
       "teamId": 14,
@@ -6257,7 +6426,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 104.513,
+        "adjD": 106.873,
+        "adjEM": -2.361,
+        "tempo": 72.273,
+        "sos": 0.519,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 337
+      }
     },
     {
       "teamId": 15,
@@ -6671,7 +6853,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 107.162,
+        "adjD": 104.677,
+        "adjEM": 2.485,
+        "tempo": 71.423,
+        "sos": 0.005,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 35
+      }
     },
     {
       "teamId": 16,
@@ -7085,7 +7280,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.199,
+        "adjD": 105.353,
+        "adjEM": 0.846,
+        "tempo": 70.768,
+        "sos": 2.21,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 153
+      }
     },
     {
       "teamId": 17,
@@ -7499,7 +7707,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.536,
+        "adjD": 104.608,
+        "adjEM": 1.928,
+        "tempo": 72.211,
+        "sos": -0.227,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 66
+      }
     },
     {
       "teamId": 18,
@@ -7913,7 +8134,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 108.658,
+        "adjD": 106.86,
+        "adjEM": 1.799,
+        "tempo": 71.395,
+        "sos": -1.771,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 74
+      }
     },
     {
       "teamId": 19,
@@ -8471,7 +8705,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 104.348,
+        "adjD": 105.346,
+        "adjEM": -0.998,
+        "tempo": 71.219,
+        "sos": -0.326,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 280
+      }
     },
     {
       "teamId": 20,
@@ -8885,7 +9132,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.2,
+        "adjD": 105.079,
+        "adjEM": 1.121,
+        "tempo": 72.209,
+        "sos": -1.608,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 128
+      }
     },
     {
       "teamId": 21,
@@ -9443,7 +9703,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.176,
+        "adjD": 106.402,
+        "adjEM": -0.226,
+        "tempo": 70.946,
+        "sos": 1.224,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 226
+      }
     },
     {
       "teamId": 22,
@@ -9857,7 +10130,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 104.11,
+        "adjD": 104.456,
+        "adjEM": -0.347,
+        "tempo": 71.403,
+        "sos": 1.559,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 238
+      }
     },
     {
       "teamId": 23,
@@ -10415,7 +10701,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.329,
+        "adjD": 105.874,
+        "adjEM": 0.455,
+        "tempo": 71.597,
+        "sos": 0.852,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 180
+      }
     },
     {
       "teamId": 25,
@@ -10829,7 +11128,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 107.317,
+        "adjD": 105.2,
+        "adjEM": 2.118,
+        "tempo": 72.88,
+        "sos": -0.783,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 54
+      }
     },
     {
       "teamId": 26,
@@ -11243,7 +11555,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.363,
+        "adjD": 105.281,
+        "adjEM": 1.082,
+        "tempo": 70.414,
+        "sos": -0.827,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 132
+      }
     },
     {
       "teamId": 27,
@@ -11801,7 +12126,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.832,
+        "adjD": 105.685,
+        "adjEM": 1.147,
+        "tempo": 70.749,
+        "sos": -0.372,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 125
+      }
     },
     {
       "teamId": 28,
@@ -12215,7 +12553,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 108.297,
+        "adjD": 106.406,
+        "adjEM": 1.892,
+        "tempo": 70.938,
+        "sos": 0.126,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 73
+      }
     },
     {
       "teamId": 29,
@@ -12629,7 +12980,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 104.245,
+        "adjD": 105.095,
+        "adjEM": -0.851,
+        "tempo": 70.968,
+        "sos": 1.099,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 272
+      }
     },
     {
       "teamId": 30,
@@ -13187,7 +13551,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 103.372,
+        "adjD": 105.439,
+        "adjEM": -2.067,
+        "tempo": 70.44,
+        "sos": -0.307,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 326
+      }
     },
     {
       "teamId": 32,
@@ -13601,7 +13978,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 104.813,
+        "adjD": 107.633,
+        "adjEM": -2.82,
+        "tempo": 71.116,
+        "sos": 2.18,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 349
+      }
     },
     {
       "teamId": 33,
@@ -14159,7 +14549,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.517,
+        "adjD": 104.876,
+        "adjEM": 0.641,
+        "tempo": 72.74,
+        "sos": -0.2,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 162
+      }
     },
     {
       "teamId": 34,
@@ -14717,7 +15120,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 107.708,
+        "adjD": 105.756,
+        "adjEM": 1.952,
+        "tempo": 72.3,
+        "sos": 0.106,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 63
+      }
     },
     {
       "teamId": 35,
@@ -15131,7 +15547,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.423,
+        "adjD": 105.773,
+        "adjEM": -0.35,
+        "tempo": 72.447,
+        "sos": -0.256,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 240
+      }
     },
     {
       "teamId": 36,
@@ -15545,7 +15974,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.986,
+        "adjD": 105.912,
+        "adjEM": 0.074,
+        "tempo": 71.849,
+        "sos": 0.503,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 206
+      }
     },
     {
       "teamId": 37,
@@ -15959,7 +16401,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 107.108,
+        "adjD": 105.468,
+        "adjEM": 1.639,
+        "tempo": 72.486,
+        "sos": -0.987,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 85
+      }
     },
     {
       "teamId": 38,
@@ -16373,7 +16828,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.322,
+        "adjD": 105.234,
+        "adjEM": 1.088,
+        "tempo": 72.221,
+        "sos": -1.65,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 131
+      }
     },
     {
       "teamId": 39,
@@ -16787,7 +17255,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 104.829,
+        "adjD": 106.955,
+        "adjEM": -2.126,
+        "tempo": 71.652,
+        "sos": 0.234,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 328
+      }
     },
     {
       "teamId": 40,
@@ -17345,7 +17826,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.821,
+        "adjD": 107.492,
+        "adjEM": -1.671,
+        "tempo": 72.078,
+        "sos": 1.051,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 312
+      }
     },
     {
       "teamId": 41,
@@ -17759,7 +18253,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.968,
+        "adjD": 106.398,
+        "adjEM": 0.57,
+        "tempo": 70.846,
+        "sos": 0.685,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 166
+      }
     },
     {
       "teamId": 42,
@@ -18317,7 +18824,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 104.652,
+        "adjD": 107.734,
+        "adjEM": -3.082,
+        "tempo": 71.673,
+        "sos": 0.176,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 351
+      }
     },
     {
       "teamId": 43,
@@ -18731,7 +19251,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.26,
+        "adjD": 105.541,
+        "adjEM": -0.281,
+        "tempo": 71.584,
+        "sos": 1.167,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 232
+      }
     },
     {
       "teamId": 44,
@@ -19291,7 +19824,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.108,
+        "adjD": 105.723,
+        "adjEM": 0.384,
+        "tempo": 70.188,
+        "sos": 0.483,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 182
+      }
     },
     {
       "teamId": 45,
@@ -19705,7 +20251,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 107.139,
+        "adjD": 104.655,
+        "adjEM": 2.484,
+        "tempo": 71.784,
+        "sos": -0.989,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 36
+      }
     },
     {
       "teamId": 46,
@@ -20119,7 +20678,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 107.314,
+        "adjD": 104.987,
+        "adjEM": 2.327,
+        "tempo": 72.45,
+        "sos": -0.777,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 42
+      }
     },
     {
       "teamId": 47,
@@ -20533,7 +21105,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.443,
+        "adjD": 105.333,
+        "adjEM": 1.11,
+        "tempo": 71.491,
+        "sos": 0.28,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 129
+      }
     },
     {
       "teamId": 48,
@@ -21091,7 +21676,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 107.112,
+        "adjD": 105.154,
+        "adjEM": 1.959,
+        "tempo": 70.471,
+        "sos": -0.671,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 62
+      }
     },
     {
       "teamId": 49,
@@ -21649,7 +22247,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 108.058,
+        "adjD": 105.528,
+        "adjEM": 2.53,
+        "tempo": 72.157,
+        "sos": 0.304,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 34
+      }
     },
     {
       "teamId": 50,
@@ -22207,7 +22818,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 104.061,
+        "adjD": 106.367,
+        "adjEM": -2.306,
+        "tempo": 71.466,
+        "sos": 1.964,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 336
+      }
     },
     {
       "teamId": 51,
@@ -22765,7 +23389,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 103.444,
+        "adjD": 105.509,
+        "adjEM": -2.064,
+        "tempo": 70.708,
+        "sos": 2.243,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 325
+      }
     },
     {
       "teamId": 52,
@@ -23323,7 +23960,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 107.15,
+        "adjD": 108.574,
+        "adjEM": -1.423,
+        "tempo": 70.515,
+        "sos": 0.863,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 304
+      }
     },
     {
       "teamId": 53,
@@ -23881,7 +24531,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 108.111,
+        "adjD": 109.084,
+        "adjEM": -0.973,
+        "tempo": 70.766,
+        "sos": 2.156,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 279
+      }
     },
     {
       "teamId": 54,
@@ -24439,7 +25102,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 102.423,
+        "adjD": 107.407,
+        "adjEM": -4.984,
+        "tempo": 71.409,
+        "sos": 0.737,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 355
+      }
     },
     {
       "teamId": 55,
@@ -24853,7 +25529,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 107.42,
+        "adjD": 105.696,
+        "adjEM": 1.724,
+        "tempo": 71.432,
+        "sos": -0.985,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 80
+      }
     },
     {
       "teamId": 56,
@@ -25267,7 +25956,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.888,
+        "adjD": 105.813,
+        "adjEM": 0.074,
+        "tempo": 71.613,
+        "sos": -0.643,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 207
+      }
     },
     {
       "teamId": 57,
@@ -25681,7 +26383,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.22,
+        "adjD": 106.475,
+        "adjEM": -1.255,
+        "tempo": 71.472,
+        "sos": 1.349,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 296
+      }
     },
     {
       "teamId": 58,
@@ -26239,7 +26954,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.751,
+        "adjD": 106.703,
+        "adjEM": -0.952,
+        "tempo": 71.573,
+        "sos": -0.455,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 278
+      }
     },
     {
       "teamId": 59,
@@ -26797,7 +27525,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 104.857,
+        "adjD": 104.981,
+        "adjEM": -0.124,
+        "tempo": 71.146,
+        "sos": -0.962,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 215
+      }
     },
     {
       "teamId": 60,
@@ -27355,7 +28096,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.059,
+        "adjD": 105.515,
+        "adjEM": 0.543,
+        "tempo": 71.945,
+        "sos": 0.252,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 171
+      }
     },
     {
       "teamId": 61,
@@ -27769,7 +28523,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.002,
+        "adjD": 105.151,
+        "adjEM": -0.149,
+        "tempo": 71.509,
+        "sos": 0.325,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 218
+      }
     },
     {
       "teamId": 62,
@@ -28329,7 +29096,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.788,
+        "adjD": 105.057,
+        "adjEM": 1.731,
+        "tempo": 70.749,
+        "sos": -0.885,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 79
+      }
     },
     {
       "teamId": 63,
@@ -28743,7 +29523,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 107.542,
+        "adjD": 105.625,
+        "adjEM": 1.917,
+        "tempo": 70.968,
+        "sos": -0.21,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 70
+      }
     },
     {
       "teamId": 64,
@@ -29159,7 +29952,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.217,
+        "adjD": 106.242,
+        "adjEM": -1.025,
+        "tempo": 71.108,
+        "sos": -0.145,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 282
+      }
     },
     {
       "teamId": 65,
@@ -29717,7 +30523,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.072,
+        "adjD": 106.237,
+        "adjEM": -1.165,
+        "tempo": 71.008,
+        "sos": 0.684,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 293
+      }
     },
     {
       "teamId": 66,
@@ -30131,7 +30950,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.767,
+        "adjD": 104.532,
+        "adjEM": 2.235,
+        "tempo": 71.617,
+        "sos": -1.657,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 46
+      }
     },
     {
       "teamId": 67,
@@ -30545,7 +31377,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.803,
+        "adjD": 104.506,
+        "adjEM": 1.297,
+        "tempo": 71.293,
+        "sos": -0.893,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 109
+      }
     },
     {
       "teamId": 68,
@@ -30959,7 +31804,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.036,
+        "adjD": 104.321,
+        "adjEM": 1.715,
+        "tempo": 71.362,
+        "sos": -0.741,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 81
+      }
     },
     {
       "teamId": 69,
@@ -31229,7 +32087,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 104.566,
+        "adjD": 106.328,
+        "adjEM": -1.762,
+        "tempo": 71.333,
+        "sos": 2.68,
+        "games": 1,
+        "rawGames": 1,
+        "reliability": 0.167,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 314
+      }
     },
     {
       "teamId": 70,
@@ -31643,7 +32514,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.996,
+        "adjD": 105.434,
+        "adjEM": 0.562,
+        "tempo": 71.585,
+        "sos": -0.648,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 170
+      }
     },
     {
       "teamId": 71,
@@ -32057,7 +32941,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 104.798,
+        "adjD": 105.903,
+        "adjEM": -1.105,
+        "tempo": 71.737,
+        "sos": 1.748,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 289
+      }
     },
     {
       "teamId": 72,
@@ -32471,7 +33368,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.549,
+        "adjD": 104.393,
+        "adjEM": 2.156,
+        "tempo": 71.783,
+        "sos": -1.25,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 50
+      }
     },
     {
       "teamId": 73,
@@ -32885,7 +33795,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 104.634,
+        "adjD": 106.233,
+        "adjEM": -1.599,
+        "tempo": 71.159,
+        "sos": 0.474,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 308
+      }
     },
     {
       "teamId": 74,
@@ -33299,7 +34222,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 104.485,
+        "adjD": 106.789,
+        "adjEM": -2.304,
+        "tempo": 71.812,
+        "sos": 0.52,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 335
+      }
     },
     {
       "teamId": 75,
@@ -33713,7 +34649,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 107.132,
+        "adjD": 105.802,
+        "adjEM": 1.33,
+        "tempo": 70.564,
+        "sos": -0.163,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 106
+      }
     },
     {
       "teamId": 76,
@@ -34127,7 +35076,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 107.239,
+        "adjD": 104.414,
+        "adjEM": 2.825,
+        "tempo": 71.118,
+        "sos": -1.463,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 27
+      }
     },
     {
       "teamId": 77,
@@ -34685,7 +35647,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.022,
+        "adjD": 106.925,
+        "adjEM": -1.904,
+        "tempo": 71.02,
+        "sos": 0.936,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 318
+      }
     },
     {
       "teamId": 78,
@@ -35099,7 +36074,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.562,
+        "adjD": 105.075,
+        "adjEM": 1.487,
+        "tempo": 72.645,
+        "sos": -1.528,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 96
+      }
     },
     {
       "teamId": 79,
@@ -35513,7 +36501,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.165,
+        "adjD": 105.226,
+        "adjEM": 0.939,
+        "tempo": 71.193,
+        "sos": -2.231,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 146
+      }
     },
     {
       "teamId": 80,
@@ -36071,7 +37072,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 108.281,
+        "adjD": 106.011,
+        "adjEM": 2.269,
+        "tempo": 71.369,
+        "sos": -0.064,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 45
+      }
     },
     {
       "teamId": 81,
@@ -36485,7 +37499,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.747,
+        "adjD": 105.361,
+        "adjEM": 1.386,
+        "tempo": 71.123,
+        "sos": 1.216,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 102
+      }
     },
     {
       "teamId": 82,
@@ -36901,7 +37928,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 104.638,
+        "adjD": 106.748,
+        "adjEM": -2.11,
+        "tempo": 71.161,
+        "sos": 2.104,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 327
+      }
     },
     {
       "teamId": 83,
@@ -37315,7 +38355,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.185,
+        "adjD": 105.668,
+        "adjEM": -0.482,
+        "tempo": 71.159,
+        "sos": -0.456,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 251
+      }
     },
     {
       "teamId": 84,
@@ -37873,7 +38926,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.152,
+        "adjD": 107.952,
+        "adjEM": -2.801,
+        "tempo": 71.679,
+        "sos": 1.583,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 347
+      }
     },
     {
       "teamId": 85,
@@ -38431,7 +39497,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 103.734,
+        "adjD": 108.01,
+        "adjEM": -4.276,
+        "tempo": 72.087,
+        "sos": 0.431,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 354
+      }
     },
     {
       "teamId": 86,
@@ -38845,7 +39924,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.243,
+        "adjD": 106.042,
+        "adjEM": -0.799,
+        "tempo": 71.648,
+        "sos": 1.292,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 268
+      }
     },
     {
       "teamId": 87,
@@ -39259,7 +40351,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.519,
+        "adjD": 105.491,
+        "adjEM": 1.028,
+        "tempo": 71.16,
+        "sos": 0.036,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 137
+      }
     },
     {
       "teamId": 88,
@@ -39819,7 +40924,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 108.635,
+        "adjD": 106.019,
+        "adjEM": 2.616,
+        "tempo": 71.313,
+        "sos": -1.166,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 32
+      }
     },
     {
       "teamId": 89,
@@ -40233,7 +41351,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.021,
+        "adjD": 105.239,
+        "adjEM": -0.218,
+        "tempo": 72.495,
+        "sos": 2.499,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 223
+      }
     },
     {
       "teamId": 90,
@@ -40647,7 +41778,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 108.142,
+        "adjD": 105.977,
+        "adjEM": 2.165,
+        "tempo": 71.703,
+        "sos": -3.019,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 49
+      }
     },
     {
       "teamId": 91,
@@ -41061,7 +42205,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.426,
+        "adjD": 106.152,
+        "adjEM": -0.726,
+        "tempo": 71.611,
+        "sos": 0.867,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 262
+      }
     },
     {
       "teamId": 92,
@@ -41475,7 +42632,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.833,
+        "adjD": 106.234,
+        "adjEM": -0.401,
+        "tempo": 71.687,
+        "sos": 0.135,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 245
+      }
     },
     {
       "teamId": 93,
@@ -42033,7 +43203,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 109.061,
+        "adjD": 106.166,
+        "adjEM": 2.895,
+        "tempo": 71.713,
+        "sos": 0.054,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 25
+      }
     },
     {
       "teamId": 94,
@@ -42447,7 +43630,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 103.809,
+        "adjD": 105.958,
+        "adjEM": -2.149,
+        "tempo": 71.506,
+        "sos": 3.02,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 330
+      }
     },
     {
       "teamId": 95,
@@ -42861,7 +44057,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 104.75,
+        "adjD": 105.051,
+        "adjEM": -0.301,
+        "tempo": 71.207,
+        "sos": 0.048,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 234
+      }
     },
     {
       "teamId": 96,
@@ -43275,7 +44484,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.49,
+        "adjD": 104.897,
+        "adjEM": 0.593,
+        "tempo": 71.269,
+        "sos": -0.347,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 164
+      }
     },
     {
       "teamId": 97,
@@ -43689,7 +44911,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.002,
+        "adjD": 106.416,
+        "adjEM": -0.414,
+        "tempo": 71.087,
+        "sos": 1.326,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 247
+      }
     },
     {
       "teamId": 98,
@@ -44247,7 +45482,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.817,
+        "adjD": 107.301,
+        "adjEM": -1.484,
+        "tempo": 71.037,
+        "sos": 1.055,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 306
+      }
     },
     {
       "teamId": 99,
@@ -44661,7 +45909,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.716,
+        "adjD": 106.003,
+        "adjEM": -0.287,
+        "tempo": 71.594,
+        "sos": -1.171,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 233
+      }
     },
     {
       "teamId": 100,
@@ -45219,7 +46480,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.873,
+        "adjD": 105.647,
+        "adjEM": 1.226,
+        "tempo": 71.206,
+        "sos": 1.001,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 116
+      }
     },
     {
       "teamId": 101,
@@ -45633,7 +46907,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 104.809,
+        "adjD": 106.154,
+        "adjEM": -1.345,
+        "tempo": 71.958,
+        "sos": 0.109,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 303
+      }
     },
     {
       "teamId": 102,
@@ -46047,7 +47334,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 107.826,
+        "adjD": 106.31,
+        "adjEM": 1.517,
+        "tempo": 71.158,
+        "sos": -1.655,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 92
+      }
     },
     {
       "teamId": 103,
@@ -46461,7 +47761,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.765,
+        "adjD": 106.419,
+        "adjEM": 0.346,
+        "tempo": 71.34,
+        "sos": 2.984,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 187
+      }
     },
     {
       "teamId": 104,
@@ -46875,7 +48188,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.406,
+        "adjD": 106.947,
+        "adjEM": -0.541,
+        "tempo": 72.211,
+        "sos": -0.166,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 254
+      }
     },
     {
       "teamId": 105,
@@ -47433,7 +48759,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 108.311,
+        "adjD": 104.61,
+        "adjEM": 3.701,
+        "tempo": 70.534,
+        "sos": -0.637,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 12
+      }
     },
     {
       "teamId": 106,
@@ -47847,7 +49186,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.104,
+        "adjD": 104.599,
+        "adjEM": 0.505,
+        "tempo": 71.631,
+        "sos": -0.376,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 177
+      }
     },
     {
       "teamId": 107,
@@ -48261,7 +49613,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.158,
+        "adjD": 103.849,
+        "adjEM": 2.308,
+        "tempo": 70.65,
+        "sos": -1.133,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 44
+      }
     },
     {
       "teamId": 108,
@@ -48963,7 +50328,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 103.992,
+        "adjD": 105.884,
+        "adjEM": -1.892,
+        "tempo": 72.523,
+        "sos": -1.674,
+        "games": 4,
+        "rawGames": 4,
+        "reliability": 0.444,
+        "sample": "Developing",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 317
+      }
     },
     {
       "teamId": 109,
@@ -49521,7 +50899,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105,
+        "adjD": 105.4,
+        "adjEM": -0.401,
+        "tempo": 70.526,
+        "sos": -0.191,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 246
+      }
     },
     {
       "teamId": 110,
@@ -49935,7 +51326,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.212,
+        "adjD": 104.286,
+        "adjEM": 1.926,
+        "tempo": 71.262,
+        "sos": -0.623,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 68
+      }
     },
     {
       "teamId": 111,
@@ -50349,7 +51753,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.746,
+        "adjD": 106.983,
+        "adjEM": -1.237,
+        "tempo": 71.455,
+        "sos": 1.3,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 295
+      }
     },
     {
       "teamId": 112,
@@ -50763,7 +52180,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.392,
+        "adjD": 104.476,
+        "adjEM": 1.916,
+        "tempo": 71.806,
+        "sos": -0.403,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 71
+      }
     },
     {
       "teamId": 113,
@@ -51177,7 +52607,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 107.066,
+        "adjD": 105.126,
+        "adjEM": 1.94,
+        "tempo": 71.661,
+        "sos": -1.841,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 65
+      }
     },
     {
       "teamId": 114,
@@ -51735,7 +53178,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 108.56,
+        "adjD": 104.592,
+        "adjEM": 3.968,
+        "tempo": 71.415,
+        "sos": -1.129,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 9
+      }
     },
     {
       "teamId": 115,
@@ -52149,7 +53605,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.466,
+        "adjD": 106.203,
+        "adjEM": -0.737,
+        "tempo": 72.257,
+        "sos": 1.22,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 264
+      }
     },
     {
       "teamId": 116,
@@ -52707,7 +54176,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.963,
+        "adjD": 106.026,
+        "adjEM": -0.063,
+        "tempo": 72.01,
+        "sos": 0.913,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 211
+      }
     },
     {
       "teamId": 117,
@@ -53265,7 +54747,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 107.679,
+        "adjD": 105.285,
+        "adjEM": 2.394,
+        "tempo": 71.945,
+        "sos": -1.126,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 40
+      }
     },
     {
       "teamId": 118,
@@ -53679,7 +55174,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 107.903,
+        "adjD": 104.704,
+        "adjEM": 3.199,
+        "tempo": 72.418,
+        "sos": -1.922,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 20
+      }
     },
     {
       "teamId": 119,
@@ -54239,7 +55747,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 109.411,
+        "adjD": 105.773,
+        "adjEM": 3.638,
+        "tempo": 69.958,
+        "sos": -0.398,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 13
+      }
     },
     {
       "teamId": 120,
@@ -54797,7 +56318,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 103.351,
+        "adjD": 105.84,
+        "adjEM": -2.488,
+        "tempo": 71.556,
+        "sos": -0.359,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 342
+      }
     },
     {
       "teamId": 121,
@@ -55355,7 +56889,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 107.731,
+        "adjD": 106.507,
+        "adjEM": 1.225,
+        "tempo": 70.877,
+        "sos": -0.117,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 117
+      }
     },
     {
       "teamId": 122,
@@ -55769,7 +57316,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.53,
+        "adjD": 106.029,
+        "adjEM": -0.499,
+        "tempo": 71.05,
+        "sos": 0.48,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 252
+      }
     },
     {
       "teamId": 123,
@@ -56327,7 +57887,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 103.935,
+        "adjD": 106.411,
+        "adjEM": -2.476,
+        "tempo": 70.396,
+        "sos": -0.251,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 340
+      }
     },
     {
       "teamId": 124,
@@ -56741,7 +58314,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.144,
+        "adjD": 104.935,
+        "adjEM": 1.209,
+        "tempo": 71.131,
+        "sos": -1.257,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 123
+      }
     },
     {
       "teamId": 125,
@@ -57155,7 +58741,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.771,
+        "adjD": 105.991,
+        "adjEM": -0.221,
+        "tempo": 71.45,
+        "sos": -0.162,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 225
+      }
     },
     {
       "teamId": 126,
@@ -57713,7 +59312,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.222,
+        "adjD": 105.362,
+        "adjEM": -0.14,
+        "tempo": 71.758,
+        "sos": -0.134,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 217
+      }
     },
     {
       "teamId": 127,
@@ -58271,7 +59883,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.755,
+        "adjD": 106.245,
+        "adjEM": 0.51,
+        "tempo": 70.997,
+        "sos": 0.055,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 175
+      }
     },
     {
       "teamId": 128,
@@ -58689,7 +60314,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 107.792,
+        "adjD": 104.835,
+        "adjEM": 2.956,
+        "tempo": 71.668,
+        "sos": -1.965,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 24
+      }
     },
     {
       "teamId": 129,
@@ -59103,7 +60741,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.373,
+        "adjD": 107.027,
+        "adjEM": -0.653,
+        "tempo": 71.449,
+        "sos": 0.438,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 258
+      }
     },
     {
       "teamId": 130,
@@ -59661,7 +61312,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.428,
+        "adjD": 106.69,
+        "adjEM": -0.262,
+        "tempo": 71.199,
+        "sos": 0.799,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 230
+      }
     },
     {
       "teamId": 131,
@@ -60075,7 +61739,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.315,
+        "adjD": 104.808,
+        "adjEM": 1.508,
+        "tempo": 71.699,
+        "sos": -0.473,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 94
+      }
     },
     {
       "teamId": 132,
@@ -60489,7 +62166,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 104.444,
+        "adjD": 106.723,
+        "adjEM": -2.28,
+        "tempo": 71.772,
+        "sos": 1.051,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 333
+      }
     },
     {
       "teamId": 133,
@@ -60903,7 +62593,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.545,
+        "adjD": 105.363,
+        "adjEM": 0.182,
+        "tempo": 72.308,
+        "sos": -0.171,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 198
+      }
     },
     {
       "teamId": 134,
@@ -61317,7 +63020,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.902,
+        "adjD": 105.295,
+        "adjEM": 1.608,
+        "tempo": 71.675,
+        "sos": -0.255,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 87
+      }
     },
     {
       "teamId": 135,
@@ -61731,7 +63447,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.58,
+        "adjD": 106.927,
+        "adjEM": -0.347,
+        "tempo": 71.09,
+        "sos": -0.494,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 239
+      }
     },
     {
       "teamId": 136,
@@ -62289,7 +64018,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.899,
+        "adjD": 103.478,
+        "adjEM": 2.421,
+        "tempo": 72.301,
+        "sos": -0.503,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 38
+      }
     },
     {
       "teamId": 137,
@@ -62703,7 +64445,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 104.7,
+        "adjD": 106.712,
+        "adjEM": -2.011,
+        "tempo": 71.775,
+        "sos": 2.044,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 322
+      }
     },
     {
       "teamId": 138,
@@ -63263,7 +65018,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.416,
+        "adjD": 104.414,
+        "adjEM": 1.002,
+        "tempo": 72.064,
+        "sos": -0.207,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 139
+      }
     },
     {
       "teamId": 139,
@@ -63677,7 +65445,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 107.738,
+        "adjD": 104.935,
+        "adjEM": 2.803,
+        "tempo": 72.454,
+        "sos": -1.417,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 28
+      }
     },
     {
       "teamId": 140,
@@ -64235,7 +66016,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.3,
+        "adjD": 105.387,
+        "adjEM": 0.913,
+        "tempo": 71.71,
+        "sos": -0.165,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 148
+      }
     },
     {
       "teamId": 141,
@@ -64793,7 +66587,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 103.144,
+        "adjD": 106.778,
+        "adjEM": -3.635,
+        "tempo": 71.188,
+        "sos": -0.337,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 353
+      }
     },
     {
       "teamId": 142,
@@ -65207,7 +67014,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.595,
+        "adjD": 105.611,
+        "adjEM": 0.984,
+        "tempo": 71.253,
+        "sos": -0.847,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 141
+      }
     },
     {
       "teamId": 143,
@@ -65765,7 +67585,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.115,
+        "adjD": 105.725,
+        "adjEM": -0.611,
+        "tempo": 71.601,
+        "sos": 0.93,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 256
+      }
     },
     {
       "teamId": 144,
@@ -66179,7 +68012,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.456,
+        "adjD": 106.825,
+        "adjEM": -0.368,
+        "tempo": 71.146,
+        "sos": 1.116,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 243
+      }
     },
     {
       "teamId": 145,
@@ -66593,7 +68439,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.981,
+        "adjD": 105.368,
+        "adjEM": 1.613,
+        "tempo": 70.912,
+        "sos": -0.913,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 86
+      }
     },
     {
       "teamId": 146,
@@ -67295,7 +69154,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.081,
+        "adjD": 102.933,
+        "adjEM": 2.147,
+        "tempo": 71.37,
+        "sos": -1.326,
+        "games": 4,
+        "rawGames": 4,
+        "reliability": 0.444,
+        "sample": "Developing",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 52
+      }
     },
     {
       "teamId": 147,
@@ -67855,7 +69727,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.045,
+        "adjD": 105.521,
+        "adjEM": 0.525,
+        "tempo": 72.529,
+        "sos": -0.374,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 172
+      }
     },
     {
       "teamId": 148,
@@ -68413,7 +70298,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 100.382,
+        "adjD": 105.904,
+        "adjEM": -5.522,
+        "tempo": 70.855,
+        "sos": 1.496,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 356
+      }
     },
     {
       "teamId": 149,
@@ -68971,7 +70869,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 104.927,
+        "adjD": 104.597,
+        "adjEM": 0.33,
+        "tempo": 70.845,
+        "sos": 0.701,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 188
+      }
     },
     {
       "teamId": 150,
@@ -69385,7 +71296,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.914,
+        "adjD": 105.579,
+        "adjEM": 1.335,
+        "tempo": 71.6,
+        "sos": 1.213,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 105
+      }
     },
     {
       "teamId": 151,
@@ -69799,7 +71723,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.486,
+        "adjD": 105.391,
+        "adjEM": 0.095,
+        "tempo": 70.811,
+        "sos": 0.413,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 205
+      }
     },
     {
       "teamId": 152,
@@ -70357,7 +72294,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.405,
+        "adjD": 104.831,
+        "adjEM": 1.574,
+        "tempo": 71.413,
+        "sos": -1.006,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 90
+      }
     },
     {
       "teamId": 153,
@@ -70771,7 +72721,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.5,
+        "adjD": 106.294,
+        "adjEM": 0.207,
+        "tempo": 72.297,
+        "sos": -0.146,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 195
+      }
     },
     {
       "teamId": 155,
@@ -71329,7 +73292,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.237,
+        "adjD": 105.572,
+        "adjEM": -0.335,
+        "tempo": 70.818,
+        "sos": -0.794,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 237
+      }
     },
     {
       "teamId": 156,
@@ -71887,7 +73863,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 104.106,
+        "adjD": 105.953,
+        "adjEM": -1.846,
+        "tempo": 71.043,
+        "sos": 0.785,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 315
+      }
     },
     {
       "teamId": 157,
@@ -72301,7 +74290,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.511,
+        "adjD": 103.831,
+        "adjEM": 2.68,
+        "tempo": 70.96,
+        "sos": -1.406,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 31
+      }
     },
     {
       "teamId": 158,
@@ -72859,7 +74861,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 104.957,
+        "adjD": 106,
+        "adjEM": -1.043,
+        "tempo": 72.439,
+        "sos": 0.677,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 283
+      }
     },
     {
       "teamId": 159,
@@ -73417,7 +75432,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 104.381,
+        "adjD": 104.27,
+        "adjEM": 0.111,
+        "tempo": 71.285,
+        "sos": -1.487,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 203
+      }
     },
     {
       "teamId": 160,
@@ -73831,7 +75859,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 107.494,
+        "adjD": 106.417,
+        "adjEM": 1.078,
+        "tempo": 71.261,
+        "sos": -1.617,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 133
+      }
     },
     {
       "teamId": 161,
@@ -74245,7 +76286,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.047,
+        "adjD": 105.248,
+        "adjEM": 0.798,
+        "tempo": 70.646,
+        "sos": -0.34,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 154
+      }
     },
     {
       "teamId": 162,
@@ -74803,7 +76857,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 109.868,
+        "adjD": 106.322,
+        "adjEM": 3.546,
+        "tempo": 72.235,
+        "sos": 0.092,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 15
+      }
     },
     {
       "teamId": 163,
@@ -75217,7 +77284,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.302,
+        "adjD": 107.119,
+        "adjEM": -0.816,
+        "tempo": 71.5,
+        "sos": 0.372,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 270
+      }
     },
     {
       "teamId": 164,
@@ -75775,7 +77855,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 107.083,
+        "adjD": 105.837,
+        "adjEM": 1.246,
+        "tempo": 71.346,
+        "sos": 0.759,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 115
+      }
     },
     {
       "teamId": 165,
@@ -76333,7 +78426,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 103.983,
+        "adjD": 105.033,
+        "adjEM": -1.05,
+        "tempo": 71.084,
+        "sos": 0.807,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 286
+      }
     },
     {
       "teamId": 166,
@@ -76891,7 +78997,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 104.619,
+        "adjD": 105.72,
+        "adjEM": -1.101,
+        "tempo": 69.689,
+        "sos": 0.893,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 288
+      }
     },
     {
       "teamId": 167,
@@ -77305,7 +79424,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.99,
+        "adjD": 105.767,
+        "adjEM": 1.222,
+        "tempo": 71.43,
+        "sos": -0.44,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 119
+      }
     },
     {
       "teamId": 168,
@@ -77863,7 +79995,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 104.519,
+        "adjD": 104.957,
+        "adjEM": -0.438,
+        "tempo": 71.703,
+        "sos": -0.564,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 249
+      }
     },
     {
       "teamId": 169,
@@ -78277,7 +80422,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.03,
+        "adjD": 105.172,
+        "adjEM": 0.858,
+        "tempo": 71.733,
+        "sos": 1.224,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 151
+      }
     },
     {
       "teamId": 170,
@@ -78691,7 +80849,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.85,
+        "adjD": 106.505,
+        "adjEM": -0.655,
+        "tempo": 71.368,
+        "sos": 1.305,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 259
+      }
     },
     {
       "teamId": 171,
@@ -79105,7 +81276,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.071,
+        "adjD": 106.291,
+        "adjEM": -0.22,
+        "tempo": 71.947,
+        "sos": -0.084,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 224
+      }
     },
     {
       "teamId": 172,
@@ -79663,7 +81847,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.667,
+        "adjD": 105.299,
+        "adjEM": 1.368,
+        "tempo": 72.288,
+        "sos": -0.864,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 104
+      }
     },
     {
       "teamId": 173,
@@ -80221,7 +82418,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.192,
+        "adjD": 104.016,
+        "adjEM": 2.176,
+        "tempo": 70.439,
+        "sos": 0.324,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 48
+      }
     },
     {
       "teamId": 174,
@@ -80779,7 +82989,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 107.921,
+        "adjD": 105.85,
+        "adjEM": 2.071,
+        "tempo": 71.51,
+        "sos": -0.212,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 57
+      }
     },
     {
       "teamId": 175,
@@ -81193,7 +83416,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.239,
+        "adjD": 105.874,
+        "adjEM": 0.365,
+        "tempo": 71.016,
+        "sos": -1.67,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 185
+      }
     },
     {
       "teamId": 176,
@@ -81607,7 +83843,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.468,
+        "adjD": 105.697,
+        "adjEM": -0.229,
+        "tempo": 71.475,
+        "sos": -0.019,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 227
+      }
     },
     {
       "teamId": 177,
@@ -82165,7 +84414,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 109.547,
+        "adjD": 105.358,
+        "adjEM": 4.189,
+        "tempo": 71.091,
+        "sos": 0.563,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 8
+      }
     },
     {
       "teamId": 178,
@@ -82579,7 +84841,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.152,
+        "adjD": 105.469,
+        "adjEM": -0.317,
+        "tempo": 71.602,
+        "sos": 1.065,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 236
+      }
     },
     {
       "teamId": 179,
@@ -82993,7 +85268,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 107.201,
+        "adjD": 104.882,
+        "adjEM": 2.319,
+        "tempo": 71.561,
+        "sos": -0.611,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 43
+      }
     },
     {
       "teamId": 180,
@@ -83407,7 +85695,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.537,
+        "adjD": 106.233,
+        "adjEM": 0.304,
+        "tempo": 71.266,
+        "sos": 0.179,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 189
+      }
     },
     {
       "teamId": 181,
@@ -83965,7 +86266,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.636,
+        "adjD": 106.74,
+        "adjEM": -0.104,
+        "tempo": 71.774,
+        "sos": 0.481,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 213
+      }
     },
     {
       "teamId": 182,
@@ -84523,7 +86837,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.661,
+        "adjD": 103.472,
+        "adjEM": 3.189,
+        "tempo": 72.793,
+        "sos": -2.97,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 21
+      }
     },
     {
       "teamId": 183,
@@ -84937,7 +87264,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 103.655,
+        "adjD": 105.621,
+        "adjEM": -1.965,
+        "tempo": 71.785,
+        "sos": 1.048,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 319
+      }
     },
     {
       "teamId": 184,
@@ -85351,7 +87691,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.341,
+        "adjD": 105.09,
+        "adjEM": 1.252,
+        "tempo": 72.36,
+        "sos": 0.316,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 114
+      }
     },
     {
       "teamId": 185,
@@ -85765,7 +88118,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.923,
+        "adjD": 106.225,
+        "adjEM": -0.303,
+        "tempo": 70.8,
+        "sos": 0.95,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 235
+      }
     },
     {
       "teamId": 187,
@@ -86323,7 +88689,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 104.148,
+        "adjD": 105.347,
+        "adjEM": -1.199,
+        "tempo": 71.102,
+        "sos": 0.12,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 294
+      }
     },
     {
       "teamId": 188,
@@ -86737,7 +89116,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.572,
+        "adjD": 105.263,
+        "adjEM": 1.309,
+        "tempo": 71.328,
+        "sos": 0.143,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 108
+      }
     },
     {
       "teamId": 189,
@@ -87153,7 +89545,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.521,
+        "adjD": 105.445,
+        "adjEM": 1.076,
+        "tempo": 71.351,
+        "sos": 0.109,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 134
+      }
     },
     {
       "teamId": 191,
@@ -87567,7 +89972,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 107.218,
+        "adjD": 105.639,
+        "adjEM": 1.579,
+        "tempo": 71.45,
+        "sos": 0.593,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 89
+      }
     },
     {
       "teamId": 192,
@@ -87981,7 +90399,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.534,
+        "adjD": 107.198,
+        "adjEM": -1.663,
+        "tempo": 71.262,
+        "sos": 1.126,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 310
+      }
     },
     {
       "teamId": 193,
@@ -88395,7 +90826,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 104.798,
+        "adjD": 105.848,
+        "adjEM": -1.05,
+        "tempo": 72.176,
+        "sos": 1.152,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 287
+      }
     },
     {
       "teamId": 194,
@@ -88809,7 +91253,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 103.273,
+        "adjD": 106.414,
+        "adjEM": -3.141,
+        "tempo": 71.615,
+        "sos": 2.658,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 352
+      }
     },
     {
       "teamId": 195,
@@ -89223,7 +91680,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.424,
+        "adjD": 104.215,
+        "adjEM": 2.209,
+        "tempo": 72.163,
+        "sos": -1.501,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 47
+      }
     },
     {
       "teamId": 196,
@@ -89637,7 +92107,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.582,
+        "adjD": 106.861,
+        "adjEM": -1.279,
+        "tempo": 71.752,
+        "sos": 0.285,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 299
+      }
     },
     {
       "teamId": 197,
@@ -90195,7 +92678,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.673,
+        "adjD": 105.462,
+        "adjEM": 1.212,
+        "tempo": 71.437,
+        "sos": -1.464,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 122
+      }
     },
     {
       "teamId": 198,
@@ -90465,7 +92961,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.232,
+        "adjD": 105.586,
+        "adjEM": 0.646,
+        "tempo": 71.451,
+        "sos": 1.122,
+        "games": 1,
+        "rawGames": 1,
+        "reliability": 0.167,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 161
+      }
     },
     {
       "teamId": 199,
@@ -90881,7 +93390,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.239,
+        "adjD": 104.548,
+        "adjEM": 1.691,
+        "tempo": 71.487,
+        "sos": -0.48,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 83
+      }
     },
     {
       "teamId": 200,
@@ -91295,7 +93817,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.325,
+        "adjD": 106.218,
+        "adjEM": 0.108,
+        "tempo": 71.721,
+        "sos": 1.069,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 204
+      }
     },
     {
       "teamId": 201,
@@ -91853,7 +94388,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 108.523,
+        "adjD": 106.41,
+        "adjEM": 2.113,
+        "tempo": 71.066,
+        "sos": -0.038,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 55
+      }
     },
     {
       "teamId": 202,
@@ -92555,7 +95103,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 108.903,
+        "adjD": 107.505,
+        "adjEM": 1.399,
+        "tempo": 70.679,
+        "sos": -0.027,
+        "games": 4,
+        "rawGames": 4,
+        "reliability": 0.444,
+        "sample": "Developing",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 101
+      }
     },
     {
       "teamId": 203,
@@ -93113,7 +95674,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 104.524,
+        "adjD": 104.789,
+        "adjEM": -0.266,
+        "tempo": 72.562,
+        "sos": -0.319,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 231
+      }
     },
     {
       "teamId": 204,
@@ -93527,7 +96101,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 107.044,
+        "adjD": 105.117,
+        "adjEM": 1.928,
+        "tempo": 71.82,
+        "sos": 1.027,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 67
+      }
     },
     {
       "teamId": 205,
@@ -93941,7 +96528,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 107.188,
+        "adjD": 106.058,
+        "adjEM": 1.13,
+        "tempo": 71.728,
+        "sos": 1.459,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 126
+      }
     },
     {
       "teamId": 206,
@@ -94355,7 +96955,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 107.482,
+        "adjD": 106.914,
+        "adjEM": 0.568,
+        "tempo": 71.093,
+        "sos": 0.266,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 168
+      }
     },
     {
       "teamId": 207,
@@ -94769,7 +97382,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 107.499,
+        "adjD": 106.075,
+        "adjEM": 1.424,
+        "tempo": 71.522,
+        "sos": -0.418,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 100
+      }
     },
     {
       "teamId": 208,
@@ -95329,7 +97955,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 108.82,
+        "adjD": 106.44,
+        "adjEM": 2.38,
+        "tempo": 70.907,
+        "sos": 0.279,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 41
+      }
     },
     {
       "teamId": 209,
@@ -95743,7 +98382,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.687,
+        "adjD": 105.657,
+        "adjEM": 1.03,
+        "tempo": 72.511,
+        "sos": 1.382,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 136
+      }
     },
     {
       "teamId": 210,
@@ -96301,7 +98953,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 108.128,
+        "adjD": 106.075,
+        "adjEM": 2.053,
+        "tempo": 72.745,
+        "sos": -0.51,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 58
+      }
     },
     {
       "teamId": 211,
@@ -96859,7 +99524,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.021,
+        "adjD": 105.877,
+        "adjEM": -0.856,
+        "tempo": 71.582,
+        "sos": 1.481,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 273
+      }
     },
     {
       "teamId": 212,
@@ -97417,7 +100095,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.135,
+        "adjD": 106.313,
+        "adjEM": -0.178,
+        "tempo": 69.909,
+        "sos": 1.14,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 221
+      }
     },
     {
       "teamId": 213,
@@ -97982,7 +100673,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": 1504,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.749,
+        "adjD": 106.375,
+        "adjEM": 0.374,
+        "tempo": 70.923,
+        "sos": -0.82,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 183
+      }
     },
     {
       "teamId": 214,
@@ -98684,7 +101388,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 107.794,
+        "adjD": 107.636,
+        "adjEM": 0.158,
+        "tempo": 70.974,
+        "sos": -0.206,
+        "games": 4,
+        "rawGames": 4,
+        "reliability": 0.444,
+        "sample": "Developing",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 200
+      }
     },
     {
       "teamId": 215,
@@ -99098,7 +101815,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 107.068,
+        "adjD": 105.946,
+        "adjEM": 1.122,
+        "tempo": 71.324,
+        "sos": -1.081,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 127
+      }
     },
     {
       "teamId": 216,
@@ -99656,7 +102386,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.957,
+        "adjD": 107.261,
+        "adjEM": -1.304,
+        "tempo": 71.796,
+        "sos": 0.914,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 302
+      }
     },
     {
       "teamId": 217,
@@ -100214,7 +102957,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 104.226,
+        "adjD": 106.701,
+        "adjEM": -2.475,
+        "tempo": 70.799,
+        "sos": 1.467,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 339
+      }
     },
     {
       "teamId": 218,
@@ -100628,7 +103384,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 107.4,
+        "adjD": 105.485,
+        "adjEM": 1.915,
+        "tempo": 71.946,
+        "sos": -0.596,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 72
+      }
     },
     {
       "teamId": 219,
@@ -101186,7 +103955,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.626,
+        "adjD": 103.344,
+        "adjEM": 3.282,
+        "tempo": 70.744,
+        "sos": -0.654,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 18
+      }
     },
     {
       "teamId": 220,
@@ -101600,7 +104382,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.742,
+        "adjD": 105.372,
+        "adjEM": 1.37,
+        "tempo": 71.692,
+        "sos": -1.497,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 103
+      }
     },
     {
       "teamId": 221,
@@ -102158,7 +104953,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 104.785,
+        "adjD": 107.023,
+        "adjEM": -2.238,
+        "tempo": 71.376,
+        "sos": 1.205,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 332
+      }
     },
     {
       "teamId": 222,
@@ -102572,7 +105380,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.613,
+        "adjD": 104.649,
+        "adjEM": 0.964,
+        "tempo": 71.631,
+        "sos": -0.791,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 144
+      }
     },
     {
       "teamId": 223,
@@ -102986,7 +105807,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.541,
+        "adjD": 106.358,
+        "adjEM": 0.183,
+        "tempo": 71.39,
+        "sos": 2.294,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 197
+      }
     },
     {
       "teamId": 224,
@@ -103544,7 +106378,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 107.643,
+        "adjD": 106.909,
+        "adjEM": 0.734,
+        "tempo": 72.031,
+        "sos": -0.671,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 156
+      }
     },
     {
       "teamId": 225,
@@ -103958,7 +106805,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 107.609,
+        "adjD": 104.262,
+        "adjEM": 3.347,
+        "tempo": 71.388,
+        "sos": -9.649,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 17
+      }
     },
     {
       "teamId": 226,
@@ -104516,7 +107376,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.953,
+        "adjD": 107.382,
+        "adjEM": -0.428,
+        "tempo": 71.799,
+        "sos": 0.133,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 248
+      }
     },
     {
       "teamId": 227,
@@ -104930,7 +107803,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 104.332,
+        "adjD": 105.375,
+        "adjEM": -1.043,
+        "tempo": 72.518,
+        "sos": 3.583,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 284
+      }
     },
     {
       "teamId": 228,
@@ -105488,7 +108374,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 109.68,
+        "adjD": 104.738,
+        "adjEM": 4.942,
+        "tempo": 72.638,
+        "sos": -6.069,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 5
+      }
     },
     {
       "teamId": 229,
@@ -106046,7 +108945,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.343,
+        "adjD": 105.391,
+        "adjEM": 0.952,
+        "tempo": 71.647,
+        "sos": -0.879,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 145
+      }
     },
     {
       "teamId": 230,
@@ -106748,7 +109660,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 110.465,
+        "adjD": 104.149,
+        "adjEM": 6.317,
+        "tempo": 74.501,
+        "sos": -3.986,
+        "games": 4,
+        "rawGames": 4,
+        "reliability": 0.444,
+        "sample": "Developing",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 2
+      }
     },
     {
       "teamId": 231,
@@ -107162,7 +110087,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.587,
+        "adjD": 105.158,
+        "adjEM": 1.429,
+        "tempo": 71.759,
+        "sos": -0.014,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 99
+      }
     },
     {
       "teamId": 232,
@@ -107720,7 +110658,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.623,
+        "adjD": 105.674,
+        "adjEM": -0.051,
+        "tempo": 72.576,
+        "sos": -0.29,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 210
+      }
     },
     {
       "teamId": 233,
@@ -108134,7 +111085,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.758,
+        "adjD": 107.9,
+        "adjEM": -1.142,
+        "tempo": 71.055,
+        "sos": -0.28,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 292
+      }
     },
     {
       "teamId": 234,
@@ -108692,7 +111656,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 104.575,
+        "adjD": 104.94,
+        "adjEM": -0.365,
+        "tempo": 70.763,
+        "sos": 0.384,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 241
+      }
     },
     {
       "teamId": 235,
@@ -109106,7 +112083,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 104.694,
+        "adjD": 105.32,
+        "adjEM": -0.626,
+        "tempo": 71.297,
+        "sos": 0.073,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 257
+      }
     },
     {
       "teamId": 236,
@@ -109668,7 +112658,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.111,
+        "adjD": 106.758,
+        "adjEM": -1.647,
+        "tempo": 70.006,
+        "sos": 2.137,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 309
+      }
     },
     {
       "teamId": 237,
@@ -110082,7 +113085,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.862,
+        "adjD": 105.4,
+        "adjEM": 1.462,
+        "tempo": 71.743,
+        "sos": -0.994,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 97
+      }
     },
     {
       "teamId": 238,
@@ -110640,7 +113656,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.251,
+        "adjD": 106.498,
+        "adjEM": -0.247,
+        "tempo": 70.598,
+        "sos": -0.018,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 229
+      }
     },
     {
       "teamId": 239,
@@ -111198,7 +114227,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.43,
+        "adjD": 104.27,
+        "adjEM": 1.16,
+        "tempo": 71.319,
+        "sos": -0.839,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 124
+      }
     },
     {
       "teamId": 240,
@@ -111612,7 +114654,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 107.298,
+        "adjD": 105.192,
+        "adjEM": 2.106,
+        "tempo": 71.546,
+        "sos": -0.777,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 56
+      }
     },
     {
       "teamId": 241,
@@ -112170,7 +115225,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.138,
+        "adjD": 105.589,
+        "adjEM": -0.451,
+        "tempo": 72.077,
+        "sos": 0.362,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 250
+      }
     },
     {
       "teamId": 242,
@@ -112728,7 +115796,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 108.129,
+        "adjD": 104.393,
+        "adjEM": 3.736,
+        "tempo": 71.728,
+        "sos": -1.634,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 10
+      }
     },
     {
       "teamId": 243,
@@ -113286,7 +116367,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 103.963,
+        "adjD": 106.813,
+        "adjEM": -2.851,
+        "tempo": 70.47,
+        "sos": 0.949,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 350
+      }
     },
     {
       "teamId": 244,
@@ -113700,7 +116794,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 104.899,
+        "adjD": 105.646,
+        "adjEM": -0.747,
+        "tempo": 71.085,
+        "sos": 0.968,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 265
+      }
     },
     {
       "teamId": 245,
@@ -113970,7 +117077,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.956,
+        "adjD": 105.778,
+        "adjEM": 0.178,
+        "tempo": 71.256,
+        "sos": 0.132,
+        "games": 1,
+        "rawGames": 1,
+        "reliability": 0.167,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 199
+      }
     },
     {
       "teamId": 246,
@@ -114384,7 +117504,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 107.22,
+        "adjD": 105.952,
+        "adjEM": 1.268,
+        "tempo": 71.117,
+        "sos": 0.239,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 112
+      }
     },
     {
       "teamId": 247,
@@ -115086,7 +118219,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.709,
+        "adjD": 104.559,
+        "adjEM": 2.149,
+        "tempo": 71.164,
+        "sos": 0.609,
+        "games": 4,
+        "rawGames": 4,
+        "reliability": 0.444,
+        "sample": "Developing",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 51
+      }
     },
     {
       "teamId": 248,
@@ -115500,7 +118646,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.257,
+        "adjD": 106.043,
+        "adjEM": -0.786,
+        "tempo": 72.235,
+        "sos": 0.684,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 266
+      }
     },
     {
       "teamId": 249,
@@ -115914,7 +119073,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.365,
+        "adjD": 105.091,
+        "adjEM": 0.274,
+        "tempo": 72.794,
+        "sos": -1.018,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 191
+      }
     },
     {
       "teamId": 250,
@@ -116474,7 +119646,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.513,
+        "adjD": 104.184,
+        "adjEM": 1.329,
+        "tempo": 72.137,
+        "sos": -0.338,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 107
+      }
     },
     {
       "teamId": 251,
@@ -116890,7 +120075,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 103.558,
+        "adjD": 105.532,
+        "adjEM": -1.974,
+        "tempo": 71.823,
+        "sos": 0.763,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 320
+      }
     },
     {
       "teamId": 252,
@@ -117304,7 +120502,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.794,
+        "adjD": 106.282,
+        "adjEM": 0.513,
+        "tempo": 71.563,
+        "sos": 0.277,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 174
+      }
     },
     {
       "teamId": 253,
@@ -117866,7 +121077,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 108.014,
+        "adjD": 107.048,
+        "adjEM": 0.966,
+        "tempo": 70.811,
+        "sos": 2.037,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 142
+      }
     },
     {
       "teamId": 254,
@@ -118424,7 +121648,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 103.546,
+        "adjD": 104.813,
+        "adjEM": -1.266,
+        "tempo": 69.248,
+        "sos": -1.693,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 298
+      }
     },
     {
       "teamId": 255,
@@ -118838,7 +122075,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.231,
+        "adjD": 105.126,
+        "adjEM": 1.105,
+        "tempo": 72.744,
+        "sos": -1.175,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 130
+      }
     },
     {
       "teamId": 256,
@@ -119252,7 +122502,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.98,
+        "adjD": 105.533,
+        "adjEM": 1.447,
+        "tempo": 71.487,
+        "sos": -0.618,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 98
+      }
     },
     {
       "teamId": 257,
@@ -119666,7 +122929,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.016,
+        "adjD": 105.447,
+        "adjEM": 0.57,
+        "tempo": 72.082,
+        "sos": 0.857,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 167
+      }
     },
     {
       "teamId": 258,
@@ -120082,7 +123358,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.66,
+        "adjD": 106.961,
+        "adjEM": -1.301,
+        "tempo": 71.227,
+        "sos": 0.683,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 300
+      }
     },
     {
       "teamId": 259,
@@ -120496,7 +123785,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.344,
+        "adjD": 106.479,
+        "adjEM": -1.134,
+        "tempo": 71.037,
+        "sos": 1.279,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 291
+      }
     },
     {
       "teamId": 260,
@@ -120910,7 +124212,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.866,
+        "adjD": 106.359,
+        "adjEM": 0.506,
+        "tempo": 71.89,
+        "sos": -0.66,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 176
+      }
     },
     {
       "teamId": 261,
@@ -121468,7 +124783,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 104.268,
+        "adjD": 106.568,
+        "adjEM": -2.3,
+        "tempo": 72.789,
+        "sos": 0.63,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 334
+      }
     },
     {
       "teamId": 262,
@@ -121882,7 +125210,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.86,
+        "adjD": 104.971,
+        "adjEM": 0.889,
+        "tempo": 71.65,
+        "sos": -0.232,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 149
+      }
     },
     {
       "teamId": 263,
@@ -122440,7 +125781,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 102.542,
+        "adjD": 105.282,
+        "adjEM": -2.739,
+        "tempo": 70.246,
+        "sos": 0.947,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 346
+      }
     },
     {
       "teamId": 264,
@@ -122854,7 +126208,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.366,
+        "adjD": 105.478,
+        "adjEM": -0.112,
+        "tempo": 71.971,
+        "sos": -1.585,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 214
+      }
     },
     {
       "teamId": 265,
@@ -123272,7 +126639,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 104.551,
+        "adjD": 107.359,
+        "adjEM": -2.808,
+        "tempo": 71.104,
+        "sos": 2.039,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 348
+      }
     },
     {
       "teamId": 266,
@@ -123686,7 +127066,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.363,
+        "adjD": 106.494,
+        "adjEM": -0.131,
+        "tempo": 70.787,
+        "sos": -0.472,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 216
+      }
     },
     {
       "teamId": 267,
@@ -124244,7 +127637,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 107.862,
+        "adjD": 103.071,
+        "adjEM": 4.792,
+        "tempo": 71.926,
+        "sos": -1.232,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 6
+      }
     },
     {
       "teamId": 268,
@@ -124802,7 +128208,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 104.786,
+        "adjD": 105.67,
+        "adjEM": -0.884,
+        "tempo": 71.465,
+        "sos": -0.832,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 276
+      }
     },
     {
       "teamId": 269,
@@ -125360,7 +128779,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.054,
+        "adjD": 107.598,
+        "adjEM": -2.544,
+        "tempo": 72.876,
+        "sos": 1.095,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 343
+      }
     },
     {
       "teamId": 270,
@@ -125774,7 +129206,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.557,
+        "adjD": 104.543,
+        "adjEM": 1.014,
+        "tempo": 71.278,
+        "sos": -1.195,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 138
+      }
     },
     {
       "teamId": 271,
@@ -126188,7 +129633,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 107.374,
+        "adjD": 106.158,
+        "adjEM": 1.216,
+        "tempo": 71.463,
+        "sos": -0.027,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 120
+      }
     },
     {
       "teamId": 272,
@@ -126746,7 +130204,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.112,
+        "adjD": 105.681,
+        "adjEM": -0.569,
+        "tempo": 72.226,
+        "sos": -0.238,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 255
+      }
     },
     {
       "teamId": 273,
@@ -127160,7 +130631,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 107.393,
+        "adjD": 105.357,
+        "adjEM": 2.035,
+        "tempo": 71.398,
+        "sos": -0.485,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 59
+      }
     },
     {
       "teamId": 274,
@@ -127718,7 +131202,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.659,
+        "adjD": 105.816,
+        "adjEM": -0.156,
+        "tempo": 71.815,
+        "sos": 0.726,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 219
+      }
     },
     {
       "teamId": 275,
@@ -128132,7 +131629,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 104.82,
+        "adjD": 104.327,
+        "adjEM": 0.492,
+        "tempo": 71.747,
+        "sos": -0.612,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 179
+      }
     },
     {
       "teamId": 276,
@@ -128690,7 +132200,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 111.924,
+        "adjD": 104.952,
+        "adjEM": 6.971,
+        "tempo": 73.131,
+        "sos": -7.974,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 1
+      }
     },
     {
       "teamId": 277,
@@ -129104,7 +132627,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.843,
+        "adjD": 104.84,
+        "adjEM": 2.003,
+        "tempo": 71.31,
+        "sos": -0.548,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 60
+      }
     },
     {
       "teamId": 279,
@@ -129518,7 +133054,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.213,
+        "adjD": 106.189,
+        "adjEM": 0.023,
+        "tempo": 71.474,
+        "sos": -1.397,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 208
+      }
     },
     {
       "teamId": 280,
@@ -130076,7 +133625,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.867,
+        "adjD": 105.942,
+        "adjEM": 0.924,
+        "tempo": 70.506,
+        "sos": 1.578,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 147
+      }
     },
     {
       "teamId": 281,
@@ -130634,7 +134196,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.631,
+        "adjD": 106.74,
+        "adjEM": -1.109,
+        "tempo": 71.092,
+        "sos": 0.659,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 290
+      }
     },
     {
       "teamId": 282,
@@ -131048,7 +134623,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 107.302,
+        "adjD": 104.086,
+        "adjEM": 3.215,
+        "tempo": 71.925,
+        "sos": -1.247,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 19
+      }
     },
     {
       "teamId": 283,
@@ -131606,7 +135194,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 107.001,
+        "adjD": 107.376,
+        "adjEM": -0.375,
+        "tempo": 70.049,
+        "sos": 0.191,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 244
+      }
     },
     {
       "teamId": 284,
@@ -132164,7 +135765,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.067,
+        "adjD": 104.842,
+        "adjEM": 0.225,
+        "tempo": 71.527,
+        "sos": -0.627,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 193
+      }
     },
     {
       "teamId": 285,
@@ -132578,7 +136192,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 107.255,
+        "adjD": 105.313,
+        "adjEM": 1.942,
+        "tempo": 71.042,
+        "sos": -1.577,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 64
+      }
     },
     {
       "teamId": 286,
@@ -133136,7 +136763,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 107.486,
+        "adjD": 105.707,
+        "adjEM": 1.779,
+        "tempo": 70.444,
+        "sos": 0.58,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 75
+      }
     },
     {
       "teamId": 287,
@@ -133550,7 +137190,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.982,
+        "adjD": 104.579,
+        "adjEM": 2.403,
+        "tempo": 71.825,
+        "sos": 2.399,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 39
+      }
     },
     {
       "teamId": 288,
@@ -133966,7 +137619,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.754,
+        "adjD": 105.702,
+        "adjEM": 1.052,
+        "tempo": 71.546,
+        "sos": -0.633,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 135
+      }
     },
     {
       "teamId": 289,
@@ -134380,7 +138046,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 103.606,
+        "adjD": 105.667,
+        "adjEM": -2.061,
+        "tempo": 71.177,
+        "sos": 2.06,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 324
+      }
     },
     {
       "teamId": 290,
@@ -134938,7 +138617,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.709,
+        "adjD": 105.221,
+        "adjEM": 1.488,
+        "tempo": 74.269,
+        "sos": -1.575,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 95
+      }
     },
     {
       "teamId": 291,
@@ -135496,7 +139188,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 107.628,
+        "adjD": 107.268,
+        "adjEM": 0.36,
+        "tempo": 73.007,
+        "sos": 1.407,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 186
+      }
     },
     {
       "teamId": 292,
@@ -135910,7 +139615,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.062,
+        "adjD": 104.775,
+        "adjEM": 0.287,
+        "tempo": 71.497,
+        "sos": 0.129,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 190
+      }
     },
     {
       "teamId": 293,
@@ -136468,7 +140186,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.334,
+        "adjD": 104.631,
+        "adjEM": 1.703,
+        "tempo": 73.423,
+        "sos": 0.189,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 82
+      }
     },
     {
       "teamId": 294,
@@ -136882,7 +140613,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.385,
+        "adjD": 104.611,
+        "adjEM": 1.774,
+        "tempo": 70.865,
+        "sos": -2.266,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 76
+      }
     },
     {
       "teamId": 295,
@@ -137440,7 +141184,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 108.704,
+        "adjD": 105.116,
+        "adjEM": 3.589,
+        "tempo": 71.388,
+        "sos": -1.37,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 14
+      }
     },
     {
       "teamId": 296,
@@ -137854,7 +141611,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.403,
+        "adjD": 106.19,
+        "adjEM": -0.787,
+        "tempo": 72.136,
+        "sos": 0.94,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 267
+      }
     },
     {
       "teamId": 297,
@@ -138268,7 +142038,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.421,
+        "adjD": 105.43,
+        "adjEM": 0.991,
+        "tempo": 71.989,
+        "sos": -0.394,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 140
+      }
     },
     {
       "teamId": 298,
@@ -138682,7 +142465,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 104.697,
+        "adjD": 104.495,
+        "adjEM": 0.202,
+        "tempo": 71.435,
+        "sos": 0.157,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 196
+      }
     },
     {
       "teamId": 299,
@@ -139096,7 +142892,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.205,
+        "adjD": 105.527,
+        "adjEM": 0.677,
+        "tempo": 71.203,
+        "sos": -0.394,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 160
+      }
     },
     {
       "teamId": 300,
@@ -139654,7 +143463,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.258,
+        "adjD": 103.563,
+        "adjEM": 2.695,
+        "tempo": 72.493,
+        "sos": -0.286,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 29
+      }
     },
     {
       "teamId": 301,
@@ -140212,7 +144034,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 104.761,
+        "adjD": 104.514,
+        "adjEM": 0.247,
+        "tempo": 71.168,
+        "sos": -0.761,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 192
+      }
     },
     {
       "teamId": 302,
@@ -140626,7 +144461,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 104.776,
+        "adjD": 106.537,
+        "adjEM": -1.761,
+        "tempo": 71.2,
+        "sos": 1.482,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 313
+      }
     },
     {
       "teamId": 303,
@@ -141044,7 +144892,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.025,
+        "adjD": 107.701,
+        "adjEM": -2.676,
+        "tempo": 71.635,
+        "sos": 1.273,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 344
+      }
     },
     {
       "teamId": 304,
@@ -141458,7 +145319,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 107.348,
+        "adjD": 105.834,
+        "adjEM": 1.514,
+        "tempo": 71.261,
+        "sos": 0.775,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 93
+      }
     },
     {
       "teamId": 305,
@@ -142016,7 +145890,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.036,
+        "adjD": 107.024,
+        "adjEM": -1.988,
+        "tempo": 71.903,
+        "sos": 0.493,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 321
+      }
     },
     {
       "teamId": 307,
@@ -142430,7 +146317,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 103.396,
+        "adjD": 105.875,
+        "adjEM": -2.479,
+        "tempo": 71.734,
+        "sos": 0.699,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 341
+      }
     },
     {
       "teamId": 308,
@@ -142844,7 +146744,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.841,
+        "adjD": 106.35,
+        "adjEM": -0.509,
+        "tempo": 71.947,
+        "sos": 0.264,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 253
+      }
     },
     {
       "teamId": 309,
@@ -143258,7 +147171,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.409,
+        "adjD": 104.842,
+        "adjEM": 0.568,
+        "tempo": 71.685,
+        "sos": 0.11,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 169
+      }
     },
     {
       "teamId": 310,
@@ -143672,7 +147598,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.067,
+        "adjD": 106.432,
+        "adjEM": -0.365,
+        "tempo": 71.729,
+        "sos": -0.139,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 242
+      }
     },
     {
       "teamId": 311,
@@ -144086,7 +148025,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.721,
+        "adjD": 105.991,
+        "adjEM": 0.73,
+        "tempo": 71.083,
+        "sos": -0.012,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 157
+      }
     },
     {
       "teamId": 312,
@@ -144502,7 +148454,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.278,
+        "adjD": 107.83,
+        "adjEM": -1.551,
+        "tempo": 71.144,
+        "sos": 1.493,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 307
+      }
     },
     {
       "teamId": 313,
@@ -144916,7 +148881,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 107.067,
+        "adjD": 105.461,
+        "adjEM": 1.606,
+        "tempo": 72.171,
+        "sos": -0.547,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 88
+      }
     },
     {
       "teamId": 314,
@@ -145474,7 +149452,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.685,
+        "adjD": 104.233,
+        "adjEM": 2.452,
+        "tempo": 71.112,
+        "sos": -1.752,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 37
+      }
     },
     {
       "teamId": 315,
@@ -146032,7 +150023,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.853,
+        "adjD": 105.992,
+        "adjEM": 0.861,
+        "tempo": 70.525,
+        "sos": 0.532,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 150
+      }
     },
     {
       "teamId": 316,
@@ -146590,7 +150594,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.436,
+        "adjD": 106.737,
+        "adjEM": -1.301,
+        "tempo": 72.351,
+        "sos": 1.136,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 301
+      }
     },
     {
       "teamId": 319,
@@ -147148,7 +151165,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.073,
+        "adjD": 107.526,
+        "adjEM": -1.454,
+        "tempo": 71.903,
+        "sos": 1.964,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 305
+      }
     },
     {
       "teamId": 320,
@@ -147706,7 +151736,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 107.511,
+        "adjD": 104.126,
+        "adjEM": 3.385,
+        "tempo": 70.976,
+        "sos": 0.404,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 16
+      }
     },
     {
       "teamId": 321,
@@ -148120,7 +152163,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.781,
+        "adjD": 104.857,
+        "adjEM": 1.924,
+        "tempo": 72.155,
+        "sos": -1.337,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 69
+      }
     },
     {
       "teamId": 322,
@@ -148534,7 +152590,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.158,
+        "adjD": 107.206,
+        "adjEM": -1.048,
+        "tempo": 71.437,
+        "sos": 1.008,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 285
+      }
     },
     {
       "teamId": 323,
@@ -148948,7 +153017,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.633,
+        "adjD": 105.912,
+        "adjEM": 0.721,
+        "tempo": 72.085,
+        "sos": 0.174,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 158
+      }
     },
     {
       "teamId": 324,
@@ -149650,7 +153732,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 108.221,
+        "adjD": 103.676,
+        "adjEM": 4.544,
+        "tempo": 73.326,
+        "sos": -3.584,
+        "games": 4,
+        "rawGames": 4,
+        "reliability": 0.444,
+        "sample": "Developing",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 7
+      }
     },
     {
       "teamId": 325,
@@ -150068,7 +154163,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 107.951,
+        "adjD": 105.265,
+        "adjEM": 2.686,
+        "tempo": 71.437,
+        "sos": -1.706,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 30
+      }
     },
     {
       "teamId": 326,
@@ -150482,7 +154590,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 104.112,
+        "adjD": 105.376,
+        "adjEM": -1.264,
+        "tempo": 71.833,
+        "sos": -0.188,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 297
+      }
     },
     {
       "teamId": 327,
@@ -150896,7 +155017,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.712,
+        "adjD": 106.399,
+        "adjEM": -0.687,
+        "tempo": 71.497,
+        "sos": -0.218,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 261
+      }
     },
     {
       "teamId": 328,
@@ -151310,7 +155444,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.389,
+        "adjD": 106.2,
+        "adjEM": -0.811,
+        "tempo": 71.807,
+        "sos": 1.015,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 269
+      }
     },
     {
       "teamId": 329,
@@ -151724,7 +155871,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.355,
+        "adjD": 105.141,
+        "adjEM": 1.215,
+        "tempo": 71.663,
+        "sos": -1.151,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 121
+      }
     },
     {
       "teamId": 330,
@@ -152138,7 +156298,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.169,
+        "adjD": 105.552,
+        "adjEM": 0.618,
+        "tempo": 71.863,
+        "sos": -0.188,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 163
+      }
     },
     {
       "teamId": 331,
@@ -152552,7 +156725,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 103.925,
+        "adjD": 106.054,
+        "adjEM": -2.129,
+        "tempo": 70.929,
+        "sos": 0.93,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 329
+      }
     },
     {
       "teamId": 332,
@@ -152966,7 +157152,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.711,
+        "adjD": 105.418,
+        "adjEM": 1.293,
+        "tempo": 72.503,
+        "sos": -0.946,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 111
+      }
     },
     {
       "teamId": 333,
@@ -153380,7 +157579,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 107.337,
+        "adjD": 106.372,
+        "adjEM": 0.965,
+        "tempo": 71.426,
+        "sos": -0.592,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 143
+      }
     },
     {
       "teamId": 334,
@@ -153938,7 +158150,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.732,
+        "adjD": 105.208,
+        "adjEM": 1.524,
+        "tempo": 73.075,
+        "sos": -1.345,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 91
+      }
     },
     {
       "teamId": 335,
@@ -154356,7 +158581,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.351,
+        "adjD": 105.095,
+        "adjEM": 1.256,
+        "tempo": 70.811,
+        "sos": -0.537,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 113
+      }
     },
     {
       "teamId": 336,
@@ -154770,7 +159008,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.829,
+        "adjD": 104.603,
+        "adjEM": 1.225,
+        "tempo": 71.174,
+        "sos": -0.477,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 118
+      }
     },
     {
       "teamId": 338,
@@ -155191,7 +159442,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": 1496,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.562,
+        "adjD": 106.068,
+        "adjEM": 0.494,
+        "tempo": 71.306,
+        "sos": -0.431,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 178
+      }
     },
     {
       "teamId": 339,
@@ -155749,7 +160013,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 107.285,
+        "adjD": 105.514,
+        "adjEM": 1.771,
+        "tempo": 71.916,
+        "sos": -0.019,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 78
+      }
     },
     {
       "teamId": 340,
@@ -156163,7 +160440,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.217,
+        "adjD": 105.469,
+        "adjEM": 0.747,
+        "tempo": 71.505,
+        "sos": 0.561,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 155
+      }
     },
     {
       "teamId": 341,
@@ -156721,7 +161011,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 103.42,
+        "adjD": 105.872,
+        "adjEM": -2.453,
+        "tempo": 70.537,
+        "sos": 1.032,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 338
+      }
     },
     {
       "teamId": 342,
@@ -157135,7 +161438,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 104.81,
+        "adjD": 105.538,
+        "adjEM": -0.728,
+        "tempo": 71.224,
+        "sos": 0.668,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 263
+      }
     },
     {
       "teamId": 343,
@@ -157549,7 +161865,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.983,
+        "adjD": 106.847,
+        "adjEM": -0.865,
+        "tempo": 71.091,
+        "sos": 1.045,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 274
+      }
     },
     {
       "teamId": 344,
@@ -157963,7 +162292,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.539,
+        "adjD": 107.206,
+        "adjEM": -1.666,
+        "tempo": 70.765,
+        "sos": 0.758,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 311
+      }
     },
     {
       "teamId": 345,
@@ -158377,7 +162719,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.292,
+        "adjD": 107.45,
+        "adjEM": -2.158,
+        "tempo": 72.332,
+        "sos": 1.013,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 331
+      }
     },
     {
       "teamId": 346,
@@ -158791,7 +163146,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.179,
+        "adjD": 105.03,
+        "adjEM": 0.149,
+        "tempo": 71.142,
+        "sos": -0.535,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 201
+      }
     },
     {
       "teamId": 347,
@@ -159205,7 +163573,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.863,
+        "adjD": 104.735,
+        "adjEM": 2.128,
+        "tempo": 71.193,
+        "sos": -1.758,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 53
+      }
     },
     {
       "teamId": 348,
@@ -159619,7 +164000,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 108.059,
+        "adjD": 105.02,
+        "adjEM": 3.039,
+        "tempo": 71.369,
+        "sos": -0.673,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 23
+      }
     },
     {
       "teamId": 349,
@@ -160177,7 +164571,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.231,
+        "adjD": 104.658,
+        "adjEM": 0.573,
+        "tempo": 71.143,
+        "sos": 0.756,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 165
+      }
     },
     {
       "teamId": 350,
@@ -160735,7 +165142,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.907,
+        "adjD": 104.362,
+        "adjEM": 2.545,
+        "tempo": 72.071,
+        "sos": -0.065,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 33
+      }
     },
     {
       "teamId": 351,
@@ -161293,7 +165713,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.562,
+        "adjD": 104.889,
+        "adjEM": 1.673,
+        "tempo": 70.555,
+        "sos": 0.989,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 84
+      }
     },
     {
       "teamId": 352,
@@ -161707,7 +166140,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.227,
+        "adjD": 106.248,
+        "adjEM": -1.021,
+        "tempo": 72.153,
+        "sos": 0.905,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 281
+      }
     },
     {
       "teamId": 353,
@@ -162121,7 +166567,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.335,
+        "adjD": 106.495,
+        "adjEM": -0.16,
+        "tempo": 71.624,
+        "sos": -0.395,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 220
+      }
     },
     {
       "teamId": 354,
@@ -162535,7 +166994,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.782,
+        "adjD": 107.65,
+        "adjEM": -0.868,
+        "tempo": 72.056,
+        "sos": 1.704,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 275
+      }
     },
     {
       "teamId": 355,
@@ -162949,7 +167421,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 104.362,
+        "adjD": 106.41,
+        "adjEM": -2.049,
+        "tempo": 71.229,
+        "sos": 1.975,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 323
+      }
     },
     {
       "teamId": 356,
@@ -163507,7 +167992,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.075,
+        "adjD": 106.977,
+        "adjEM": -0.902,
+        "tempo": 72.037,
+        "sos": 0.067,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 277
+      }
     },
     {
       "teamId": 357,
@@ -163921,7 +168419,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 107.153,
+        "adjD": 106.717,
+        "adjEM": 0.436,
+        "tempo": 71.778,
+        "sos": -0.523,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 181
+      }
     },
     {
       "teamId": 358,
@@ -164335,7 +168846,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.982,
+        "adjD": 105.21,
+        "adjEM": 1.772,
+        "tempo": 71.418,
+        "sos": -0.488,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 77
+      }
     },
     {
       "teamId": 359,
@@ -164749,7 +169273,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.269,
+        "adjD": 104.748,
+        "adjEM": 0.522,
+        "tempo": 71.718,
+        "sos": -0.513,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 173
+      }
     },
     {
       "teamId": 360,
@@ -165163,7 +169700,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.416,
+        "adjD": 106.045,
+        "adjEM": 0.37,
+        "tempo": 71.05,
+        "sos": 1.208,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 184
+      }
     },
     {
       "teamId": 361,
@@ -165577,7 +170127,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.711,
+        "adjD": 104.726,
+        "adjEM": 1.985,
+        "tempo": 71.625,
+        "sos": 0.349,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 61
+      }
     },
     {
       "teamId": 362,
@@ -166135,7 +170698,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 109.216,
+        "adjD": 107.92,
+        "adjEM": 1.296,
+        "tempo": 72.555,
+        "sos": 0.418,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 110
+      }
     },
     {
       "teamId": 365,
@@ -166695,7 +171271,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 106.865,
+        "adjD": 103.136,
+        "adjEM": 3.729,
+        "tempo": 71.594,
+        "sos": -1.39,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 11
+      }
     },
     {
       "teamId": 366,
@@ -167253,7 +171842,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 108.913,
+        "adjD": 103.958,
+        "adjEM": 4.955,
+        "tempo": 72.307,
+        "sos": -1.186,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 4
+      }
     },
     {
       "teamId": 1073,
@@ -167811,7 +172413,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 109.04,
+        "adjD": 103.581,
+        "adjEM": 5.459,
+        "tempo": 72.846,
+        "sos": -1.015,
+        "games": 3,
+        "rawGames": 3,
+        "reliability": 0.375,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 3
+      }
     },
     {
       "teamId": 1507,
@@ -168225,7 +172840,20 @@
       "adjusted": null,
       "srsRating": null,
       "eloRating": null,
-      "sosRating": null
+      "sosRating": null,
+      "powerRatings": {
+        "adjO": 105.69,
+        "adjD": 105.559,
+        "adjEM": 0.132,
+        "tempo": 70.749,
+        "sos": 0.979,
+        "games": 2,
+        "rawGames": 2,
+        "reliability": 0.286,
+        "sample": "Early sample",
+        "model": "D1 Hoops Power Rating v1",
+        "rank": 202
+      }
     },
     {
       "team": "Binghamton",
@@ -168240,7 +172868,8 @@
       "elo": null,
       "sosRating": null,
       "gameStats": [],
-      "dataStatus": "no_games_yet"
+      "dataStatus": "no_games_yet",
+      "powerRatings": null
     },
     {
       "team": "Bryant",
@@ -168255,7 +172884,8 @@
       "elo": null,
       "sosRating": null,
       "gameStats": [],
-      "dataStatus": "no_games_yet"
+      "dataStatus": "no_games_yet",
+      "powerRatings": null
     },
     {
       "team": "Maine",
@@ -168270,7 +172900,8 @@
       "elo": null,
       "sosRating": null,
       "gameStats": [],
-      "dataStatus": "no_games_yet"
+      "dataStatus": "no_games_yet",
+      "powerRatings": null
     },
     {
       "team": "NJIT",
@@ -168285,7 +172916,8 @@
       "elo": null,
       "sosRating": null,
       "gameStats": [],
-      "dataStatus": "no_games_yet"
+      "dataStatus": "no_games_yet",
+      "powerRatings": null
     },
     {
       "team": "New Hampshire",
@@ -168300,7 +172932,8 @@
       "elo": null,
       "sosRating": null,
       "gameStats": [],
-      "dataStatus": "no_games_yet"
+      "dataStatus": "no_games_yet",
+      "powerRatings": null
     },
     {
       "team": "UAlbany",
@@ -168315,7 +172948,8 @@
       "elo": null,
       "sosRating": null,
       "gameStats": [],
-      "dataStatus": "no_games_yet"
+      "dataStatus": "no_games_yet",
+      "powerRatings": null
     },
     {
       "team": "UMBC",
@@ -168330,7 +172964,8 @@
       "elo": null,
       "sosRating": null,
       "gameStats": [],
-      "dataStatus": "no_games_yet"
+      "dataStatus": "no_games_yet",
+      "powerRatings": null
     },
     {
       "team": "UMass Lowell",
@@ -168345,7 +172980,8 @@
       "elo": null,
       "sosRating": null,
       "gameStats": [],
-      "dataStatus": "no_games_yet"
+      "dataStatus": "no_games_yet",
+      "powerRatings": null
     },
     {
       "team": "Vermont",
@@ -168360,7 +172996,20 @@
       "elo": null,
       "sosRating": null,
       "gameStats": [],
-      "dataStatus": "no_games_yet"
+      "dataStatus": "no_games_yet",
+      "powerRatings": null
     }
-  ]
+  ],
+  "ratingModel": {
+    "name": "D1 Hoops Power Rating",
+    "version": "1.0.0",
+    "method": "Iterative opponent-adjusted offensive and defensive efficiency with neutral-site normalization and five-game league-average prior shrinkage.",
+    "leagueAverage": 105.908,
+    "leagueTempo": 71.527,
+    "estimatedHomeEdge": 33.455,
+    "gameCoverage": 517,
+    "rankedTeams": 356,
+    "minimumGames": 1,
+    "updatedAt": "2026-11-11T01:21:58.899Z"
+  }
 }
