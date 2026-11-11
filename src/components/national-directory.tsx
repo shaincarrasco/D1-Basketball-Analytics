@@ -193,9 +193,9 @@ const teamMetric = (team: TeamSeasonRecord, key: string): number | null => {
     case "losses": return team.losses ?? null;
     case "games": return team.games ?? null;
     case "pace": return team.pace ?? null;
-    case "netRating": return team.adjusted?.netRating ?? (offense != null && defense != null ? offense - defense : null);
-    case "offensiveRating": return team.adjusted?.offensiveRating ?? offense;
-    case "defensiveRating": return team.adjusted?.defensiveRating ?? defense;
+    case "netRating": return team.adjusted?.netRating ?? null;
+    case "offensiveRating": return team.adjusted?.offensiveRating ?? null;
+    case "defensiveRating": return team.adjusted?.defensiveRating ?? null;
     case "srs": return team.srsRating ?? null;
     case "elo": return team.eloRating ?? null;
     case "sos": return team.sosRating ?? null;
