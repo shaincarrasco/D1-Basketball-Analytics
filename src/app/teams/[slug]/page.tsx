@@ -48,7 +48,7 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
         <div className="court-arc" aria-hidden />
         <div className="relative flex flex-wrap items-center gap-6">
           <TeamLogo src={team.logo} name={team.name} size={88} className="drop-shadow-[0_0_24px_rgba(255,255,255,.08)]" />
-          <div className="min-w-0 flex-1">
+          <div className="order-last min-w-0 basis-full sm:order-none sm:basis-auto sm:flex-1">
             <p className="text-sm text-mute">
               <Link className="link underline decoration-line2 underline-offset-4" href={`/conferences/${team.confSlug}/`}>{team.confName}</Link>
               {team.mascot ? <> · {team.mascot}</> : null}
@@ -60,9 +60,9 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
               {" "}· projected <b className="text-ink">{fmt(team.projW, 1)}–{fmt(team.projL, 1)}</b>
             </p>
           </div>
-          <div className="text-right">
+          <div className="ml-auto text-right sm:ml-0">
             <div className="label">DHR rank</div>
-            <div className="outline-num font-display text-[6.5rem] font-black leading-[0.85] sm:text-[8rem]">{team.rank ?? "—"}</div>
+            <div className="outline-num font-display text-[5rem] font-black leading-[0.85] sm:text-[8rem]">{team.rank ?? "—"}</div>
           </div>
         </div>
         <dl className="relative mt-6 grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-line bg-line sm:grid-cols-5">
