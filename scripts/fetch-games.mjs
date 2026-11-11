@@ -4,15 +4,27 @@ const season = 2027;
 const key = process.env.CBBD_API_KEY;
 if (!key) throw new Error("CBBD_API_KEY is missing. Add it as a GitHub Actions secret.");
 
-const url = new URL("https://api.collegebasketballdata.com/games");
-url.searchParams.set("season", String(season));
-url.searchParams.set("seasonType", "regular");
-const response = await fetch(url, {
-  headers: { Authorization: `Bearer ${key}`, Accept: "application/json" },
-});
-if (!response.ok) throw new Error(`CBBD games request failed with HTTP ${response.status}.`);
-const rows = await response.json();
-if (!Array.isArray(rows)) throw new Error("CBBD returned an unexpected games payload.");
+const windows = [
+  ["early-season", "2026-08-01T00:00:00Z", "2026-12-31T23:59:59Z"],
+  ["late-season", "2027-01-01T00:00:00Z", "2027-08-01T00:00:00Z"],
+];
+const batches = await Promise.all(windows.map(async ([label, startDateRange, endDateRange]) => {
+  const url = new URL("https://api.collegebasketballdata.com/games");
+  url.searchParams.set("season", String(season));
+  url.searchParams.set("seasonType", "regular");
+  url.searchParams.set("startDateRange", startDateRange);
+  url.searchParams.set("endDateRange", endDateRange);
+  const response = await fetch(url, {
+    headers: { Authorization: `Bearer ${key}`, Accept: "application/json" },
+  });
+  if (!response.ok) throw new Error(`CBBD games ${label} request failed with HTTP ${response.status}.`);
+  const rows = await response.json();
+  if (!Array.isArray(rows)) throw new Error(`CBBD games ${label} returned an unexpected payload.`);
+  if (rows.length >= 3000) console.warn(`[games] ${label} reached the 3,000-row endpoint cap; further date partitioning may be required.`);
+  return rows;
+}));
+const rows = [...new Map(batches.flat().map(row => [String(row?.id), row])).values()];
+console.log(`Fetched ${rows.length} distinct game rows across ${windows.length} date windows.`);
 
 const games = rows.flatMap((row) => {
   if (!row || !Number.isInteger(row.id) || typeof row.startDate !== "string" ||
@@ -55,7 +67,7 @@ const payload = {
   fetchedAt: new Date().toISOString(),
   count: games.length,
   status: games.length ? "available" : "empty",
-  note: "Schedule, results and scores are taken from the CBBD regular-season games endpoint. Game-level player or play-by-play detail is not inferred.",
+  note: "Schedule, results and scores are taken from two date-partitioned CBBD regular-season game requests to reduce the 3,000-row endpoint cap risk. Game-level player or play-by-play detail is not inferred.",
   games,
 };
 
