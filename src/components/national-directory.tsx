@@ -245,11 +245,11 @@ const teamMetric = (team: TeamSeasonRecord, key: string): number | null => {
 };
 
 
-export default function NationalDirectory({ players = [], teamRecords = [] }: { players?: Player[]; teamRecords?: TeamSeasonRecord[] }) {
+export default function NationalDirectory({ players = [], teamRecords = [], initialQuery = "" }: { players?: Player[]; teamRecords?: TeamSeasonRecord[]; initialQuery?: string }) {
   const [teams, setTeams] = useState<EspnTeam[]>([]);
   const [status, setStatus] = useState<DirectoryState>("loading");
   const [error, setError] = useState("");
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState(initialQuery);
   const [conference, setConference] = useState("All locations");
   const [selected, setSelected] = useState<EspnTeam | null>(null);
   const [roster, setRoster] = useState<EspnAthlete[]>([]);
@@ -265,6 +265,7 @@ export default function NationalDirectory({ players = [], teamRecords = [] }: { 
   const [rankingMetric, setRankingMetric] = useState("netRating");
   const [rankingDirection, setRankingDirection] = useState<"asc" | "desc">("desc");
   const [rosterSort, setRosterSort] = useState<"name" | "position" | "jersey">("name");
+  useEffect(() => { if (initialQuery) setQuery(initialQuery); }, [initialQuery]);
   const teamStats = useMemo(() => {
     if (!selected) return [];
     const candidates = [selected.name, selected.displayName].filter(Boolean).map((v) => normalizeTeam(v as string));
