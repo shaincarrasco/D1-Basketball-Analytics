@@ -200,6 +200,8 @@ html[data-theme="light"] .text-slate-100, html[data-theme="light"] .text-slate-2
 html[data-theme="light"] .text-slate-300, html[data-theme="light"] .text-slate-400 { color: #617184 !important; }
 html[data-theme="light"] .text-slate-500, html[data-theme="light"] .text-slate-600 { color: #8996a4 !important; }
 html[data-theme="light"] [class*="bg-[#0c1420]"], html[data-theme="light"] [class*="bg-[#101827]"], html[data-theme="light"] [class*="bg-[#111b29]"], html[data-theme="light"] [class*="bg-[#0c121e]"], html[data-theme="light"] [class*="bg-[#090d16]"] { background-color: var(--surface-soft) !important; }
+html[data-theme="light"] [class*="bg-[#0d1521]"], html[data-theme="light"] [class*="bg-[#131e2d]"], html[data-theme="light"] [class*="bg-[#172438]"], html[data-theme="light"] [class*="bg-[#1c2939]"] { background-color: var(--surface-raised) !important; }
+html[data-theme="light"] [class~="border-lime-300"], html[data-theme="light"] [class~="hover:border-lime-300"]:hover, html[data-theme="light"] [class~="hover:border-lime-300/60"]:hover { border-color: var(--accent) !important; }
 html[data-theme="light"] [class*="border-[#243044]"], html[data-theme="light"] [class*="border-[#263448]"], html[data-theme="light"] [class*="border-[#29364a]"] { border-color: var(--line) !important; }
 html[data-theme="light"] .text-lime-300 { color: var(--accent) !important; }
 .text-lime-300 { color: var(--accent) !important; }
