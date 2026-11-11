@@ -50,7 +50,7 @@ function useFeed<T>(path: string, key: string, fallback: string, enabled = true)
     if (!enabled || loaded.current) return;
     const base = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
     const controller = new AbortController();
-    fetch(`${base}${path}`, { signal: controller.signal, cache: "force-cache" })
+    fetch(`${base}${path}`, { signal: controller.signal, cache: "no-store" })
       .then(response => { if (!response.ok) throw new Error(`Feed request failed (${response.status})`); return response.json(); })
       .then(payload => {
         if (!payload || !Array.isArray(payload[key])) throw new Error("Feed schema is invalid");
@@ -145,17 +145,15 @@ export default function HomePage() {
     const inDateRange = (!gameDateFrom || day >= gameDateFrom) && (!gameDateTo || day <= gameDateTo);
     return matches && inDateRange && (gameStatus === "all" || game.status === gameStatus);
   }).sort((a,b) => direction === "asc" ? a.date.localeCompare(b.date) : b.date.localeCompare(a.date)), [games, query, gameStatus, direction]);
-  const leaders = useMemo(() => [...players].filter(p => p.points != null).sort((a,b) => (b.points ?? -Infinity) - (a.points ?? -Infinity)).slice(0,8), [players]);
-  const topTeams = useMemo(() => [...teams].filter(t => t.adjusted?.netRating != null).sort((a,b) => (b.adjusted?.netRating ?? -Infinity) - (a.adjusted?.netRating ?? -Infinity)).slice(0,8), [teams]);
-  const latestGames = useMemo(() => {
-    const now = Date.now();
-    const upcoming = games.filter(game => new Date(game.date).getTime() >= now).sort((a,b) => a.date.localeCompare(b.date));
-    const recent = games.filter(game => new Date(game.date).getTime() < now).sort((a,b) => b.date.localeCompare(a.date));
-    return (upcoming.length ? upcoming : recent).slice(0,6);
-  }, [games]);
-  const feedReady = [playerFeed, teamFeed, gameFeed].filter(f => f.status === "ready").length;
-  const changeSection = (next: Section) => { setSection(next); setQuery(""); setSelectedPlayer(null); setSelectedGame(null); setMobileOpen(false); };
-  const openTeamDirectory = (teamName: string) => { setTeamSearchTerm(teamName); changeSection("Teams"); };
+  const leaders = overview?.players ?? [];
+  const topTeams = overview?.teams ?? [];
+  const latestGames = overview?.games ?? [];
+  const selectedGameBoxscore = gameBoxscoreFeed.items.find(game => game.id === selectedGame?.id);
+  const feedReady = [playerFeed, teamFeed, gameFeed].filter(feed => feed.status === "ready").length;
+  const changeSection = (next: Section) => { setSection(next); setQuery(""); setSelectedPlayer(null); setSelectedGame(null); setMobileOpen(false); if (next !== "Teams") setTeamSearchTerm(""); };
+  const openTeamDirectory = (teamName: string) => { changeSection("Teams"); setTeamSearchTerm(teamName); };
+  const openGame = (game: AppGame) => { changeSection("Games"); setSelectedGame(game); };
+  const openPlayer = (player: Player | OverviewPlayer) => { changeSection("Players"); setSelectedPlayer(player as Player); };
   const pageTitle = selectedPlayer?.name ?? (selectedGame ? `${selectedGame.awayTeam} at ${selectedGame.homeTeam}` : section);
   const refresh = () => window.location.reload();
   const Sidebar = () => <div className="flex h-full flex-col">
