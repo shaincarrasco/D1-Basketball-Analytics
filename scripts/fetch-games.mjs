@@ -5,8 +5,10 @@ const key = process.env.CBBD_API_KEY;
 if (!key) throw new Error("CBBD_API_KEY is missing. Add it as a GitHub Actions secret.");
 
 const windows = [
-  ["early-season", "2026-08-01T00:00:00Z", "2026-12-31T23:59:59Z"],
-  ["late-season", "2027-01-01T00:00:00Z", "2027-08-01T00:00:00Z"],
+  ["aug-oct", "2026-08-01T00:00:00Z", "2026-10-31T23:59:59Z"],
+  ["nov-dec", "2026-11-01T00:00:00Z", "2026-12-31T23:59:59Z"],
+  ["jan-feb", "2027-01-01T00:00:00Z", "2027-02-28T23:59:59Z"],
+  ["mar-aug", "2027-03-01T00:00:00Z", "2027-08-01T00:00:00Z"],
 ];
 const batches = await Promise.all(windows.map(async ([label, startDateRange, endDateRange]) => {
   const url = new URL("https://api.collegebasketballdata.com/games");
@@ -67,7 +69,7 @@ const payload = {
   fetchedAt: new Date().toISOString(),
   count: games.length,
   status: games.length ? "available" : "empty",
-  note: "Schedule, results and scores are taken from two date-partitioned CBBD regular-season game requests to reduce the 3,000-row endpoint cap risk. Game-level player or play-by-play detail is not inferred.",
+  note: "Schedule, results and scores are taken from four date-partitioned CBBD regular-season game requests to avoid the 3,000-row endpoint cap. Game-level player or play-by-play detail is not inferred.",
   games,
 };
 
