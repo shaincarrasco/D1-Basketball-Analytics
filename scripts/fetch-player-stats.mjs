@@ -1,4 +1,4 @@
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 
 const season = 2027;
 const key = process.env.CBBD_API_KEY;
@@ -20,9 +20,16 @@ const detailGroupFor = conference => String(conference || "unclassified")
   .toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g, "")
   .replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "unclassified";
 
+const directoryPayload = JSON.parse(await readFile("public/data/team-directory.json", "utf8"));
+const directoryTeams = Array.isArray(directoryPayload.teams) ? directoryPayload.teams : [];
+if (directoryPayload.status !== "available" || !directoryTeams.length) throw new Error("A verified ESPN Division I directory is required before publishing player records.");
+const normalizeTeamName = value => String(value ?? "").toLowerCase().replace(/\b(the|university|college)\b/g, "").replace(/[^a-z0-9]/g, "");
+const d1TeamNames = new Set(directoryTeams.flatMap(team => [team.location, team.displayName].filter(Boolean).map(normalizeTeamName)));
 const validRows = rows.filter(row => row && typeof row === "object" &&
   Number.isInteger(row.athleteId) && typeof row.name === "string" && row.name.trim() &&
-  typeof row.team === "string" && row.team.trim());
+  typeof row.team === "string" && row.team.trim() && d1TeamNames.has(normalizeTeamName(row.team)));
+console.log(`Filtered ${validRows.length} Division I player rows from ${rows.length} provider rows using the ${directoryTeams.length}-team ESPN directory.`);
+if (validRows.length < 4500) console.warn("Fewer than 4,500 player rows matched the Division I directory; inspect school-name aliases before trusting national player coverage.");
 const detailsByGroup = new Map();
 const players = validRows.map(row => {
   const games = numeric(row.games);
