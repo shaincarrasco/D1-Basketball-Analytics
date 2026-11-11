@@ -3,7 +3,7 @@
   "season": 2027,
   "seasonLabel": "2026–27",
   "seasonType": "regular",
-  "fetchedAt": "2026-11-11T01:15:32.568Z",
+  "fetchedAt": "2026-11-11T01:21:58.899Z",
   "count": 365,
   "status": "available",
   "sources": [
@@ -87984,6 +87984,420 @@
       "sosRating": null
     },
     {
+      "teamId": 193,
+      "team": "New Orleans",
+      "conference": "Southland",
+      "season": 2027,
+      "seasonLabel": "20262027",
+      "games": 2,
+      "wins": 1,
+      "losses": 1,
+      "totalMinutes": 80,
+      "pace": 78,
+      "teamStats": {
+        "assists": 20,
+        "blocks": 13,
+        "steals": 14,
+        "possessions": 156,
+        "trueShooting": 47.5,
+        "rating": 94.2,
+        "fieldGoals": {
+          "made": 51,
+          "attempted": 131,
+          "pct": 38.9
+        },
+        "twoPointFieldGoals": {
+          "made": 43,
+          "attempted": 89,
+          "pct": 48.3
+        },
+        "threePointFieldGoals": {
+          "made": 8,
+          "attempted": 42,
+          "pct": 19
+        },
+        "freeThrows": {
+          "made": 37,
+          "attempted": 54,
+          "pct": 68.5
+        },
+        "rebounds": {
+          "offensive": 29,
+          "defensive": 52,
+          "total": 81
+        },
+        "turnovers": {
+          "total": 30,
+          "teamTotal": 2
+        },
+        "fouls": {
+          "total": 34,
+          "technical": 0,
+          "flagrant": 0
+        },
+        "points": {
+          "total": 147,
+          "inPaint": 78,
+          "offTurnovers": 34,
+          "fastBreak": 27
+        },
+        "fourFactors": {
+          "effectiveFieldGoalPct": 42,
+          "turnoverRatio": 0.19,
+          "offensiveReboundPct": 35.8,
+          "freeThrowRate": 41.2
+        }
+      },
+      "opponentStats": {
+        "assists": 40,
+        "blocks": 8,
+        "steals": 15,
+        "possessions": 156,
+        "trueShooting": 54.8,
+        "rating": 105.8,
+        "fieldGoals": {
+          "made": 60,
+          "attempted": 133,
+          "pct": 45.1
+        },
+        "twoPointFieldGoals": {
+          "made": 44,
+          "attempted": 81,
+          "pct": 54.3
+        },
+        "threePointFieldGoals": {
+          "made": 16,
+          "attempted": 52,
+          "pct": 30.8
+        },
+        "freeThrows": {
+          "made": 29,
+          "attempted": 40,
+          "pct": 72.5
+        },
+        "rebounds": {
+          "offensive": 27,
+          "defensive": 56,
+          "total": 83
+        },
+        "turnovers": {
+          "total": 31,
+          "teamTotal": 1
+        },
+        "fouls": {
+          "total": 39,
+          "technical": 1,
+          "flagrant": 0
+        },
+        "points": {
+          "total": 165,
+          "inPaint": 82,
+          "offTurnovers": 32,
+          "fastBreak": 42
+        },
+        "fourFactors": {
+          "effectiveFieldGoalPct": 51.1,
+          "turnoverRatio": 0.2,
+          "offensiveReboundPct": 32.5,
+          "freeThrowRate": 30.1
+        }
+      },
+      "gameStats": [
+        {
+          "gameId": 374600,
+          "season": 2027,
+          "seasonLabel": "20262027",
+          "seasonType": "regular",
+          "tournament": null,
+          "startDate": "2026-11-04T01:00:00.000Z",
+          "startTimeTbd": false,
+          "teamId": 193,
+          "team": "New Orleans",
+          "conference": "Southland",
+          "teamSeed": null,
+          "opponentId": 136,
+          "opponent": "LSU",
+          "opponentConference": "SEC",
+          "opponentSeed": null,
+          "neutralSite": false,
+          "isHome": false,
+          "conferenceGame": false,
+          "gameType": "STD",
+          "notes": null,
+          "gameMinutes": 40,
+          "pace": 81.5,
+          "teamStats": {
+            "possessions": 81,
+            "assists": 4,
+            "steals": 7,
+            "blocks": 4,
+            "trueShooting": 36.7,
+            "rating": 70.4,
+            "gameScore": 20.69999999999999,
+            "points": {
+              "total": 57,
+              "byPeriod": [
+                17,
+                40
+              ],
+              "largestLead": 0,
+              "fastBreak": 14,
+              "inPaint": 20,
+              "offTurnovers": 14
+            },
+            "twoPointFieldGoals": {
+              "made": 11,
+              "attempted": 32,
+              "pct": 34.4
+            },
+            "threePointFieldGoals": {
+              "made": 4,
+              "attempted": 29,
+              "pct": 14
+            },
+            "freeThrows": {
+              "made": 23,
+              "attempted": 38,
+              "pct": 61
+            },
+            "fieldGoals": {
+              "made": 15,
+              "attempted": 61,
+              "pct": 25
+            },
+            "turnovers": {
+              "total": 16,
+              "teamTotal": 1
+            },
+            "rebounds": {
+              "offensive": 14,
+              "defensive": 24,
+              "total": 38
+            },
+            "fouls": {
+              "total": 18,
+              "technical": 0,
+              "flagrant": 0
+            },
+            "fourFactors": {
+              "effectiveFieldGoalPct": 27.9,
+              "freeThrowRate": 62.3,
+              "turnoverRatio": 19.8,
+              "offensiveReboundPct": 36.8
+            }
+          },
+          "opponentStats": {
+            "possessions": 82,
+            "assists": 24,
+            "steals": 11,
+            "blocks": 6,
+            "trueShooting": 59,
+            "rating": 122,
+            "gameScore": 92.69999999999999,
+            "points": {
+              "total": 100,
+              "byPeriod": [
+                53,
+                47
+              ],
+              "largestLead": 54,
+              "fastBreak": 30,
+              "inPaint": 60,
+              "offTurnovers": 25
+            },
+            "twoPointFieldGoals": {
+              "made": 32,
+              "attempted": 48,
+              "pct": 66.7
+            },
+            "threePointFieldGoals": {
+              "made": 7,
+              "attempted": 28,
+              "pct": 25
+            },
+            "freeThrows": {
+              "made": 15,
+              "attempted": 20,
+              "pct": 75
+            },
+            "fieldGoals": {
+              "made": 39,
+              "attempted": 76,
+              "pct": 51
+            },
+            "turnovers": {
+              "total": 12,
+              "teamTotal": 1
+            },
+            "rebounds": {
+              "offensive": 16,
+              "defensive": 37,
+              "total": 53
+            },
+            "fouls": {
+              "total": 25,
+              "technical": 1,
+              "flagrant": 0
+            },
+            "fourFactors": {
+              "effectiveFieldGoalPct": 55.9,
+              "freeThrowRate": 26.3,
+              "turnoverRatio": 14.6,
+              "offensiveReboundPct": 30.2
+            }
+          }
+        },
+        {
+          "gameId": 374721,
+          "season": 2027,
+          "seasonLabel": "20262027",
+          "seasonType": "regular",
+          "tournament": null,
+          "startDate": "2026-11-07T19:00:00.000Z",
+          "startTimeTbd": false,
+          "teamId": 193,
+          "team": "New Orleans",
+          "conference": "Southland",
+          "teamSeed": null,
+          "opponentId": 650,
+          "opponent": "Loyola New Orleans",
+          "opponentConference": null,
+          "opponentSeed": null,
+          "neutralSite": false,
+          "isHome": true,
+          "conferenceGame": false,
+          "gameType": "STD",
+          "notes": null,
+          "gameMinutes": 40,
+          "pace": 74.5,
+          "teamStats": {
+            "possessions": 75,
+            "assists": 16,
+            "steals": 7,
+            "blocks": 9,
+            "trueShooting": 58.4,
+            "rating": 120,
+            "gameScore": 77.60000000000001,
+            "points": {
+              "total": 90,
+              "byPeriod": [
+                42,
+                48
+              ],
+              "largestLead": 27,
+              "fastBreak": 13,
+              "inPaint": 58,
+              "offTurnovers": 20
+            },
+            "twoPointFieldGoals": {
+              "made": 32,
+              "attempted": 57,
+              "pct": 56.1
+            },
+            "threePointFieldGoals": {
+              "made": 4,
+              "attempted": 13,
+              "pct": 31
+            },
+            "freeThrows": {
+              "made": 14,
+              "attempted": 16,
+              "pct": 88
+            },
+            "fieldGoals": {
+              "made": 36,
+              "attempted": 70,
+              "pct": 51
+            },
+            "turnovers": {
+              "total": 14,
+              "teamTotal": 1
+            },
+            "rebounds": {
+              "offensive": 15,
+              "defensive": 28,
+              "total": 43
+            },
+            "fouls": {
+              "total": 16,
+              "technical": 0,
+              "flagrant": 0
+            },
+            "fourFactors": {
+              "effectiveFieldGoalPct": 54.3,
+              "freeThrowRate": 22.9,
+              "turnoverRatio": 18.7,
+              "offensiveReboundPct": 34.9
+            }
+          },
+          "opponentStats": {
+            "possessions": 74,
+            "assists": 16,
+            "steals": 4,
+            "blocks": 2,
+            "trueShooting": 49.4,
+            "rating": 87.8,
+            "gameScore": 36.500000000000014,
+            "points": {
+              "total": 65,
+              "byPeriod": [
+                31,
+                34
+              ],
+              "largestLead": 0,
+              "fastBreak": 12,
+              "inPaint": 22,
+              "offTurnovers": 7
+            },
+            "twoPointFieldGoals": {
+              "made": 12,
+              "attempted": 33,
+              "pct": 36.4
+            },
+            "threePointFieldGoals": {
+              "made": 9,
+              "attempted": 24,
+              "pct": 38
+            },
+            "freeThrows": {
+              "made": 14,
+              "attempted": 20,
+              "pct": 70
+            },
+            "fieldGoals": {
+              "made": 21,
+              "attempted": 57,
+              "pct": 37
+            },
+            "turnovers": {
+              "total": 19,
+              "teamTotal": 0
+            },
+            "rebounds": {
+              "offensive": 11,
+              "defensive": 19,
+              "total": 30
+            },
+            "fouls": {
+              "total": 14,
+              "technical": 0,
+              "flagrant": 0
+            },
+            "fourFactors": {
+              "effectiveFieldGoalPct": 44.7,
+              "freeThrowRate": 35.1,
+              "turnoverRatio": 25.7,
+              "offensiveReboundPct": 36.7
+            }
+          }
+        }
+      ],
+      "adjusted": null,
+      "srsRating": null,
+      "eloRating": null,
+      "sosRating": null
+    },
+    {
       "teamId": 194,
       "team": "Niagara",
       "conference": "Metro",
@@ -129107,6 +129521,564 @@
       "sosRating": null
     },
     {
+      "teamId": 280,
+      "team": "St. Thomas-Minnesota",
+      "conference": "Summit",
+      "season": 2027,
+      "seasonLabel": "20262027",
+      "games": 3,
+      "wins": 1,
+      "losses": 2,
+      "totalMinutes": 120,
+      "pace": 66.7,
+      "teamStats": {
+        "assists": 39,
+        "blocks": 8,
+        "steals": 13,
+        "possessions": 201,
+        "trueShooting": 58.1,
+        "rating": 107.5,
+        "fieldGoals": {
+          "made": 66,
+          "attempted": 156,
+          "pct": 42.3
+        },
+        "twoPointFieldGoals": {
+          "made": 39,
+          "attempted": 75,
+          "pct": 52
+        },
+        "threePointFieldGoals": {
+          "made": 27,
+          "attempted": 81,
+          "pct": 33.3
+        },
+        "freeThrows": {
+          "made": 57,
+          "attempted": 68,
+          "pct": 83.8
+        },
+        "rebounds": {
+          "offensive": 19,
+          "defensive": 71,
+          "total": 90
+        },
+        "turnovers": {
+          "total": 31,
+          "teamTotal": 2
+        },
+        "fouls": {
+          "total": 54,
+          "technical": 0,
+          "flagrant": 0
+        },
+        "points": {
+          "total": 216,
+          "inPaint": 78,
+          "offTurnovers": 27,
+          "fastBreak": 21
+        },
+        "fourFactors": {
+          "effectiveFieldGoalPct": 51,
+          "turnoverRatio": 0.15,
+          "offensiveReboundPct": 21.1,
+          "freeThrowRate": 43.6
+        }
+      },
+      "opponentStats": {
+        "assists": 46,
+        "blocks": 10,
+        "steals": 18,
+        "possessions": 199,
+        "trueShooting": 55.1,
+        "rating": 115.6,
+        "fieldGoals": {
+          "made": 76,
+          "attempted": 180,
+          "pct": 42.2
+        },
+        "twoPointFieldGoals": {
+          "made": 49,
+          "attempted": 87,
+          "pct": 56.3
+        },
+        "threePointFieldGoals": {
+          "made": 27,
+          "attempted": 93,
+          "pct": 29
+        },
+        "freeThrows": {
+          "made": 51,
+          "attempted": 65,
+          "pct": 78.5
+        },
+        "rebounds": {
+          "offensive": 39,
+          "defensive": 78,
+          "total": 117
+        },
+        "turnovers": {
+          "total": 30,
+          "teamTotal": 2
+        },
+        "fouls": {
+          "total": 59,
+          "technical": 0,
+          "flagrant": 0
+        },
+        "points": {
+          "total": 230,
+          "inPaint": 88,
+          "offTurnovers": 42,
+          "fastBreak": 43
+        },
+        "fourFactors": {
+          "effectiveFieldGoalPct": 49.7,
+          "turnoverRatio": 0.15,
+          "offensiveReboundPct": 33.3,
+          "freeThrowRate": 36.1
+        }
+      },
+      "gameStats": [
+        {
+          "gameId": 374529,
+          "season": 2027,
+          "seasonLabel": "20262027",
+          "seasonType": "regular",
+          "tournament": null,
+          "startDate": "2026-11-03T00:00:00.000Z",
+          "startTimeTbd": false,
+          "teamId": 280,
+          "team": "St. Thomas-Minnesota",
+          "conference": "Summit",
+          "teamSeed": null,
+          "opponentId": 233,
+          "opponent": "Presbyterian",
+          "opponentConference": "Big South",
+          "opponentSeed": null,
+          "neutralSite": false,
+          "isHome": false,
+          "conferenceGame": false,
+          "gameType": "STD",
+          "notes": null,
+          "gameMinutes": 40,
+          "pace": 69,
+          "teamStats": {
+            "possessions": 69,
+            "assists": 16,
+            "steals": 4,
+            "blocks": 1,
+            "trueShooting": 72.2,
+            "rating": 126.1,
+            "gameScore": 69.40000000000002,
+            "points": {
+              "total": 87,
+              "byPeriod": [
+                38,
+                49
+              ],
+              "largestLead": 13,
+              "fastBreak": 11,
+              "inPaint": 32,
+              "offTurnovers": 13
+            },
+            "twoPointFieldGoals": {
+              "made": 16,
+              "attempted": 27,
+              "pct": 59.3
+            },
+            "threePointFieldGoals": {
+              "made": 12,
+              "attempted": 24,
+              "pct": 50
+            },
+            "freeThrows": {
+              "made": 19,
+              "attempted": 21,
+              "pct": 90
+            },
+            "fieldGoals": {
+              "made": 28,
+              "attempted": 51,
+              "pct": 55
+            },
+            "turnovers": {
+              "total": 11,
+              "teamTotal": 2
+            },
+            "rebounds": {
+              "offensive": 4,
+              "defensive": 24,
+              "total": 28
+            },
+            "fouls": {
+              "total": 18,
+              "technical": 0,
+              "flagrant": 0
+            },
+            "fourFactors": {
+              "effectiveFieldGoalPct": 66.7,
+              "freeThrowRate": 41.2,
+              "turnoverRatio": 15.9,
+              "offensiveReboundPct": 14.3
+            }
+          },
+          "opponentStats": {
+            "possessions": 69,
+            "assists": 12,
+            "steals": 5,
+            "blocks": 4,
+            "trueShooting": 54.9,
+            "rating": 113,
+            "gameScore": 55.499999999999986,
+            "points": {
+              "total": 78,
+              "byPeriod": [
+                36,
+                42
+              ],
+              "largestLead": 4,
+              "fastBreak": 19,
+              "inPaint": 34,
+              "offTurnovers": 13
+            },
+            "twoPointFieldGoals": {
+              "made": 20,
+              "attempted": 32,
+              "pct": 62.5
+            },
+            "threePointFieldGoals": {
+              "made": 7,
+              "attempted": 28,
+              "pct": 25
+            },
+            "freeThrows": {
+              "made": 17,
+              "attempted": 25,
+              "pct": 68
+            },
+            "fieldGoals": {
+              "made": 27,
+              "attempted": 60,
+              "pct": 45
+            },
+            "turnovers": {
+              "total": 10,
+              "teamTotal": 0
+            },
+            "rebounds": {
+              "offensive": 11,
+              "defensive": 20,
+              "total": 31
+            },
+            "fouls": {
+              "total": 20,
+              "technical": 0,
+              "flagrant": 0
+            },
+            "fourFactors": {
+              "effectiveFieldGoalPct": 50.8,
+              "freeThrowRate": 41.7,
+              "turnoverRatio": 14.5,
+              "offensiveReboundPct": 35.5
+            }
+          }
+        },
+        {
+          "gameId": 372696,
+          "season": 2027,
+          "seasonLabel": "20262027",
+          "seasonType": "regular",
+          "tournament": null,
+          "startDate": "2026-11-07T01:00:00.000Z",
+          "startTimeTbd": false,
+          "teamId": 280,
+          "team": "St. Thomas-Minnesota",
+          "conference": "Summit",
+          "teamSeed": null,
+          "opponentId": 173,
+          "opponent": "Minnesota",
+          "opponentConference": "Big Ten",
+          "opponentSeed": null,
+          "neutralSite": false,
+          "isHome": false,
+          "conferenceGame": false,
+          "gameType": "STD",
+          "notes": null,
+          "gameMinutes": 40,
+          "pace": 63.5,
+          "teamStats": {
+            "possessions": 64,
+            "assists": 14,
+            "steals": 6,
+            "blocks": 4,
+            "trueShooting": 46.3,
+            "rating": 96.9,
+            "gameScore": 44.199999999999996,
+            "points": {
+              "total": 62,
+              "byPeriod": [
+                22,
+                40
+              ],
+              "largestLead": 4,
+              "fastBreak": 2,
+              "inPaint": 22,
+              "offTurnovers": 6
+            },
+            "twoPointFieldGoals": {
+              "made": 11,
+              "attempted": 23,
+              "pct": 47.8
+            },
+            "threePointFieldGoals": {
+              "made": 9,
+              "attempted": 36,
+              "pct": 25
+            },
+            "freeThrows": {
+              "made": 13,
+              "attempted": 18,
+              "pct": 72
+            },
+            "fieldGoals": {
+              "made": 20,
+              "attempted": 59,
+              "pct": 34
+            },
+            "turnovers": {
+              "total": 6,
+              "teamTotal": 0
+            },
+            "rebounds": {
+              "offensive": 9,
+              "defensive": 22,
+              "total": 31
+            },
+            "fouls": {
+              "total": 20,
+              "technical": 0,
+              "flagrant": 0
+            },
+            "fourFactors": {
+              "effectiveFieldGoalPct": 41.5,
+              "freeThrowRate": 30.5,
+              "turnoverRatio": 9.4,
+              "offensiveReboundPct": 29
+            }
+          },
+          "opponentStats": {
+            "possessions": 63,
+            "assists": 18,
+            "steals": 5,
+            "blocks": 1,
+            "trueShooting": 54.5,
+            "rating": 120.6,
+            "gameScore": 64.69999999999999,
+            "points": {
+              "total": 76,
+              "byPeriod": [
+                40,
+                36
+              ],
+              "largestLead": 21,
+              "fastBreak": 12,
+              "inPaint": 24,
+              "offTurnovers": 7
+            },
+            "twoPointFieldGoals": {
+              "made": 12,
+              "attempted": 25,
+              "pct": 48
+            },
+            "threePointFieldGoals": {
+              "made": 11,
+              "attempted": 35,
+              "pct": 31
+            },
+            "freeThrows": {
+              "made": 19,
+              "attempted": 22,
+              "pct": 86
+            },
+            "fieldGoals": {
+              "made": 23,
+              "attempted": 60,
+              "pct": 38
+            },
+            "turnovers": {
+              "total": 11,
+              "teamTotal": 1
+            },
+            "rebounds": {
+              "offensive": 17,
+              "defensive": 33,
+              "total": 50
+            },
+            "fouls": {
+              "total": 16,
+              "technical": 0,
+              "flagrant": 0
+            },
+            "fourFactors": {
+              "effectiveFieldGoalPct": 47.5,
+              "freeThrowRate": 36.7,
+              "turnoverRatio": 17.5,
+              "offensiveReboundPct": 34
+            }
+          }
+        },
+        {
+          "gameId": 374778,
+          "season": 2027,
+          "seasonLabel": "20262027",
+          "seasonType": "regular",
+          "tournament": null,
+          "startDate": "2026-11-08T19:00:00.000Z",
+          "startTimeTbd": false,
+          "teamId": 280,
+          "team": "St. Thomas-Minnesota",
+          "conference": "Summit",
+          "teamSeed": null,
+          "opponentId": 105,
+          "opponent": "Green Bay",
+          "opponentConference": "Horizon",
+          "opponentSeed": null,
+          "neutralSite": false,
+          "isHome": true,
+          "conferenceGame": false,
+          "gameType": "STD",
+          "notes": null,
+          "gameMinutes": 40,
+          "pace": 67.5,
+          "teamStats": {
+            "possessions": 68,
+            "assists": 9,
+            "steals": 3,
+            "blocks": 3,
+            "trueShooting": 57,
+            "rating": 98.5,
+            "gameScore": 43.10000000000001,
+            "points": {
+              "total": 67,
+              "byPeriod": [
+                33,
+                34
+              ],
+              "largestLead": 8,
+              "fastBreak": 8,
+              "inPaint": 24,
+              "offTurnovers": 8
+            },
+            "twoPointFieldGoals": {
+              "made": 12,
+              "attempted": 25,
+              "pct": 48
+            },
+            "threePointFieldGoals": {
+              "made": 6,
+              "attempted": 21,
+              "pct": 29
+            },
+            "freeThrows": {
+              "made": 25,
+              "attempted": 29,
+              "pct": 86
+            },
+            "fieldGoals": {
+              "made": 18,
+              "attempted": 46,
+              "pct": 39
+            },
+            "turnovers": {
+              "total": 14,
+              "teamTotal": 0
+            },
+            "rebounds": {
+              "offensive": 6,
+              "defensive": 25,
+              "total": 31
+            },
+            "fouls": {
+              "total": 16,
+              "technical": 0,
+              "flagrant": 0
+            },
+            "fourFactors": {
+              "effectiveFieldGoalPct": 45.7,
+              "freeThrowRate": 63,
+              "turnoverRatio": 20.6,
+              "offensiveReboundPct": 19.4
+            }
+          },
+          "opponentStats": {
+            "possessions": 67,
+            "assists": 16,
+            "steals": 8,
+            "blocks": 5,
+            "trueShooting": 55.9,
+            "rating": 113.4,
+            "gameScore": 62.900000000000006,
+            "points": {
+              "total": 76,
+              "byPeriod": [
+                33,
+                43
+              ],
+              "largestLead": 14,
+              "fastBreak": 12,
+              "inPaint": 30,
+              "offTurnovers": 22
+            },
+            "twoPointFieldGoals": {
+              "made": 17,
+              "attempted": 30,
+              "pct": 56.7
+            },
+            "threePointFieldGoals": {
+              "made": 9,
+              "attempted": 30,
+              "pct": 30
+            },
+            "freeThrows": {
+              "made": 15,
+              "attempted": 18,
+              "pct": 83
+            },
+            "fieldGoals": {
+              "made": 26,
+              "attempted": 60,
+              "pct": 43
+            },
+            "turnovers": {
+              "total": 9,
+              "teamTotal": 1
+            },
+            "rebounds": {
+              "offensive": 11,
+              "defensive": 25,
+              "total": 36
+            },
+            "fouls": {
+              "total": 23,
+              "technical": 0,
+              "flagrant": 0
+            },
+            "fourFactors": {
+              "effectiveFieldGoalPct": 50.8,
+              "freeThrowRate": 30,
+              "turnoverRatio": 13.4,
+              "offensiveReboundPct": 30.6
+            }
+          }
+        }
+      ],
+      "adjusted": null,
+      "srsRating": null,
+      "eloRating": null,
+      "sosRating": null
+    },
+    {
       "teamId": 281,
       "team": "Stanford",
       "conference": "ACC",
@@ -167286,21 +168258,6 @@
       "dataStatus": "no_games_yet"
     },
     {
-      "team": "LSU New Orleans",
-      "conference": null,
-      "wins": 0,
-      "losses": 0,
-      "games": 0,
-      "teamStats": null,
-      "opponentStats": null,
-      "adjusted": null,
-      "srsRating": null,
-      "elo": null,
-      "sosRating": null,
-      "gameStats": [],
-      "dataStatus": "no_games_yet"
-    },
-    {
       "team": "Maine",
       "conference": null,
       "wins": 0,
@@ -167332,21 +168289,6 @@
     },
     {
       "team": "New Hampshire",
-      "conference": null,
-      "wins": 0,
-      "losses": 0,
-      "games": 0,
-      "teamStats": null,
-      "opponentStats": null,
-      "adjusted": null,
-      "srsRating": null,
-      "elo": null,
-      "sosRating": null,
-      "gameStats": [],
-      "dataStatus": "no_games_yet"
-    },
-    {
-      "team": "St. Thomas",
       "conference": null,
       "wins": 0,
       "losses": 0,
