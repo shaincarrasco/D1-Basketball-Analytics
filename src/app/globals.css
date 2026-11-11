@@ -206,8 +206,8 @@ html[data-theme="light"] [class~="border-lime-300"], html[data-theme="light"] [c
 html[data-theme="light"] [class*="border-[#243044]"], html[data-theme="light"] [class*="border-[#263448]"], html[data-theme="light"] [class*="border-[#29364a]"] { border-color: var(--line) !important; }
 html[data-theme="light"] .text-lime-300 { color: var(--accent) !important; }
 .text-lime-300 { color: var(--accent) !important; }
-.border-lime-300, .hover\\:border-lime-300:hover, .hover\\:border-lime-300\\/60:hover { border-color: var(--accent) !important; }
-.hover\\:text-lime-300:hover { color: var(--accent) !important; }
+.border-lime-300, [class~="hover:border-lime-300"]:hover, [class~="hover:border-lime-300/60"]:hover { border-color: var(--accent) !important; }
+[class~="hover:text-lime-300"]:hover { color: var(--accent) !important; }
 @media (min-width: 1024px) {
   .desktop-sidebar { display: block; }
   .app-main { margin-left: 252px; }
