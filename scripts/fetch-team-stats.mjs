@@ -19,6 +19,26 @@ async function fetchRows(endpoint) {
   const url = new URL("https://api.collegebasketballdata.com" + path);
   url.searchParams.set("season", String(season));
   if (name === "season" || name === "gameStats") url.searchParams.set("seasonType", "regular");
+  if (name === "gameStats") {
+    const windows = [
+      ["early-season", "2026-08-01T00:00:00Z", "2026-12-31T23:59:59Z"],
+      ["late-season", "2027-01-01T00:00:00Z", "2027-08-01T00:00:00Z"],
+    ];
+    const batches = await Promise.all(windows.map(async ([label, startDateRange, endDateRange]) => {
+      const batchUrl = new URL("https://api.collegebasketballdata.com" + path);
+      batchUrl.searchParams.set("season", String(season));
+      batchUrl.searchParams.set("seasonType", "regular");
+      batchUrl.searchParams.set("startDateRange", startDateRange);
+      batchUrl.searchParams.set("endDateRange", endDateRange);
+      const response = await fetch(batchUrl, { headers });
+      if (!response.ok) throw new Error("CBBD " + path + " " + label + " request failed with HTTP " + response.status + ".");
+      const rows = await response.json();
+      if (!Array.isArray(rows)) throw new Error("CBBD " + path + " " + label + " returned an unexpected payload.");
+      if (rows.length >= 3000) console.warn("[team-rankings] " + label + " game box scores reached the 3,000-row cap.");
+      return rows;
+    }));
+    return [...new Map(batches.flat().map(row => [String(row.gameId) + ":" + String(row.teamId), row])).values()];
+  }
   const response = await fetch(url, { headers });
   if (!response.ok) throw new Error("CBBD " + path + " request failed with HTTP " + response.status + ".");
   const rows = await response.json();
@@ -87,7 +107,7 @@ const payload = {
   status: teams.length ? "available" : "empty",
   sources: endpoints.map(([name, path]) => ({ name, endpoint: path })),
   warnings,
-  note: "Team season aggregates, provider ratings, and game-level team box scores are merged by provider team ID. Game-level coverage is limited to rows returned by the provider (up to 3,000 games per request). Missing values remain null.",
+  note: "Team season aggregates, provider ratings, and date-partitioned game-level team box scores are merged by provider team ID. Each game box-score request is capped at 3,000 rows; date partitions reduce truncation risk. Missing values remain null.",
   teams,
 };
 
