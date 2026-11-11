@@ -264,7 +264,7 @@ export default function NationalDirectory({ players = [], teamRecords = [], init
   const [directoryDirection, setDirectoryDirection] = useState<"asc" | "desc">("asc");
   const [statsSort, setStatsSort] = useState<keyof Player>("points");
   const [statsDirection, setStatsDirection] = useState<"asc" | "desc">("desc");
-  const [rankingMetric, setRankingMetric] = useState("netRating");
+  const [rankingMetric, setRankingMetric] = useState("netPer100");
   const [rankingDirection, setRankingDirection] = useState<"asc" | "desc">("desc");
   const [rosterSort, setRosterSort] = useState<"name" | "position" | "jersey">("name");
   useEffect(() => { if (initialQuery) setQuery(initialQuery); }, [initialQuery]);
