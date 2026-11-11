@@ -31,8 +31,12 @@ console.log(`Fetched ${rows.length} distinct game rows across ${windows.length} 
 const games = rows.flatMap((row) => {
   if (!row || !Number.isInteger(row.id) || typeof row.startDate !== "string" ||
       typeof row.homeTeam !== "string" || typeof row.awayTeam !== "string") return [];
-  const status = ["scheduled", "in_progress", "final", "postponed", "cancelled"].includes(row.status)
-    ? row.status : "scheduled";
+  const rawStatus = String(row.status ?? row.gameStatus ?? "").toLowerCase();
+  const status = rawStatus.includes("final") ? "final"
+    : rawStatus.includes("progress") || rawStatus.includes("live") ? "in_progress"
+    : rawStatus.includes("postpon") ? "postponed"
+    : rawStatus.includes("cancel") ? "cancelled"
+    : "scheduled";
   return [{
     id: String(row.id),
     date: row.startDate,
