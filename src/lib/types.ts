@@ -68,4 +68,9 @@ export type TeamSeasonRecord = {
   eloRating?: number | null;
   sosRating?: number | null;
   gameStats?: Array<Record<string, unknown>>;
+  powerRatings?: {
+    rank: number | null; adjO: number; adjD: number; adjEM: number; tempo: number;
+    sos: number | null; games: number; rawGames: number; reliability: number;
+    sample: string; model: string;
+  } | null;
 };
