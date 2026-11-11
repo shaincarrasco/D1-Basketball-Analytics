@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Activity, ArrowDownUp, ArrowRight, CalendarDays,
   ChevronRight, CircleHelp, Clock3, Database, Gauge, Home,
@@ -66,6 +66,7 @@ export default function HomePage() {
   const [theme, setTheme] = useState<"dark" | "light">("dark");
   const [mobileOpen, setMobileOpen] = useState(false);
   const [query, setQuery] = useState("");
+  const searchInputRef = useRef<HTMLInputElement>(null);
   const [playerSort, setPlayerSort] = useState<keyof Player>("points");
   const [direction, setDirection] = useState<"asc" | "desc">("desc");
   const [gameStatus, setGameStatus] = useState("all");
@@ -80,6 +81,16 @@ export default function HomePage() {
   useEffect(() => {
     const saved = window.localStorage.getItem("d1-hoops-theme");
     if (saved === "light" || saved === "dark") setTheme(saved);
+  }, []);
+  useEffect(() => {
+    const onShortcut = (event: KeyboardEvent) => {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+        event.preventDefault();
+        searchInputRef.current?.focus();
+      }
+    };
+    window.addEventListener("keydown", onShortcut);
+    return () => window.removeEventListener("keydown", onShortcut);
   }, []);
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
@@ -101,7 +112,12 @@ export default function HomePage() {
   }).sort((a,b) => direction === "asc" ? a.date.localeCompare(b.date) : b.date.localeCompare(a.date)), [games, query, gameStatus, direction]);
   const leaders = useMemo(() => [...players].filter(p => p.points != null).sort((a,b) => (b.points ?? -Infinity) - (a.points ?? -Infinity)).slice(0,8), [players]);
   const topTeams = useMemo(() => [...teams].filter(t => t.adjusted?.netRating != null).sort((a,b) => (b.adjusted?.netRating ?? -Infinity) - (a.adjusted?.netRating ?? -Infinity)).slice(0,8), [teams]);
-  const latestGames = useMemo(() => [...games].sort((a,b) => b.date.localeCompare(a.date)).slice(0,6), [games]);
+  const latestGames = useMemo(() => {
+    const now = Date.now();
+    const upcoming = games.filter(game => new Date(game.date).getTime() >= now).sort((a,b) => a.date.localeCompare(b.date));
+    const recent = games.filter(game => new Date(game.date).getTime() < now).sort((a,b) => b.date.localeCompare(a.date));
+    return (upcoming.length ? upcoming : recent).slice(0,6);
+  }, [games]);
   const feedReady = [playerFeed, teamFeed, gameFeed].filter(f => f.status === "ready").length;
   const changeSection = (next: Section) => { setSection(next); setQuery(""); setSelectedPlayer(null); setSelectedGame(null); setMobileOpen(false); };
   const pageTitle = selectedPlayer?.name ?? (selectedGame ? `${selectedGame.awayTeam} at ${selectedGame.homeTeam}` : section);
@@ -112,7 +128,7 @@ export default function HomePage() {
     <nav className="space-y-1" aria-label="Main navigation">{NAV.map(({name,description,icon:Icon}) => <button key={name} onClick={() => changeSection(name)} aria-current={section === name ? "page" : undefined} className={`nav-item ${section === name ? "active" : ""}`}><Icon size={17}/><span className="min-w-0 flex-1 text-left"><span className="block text-[13px] font-medium">{name}</span><span className="mt-0.5 block truncate text-[10px] text-muted">{description}</span></span>{section === name && <span className="nav-indicator"/>}</button>)}</nav>
     <div className="mt-auto space-y-4"><div className="rounded-xl border p-3"><div className="flex items-center gap-2 text-xs font-semibold"><ShieldCheck size={14}/> Data integrity</div><div className="mt-3 grid grid-cols-3 gap-2 text-center">{[["Teams",teamFeed.status],["Players",playerFeed.status],["Games",gameFeed.status]].map(([label,status])=><div key={label}><div className={`status-dot ${status === "ready" ? "good" : status === "error" ? "bad" : ""}`}/><div className="mt-1 text-[10px] text-muted">{label}</div></div>)}</div></div><div className="px-3 text-[10px] text-muted">2026–27 MEN'S DIVISION I</div></div>
   </div>;
-  const SearchBar = () => <label className="search-field"><Search size={16}/><input value={query} onChange={e => setQuery(e.target.value)} placeholder={section === "Players" ? "Search player, team or conference" : "Search teams, matchups, venues…"}/>{query && <button type="button" onClick={() => setQuery("")} aria-label="Clear search"><X size={14}/></button>}<kbd>⌘ K</kbd></label>;
+  const SearchBar = () => <label className="search-field"><Search size={16}/><input ref={searchInputRef} value={query} onChange={e => setQuery(e.target.value)} placeholder={section === "Players" ? "Search player, team or conference" : "Search teams, matchups, venues…"}/>{query && <button type="button" onClick={() => setQuery("")} aria-label="Clear search"><X size={14}/></button>}<kbd>⌘ K</kbd></label>;
   return <main className="app-shell">
     <aside className="desktop-sidebar"><Sidebar/></aside>
     {mobileOpen && <div className="mobile-scrim" onClick={() => setMobileOpen(false)}><aside className="mobile-sidebar" onClick={e => e.stopPropagation()}><div className="mb-5 flex justify-end"><button onClick={() => setMobileOpen(false)} aria-label="Close navigation"><X/></button></div><Sidebar/></aside></div>}
@@ -145,7 +161,7 @@ export default function HomePage() {
           {selectedPlayer ? <><button className="back-link" onClick={() => setSelectedPlayer(null)}>← All players</button><div className="profile-hero"><div className="eyebrow">Player profile · 2026–27 season</div><h1>{selectedPlayer.name}</h1><p>{selectedPlayer.teamName} · {selectedPlayer.position || "Position not supplied"} · {selectedPlayer.games ?? "—"} games</p><div className="profile-kpis">{[["PTS/G",selectedPlayer.points],["REB/G",selectedPlayer.rebounds],["AST/G",selectedPlayer.assists],["MPG",selectedPlayer.minutes],["USG%",selectedPlayer.usage],["eFG%",selectedPlayer.efg],["TS%",selectedPlayer.ts],["PORPAG",selectedPlayer.impact]].map(([label,value])=><div key={label}><small>{label}</small><b>{number(value as number | null)}</b></div>)}</div></div><section className="panel section-panel"><div className="section-heading"><h2>Complete provider stat record</h2><span className="text-xs text-muted">{flatten(selectedPlayer.sourceStats ?? selectedPlayer).length} source fields</span></div><div className="stat-grid">{flatten(selectedPlayer.sourceStats ?? selectedPlayer).map(stat=><div className="raw-stat" key={stat.label}><small>{stat.label}</small><b>{stat.value}</b></div>)}</div><p className="mt-4 text-xs text-muted">Raw values are preserved from the College Basketball Data provider. Missing source fields are not estimated.</p></section></> : <>
             <div className="section-title-row"><div><div className="eyebrow">Player discovery</div><h1>Players</h1><p>Search and sort the current-season player statistical universe.</p></div><div className="text-xs text-muted">{players.length.toLocaleString()} records · refreshed {playerFeed.updatedAt ? new Date(playerFeed.updatedAt).toLocaleDateString() : "—"}</div></div>
             <div className="toolbar"><SearchBar/><label className="control-label">Sort by<select value={String(playerSort)} onChange={e => setPlayerSort(e.target.value as keyof Player)}><option value="points">Points</option><option value="rebounds">Rebounds</option><option value="assists">Assists</option><option value="minutes">Minutes</option><option value="usage">Usage</option><option value="efg">eFG%</option><option value="ts">True shooting</option><option value="impact">PORPAG</option><option value="name">Name</option><option value="teamName">Team</option></select></label><button className="control-button" onClick={() => setDirection(v => v === "asc" ? "desc" : "asc")}><ArrowDownUp size={14}/> {direction === "desc" ? "High to low" : "Low to high"}</button></div>
-            {playerFeed.status === "loading" ? <EmptyState title="Loading player records" detail="Reading the published 2026–27 snapshot…"/> : playerFeed.status === "error" || playerFeed.status === "empty" ? <EmptyState title="Player feed unavailable" detail={playerFeed.note} retry={refresh}/> : <section className="panel table-panel"><div className="table-scroll"><table className="data-table min-w-[1050px]"><thead><tr>{["Player","Team","GP","MPG","PTS","REB","AST","STL","BLK","TOV","USG%","eFG%","TS%","PORPAG","ORtg","DRtg","Net","FT rate","AST/TO","WS"].map(label=><th key={label}>{label}</th>)}</tr></thead><tbody>{filteredPlayers.map(player=><tr key={player.id} onClick={() => setSelectedPlayer(player)} tabIndex={0} onKeyDown={e => { if (e.key === "Enter" || e.key === " ") setSelectedPlayer(player); }}><td><b className="text-link">{player.name}</b><small>{player.position || "Position —"}</small></td><td>{player.teamName}</td><td>{player.games ?? "—"}</td><td>{number(player.minutes)}</td><td>{number(player.points)}</td><td>{number(player.rebounds)}</td><td>{number(player.assists)}</td><td>{number(player.steals)}</td><td>{number(player.blocks)}</td><td>{number(player.turnovers)}</td><td>{number(player.usage)}</td><td>{number(player.efg)}</td><td>{number(player.ts)}</td><td>{number(player.impact,2)}</td><td>{number(player.offensiveRating)}</td><td>{number(player.defensiveRating)}</td><td>{number(player.netRating)}</td><td>{number(player.freeThrowRate,3)}</td><td>{number(player.assistsTurnoverRatio,2)}</td><td>{number(player.winShares?.total,2)}</td></tr>)}</tbody></table></div><div className="table-footer">Showing {filteredPlayers.length.toLocaleString()} of {players.length.toLocaleString()} players · select a row to inspect all source fields</div></section>}
+            {playerFeed.status === "loading" ? <EmptyState title="Loading player records" detail="Reading the published 2026–27 snapshot…"/> : playerFeed.status === "error" || playerFeed.status === "empty" ? <EmptyState title="Player feed unavailable" detail={playerFeed.note} retry={refresh}/> : <section className="panel table-panel"><div className="table-scroll"><table className="data-table min-w-[1050px]"><thead><tr>{["Player","Team","GP","MPG","PTS","REB","AST","STL","BLK","TOV","USG%","FG%","2P%","3P%","FT%","eFG%","TS%","PORPAG","ORtg","DRtg","Net","FT rate","OREB%","AST/TO","WS"].map(label=><th key={label}>{label}</th>)}</tr></thead><tbody>{filteredPlayers.map(player=><tr key={player.id} onClick={() => setSelectedPlayer(player)} tabIndex={0} onKeyDown={e => { if (e.key === "Enter" || e.key === " ") setSelectedPlayer(player); }}><td><b className="text-link">{player.name}</b><small>{player.position || "Position —"}</small></td><td>{player.teamName}</td><td>{player.games ?? "—"}</td><td>{number(player.minutes)}</td><td>{number(player.points)}</td><td>{number(player.rebounds)}</td><td>{number(player.assists)}</td><td>{number(player.steals)}</td><td>{number(player.blocks)}</td><td>{number(player.turnovers)}</td><td>{number(player.usage)}</td><td>{number(player.fieldGoals?.pct)}</td><td>{number(player.twoPointFieldGoals?.pct)}</td><td>{number(player.threePointFieldGoals?.pct)}</td><td>{number(player.freeThrows?.pct)}</td><td>{number(player.efg)}</td><td>{number(player.ts)}</td><td>{number(player.impact,2)}</td><td>{number(player.offensiveRating)}</td><td>{number(player.defensiveRating)}</td><td>{number(player.netRating)}</td><td>{number(player.freeThrowRate,3)}</td><td>{number(player.offensiveReboundPct)}</td><td>{number(player.assistsTurnoverRatio,2)}</td><td>{number(player.winShares?.total,2)}</td></tr>)}</tbody></table></div><div className="table-footer">Showing {filteredPlayers.length.toLocaleString()} of {players.length.toLocaleString()} players · select a row to inspect all source fields</div></section>}
           </>}
         </>}
         {section === "Games" && <>
