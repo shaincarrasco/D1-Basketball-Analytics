@@ -257,6 +257,8 @@ export default function NationalDirectory({ players = [], teamRecords = [], init
   const [rosterError, setRosterError] = useState("");
   const [player, setPlayer] = useState<EspnAthlete | null>(null);
   const [selectedStatsPlayer, setSelectedStatsPlayer] = useState<Player | null>(null);
+  const [selectedStatsPlayerDetails, setSelectedStatsPlayerDetails] = useState<Record<string, unknown> | null>(null);
+  const [statsDetailStatus, setStatsDetailStatus] = useState<"idle" | "loading" | "ready" | "error">("idle");
   const [compareIds, setCompareIds] = useState<string[]>([]);
   const [directorySort, setDirectorySort] = useState<"name" | "location">("name");
   const [directoryDirection, setDirectoryDirection] = useState<"asc" | "desc">("asc");
@@ -266,6 +268,23 @@ export default function NationalDirectory({ players = [], teamRecords = [], init
   const [rankingDirection, setRankingDirection] = useState<"asc" | "desc">("desc");
   const [rosterSort, setRosterSort] = useState<"name" | "position" | "jersey">("name");
   useEffect(() => { if (initialQuery) setQuery(initialQuery); }, [initialQuery]);
+  useEffect(() => {
+    if (!selectedStatsPlayer) { setSelectedStatsPlayerDetails(null); setStatsDetailStatus("idle"); return; }
+    const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+    const controller = new AbortController();
+    setSelectedStatsPlayerDetails(null);
+    setStatsDetailStatus("loading");
+    fetch(`${basePath}/data/player-details-2027/${selectedStatsPlayer.detailGroup || "unclassified"}.json`, { signal: controller.signal, cache: "no-store" })
+      .then(response => { if (!response.ok) throw new Error(`Player detail request failed (${response.status})`); return response.json(); })
+      .then(payload => {
+        const detail = Array.isArray(payload?.players) ? payload.players.find((entry: {id?:string}) => entry.id === selectedStatsPlayer.id) : null;
+        setSelectedStatsPlayerDetails(detail ?? null);
+        setStatsDetailStatus(detail ? "ready" : "error");
+      })
+      .catch(error => { if (error instanceof Error && error.name === "AbortError") return; setStatsDetailStatus("error"); });
+    return () => controller.abort();
+  }, [selectedStatsPlayer?.id, selectedStatsPlayer?.detailGroup]);
+
   const teamStats = useMemo(() => {
     if (!selected) return [];
     const candidates = [selected.name, selected.displayName].filter(Boolean).map((v) => normalizeTeam(v as string));
@@ -375,9 +394,9 @@ export default function NationalDirectory({ players = [], teamRecords = [], init
   if (selectedStatsPlayer && selected) return <div className="space-y-5">
     <button onClick={() => setSelectedStatsPlayer(null)} className="inline-flex items-center gap-2 rounded-lg border border-[#29364a] px-3 py-2 text-sm text-slate-300 hover:border-lime-300"><ArrowLeft size={15}/> Back to {selected.displayName || selected.name} stats</button>
     <div className="panel p-6"><div className="eyebrow">Complete provider stat record · 2026–27</div><h2 className="mt-2 text-3xl font-black">{selectedStatsPlayer.name}</h2><p className="mt-2 text-sm text-slate-400">{selectedStatsPlayer.teamName} · {selectedStatsPlayer.position || "Position unavailable"} · {selectedStatsPlayer.games ?? "—"} games</p></div>
-    <div className="panel p-5"><div className="mb-4 flex items-center justify-between"><h3 className="font-bold">All available season statistics</h3><span className="text-xs text-lime-300">{flattenStats(selectedStatsPlayer.sourceStats ?? selectedStatsPlayer).length} fields</span></div>
-      <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-3">{flattenStats(selectedStatsPlayer.sourceStats ?? selectedStatsPlayer).map(stat=><div key={stat.label} className="rounded-xl border border-[#263448] bg-[#0c1420] p-3"><div className="text-[10px] uppercase tracking-wider text-slate-500">{stat.label}</div><div className="mt-2 break-words text-sm font-semibold tabular-nums text-slate-100">{stat.value}</div></div>)}</div>
-      <p className="mt-4 text-xs text-slate-500">Values are shown as returned by College Basketball Data. Null or absent source values are labeled “Not supplied”; no values are fabricated.</p>
+    <div className="panel p-5"><div className="mb-4 flex items-center justify-between"><h3 className="font-bold">All available season statistics</h3><span className="text-xs text-lime-300">{statsDetailStatus === "ready" ? `${flattenStats({providerStats:selectedStatsPlayerDetails?.sourceStats,shootingProfile:selectedStatsPlayerDetails?.shootingProfile}).length} fields` : statsDetailStatus === "loading" ? "Loading…" : "Source unavailable"}</span></div>
+      {statsDetailStatus === "loading" ? <p className="py-8 text-sm text-slate-400">Loading complete provider statistics…</p> : statsDetailStatus === "error" || !selectedStatsPlayerDetails ? <p className="py-8 text-sm text-slate-400">Full provider detail could not be loaded. The player leaderboard values remain available.</p> : <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-3">{flattenStats({providerStats:selectedStatsPlayerDetails.sourceStats,shootingProfile:selectedStatsPlayerDetails.shootingProfile}).map(stat=><div key={stat.label} className="rounded-xl border border-[#263448] bg-[#0c1420] p-3"><div className="text-[10px] uppercase tracking-wider text-slate-500">{stat.label}</div><div className="mt-2 break-words text-sm font-semibold tabular-nums text-slate-100">{stat.value}</div></div>)}</div>}
+      <p className="mt-4 text-xs text-slate-500">Full provider data is loaded only when a player profile is opened. Null or absent source values are labeled “Not supplied”; no values are fabricated.</p>
     </div>
   </div>;
   if (player && selected) return <div className="space-y-5">
