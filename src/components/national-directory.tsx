@@ -350,7 +350,7 @@ export default function NationalDirectory({ players = [], teamRecords = [], init
   const filtered = useMemo(() => teams.filter(t => {
     const name = t.displayName || t.name || "";
     const teamConference = conferenceByTeam.get(normalizeTeam(name)) || "Conference unavailable";
-    return name.toLowerCase().includes(query.toLowerCase()) && (conference === "All conferences" || teamConference === conference);
+    return Boolean(conferenceByTeam.get(normalizeTeam(name))) && name.toLowerCase().includes(query.toLowerCase()) && (conference === "All conferences" || teamConference === conference);
   }).sort((a, b) => {
     const av = directorySort === "name" ? (a.displayName || a.name || "") : (a.location || "");
     const bv = directorySort === "name" ? (b.displayName || b.name || "") : (b.location || "");
