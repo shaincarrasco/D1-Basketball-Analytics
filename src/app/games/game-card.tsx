@@ -30,7 +30,8 @@ function Row({ g, side, which }: { g: Game; side: GameSide; which: "home" | "awa
   const w = winner(g);
   const final = isFinal(g), live = isLive(g);
   const lost = final && w != null && w !== which;
-  const showScore = (final || live) && side.score != null;
+  // A live game at 0–0 is a stale snapshot of tip-off; show no score rather than a fake one.
+  const showScore = (final || (live && ((g.home.score ?? 0) + (g.away.score ?? 0)) > 0)) && side.score != null;
   const proj = g.pred ? g.pred[which] : null;
   return (
     <div className="flex items-center gap-2.5">

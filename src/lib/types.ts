@@ -11,6 +11,8 @@ export type Venue = "H" | "A" | "N";
 
 export type TeamSummary = {
   id: string; slug: string; name: string; short: string; mascot: string | null; logo: string | null;
+  /** ESPN primary / alternate team colours (hex), when published. */
+  color: string | null; altColor: string | null;
   conf: string; confName: string; confSlug: string;
   w: number; l: number; cw: number; cl: number; streak: string | null;
   rank: number | null; adjEM: number | null; adjO: number | null; adjD: number | null; adjT: number | null; sos: number | null;
@@ -58,7 +60,7 @@ export type TeamDetail = {
 export type TeamPerGame = { pts: number | null; reb: number | null; ast: number | null; tov: number | null; stl: number | null; blk: number | null; paint: number | null; fastBreak: number | null };
 
 export type GameSide = {
-  id: string | null; slug: string | null; name: string; short: string | null; logo: string | null; conf: string | null;
+  id: string | null; slug: string | null; name: string; short: string | null; logo: string | null; color: string | null; conf: string | null;
   rank: number | null; adjEM: number | null; record: string | null; score: number | null; periods: number[] | null;
 };
 export type BoxLine = {
@@ -72,7 +74,7 @@ export type Game = {
   home: GameSide; away: GameSide;
   /** Pregame projection from the home side: wp = home win probability, margin = home − away. */
   pred: { wp: number; margin: number; home: number; away: number; tempo: number } | null;
-  /** 0–100: half team quality, half competitiveness. */
+  /** 0–100: 55% team quality (both teams' AdjEM percentiles), 45% projected closeness. */
   watch: number | null;
   /** Winner's pregame win probability when it was below 35%. */
   upset: number | null;

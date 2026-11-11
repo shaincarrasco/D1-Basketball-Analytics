@@ -41,7 +41,7 @@ export function heat(rank: number | null | undefined, total = 356): string | und
   const d = Math.abs(p - 0.5) * 2;
   if (d < 0.2) return undefined;
   const a = ((d - 0.2) / 0.8) * 0.32;
-  return p > 0.5 ? `rgba(92,255,178,${a.toFixed(3)})` : `rgba(255,92,122,${a.toFixed(3)})`;
+  return p > 0.5 ? `rgb(var(--good-rgb) / calc(${a.toFixed(3)} * var(--heat-k)))` : `rgb(var(--bad-rgb) / calc(${a.toFixed(3)} * var(--heat-k)))`;
 }
 /** Percentile (0–1, 1 = best) → heat background. */
 export const heatPct = (p: number | null | undefined) => (p == null ? undefined : heat(Math.round((1 - p) * 99) + 1, 100));

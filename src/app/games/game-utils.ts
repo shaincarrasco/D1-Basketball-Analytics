@@ -73,7 +73,7 @@ export function statusLabel(g: Game): string {
     const n = Math.max(g.home.periods?.length ?? 0, g.away.periods?.length ?? 0);
     return n > 2 ? `Final · ${n === 3 ? "OT" : `${n - 2}OT`}` : "Final";
   }
-  if (isLive(g)) return "Live";
+  if (isLive(g)) return "In progress";
   if (g.status !== "scheduled") return g.status.replace(/_/g, " ").replace(/^\w/, c => c.toUpperCase());
   return timeLabel(g.date);
 }

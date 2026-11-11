@@ -44,7 +44,7 @@ export default function Tonight() {
           <p className="mt-2 text-mute">
             {slate.data ? (
               <>
-                {games.length} games{live ? <> · <span className="text-hot">{live} live</span></> : null}
+                {games.length} games{live ? <> · <span className="text-hot">{live} in progress at last refresh</span></> : null}
                 {best && best.pred ? <> · best matchup by quality and closeness: <b className="text-ink">{best.away.name} {best.neutral ? "vs" : "at"} {best.home.name}</b></> : null}
               </>
             ) : "Loading the slate…"}
@@ -60,7 +60,7 @@ export default function Tonight() {
             <Link key={g.id} href={`/games/?d=${day}&g=${g.id}`} className="deck w-[82vw] max-w-[340px] shrink-0 snap-start p-4 hover:border-line2 sm:w-auto sm:max-w-none">
               <div className="mb-3 flex items-center justify-between text-xs text-mute">
                 <span className="flex items-center gap-2">
-                  {g.status === "in_progress" ? <><span className="live-dot" /><span className="text-hot">Live</span></> : g.status === "final" ? "Final" : <>{timeLabel(g.date)} · projected score</>}
+                  {g.status === "in_progress" ? <><span className="live-dot" /><span className="text-hot" title="Status as of the last data refresh">In progress</span></> : g.status === "final" ? "Final" : <>{timeLabel(g.date)} · projected score</>}
                   {g.neutral && <span>· neutral</span>}
                 </span>
                 {g.watch !== null && <span title="Watchability: team quality + projected closeness">Watch {g.watch}</span>}

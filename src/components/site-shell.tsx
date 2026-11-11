@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { BarChart3, CalendarDays, Home, Search, Swords, Users, Layers, BookOpen } from "lucide-react";
 import CommandSearch from "./command-search";
+import ThemeToggle from "./theme-toggle";
 
 const NAV = [
   { href: "/", label: "Home", icon: Home },
@@ -43,7 +44,7 @@ export default function SiteShell({ children, updated }: { children: React.React
       <header className="sticky top-0 z-40 border-b border-line bg-night/85 backdrop-blur-md">
         <div className="mx-auto flex h-14 max-w-[1440px] items-center gap-4 px-4 sm:px-6">
           <Link href="/" className="flex items-center gap-2" aria-label="D1 Hoops home">
-            <span className="relative grid h-7 w-7 place-items-center rounded-full bg-off shadow-[0_0_18px_rgba(255,122,26,.55)]" aria-hidden>
+            <span className="relative grid h-7 w-7 place-items-center rounded-full bg-off shadow-[0_0_18px_rgb(var(--off-rgb)/.45)]" aria-hidden>
               <svg viewBox="0 0 24 24" className="h-7 w-7" fill="none" stroke="#1a0a00" strokeWidth="1.4"><circle cx="12" cy="12" r="10.5" /><path d="M1.5 12h21M12 1.5v21M4.5 4.8c3 2.4 3 12 0 14.4M19.5 4.8c-3 2.4-3 12 0 14.4" /></svg>
             </span>
             <span className="font-display text-[1.55rem] font-black leading-none tracking-tight">D1 HOOPS</span>
@@ -63,6 +64,7 @@ export default function SiteShell({ children, updated }: { children: React.React
               <span className="hidden sm:inline">Search teams &amp; players</span>
               <kbd className="ml-2 hidden rounded border border-line2 px-1.5 text-[11px] text-dim md:inline">⌘K</kbd>
             </button>
+            <ThemeToggle />
           </div>
         </div>
       </header>

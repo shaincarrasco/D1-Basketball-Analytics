@@ -156,7 +156,7 @@ const teamSummaries = d1Teams.map(t => {
   const q = [1, 2, 3, 4].map(n => recordOf(log, x => x.quad === n));
   return {
     id, slug: slugById.get(id), name: t.team, short: dir?.abbreviation ?? t.team.slice(0, 4).toUpperCase(), mascot: dir?.name ?? null,
-    logo: dir?.logo ?? null, conf: t.conference, confName: confName(t.conference), confSlug: confSlug(t.conference),
+    logo: dir?.logo ?? null, color: dir?.color ?? null, altColor: dir?.altColor ?? null, conf: t.conference, confName: confName(t.conference), confSlug: confSlug(t.conference),
     w, l, cw, cl, streak,
     rank: p?.rank ?? null, adjEM: r(p?.adjEM, 2), adjO: r(p?.adjO), adjD: r(p?.adjD), adjT: r(p?.tempo), sos: r(p?.sos, 2),
     adjORank: p?.adjORank ?? null, adjDRank: p?.adjDRank ?? null, adjTRank: p?.tempoRank ?? null, sosRank: p?.sosRank ?? null,
@@ -280,7 +280,7 @@ const sideInfo = (g, side) => {
   const id = String(side === "home" ? g.homeTeamId : g.awayTeamId);
   const s = summaryById.get(id);
   return {
-    id: s ? id : null, slug: s?.slug ?? null, name: side === "home" ? g.homeTeam : g.awayTeam, short: s?.short ?? null, logo: s?.logo ?? null,
+    id: s ? id : null, slug: s?.slug ?? null, name: side === "home" ? g.homeTeam : g.awayTeam, short: s?.short ?? null, logo: s?.logo ?? null, color: s?.color ?? null,
     conf: s?.conf ?? null, rank: s?.rank ?? null, adjEM: s?.adjEM ?? null, record: s ? `${s.w}-${s.l}` : null,
     score: g.status === "scheduled" ? null : side === "home" ? g.homeScore : g.awayScore, periods: (side === "home" ? g.homePeriodPoints : g.awayPeriodPoints) ?? null,
   };

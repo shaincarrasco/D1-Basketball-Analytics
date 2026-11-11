@@ -164,7 +164,7 @@ function DaySummaryLine({ s, onOpen }: { s: ReturnType<typeof summarize>; onOpen
   return (
     <p className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-mute tnum">
       <span><b className="text-ink">{s.games}</b> games</span>
-      {s.live > 0 && <span className="flex items-center gap-1.5"><span className="live-dot" aria-hidden /><b className="text-hot">{s.live}</b> live</span>}
+      {s.live > 0 && <span className="flex items-center gap-1.5"><span className="live-dot" aria-hidden /><b className="text-hot">{s.live}</b> in progress</span>}
       <span><b className="text-ink">{s.finals}</b> final</span>
       {s.graded > 0 && (
         <span title="Finals where the pregame favorite won">Model <b className="text-ink">{s.correct}–{s.graded - s.correct}</b> ({Math.round((s.correct / s.graded) * 100)}%)</span>

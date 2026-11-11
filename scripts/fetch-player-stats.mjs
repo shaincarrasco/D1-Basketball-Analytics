@@ -119,7 +119,10 @@ try {
       abbreviation: team.abbreviation || "",
       location: team.location || "Other",
       conference: team.groups?.name || team.group?.name || team.conference?.name || null,
-      logo: team.logos?.[0]?.href || team.logo || "",
+      logo: team.logos?.find(l => !l.rel?.includes("dark"))?.href || team.logos?.[0]?.href || team.logo || "",
+      logoDark: team.logos?.find(l => l.rel?.includes("dark"))?.href || null,
+      color: team.color ? `#${team.color}` : null,
+      altColor: team.alternateColor ? `#${team.alternateColor}` : null,
     }));
   if (!teams.length) throw new Error("ESPN returned no recognizable team records");
   const directory = { provider: "ESPN", fetchedAt: new Date().toISOString(), count: teams.length, status: "available", teams };

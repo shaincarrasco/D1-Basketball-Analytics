@@ -68,14 +68,14 @@ export default function ConferencesPage() {
                   </Link>
                   <div className="relative h-full min-h-[30px] border-b border-line" role="img"
                     aria-label={`${c.name}: ${vals.length} teams from ${signed(vals[0])} to ${signed(vals[vals.length - 1])}, average ${signed(c.avgEM)}`}>
-                    {ticks.map(v => <span key={v} className="absolute inset-y-0 w-px" style={{ left: `${x(v)}%`, background: v === 0 ? "var(--line-2)" : "rgba(30,42,85,.55)" }} aria-hidden />)}
-                    {vals.length > 1 && <span className="absolute top-1/2 h-px -translate-y-1/2" style={{ background: "rgba(149,158,207,.35)", left: `${x(vals[0])}%`, width: `${x(vals[vals.length - 1]) - x(vals[0])}%` }} aria-hidden />}
+                    {ticks.map(v => <span key={v} className="absolute inset-y-0 w-px" style={{ left: `${x(v)}%`, background: v === 0 ? "var(--line-2)" : "var(--line)" }} aria-hidden />)}
+                    {vals.length > 1 && <span className="absolute top-1/2 h-px -translate-y-1/2" style={{ background: "rgb(var(--mute-rgb) / .35)", left: `${x(vals[0])}%`, width: `${x(vals[vals.length - 1]) - x(vals[0])}%` }} aria-hidden />}
                     {members.map(t => (
                       <span key={t!.id} title={`${t!.name} ${signed(t!.adjEM)}`} aria-hidden
                         className="absolute top-1/2 h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full border border-night"
                         style={{ left: `${x(t!.adjEM!)}%`, background: "var(--mute)", opacity: 0.85 }} />
                     ))}
-                    {c.avgEM !== null && <span className="absolute top-1/2 h-5 w-[3px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-ink shadow-[0_0_8px_rgba(238,241,255,.6)]" style={{ left: `${x(c.avgEM)}%` }} aria-hidden />}
+                    {c.avgEM !== null && <span className="absolute top-1/2 h-5 w-[3px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-ink shadow-[0_0_8px_rgb(var(--ink-rgb)/.4)]" style={{ left: `${x(c.avgEM)}%` }} aria-hidden />}
                   </div>
                 </div>
               );

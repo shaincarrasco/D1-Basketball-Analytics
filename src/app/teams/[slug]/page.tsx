@@ -35,7 +35,8 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
   if (!team) notFound();
   const detail = getTeamDetail(slug), meta = getMeta(), teams = getTeams();
   const total = meta.counts.ratedTeams;
-  const logos = Object.fromEntries(teams.map(t => [t.slug, t.logo]));
+  const oppSlugs = new Set(detail.games.map(g => g.oppSlug).filter(Boolean));
+  const logos = Object.fromEntries(teams.filter(t => oppSlugs.has(t.slug)).map(t => [t.slug, t.logo]));
   const o = team.off, d = team.def, or = team.offRanks ?? {}, dr = team.defRanks ?? {};
   const similar = comps(team, teams);
   const played = detail.games.filter(g => g.result);
@@ -43,7 +44,7 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
   return (
     <article>
       {/* Hero */}
-      <section className="deck relative mb-6 overflow-hidden p-5 sm:p-8">
+      <section className="deck team-accent team-hero relative mb-6 overflow-hidden p-5 sm:p-8" style={team.color ? ({ "--team": team.color } as React.CSSProperties) : undefined}>
         <div className="court-arc" aria-hidden />
         <div className="relative flex flex-wrap items-center gap-6">
           <TeamLogo src={team.logo} name={team.name} size={88} className="drop-shadow-[0_0_24px_rgba(255,255,255,.08)]" />
