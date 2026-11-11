@@ -346,8 +346,9 @@ export default function NationalDirectory({ players = [], teamRecords = [], init
 
   const rankedRecords = useMemo(() => teamRecords
     .map(record => ({ record, value: teamMetric(record, rankingMetric) }))
-    .filter((item): item is { record: TeamSeasonRecord; value: number } => item.value !== null)
     .sort((a, b) => {
+      if (a.value == null) return b.value == null ? a.record.team.localeCompare(b.record.team) : 1;
+      if (b.value == null) return -1;
       const comparison = rankingDirection === "asc" ? a.value - b.value : b.value - a.value;
       return comparison || a.record.team.localeCompare(b.record.team);
     }), [teamRecords, rankingMetric, rankingDirection]);
