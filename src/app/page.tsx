@@ -177,12 +177,14 @@ export default function HomePage() {
     ["Players", playerFeed.status === "error" ? "error" : playerFeed.status === "ready" || (overview?.playerCount ?? 0) > 0 ? "ready" : playerFeed.status],
     ["Games", gameFeed.status === "error" ? "error" : gameFeed.status === "ready" || (overview?.gameCount ?? 0) > 0 ? "ready" : gameFeed.status],
   ];
-  const Sidebar = () => <div className="flex h-full flex-col">
+  const Sidebar = () => (
+    <div className="flex h-full flex-col">
     <div className="mb-9 flex items-center gap-3 px-2"><div className="brand-mark"><Activity size={20}/></div><div><div className="text-[15px] font-bold tracking-tight">D1 Hoops</div><div className="text-[10px] uppercase tracking-[.17em] text-muted">Basketball intelligence</div></div></div>
     <div className="mb-3 px-3 text-[10px] font-semibold uppercase tracking-[.16em] text-muted">Workspace</div>
     <nav className="space-y-1" aria-label="Main navigation">{NAV.map(({name,description,icon:Icon}) => <button key={name} onClick={() => changeSection(name)} aria-current={section === name ? "page" : undefined} className={`nav-item ${section === name ? "active" : ""}`}><Icon size={17}/><span className="min-w-0 flex-1 text-left"><span className="block text-[13px] font-medium">{name}</span><span className="mt-0.5 block truncate text-[10px] text-muted">{description}</span></span>{section === name && <span className="nav-indicator"/>}</button>)}</nav>
     <div className="mt-auto space-y-4"><div className="rounded-xl border p-3"><div className="flex items-center gap-2 text-xs font-semibold"><ShieldCheck size={14}/> Data integrity</div><div className="mt-3 grid grid-cols-3 gap-2 text-center">{integrityStatuses.map(([label,status])=><div key={label}><div className={`status-dot ${status === "ready" ? "good" : status === "error" ? "bad" : ""}`}/><div className="mt-1 text-[10px] text-muted">{label}</div></div>)}</div></div><div className="px-3 text-[10px] text-muted">2026–27 MEN'S DIVISION I</div></div>
-  </div>;
+    </div>
+  );
   const SearchBar = () => <label className="search-field"><Search size={16}/><input ref={searchInputRef} value={query} onChange={e => setQuery(e.target.value)} placeholder={section === "Players" ? "Search player, team or conference" : "Search teams, matchups, venues…"}/>{query && <button type="button" onClick={() => setQuery("")} aria-label="Clear search"><X size={14}/></button>}<kbd>⌘ K</kbd></label>;
   return <main className="app-shell">
     <aside className="desktop-sidebar"><Sidebar/></aside>
