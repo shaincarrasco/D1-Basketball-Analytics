@@ -1,4 +1,4 @@
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { isD1Conference } from "./d1-conferences.mjs";
 
 const season = 2027;
@@ -102,8 +102,30 @@ const teams = [...byTeam.values()].map(team => {
 
 const allTeamCount = teams.length;
 const d1Teams = teams.filter(team => isD1Conference(team.conference));
-console.log("[team-rankings] Division I conference filter: " + d1Teams.length + " of " + allTeamCount + " provider team records match the canonical conference allowlist.");
-if (d1Teams.length < 300) console.warn("[team-rankings] Fewer than 300 team records matched the Division I conference allowlist; inspect conference labels.");
+const directoryPayload = JSON.parse(await readFile("public/data/team-directory.json", "utf8"));
+const directoryTeams = Array.isArray(directoryPayload.teams) ? directoryPayload.teams : [];
+const normalizeTeamName = value => String(value ?? "").toLowerCase().replace(/\b(the|university|college)\b/g, "").replace(/[^a-z0-9]/g, "");
+const providerTeamNames = new Set(d1Teams.map(team => normalizeTeamName(team.team)));
+const d1DirectoryTeams = directoryTeams.filter(team => isD1Conference(team.conference));
+const missingDirectoryTeams = d1DirectoryTeams.filter(team => !providerTeamNames.has(normalizeTeamName(team.location || team.displayName)));
+const placeholderTeams = missingDirectoryTeams.map(team => ({
+  team: team.location || team.displayName,
+  conference: team.conference,
+  wins: 0,
+  losses: 0,
+  games: 0,
+  teamStats: null,
+  opponentStats: null,
+  adjusted: null,
+  srsRating: null,
+  elo: null,
+  sosRating: null,
+  gameStats: [],
+  dataStatus: "no_games_yet",
+}));
+const completeD1Teams = [...d1Teams, ...placeholderTeams];
+console.log("[team-rankings] Division I conference filter: " + d1Teams.length + " provider rows + " + placeholderTeams.length + " directory teams with no stats = " + completeD1Teams.length + " D-I teams (" + d1DirectoryTeams.length + " directory entries matched).");
+if (completeD1Teams.length < 300) console.warn("[team-rankings] Fewer than 300 teams matched the Division I conference allowlist; inspect conference labels.");
 
 const gameRows = results.find(result => result.kind === "gameStats")?.rows ?? [];
 const gamesById = new Map();
@@ -148,18 +170,18 @@ const payload = {
   seasonLabel: "2026–27",
   seasonType: "regular",
   fetchedAt: new Date().toISOString(),
-  count: d1Teams.length,
-  status: d1Teams.length ? "available" : "empty",
+  count: completeD1Teams.length,
+  status: completeD1Teams.length ? "available" : "empty",
   sources: endpoints.map(([name, path]) => ({ name, endpoint: path })),
   warnings,
   note: "Team season aggregates, provider ratings, and date-partitioned game-level team box scores are merged by provider team ID. Each game box-score request is capped at 3,000 rows; date partitions reduce truncation risk. Missing values remain null.",
-  teams: d1Teams,
+  teams: completeD1Teams,
 };
 
 await mkdir("public/data", { recursive: true });
 await writeFile("public/data/team-season-2027.json", JSON.stringify(payload, null, 2) + "\n");
 await writeFile("public/data/game-team-boxscores-2027.json", JSON.stringify(gameBoxScorePayload, null, 2) + "\n");
-console.log("[team-rankings] Published " + d1Teams.length + " Division I team records for season " + season + ".");
+console.log("[team-rankings] Published " + completeD1Teams.length + " Division I team records for season " + season + ".");
 console.log("[team-rankings] Published " + gamesById.size + " game-level team box-score records.");
 if (!teams.length) {
   console.warn("[team-rankings] No team rows were returned. Verify CBBD season coverage, API access, and endpoint response.");
