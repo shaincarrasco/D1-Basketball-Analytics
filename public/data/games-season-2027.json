@@ -3,7 +3,7 @@
   "season": 2027,
   "seasonLabel": "2026–27",
   "seasonType": "regular",
-  "fetchedAt": "2026-11-11T01:14:44.722Z",
+  "fetchedAt": "2026-11-11T01:15:33.367Z",
   "count": 5919,
   "status": "available",
   "note": "Schedule, results and scores are taken from four date-partitioned CBBD regular-season game requests to avoid the 3,000-row endpoint cap. Game-level player or play-by-play detail is not inferred.",
