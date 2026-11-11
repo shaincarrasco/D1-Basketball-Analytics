@@ -1,4 +1,5 @@
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { mkdir, writeFile } from "node:fs/promises";
+import { isD1Conference } from "./d1-conferences.mjs";
 
 const season = 2027;
 const key = process.env.CBBD_API_KEY;
@@ -99,21 +100,15 @@ const teams = [...byTeam.values()].map(team => {
   };
 });
 
-const directoryPayload = JSON.parse(await readFile("public/data/team-directory.json", "utf8"));
-const directoryTeams = Array.isArray(directoryPayload.teams) ? directoryPayload.teams : [];
-if (directoryPayload.status !== "available" || !directoryTeams.length) throw new Error("A verified ESPN Division I team directory is required to filter team statistics.");
-const normalizeTeamName = value => String(value ?? "").toLowerCase().replace(/\b(the|university|college)\b/g, "").replace(/[^a-z0-9]/g, "");
-const d1TeamNames = new Set(directoryTeams.flatMap(team => [team.location, team.displayName].filter(Boolean).map(normalizeTeamName)));
-const isD1Team = name => d1TeamNames.has(normalizeTeamName(name));
 const allTeamCount = teams.length;
-const d1Teams = teams.filter(team => isD1Team(team.team));
-console.log("[team-rankings] Division I directory filter: " + d1Teams.length + " of " + allTeamCount + " provider team records match " + directoryTeams.length + " ESPN Division I programs.");
-if (d1Teams.length < 300) console.warn("[team-rankings] Fewer than 300 team records matched the Division I directory; inspect name aliases before trusting national coverage.");
+const d1Teams = teams.filter(team => isD1Conference(team.conference));
+console.log("[team-rankings] Division I conference filter: " + d1Teams.length + " of " + allTeamCount + " provider team records match the canonical conference allowlist.");
+if (d1Teams.length < 300) console.warn("[team-rankings] Fewer than 300 team records matched the Division I conference allowlist; inspect conference labels.");
 
 const gameRows = results.find(result => result.kind === "gameStats")?.rows ?? [];
 const gamesById = new Map();
 for (const row of gameRows) {
-  if (!row || !Number.isInteger(row.gameId) || typeof row.team !== "string" || !isD1Team(row.team)) continue;
+  if (!row || !Number.isInteger(row.gameId) || typeof row.team !== "string" || !isD1Conference(row.conference)) continue;
   const id = String(row.gameId);
   const game = gamesById.get(id) ?? {
     id,
