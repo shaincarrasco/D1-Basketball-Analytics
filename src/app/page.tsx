@@ -117,6 +117,16 @@ export default function HomePage() {
     return () => controller.abort();
   }, [selectedPlayer?.id, selectedPlayer?.detailGroup]);
   useEffect(() => {
+    const syncSection = () => {
+      const value = new URLSearchParams(window.location.search).get("section");
+      const match = NAV.find(item => item.name.toLowerCase() === value);
+      if (match) setSection(match.name);
+    };
+    syncSection();
+    window.addEventListener("popstate", syncSection);
+    return () => window.removeEventListener("popstate", syncSection);
+  }, []);
+  useEffect(() => {
     const saved = window.localStorage.getItem("d1-hoops-theme");
     if (saved === "light" || saved === "dark") setTheme(saved);
   }, []);
@@ -156,7 +166,7 @@ export default function HomePage() {
   const selectedGameBoxscore = gameBoxscoreFeed.items.find(game => game.id === selectedGame?.id);
   const activeFeeds = section === "Teams" ? [teamFeed, playerFeed] : section === "Players" ? [playerFeed] : section === "Games" ? [gameFeed] : section === "Overview" ? [overviewFeed] : [];
   const feedReady = activeFeeds.filter(feed => feed.status === "ready").length;
-  const changeSection = (next: Section) => { setSection(next); setQuery(""); setSelectedPlayer(null); setSelectedGame(null); setMobileOpen(false); if (next !== "Teams") setTeamSearchTerm(""); };
+  const changeSection = (next: Section) => { setSection(next); setQuery(""); setSelectedPlayer(null); setSelectedGame(null); setMobileOpen(false); setTeamSearchTerm(""); const url = new URL(window.location.href); url.searchParams.set("section", next.toLowerCase()); window.history.pushState({}, "", url); };
   const openTeamDirectory = (teamName: string) => { changeSection("Teams"); setTeamSearchTerm(teamName); };
   const openGame = (game: AppGame) => { changeSection("Games"); setSelectedGame(game); };
   const openPlayer = (player: Player | OverviewPlayer) => { changeSection("Players"); setSelectedPlayer(player as Player); };
