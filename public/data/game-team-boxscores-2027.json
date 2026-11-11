@@ -2,8 +2,8 @@
   "provider": "College Basketball Data",
   "season": 2027,
   "seasonLabel": "2026–27",
-  "fetchedAt": "2026-11-11T01:07:37.234Z",
-  "count": 519,
+  "fetchedAt": "2026-11-11T01:09:48.457Z",
+  "count": 517,
   "status": "available",
   "note": "Team box scores are grouped from the provider game-team endpoint. Only fields actually supplied by the provider are included.",
   "games": [
@@ -6101,85 +6101,6 @@
       ]
     },
     {
-      "id": "374810",
-      "date": "2026-11-09T23:00:00.000Z",
-      "neutralSite": false,
-      "conferenceGame": false,
-      "gameType": "STD",
-      "teams": [
-        {
-          "teamId": 317,
-          "team": "UMBC",
-          "conference": "Am. East",
-          "opponentId": 1011,
-          "opponent": "McDaniel",
-          "isHome": true,
-          "pace": 76.5,
-          "gameMinutes": 40,
-          "stats": {
-            "possessions": 77,
-            "assists": 21,
-            "steals": 8,
-            "blocks": 8,
-            "trueShooting": 54.9,
-            "rating": 118.2,
-            "gameScore": 86.10000000000001,
-            "points": {
-              "total": 91,
-              "byPeriod": [
-                51,
-                40
-              ],
-              "largestLead": 33,
-              "fastBreak": 17,
-              "inPaint": 28,
-              "offTurnovers": 9
-            },
-            "twoPointFieldGoals": {
-              "made": 18,
-              "attempted": 31,
-              "pct": 58.1
-            },
-            "threePointFieldGoals": {
-              "made": 15,
-              "attempted": 47,
-              "pct": 32
-            },
-            "freeThrows": {
-              "made": 10,
-              "attempted": 11,
-              "pct": 91
-            },
-            "fieldGoals": {
-              "made": 33,
-              "attempted": 78,
-              "pct": 42
-            },
-            "turnovers": {
-              "total": 10,
-              "teamTotal": 0
-            },
-            "rebounds": {
-              "offensive": 16,
-              "defensive": 38,
-              "total": 54
-            },
-            "fouls": {
-              "total": 10,
-              "technical": 0,
-              "flagrant": 0
-            },
-            "fourFactors": {
-              "effectiveFieldGoalPct": 51.9,
-              "freeThrowRate": 14.1,
-              "turnoverRatio": 13,
-              "offensiveReboundPct": 29.6
-            }
-          }
-        }
-      ]
-    },
-    {
       "id": "374806",
       "date": "2026-11-09T16:00:00.000Z",
       "neutralSite": false,
@@ -7760,155 +7681,6 @@
       ]
     },
     {
-      "id": "372728",
-      "date": "2026-11-08T21:00:00.000Z",
-      "neutralSite": false,
-      "conferenceGame": false,
-      "gameType": "STD",
-      "teams": [
-        {
-          "teamId": 24,
-          "team": "Binghamton",
-          "conference": "Am. East",
-          "opponentId": 243,
-          "opponent": "Rider",
-          "isHome": true,
-          "pace": 59.5,
-          "gameMinutes": 40,
-          "stats": {
-            "possessions": 60,
-            "assists": 18,
-            "steals": 4,
-            "blocks": 2,
-            "trueShooting": 59.3,
-            "rating": 125,
-            "gameScore": 64.6,
-            "points": {
-              "total": 75,
-              "byPeriod": [
-                42,
-                33
-              ],
-              "largestLead": 18,
-              "fastBreak": 15,
-              "inPaint": 44,
-              "offTurnovers": 11
-            },
-            "twoPointFieldGoals": {
-              "made": 24,
-              "attempted": 44,
-              "pct": 54.5
-            },
-            "threePointFieldGoals": {
-              "made": 6,
-              "attempted": 14,
-              "pct": 43
-            },
-            "freeThrows": {
-              "made": 9,
-              "attempted": 12,
-              "pct": 75
-            },
-            "fieldGoals": {
-              "made": 30,
-              "attempted": 58,
-              "pct": 52
-            },
-            "turnovers": {
-              "total": 9,
-              "teamTotal": 0
-            },
-            "rebounds": {
-              "offensive": 12,
-              "defensive": 24,
-              "total": 36
-            },
-            "fouls": {
-              "total": 13,
-              "technical": 0,
-              "flagrant": 0
-            },
-            "fourFactors": {
-              "effectiveFieldGoalPct": 56.9,
-              "freeThrowRate": 20.7,
-              "turnoverRatio": 15,
-              "offensiveReboundPct": 33.3
-            }
-          }
-        },
-        {
-          "teamId": 243,
-          "team": "Rider",
-          "conference": "Metro",
-          "opponentId": 24,
-          "opponent": "Binghamton",
-          "isHome": false,
-          "pace": 59.5,
-          "gameMinutes": 40,
-          "stats": {
-            "possessions": 59,
-            "assists": 8,
-            "steals": 5,
-            "blocks": 4,
-            "trueShooting": 47.8,
-            "rating": 106.8,
-            "gameScore": 44.49999999999999,
-            "points": {
-              "total": 63,
-              "byPeriod": [
-                32,
-                31
-              ],
-              "largestLead": 2,
-              "fastBreak": 0,
-              "inPaint": 30,
-              "offTurnovers": 12
-            },
-            "twoPointFieldGoals": {
-              "made": 18,
-              "attempted": 37,
-              "pct": 48.6
-            },
-            "threePointFieldGoals": {
-              "made": 6,
-              "attempted": 24,
-              "pct": 25
-            },
-            "freeThrows": {
-              "made": 9,
-              "attempted": 11,
-              "pct": 82
-            },
-            "fieldGoals": {
-              "made": 24,
-              "attempted": 61,
-              "pct": 39
-            },
-            "turnovers": {
-              "total": 7,
-              "teamTotal": 1
-            },
-            "rebounds": {
-              "offensive": 13,
-              "defensive": 17,
-              "total": 30
-            },
-            "fouls": {
-              "total": 13,
-              "technical": 0,
-              "flagrant": 0
-            },
-            "fourFactors": {
-              "effectiveFieldGoalPct": 44.3,
-              "freeThrowRate": 18,
-              "turnoverRatio": 11.9,
-              "offensiveReboundPct": 43.3
-            }
-          }
-        }
-      ]
-    },
-    {
       "id": "374766",
       "date": "2026-11-08T21:00:00.000Z",
       "neutralSite": false,
@@ -7984,74 +7756,83 @@
               "offensiveReboundPct": 52.8
             }
           }
-        },
+        }
+      ]
+    },
+    {
+      "id": "372728",
+      "date": "2026-11-08T21:00:00.000Z",
+      "neutralSite": false,
+      "conferenceGame": false,
+      "gameType": "STD",
+      "teams": [
         {
-          "teamId": 186,
-          "team": "NJIT",
-          "conference": "Am. East",
-          "opponentId": 254,
-          "opponent": "Saint Peter's",
-          "isHome": true,
-          "pace": 58,
+          "teamId": 243,
+          "team": "Rider",
+          "conference": "Metro",
+          "opponentId": 24,
+          "opponent": "Binghamton",
+          "isHome": false,
+          "pace": 59.5,
           "gameMinutes": 40,
           "stats": {
-            "possessions": 58,
-            "assists": 11,
+            "possessions": 59,
+            "assists": 8,
             "steals": 5,
-            "blocks": 2,
-            "trueShooting": 58.1,
-            "rating": 93.1,
-            "gameScore": 32.29999999999999,
+            "blocks": 4,
+            "trueShooting": 47.8,
+            "rating": 106.8,
+            "gameScore": 44.49999999999999,
             "points": {
-              "total": 54,
+              "total": 63,
               "byPeriod": [
-                25,
-                29
+                32,
+                31
               ],
-              "largestLead": 12,
-              "fastBreak": 15,
-              "inPaint": 16,
-              "offTurnovers": 19
+              "largestLead": 2,
+              "fastBreak": 0,
+              "inPaint": 30,
+              "offTurnovers": 12
             },
             "twoPointFieldGoals": {
-              "made": 8,
-              "attempted": 18,
-              "pct": 44.4
+              "made": 18,
+              "attempted": 37,
+              "pct": 48.6
             },
             "threePointFieldGoals": {
-              "made": 7,
-              "attempted": 17,
-              "pct": 41
+              "made": 6,
+              "attempted": 24,
+              "pct": 25
             },
             "freeThrows": {
-              "made": 17,
-              "attempted": 26,
-              "pct": 65
+              "made": 9,
+              "attempted": 11,
+              "pct": 82
             },
             "fieldGoals": {
-              "made": 15,
-              "attempted": 35,
-              "pct": 43
+              "made": 24,
+              "attempted": 61,
+              "pct": 39
             },
             "turnovers": {
-              "total": 16,
-              "teamTotal": 2
+              "total": 7,
+              "teamTotal": 1
             },
             "rebounds": {
-              "offensive": 5,
-              "defensive": 20,
-              "total": 25
+              "offensive": 13,
+              "defensive": 17,
+              "total": 30
             },
             "fouls": {
-              "total": 18,
+              "total": 13,
               "technical": 0,
               "flagrant": 0
             },
             "fourFactors": {
-              "effectiveFieldGoalPct": 52.9,
-              "freeThrowRate": 74.3,
-              "turnoverRatio": 27.6,
-              "offensiveReboundPct": 20
+              "effectiveFieldGoalPct": 44.3,
+              "freeThrowRate": 18,
+              "turnoverRatio": 11.9,
+              "offensiveReboundPct": 43.3
             }
           }
         }
@@ -9336,6 +9117,76 @@
               "offensiveReboundPct": 30.6
             }
           }
+        },
+        {
+          "teamId": 280,
+          "team": "St. Thomas-Minnesota",
+          "conference": "Summit",
+          "opponentId": 105,
+          "opponent": "Green Bay",
+          "isHome": true,
+          "pace": 67.5,
+          "gameMinutes": 40,
+          "stats": {
+            "possessions": 68,
+            "assists": 9,
+            "steals": 3,
+            "blocks": 3,
+            "trueShooting": 57,
+            "rating": 98.5,
+            "gameScore": 43.10000000000001,
+            "points": {
+              "total": 67,
+              "byPeriod": [
+                33,
+                34
+              ],
+              "largestLead": 8,
+              "fastBreak": 8,
+              "inPaint": 24,
+              "offTurnovers": 8
+            },
+            "twoPointFieldGoals": {
+              "made": 12,
+              "attempted": 25,
+              "pct": 48
+            },
+            "threePointFieldGoals": {
+              "made": 6,
+              "attempted": 21,
+              "pct": 29
+            },
+            "freeThrows": {
+              "made": 25,
+              "attempted": 29,
+              "pct": 86
+            },
+            "fieldGoals": {
+              "made": 18,
+              "attempted": 46,
+              "pct": 39
+            },
+            "turnovers": {
+              "total": 14,
+              "teamTotal": 0
+            },
+            "rebounds": {
+              "offensive": 6,
+              "defensive": 25,
+              "total": 31
+            },
+            "fouls": {
+              "total": 16,
+              "technical": 0,
+              "flagrant": 0
+            },
+            "fourFactors": {
+              "effectiveFieldGoalPct": 45.7,
+              "freeThrowRate": 63,
+              "turnoverRatio": 20.6,
+              "offensiveReboundPct": 19.4
+            }
+          }
         }
       ]
     },
@@ -9425,76 +9276,6 @@
       "conferenceGame": false,
       "gameType": "STD",
       "teams": [
-        {
-          "teamId": 306,
-          "team": "UAlbany",
-          "conference": "Am. East",
-          "opponentId": 166,
-          "opponent": "Merrimack",
-          "isHome": true,
-          "pace": 63,
-          "gameMinutes": 40,
-          "stats": {
-            "possessions": 63,
-            "assists": 13,
-            "steals": 7,
-            "blocks": 5,
-            "trueShooting": 51.5,
-            "rating": 95.2,
-            "gameScore": 40.99999999999999,
-            "points": {
-              "total": 60,
-              "byPeriod": [
-                26,
-                34
-              ],
-              "largestLead": 2,
-              "fastBreak": 7,
-              "inPaint": 30,
-              "offTurnovers": 10
-            },
-            "twoPointFieldGoals": {
-              "made": 20,
-              "attempted": 39,
-              "pct": 51.3
-            },
-            "threePointFieldGoals": {
-              "made": 4,
-              "attempted": 14,
-              "pct": 29
-            },
-            "freeThrows": {
-              "made": 8,
-              "attempted": 12,
-              "pct": 67
-            },
-            "fieldGoals": {
-              "made": 24,
-              "attempted": 53,
-              "pct": 45
-            },
-            "turnovers": {
-              "total": 21,
-              "teamTotal": 3
-            },
-            "rebounds": {
-              "offensive": 15,
-              "defensive": 22,
-              "total": 37
-            },
-            "fouls": {
-              "total": 14,
-              "technical": 0,
-              "flagrant": 0
-            },
-            "fourFactors": {
-              "effectiveFieldGoalPct": 49.1,
-              "freeThrowRate": 22.6,
-              "turnoverRatio": 33.3,
-              "offensiveReboundPct": 40.5
-            }
-          }
-        },
         {
           "teamId": 166,
           "team": "Merrimack",
@@ -9641,76 +9422,6 @@
               "freeThrowRate": 27,
               "turnoverRatio": 3.2,
               "offensiveReboundPct": 36.7
-            }
-          }
-        },
-        {
-          "teamId": 337,
-          "team": "Vermont",
-          "conference": "Am. East",
-          "opponentId": 238,
-          "opponent": "Quinnipiac",
-          "isHome": true,
-          "pace": 62,
-          "gameMinutes": 40,
-          "stats": {
-            "possessions": 62,
-            "assists": 10,
-            "steals": 1,
-            "blocks": 1,
-            "trueShooting": 59.4,
-            "rating": 122.6,
-            "gameScore": 56.900000000000006,
-            "points": {
-              "total": 76,
-              "byPeriod": [
-                40,
-                36
-              ],
-              "largestLead": 9,
-              "fastBreak": 1,
-              "inPaint": 38,
-              "offTurnovers": 1
-            },
-            "twoPointFieldGoals": {
-              "made": 22,
-              "attempted": 37,
-              "pct": 59.5
-            },
-            "threePointFieldGoals": {
-              "made": 5,
-              "attempted": 16,
-              "pct": 31
-            },
-            "freeThrows": {
-              "made": 17,
-              "attempted": 25,
-              "pct": 68
-            },
-            "fieldGoals": {
-              "made": 27,
-              "attempted": 53,
-              "pct": 51
-            },
-            "turnovers": {
-              "total": 7,
-              "teamTotal": 0
-            },
-            "rebounds": {
-              "offensive": 11,
-              "defensive": 26,
-              "total": 37
-            },
-            "fouls": {
-              "total": 17,
-              "technical": 0,
-              "flagrant": 0
-            },
-            "fourFactors": {
-              "effectiveFieldGoalPct": 55.7,
-              "freeThrowRate": 47.2,
-              "turnoverRatio": 11.3,
-              "offensiveReboundPct": 29.7
             }
           }
         }
@@ -10171,76 +9882,6 @@
       "gameType": "STD",
       "teams": [
         {
-          "teamId": 318,
-          "team": "UMass Lowell",
-          "conference": "Am. East",
-          "opponentId": 156,
-          "opponent": "Marist",
-          "isHome": true,
-          "pace": 64,
-          "gameMinutes": 40,
-          "stats": {
-            "possessions": 64,
-            "assists": 7,
-            "steals": 8,
-            "blocks": 0,
-            "trueShooting": 45.4,
-            "rating": 98.4,
-            "gameScore": 43.900000000000006,
-            "points": {
-              "total": 63,
-              "byPeriod": [
-                30,
-                33
-              ],
-              "largestLead": 6,
-              "fastBreak": 10,
-              "inPaint": 30,
-              "offTurnovers": 13
-            },
-            "twoPointFieldGoals": {
-              "made": 15,
-              "attempted": 38,
-              "pct": 39.5
-            },
-            "threePointFieldGoals": {
-              "made": 6,
-              "attempted": 23,
-              "pct": 26
-            },
-            "freeThrows": {
-              "made": 15,
-              "attempted": 19,
-              "pct": 79
-            },
-            "fieldGoals": {
-              "made": 21,
-              "attempted": 61,
-              "pct": 34
-            },
-            "turnovers": {
-              "total": 6,
-              "teamTotal": 1
-            },
-            "rebounds": {
-              "offensive": 12,
-              "defensive": 25,
-              "total": 37
-            },
-            "fouls": {
-              "total": 15,
-              "technical": 0,
-              "flagrant": 0
-            },
-            "fourFactors": {
-              "effectiveFieldGoalPct": 39.3,
-              "freeThrowRate": 31.1,
-              "turnoverRatio": 9.4,
-              "offensiveReboundPct": 32.4
-            }
-          }
-        },
-        {
           "teamId": 156,
           "team": "Marist",
           "conference": "Metro",
@@ -10319,77 +9960,6 @@
       "conferenceGame": false,
       "gameType": "STD",
       "teams": [
-        {
-          "teamId": 190,
-          "team": "New Hampshire",
-          "conference": "Am. East",
-          "opponentId": 250,
-          "opponent": "Sacred Heart",
-          "isHome": true,
-          "pace": 71.1,
-          "gameMinutes": 45,
-          "stats": {
-            "possessions": 80,
-            "assists": 15,
-            "steals": 9,
-            "blocks": 3,
-            "trueShooting": 50.9,
-            "rating": 95,
-            "gameScore": 56,
-            "points": {
-              "total": 76,
-              "byPeriod": [
-                34,
-                39,
-                3
-              ],
-              "largestLead": 4,
-              "fastBreak": 6,
-              "inPaint": 30,
-              "offTurnovers": 17
-            },
-            "twoPointFieldGoals": {
-              "made": 18,
-              "attempted": 40,
-              "pct": 45
-            },
-            "threePointFieldGoals": {
-              "made": 10,
-              "attempted": 28,
-              "pct": 36
-            },
-            "freeThrows": {
-              "made": 10,
-              "attempted": 15,
-              "pct": 67
-            },
-            "fieldGoals": {
-              "made": 28,
-              "attempted": 68,
-              "pct": 41
-            },
-            "turnovers": {
-              "total": 12,
-              "teamTotal": 0
-            },
-            "rebounds": {
-              "offensive": 8,
-              "defensive": 32,
-              "total": 40
-            },
-            "fouls": {
-              "total": 16,
-              "technical": 0,
-              "flagrant": 0
-            },
-            "fourFactors": {
-              "effectiveFieldGoalPct": 48.5,
-              "freeThrowRate": 22.1,
-              "turnoverRatio": 15,
-              "offensiveReboundPct": 20
-            }
-          }
-        },
         {
           "teamId": 250,
           "team": "Sacred Heart",
@@ -10537,76 +10107,6 @@
               "freeThrowRate": 67.3,
               "turnoverRatio": 15.9,
               "offensiveReboundPct": 16.7
-            }
-          }
-        },
-        {
-          "teamId": 154,
-          "team": "Maine",
-          "conference": "Am. East",
-          "opponentId": 155,
-          "opponent": "Manhattan",
-          "isHome": true,
-          "pace": 69.5,
-          "gameMinutes": 40,
-          "stats": {
-            "possessions": 70,
-            "assists": 16,
-            "steals": 3,
-            "blocks": 2,
-            "trueShooting": 50,
-            "rating": 88.6,
-            "gameScore": 35.39999999999999,
-            "points": {
-              "total": 62,
-              "byPeriod": [
-                29,
-                33
-              ],
-              "largestLead": 8,
-              "fastBreak": 4,
-              "inPaint": 32,
-              "offTurnovers": 9
-            },
-            "twoPointFieldGoals": {
-              "made": 18,
-              "attempted": 32,
-              "pct": 56.3
-            },
-            "threePointFieldGoals": {
-              "made": 6,
-              "attempted": 23,
-              "pct": 26
-            },
-            "freeThrows": {
-              "made": 8,
-              "attempted": 16,
-              "pct": 50
-            },
-            "fieldGoals": {
-              "made": 24,
-              "attempted": 55,
-              "pct": 44
-            },
-            "turnovers": {
-              "total": 14,
-              "teamTotal": 0
-            },
-            "rebounds": {
-              "offensive": 9,
-              "defensive": 28,
-              "total": 37
-            },
-            "fouls": {
-              "total": 27,
-              "technical": 0,
-              "flagrant": 0
-            },
-            "fourFactors": {
-              "effectiveFieldGoalPct": 49.1,
-              "freeThrowRate": 29.1,
-              "turnoverRatio": 20,
-              "offensiveReboundPct": 24.3
             }
           }
         }
@@ -10765,76 +10265,6 @@
               "freeThrowRate": 47.4,
               "turnoverRatio": 12.7,
               "offensiveReboundPct": 25
-            }
-          }
-        },
-        {
-          "teamId": 31,
-          "team": "Bryant",
-          "conference": "Am. East",
-          "opponentId": 83,
-          "opponent": "Fairfield",
-          "isHome": true,
-          "pace": 72,
-          "gameMinutes": 40,
-          "stats": {
-            "possessions": 73,
-            "assists": 13,
-            "steals": 1,
-            "blocks": 8,
-            "trueShooting": 48,
-            "rating": 80.8,
-            "gameScore": 29.900000000000013,
-            "points": {
-              "total": 59,
-              "byPeriod": [
-                30,
-                29
-              ],
-              "largestLead": 6,
-              "fastBreak": 0,
-              "inPaint": 24,
-              "offTurnovers": 5
-            },
-            "twoPointFieldGoals": {
-              "made": 12,
-              "attempted": 18,
-              "pct": 66.7
-            },
-            "threePointFieldGoals": {
-              "made": 9,
-              "attempted": 36,
-              "pct": 25
-            },
-            "freeThrows": {
-              "made": 8,
-              "attempted": 17,
-              "pct": 47
-            },
-            "fieldGoals": {
-              "made": 21,
-              "attempted": 54,
-              "pct": 39
-            },
-            "turnovers": {
-              "total": 20,
-              "teamTotal": 0
-            },
-            "rebounds": {
-              "offensive": 10,
-              "defensive": 32,
-              "total": 42
-            },
-            "fouls": {
-              "total": 21,
-              "technical": 0,
-              "flagrant": 0
-            },
-            "fourFactors": {
-              "effectiveFieldGoalPct": 47.2,
-              "freeThrowRate": 31.5,
-              "turnoverRatio": 27.4,
-              "offensiveReboundPct": 23.8
             }
           }
         }
@@ -18046,6 +17476,85 @@
       ]
     },
     {
+      "id": "374721",
+      "date": "2026-11-07T19:00:00.000Z",
+      "neutralSite": false,
+      "conferenceGame": false,
+      "gameType": "STD",
+      "teams": [
+        {
+          "teamId": 193,
+          "team": "New Orleans",
+          "conference": "Southland",
+          "opponentId": 650,
+          "opponent": "Loyola New Orleans",
+          "isHome": true,
+          "pace": 74.5,
+          "gameMinutes": 40,
+          "stats": {
+            "possessions": 75,
+            "assists": 16,
+            "steals": 7,
+            "blocks": 9,
+            "trueShooting": 58.4,
+            "rating": 120,
+            "gameScore": 77.60000000000001,
+            "points": {
+              "total": 90,
+              "byPeriod": [
+                42,
+                48
+              ],
+              "largestLead": 27,
+              "fastBreak": 13,
+              "inPaint": 58,
+              "offTurnovers": 20
+            },
+            "twoPointFieldGoals": {
+              "made": 32,
+              "attempted": 57,
+              "pct": 56.1
+            },
+            "threePointFieldGoals": {
+              "made": 4,
+              "attempted": 13,
+              "pct": 31
+            },
+            "freeThrows": {
+              "made": 14,
+              "attempted": 16,
+              "pct": 88
+            },
+            "fieldGoals": {
+              "made": 36,
+              "attempted": 70,
+              "pct": 51
+            },
+            "turnovers": {
+              "total": 14,
+              "teamTotal": 1
+            },
+            "rebounds": {
+              "offensive": 15,
+              "defensive": 28,
+              "total": 43
+            },
+            "fouls": {
+              "total": 16,
+              "technical": 0,
+              "flagrant": 0
+            },
+            "fourFactors": {
+              "effectiveFieldGoalPct": 54.3,
+              "freeThrowRate": 22.9,
+              "turnoverRatio": 18.7,
+              "offensiveReboundPct": 34.9
+            }
+          }
+        }
+      ]
+    },
+    {
       "id": "374735",
       "date": "2026-11-07T19:00:00.000Z",
       "neutralSite": false,
@@ -22469,6 +21978,76 @@
               "freeThrowRate": 36.7,
               "turnoverRatio": 17.5,
               "offensiveReboundPct": 34
+            }
+          }
+        },
+        {
+          "teamId": 280,
+          "team": "St. Thomas-Minnesota",
+          "conference": "Summit",
+          "opponentId": 173,
+          "opponent": "Minnesota",
+          "isHome": false,
+          "pace": 63.5,
+          "gameMinutes": 40,
+          "stats": {
+            "possessions": 64,
+            "assists": 14,
+            "steals": 6,
+            "blocks": 4,
+            "trueShooting": 46.3,
+            "rating": 96.9,
+            "gameScore": 44.199999999999996,
+            "points": {
+              "total": 62,
+              "byPeriod": [
+                22,
+                40
+              ],
+              "largestLead": 4,
+              "fastBreak": 2,
+              "inPaint": 22,
+              "offTurnovers": 6
+            },
+            "twoPointFieldGoals": {
+              "made": 11,
+              "attempted": 23,
+              "pct": 47.8
+            },
+            "threePointFieldGoals": {
+              "made": 9,
+              "attempted": 36,
+              "pct": 25
+            },
+            "freeThrows": {
+              "made": 13,
+              "attempted": 18,
+              "pct": 72
+            },
+            "fieldGoals": {
+              "made": 20,
+              "attempted": 59,
+              "pct": 34
+            },
+            "turnovers": {
+              "total": 6,
+              "teamTotal": 0
+            },
+            "rebounds": {
+              "offensive": 9,
+              "defensive": 22,
+              "total": 31
+            },
+            "fouls": {
+              "total": 20,
+              "technical": 0,
+              "flagrant": 0
+            },
+            "fourFactors": {
+              "effectiveFieldGoalPct": 41.5,
+              "freeThrowRate": 30.5,
+              "turnoverRatio": 9.4,
+              "offensiveReboundPct": 29
             }
           }
         }
@@ -32710,76 +32289,6 @@
               "offensiveReboundPct": 47.7
             }
           }
-        },
-        {
-          "teamId": 190,
-          "team": "New Hampshire",
-          "conference": "Am. East",
-          "opponentId": 243,
-          "opponent": "Rider",
-          "isHome": false,
-          "pace": 67.5,
-          "gameMinutes": 40,
-          "stats": {
-            "possessions": 67,
-            "assists": 8,
-            "steals": 5,
-            "blocks": 5,
-            "trueShooting": 57,
-            "rating": 98.5,
-            "gameScore": 42.300000000000004,
-            "points": {
-              "total": 66,
-              "byPeriod": [
-                27,
-                39
-              ],
-              "largestLead": 13,
-              "fastBreak": 18,
-              "inPaint": 32,
-              "offTurnovers": 15
-            },
-            "twoPointFieldGoals": {
-              "made": 18,
-              "attempted": 31,
-              "pct": 58.1
-            },
-            "threePointFieldGoals": {
-              "made": 4,
-              "attempted": 15,
-              "pct": 27
-            },
-            "freeThrows": {
-              "made": 18,
-              "attempted": 27,
-              "pct": 67
-            },
-            "fieldGoals": {
-              "made": 22,
-              "attempted": 46,
-              "pct": 48
-            },
-            "turnovers": {
-              "total": 14,
-              "teamTotal": 0
-            },
-            "rebounds": {
-              "offensive": 5,
-              "defensive": 31,
-              "total": 36
-            },
-            "fouls": {
-              "total": 24,
-              "technical": 0,
-              "flagrant": 1
-            },
-            "fourFactors": {
-              "effectiveFieldGoalPct": 52.2,
-              "freeThrowRate": 58.7,
-              "turnoverRatio": 20.9,
-              "offensiveReboundPct": 13.9
-            }
-          }
         }
       ]
     },
@@ -33404,76 +32913,6 @@
       "conferenceGame": false,
       "gameType": "STD",
       "teams": [
-        {
-          "teamId": 154,
-          "team": "Maine",
-          "conference": "Am. East",
-          "opponentId": 250,
-          "opponent": "Sacred Heart",
-          "isHome": false,
-          "pace": 71.5,
-          "gameMinutes": 40,
-          "stats": {
-            "possessions": 72,
-            "assists": 17,
-            "steals": 4,
-            "blocks": 7,
-            "trueShooting": 55.7,
-            "rating": 102.8,
-            "gameScore": 59,
-            "points": {
-              "total": 74,
-              "byPeriod": [
-                25,
-                49
-              ],
-              "largestLead": 6,
-              "fastBreak": 12,
-              "inPaint": 24,
-              "offTurnovers": 4
-            },
-            "twoPointFieldGoals": {
-              "made": 15,
-              "attempted": 33,
-              "pct": 45.5
-            },
-            "threePointFieldGoals": {
-              "made": 10,
-              "attempted": 26,
-              "pct": 38
-            },
-            "freeThrows": {
-              "made": 14,
-              "attempted": 17,
-              "pct": 82
-            },
-            "fieldGoals": {
-              "made": 25,
-              "attempted": 59,
-              "pct": 42
-            },
-            "turnovers": {
-              "total": 11,
-              "teamTotal": 1
-            },
-            "rebounds": {
-              "offensive": 6,
-              "defensive": 33,
-              "total": 39
-            },
-            "fouls": {
-              "total": 16,
-              "technical": 0,
-              "flagrant": 0
-            },
-            "fourFactors": {
-              "effectiveFieldGoalPct": 50.8,
-              "freeThrowRate": 28.8,
-              "turnoverRatio": 15.3,
-              "offensiveReboundPct": 15.4
-            }
-          }
-        },
         {
           "teamId": 250,
           "team": "Sacred Heart",
@@ -34159,76 +33598,6 @@
       "gameType": "STD",
       "teams": [
         {
-          "teamId": 31,
-          "team": "Bryant",
-          "conference": "Am. East",
-          "opponentId": 238,
-          "opponent": "Quinnipiac",
-          "isHome": false,
-          "pace": 63.5,
-          "gameMinutes": 40,
-          "stats": {
-            "possessions": 63,
-            "assists": 8,
-            "steals": 7,
-            "blocks": 5,
-            "trueShooting": 42,
-            "rating": 88.9,
-            "gameScore": 29.30000000000001,
-            "points": {
-              "total": 56,
-              "byPeriod": [
-                29,
-                27
-              ],
-              "largestLead": 4,
-              "fastBreak": 8,
-              "inPaint": 22,
-              "offTurnovers": 19
-            },
-            "twoPointFieldGoals": {
-              "made": 14,
-              "attempted": 31,
-              "pct": 45.2
-            },
-            "threePointFieldGoals": {
-              "made": 7,
-              "attempted": 30,
-              "pct": 23
-            },
-            "freeThrows": {
-              "made": 7,
-              "attempted": 13,
-              "pct": 54
-            },
-            "fieldGoals": {
-              "made": 21,
-              "attempted": 61,
-              "pct": 34
-            },
-            "turnovers": {
-              "total": 12,
-              "teamTotal": 0
-            },
-            "rebounds": {
-              "offensive": 12,
-              "defensive": 17,
-              "total": 29
-            },
-            "fouls": {
-              "total": 19,
-              "technical": 0,
-              "flagrant": 0
-            },
-            "fourFactors": {
-              "effectiveFieldGoalPct": 40.2,
-              "freeThrowRate": 21.3,
-              "turnoverRatio": 19,
-              "offensiveReboundPct": 41.4
-            }
-          }
-        },
-        {
           "teamId": 238,
           "team": "Quinnipiac",
           "conference": "Metro",
@@ -34307,76 +33676,6 @@
       "conferenceGame": false,
       "gameType": "STD",
       "teams": [
-        {
-          "teamId": 337,
-          "team": "Vermont",
-          "conference": "Am. East",
-          "opponentId": 83,
-          "opponent": "Fairfield",
-          "isHome": false,
-          "pace": 66,
-          "gameMinutes": 40,
-          "stats": {
-            "possessions": 66,
-            "assists": 11,
-            "steals": 2,
-            "blocks": 2,
-            "trueShooting": 61.6,
-            "rating": 119.7,
-            "gameScore": 56.000000000000014,
-            "points": {
-              "total": 79,
-              "byPeriod": [
-                38,
-                41
-              ],
-              "largestLead": 18,
-              "fastBreak": 2,
-              "inPaint": 38,
-              "offTurnovers": 14
-            },
-            "twoPointFieldGoals": {
-              "made": 23,
-              "attempted": 38,
-              "pct": 60.5
-            },
-            "threePointFieldGoals": {
-              "made": 8,
-              "attempted": 20,
-              "pct": 40
-            },
-            "freeThrows": {
-              "made": 9,
-              "attempted": 14,
-              "pct": 64
-            },
-            "fieldGoals": {
-              "made": 31,
-              "attempted": 58,
-              "pct": 53
-            },
-            "turnovers": {
-              "total": 14,
-              "teamTotal": 0
-            },
-            "rebounds": {
-              "offensive": 12,
-              "defensive": 27,
-              "total": 39
-            },
-            "fouls": {
-              "total": 16,
-              "technical": 1,
-              "flagrant": 0
-            },
-            "fourFactors": {
-              "effectiveFieldGoalPct": 60.3,
-              "freeThrowRate": 24.1,
-              "turnoverRatio": 21.2,
-              "offensiveReboundPct": 30.8
-            }
-          }
-        },
         {
           "teamId": 83,
           "team": "Fairfield",
@@ -34902,76 +34201,6 @@
               "offensiveReboundPct": 27.6
             }
           }
-        },
-        {
-          "teamId": 24,
-          "team": "Binghamton",
-          "conference": "Am. East",
-          "opponentId": 254,
-          "opponent": "Saint Peter's",
-          "isHome": false,
-          "pace": 60,
-          "gameMinutes": 40,
-          "stats": {
-            "possessions": 60,
-            "assists": 8,
-            "steals": 6,
-            "blocks": 0,
-            "trueShooting": 48,
-            "rating": 96.7,
-            "gameScore": 36.300000000000004,
-            "points": {
-              "total": 58,
-              "byPeriod": [
-                27,
-                31
-              ],
-              "largestLead": 6,
-              "fastBreak": 8,
-              "inPaint": 22,
-              "offTurnovers": 11
-            },
-            "twoPointFieldGoals": {
-              "made": 12,
-              "attempted": 26,
-              "pct": 46.2
-            },
-            "threePointFieldGoals": {
-              "made": 3,
-              "attempted": 19,
-              "pct": 16
-            },
-            "freeThrows": {
-              "made": 25,
-              "attempted": 35,
-              "pct": 71
-            },
-            "fieldGoals": {
-              "made": 15,
-              "attempted": 45,
-              "pct": 33
-            },
-            "turnovers": {
-              "total": 10,
-              "teamTotal": 1
-            },
-            "rebounds": {
-              "offensive": 11,
-              "defensive": 19,
-              "total": 30
-            },
-            "fouls": {
-              "total": 18,
-              "technical": 0,
-              "flagrant": 1
-            },
-            "fourFactors": {
-              "effectiveFieldGoalPct": 36.7,
-              "freeThrowRate": 77.8,
-              "turnoverRatio": 16.7,
-              "offensiveReboundPct": 36.7
-            }
-          }
         }
       ]
     },
@@ -35428,76 +34657,6 @@
               "offensiveReboundPct": 22.2
             }
           }
-        },
-        {
-          "teamId": 186,
-          "team": "NJIT",
-          "conference": "Am. East",
-          "opponentId": 123,
-          "opponent": "Iona",
-          "isHome": false,
-          "pace": 66,
-          "gameMinutes": 40,
-          "stats": {
-            "possessions": 66,
-            "assists": 12,
-            "steals": 8,
-            "blocks": 0,
-            "trueShooting": 36.4,
-            "rating": 74.2,
-            "gameScore": 27.500000000000007,
-            "points": {
-              "total": 49,
-              "byPeriod": [
-                19,
-                30
-              ],
-              "largestLead": 6,
-              "fastBreak": 7,
-              "inPaint": 26,
-              "offTurnovers": 14
-            },
-            "twoPointFieldGoals": {
-              "made": 13,
-              "attempted": 37,
-              "pct": 35.1
-            },
-            "threePointFieldGoals": {
-              "made": 5,
-              "attempted": 26,
-              "pct": 19
-            },
-            "freeThrows": {
-              "made": 8,
-              "attempted": 10,
-              "pct": 80
-            },
-            "fieldGoals": {
-              "made": 18,
-              "attempted": 63,
-              "pct": 29
-            },
-            "turnovers": {
-              "total": 8,
-              "teamTotal": 1
-            },
-            "rebounds": {
-              "offensive": 10,
-              "defensive": 16,
-              "total": 26
-            },
-            "fouls": {
-              "total": 10,
-              "technical": 0,
-              "flagrant": 0
-            },
-            "fourFactors": {
-              "effectiveFieldGoalPct": 32.5,
-              "freeThrowRate": 15.9,
-              "turnoverRatio": 12.1,
-              "offensiveReboundPct": 38.5
-            }
-          }
         }
       ]
     },
@@ -35577,76 +34736,6 @@
               "offensiveReboundPct": 33.3
             }
           }
-        },
-        {
-          "teamId": 306,
-          "team": "UAlbany",
-          "conference": "Am. East",
-          "opponentId": 155,
-          "opponent": "Manhattan",
-          "isHome": false,
-          "pace": 68.5,
-          "gameMinutes": 40,
-          "stats": {
-            "possessions": 68,
-            "assists": 15,
-            "steals": 10,
-            "blocks": 4,
-            "trueShooting": 52,
-            "rating": 105.9,
-            "gameScore": 60.8,
-            "points": {
-              "total": 72,
-              "byPeriod": [
-                32,
-                40
-              ],
-              "largestLead": 9,
-              "fastBreak": 14,
-              "inPaint": 30,
-              "offTurnovers": 18
-            },
-            "twoPointFieldGoals": {
-              "made": 18,
-              "attempted": 31,
-              "pct": 58.1
-            },
-            "threePointFieldGoals": {
-              "made": 5,
-              "attempted": 25,
-              "pct": 20
-            },
-            "freeThrows": {
-              "made": 21,
-              "attempted": 30,
-              "pct": 70
-            },
-            "fieldGoals": {
-              "made": 23,
-              "attempted": 56,
-              "pct": 41
-            },
-            "turnovers": {
-              "total": 10,
-              "teamTotal": 0
-            },
-            "rebounds": {
-              "offensive": 14,
-              "defensive": 23,
-              "total": 37
-            },
-            "fouls": {
-              "total": 19,
-              "technical": 1,
-              "flagrant": 1
-            },
-            "fourFactors": {
-              "effectiveFieldGoalPct": 45.5,
-              "freeThrowRate": 53.6,
-              "turnoverRatio": 14.7,
-              "offensiveReboundPct": 37.8
-            }
-          }
         }
       ]
     },
@@ -35657,76 +34746,6 @@
       "conferenceGame": false,
       "gameType": "STD",
       "teams": [
-        {
-          "teamId": 317,
-          "team": "UMBC",
-          "conference": "Am. East",
-          "opponentId": 156,
-          "opponent": "Marist",
-          "isHome": false,
-          "pace": 75.5,
-          "gameMinutes": 40,
-          "stats": {
-            "possessions": 75,
-            "assists": 10,
-            "steals": 8,
-            "blocks": 2,
-            "trueShooting": 62.7,
-            "rating": 106.7,
-            "gameScore": 52.500000000000014,
-            "points": {
-              "total": 80,
-              "byPeriod": [
-                33,
-                47
-              ],
-              "largestLead": 8,
-              "fastBreak": 8,
-              "inPaint": 40,
-              "offTurnovers": 15
-            },
-            "twoPointFieldGoals": {
-              "made": 22,
-              "attempted": 40,
-              "pct": 55
-            },
-            "threePointFieldGoals": {
-              "made": 4,
-              "attempted": 11,
-              "pct": 36
-            },
-            "freeThrows": {
-              "made": 24,
-              "attempted": 29,
-              "pct": 83
-            },
-            "fieldGoals": {
-              "made": 26,
-              "attempted": 51,
-              "pct": 51
-            },
-            "turnovers": {
-              "total": 19,
-              "teamTotal": 0
-            },
-            "rebounds": {
-              "offensive": 5,
-              "defensive": 27,
-              "total": 32
-            },
-            "fouls": {
-              "total": 23,
-              "technical": 2,
-              "flagrant": 0
-            },
-            "fourFactors": {
-              "effectiveFieldGoalPct": 54.9,
-              "freeThrowRate": 56.9,
-              "turnoverRatio": 25.3,
-              "offensiveReboundPct": 15.6
-            }
-          }
-        },
         {
           "teamId": 156,
           "team": "Marist",
@@ -35955,76 +34974,6 @@
       "conferenceGame": false,
       "gameType": "STD",
       "teams": [
-        {
-          "teamId": 318,
-          "team": "UMass Lowell",
-          "conference": "Am. East",
-          "opponentId": 166,
-          "opponent": "Merrimack",
-          "isHome": false,
-          "pace": 65,
-          "gameMinutes": 40,
-          "stats": {
-            "possessions": 64,
-            "assists": 15,
-            "steals": 5,
-            "blocks": 2,
-            "trueShooting": 51.4,
-            "rating": 110.9,
-            "gameScore": 53.8,
-            "points": {
-              "total": 71,
-              "byPeriod": [
-                38,
-                33
-              ],
-              "largestLead": 14,
-              "fastBreak": 2,
-              "inPaint": 30,
-              "offTurnovers": 14
-            },
-            "twoPointFieldGoals": {
-              "made": 17,
-              "attempted": 36,
-              "pct": 47.2
-            },
-            "threePointFieldGoals": {
-              "made": 7,
-              "attempted": 23,
-              "pct": 30
-            },
-            "freeThrows": {
-              "made": 16,
-              "attempted": 23,
-              "pct": 70
-            },
-            "fieldGoals": {
-              "made": 24,
-              "attempted": 59,
-              "pct": 41
-            },
-            "turnovers": {
-              "total": 10,
-              "teamTotal": 1
-            },
-            "rebounds": {
-              "offensive": 14,
-              "defensive": 26,
-              "total": 40
-            },
-            "fouls": {
-              "total": 18,
-              "technical": 0,
-              "flagrant": 0
-            },
-            "fourFactors": {
-              "effectiveFieldGoalPct": 46.6,
-              "freeThrowRate": 39,
-              "turnoverRatio": 15.6,
-              "offensiveReboundPct": 35
-            }
-          }
-        },
         {
           "teamId": 166,
           "team": "Merrimack",
@@ -41584,6 +40533,76 @@
               "offensiveReboundPct": 30.2
             }
           }
+        },
+        {
+          "teamId": 193,
+          "team": "New Orleans",
+          "conference": "Southland",
+          "opponentId": 136,
+          "opponent": "LSU",
+          "isHome": false,
+          "pace": 81.5,
+          "gameMinutes": 40,
+          "stats": {
+            "possessions": 81,
+            "assists": 4,
+            "steals": 7,
+            "blocks": 4,
+            "trueShooting": 36.7,
+            "rating": 70.4,
+            "gameScore": 20.69999999999999,
+            "points": {
+              "total": 57,
+              "byPeriod": [
+                17,
+                40
+              ],
+              "largestLead": 0,
+              "fastBreak": 14,
+              "inPaint": 20,
+              "offTurnovers": 14
+            },
+            "twoPointFieldGoals": {
+              "made": 11,
+              "attempted": 32,
+              "pct": 34.4
+            },
+            "threePointFieldGoals": {
+              "made": 4,
+              "attempted": 29,
+              "pct": 14
+            },
+            "freeThrows": {
+              "made": 23,
+              "attempted": 38,
+              "pct": 61
+            },
+            "fieldGoals": {
+              "made": 15,
+              "attempted": 61,
+              "pct": 25
+            },
+            "turnovers": {
+              "total": 16,
+              "teamTotal": 1
+            },
+            "rebounds": {
+              "offensive": 14,
+              "defensive": 24,
+              "total": 38
+            },
+            "fouls": {
+              "total": 18,
+              "technical": 0,
+              "flagrant": 0
+            },
+            "fourFactors": {
+              "effectiveFieldGoalPct": 27.9,
+              "freeThrowRate": 62.3,
+              "turnoverRatio": 19.8,
+              "offensiveReboundPct": 36.8
+            }
+          }
         }
       ]
     },
@@ -46166,155 +45185,6 @@
       ]
     },
     {
-      "id": "374498",
-      "date": "2026-11-03T02:30:00.000Z",
-      "neutralSite": false,
-      "conferenceGame": false,
-      "gameType": "STD",
-      "teams": [
-        {
-          "teamId": 572,
-          "team": "Colorado College",
-          "conference": null,
-          "opponentId": 207,
-          "opponent": "Northern Colorado",
-          "isHome": false,
-          "pace": 77,
-          "gameMinutes": 40,
-          "stats": {
-            "possessions": 76,
-            "assists": 8,
-            "steals": 9,
-            "blocks": 3,
-            "trueShooting": 44.7,
-            "rating": 84.2,
-            "gameScore": 30.5,
-            "points": {
-              "total": 64,
-              "byPeriod": [
-                21,
-                43
-              ],
-              "largestLead": 0,
-              "fastBreak": 5,
-              "inPaint": 26,
-              "offTurnovers": 11
-            },
-            "twoPointFieldGoals": {
-              "made": 15,
-              "attempted": 38,
-              "pct": 39.5
-            },
-            "threePointFieldGoals": {
-              "made": 7,
-              "attempted": 23,
-              "pct": 30
-            },
-            "freeThrows": {
-              "made": 13,
-              "attempted": 24,
-              "pct": 54
-            },
-            "fieldGoals": {
-              "made": 22,
-              "attempted": 61,
-              "pct": 36
-            },
-            "turnovers": {
-              "total": 13,
-              "teamTotal": 0
-            },
-            "rebounds": {
-              "offensive": 9,
-              "defensive": 16,
-              "total": 25
-            },
-            "fouls": {
-              "total": 25,
-              "technical": 0,
-              "flagrant": 1
-            },
-            "fourFactors": {
-              "effectiveFieldGoalPct": 41.8,
-              "freeThrowRate": 39.3,
-              "turnoverRatio": 17.1,
-              "offensiveReboundPct": 36
-            }
-          }
-        },
-        {
-          "teamId": 207,
-          "team": "Northern Colorado",
-          "conference": "Big Sky",
-          "opponentId": 572,
-          "opponent": "Colorado College",
-          "isHome": true,
-          "pace": 77,
-          "gameMinutes": 40,
-          "stats": {
-            "possessions": 78,
-            "assists": 26,
-            "steals": 5,
-            "blocks": 7,
-            "trueShooting": 72.4,
-            "rating": 150,
-            "gameScore": 109.80000000000001,
-            "points": {
-              "total": 117,
-              "byPeriod": [
-                52,
-                65
-              ],
-              "largestLead": 54,
-              "fastBreak": 16,
-              "inPaint": 42,
-              "offTurnovers": 23
-            },
-            "twoPointFieldGoals": {
-              "made": 21,
-              "attempted": 35,
-              "pct": 60
-            },
-            "threePointFieldGoals": {
-              "made": 16,
-              "attempted": 30,
-              "pct": 53
-            },
-            "freeThrows": {
-              "made": 27,
-              "attempted": 36,
-              "pct": 75
-            },
-            "fieldGoals": {
-              "made": 37,
-              "attempted": 65,
-              "pct": 57
-            },
-            "turnovers": {
-              "total": 14,
-              "teamTotal": 1
-            },
-            "rebounds": {
-              "offensive": 16,
-              "defensive": 34,
-              "total": 50
-            },
-            "fouls": {
-              "total": 21,
-              "technical": 0,
-              "flagrant": 0
-            },
-            "fourFactors": {
-              "effectiveFieldGoalPct": 69.2,
-              "freeThrowRate": 55.4,
-              "turnoverRatio": 17.9,
-              "offensiveReboundPct": 32
-            }
-          }
-        }
-      ]
-    },
-    {
       "id": "374552",
       "date": "2026-11-03T02:30:00.000Z",
       "neutralSite": false,
@@ -46388,6 +45258,85 @@
               "freeThrowRate": 39.7,
               "turnoverRatio": 17.4,
               "offensiveReboundPct": 25
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "374498",
+      "date": "2026-11-03T02:30:00.000Z",
+      "neutralSite": false,
+      "conferenceGame": false,
+      "gameType": "STD",
+      "teams": [
+        {
+          "teamId": 207,
+          "team": "Northern Colorado",
+          "conference": "Big Sky",
+          "opponentId": 572,
+          "opponent": "Colorado College",
+          "isHome": true,
+          "pace": 77,
+          "gameMinutes": 40,
+          "stats": {
+            "possessions": 78,
+            "assists": 26,
+            "steals": 5,
+            "blocks": 7,
+            "trueShooting": 72.4,
+            "rating": 150,
+            "gameScore": 109.80000000000001,
+            "points": {
+              "total": 117,
+              "byPeriod": [
+                52,
+                65
+              ],
+              "largestLead": 54,
+              "fastBreak": 16,
+              "inPaint": 42,
+              "offTurnovers": 23
+            },
+            "twoPointFieldGoals": {
+              "made": 21,
+              "attempted": 35,
+              "pct": 60
+            },
+            "threePointFieldGoals": {
+              "made": 16,
+              "attempted": 30,
+              "pct": 53
+            },
+            "freeThrows": {
+              "made": 27,
+              "attempted": 36,
+              "pct": 75
+            },
+            "fieldGoals": {
+              "made": 37,
+              "attempted": 65,
+              "pct": 57
+            },
+            "turnovers": {
+              "total": 14,
+              "teamTotal": 1
+            },
+            "rebounds": {
+              "offensive": 16,
+              "defensive": 34,
+              "total": 50
+            },
+            "fouls": {
+              "total": 21,
+              "technical": 0,
+              "flagrant": 0
+            },
+            "fourFactors": {
+              "effectiveFieldGoalPct": 69.2,
+              "freeThrowRate": 55.4,
+              "turnoverRatio": 17.9,
+              "offensiveReboundPct": 32
             }
           }
         }
@@ -50388,225 +49337,6 @@
               "offensiveReboundPct": 29.4
             }
           }
-        },
-        {
-          "teamId": 24,
-          "team": "Binghamton",
-          "conference": "Am. East",
-          "opponentId": 212,
-          "opponent": "Northwestern",
-          "isHome": false,
-          "pace": 63,
-          "gameMinutes": 40,
-          "stats": {
-            "possessions": 63,
-            "assists": 12,
-            "steals": 3,
-            "blocks": 1,
-            "trueShooting": 51.2,
-            "rating": 95.2,
-            "gameScore": 33.400000000000006,
-            "points": {
-              "total": 60,
-              "byPeriod": [
-                35,
-                25
-              ],
-              "largestLead": 0,
-              "fastBreak": 2,
-              "inPaint": 22,
-              "offTurnovers": 4
-            },
-            "twoPointFieldGoals": {
-              "made": 16,
-              "attempted": 34,
-              "pct": 47.1
-            },
-            "threePointFieldGoals": {
-              "made": 5,
-              "attempted": 18,
-              "pct": 28
-            },
-            "freeThrows": {
-              "made": 13,
-              "attempted": 15,
-              "pct": 87
-            },
-            "fieldGoals": {
-              "made": 21,
-              "attempted": 52,
-              "pct": 40
-            },
-            "turnovers": {
-              "total": 12,
-              "teamTotal": 1
-            },
-            "rebounds": {
-              "offensive": 6,
-              "defensive": 17,
-              "total": 23
-            },
-            "fouls": {
-              "total": 18,
-              "technical": 0,
-              "flagrant": 0
-            },
-            "fourFactors": {
-              "effectiveFieldGoalPct": 45.2,
-              "freeThrowRate": 28.8,
-              "turnoverRatio": 19,
-              "offensiveReboundPct": 26.1
-            }
-          }
-        }
-      ]
-    },
-    {
-      "id": "374513",
-      "date": "2026-11-03T01:00:00.000Z",
-      "neutralSite": false,
-      "conferenceGame": false,
-      "gameType": "STD",
-      "teams": [
-        {
-          "teamId": 31,
-          "team": "Bryant",
-          "conference": "Am. East",
-          "opponentId": 264,
-          "opponent": "Siena",
-          "isHome": true,
-          "pace": 81,
-          "gameMinutes": 40,
-          "stats": {
-            "possessions": 81,
-            "assists": 18,
-            "steals": 5,
-            "blocks": 5,
-            "trueShooting": 52.6,
-            "rating": 98.8,
-            "gameScore": 58.5,
-            "points": {
-              "total": 80,
-              "byPeriod": [
-                37,
-                43
-              ],
-              "largestLead": 9,
-              "fastBreak": 6,
-              "inPaint": 32,
-              "offTurnovers": 10
-            },
-            "twoPointFieldGoals": {
-              "made": 16,
-              "attempted": 30,
-              "pct": 53.3
-            },
-            "threePointFieldGoals": {
-              "made": 10,
-              "attempted": 35,
-              "pct": 29
-            },
-            "freeThrows": {
-              "made": 18,
-              "attempted": 25,
-              "pct": 72
-            },
-            "fieldGoals": {
-              "made": 26,
-              "attempted": 65,
-              "pct": 40
-            },
-            "turnovers": {
-              "total": 14,
-              "teamTotal": 0
-            },
-            "rebounds": {
-              "offensive": 11,
-              "defensive": 36,
-              "total": 47
-            },
-            "fouls": {
-              "total": 23,
-              "technical": 1,
-              "flagrant": 0
-            },
-            "fourFactors": {
-              "effectiveFieldGoalPct": 47.7,
-              "freeThrowRate": 38.5,
-              "turnoverRatio": 17.3,
-              "offensiveReboundPct": 23.4
-            }
-          }
-        },
-        {
-          "teamId": 264,
-          "team": "Siena",
-          "conference": "Metro",
-          "opponentId": 31,
-          "opponent": "Bryant",
-          "isHome": false,
-          "pace": 81,
-          "gameMinutes": 40,
-          "stats": {
-            "possessions": 81,
-            "assists": 13,
-            "steals": 11,
-            "blocks": 1,
-            "trueShooting": 48,
-            "rating": 92.6,
-            "gameScore": 49.099999999999994,
-            "points": {
-              "total": 75,
-              "byPeriod": [
-                41,
-                34
-              ],
-              "largestLead": 11,
-              "fastBreak": 20,
-              "inPaint": 34,
-              "offTurnovers": 9
-            },
-            "twoPointFieldGoals": {
-              "made": 18,
-              "attempted": 37,
-              "pct": 48.6
-            },
-            "threePointFieldGoals": {
-              "made": 6,
-              "attempted": 27,
-              "pct": 22
-            },
-            "freeThrows": {
-              "made": 21,
-              "attempted": 32,
-              "pct": 66
-            },
-            "fieldGoals": {
-              "made": 24,
-              "attempted": 64,
-              "pct": 38
-            },
-            "turnovers": {
-              "total": 15,
-              "teamTotal": 0
-            },
-            "rebounds": {
-              "offensive": 11,
-              "defensive": 30,
-              "total": 41
-            },
-            "fouls": {
-              "total": 22,
-              "technical": 0,
-              "flagrant": 0
-            },
-            "fourFactors": {
-              "effectiveFieldGoalPct": 42.2,
-              "freeThrowRate": 50,
-              "turnoverRatio": 18.5,
-              "offensiveReboundPct": 26.8
-            }
-          }
         }
       ]
     },
@@ -50991,6 +49721,85 @@
               "freeThrowRate": 31.8,
               "turnoverRatio": 23.1,
               "offensiveReboundPct": 29.8
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "374513",
+      "date": "2026-11-03T01:00:00.000Z",
+      "neutralSite": false,
+      "conferenceGame": false,
+      "gameType": "STD",
+      "teams": [
+        {
+          "teamId": 264,
+          "team": "Siena",
+          "conference": "Metro",
+          "opponentId": 31,
+          "opponent": "Bryant",
+          "isHome": false,
+          "pace": 81,
+          "gameMinutes": 40,
+          "stats": {
+            "possessions": 81,
+            "assists": 13,
+            "steals": 11,
+            "blocks": 1,
+            "trueShooting": 48,
+            "rating": 92.6,
+            "gameScore": 49.099999999999994,
+            "points": {
+              "total": 75,
+              "byPeriod": [
+                41,
+                34
+              ],
+              "largestLead": 11,
+              "fastBreak": 20,
+              "inPaint": 34,
+              "offTurnovers": 9
+            },
+            "twoPointFieldGoals": {
+              "made": 18,
+              "attempted": 37,
+              "pct": 48.6
+            },
+            "threePointFieldGoals": {
+              "made": 6,
+              "attempted": 27,
+              "pct": 22
+            },
+            "freeThrows": {
+              "made": 21,
+              "attempted": 32,
+              "pct": 66
+            },
+            "fieldGoals": {
+              "made": 24,
+              "attempted": 64,
+              "pct": 38
+            },
+            "turnovers": {
+              "total": 15,
+              "teamTotal": 0
+            },
+            "rebounds": {
+              "offensive": 11,
+              "defensive": 30,
+              "total": 41
+            },
+            "fouls": {
+              "total": 22,
+              "technical": 0,
+              "flagrant": 0
+            },
+            "fourFactors": {
+              "effectiveFieldGoalPct": 42.2,
+              "freeThrowRate": 50,
+              "turnoverRatio": 18.5,
+              "offensiveReboundPct": 26.8
             }
           }
         }
@@ -57993,76 +56802,6 @@
               "offensiveReboundPct": 20.6
             }
           }
-        },
-        {
-          "teamId": 190,
-          "team": "New Hampshire",
-          "conference": "Am. East",
-          "opponentId": 30,
-          "opponent": "Brown",
-          "isHome": false,
-          "pace": 63,
-          "gameMinutes": 40,
-          "stats": {
-            "possessions": 63,
-            "assists": 11,
-            "steals": 2,
-            "blocks": 2,
-            "trueShooting": 49.9,
-            "rating": 93.7,
-            "gameScore": 36.5,
-            "points": {
-              "total": 59,
-              "byPeriod": [
-                20,
-                39
-              ],
-              "largestLead": 11,
-              "fastBreak": 4,
-              "inPaint": 14,
-              "offTurnovers": 16
-            },
-            "twoPointFieldGoals": {
-              "made": 9,
-              "attempted": 23,
-              "pct": 39.1
-            },
-            "threePointFieldGoals": {
-              "made": 6,
-              "attempted": 22,
-              "pct": 27
-            },
-            "freeThrows": {
-              "made": 23,
-              "attempted": 32,
-              "pct": 72
-            },
-            "fieldGoals": {
-              "made": 15,
-              "attempted": 45,
-              "pct": 33
-            },
-            "turnovers": {
-              "total": 11,
-              "teamTotal": 2
-            },
-            "rebounds": {
-              "offensive": 7,
-              "defensive": 24,
-              "total": 31
-            },
-            "fouls": {
-              "total": 14,
-              "technical": 0,
-              "flagrant": 0
-            },
-            "fourFactors": {
-              "effectiveFieldGoalPct": 40,
-              "freeThrowRate": 71.1,
-              "turnoverRatio": 17.5,
-              "offensiveReboundPct": 22.6
-            }
-          }
         }
       ]
     },
@@ -58450,76 +57189,6 @@
       "conferenceGame": false,
       "gameType": "STD",
       "teams": [
-        {
-          "teamId": 337,
-          "team": "Vermont",
-          "conference": "Am. East",
-          "opponentId": 123,
-          "opponent": "Iona",
-          "isHome": false,
-          "pace": 62,
-          "gameMinutes": 40,
-          "stats": {
-            "possessions": 61,
-            "assists": 9,
-            "steals": 9,
-            "blocks": 4,
-            "trueShooting": 47.2,
-            "rating": 90.2,
-            "gameScore": 39.099999999999994,
-            "points": {
-              "total": 55,
-              "byPeriod": [
-                29,
-                26
-              ],
-              "largestLead": 10,
-              "fastBreak": 0,
-              "inPaint": 22,
-              "offTurnovers": 11
-            },
-            "twoPointFieldGoals": {
-              "made": 11,
-              "attempted": 22,
-              "pct": 50
-            },
-            "threePointFieldGoals": {
-              "made": 8,
-              "attempted": 31,
-              "pct": 26
-            },
-            "freeThrows": {
-              "made": 9,
-              "attempted": 12,
-              "pct": 75
-            },
-            "fieldGoals": {
-              "made": 19,
-              "attempted": 53,
-              "pct": 36
-            },
-            "turnovers": {
-              "total": 15,
-              "teamTotal": 1
-            },
-            "rebounds": {
-              "offensive": 13,
-              "defensive": 26,
-              "total": 39
-            },
-            "fouls": {
-              "total": 13,
-              "technical": 0,
-              "flagrant": 0
-            },
-            "fourFactors": {
-              "effectiveFieldGoalPct": 43.4,
-              "freeThrowRate": 22.6,
-              "turnoverRatio": 24.6,
-              "offensiveReboundPct": 33.3
-            }
-          }
-        },
         {
           "teamId": 123,
           "team": "Iona",
@@ -59810,83 +58479,74 @@
               "offensiveReboundPct": 35.5
             }
           }
-        }
-      ]
-    },
-    {
-      "id": "374573",
-      "date": "2026-11-03T00:00:00.000Z",
-      "neutralSite": false,
-      "conferenceGame": false,
-      "gameType": "STD",
-      "teams": [
+        },
         {
-          "teamId": 318,
-          "team": "UMass Lowell",
-          "conference": "Am. East",
-          "opponentId": 502,
-          "opponent": "Rivier",
-          "isHome": true,
-          "pace": 79,
+          "teamId": 280,
+          "team": "St. Thomas-Minnesota",
+          "conference": "Summit",
+          "opponentId": 233,
+          "opponent": "Presbyterian",
+          "isHome": false,
+          "pace": 69,
           "gameMinutes": 40,
           "stats": {
-            "possessions": 80,
-            "assists": 29,
-            "steals": 10,
-            "blocks": 7,
-            "trueShooting": 71.8,
-            "rating": 151.3,
-            "gameScore": 129.10000000000002,
+            "possessions": 69,
+            "assists": 16,
+            "steals": 4,
+            "blocks": 1,
+            "trueShooting": 72.2,
+            "rating": 126.1,
+            "gameScore": 69.40000000000002,
             "points": {
-              "total": 121,
+              "total": 87,
               "byPeriod": [
-                60,
-                61
+                38,
+                49
               ],
-              "largestLead": 68,
-              "fastBreak": 17,
-              "inPaint": 70,
-              "offTurnovers": 15
+              "largestLead": 13,
+              "fastBreak": 11,
+              "inPaint": 32,
+              "offTurnovers": 13
             },
             "twoPointFieldGoals": {
-              "made": 36,
-              "attempted": 50,
-              "pct": 72
+              "made": 16,
+              "attempted": 27,
+              "pct": 59.3
             },
             "threePointFieldGoals": {
-              "made": 11,
-              "attempted": 22,
+              "made": 12,
+              "attempted": 24,
               "pct": 50
             },
             "freeThrows": {
-              "made": 16,
-              "attempted": 28,
-              "pct": 57
+              "made": 19,
+              "attempted": 21,
+              "pct": 90
             },
             "fieldGoals": {
-              "made": 47,
-              "attempted": 72,
-              "pct": 65
+              "made": 28,
+              "attempted": 51,
+              "pct": 55
             },
             "turnovers": {
-              "total": 10,
-              "teamTotal": 1
+              "total": 11,
+              "teamTotal": 2
             },
             "rebounds": {
-              "offensive": 16,
-              "defensive": 39,
-              "total": 55
+              "offensive": 4,
+              "defensive": 24,
+              "total": 28
             },
             "fouls": {
-              "total": 9,
+              "total": 18,
               "technical": 0,
               "flagrant": 0
             },
             "fourFactors": {
-              "effectiveFieldGoalPct": 72.9,
-              "freeThrowRate": 38.9,
-              "turnoverRatio": 12.5,
-              "offensiveReboundPct": 29.1
+              "effectiveFieldGoalPct": 66.7,
+              "freeThrowRate": 41.2,
+              "turnoverRatio": 15.9,
+              "offensiveReboundPct": 14.3
             }
           }
         }
@@ -60434,76 +59094,6 @@
       "conferenceGame": false,
       "gameType": "STD",
       "teams": [
-        {
-          "teamId": 186,
-          "team": "NJIT",
-          "conference": "Am. East",
-          "opponentId": 64,
-          "opponent": "Dayton",
-          "isHome": false,
-          "pace": 69.5,
-          "gameMinutes": 40,
-          "stats": {
-            "possessions": 70,
-            "assists": 9,
-            "steals": 8,
-            "blocks": 2,
-            "trueShooting": 42,
-            "rating": 82.9,
-            "gameScore": 32.099999999999994,
-            "points": {
-              "total": 58,
-              "byPeriod": [
-                23,
-                35
-              ],
-              "largestLead": 0,
-              "fastBreak": 6,
-              "inPaint": 24,
-              "offTurnovers": 6
-            },
-            "twoPointFieldGoals": {
-              "made": 17,
-              "attempted": 33,
-              "pct": 51.5
-            },
-            "threePointFieldGoals": {
-              "made": 3,
-              "attempted": 25,
-              "pct": 12
-            },
-            "freeThrows": {
-              "made": 15,
-              "attempted": 25,
-              "pct": 60
-            },
-            "fieldGoals": {
-              "made": 20,
-              "attempted": 58,
-              "pct": 34
-            },
-            "turnovers": {
-              "total": 11,
-              "teamTotal": 2
-            },
-            "rebounds": {
-              "offensive": 11,
-              "defensive": 17,
-              "total": 28
-            },
-            "fouls": {
-              "total": 17,
-              "technical": 0,
-              "flagrant": 0
-            },
-            "fourFactors": {
-              "effectiveFieldGoalPct": 37.1,
-              "freeThrowRate": 43.1,
-              "turnoverRatio": 15.7,
-              "offensiveReboundPct": 39.3
-            }
-          }
-        },
         {
           "teamId": 64,
           "team": "Dayton",
@@ -61853,76 +60443,6 @@
               "offensiveReboundPct": 37.2
             }
           }
-        },
-        {
-          "teamId": 154,
-          "team": "Maine",
-          "conference": "Am. East",
-          "opponentId": 235,
-          "opponent": "Providence",
-          "isHome": false,
-          "pace": 71.5,
-          "gameMinutes": 40,
-          "stats": {
-            "possessions": 71,
-            "assists": 9,
-            "steals": 5,
-            "blocks": 5,
-            "trueShooting": 50.6,
-            "rating": 78.9,
-            "gameScore": 25.299999999999997,
-            "points": {
-              "total": 56,
-              "byPeriod": [
-                26,
-                30
-              ],
-              "largestLead": 3,
-              "fastBreak": 3,
-              "inPaint": 10,
-              "offTurnovers": 6
-            },
-            "twoPointFieldGoals": {
-              "made": 7,
-              "attempted": 20,
-              "pct": 35
-            },
-            "threePointFieldGoals": {
-              "made": 8,
-              "attempted": 23,
-              "pct": 35
-            },
-            "freeThrows": {
-              "made": 18,
-              "attempted": 28,
-              "pct": 64
-            },
-            "fieldGoals": {
-              "made": 15,
-              "attempted": 43,
-              "pct": 35
-            },
-            "turnovers": {
-              "total": 23,
-              "teamTotal": 1
-            },
-            "rebounds": {
-              "offensive": 8,
-              "defensive": 24,
-              "total": 32
-            },
-            "fouls": {
-              "total": 18,
-              "technical": 0,
-              "flagrant": 0
-            },
-            "fourFactors": {
-              "effectiveFieldGoalPct": 44.2,
-              "freeThrowRate": 65.1,
-              "turnoverRatio": 32.4,
-              "offensiveReboundPct": 25
-            }
-          }
         }
       ]
     },
@@ -62526,155 +61046,6 @@
               "freeThrowRate": 32,
               "turnoverRatio": 14.1,
               "offensiveReboundPct": 32.3
-            }
-          }
-        }
-      ]
-    },
-    {
-      "id": "374512",
-      "date": "2026-11-02T23:30:00.000Z",
-      "neutralSite": false,
-      "conferenceGame": false,
-      "gameType": "STD",
-      "teams": [
-        {
-          "teamId": 894,
-          "team": "Rhode Island College",
-          "conference": null,
-          "opponentId": 306,
-          "opponent": "UAlbany",
-          "isHome": false,
-          "pace": 72.5,
-          "gameMinutes": 40,
-          "stats": {
-            "possessions": 72,
-            "assists": 8,
-            "steals": 5,
-            "blocks": 1,
-            "trueShooting": 46.3,
-            "rating": 93.1,
-            "gameScore": 40.50000000000001,
-            "points": {
-              "total": 67,
-              "byPeriod": [
-                23,
-                44
-              ],
-              "largestLead": 3,
-              "fastBreak": 2,
-              "inPaint": 30,
-              "offTurnovers": 15
-            },
-            "twoPointFieldGoals": {
-              "made": 15,
-              "attempted": 39,
-              "pct": 38.5
-            },
-            "threePointFieldGoals": {
-              "made": 10,
-              "attempted": 25,
-              "pct": 40
-            },
-            "freeThrows": {
-              "made": 7,
-              "attempted": 19,
-              "pct": 37
-            },
-            "fieldGoals": {
-              "made": 25,
-              "attempted": 64,
-              "pct": 39
-            },
-            "turnovers": {
-              "total": 11,
-              "teamTotal": 1
-            },
-            "rebounds": {
-              "offensive": 13,
-              "defensive": 27,
-              "total": 40
-            },
-            "fouls": {
-              "total": 11,
-              "technical": 0,
-              "flagrant": 0
-            },
-            "fourFactors": {
-              "effectiveFieldGoalPct": 46.9,
-              "freeThrowRate": 29.7,
-              "turnoverRatio": 15.3,
-              "offensiveReboundPct": 32.5
-            }
-          }
-        },
-        {
-          "teamId": 306,
-          "team": "UAlbany",
-          "conference": "Am. East",
-          "opponentId": 894,
-          "opponent": "Rhode Island College",
-          "isHome": true,
-          "pace": 72.5,
-          "gameMinutes": 40,
-          "stats": {
-            "possessions": 73,
-            "assists": 10,
-            "steals": 6,
-            "blocks": 7,
-            "trueShooting": 50.9,
-            "rating": 101.4,
-            "gameScore": 53.7,
-            "points": {
-              "total": 74,
-              "byPeriod": [
-                42,
-                32
-              ],
-              "largestLead": 28,
-              "fastBreak": 8,
-              "inPaint": 38,
-              "offTurnovers": 13
-            },
-            "twoPointFieldGoals": {
-              "made": 23,
-              "attempted": 44,
-              "pct": 52.3
-            },
-            "threePointFieldGoals": {
-              "made": 7,
-              "attempted": 23,
-              "pct": 30
-            },
-            "freeThrows": {
-              "made": 7,
-              "attempted": 13,
-              "pct": 54
-            },
-            "fieldGoals": {
-              "made": 30,
-              "attempted": 67,
-              "pct": 45
-            },
-            "turnovers": {
-              "total": 13,
-              "teamTotal": 1
-            },
-            "rebounds": {
-              "offensive": 13,
-              "defensive": 34,
-              "total": 47
-            },
-            "fouls": {
-              "total": 18,
-              "technical": 0,
-              "flagrant": 0
-            },
-            "fourFactors": {
-              "effectiveFieldGoalPct": 50,
-              "freeThrowRate": 19.4,
-              "turnoverRatio": 17.8,
-              "offensiveReboundPct": 27.7
             }
           }
         }
@@ -64490,76 +62861,6 @@
               "freeThrowRate": 32.4,
               "turnoverRatio": 13.9,
               "offensiveReboundPct": 31.5
-            }
-          }
-        },
-        {
-          "teamId": 317,
-          "team": "UMBC",
-          "conference": "Am. East",
-          "opponentId": 95,
-          "opponent": "George Mason",
-          "isHome": false,
-          "pace": 71.5,
-          "gameMinutes": 40,
-          "stats": {
-            "possessions": 71,
-            "assists": 11,
-            "steals": 6,
-            "blocks": 3,
-            "trueShooting": 36,
-            "rating": 76.1,
-            "gameScore": 25.400000000000006,
-            "points": {
-              "total": 54,
-              "byPeriod": [
-                27,
-                27
-              ],
-              "largestLead": 0,
-              "fastBreak": 4,
-              "inPaint": 12,
-              "offTurnovers": 19
-            },
-            "twoPointFieldGoals": {
-              "made": 12,
-              "attempted": 41,
-              "pct": 29.3
-            },
-            "threePointFieldGoals": {
-              "made": 8,
-              "attempted": 31,
-              "pct": 26
-            },
-            "freeThrows": {
-              "made": 6,
-              "attempted": 7,
-              "pct": 86
-            },
-            "fieldGoals": {
-              "made": 20,
-              "attempted": 72,
-              "pct": 28
-            },
-            "turnovers": {
-              "total": 12,
-              "teamTotal": 2
-            },
-            "rebounds": {
-              "offensive": 15,
-              "defensive": 25,
-              "total": 40
-            },
-            "fouls": {
-              "total": 19,
-              "technical": 0,
-              "flagrant": 0
-            },
-            "fourFactors": {
-              "effectiveFieldGoalPct": 33.3,
-              "freeThrowRate": 9.7,
-              "turnoverRatio": 16.9,
-              "offensiveReboundPct": 37.5
             }
           }
         }
