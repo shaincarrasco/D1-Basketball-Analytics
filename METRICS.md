@@ -60,3 +60,21 @@ The current-season team, player, and game snapshots are filtered against a canon
 
 
 Provider school-name aliases are normalized before matching team records to the directory (including New Orleans and St. Thomas).
+
+
+## D1 Hoops Power Rating (DHR)
+
+The free national power rating is independently calculated from verified 2026–27 game-level team box scores. It is not KenPom, Bart Torvik, the NCAA NET, or a reproduction of any proprietary rating.
+
+- **AdjO:** opponent-adjusted points scored per 100 possessions.
+- **AdjD:** opponent-adjusted points allowed per 100 possessions; lower is better.
+- **AdjEM:** AdjO − AdjD; the primary national ranking key.
+- **AdjTempo:** opponent-adjusted possessions per 40 minutes.
+- **SOS:** average opponent adjusted efficiency margin for the opponents on the schedule.
+- **Venue adjustment:** estimates the home-court net-efficiency edge from available non-neutral games and normalizes game performances to neutral court.
+- **Opponent adjustment:** iterative fixed-point solve; each team's offense is adjusted for the defenses it faced and each defense for the offenses it faced.
+- **Small-sample stabilization:** ratings are shrunk toward the season's D-I league average using a five-game prior. Sample labels distinguish early (1–3 games), developing (4–7), and established (8+) records.
+- **Coverage:** only games with sufficient team and opponent box-score fields to calculate possessions and efficiency are included. Teams without verified box-score coverage remain unranked; no missing performance is fabricated.
+- **Update:** the rating is recalculated from the current season snapshot during every GitHub Pages build.
+
+The iterative opponent-adjustment approach is a transparent, established family of methods for estimating adjusted offense and defense from game-level efficiency. DHR's equations, venue treatment, shrinkage and coverage are documented here so its output can be audited. Its values and ranks are original to this project and must not be described as KenPom ratings.
