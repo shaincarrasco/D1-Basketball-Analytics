@@ -105,12 +105,13 @@ const d1Teams = teams.filter(team => isD1Conference(team.conference));
 const directoryPayload = JSON.parse(await readFile("public/data/team-directory.json", "utf8"));
 const directoryTeams = Array.isArray(directoryPayload.teams) ? directoryPayload.teams : [];
 const normalizeTeamName = value => String(value ?? "").toLowerCase().replace(/\b(the|university|college)\b/g, "").replace(/[^a-z0-9]/g, "");
-const providerTeamNames = new Set(d1Teams.map(team => normalizeTeamName(team.team)));
-const d1DirectoryTeams = directoryTeams;
-const missingDirectoryTeams = d1DirectoryTeams.filter(team => !providerTeamNames.has(normalizeTeamName(team.location || team.displayName)));
+const directoryTeamNames = new Set(directoryTeams.map(team => normalizeTeamName(team.location || team.displayName)));
+const matchedD1Teams = d1Teams.filter(team => directoryTeamNames.has(normalizeTeamName(team.team)));
+const unmatchedProviderTeams = d1Teams.filter(team => !directoryTeamNames.has(normalizeTeamName(team.team)));
+const missingDirectoryTeams = directoryTeams.filter(team => !matchedD1Teams.some(record => normalizeTeamName(record.team) === normalizeTeamName(team.location || team.displayName)));
 const placeholderTeams = missingDirectoryTeams.map(team => ({
   team: team.location || team.displayName,
-  conference: team.conference,
+  conference: team.conference ?? null,
   wins: 0,
   losses: 0,
   games: 0,
@@ -123,8 +124,9 @@ const placeholderTeams = missingDirectoryTeams.map(team => ({
   gameStats: [],
   dataStatus: "no_games_yet",
 }));
-const completeD1Teams = [...d1Teams, ...placeholderTeams];
-console.log("[team-rankings] Division I conference filter: " + d1Teams.length + " provider rows + " + placeholderTeams.length + " directory teams with no stats = " + completeD1Teams.length + " D-I teams (" + d1DirectoryTeams.length + " directory entries matched).");
+const completeD1Teams = [...matchedD1Teams, ...placeholderTeams];
+console.log("[team-rankings] D-I teams: " + matchedD1Teams.length + " provider rows + " + placeholderTeams.length + " directory-only teams = " + completeD1Teams.length + " of " + directoryTeams.length + " directory programs.");
+if (unmatchedProviderTeams.length) console.warn("[team-rankings] Provider D-I team names not matched to ESPN directory: " + unmatchedProviderTeams.map(team => team.team).join("; "));
 if (completeD1Teams.length < 300) console.warn("[team-rankings] Fewer than 300 teams matched the Division I conference allowlist; inspect conference labels.");
 
 const gameRows = results.find(result => result.kind === "gameStats")?.rows ?? [];
