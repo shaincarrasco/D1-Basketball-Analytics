@@ -117,7 +117,8 @@ try {
       displayName: team.displayName || team.name,
       name: team.name || team.displayName,
       abbreviation: team.abbreviation || "",
-      location: team.location || team.groups?.name || "Other",
+      location: team.location || "Other",
+      conference: team.groups?.name || team.group?.name || team.conference?.name || null,
       logo: team.logos?.[0]?.href || team.logo || "",
     }));
   if (!teams.length) throw new Error("ESPN returned no recognizable team records");
