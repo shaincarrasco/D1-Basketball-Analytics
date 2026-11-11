@@ -4,11 +4,14 @@ const season = 2027;
 const key = process.env.CBBD_API_KEY;
 if (!key) throw new Error("CBBD_API_KEY is missing.");
 const event = process.env.GITHUB_EVENT_NAME ?? "";
-const snapshotPath = "public/data/player-shooting-season-2027.json";
+const snapshotPath = ".cache/player-shooting-season-2027.json";
+const legacySnapshotPath = "public/data/player-shooting-season-2027.json";
 const playerPath = "public/data/player-season-2027.json";
 const detailDirectory = "public/data/player-details-2027";
 let previous = null;
-try { previous = JSON.parse(await readFile(snapshotPath, "utf8")); } catch { /* no previous snapshot */ }
+try { previous = JSON.parse(await readFile(snapshotPath, "utf8")); } catch {
+  try { previous = JSON.parse(await readFile(legacySnapshotPath, "utf8")); } catch { /* no previous snapshot */ }
+}
 
 async function attachProfiles(profiles) {
   const seasonPayload = JSON.parse(await readFile(playerPath, "utf8"));
@@ -37,7 +40,7 @@ async function attachProfiles(profiles) {
 const refresh = event === "workflow_dispatch" || (event === "schedule" && new Date().getUTCDay() === 0) || (event === "push" && !previous);
 if (!refresh) {
   if (!previous) {
-    await mkdir("public/data", { recursive: true });
+    await mkdir(".cache", { recursive: true });
     await writeFile(snapshotPath, JSON.stringify({ provider: "College Basketball Data", season, status: "pending", fetchedAt: null, count: 0, players: [] }) + "\n");
   } else {
     await attachProfiles(previous.players);
@@ -79,7 +82,7 @@ if (warnings.length && playersById.size === 0) {
 }
 const shootingPlayers = [...playersById.values()];
 const payload = { provider: "College Basketball Data", season, seasonLabel: "2026–27", seasonType: "regular", status: "available", fetchedAt: new Date().toISOString(), conferenceCount: conferences.length, count: shootingPlayers.length, warnings, players: shootingPlayers };
-await mkdir("public/data", { recursive: true });
+await mkdir(".cache", { recursive: true });
 await writeFile(snapshotPath, JSON.stringify(payload) + "\n");
 await attachProfiles(shootingPlayers);
 console.log(`Published ${shootingPlayers.length} player shooting profiles across ${conferences.length} conferences.`);
