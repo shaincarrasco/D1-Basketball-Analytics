@@ -96,6 +96,11 @@ export default function HomePage() {
   const [playerDetails, setPlayerDetails] = useState<PlayerDetailRecord | null>(null);
   const [playerDetailsStatus, setPlayerDetailsStatus] = useState<"idle" | "loading" | "ready" | "error">("idle");
   useEffect(() => {
+    if (!selectedPlayer) return;
+    const fullRecord = players.find(player => player.id === selectedPlayer.id);
+    if (fullRecord && fullRecord !== selectedPlayer) setSelectedPlayer(fullRecord);
+  }, [players, selectedPlayer?.id]);
+  useEffect(() => {
     if (!selectedPlayer) { setPlayerDetails(null); setPlayerDetailsStatus("idle"); return; }
     const base = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
     const controller = new AbortController();
