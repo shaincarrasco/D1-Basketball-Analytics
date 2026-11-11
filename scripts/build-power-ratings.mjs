@@ -57,6 +57,7 @@ for (const team of teamRecords) {
     games.set(id, [ownSide, oppSide]);
   }
 }
+if (!games.size) throw new Error("No verified game-level box scores were available for DHR; refusing to publish an empty rating model.");
 const performances = [...games.values()].flat();
 const d1Performances = performances.filter(game => isD1Conference(game.conference));
 const mean = values => values.length ? values.reduce((sum, value) => sum + value, 0) / values.length : null;
@@ -110,7 +111,7 @@ const output = teamRecords.map(team => {
   const adjO = leagueEfficiency + (node.offense - leagueEfficiency) * reliability;
   const adjD = leagueEfficiency + (node.defense - leagueEfficiency) * reliability;
   const tempo = leagueTempo + (node.tempo - leagueTempo) * reliability;
-  const opponentRatings = teamGames.map(game => nodes.get(game.opponentId)).filter(Boolean).map(opponent => (opponent.offense - opponent.defense) * reliability);
+  const opponentRatings = teamGames.map(game => nodes.get(game.opponentId)).filter(Boolean).map(opponent => { const opponentReliability = opponent.games.length / (opponent.games.length + 5); return (opponent.offense - opponent.defense) * opponentReliability; });
   const sos = mean(opponentRatings);
   return {
     ...team,
@@ -130,6 +131,7 @@ const output = teamRecords.map(team => {
 }).map(team => ({ ...team, powerRatings: team.powerRatings ? { ...team.powerRatings, rank: null } : null }));
 const ranked = output.filter(team => team.powerRatings).sort((a,b) => b.powerRatings.adjEM - a.powerRatings.adjEM);
 ranked.forEach((team, index) => { team.powerRatings.rank = index + 1; });
+if (!ranked.length) throw new Error("DHR produced no rankable Division I teams; refusing to publish an empty national ranking.");
 const payload = { ...teamPayload, fetchedAt: new Date().toISOString(), ratingModel: {
   name: "D1 Hoops Power Rating",
   version: "1.0.0",
