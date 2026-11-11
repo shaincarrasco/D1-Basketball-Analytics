@@ -2,7 +2,7 @@
   "provider": "College Basketball Data",
   "season": 2027,
   "seasonLabel": "2026–27",
-  "fetchedAt": "2026-11-11T01:06:58.549Z",
+  "fetchedAt": "2026-11-11T01:07:37.234Z",
   "count": 519,
   "status": "available",
   "note": "Team box scores are grouped from the provider game-team endpoint. Only fields actually supplied by the provider are included.",
