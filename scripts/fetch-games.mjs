@@ -67,7 +67,6 @@ const games = rows.flatMap((row) => {
     state: row.state ?? null,
     homePeriodPoints: Array.isArray(row.homePeriodPoints) ? row.homePeriodPoints : null,
     awayPeriodPoints: Array.isArray(row.awayPeriodPoints) ? row.awayPeriodPoints : null,
-    source: row,
   }];
 }).sort((a,b) => a.date.localeCompare(b.date));
 console.log(`Fetched ${rows.length} distinct game rows across ${windows.length} date windows; retained ${games.length} Division I matchups.`);
