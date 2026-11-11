@@ -54,7 +54,7 @@ export default function GameLog({ games, logos }: { games: TeamGame[]; logos: Re
                         <span className={g.result === "W" ? "text-win" : "text-loss"}>{g.result}</span> {g.pts}–{g.oppPts}
                         {upset && <span className="ml-2 rounded bg-hot/15 px-1.5 text-[10px] font-bold text-hot">upset</span>}
                       </span>
-                    ) : g.status === "in_progress" ? <span className="flex items-center gap-2 text-hot"><span className="live-dot" />In progress</span> : <span className="text-dim">{timeLabel(g.date)}</span>}
+                    ) : g.status === "postponed" || g.status === "cancelled" ? <span className="text-mute capitalize">{g.status}</span> : g.status === "in_progress" ? <span className="flex items-center gap-2 text-hot"><span className="live-dot" />In progress</span> : <span className="text-dim">{timeLabel(g.date)}</span>}
                   </td>
                   <td style={{ color: g.wp === null ? undefined : g.wp >= 0.5 ? "var(--ink)" : "var(--mute)" }}>{pctFmt(g.wp)}</td>
                   <td className="text-mute">{g.projPts !== null ? `${fmt(g.projPts, 0)}–${fmt(g.projOppPts, 0)}` : "—"}</td>

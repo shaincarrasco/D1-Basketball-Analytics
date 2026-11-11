@@ -168,7 +168,7 @@ const ratingModel = {
   homeEdgePointsPerGame: round((current.h * current.muT) / 100, 2),
   gameCoverage: fitGames.length, rankedTeams: rated.length, iterations: current.iterations,
   seasonPrior: priorInfo,
-  priors: { teamGames: current.cfg.teamPrior, conferenceTeams: current.cfg.conferencePrior, homeEdge: current.cfg.homeEdgePrior, homeEdgeWeight: current.cfg.homeEdgeWeight, nonD1Weight: current.cfg.nonD1Weight },
+  priors: { teamGames: current.cfg.teamPrior, seasonPriorWeight: current.cfg.seasonPriorWeight, seasonRegression: current.cfg.seasonRegression, conferenceTeams: current.cfg.conferencePrior, homeEdge: current.cfg.homeEdgePrior, homeEdgeWeight: current.cfg.homeEdgeWeight, nonD1Weight: current.cfg.nonD1Weight },
   updatedAt: teamPayload.fetchedAt ?? new Date().toISOString(),
 };
 const nonD1 = rating(current, NON_D1, false);

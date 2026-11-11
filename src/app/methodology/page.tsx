@@ -113,7 +113,7 @@ export default function MethodologyPage() {
   const p = m.priors;
   const bt = m.backtest;
   const tempoFactor = m.leagueTempo / 100;
-  const uTypical = (n: number) => (NET_SIGMA / Math.sqrt(n + p.teamGames)) * tempoFactor;
+  const uTypical = (n: number) => (NET_SIGMA / Math.sqrt(n + (meta.model.seasonPrior ? (p.seasonPriorWeight ?? SEASON_PRIOR_WEIGHT) : p.teamGames))) * tempoFactor;
   const sigmaFor = (n: number) => Math.sqrt(GAME_SIGMA ** 2 + 2 * uTypical(n) ** 2);
   const updated = (iso: string | null) => (iso ? new Date(iso).toLocaleString("en-US", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit", timeZone: "America/New_York", timeZoneName: "short" }) : "unknown");
 

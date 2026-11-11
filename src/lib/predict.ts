@@ -22,7 +22,8 @@ export function project(meta: Meta, a: TeamSummary, b: TeamSummary, site: "home"
   const bEff = b.adjO + (a.adjD - mu) - edge;
   const homePts = (aEff * tempo) / 100, awayPts = (bEff * tempo) / 100;
   const margin = homePts - awayPts;
-  const prior = priors?.teamGames ?? 3;
+  // Matches the model: a previous-season prior carries more weight than the conference prior.
+  const prior = meta.model.seasonPrior ? (priors?.seasonPriorWeight ?? 5) : (priors?.teamGames ?? 3);
   const u = (n: number) => (NET_SIGMA / Math.sqrt(n + prior)) * (tempo / 100);
   const sigma = Math.sqrt(GAME_SIGMA ** 2 + u(a.ratedGames) ** 2 + u(b.ratedGames) ** 2);
   return { tempo, homePts, awayPts, margin, sigma, homeWinProb: normalCdf(margin / sigma) };

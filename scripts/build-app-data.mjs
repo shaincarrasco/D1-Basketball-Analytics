@@ -148,7 +148,8 @@ const teamSummaries = d1Teams.map(t => {
     for (let i = finished.length - 1; i >= 0 && finished[i].result === last; i--) n++;
     streak = `${last}${n}`;
   }
-  const upcoming = log.filter(x => !x.result);
+  // Only games still on the calendar count toward projections and "next game".
+  const upcoming = log.filter(x => !x.result && (x.status === "scheduled" || x.status === "in_progress"));
   const next = upcoming[0];
   // Expected wins over the remaining schedule using current ratings.
   const projWinsLeft = upcoming.reduce((s, x) => s + (x.wp ?? 0.5), 0);

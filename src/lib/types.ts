@@ -99,7 +99,7 @@ export type Meta = {
     name: string; version: string; method: string; leagueAverage: number; leagueTempo: number; estimatedHomeEdge: number;
     homeEdgePointsPerGame: number; gameCoverage: number; rankedTeams: number;
     seasonPrior: { season: number | null; provider: string | null; teams: number } | null;
-    priors: { teamGames: number; conferenceTeams: number; homeEdge: number; homeEdgeWeight: number; nonD1Weight: number };
+    priors: { teamGames: number; seasonPriorWeight?: number; seasonRegression?: number; conferenceTeams: number; homeEdge: number; homeEdgeWeight: number; nonD1Weight: number };
     pooledNonD1: { adjO: number; adjD: number; adjEM: number; adjT: number } | null;
     backtest: { description: string; all: BacktestBlock; seasoned: BacktestBlock; seasonedRule: string };
   };

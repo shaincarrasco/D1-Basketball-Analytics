@@ -30,6 +30,8 @@ export default function SiteShell({ children, updated }: { children: React.React
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if ((e.key === "k" && (e.metaKey || e.ctrlKey)) || (e.key === "/" && !(e.target instanceof HTMLInputElement) && !(e.target instanceof HTMLTextAreaElement) && !(e.target instanceof HTMLSelectElement))) {
+        // Don't stack search on top of another open dialog (e.g. a game sheet).
+        if (document.querySelector('[aria-modal="true"]')) return;
         e.preventDefault();
         setSearchOpen(true);
       }

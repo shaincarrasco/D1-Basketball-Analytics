@@ -60,14 +60,14 @@ export default function Tonight() {
             <Link key={g.id} href={`/games/?d=${day}&g=${g.id}`} className="deck w-[82vw] max-w-[340px] shrink-0 snap-start p-4 hover:border-line2 sm:w-auto sm:max-w-none">
               <div className="mb-3 flex items-center justify-between text-xs text-mute">
                 <span className="flex items-center gap-2">
-                  {g.status === "in_progress" ? <><span className="live-dot" /><span className="text-hot" title="Status as of the last data refresh">In progress</span></> : g.status === "final" ? "Final" : <>{timeLabel(g.date)} · projected score</>}
+                  {g.status === "in_progress" ? <><span className="live-dot" /><span className="text-hot" title="Status as of the last data refresh">In progress</span></> : g.status === "final" ? "Final" : g.status === "scheduled" ? <>{timeLabel(g.date)} · projected score</> : <span className="capitalize">{g.status.replace("_", " ")}</span>}
                   {g.neutral && <span>· neutral</span>}
                 </span>
                 {g.watch !== null && <span title="Watchability: team quality + projected closeness">Watch {g.watch}</span>}
               </div>
               <div className="space-y-1.5">
-                <Row side={g.away} score={g.status === "scheduled" ? (g.pred ? Math.round(g.pred.away) : null) : g.away.score} fav={!g.pred || g.pred.wp < 0.5} projected={g.status === "scheduled"} />
-                <Row side={g.home} score={g.status === "scheduled" ? (g.pred ? Math.round(g.pred.home) : null) : g.home.score} fav={!g.pred || g.pred.wp >= 0.5} projected={g.status === "scheduled"} />
+                <Row side={g.away} score={g.status === "scheduled" ? (g.pred ? Math.round(g.pred.away) : null) : g.status === "final" || g.status === "in_progress" ? g.away.score : null} fav={!g.pred || g.pred.wp < 0.5} projected={g.status === "scheduled"} />
+                <Row side={g.home} score={g.status === "scheduled" ? (g.pred ? Math.round(g.pred.home) : null) : g.status === "final" || g.status === "in_progress" ? g.home.score : null} fav={!g.pred || g.pred.wp >= 0.5} projected={g.status === "scheduled"} />
               </div>
               {g.pred && (
                 <div className="mt-3">

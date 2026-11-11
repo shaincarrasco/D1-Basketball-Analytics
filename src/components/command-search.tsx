@@ -23,10 +23,27 @@ export default function CommandSearch({ onClose }: { onClose: () => void }) {
   const [q, setQ] = useState("");
   const [active, setActive] = useState(0);
   const input = useRef<HTMLInputElement>(null);
+  const dialog = useRef<HTMLDivElement>(null);
   const teams = useJson<TeamSummary[]>("teams.json");
   const players = useJson<PlayerTable>("players.json");
   const confs = useJson<Conference[]>("conferences.json");
-  useEffect(() => { input.current?.focus(); const prev = document.body.style.overflow; document.body.style.overflow = "hidden"; return () => { document.body.style.overflow = prev; }; }, []);
+  useEffect(() => {
+    const opener = document.activeElement as HTMLElement | null;
+    input.current?.focus();
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = prev; opener?.focus?.({ preventScroll: true }); };
+  }, []);
+  // Escape from anywhere in the dialog; Tab cycles inside it.
+  const onDialogKey = (e: React.KeyboardEvent) => {
+    if (e.key === "Escape") { e.preventDefault(); onClose(); return; }
+    if (e.key !== "Tab" || !dialog.current) return;
+    const items = [...dialog.current.querySelectorAll<HTMLElement>("input, button")];
+    if (!items.length) return;
+    const first = items[0], last = items[items.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  };
 
   const hits = useMemo<Hit[]>(() => {
     const n = norm(q.trim());
@@ -54,15 +71,14 @@ export default function CommandSearch({ onClose }: { onClose: () => void }) {
   const go = (h: Hit) => { onClose(); router.push(h.href); };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/60 p-3 pt-[10vh] backdrop-blur-sm" onMouseDown={e => e.target === e.currentTarget && onClose()} role="dialog" aria-modal="true" aria-label="Search">
-      <div className="deck sheet-in w-full max-w-xl overflow-hidden !bg-deck shadow-2xl">
+    <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/60 p-3 pt-[10vh] backdrop-blur-sm" onMouseDown={e => e.target === e.currentTarget && onClose()} role="dialog" aria-modal="true" aria-label="Search" onKeyDown={onDialogKey}>
+      <div ref={dialog} className="deck sheet-in w-full max-w-xl overflow-hidden !bg-deck shadow-2xl">
         <div className="flex items-center gap-3 border-b border-line px-4">
           <Search size={18} className="text-mute" aria-hidden />
           <input ref={input} value={q} onChange={e => setQ(e.target.value)} placeholder="Team, player or conference"
             className="h-14 w-full bg-transparent text-base outline-none placeholder:text-dim" aria-label="Search" aria-controls="search-results" aria-activedescendant={hits[active] ? `hit-${active}` : undefined}
             onKeyDown={e => {
-              if (e.key === "Escape") onClose();
-              else if (e.key === "ArrowDown") { e.preventDefault(); setActive(a => Math.min(hits.length - 1, a + 1)); }
+              if (e.key === "ArrowDown") { e.preventDefault(); setActive(a => Math.min(hits.length - 1, a + 1)); }
               else if (e.key === "ArrowUp") { e.preventDefault(); setActive(a => Math.max(0, a - 1)); }
               else if (e.key === "Enter" && hits[active]) go(hits[active]);
             }} />
