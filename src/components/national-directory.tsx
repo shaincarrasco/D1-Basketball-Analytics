@@ -250,7 +250,7 @@ export default function NationalDirectory({ players = [], teamRecords = [], init
   const [status, setStatus] = useState<DirectoryState>("loading");
   const [error, setError] = useState("");
   const [query, setQuery] = useState(initialQuery);
-  const [conference, setConference] = useState("All locations");
+  const [conference, setConference] = useState("All conferences");
   const [selected, setSelected] = useState<EspnTeam | null>(null);
   const [roster, setRoster] = useState<EspnAthlete[]>([]);
   const [rosterStatus, setRosterStatus] = useState<DirectoryState>("ready");
@@ -325,16 +325,18 @@ export default function NationalDirectory({ players = [], teamRecords = [], init
 
   useEffect(() => { void loadTeams(); }, []);
 
-  const conferences = useMemo(() => ["All locations", ...Array.from(new Set(teams.map(t => t.location || "Other"))).sort()], [teams]);
+  const conferenceByTeam = useMemo(() => new Map(teamRecords.map(record => [normalizeTeam(record.team), record.conference || "Conference unavailable"])), [teamRecords]);
+  const conferences = useMemo(() => ["All conferences", ...Array.from(new Set(teamRecords.map(record => record.conference).filter((value): value is string => Boolean(value)))).sort()], [teamRecords]);
   const filtered = useMemo(() => teams.filter(t => {
     const name = t.displayName || t.name || "";
-    return name.toLowerCase().includes(query.toLowerCase()) && (conference === "All locations" || (t.location || "Other") === conference);
+    const teamConference = conferenceByTeam.get(normalizeTeam(name)) || "Conference unavailable";
+    return name.toLowerCase().includes(query.toLowerCase()) && (conference === "All conferences" || teamConference === conference);
   }).sort((a, b) => {
     const av = directorySort === "name" ? (a.displayName || a.name || "") : (a.location || "");
     const bv = directorySort === "name" ? (b.displayName || b.name || "") : (b.location || "");
     const comparison = av.localeCompare(bv);
     return directoryDirection === "asc" ? comparison : -comparison;
-  }), [teams, query, conference, directorySort, directoryDirection]);
+  }), [teams, query, conference, conferenceByTeam, directorySort, directoryDirection]);
 
   const sortedRoster = useMemo(() => [...roster].sort((a, b) => {
     const av = rosterSort === "position" ? (a.position?.displayName || a.position?.name || "") : rosterSort === "jersey" ? (a.jersey || "") : (a.fullName || a.displayName || "");
@@ -400,7 +402,7 @@ export default function NationalDirectory({ players = [], teamRecords = [], init
 
   return <div className="space-y-5">
     <div className="panel flex flex-wrap items-center justify-between gap-3 p-5"><div><div className="eyebrow">National directory · men's Division I</div><h2 className="mt-2 text-2xl font-black">Every program. Every listed roster.</h2><p className="mt-1 text-xs text-slate-400">Build-refreshed national directory and live roster listings from ESPN.</p></div><button onClick={() => void loadTeams()} className="inline-flex items-center gap-2 rounded-lg border border-[#29364a] px-3 py-2 text-xs hover:border-lime-300"><RefreshCw size={14}/> Refresh</button></div>
-    <div className="flex flex-wrap gap-2"><label className="flex min-w-[220px] flex-1 items-center gap-2 rounded-xl border border-[#29364a] bg-[#101827] px-3"><Search size={15} className="text-slate-500"/><input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search all teams…" className="w-full bg-transparent py-3 text-xs outline-none"/></label><label className="flex items-center gap-2 rounded-xl border border-[#29364a] bg-[#101827] px-3 text-xs text-slate-500">Sort<select value={directorySort} onChange={e=>setDirectorySort(e.target.value as "name"|"location")} className="bg-transparent py-3 text-slate-100"><option value="name">Team name</option><option value="location">Location</option></select></label><button onClick={() => setDirectoryDirection(v => v === "asc" ? "desc" : "asc")} className="rounded-xl border border-[#29364a] bg-[#101827] px-3 py-2 text-xs" aria-label="Toggle team sort direction">{directoryDirection === "asc" ? "A–Z" : "Z–A"}</button><select value={conference} onChange={e=>setConference(e.target.value)} className="rounded-xl border border-[#29364a] bg-[#101827] px-3 py-2 text-xs">{conferences.map(c=><option key={c}>{c}</option>)}</select></div>
+    <div className="flex flex-wrap gap-2"><label className="flex min-w-[220px] flex-1 items-center gap-2 rounded-xl border border-[#29364a] bg-[#101827] px-3"><Search size={15} className="text-slate-500"/><input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search all teams…" className="w-full bg-transparent py-3 text-xs outline-none"/></label><label className="flex items-center gap-2 rounded-xl border border-[#29364a] bg-[#101827] px-3 text-xs text-slate-500">Sort<select value={directorySort} onChange={e=>setDirectorySort(e.target.value as "name"|"location")} className="bg-transparent py-3 text-slate-100"><option value="name">Team name</option><option value="location">Location</option></select></label><button onClick={() => setDirectoryDirection(v => v === "asc" ? "desc" : "asc")} className="rounded-xl border border-[#29364a] bg-[#101827] px-3 py-2 text-xs" aria-label="Toggle team sort direction">{directoryDirection === "asc" ? "A–Z" : "Z–A"}</button><label className="flex items-center gap-2 rounded-xl border border-[#29364a] bg-[#101827] px-3 text-xs text-slate-500">Conference<select value={conference} onChange={e=>setConference(e.target.value)} className="bg-transparent py-2 text-slate-100">{conferences.map(c=><option key={c}>{c}</option>)}</select></label></div>
     {status === "loading" && <div className="panel flex items-center gap-3 p-8 text-sm text-slate-400"><Loader2 className="animate-spin" size={18}/> Loading the national team directory…</div>}
     {status === "error" && <div className="panel p-6"><p className="text-sm text-amber-300">{error}</p><button onClick={() => void loadTeams()} className="mt-3 text-xs text-white underline">Retry directory load</button><p className="mt-3 text-xs text-slate-500">This data source may be temporarily unavailable or may block this browser request.</p></div>}
     {comparisonRecords.length > 0 && <section className="panel overflow-hidden">
