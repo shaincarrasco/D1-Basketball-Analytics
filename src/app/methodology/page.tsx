@@ -4,6 +4,8 @@ import PageHeader from "@/components/page-header";
 import { fmt, pctFmt } from "@/lib/format";
 import { getMeta } from "@/lib/server-data";
 import type { BacktestBlock } from "@/lib/types";
+import { ZONES } from "@/lib/shots";
+import { WP_EPS, WP_SIGMA } from "@/lib/win-prob";
 import CalibrationChart from "./calibration-chart";
 
 export const metadata: Metadata = { title: "Methodology", description: "How the D1 Hoops Power Rating (DHR) is built, how its predictions work, how accurate they have been, and what every metric on the site means." };
@@ -20,6 +22,11 @@ const TOC = [
   { id: "season-prior", label: "Previous-season prior" },
   { id: "predictions", label: "Predictions" },
   { id: "backtest", label: "How it's doing" },
+  { id: "market", label: "Model vs the market" },
+  { id: "win-probability", label: "In-game win probability" },
+  { id: "sims", label: "Season simulations" },
+  { id: "dpr", label: "Player rating (DPR)" },
+  { id: "shot-zones", label: "Shot zones" },
   { id: "glossary", label: "Glossary" },
   { id: "sources", label: "Data sources and limits" },
 ];
@@ -292,6 +299,148 @@ u = ${NET_SIGMA} / √(n + k) × tempo / 100`}
             ) : <p>No completed D-I vs D-I games have out-of-sample predictions yet.</p>}
           </Section>
 
+          <Section id="market" title="Model vs the market">
+            {meta.market ? (() => {
+              const mk = meta.market;
+              const picks = mk.atsW + mk.atsL;
+              const atsPct = picks ? mk.atsW / picks : null;
+              const lineBetter = mk.lineMAE < mk.modelMAE;
+              return (
+                <>
+                  <p>
+                    For every final where ESPN showed a pregame spread, DHR&apos;s walk-forward projected margin is compared with the line. Both are scored on the same games: how far each was from the actual margin,
+                    and, where they disagree by at least half a point, whether DHR&apos;s side would have covered.
+                  </p>
+                  <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-line bg-line sm:grid-cols-4">
+                    <Tile label="Games with a line" value={mk.games.toLocaleString("en-US")} sub="D-I vs D-I finals" />
+                    <Tile label="DHR margin MAE" value={fmt(mk.modelMAE, 2)} sub="points off, on average" />
+                    <Tile label="Line margin MAE" value={fmt(mk.lineMAE, 2)} sub="points off, on average" />
+                    <Tile label="DHR against the spread" value={`${mk.atsW}–${mk.atsL}${mk.atsP ? `–${mk.atsP}` : ""}`} sub={atsPct != null ? `${pctFmt(atsPct, 1)} · 52.4% breaks even at −110` : "no picks yet"} />
+                  </dl>
+                  <p>
+                    {lineBetter ? (
+                      <><b>The betting line is currently the better predictor</b>: it misses the final margin by {fmt(mk.lineMAE, 1)} points on average, DHR by {fmt(mk.modelMAE, 1)}.
+                        {atsPct != null && atsPct < 0.524 ? <> DHR&apos;s picks against the spread are {pctFmt(atsPct, 1)}, below the 52.4% needed to break even at standard odds, so <b>don&apos;t bet with it</b>.</> : null}
+                        {" "}That is expected in November: the market knows about injuries, transfers, rotations and preseason information that a pure box-score model only learns from games.</>
+                    ) : (
+                      <>DHR has been closer to the final margin than the line so far ({fmt(mk.modelMAE, 1)} vs {fmt(mk.lineMAE, 1)} points). Samples this small swing a lot; treat that as noise until it holds up over a season.</>
+                    )}
+                  </p>
+                  <p className="text-sm">{mk.note} Lines appear on the <Link href="/games/" className="underline hover:text-ink">scoreboard</Link> as &ldquo;Line: UF −8.5 · DHR: UF −6.2&rdquo;: the favourite and the spread, then DHR&apos;s projection written the same way.</p>
+                </>
+              );
+            })() : <p>No pregame lines have been matched to finished games yet.</p>}
+          </Section>
+
+          <Section id="win-probability" title="In-game win probability">
+            <p>
+              Game sheets for finished and live games chart the home team&apos;s chance of winning after every scoring play. It starts from the pregame projection and moves with the score and the clock:
+            </p>
+            <Formula note={`margin = home − away now; pregame = DHR projected home margin; r = seconds left / 2400. σ = ${WP_SIGMA}, ε = ${WP_EPS}.`}>
+{`WP = Φ( (margin + pregame · r) / (σ · √r + ε) )
+remaining = max(0, 2400 − t)   (overtime: time left in the 300-second period)`}
+            </Formula>
+            <p>
+              The pregame edge is assumed to be earned evenly over 40 minutes, so only the unplayed share of it still counts. <b>σ = {WP_SIGMA} points</b> is how widely a full game&apos;s final margin
+              spreads around its expectation (DHR&apos;s single-game noise is {GAME_SIGMA}; a little more allows for rating uncertainty), and the spread of what is still to come shrinks with the square root of the time left.
+              The small ε keeps the formula defined at the horn, where a tie is 50%. Between baskets the curve drifts toward the leader as time runs off.
+            </p>
+            <p>
+              The chart also marks halftime and any overtimes, the biggest lead for each side, lead changes (the leader switching, ties don&apos;t count) and the largest single-play swing.
+              It is a simple model: it knows nothing about possession, fouls to give or who is on the floor, so the final two minutes of close games are rougher than a full play-by-play model.
+            </p>
+            <p>
+              <b>Live scores</b> on today&apos;s scoreboard come straight from ESPN&apos;s public scoreboard in your browser, refreshed every 30 seconds while a game is on (and paused while the tab is hidden).
+              If that feed fails the page quietly falls back to the last nightly refresh.
+            </p>
+          </Section>
+
+          <Section id="sims" title="Season simulations">
+            {meta.sims ? (
+              <>
+                <p>
+                  Projected records, win ranges and conference-title odds come from <b>{meta.sims.sims.toLocaleString("en-US")} simulations</b> of the {meta.sims.remainingGames.toLocaleString("en-US")} scheduled games left.
+                  Each simulation first draws a <b>rating shock</b> for every team — how wrong today&apos;s rating might be — then plays every remaining game with single-game noise:
+                </p>
+                <Formula note="Shock sd = 15.7 / √(games + 3) points per 100 possessions, scaled to points at league tempo; it shrinks as a team plays more. One shock per team per simulation, so a team that is better than its rating is better in every game of that run.">
+{`simulated margin = DHR projected margin + shock[home] − shock[away] + N(0, ${GAME_SIGMA}²)`}
+                </Formula>
+                <ul className="list-disc space-y-1.5 pl-5">
+                  <li><b>Expected wins</b>: the average final win total across all runs (current wins plus simulated ones). <b>10th–90th percentile</b>: the range that covers the middle 80% of runs.</li>
+                  <li><b>Conference title</b>: share of runs in which the team finishes with the best conference winning percentage, ties included (a shared title counts for every team in the tie); <b>outright</b> counts only runs with no tie.</li>
+                  <li><b>P(20+ wins)</b>: share of runs ending with at least 20 wins. Team pages chart the full win-total distribution.</li>
+                  <li>Only games already on the schedule are played; conference tournaments and the NCAA tournament are not simulated. Games without a projection are skipped.</li>
+                </ul>
+                <p className="text-sm">{meta.sims.method}</p>
+              </>
+            ) : <p>No season simulation is in this build.</p>}
+          </Section>
+
+          <Section id="dpr" title="Player rating (DPR)">
+            <p>
+              <b>DPR</b> (D1 Hoops Player Rating) estimates how many points per 100 possessions a player adds compared with an average D-I player, split into <b>offense</b> and <b>defense</b> (positive is good on both).
+              It is a <b>regularised adjusted plus-minus</b>: from ESPN play-by-play we know which ten players were on the floor for every stretch of every game and how many points each side scored, and we solve for the
+              player values that best explain those scoring margins after accounting for everyone else on the court.
+            </p>
+            <Formula note="Each row is one stretch with the same ten players: y = points per 100 possessions for the offense, weighted by possessions. Off/def are the five offensive and five defensive players.">
+{`y = μ + Σ O[offense players] + Σ D[defense players] + noise
+minimise  Σ w · (y − fit)²  +  λ · Σ (rating − prior)²        λ = ${meta.dpr?.lambda ?? 2500} possessions`}
+            </Formula>
+            <p>
+              Plus-minus on its own is very noisy — teammates who always play together can&apos;t be told apart — so every rating is pulled toward a <b>box-score prior</b>. The prior is a quarter of the gap between the player&apos;s
+              Oliver offensive rating (ORtg) and the D-I average, scaled by usage (usage ÷ 20%, kept between 0.5 and 1.5, so a high-usage efficient scorer gets more credit), and a quarter of his defensive rating (DRtg) gap
+              on defense; each side is capped at ±6. <b>λ = {meta.dpr?.lambda ?? 2500} possessions</b> means a player needs a few thousand possessions on the floor before his on-court results outweigh the prior.
+            </p>
+            <p>
+              Every DPR comes with a <b>standard error</b> (shown as a ± band), from the residual noise and the possessions behind it: √(σ² / (possessions + λ)) for each side, combined. Early in the season that band is wide — often
+              several points — so two players a point or two apart are not meaningfully different. Ranks only include players with at least 150 on-court possessions; players without play-by-play coverage show their box-score prior alone.
+            </p>
+            {meta.dpr && <p className="text-sm">This build: {meta.dpr.players.toLocaleString("en-US")} players rated from {meta.dpr.rows.toLocaleString("en-US")} lineup rows. {meta.dpr.method}. See the <Link href="/players/" className="underline hover:text-ink">players page</Link>.</p>}
+          </Section>
+
+          <Section id="shot-zones" title="Shot zones">
+            <p>
+              Shot charts use ESPN&apos;s shot coordinates: x runs 0–50 feet across the court and y is feet out from the basket (the rim at x 25, y 0). Every field-goal attempt falls in exactly one zone,
+              and zone shading compares a team or player with the D-I field-goal percentage in that zone.
+            </p>
+            <div className="scroll-x">
+              <table className="dt [&_td]:!whitespace-normal">
+                <caption className="sr-only">Shot zone definitions and D-I averages</caption>
+                <thead><tr><th scope="col" className="l">Zone</th><th scope="col" className="l">Definition</th><th scope="col">D-I FG%</th><th scope="col">Share of FGA</th></tr></thead>
+                <tbody>
+                  {(() => {
+                    const lz = meta.shotZones;
+                    const total = lz ? Object.values(lz).reduce((a, z) => a + z.fga, 0) : 0;
+                    const DEF: Record<string, string> = {
+                      rim: "Two-pointers within 4 feet of the basket.",
+                      paint: "Other two-pointers inside the lane (12 feet wide, out to the free-throw line, 13.75 feet from the rim).",
+                      midL: "Two-pointers outside the paint, more than 30° to the left of straight on.",
+                      midC: "Two-pointers outside the paint within 30° of straight on (elbows and the top of the key).",
+                      midR: "Two-pointers outside the paint, more than 30° to the right.",
+                      c3L: "Threes from the left corner: taken less than 8.75 feet out from the basket (the straight part of the arc).",
+                      c3R: "Threes from the right corner.",
+                      ab3L: "Above-the-break threes more than 22° to the left.",
+                      ab3C: "Above-the-break threes within 22° of straight on.",
+                      ab3R: "Above-the-break threes more than 22° to the right.",
+                    };
+                    return ZONES.map(z => {
+                      const st = lz?.[z.id];
+                      return (
+                        <tr key={z.id}>
+                          <th scope="row" className="l !static !border-line !bg-transparent !text-[13.5px] !font-semibold !text-ink">{z.label}</th>
+                          <td className="l min-w-[14rem] text-mute">{DEF[z.id]}</td>
+                          <td>{st && st.fga ? pctFmt(st.fgm / st.fga, 1) : "—"}</td>
+                          <td>{st && total ? pctFmt(st.fga / total, 1) : "—"}</td>
+                        </tr>
+                      );
+                    });
+                  })()}
+                </tbody>
+              </table>
+            </div>
+            <p className="text-sm">Left and right follow the labels on the site&apos;s shot charts. Coordinates are logged by ESPN&apos;s scorers and can be off by a foot or two, so shots on a zone boundary may land in its neighbour.</p>
+          </Section>
+
           <Section id="glossary" title="Glossary">
             {GLOSSARY.map(g => (
               <div key={g.group}>
@@ -313,7 +462,8 @@ u = ${NET_SIGMA} / √(n + k) × tempo / 100`}
               <li><b>Source:</b> schedules, scores, team and player box scores come from the {meta.provider} API. Logos are ESPN-hosted.</li>
               <li><b>Refresh:</b> data is pulled and the whole site rebuilt once a day by a scheduled GitHub Actions job (early morning Eastern), plus on every deploy. Latest pulls — teams {updated(meta.updated.teams)}, games {updated(meta.updated.games)}, players {updated(meta.updated.players)}; site built {updated(meta.updated.built)}.</li>
               <li><b>Coverage:</b> {meta.counts.teams} D-I teams, {meta.counts.players.toLocaleString("en-US")} players and {meta.counts.games.toLocaleString("en-US")} scheduled games ({meta.counts.finals.toLocaleString("en-US")} final). Only games with usable scores enter the rating; missing values show as &ldquo;—&rdquo;, never as zero.</li>
-              <li><b>Not available:</b> no lineup, substitution or play-by-play data, so there are no on/off, lineup or player impact numbers, and projections know nothing about injuries, suspensions or rest.</li>
+              <li><b>Play-by-play, shots and lines:</b> lineups, substitutions, shot locations, score flow and pregame spreads come from ESPN&apos;s public play-by-play and scoreboard; recruiting stars from College Basketball Data. Live scores on today&apos;s slate are fetched from ESPN in your browser.</li>
+              <li><b>Not available:</b> projections know nothing about injuries, suspensions or rest, and play-by-play is missing for some games (mostly against non-D-I opponents), so lineup, on/off and DPR numbers cover only the games ESPN logged.</li>
               <li><b>Not KenPom, Torvik or the NET:</b> DHR is calculated independently here. It belongs to the same family of opponent-adjusted efficiency ratings, but its values and ranks are its own and won&apos;t match those systems. DHR quadrants are unofficial and are not what the NCAA selection committee uses.</li>
               <li><b>Early season:</b> with only a few games per team, ratings lean heavily on conference priors and the backtest is small. Treat rankings in November as a rough sketch.</li>
             </ul>

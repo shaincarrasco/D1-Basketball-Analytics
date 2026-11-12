@@ -2,19 +2,22 @@
 // Game detail sheet: modal on desktop, bottom sheet on phones.
 // Escape / backdrop / close button dismiss it; focus is trapped inside and restored on close.
 import Link from "next/link";
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { X } from "lucide-react";
 import TeamLogo from "@/components/team-logo";
 import WinProb from "@/components/win-prob";
 import { dayLabel, fmt, pctFmt, timeLabel } from "@/lib/format";
+import type { LiveGame } from "@/lib/live";
 import type { BoxLine, Game, GameSide } from "@/lib/types";
+import { winProb, remainingAt, clockLabel } from "@/lib/win-prob";
+import FlowChart from "./flow-chart";
 import { WatchBadge } from "./game-card";
-import { actualMarginText, favoriteWon, isFinal, isLive, marginText, matchupHref, periodLabel, statusLabel, teamHref, winner } from "./game-utils";
+import { actualMarginText, favoriteWon, isFinal, isLive, lineInfo, marginText, matchupHref, periodLabel, statusLabel, teamHref, winner } from "./game-utils";
 
 const ROW_TH = "l !static !border-line !bg-transparent !text-[13.5px] !font-normal !text-mute";
 const FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
-export default function GameSheet({ g, onClose }: { g: Game; onClose: () => void }) {
+export default function GameSheet({ g, live, onClose }: { g: Game; live?: LiveGame; onClose: () => void }) {
   const panel = useRef<HTMLDivElement>(null);
   const closeBtn = useRef<HTMLButtonElement>(null);
   const onCloseRef = useRef(onClose);
@@ -44,8 +47,8 @@ export default function GameSheet({ g, onClose }: { g: Game; onClose: () => void
     };
   }, []);
 
-  const final = isFinal(g), live = isLive(g);
-  const played = final || live;
+  const final = isFinal(g), isLiveNow = isLive(g);
+  const played = final || isLiveNow;
   const titleId = `game-${g.id}-title`;
   const matchup = matchupHref(g);
   const place = [g.city, g.state].filter(Boolean).join(", ");
@@ -57,9 +60,10 @@ export default function GameSheet({ g, onClose }: { g: Game; onClose: () => void
         className="sheet-in relative flex max-h-[92dvh] w-full flex-col overflow-hidden rounded-t-[18px] border border-line2 bg-deck sm:max-h-[90vh] sm:max-w-[860px] sm:rounded-[18px]">
         <div className="mx-auto mt-2 h-1 w-10 shrink-0 rounded-full bg-line2 sm:hidden" aria-hidden />
         <div className="flex shrink-0 items-center gap-2 border-b border-line px-4 py-3 sm:px-6">
-          {live && <span className="live-dot" aria-hidden />}
-          <span className={`text-sm font-semibold ${live ? "text-hot" : "text-ink"}`}>{statusLabel(g)}</span>
-          <span className="truncate text-sm text-mute">· {dayLabel(etDay(g.date), { weekday: "short", month: "short", day: "numeric" })}{final || live ? "" : timeLabel(g.date) === "TBA" ? " · tip time TBA" : ""}</span>
+          {isLiveNow && <span className="live-dot" aria-hidden />}
+          <span className={`text-sm font-semibold ${isLiveNow ? "text-hot" : "text-ink"}`}>{statusLabel(g, live)}</span>
+          {live?.state === "in" && <span className="rounded bg-[rgb(var(--hot-rgb)/0.14)] px-1.5 py-0.5 text-[11px] font-semibold text-hot" title="Score and clock from ESPN's live scoreboard, refreshed every 30 seconds">Live</span>}
+          <span className="truncate text-sm text-mute">· {dayLabel(etDay(g.date), { weekday: "short", month: "short", day: "numeric" })}{final || isLiveNow ? "" : timeLabel(g.date) === "TBA" ? " · tip time TBA" : ""}</span>
           <span className="ml-auto"><WatchBadge value={g.watch} /></span>
           <button ref={closeBtn} onClick={onClose} className="btn ml-1 !p-2" aria-label="Close game details"><X size={18} aria-hidden /></button>
         </div>
@@ -73,10 +77,11 @@ export default function GameSheet({ g, onClose }: { g: Game; onClose: () => void
             {g.neutral && <span className="chip !px-2 !py-0.5 !text-[11.5px]">Neutral site</span>}
             {g.confGame && <span className="chip !px-2 !py-0.5 !text-[11.5px]">Conference game</span>}
             {g.tournament && <span className="chip !px-2 !py-0.5 !text-[11.5px]">{g.tournament}</span>}
-            {final && g.upset != null && <span className="rounded-full bg-[rgba(255,62,165,0.15)] px-2 py-0.5 text-[11.5px] font-bold text-hot">Upset · winner had a {pctFmt(g.upset)} pregame chance</span>}
+            {final && g.upset != null && <span className="rounded-full bg-[rgb(var(--hot-rgb)/0.15)] px-2 py-0.5 text-[11.5px] font-bold text-hot">Upset · winner had a {pctFmt(g.upset)} pregame chance</span>}
           </div>
 
           {played && <LineScore g={g} />}
+          {played && <GameFlow g={g} live={live} />}
           <Projection g={g} />
           <BoxCompare g={g} />
 
@@ -101,7 +106,7 @@ function SideBlock({ side, align, tone }: { side: GameSide; align: "l" | "r"; to
   const name = <span className="block text-[15px] font-semibold leading-tight sm:text-lg">{side.name}</span>;
   return (
     <div className={`flex min-w-0 flex-col items-center gap-2 text-center sm:flex-row sm:gap-3 ${align === "r" ? "sm:flex-row-reverse sm:text-right" : "sm:text-left"}`}>
-      <TeamLogo src={side.logo} name={side.name} size={52} />
+      {href ? <Link href={href} tabIndex={-1} aria-hidden className="shrink-0"><TeamLogo src={side.logo} name={side.name} size={52} /></Link> : <TeamLogo src={side.logo} name={side.name} size={52} />}
       <div className="min-w-0">
         <span className="flex items-center justify-center gap-1.5 sm:justify-start" style={align === "r" ? { justifyContent: "flex-end" } : undefined}>
           <i className="inline-block h-2 w-2 shrink-0 rounded-full" style={{ background: `var(--${tone})` }} aria-hidden />
@@ -159,6 +164,57 @@ function LineScore({ g }: { g: Game }) {
   );
 }
 
+function GameFlow({ g, live }: { g: Game; live?: LiveGame }) {
+  const inGame = live?.state === "in" && live.elapsed != null && g.home.score != null && g.away.score != null;
+  // Extend a stale in-progress flow to the live clock and score.
+  const flowGame = useMemo(() => {
+    if (!inGame || !g.flow?.length) return g;
+    const last = g.flow[g.flow.length - 1];
+    const now: [number, number, number] = [Math.max(last[0], live!.elapsed!), g.home.score!, g.away.score!];
+    return { ...g, flow: [...g.flow, now] };
+  }, [g, inGame, live]);
+  const hasFlow = (g.flow?.length ?? 0) >= 2;
+  const homeS = g.home.short ?? g.home.name, awayS = g.away.short ?? g.away.name;
+  return (
+    <section className="mt-7" aria-labelledby={`gf-${g.id}`}>
+      <h3 id={`gf-${g.id}`} className="h-section mb-2 !text-xl">{isFinal(g) ? "Game flow" : "Win probability"}</h3>
+      {hasFlow ? (
+        <FlowChart g={flowGame} now={inGame ? live!.elapsed : null} />
+      ) : inGame ? (() => {
+        const wp = winProb(g.home.score! - g.away.score!, remainingAt(live!.elapsed!), g.pred?.margin ?? 0);
+        return (
+          <div className="deck-flat p-3">
+            <div className="mb-1 flex justify-between text-xs text-mute"><span>{awayS}</span><span>Live win probability · {clockLabel(live!.elapsed!)}</span><span>{homeS}</span></div>
+            <WinProb awayName={g.away.name} homeName={g.home.name} homeWP={wp} />
+            <p className="mt-2 text-[11.5px] text-dim">From the live score, time left and the pregame projection. The full game-flow chart appears after the nightly data refresh.</p>
+          </div>
+        );
+      })() : (
+        <p className="text-sm text-mute">Play-by-play isn&apos;t available for this game{isFinal(g) ? "" : " yet"}.</p>
+      )}
+    </section>
+  );
+}
+
+function LineRow({ g }: { g: Game }) {
+  const li = lineInfo(g);
+  if (!li) return null;
+  const res = li.result;
+  return (
+    <div className="deck-flat mb-3 flex flex-wrap items-center gap-x-3 gap-y-1 px-3 py-2 text-[13px] text-mute tnum">
+      <span title={li.provider ? `Pregame spread from ${li.provider}, as shown by ESPN` : "Pregame spread as shown by ESPN"}>Line: <b className="text-ink">{li.market}</b></span>
+      {li.model && <span title="DHR projected margin written as a spread">· DHR: <b className="text-ink">{li.model}</b></span>}
+      {li.total != null && <span>· Total {li.total}</span>}
+      {li.pick ? (
+        <span className="ml-auto" title="DHR's side against the line (counts when the model and line differ by at least half a point)">
+          DHR pick <b className="text-ink">{li.pick.text}</b>
+          {res && <b className={`ml-1.5 ${res === "W" ? "text-win" : res === "L" ? "text-loss" : "text-mute"}`}>{res === "W" ? "✓ covered" : res === "L" ? "✗ didn't cover" : "push"}</b>}
+        </span>
+      ) : li.model ? <span className="ml-auto text-dim">No DHR pick (within half a point of the line)</span> : null}
+    </div>
+  );
+}
+
 function Projection({ g }: { g: Game }) {
   const p = g.pred;
   const final = isFinal(g);
@@ -172,8 +228,9 @@ function Projection({ g }: { g: Game }) {
       </div>
       {!p ? <p className="text-sm text-mute">No projection was made for this game.</p> : (
         <>
+          <LineRow g={g} />
           <div className="deck-flat mb-3 p-3">
-            <div className="mb-1 flex justify-between text-xs text-mute"><span>{g.away.name}</span><span>Win probability</span><span>{g.home.name}</span></div>
+            <div className="mb-1 flex justify-between text-xs text-mute"><span>{g.away.name}</span><span>Pregame win probability</span><span>{g.home.name}</span></div>
             <WinProb awayName={g.away.name} homeName={g.home.name} homeWP={p.wp} />
           </div>
           <div className="scroll-x">
@@ -182,6 +239,9 @@ function Projection({ g }: { g: Game }) {
               <tbody>
                 <tr><th scope="row" className={ROW_TH}>Score ({g.away.short ?? g.away.name}–{g.home.short ?? g.home.name})</th><td>{fmt(p.away)}–{fmt(p.home)}</td>{final && <td className="font-semibold">{g.away.score ?? "—"}–{g.home.score ?? "—"}</td>}</tr>
                 <tr><th scope="row" className={ROW_TH}>Margin</th><td>{marginText(g)}</td>{final && <td className="font-semibold">{actualMarginText(g)}</td>}</tr>
+                {g.line && (
+                  <tr><th scope="row" className={ROW_TH}>Market spread</th><td>{lineInfo(g)?.market ?? "—"}</td>{final && <td className="font-semibold">{(() => { const c = lineInfo(g)?.covered; return c ? `${g[c].short ?? g[c].name} covered` : g.home.score != null ? "Push" : "—"; })()}</td>}</tr>
+                )}
                 <tr><th scope="row" className={ROW_TH}>Total points</th><td>{fmt(p.away + p.home)}</td>{final && <td className="font-semibold">{g.home.score != null && g.away.score != null ? g.home.score + g.away.score : "—"}</td>}</tr>
                 <tr><th scope="row" className={ROW_TH}>Tempo (possessions)</th><td>{fmt(p.tempo)}</td>{final && <td className="font-semibold">{fmt(poss)}</td>}</tr>
               </tbody>

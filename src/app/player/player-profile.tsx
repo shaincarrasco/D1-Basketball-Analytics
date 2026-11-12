@@ -1,16 +1,20 @@
 "use client";
-// Player profile: hero line, D-I percentiles, shot diet, teammates, team context.
+// Player profile: hero line + DPR, shots, on/off, D-I percentiles, similar players, teammates, team context.
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
+import FavoriteButton from "@/components/favorite-button";
+import ShotChart from "@/components/shot-chart";
 import TeamLogo from "@/components/team-logo";
 import { Empty, ErrorState, Loading } from "@/components/states";
 import { useJson } from "@/lib/client-data";
 import { dayLabel, fmt, heatPct, pctFmt, signed, timeLabel } from "@/lib/format";
 import { playerRows } from "@/lib/players";
-import type { PlayerBio, PlayerTable, TeamDetail, TeamSummary } from "@/lib/types";
+import type { Meta, PlayerBio, PlayerTable, TeamDetail, TeamSummary } from "@/lib/types";
 import GameLog from "./game-log";
-import { derive, makePool, MIN_ATT, POS_WORD, pctLabel, type PlayerRow } from "../players/player-stats";
+import { derive, makePool, MIN_ATT, POS_WORD, pctLabel, recruitText, similarPlayers, starGlyphs, type PlayerRow } from "../players/player-stats";
+import { followRowLink, ROW_LINK_CLASS } from "../players/row-link";
+import { DprCard, OnOff, Similar } from "./impact";
 import ShotDiet, { type ZoneAvg } from "./shot-diet";
 
 const POOL_MIN = 10;
@@ -94,6 +98,8 @@ function Profile({ p, all, detail, teams }: { p: PlayerRow; all: PlayerRow[]; de
     }
     return out;
   }, [pool, p]);
+  const ranked = useMemo(() => all.reduce((n, r) => (r.dprRank ? n + 1 : n), 0), [all]);
+  const similar = useMemo(() => similarPlayers(p, all), [p, all]);
   const zoneAvg = useMemo<ZoneAvg>(() => {
     const sum = (k: "rimA" | "rimM" | "midA" | "midM" | "thrA" | "thrM") => pool.reduce((a, r) => a + (r[k] ?? 0), 0);
     const r = (m: number, a: number) => (a ? (m / a) * 100 : null);
@@ -107,8 +113,10 @@ function Profile({ p, all, detail, teams }: { p: PlayerRow; all: PlayerRow[]; de
   return (
     <div className="space-y-5">
       <section className="deck relative overflow-hidden p-5 sm:p-8" aria-labelledby="player-name">
-        <div className="relative">
-          <div className="flex items-center gap-3">
+        <div className="relative grid gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
+          <div className="min-w-0">
+          <div className="flex items-start justify-between gap-3">
+          <div className="flex min-w-0 items-center gap-3">
             <TeamLogo src={t?.logo ?? null} name={t?.name ?? "?"} size={44} />
             <div className="min-w-0 text-sm leading-tight">
               {t ? <Link href={`/teams/${t.slug}/`} className="link block truncate text-base font-semibold">{t.name}{t.mascot ? ` ${t.mascot}` : ""}</Link> : <span className="block font-semibold">Unknown team</span>}
@@ -118,6 +126,8 @@ function Profile({ p, all, detail, teams }: { p: PlayerRow; all: PlayerRow[]; de
               </span>
             </div>
           </div>
+          <FavoriteButton kind="players" id={p.id} name={p.name} />
+          </div>
           <div className="mt-4 flex items-center gap-3">
             <Jersey bio={bio} color={t?.color ?? null} />
             <h1 id="player-name" className="text-[2rem] font-bold leading-tight tracking-[-0.02em] sm:text-[2.5rem]">{p.name}</h1>
@@ -125,6 +135,12 @@ function Profile({ p, all, detail, teams }: { p: PlayerRow; all: PlayerRow[]; de
           {bio && (
             <p className="mt-2 text-sm text-mute">
               {[bio.pos, bio.ht, bio.wt ? `${bio.wt} lbs` : null, bio.year ? YEAR[bio.year] ?? bio.year : null, bio.home].filter(Boolean).join(" · ")}
+            </p>
+          )}
+          {recruitText(p) && (
+            <p className="mt-1.5 text-sm" title="High-school recruiting ranking (College Basketball Data)">
+              {p.stars ? <span className="mr-1.5 tracking-[0.08em]" role="img" aria-label={`${p.stars}-star recruit`}>{starGlyphs(p.stars)}</span> : null}
+              <span className="text-mute">{p.stars && !p.recRank && !p.recYear ? "recruit" : recruitText(p)}</span>
             </p>
           )}
           <p className="mt-2 text-mute tnum">
@@ -148,6 +164,8 @@ function Profile({ p, all, detail, teams }: { p: PlayerRow; all: PlayerRow[]; de
             <span><span className="text-dim">BLK</span> <b>{fmt(p.blk)}</b></span>
             <span><span className="text-dim">TOV</span> <b>{fmt(p.tov)}</b></span>
           </div>
+          </div>
+          <DprCard p={p} ranked={ranked} />
         </div>
       </section>
 
@@ -164,6 +182,8 @@ function Profile({ p, all, detail, teams }: { p: PlayerRow; all: PlayerRow[]; de
           : detail.data ? <GameLog playerId={p.id} detail={detail.data} teams={teams} /> : <p className="text-sm text-mute">Loading games…</p>}
       </section>
 
+      <Shots p={p} detail={detail.data} loading={detail.status === "loading"} zoneAvg={zoneAvg} />
+
       <div className="grid items-start gap-5 lg:grid-cols-2">
         <section className="deck p-5" aria-labelledby="pct-h">
           <h2 id="pct-h" className="h-section">D-I percentiles</h2>
@@ -179,11 +199,10 @@ function Profile({ p, all, detail, teams }: { p: PlayerRow; all: PlayerRow[]; de
             </div>
           </div>
         </section>
-        <section className="deck p-5" aria-labelledby="shot-h">
-          <h2 id="shot-h" className="h-section">Shot diet</h2>
-          {p.shots ? <p className="mb-4 mt-1 text-sm text-mute">Where his {p.shots} tracked field-goal attempts come from, and how often they go in.</p> : <div className="mt-2" />}
-          <ShotDiet p={p} avg={zoneAvg} />
-        </section>
+        <div className="grid min-w-0 gap-5">
+          <OnOff p={p} detail={detail.data} />
+          <Similar p={p} list={similar} />
+        </div>
       </div>
 
       <div className="grid gap-5 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
@@ -195,6 +214,42 @@ function Profile({ p, all, detail, teams }: { p: PlayerRow; all: PlayerRow[]; de
         {t && <TeamContext t={t} detail={detail.data} />}
       </div>
     </div>
+  );
+}
+
+function Shots({ p, detail, loading, zoneAvg }: { p: PlayerRow; detail: TeamDetail | null; loading: boolean; zoneAvg: ZoneAvg }) {
+  const meta = useJson<Meta>("meta.json");
+  const [mode, setMode] = useState<"dots" | "zones">("dots");
+  const shots = detail?.shots?.byPid?.[p.id] ?? [];
+  const league = meta.data?.shotZones ?? null;
+  return (
+    <section className="deck p-5" aria-labelledby="shot-h">
+      <div className="flex flex-wrap items-baseline justify-between gap-3">
+        <div>
+          <h2 id="shot-h" className="h-section">Shots</h2>
+          <p className="mt-1 text-sm text-mute">
+            {shots.length ? `Every tracked field-goal attempt (${shots.length}), and where his shots come from.` : p.shots ? `Where his ${p.shots} tracked field-goal attempts come from, and how often they go in.` : "Shot locations appear once he attempts a field goal in a tracked game."}
+          </p>
+        </div>
+        {shots.length > 0 && (
+          <div className="flex gap-1.5" role="group" aria-label="Shot chart view">
+            <button className="chip" aria-pressed={mode === "dots"} onClick={() => setMode("dots")}>Every shot</button>
+            <button className="chip" aria-pressed={mode === "zones"} onClick={() => setMode("zones")} disabled={!league} title={league ? "FG% by zone vs the D-I average" : "Loading D-I zone averages"}>Zones</button>
+          </div>
+        )}
+      </div>
+      {!shots.length && !p.shots ? (
+        <p className="mt-3 rounded-lg bg-deck2 p-6 text-sm text-mute">{loading ? "Loading shot locations…" : "No shot locations for him yet."}</p>
+      ) : (
+      <div className="mt-4 grid items-center gap-6 md:grid-cols-2">
+        <div className="mx-auto w-full max-w-[560px]">
+          {shots.length ? <ShotChart shots={shots} mode={mode === "zones" && league ? "zones" : "dots"} league={league} title={`${p.name} shot chart: ${shots.filter(s => s[2]).length} of ${shots.length} field goals`} />
+            : <p className="rounded-lg bg-deck2 p-6 text-sm text-mute">{loading ? "Loading shot locations…" : "No shot locations for him yet."}</p>}
+        </div>
+        <ShotDiet p={p} avg={zoneAvg} />
+      </div>
+      )}
+    </section>
   );
 }
 
@@ -232,7 +287,7 @@ function Teammates({ p, all, detail }: { p: PlayerRow; all: PlayerRow[]; detail:
   const rows = [...roster].sort((a, b) => (b.min ?? 0) * (b.g ?? 0) - (a.min ?? 0) * (a.g ?? 0));
   const hi = "color-mix(in srgb, var(--off) 14%, var(--bg))";
   return (
-    <div className="scroll-x rounded-xl border border-line">
+    <div className={`scroll-x rounded-xl border border-line ${ROW_LINK_CLASS}`} onClick={followRowLink}>
       <table className="dt">
         <caption className="sr-only">Roster stats</caption>
         <thead>
@@ -250,7 +305,7 @@ function Teammates({ p, all, detail }: { p: PlayerRow; all: PlayerRow[]; detail:
             return (
               <tr key={r.id} aria-current={me ? "true" : undefined}>
                 <td className="l sticky-col" style={{ ...stSticky, minWidth: 168, boxShadow: me ? "inset 3px 0 0 var(--off)" : undefined }}>
-                  {me ? <span className="font-semibold text-off">{r.name}</span> : <Link href={`/player/?id=${r.id}`} className="link font-semibold">{r.name}</Link>}
+                  {me ? <span className="font-semibold text-off">{r.name}</span> : <Link data-row-link href={`/player/?id=${r.id}`} className="link font-semibold">{r.name}</Link>}
                   {r.posN ? <span className="ml-1.5 text-xs text-dim">{r.posN}</span> : null}
                 </td>
                 <td style={st}>{r.g ?? "—"}</td>

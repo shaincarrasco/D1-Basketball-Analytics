@@ -5,11 +5,13 @@ import { Search } from "lucide-react";
 import DataTable, { type Column } from "@/components/data-table";
 import PerfBars from "@/components/perf-bars";
 import TeamLogo from "@/components/team-logo";
-import { fmt, heat, signed } from "@/lib/format";
+import { fmt, heat, pctFmt, signed } from "@/lib/format";
 import type { ProfileKey, TeamSummary } from "@/lib/types";
 
-const VIEWS = ["Ratings", "Four factors", "Shooting", "Résumé"] as const;
+const VIEWS = ["Ratings", "Projections", "Four factors", "Shooting", "Résumé"] as const;
 type View = (typeof VIEWS)[number];
+/** URL slug for a view: ratings, projections, fourfactors, shooting, resume. */
+const slug = (v: string) => v.toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]/g, "");
 
 export default function RankingsTable({ teams, total }: { teams: TeamSummary[]; total: number }) {
   const [view, setView] = useState<View>("Ratings");
@@ -19,13 +21,14 @@ export default function RankingsTable({ teams, total }: { teams: TeamSummary[]; 
   // Keep view + conference in the URL so a filtered table can be shared.
   useEffect(() => {
     const p = new URLSearchParams(window.location.search);
-    const v = VIEWS.find(x => x.toLowerCase().replace(/\W/g, "") === p.get("view"));
+    const want = slug(p.get("view") ?? "");
+    const v = VIEWS.find(x => slug(x) === want);
     if (v) setView(v);
     if (p.get("conf")) setConf(p.get("conf")!);
   }, []);
   useEffect(() => {
     const p = new URLSearchParams();
-    if (view !== "Ratings") p.set("view", view.toLowerCase().replace(/\W/g, ""));
+    if (view !== "Ratings") p.set("view", slug(view));
     if (conf !== "all") p.set("conf", conf);
     const s = p.toString();
     window.history.replaceState(null, "", s ? `?${s}` : window.location.pathname);
@@ -36,6 +39,23 @@ export default function RankingsTable({ teams, total }: { teams: TeamSummary[]; 
     const n = q.trim().toLowerCase();
     return teams.filter(t => (conf === "all" || t.confSlug === conf) && (!n || t.name.toLowerCase().includes(n) || t.short.toLowerCase().includes(n)));
   }, [teams, conf, q]);
+
+  // National ranks for the simulation columns (heat shading).
+  const simRanks = useMemo(() => {
+    const rankBy = (v: (t: TeamSummary) => number | null) => {
+      const list = teams.filter(t => v(t) !== null).sort((a, b) => v(b)! - v(a)!);
+      return new Map(list.map((t, i) => [t.id, i + 1]));
+    };
+    return { wins: rankBy(t => t.sim?.wins ?? null), title: rankBy(t => t.sim?.title ?? null), win20: rankBy(t => t.sim?.win20 ?? null) };
+  }, [teams]);
+  // Shared axis for the win-range bars: lowest 10th percentile to highest 90th percentile in D-I.
+  const winAxis = useMemo(() => {
+    const sims = teams.flatMap(t => (t.sim ? [t.sim] : []));
+    const lo = sims.length ? Math.min(...sims.map(x => x.p10)) : 0, hi = sims.length ? Math.max(...sims.map(x => x.p90)) : 30;
+    return { lo, span: Math.max(1, hi - lo) };
+  }, [teams]);
+  const wx = (v: number) => ((v - winAxis.lo) / winAxis.span) * 100;
+  const atsPct = (t: TeamSummary) => (t.ats[0] + t.ats[1] ? t.ats[0] / (t.ats[0] + t.ats[1]) : null);
 
   const rankCell = (v: number | null, rank: number | null | undefined, digits = 1, prefix = "") => (
     <span className="inline-block min-w-[3.4rem] rounded px-1.5 py-0.5" style={{ background: heat(rank, total) }}>
@@ -53,13 +73,15 @@ export default function RankingsTable({ teams, total }: { teams: TeamSummary[]; 
     {
       key: "name", label: "Team", align: "l", value: t => t.name, first: "asc", sticky: true, width: 210,
       render: t => (
-        <Link href={`/teams/${t.slug}/`} className="link flex items-center gap-2.5">
-          <TeamLogo src={t.logo} name={t.name} size={24} />
+        <div className="flex items-center gap-2.5">
+          <Link href={`/teams/${t.slug}/`} tabIndex={-1} aria-hidden className="shrink-0"><TeamLogo src={t.logo} name={t.name} size={24} /></Link>
           <span className="min-w-0">
-            <span className="block truncate font-semibold">{t.name}</span>
-            <span className="block truncate text-[11.5px] text-mute">{t.confName} · {t.w}–{t.l}</span>
+            <Link href={`/teams/${t.slug}/`} className="link block truncate font-semibold group-hover/row:text-off">{t.name}</Link>
+            <span className="block truncate text-[11.5px] text-mute">
+              <Link href={`/conferences/${t.confSlug}/`} className="hover:text-ink hover:underline">{t.confName}</Link> · {t.w}–{t.l}
+            </span>
           </span>
-        </Link>
+        </div>
       ),
     },
   ];
@@ -74,6 +96,33 @@ export default function RankingsTable({ teams, total }: { teams: TeamSummary[]; 
       { key: "perf", label: "Game form", title: "Adjusted efficiency margin in each game (opponent + venue adjusted)", sortable: false, value: t => t.perf.length ? t.perf.reduce((a, b) => a + b, 0) / t.perf.length : null, render: t => <PerfBars values={t.perf} /> },
       { key: "proj", label: "Proj W–L", title: "Current record plus expected wins in remaining games", value: t => t.projW, render: t => <span>{fmt(t.projW, 1)}–{fmt(t.projL, 1)}</span> },
       { key: "sample", label: "Sample", title: "Rated D-I games; early ratings lean on conference priors", value: t => t.ratedGames, render: t => <span className={t.ratedGames < 4 ? "text-dim" : "text-mute"}>{fmt(t.ratedGames, 0)} g</span> },
+    ],
+    Projections: [
+      ...identity,
+      {
+        key: "simW", label: "Exp. wins", csvLabel: "Expected wins", title: "Average final win total across 10,000 season simulations; the bar spans the 10th–90th percentile",
+        value: t => t.sim?.wins ?? null,
+        render: t => t.sim ? (
+          <span className="inline-flex items-center gap-2.5" title={`${fmt(t.sim.wins, 1)} wins expected; 80% of simulations end between ${t.sim.p10} and ${t.sim.p90}`}>
+            <span className="relative h-2 w-[96px] rounded-full bg-line" aria-hidden>
+              <span className="absolute inset-y-0 rounded-full bg-mute/45" style={{ left: `${wx(t.sim.p10)}%`, width: `${Math.max(2, wx(t.sim.p90) - wx(t.sim.p10))}%` }} />
+              <span className="absolute -top-0.5 h-3 w-[3px] -translate-x-1/2 rounded-full bg-ink" style={{ left: `${wx(t.sim.wins)}%` }} />
+            </span>
+            <b className="w-9 text-[15px]">{fmt(t.sim.wins, 1)}</b>
+          </span>
+        ) : "—",
+      },
+      { key: "simRange", label: "80% range", csvLabel: "Wins p10–p90", title: "10th to 90th percentile of simulated final win totals", value: t => t.sim ? t.sim.p90 - t.sim.p10 : null, first: "asc",
+        render: t => t.sim ? <span className="text-mute">{t.sim.p10}–{t.sim.p90}</span> : "—" },
+      { key: "proj", label: "Proj W–L", title: "Current record plus summed win probability of every remaining game", value: t => t.projW, render: t => <span className="font-semibold">{fmt(t.projW, 1)}–{fmt(t.projL, 1)}</span> },
+      { key: "simConfW", label: "Exp. conf W", csvLabel: "Expected conference wins", title: "Average conference wins across the simulations", value: t => t.sim?.confWins ?? null, render: t => fmt(t.sim?.confWins, 1) },
+      { key: "simTitle", label: "Conf title", csvLabel: "Conference title odds", title: "Share of simulations in which the team wins or shares its conference regular-season title", value: t => t.sim?.title ?? null,
+        render: t => t.sim ? <span className="inline-block min-w-[3.2rem] rounded px-1.5 py-0.5 font-semibold" style={{ background: heat(simRanks.title.get(t.id), total) }}>{pctFmt(t.sim.title, t.sim.title < 0.1 && t.sim.title >= 0.005 ? 1 : 0)}</span> : "—" },
+      { key: "simOut", label: "Outright", csvLabel: "Outright title odds", title: "Share of simulations in which the team wins the conference title alone", value: t => t.sim?.outright ?? null, render: t => <span className="text-mute">{pctFmt(t.sim?.outright)}</span> },
+      { key: "simW20", label: "20+ wins", csvLabel: "P(20+ wins)", title: "Share of simulations in which the team finishes with 20 or more wins", value: t => t.sim?.win20 ?? null,
+        render: t => t.sim ? <span className="inline-block min-w-[3.2rem] rounded px-1.5 py-0.5" style={{ background: heat(simRanks.win20.get(t.id), total) }}>{pctFmt(t.sim.win20)}</span> : "—" },
+      { key: "ats", label: "ATS", csvLabel: "ATS cover %", title: "Record against the pregame spread ESPN shows (W–L–push)", value: atsPct,
+        render: t => t.ats[0] + t.ats[1] + t.ats[2] ? <span>{t.ats[0]}–{t.ats[1]}{t.ats[2] ? `–${t.ats[2]}` : ""}<span className="sub-rank">{atsPct(t) === null ? "" : `${Math.round(atsPct(t)! * 100)}%`}</span></span> : <span className="text-dim">—</span> },
     ],
     "Four factors": [
       ...identity,
@@ -124,12 +173,16 @@ export default function RankingsTable({ teams, total }: { teams: TeamSummary[]; 
           </label>
         </div>
       </div>
-      <div className="mb-2 flex flex-wrap gap-x-5 gap-y-1 text-xs text-mute">
-        <span><i className="mr-1.5 inline-block h-2 w-3 rounded-sm bg-off align-middle" />Offense</span>
-        <span><i className="mr-1.5 inline-block h-2 w-3 rounded-sm bg-def align-middle" />Defense</span>
-        <span>Small number = national rank. Shading marks the top and bottom of D-I.</span>
-      </div>
-      <DataTable key={view} rows={rows} columns={columns[view]} rowKey={t => t.id} initialSort={view === "Résumé" ? "rec" : "rank"} initialDir={view === "Résumé" ? "desc" : "asc"} csvName={`d1hoops-${view.toLowerCase().replace(/\W/g, "")}.csv`} caption="Division I power rankings" />
+      {view === "Projections" ? (
+        <p className="mb-2 text-xs text-mute">10,000 simulations of the rest of the season using current ratings. The bar shows where 80% of simulated win totals land; early-season ranges are wide on purpose.</p>
+      ) : (
+        <div className="mb-2 flex flex-wrap gap-x-5 gap-y-1 text-xs text-mute">
+          <span><i className="mr-1.5 inline-block h-2 w-3 rounded-sm bg-off align-middle" />Offense</span>
+          <span><i className="mr-1.5 inline-block h-2 w-3 rounded-sm bg-def align-middle" />Defense</span>
+          <span>Small number = national rank. Shading marks the top and bottom of D-I.</span>
+        </div>
+      )}
+      <DataTable key={view} rows={rows} columns={columns[view]} rowKey={t => t.id} rowHref={t => `/teams/${t.slug}/`} initialSort={view === "Résumé" ? "rec" : view === "Projections" ? "simW" : "rank"} initialDir={view === "Résumé" || view === "Projections" ? "desc" : "asc"} csvName={`d1hoops-${slug(view)}.csv`} caption="Division I power rankings" />
       {rows.length === 0 && <p className="mt-4 text-sm text-mute">No teams match “{q}”. Clear the search or pick another conference.</p>}
     </section>
   );

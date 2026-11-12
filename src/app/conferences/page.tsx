@@ -63,16 +63,16 @@ export default function ConferencesPage() {
                     <span className="w-5 shrink-0 text-right font-display text-base font-extrabold text-mute tnum">{c.rank}</span>
                     <span className="truncate"><span className="sm:hidden">{SHORT[c.slug] ?? c.name}</span><span className="hidden sm:inline">{c.name}</span></span>
                   </Link>
-                  <div className="relative h-full min-h-[30px] border-b border-line" role="img"
-                    aria-label={`${c.name}: ${vals.length} teams from ${signed(vals[0])} to ${signed(vals[vals.length - 1])}, average ${signed(c.avgEM)}`}>
+                  <div className="relative h-full min-h-[30px] border-b border-line">
+                    <span className="sr-only">{`${c.name}: ${vals.length} teams from ${signed(vals[0])} to ${signed(vals[vals.length - 1])}, average ${signed(c.avgEM)}`}</span>
                     {ticks.map(v => <span key={v} className="absolute inset-y-0 w-px" style={{ left: `${x(v)}%`, background: v === 0 ? "var(--line-2)" : "var(--line)" }} aria-hidden />)}
                     {vals.length > 1 && <span className="absolute top-1/2 h-px -translate-y-1/2" style={{ background: "rgb(var(--mute-rgb) / .35)", left: `${x(vals[0])}%`, width: `${x(vals[vals.length - 1]) - x(vals[0])}%` }} aria-hidden />}
                     {members.map(t => (
-                      <span key={t!.id} title={`${t!.name} ${signed(t!.adjEM)}`} aria-hidden
-                        className="absolute top-1/2 h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full border border-night"
-                        style={{ left: `${x(t!.adjEM!)}%`, background: "var(--mute)", opacity: 0.85 }} />
+                      <Link key={t!.id} href={`/teams/${t!.slug}/`} title={`${t!.name} ${signed(t!.adjEM)}`} aria-label={`${t!.name} ${signed(t!.adjEM)}`} tabIndex={-1}
+                        className="absolute top-1/2 z-[1] h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full border border-night opacity-85 transition-transform hover:z-[3] hover:scale-150 hover:!bg-ink"
+                        style={{ left: `${x(t!.adjEM!)}%`, background: "var(--mute)" }} />
                     ))}
-                    {c.avgEM !== null && <span className="absolute top-1/2 h-5 w-[3px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-ink" style={{ left: `${x(c.avgEM)}%` }} aria-hidden />}
+                    {c.avgEM !== null && <span className="pointer-events-none absolute top-1/2 z-[2] h-5 w-[3px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-ink" style={{ left: `${x(c.avgEM)}%` }} aria-hidden />}
                   </div>
                 </div>
               );

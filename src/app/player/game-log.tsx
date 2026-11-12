@@ -101,7 +101,7 @@ export default function GameLog({ playerId, detail, teams }: { playerId: string;
           </tbody>
           <tfoot>
             <tr className="font-semibold">
-              <td className="l sticky-col">Average</td><td className="l text-mute">{n} games</td><td className="l text-mute">{lines.filter(l => l.result === "W").length}–{lines.filter(l => l.result === "L").length}</td>
+              <td className="l sticky-col">Average</td><td className="l text-mute">{n} {n === 1 ? "game" : "games"}</td><td className="l text-mute">{lines.filter(l => l.result === "W").length}–{lines.filter(l => l.result === "L").length}</td>
               <td className="text-mute">{lines.filter(l => l.starter).length}</td>
               <td>{fmt(avg("min"))}</td><td>{fmt(avg("pts"))}</td>
               <td>{fmt(avg("fgm"))}-{fmt(avg("fga"))}</td><td>{fmt(avg("tpm"))}-{fmt(avg("tpa"))}</td><td>{fmt(avg("ftm"))}-{fmt(avg("fta"))}</td>

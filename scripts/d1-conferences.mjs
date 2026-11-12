@@ -1,6 +1,6 @@
 const names = [
   "A-10", "Atlantic 10", "Atlantic 10 Conference", "ACC", "Atlantic Coast",
-  "America East", "America East Conference", "American", "American Athletic",
+  "America East", "America East Conference", "Am. East", "American", "American Athletic",
   "ASUN", "Atlantic Sun", "Big 12", "Big East", "Big Sky", "Big South", "Big Ten",
   "Big West", "CAA", "Colonial Athletic Association", "Coastal Athletic Association",
   "CUSA", "Conference USA", "Horizon", "Horizon League", "Ivy", "Ivy League", "MAC",

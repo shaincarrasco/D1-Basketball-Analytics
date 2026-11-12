@@ -8,9 +8,10 @@ import TeamLogo from "@/components/team-logo";
 import WinProb from "@/components/win-prob";
 import { ErrorState, Loading } from "@/components/states";
 import { useJson } from "@/lib/client-data";
-import { fmt, heat, ordinal, pctFmt, signed } from "@/lib/format";
+import { dayLabel, fmt, heat, ordinal, pctFmt, signed, timeLabel } from "@/lib/format";
 import { project } from "@/lib/predict";
-import type { Meta, ProfileKey, TeamSummary } from "@/lib/types";
+import { playerRows } from "@/lib/players";
+import type { Meta, Player, PlayerTable, ProfileKey, TeamSummary } from "@/lib/types";
 import TeamCombobox from "./team-combobox";
 import MarginChart from "./margin-chart";
 
@@ -22,6 +23,7 @@ export default function MatchupClient() {
   const params = useSearchParams();
   const teams = useJson<TeamSummary[]>("teams.json");
   const meta = useJson<Meta>("meta.json");
+  const players = useJson<PlayerTable>("players.json");
 
   const ranked = useMemo(() => [...(teams.data ?? [])].sort((x, y) => (x.rank ?? 999) - (y.rank ?? 999) || x.name.localeCompare(y.name)), [teams.data]);
   const bySlug = useMemo(() => new Map(ranked.map(t => [t.slug, t])), [ranked]);
@@ -65,6 +67,8 @@ export default function MatchupClient() {
         </div>
       </section>
 
+      <NextMeeting a={a} b={b} />
+
       {proj ? <Projection a={a} b={b} proj={proj} site={site} homeEdge={meta.data.model.homeEdgePointsPerGame} /> : (
         <div className="deck p-6 text-sm text-mute">One of these teams has no DHR rating yet, so there is nothing to project. Pick a team with at least one rated D-I game.</div>
       )}
@@ -80,6 +84,8 @@ export default function MatchupClient() {
         </div>
       </section>
       </div>
+
+      <KeyPlayers a={a} b={b} table={players.data} status={players.status} error={players.error} retry={players.retry} />
 
       <section aria-labelledby="ff-h">
         <h2 id="ff-h" className="h-section mb-1">Four factors matchup</h2>
@@ -127,8 +133,8 @@ function Projection({ a, b, proj, site, homeEdge }: { a: TeamSummary; b: TeamSum
 
       <div className="mx-auto mt-6 max-w-2xl">
         <div className="mb-1.5 flex justify-between text-sm font-semibold">
-          <span className="truncate" style={{ color: A_COLOR }}>{a.name} <span className="font-display text-2xl font-extrabold tnum">{pctFmt(pA)}</span></span>
-          <span className="truncate text-right" style={{ color: B_COLOR }}><span className="font-display text-2xl font-extrabold tnum">{pctFmt(1 - pA)}</span> {b.name}</span>
+          <span className="truncate" style={{ color: A_COLOR }}><Link href={`/teams/${a.slug}/`} className="hover:underline">{a.name}</Link> <span className="font-display text-2xl font-extrabold tnum">{pctFmt(pA)}</span></span>
+          <span className="truncate text-right" style={{ color: B_COLOR }}><span className="font-display text-2xl font-extrabold tnum">{pctFmt(1 - pA)}</span> <Link href={`/teams/${b.slug}/`} className="hover:underline">{b.name}</Link></span>
         </div>
         <WinProb awayName={a.name} homeName={b.name} homeWP={1 - pA} compact />
         <p className="mt-1.5 text-center text-xs text-mute">Win probability</p>
@@ -154,17 +160,19 @@ function Projection({ a, b, proj, site, homeEdge }: { a: TeamSummary; b: TeamSum
 
 function TeamId({ t, color, align }: { t: TeamSummary; color: string; align: "l" | "r" }) {
   return (
-    <Link href={`/teams/${t.slug}/`} className={`link group flex min-w-0 items-center gap-3 ${align === "r" ? "flex-row-reverse text-right" : ""}`}>
+    <div className={`group relative flex min-w-0 items-center gap-3 ${align === "r" ? "flex-row-reverse text-right" : ""}`}>
       <TeamLogo src={t.logo} name={t.name} size={44} />
       <span className="min-w-0">
-        <span className="flex items-center gap-2 text-xl font-semibold leading-tight tracking-[-0.01em] sm:text-2xl" style={align === "r" ? { flexDirection: "row-reverse" } : undefined}>
+        <Link href={`/teams/${t.slug}/`} className="link flex min-w-0 items-center gap-2 text-lg font-semibold leading-tight tracking-[-0.01em] after:absolute after:inset-0 after:content-[''] sm:text-2xl" style={align === "r" ? { flexDirection: "row-reverse" } : undefined}>
           <i className="h-2.5 w-2.5 shrink-0 rounded-sm" style={{ background: color }} aria-hidden />
           {t.rank ? <span className="text-base font-medium text-mute tnum">{t.rank}</span> : null}
           <span className="group-hover:underline">{t.name}</span>
+        </Link>
+        <span className="mt-1 block truncate text-xs text-mute">
+          <Link href={`/conferences/${t.confSlug}/`} className="relative z-[1] hover:text-ink hover:underline">{t.confName}</Link> · {t.w}–{t.l}{t.mascot ? ` · ${t.mascot}` : ""}
         </span>
-        <span className="mt-1 block truncate text-xs text-mute">{t.confName} · {t.w}–{t.l}{t.mascot ? ` · ${t.mascot}` : ""}</span>
       </span>
-    </Link>
+    </div>
   );
 }
 
@@ -202,9 +210,9 @@ function TaleOfTheTape({ a, b, total }: { a: TeamSummary; b: TeamSummary; total:
       <h2 id="tape-h" className="h-section mb-4">Tale of the tape</h2>
       <div className="deck overflow-hidden">
         <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3 border-b border-line2 bg-deck px-4 py-3 text-sm font-semibold">
-          <span className="flex min-w-0 items-center justify-end gap-2 text-right" style={{ color: A_COLOR }}><span className="truncate">{a.name}</span><TeamLogo src={a.logo} name={a.name} size={22} /></span>
+          <Link href={`/teams/${a.slug}/`} className="flex min-w-0 items-center justify-end gap-2 text-right hover:underline" style={{ color: A_COLOR }}><span className="truncate">{a.name}</span><TeamLogo src={a.logo} name={a.name} size={22} /></Link>
           <span className="w-24 text-center text-xs text-mute sm:w-32">vs</span>
-          <span className="flex min-w-0 items-center gap-2" style={{ color: B_COLOR }}><TeamLogo src={b.logo} name={b.name} size={22} /><span className="truncate">{b.name}</span></span>
+          <Link href={`/teams/${b.slug}/`} className="flex min-w-0 items-center gap-2 hover:underline" style={{ color: B_COLOR }}><TeamLogo src={b.logo} name={b.name} size={22} /><span className="truncate">{b.name}</span></Link>
         </div>
         <table className="w-full text-sm">
           <caption className="sr-only">Tale of the tape: {a.name} vs {b.name}</caption>
@@ -245,7 +253,7 @@ function FactorPanel({ off, def, offColor, defColor, total }: { off: TeamSummary
   return (
     <div className="deck overflow-hidden">
       <h3 className="border-b border-line px-4 py-3 text-[15px] font-semibold">
-        When <span style={{ color: offColor }}>{off.name}</span> has the ball
+        When <Link href={`/teams/${off.slug}/`} className="hover:underline" style={{ color: offColor }}>{off.name}</Link> has the ball
       </h3>
       <div className="scroll-x">
         <table className="w-full min-w-[340px] text-sm">
@@ -253,8 +261,8 @@ function FactorPanel({ off, def, offColor, defColor, total }: { off: TeamSummary
           <thead>
             <tr className="text-xs text-mute">
               <th scope="col" className="px-4 py-2 text-left font-semibold">Stat</th>
-              <th scope="col" className="px-2 py-2 text-right font-semibold"><span style={{ color: offColor }}>{off.short}</span> off</th>
-              <th scope="col" className="px-2 py-2 text-right font-semibold"><span style={{ color: defColor }}>{def.short}</span> def</th>
+              <th scope="col" className="px-2 py-2 text-right font-semibold"><Link href={`/teams/${off.slug}/`} className="hover:underline" style={{ color: offColor }}>{off.short}</Link> off</th>
+              <th scope="col" className="px-2 py-2 text-right font-semibold"><Link href={`/teams/${def.slug}/`} className="hover:underline" style={{ color: defColor }}>{def.short}</Link> def</th>
               <th scope="col" className="px-4 py-2 text-center font-semibold">Edge</th>
             </tr>
           </thead>
@@ -301,7 +309,7 @@ function FormCard({ t, color }: { t: TeamSummary; color: string }) {
   return (
     <div className="deck p-4">
       <div className="flex items-center gap-3">
-        <TeamLogo src={t.logo} name={t.name} size={32} />
+        <Link href={`/teams/${t.slug}/`} tabIndex={-1} aria-hidden className="shrink-0"><TeamLogo src={t.logo} name={t.name} size={32} /></Link>
         <div className="min-w-0 flex-1">
           <Link href={`/teams/${t.slug}/`} className="link block truncate font-semibold">{t.name}</Link>
           <p className="text-xs text-mute">{t.w}–{t.l} overall · {t.cw}–{t.cl} conf · streak {t.streak ?? "—"} · {t.sample.toLowerCase()}</p>
@@ -316,6 +324,90 @@ function FormCard({ t, color }: { t: TeamSummary; color: string }) {
             </li>
           ))}
         </ul>
+      )}
+    </div>
+  );
+}
+
+const etDay = (iso: string) => new Intl.DateTimeFormat("en-CA", { timeZone: "America/New_York" }).format(new Date(iso));
+
+/** When the two teams are actually scheduled to meet next, link straight to that game. */
+function NextMeeting({ a, b }: { a: TeamSummary; b: TeamSummary }) {
+  const n = a.next?.oppSlug === b.slug ? a.next : b.next?.oppSlug === a.slug ? b.next : null;
+  if (!n) return null;
+  const day = etDay(n.date);
+  return (
+    <Link href={`/games/?d=${day}&g=${n.id}`} className="deck-flat flex flex-wrap items-center gap-x-3 gap-y-1 px-4 py-3 text-sm transition-colors hover:border-line2">
+      <span className="font-semibold">These teams meet next</span>
+      <span className="text-mute">{dayLabel(day)} · {timeLabel(n.date)}</span>
+      <span className="ml-auto font-semibold text-off">Open the game preview</span>
+    </Link>
+  );
+}
+
+type KP = Player & { dpr: number };
+function KeyPlayers({ a, b, table, status, error, retry }: { a: TeamSummary; b: TeamSummary; table: PlayerTable | null; status: string; error: string | null; retry: () => void }) {
+  const top = useMemo(() => {
+    if (!table) return null;
+    const iTeam = table.fields.indexOf("teamId");
+    const pick = (t: TeamSummary) => playerRows(table, table.rows.filter(r => String(r[iTeam]) === t.id))
+      .filter((p): p is KP => p.dpr !== null && (p.onPoss ?? 0) >= 100)
+      .sort((x, y) => y.dpr - x.dpr).slice(0, 3);
+    return { a: pick(a), b: pick(b) };
+  }, [table, a, b]);
+  return (
+    <section aria-labelledby="kp-h">
+      <h2 id="kp-h" className="h-section mb-1">Top players by DPR</h2>
+      <p className="mb-4 text-sm text-mute">Points per 100 possessions better than an average D-I player when on the floor, from lineup play-by-play (minimum 100 possessions). The band is ± one standard error; early in the season it is wide.</p>
+      {status === "error" ? <ErrorState message={error ?? "Could not load players."} retry={retry} />
+        : !top ? <Loading label="Loading players" />
+        : (
+          <div className="grid gap-4 md:grid-cols-2">
+            <KeyPlayerCard t={a} list={top.a} color={A_COLOR} />
+            <KeyPlayerCard t={b} list={top.b} color={B_COLOR} />
+          </div>
+        )}
+    </section>
+  );
+}
+
+const DPR_LO = -8, DPR_HI = 16;
+const dprX = (v: number) => `${((Math.max(DPR_LO, Math.min(DPR_HI, v)) - DPR_LO) / (DPR_HI - DPR_LO)) * 100}%`;
+
+function KeyPlayerCard({ t, list, color }: { t: TeamSummary; list: KP[]; color: string }) {
+  return (
+    <div className="deck overflow-hidden">
+      <h3 className="flex items-center gap-2 border-b border-line px-4 py-3 text-[15px] font-semibold">
+        <i className="h-2.5 w-2.5 rounded-sm" style={{ background: color }} aria-hidden />
+        <Link href={`/teams/${t.slug}/`} className="link flex min-w-0 items-center gap-2"><TeamLogo src={t.logo} name={t.name} size={20} /><span className="truncate">{t.name}</span></Link>
+      </h3>
+      {list.length === 0 ? <p className="px-4 py-5 text-sm text-mute">No player has 100 tracked possessions yet.</p> : (
+        <ol>
+          {list.map((p, i) => {
+            const se = p.dprSE ?? 0;
+            return (
+              <li key={p.id} className="group relative flex items-center gap-3 border-b border-line px-4 py-2.5 last:border-0 hover:bg-deck2 focus-within:bg-deck2">
+                <span className="w-4 text-xs text-dim tnum">{i + 1}</span>
+                <span className="min-w-0 flex-1">
+                  <Link href={`/player/?id=${p.id}`} className="link block truncate font-semibold group-hover:text-off after:absolute after:inset-0 after:content-['']">{p.name}</Link>
+                  <span className="block truncate text-xs text-mute">
+                    {p.pos ? `${p.pos} · ` : ""}{fmt(p.pts)} pts · {fmt(p.min)} min · <span title="DPR offense / defense">O {signed(p.dprO)} / D {signed(p.dprD)}</span>
+                    {p.dprRank ? <span title="DPR rank among players with 150+ possessions"> · #{p.dprRank}</span> : null}
+                  </span>
+                </span>
+                <span className="relative hidden h-2 w-20 shrink-0 rounded-full bg-line xs:block" title={`${signed(p.dpr)} ± ${fmt(se)}`} aria-hidden>
+                  <span className="absolute inset-y-0 w-px bg-line2" style={{ left: dprX(0) }} />
+                  <span className="absolute inset-y-0 rounded-full opacity-40" style={{ background: color, left: dprX(p.dpr - se), width: `calc(${dprX(p.dpr + se)} - ${dprX(p.dpr - se)})` }} />
+                  <span className="absolute -top-0.5 h-3 w-[3px] -translate-x-1/2 rounded-full" style={{ background: color, left: dprX(p.dpr) }} />
+                </span>
+                <span className="w-[4.6rem] text-right tnum">
+                  <b className="font-display text-xl font-extrabold">{signed(p.dpr)}</b>
+                  <span className="block text-[11px] leading-none text-dim">±{fmt(se)}</span>
+                </span>
+              </li>
+            );
+          })}
+        </ol>
       )}
     </div>
   );

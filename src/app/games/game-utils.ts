@@ -1,5 +1,6 @@
 // Pure helpers for the games hub: filters, sorts, day summaries, labels.
 import { fmt, timeLabel } from "@/lib/format";
+import type { LiveGame } from "@/lib/live";
 import type { Game, GameIndex, GameSide } from "@/lib/types";
 
 export const FILTERS = [
@@ -68,7 +69,9 @@ export function actualMarginText(g: Game): string {
 }
 
 export const periodLabel = (i: number) => (i === 0 ? "1st" : i === 1 ? "2nd" : i === 2 ? "OT" : `${i - 1}OT`);
-export function statusLabel(g: Game): string {
+export function statusLabel(g: Game, live?: LiveGame): string {
+  if (live && live.state !== "pre" && g.status !== "final" && live.label) return live.label;
+  if (live?.state === "pre" && live.label && /Delayed|Postponed/.test(live.label)) return live.label;
   if (isFinal(g)) {
     const n = Math.max(g.home.periods?.length ?? 0, g.away.periods?.length ?? 0);
     return n > 2 ? `Final · ${n === 3 ? "OT" : `${n - 2}OT`}` : "Final";
@@ -111,3 +114,49 @@ export function defaultDay(index: GameIndex, today: string): string | null {
 }
 
 export const isDay = (s: string | null): s is string => !!s && /^\d{4}-\d{2}-\d{2}$/.test(s) && !Number.isNaN(Date.parse(`${s}T12:00:00Z`));
+
+// ---------- pregame line (spread ESPN shows, home perspective: negative = home favoured) ----------
+
+const shortName = (s: GameSide) => s.short ?? s.name;
+const num = (v: number) => (Number.isInteger(v) ? String(v) : v.toFixed(1));
+/** "+8.5" / "−3" / "PK" for a spread from one side's perspective. */
+export const spreadNum = (v: number) => (v === 0 ? "PK" : `${v > 0 ? "+" : "−"}${num(Math.abs(v))}`);
+
+export type LineInfo = {
+  /** "UF −8.5" (favourite and spread) or "Pick'em". */
+  market: string;
+  /** DHR projection in the same form: "UF −6.2". */
+  model: string | null;
+  total: number | null;
+  provider: string | null;
+  /** DHR's side against the line, when the model and line differ by at least half a point (same rule as the methodology record). */
+  pick: { side: "home" | "away"; text: string } | null;
+  /** How the DHR pick fared on a final: W covered, L didn't, P push. */
+  result: "W" | "L" | "P" | null;
+  /** Which side covered the line on a final (null = push or not final). */
+  covered: "home" | "away" | null;
+};
+
+export function lineInfo(g: Game): LineInfo | null {
+  const l = g.line;
+  if (!l || typeof l.spread !== "number") return null;
+  const s = l.spread;
+  const market = s === 0 ? "Pick'em" : `${shortName(s < 0 ? g.home : g.away)} −${num(Math.abs(s))}`;
+  let model: string | null = null, pick: LineInfo["pick"] = null;
+  if (g.pred) {
+    const m = g.pred.margin;
+    model = Math.abs(m) < 0.05 ? "Pick'em" : `${shortName(m > 0 ? g.home : g.away)} −${Math.abs(m).toFixed(1)}`;
+    const lineMargin = -s;
+    if (Math.abs(m - lineMargin) >= 0.5) {
+      const side = m > lineMargin ? "home" : "away";
+      pick = { side, text: `${shortName(g[side])} ${spreadNum(side === "home" ? s : -s)}` };
+    }
+  }
+  let result: LineInfo["result"] = null, covered: LineInfo["covered"] = null;
+  if (isFinal(g) && g.home.score != null && g.away.score != null) {
+    const cover = g.home.score - g.away.score + s;
+    covered = cover > 0 ? "home" : cover < 0 ? "away" : null;
+    if (pick) result = cover === 0 ? "P" : (cover > 0) === (pick.side === "home") ? "W" : "L";
+  }
+  return { market, model, total: l.total, provider: l.provider, pick, result, covered };
+}

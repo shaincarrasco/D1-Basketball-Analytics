@@ -1,9 +1,51 @@
 "use client";
 // Generic sortable data table: sticky header + sticky identity columns,
 // click/Enter to sort, incremental rendering for long lists, CSV export.
-import { useMemo, useState, type ReactNode } from "react";
+// Optional whole-row links (`rowHref`): the row is clickable with the mouse,
+// keyboard users reach the same page through the row's own primary link
+// (the row highlights while that link has focus), inner links/buttons keep working.
+import { useMemo, useState, type KeyboardEvent, type MouseEvent, type ReactNode } from "react";
+import { useRouter } from "next/navigation";
 import { ArrowDown, ArrowUp, Download } from "lucide-react";
 import { downloadCsv } from "@/lib/format";
+
+const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+const INTERACTIVE = "a, button, input, select, textarea, label, summary, [role='button'], [data-no-row-link]";
+
+/** Click / middle-click / Enter handlers that turn a container (usually a <tr>) into a link without nesting anchors. */
+export function useRowLink() {
+  const router = useRouter();
+  const open = (href: string, newTab: boolean) => {
+    if (newTab) window.open(`${BASE}${href}`, "_blank", "noopener");
+    else router.push(href);
+  };
+  return (href: string | null | undefined) => {
+    if (!href) return {};
+    const fromInner = (e: { target: EventTarget | null; currentTarget: EventTarget }) => {
+      const el = e.target instanceof Element ? e.target.closest(INTERACTIVE) : null;
+      return !!el && el !== e.currentTarget && (e.currentTarget as Element).contains(el);
+    };
+    return {
+      "data-href": href,
+      onClick: (e: MouseEvent<HTMLElement>) => {
+        if (e.defaultPrevented || fromInner(e) || e.button !== 0) return;
+        if (window.getSelection()?.toString()) return; // let people select text in a row
+        open(href, e.metaKey || e.ctrlKey || e.shiftKey);
+      },
+      onAuxClick: (e: MouseEvent<HTMLElement>) => { if (e.button === 1 && !fromInner(e)) { e.preventDefault(); open(href, true); } },
+      onKeyDown: (e: KeyboardEvent<HTMLElement>) => { if (e.key === "Enter" && e.target === e.currentTarget) open(href, e.metaKey || e.ctrlKey); },
+    };
+  };
+}
+
+/** Row hover/focus styling for linked rows (sticky cells need an opaque tint). */
+export const LINK_ROW = "cursor-pointer group/row [&:hover>td]:!bg-[rgb(var(--def-rgb)/0.08)] [&:hover>td.sticky-col]:!bg-[color-mix(in_srgb,var(--def)_8%,var(--bg))] [&:focus-within>td]:!bg-[rgb(var(--def-rgb)/0.1)] [&:focus-within>td.sticky-col]:!bg-[color-mix(in_srgb,var(--def)_10%,var(--bg))]";
+
+/** A table row that links to `href` (for hand-built tables outside DataTable). */
+export function LinkRow({ href, className = "", children }: { href: string | null; className?: string; children: ReactNode }) {
+  const props = useRowLink()(href);
+  return <tr {...props} className={`${href ? LINK_ROW : ""} ${className}`}>{children}</tr>;
+}
 
 export type Column<T> = {
   key: string;
@@ -22,10 +64,13 @@ export type Column<T> = {
   sortable?: boolean;
 };
 
-export default function DataTable<T>({ rows, columns, rowKey, initialSort, initialDir = "desc", pageSize = 0, csvName, maxHeight, caption }: {
+export default function DataTable<T>({ rows, columns, rowKey, initialSort, initialDir = "desc", pageSize = 0, csvName, maxHeight, caption, rowHref }: {
   rows: T[]; columns: Column<T>[]; rowKey: (row: T) => string; initialSort?: string; initialDir?: "asc" | "desc";
   pageSize?: number; csvName?: string; maxHeight?: string; caption?: string;
+  /** Make each row a link to this page (mouse: click anywhere; keyboard: the row's own link). */
+  rowHref?: (row: T) => string | null;
 }) {
+  const rowLink = useRowLink();
   const [sort, setSort] = useState<{ key: string | undefined; dir: "asc" | "desc" }>({ key: initialSort, dir: initialDir });
   const [limit, setLimit] = useState(pageSize || Infinity);
 
@@ -84,7 +129,7 @@ export default function DataTable<T>({ rows, columns, rowKey, initialSort, initi
           </thead>
           <tbody>
             {visible.map((row, ri) => (
-              <tr key={rowKey(row)}>
+              <tr key={rowKey(row)} {...(rowHref ? rowLink(rowHref(row)) : {})} className={rowHref && rowHref(row) ? LINK_ROW : undefined}>
                 {columns.map((c, i) => (
                   <td key={c.key} className={`${c.align === "l" ? "l" : ""} ${c.sticky ? "sticky-col" : ""}`} style={c.sticky ? { left: offsets[i], minWidth: c.width, maxWidth: c.width } : undefined}>
                     {c.render ? c.render(row, ri) : (c.value(row) ?? "—")}

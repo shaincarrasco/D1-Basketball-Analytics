@@ -5,12 +5,13 @@ import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Empty, ErrorState, Loading } from "@/components/states";
 import { useJson } from "@/lib/client-data";
+import { useLiveScores, withLive } from "@/lib/live";
 import { dayLabel, etToday, pctFmt } from "@/lib/format";
 import type { Game, GameDay, GameIndex } from "@/lib/types";
 import DateStrip from "./date-strip";
 import GameCard from "./game-card";
 import GameSheet from "./game-sheet";
-import { FILTERS, SORTS, defaultDay, isDay, matchesFilter, sortGames, summarize, winner, type FilterId, type SortId } from "./game-utils";
+import { FILTERS, SORTS, defaultDay, lineInfo, isDay, matchesFilter, sortGames, summarize, winner, type FilterId, type SortId } from "./game-utils";
 
 function setUrl(mutate: (p: URLSearchParams) => void, mode: "push" | "replace") {
   const p = new URLSearchParams(window.location.search);
@@ -33,7 +34,10 @@ export default function GamesHub() {
   const listed = index.data && day ? index.data.days.find(d => d.day === day && d.games > 0) : undefined;
   const dayData = useJson<GameDay>(listed ? `games/${listed.day}.json` : null);
   // useJson keeps the previous day's data for one render after the file changes.
-  const games = dayData.status === "ready" && dayData.data.day === day ? dayData.data.games : null;
+  const staticGames = dayData.status === "ready" && dayData.data.day === day ? dayData.data.games : null;
+  // Today's slate gets ESPN's live scores laid over the static (once-a-day) data.
+  const live = useLiveScores(day === today ? day : null, staticGames);
+  const games = useMemo(() => (staticGames && live.byGame.size ? staticGames.map(g => withLive(g, live.byGame.get(g.id))) : staticGames), [staticGames, live.byGame]);
 
   const [filter, setFilter] = useState<FilterId>("all");
   const [sort, setSort] = useState<SortId>("time");
@@ -88,7 +92,7 @@ export default function GamesHub() {
 
       <div className="mb-4 flex flex-wrap items-baseline gap-x-4 gap-y-1">
         <h2 className="h-section">{dayLabel(day, { weekday: "long", month: "long", day: "numeric" })}{day === today ? <span className="ml-2 text-off">Today</span> : null}</h2>
-        {summary && <DaySummaryLine s={summary} onOpen={openGame} />}
+        {summary && games && <DaySummaryLine s={summary} games={games} onOpen={openGame} liveData={live.hasData} updated={live.updated} />}
       </div>
 
       {!listed ? (
@@ -141,33 +145,43 @@ export default function GamesHub() {
             <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4" aria-label={`${shown.length} games`}>
               {shown.map(g => (
                 <li key={g.id} data-game={g.id} className="flex">
-                  <GameCard g={g} onOpen={openGame} />
+                  <GameCard g={g} live={live.byGame.get(g.id)} onOpen={openGame} />
                 </li>
               ))}
             </ul>
           )}
           <p className="mt-4 text-xs text-dim">
             Bar = pregame win probability (<span className="text-def">away</span> / <span className="text-off">home</span>). Gray numbers on unplayed games are projected points.
-            ✓/✗ marks whether the pregame favorite won. Small numeral before a team = D1 Hoops national rank.
+            ✓/✗ marks whether the pregame favorite won. Line = the pregame spread ESPN shows; ATS ✓/✗ = whether DHR&apos;s pick against it covered. Small numeral before a team = D1 Hoops national rank.
           </p>
         </>
       )}
 
-      {open && <GameSheet key={open.id} g={open} onClose={closeGame} />}
+      {open && <GameSheet key={open.id} g={open} live={live.byGame.get(open.id)} onClose={closeGame} />}
     </div>
   );
 }
 
-function DaySummaryLine({ s, onOpen }: { s: ReturnType<typeof summarize>; onOpen: (id: string) => void }) {
+function DaySummaryLine({ s, games, onOpen, liveData, updated }: { s: ReturnType<typeof summarize>; games: Game[]; onOpen: (id: string) => void; liveData: boolean; updated: number | null }) {
   const b: Game | null = s.biggest;
+  const ats = { w: 0, l: 0, p: 0 };
+  for (const g of games) { const r = lineInfo(g)?.result; if (r === "W") ats.w++; else if (r === "L") ats.l++; else if (r === "P") ats.p++; }
   const w = b ? winner(b) : null;
   return (
     <p className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-mute tnum">
       <span><b className="text-ink">{s.games}</b> games</span>
-      {s.live > 0 && <span className="flex items-center gap-1.5"><span className="live-dot" aria-hidden /><b className="text-hot">{s.live}</b> in progress</span>}
+      {liveData ? (
+        <span className="flex items-center gap-1.5" title={`Live scores from ESPN${updated ? `, updated ${new Date(updated).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", second: "2-digit" })}` : ""}. Refreshes every 30 seconds while games are on.`}>
+          <span className="rounded bg-[rgb(var(--hot-rgb)/0.14)] px-1.5 py-0.5 text-[11px] font-semibold text-hot">Live</span>
+          {s.live > 0 ? <><span className="live-dot" aria-hidden /><b className="text-hot">{s.live}</b> in progress</> : <span className="text-dim">scores update automatically</span>}
+        </span>
+      ) : s.live > 0 && <span className="flex items-center gap-1.5" title="Status as of the last data refresh"><span className="live-dot" aria-hidden /><b className="text-hot">{s.live}</b> in progress at last refresh</span>}
       <span><b className="text-ink">{s.finals}</b> final</span>
       {s.graded > 0 && (
         <span title="Finals where the pregame favorite won">Model <b className="text-ink">{s.correct}–{s.graded - s.correct}</b> ({Math.round((s.correct / s.graded) * 100)}%)</span>
+      )}
+      {ats.w + ats.l > 0 && (
+        <span title="DHR picks against the pregame spread on today's finals (only where the model and line differ by at least half a point)">ATS <b className="text-ink">{ats.w}–{ats.l}{ats.p ? `–${ats.p}` : ""}</b></span>
       )}
       {b && w && (
         <span>

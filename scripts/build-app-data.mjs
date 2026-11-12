@@ -8,6 +8,7 @@
 //   team/<slug>.json, games/index.json, games/<yyyy-mm-dd>.json
 import { mkdir, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import { isD1Conference } from "./d1-conferences.mjs";
+import { boxPossessions, loadPbp, solveRapm } from "./lib/pbp-analytics.mjs";
 
 const OUT = "public/data/app";
 const readJson = async path => JSON.parse(await readFile(path, "utf8"));
@@ -20,6 +21,8 @@ const [teamPayload, gamePayload, playerPayload, directory, model] = await Promis
 ]);
 
 const espnRosters = await readJson("public/data/espn-rosters-2027.json").catch(() => ({ teams: {} }));
+const sims = await readJson("public/data/sims-2027.json").catch(() => null);
+const recruiting = await readJson("public/data/recruiting.json").catch(() => null);
 const espnGames = await readJson(".cache/espn-player-games-2027.json").catch(() => ({ events: {} }));
 
 // ---------- helpers ----------
@@ -274,6 +277,7 @@ for (const ev of Object.values(espnGames.events ?? {})) {
   }
 }
 const logsBySlug = new Map(), biosBySlug = new Map();
+const pidByAid = new Map(); // ESPN athlete id -> provider player id
 let matched = 0, unmatched = 0;
 for (const t of teamSummaries) {
   const espnId = espnIdBySlug.get(t.slug);
@@ -293,6 +297,7 @@ for (const t of teamSummaries) {
     const aid = byFull.get(nameKey(name)) ?? byLoose.get(looseKey(name)) ?? null;
     if (!aid) { unmatched++; continue; }
     matched++;
+    pidByAid.set(String(aid), pid);
     const lines = espnLines.get(`${espnId}:${aid}`);
     if (lines) logs[pid] = lines.rows.sort((a, b) => String(a[0]).localeCompare(String(b[0])));
     const bio = roster.find(a => a.id === aid);
@@ -301,6 +306,191 @@ for (const t of teamSummaries) {
   logsBySlug.set(t.slug, logs); biosBySlug.set(t.slug, bios);
 }
 console.log(`[app-data] ESPN player match: ${matched} matched, ${unmatched} unmatched.`);
+
+// ---------- play-by-play: shots, lineups, on/off, DPR, game flow, lines ----------
+const pbp = await loadPbp(".cache/espn-pbp-2027");
+const espnFields = espnGames.fields ?? [];
+const gamePoss = new Map(); // event id -> possessions per team
+for (const [id, ev] of Object.entries(espnGames.events ?? {})) { const p = boxPossessions(ev, espnFields); if (p) gamePoss.set(id, p); }
+const espnByTeam = new Map([...espnIdBySlug].filter(([, e]) => e).map(([slug, e]) => [String(e), slug]));
+const shotsBySlug = new Map(), lineupStints = new Map();
+const rapmRows = [];
+for (const ev of pbp.values()) {
+  const poss = gamePoss.get(ev.id) ?? 68;
+  for (const sh of ev.shots ?? []) {
+    const [team, aid, x, y, made, value, kind, ast] = sh;
+    const off = espnByTeam.get(team), def = espnByTeam.get(team === ev.homeId ? ev.awayId : ev.homeId);
+    const pid = pidByAid.get(aid) ?? null;
+    if (off) { if (!shotsBySlug.has(off)) shotsBySlug.set(off, { off: [], def: [], byPid: {} }); const o = shotsBySlug.get(off); o.off.push([x, y, made, value]); if (pid) (o.byPid[pid] ??= []).push([x, y, made, value, kind, ast, ev.day]); }
+    if (def) { if (!shotsBySlug.has(def)) shotsBySlug.set(def, { off: [], def: [], byPid: {} }); shotsBySlug.get(def).def.push([x, y, made, value]); }
+  }
+  // Pair each team's stints with the opponent unit on the floor at the same time for RAPM.
+  const byTeam = { [ev.homeId]: [], [ev.awayId]: [] };
+  for (const st of ev.stints ?? []) byTeam[st[0]]?.push(st);
+  for (const [team, list] of Object.entries(byTeam)) {
+    const slug = espnByTeam.get(team);
+    for (const st of list) {
+      const sec = st[2] - st[1];
+      if (slug) { if (!lineupStints.has(slug)) lineupStints.set(slug, []); lineupStints.get(slug).push({ ids: st[3], sec, pf: st[4], pa: st[5], poss: (sec / 2400) * poss }); }
+    }
+  }
+  // Split the game into intervals where both units are known.
+  const cuts = [...new Set((ev.stints ?? []).flatMap(s => [s[1], s[2]]))].sort((a, b) => a - b);
+  const unitAt = (team, t) => (byTeam[team] ?? []).find(s => s[1] <= t && t < s[2]);
+  for (let i = 0; i < cuts.length - 1; i++) {
+    const a = cuts[i], z = cuts[i + 1], mid = (a + z) / 2;
+    const hu = unitAt(ev.homeId, mid), au = unitAt(ev.awayId, mid);
+    if (!hu || !au) continue;
+    // Points in the interval from the score flow.
+    const scoreAt = t => { let h = 0, w = 0; for (const f of ev.flow) { if (f[0] <= t) { h = f[1]; w = f[2]; } else break; } return [h, w]; };
+    const [h0, a0] = scoreAt(a), [h1, a1] = scoreAt(z);
+    const p = ((z - a) / 2400) * poss;
+    if (p < 0.5) continue;
+    rapmRows.push({ off: hu[3], def: au[3], y: ((h1 - h0) / p) * 100, w: p });
+    rapmRows.push({ off: au[3], def: hu[3], y: ((a1 - a0) / p) * 100, w: p });
+  }
+}
+// Box-score prior (v0 heuristic, documented on the methodology page): a quarter of each player's
+// Oliver offensive/defensive rating gap to the D-I average, offence scaled by usage.
+const avgOf = k => { const v = players.map(p => p[playerIdx[k]]).filter(x => typeof x === "number" && (players.length ? true : false)); return v.reduce((s, x) => s + x, 0) / Math.max(1, v.length); };
+const avgOrtg = avgOf("ortg"), avgDrtg = avgOf("drtg");
+const rowByPid = new Map(players.map(p => [p[playerIdx.id], p]));
+const aidByPid = new Map([...pidByAid].map(([a, p]) => [p, a]));
+const prior = new Map();
+for (const [aid, pid] of pidByAid) {
+  const row = rowByPid.get(pid); if (!row) continue;
+  const ortg = row[playerIdx.ortg], drtg = row[playerIdx.drtg], usg = row[playerIdx.usg];
+  if (typeof ortg !== "number" || typeof drtg !== "number") continue;
+  const usageScale = Math.min(1.5, Math.max(0.5, (usg ?? 20) / 20));
+  prior.set(aid, { O: Math.max(-6, Math.min(6, 0.25 * (ortg - avgOrtg) * usageScale)), D: Math.max(-6, Math.min(6, 0.25 * (drtg - avgDrtg))) });
+}
+// D-I average FG% by shot zone (mirrors src/lib/shots.ts zoneOf) for shot-chart shading.
+const zoneOf = (x, y, value) => {
+  const ang = Math.atan2(x - 25, y) * (180 / Math.PI);
+  if (value === 3) return y < 8.75 ? (x < 25 ? "c3L" : "c3R") : ang < -22 ? "ab3L" : ang > 22 ? "ab3R" : "ab3C";
+  if (Math.hypot(x - 25, y) < 4) return "rim";
+  if (x >= 19 && x <= 31 && y <= 13.75) return "paint";
+  return ang < -30 ? "midL" : ang > 30 ? "midR" : "midC";
+};
+const leagueZones = {};
+for (const ev of pbp.values()) for (const sh of ev.shots ?? []) { const z = zoneOf(sh[2], sh[3], sh[5]); leagueZones[z] ??= { fga: 0, fgm: 0 }; leagueZones[z].fga++; leagueZones[z].fgm += sh[4]; }
+const rapm = rapmRows.length > 500 ? solveRapm(rapmRows, prior) : null;
+console.log(`[app-data] Play-by-play: ${pbp.size} games, ${rapmRows.length} lineup rows, ${rapm?.ratings.size ?? 0} players rated.`);
+const dprOf = pid => {
+  const aid = aidByPid.get(pid);
+  const r = aid ? rapm?.ratings.get(aid) : null;
+  if (r) return r;
+  const p = aid ? prior.get(aid) : null;
+  return p ? { O: p.O, D: p.D, net: p.O - p.D, se: null, poss: 0 } : null;
+};
+for (const row of players) {
+  const d = dprOf(row[playerIdx.id]);
+  row.push(d ? r(d.net, 2) : null, d ? r(d.O, 2) : null, d ? r(-d.D, 2) : null, d?.se != null ? r(d.se, 2) : null, d ? Math.round(d.poss) : null);
+}
+PLAYER_FIELDS.push("dpr", "dprO", "dprD", "dprSE", "onPoss");
+playerIdx.dpr = PLAYER_FIELDS.indexOf("dpr");
+// Recruiting stars (College Basketball Data, high-school classes 2022–2026), joined on athlete id
+// with a name + college fallback.
+{
+  const recById = new Map(), recByName = new Map();
+  for (const rec of recruiting?.players ?? []) {
+    if (rec.athleteId != null) recById.set(String(rec.athleteId), rec);
+    recByName.set(`${nameKey(rec.name)}:${normName(rec.school)}`, rec);
+  }
+  PLAYER_FIELDS.push("stars", "recRank", "recYear");
+  let hits = 0;
+  for (const row of players) {
+    const team = summaryById.get(row[playerIdx.teamId]);
+    const rec = recById.get(row[playerIdx.id]) ?? recByName.get(`${nameKey(row[playerIdx.name])}:${normName(team?.name)}`) ?? null;
+    if (rec) hits++;
+    row.push(rec?.stars ?? null, rec?.ranking ?? null, rec?.year ?? null);
+  }
+  console.log(`[app-data] Recruiting: ${hits} current players matched to a high-school ranking.`);
+}
+// DPR rank among players with real on-court samples.
+{
+  const ranked = players.filter(p => (p[PLAYER_FIELDS.indexOf("onPoss")] ?? 0) >= 150 && p[playerIdx.dpr] !== null).sort((a, b) => b[playerIdx.dpr] - a[playerIdx.dpr]);
+  PLAYER_FIELDS.push("dprRank");
+  const rankMap = new Map(ranked.map((p, i) => [p[playerIdx.id], i + 1]));
+  for (const row of players) row.push(rankMap.get(row[playerIdx.id]) ?? null);
+}
+
+// Lineups + on/off per team.
+const lineupsBySlug = new Map(), onOffBySlug = new Map();
+for (const [slug, list] of lineupStints) {
+  const agg = new Map(); let tSec = 0, tPf = 0, tPa = 0, tPoss = 0;
+  const on = new Map();
+  for (const s of list) {
+    tSec += s.sec; tPf += s.pf; tPa += s.pa; tPoss += s.poss;
+    const pids = s.ids.map(a => pidByAid.get(a) ?? null);
+    const key = pids.map(p => p ?? "?").sort().join(",");
+    if (!agg.has(key)) agg.set(key, { pids: pids.slice().sort(), sec: 0, pf: 0, pa: 0, poss: 0 });
+    const a = agg.get(key); a.sec += s.sec; a.pf += s.pf; a.pa += s.pa; a.poss += s.poss;
+    for (const p of pids) { if (!p) continue; if (!on.has(p)) on.set(p, { sec: 0, pf: 0, pa: 0, poss: 0 }); const o = on.get(p); o.sec += s.sec; o.pf += s.pf; o.pa += s.pa; o.poss += s.poss; }
+  }
+  lineupsBySlug.set(slug, [...agg.values()].filter(a => a.sec >= 120).sort((a, b) => b.sec - a.sec).slice(0, 40)
+    .map(a => ({ pids: a.pids, min: r(a.sec / 60), pf: a.pf, pa: a.pa, poss: r(a.poss), net: r(((a.pf - a.pa) / Math.max(1, a.poss)) * 100) })));
+  const onOff = {};
+  for (const [pid, o] of on) {
+    const offPoss = tPoss - o.poss;
+    onOff[pid] = { min: r(o.sec / 60), onNet: r(((o.pf - o.pa) / Math.max(1, o.poss)) * 100), offNet: offPoss > 5 ? r((((tPf - o.pf) - (tPa - o.pa)) / offPoss) * 100) : null, poss: r(o.poss) };
+  }
+  onOffBySlug.set(slug, onOff);
+}
+
+// Event lookup for provider games: day + ESPN home/away ids (either orientation).
+const eventByKey = new Map();
+for (const ev of pbp.values()) {
+  eventByKey.set(`${ev.day}:${ev.homeId}:${ev.awayId}`, { ev, flip: false });
+  eventByKey.set(`${ev.day}:${ev.awayId}:${ev.homeId}`, { ev, flip: true });
+}
+const espnIdOf = teamId => { const s = summaryById.get(String(teamId)); return s ? espnIdBySlug.get(s.slug) ?? null : null; };
+const eventFor = g => {
+  const h = espnIdOf(g.homeTeamId), a = espnIdOf(g.awayTeamId);
+  if (!h || !a) return null;
+  return eventByKey.get(`${etDate(g.date)}:${h}:${a}`) ?? null;
+};
+// Market lines + flow per provider game, and grading of the walk-forward model against the line.
+const marketByGame = new Map();
+let mGames = 0, mModelAbs = 0, mLineAbs = 0, atsW = 0, atsL = 0, atsP = 0;
+for (const g of allGames) {
+  const hit = eventFor(g);
+  if (!hit) continue;
+  const { ev, flip } = hit;
+  const spread = ev.line?.spread == null ? null : flip ? -ev.line.spread : ev.line.spread; // home perspective, negative = home favoured
+  const flow = ev.flow?.length > 2 ? ev.flow.map(f => (flip ? [f[0], f[2], f[1]] : f)) : null;
+  marketByGame.set(String(g.id), { espnId: ev.id, line: spread == null ? null : { spread, total: ev.line.total, provider: ev.line.provider }, flow });
+  const p = preds[g.id];
+  if (spread != null && p && g.status === "final" && num(g.homeScore) !== null && isD1(g.homeConference) && isD1(g.awayConference)) {
+    const actual = g.homeScore - g.awayScore, lineMargin = -spread;
+    mGames++; mModelAbs += Math.abs(actual - p.margin); mLineAbs += Math.abs(actual - lineMargin);
+    if (Math.abs(p.margin - lineMargin) >= 0.5) {
+      const pickHome = p.margin > lineMargin, cover = actual + spread;
+      if (cover === 0) atsP++; else if ((cover > 0) === pickHome) atsW++; else atsL++;
+    }
+  }
+}
+const market = mGames ? { games: mGames, modelMAE: r(mModelAbs / mGames, 2), lineMAE: r(mLineAbs / mGames, 2), atsW, atsL, atsP,
+  note: "Walk-forward model margin vs the pregame spread ESPN shows (DraftKings when listed). Picks count only when the model and the line differ by at least half a point." } : null;
+console.log(`[app-data] Market: ${market ? `${mGames} games, model MAE ${market.modelMAE} vs line ${market.lineMAE}, ATS ${atsW}-${atsL}-${atsP}` : "no lines"}.`);
+// Team-perspective line on every team game log row.
+for (const [tid, list] of teamLog) {
+  for (const row of list) {
+    const m = marketByGame.get(row.id);
+    const g = allGames.find(x => String(x.id) === row.id);
+    if (!m?.line || !g) continue;
+    const isHome = String(g.homeTeamId) === tid;
+    row.line = isHome ? m.line.spread : -m.line.spread;
+    if (row.result) { const cover = row.pts - row.oppPts + row.line; row.ats = cover > 0 ? "W" : cover < 0 ? "L" : "P"; }
+  }
+}
+for (const t of teamSummaries) {
+  const sim = sims?.teams?.[t.id];
+  t.sim = sim ? { wins: sim.wins, p10: sim.p10, p90: sim.p90, confWins: sim.confWins, title: sim.titleShare, outright: sim.titleOutright, win20: sim.win20 } : null;
+  t.espnId = espnIdBySlug.get(t.slug) ?? null;
+  const log = teamLog.get(t.id) ?? [];
+  t.ats = [log.filter(x => x.ats === "W").length, log.filter(x => x.ats === "L").length, log.filter(x => x.ats === "P").length];
+}
 
 // ---------- write ----------
 await rm(OUT, { recursive: true, force: true });
@@ -311,7 +501,10 @@ const write = (path, data) => writeFile(`${OUT}/${path}`, JSON.stringify(data));
 const updated = { teams: teamPayload.fetchedAt ?? null, players: playerPayload.fetchedAt ?? null, games: gamePayload.fetchedAt ?? null, built: new Date().toISOString() };
 const counts = { teams: teamSummaries.length, ratedTeams: teamSummaries.filter(t => t.rank).length, players: players.length, games: allGames.length, finals: finals.length };
 const { predictions: _omit, ...modelInfo } = model;
-await write("meta.json", { season: 2027, seasonLabel: "2026–27", provider: "College Basketball Data", updated, counts, model: modelInfo, leagueProfile });
+await write("meta.json", { season: 2027, seasonLabel: "2026–27", provider: "College Basketball Data", updated, counts, model: modelInfo, leagueProfile, market,
+  shotZones: leagueZones,
+  sims: sims ? { sims: sims.sims, remainingGames: sims.remainingGames, method: sims.method } : null,
+  dpr: rapm ? { players: rapm.ratings.size, rows: rapmRows.length, lambda: 2500, method: "Regularised adjusted plus-minus (offence/defence) from ESPN play-by-play lineups, shrunk toward a box-score prior" } : null });
 await write("teams.json", teamSummaries);
 await write("conferences.json", conferences);
 await write("players.json", { fields: PLAYER_FIELDS, rows: players });
@@ -323,7 +516,8 @@ for (const t of teamSummaries) {
   const tot = factors(record.teamStats), opp = factors(record.opponentStats), gp = record.games || null;
   const perGame = s => s && gp ? { pts: r(div(s.pts, gp)), reb: r(div((s.orb ?? 0) + (s.drb ?? 0), gp)), ast: r(div(s.ast, gp)), tov: r(div(s.tov, gp)), stl: r(div(s.stl, gp)), blk: r(div(s.blk, gp)), paint: r(div(s.paint, gp)), fastBreak: r(div(s.fastBreak, gp)) } : null;
   await write(`team/${t.slug}.json`, { id: t.id, games: teamLog.get(t.id) ?? [], roster, perGame: perGame(tot), oppPerGame: perGame(opp),
-    logFields: LOG_FIELDS, logs: logsBySlug.get(t.slug) ?? {}, bios: biosBySlug.get(t.slug) ?? {} });
+    logFields: LOG_FIELDS, logs: logsBySlug.get(t.slug) ?? {}, bios: biosBySlug.get(t.slug) ?? {},
+    rosterFields: PLAYER_FIELDS, winHist: sims?.teams?.[t.id]?.hist ?? null, shots: shotsBySlug.get(t.slug) ?? null, lineups: lineupsBySlug.get(t.slug) ?? [], onOff: onOffBySlug.get(t.slug) ?? {} });
 }
 
 // Games by Eastern date.
@@ -367,6 +561,7 @@ for (const [day, list] of [...byDay.entries()].sort(([a], [b]) => a.localeCompar
       home, away,
       pred: p ? { wp: r(p.homeWinProb, 3), margin: r(p.margin), home: r(p.homePts), away: r(p.awayPts), tempo: r(p.tempo) } : null,
       watch, upset: winnerWP !== null && winnerWP < 0.35 ? r(winnerWP, 3) : null,
+      espnId: marketByGame.get(String(g.id))?.espnId ?? null, line: marketByGame.get(String(g.id))?.line ?? null, flow: marketByGame.get(String(g.id))?.flow ?? null,
       box: hb || ab ? { home: boxLine(hb ?? (ab ? { teamStats: ab.opponentStats } : null)), away: boxLine(ab ?? (hb ? { teamStats: hb.opponentStats } : null)) } : null,
     };
   });

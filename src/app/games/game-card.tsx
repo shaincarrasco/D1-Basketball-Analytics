@@ -5,12 +5,13 @@ import Link from "next/link";
 import TeamLogo from "@/components/team-logo";
 import WinProb from "@/components/win-prob";
 import { fmt, pctFmt } from "@/lib/format";
+import type { LiveGame } from "@/lib/live";
 import type { Game, GameSide } from "@/lib/types";
-import { favoriteWon, isFinal, isLive, marginText, statusLabel, teamHref, winner } from "./game-utils";
+import { favoriteWon, isFinal, isLive, lineInfo, marginText, statusLabel, teamHref, winner } from "./game-utils";
 
 export function WatchBadge({ value }: { value: number | null }) {
   if (value == null) return null;
-  const tone = value >= 80 ? "border-[rgba(255,122,26,0.6)] text-off" : value >= 60 ? "border-line2 text-ink" : "border-line text-mute";
+  const tone = value >= 80 ? "border-[rgb(var(--off-rgb)/0.6)] text-off" : value >= 60 ? "border-line2 text-ink" : "border-line text-mute";
   return (
     <span title="Watchability, 0–100: half team quality, half how close the projection is" className={`inline-flex items-baseline gap-1 rounded-md border px-1.5 py-0.5 ${tone}`}>
       <span className="text-[10.5px] font-semibold text-mute">Watch</span>
@@ -35,7 +36,9 @@ function Row({ g, side, which }: { g: Game; side: GameSide; which: "home" | "awa
   const proj = g.pred ? g.pred[which] : null;
   return (
     <div className="flex items-center gap-2.5">
-      <TeamLogo src={side.logo} name={side.name} size={28} />
+      {teamHref(side)
+        ? <Link href={teamHref(side)!} tabIndex={-1} aria-hidden className="relative z-10 shrink-0"><TeamLogo src={side.logo} name={side.name} size={28} /></Link>
+        : <TeamLogo src={side.logo} name={side.name} size={28} />}
       <span className="w-6 shrink-0 text-right font-display text-[13px] font-bold leading-none text-dim tnum" aria-label={side.rank ? `Ranked ${side.rank}` : undefined}>
         {side.rank ?? ""}
       </span>
@@ -57,20 +60,23 @@ function Row({ g, side, which }: { g: Game; side: GameSide; which: "home" | "awa
   );
 }
 
-export default function GameCard({ g, onOpen }: { g: Game; onOpen: (id: string, el: HTMLElement) => void }) {
+export default function GameCard({ g, live: lg, onOpen }: { g: Game; live?: LiveGame; onOpen: (id: string, el: HTMLElement) => void }) {
   const final = isFinal(g), live = isLive(g);
   const fw = favoriteWon(g);
-  const label = `${g.away.name} ${g.neutral ? "vs" : "at"} ${g.home.name}: ${statusLabel(g)}${final || live ? `, ${g.away.score ?? "—"} to ${g.home.score ?? "—"}` : ""}. Open game details`;
+  const status = statusLabel(g, lg);
+  const li = lineInfo(g);
+  const label = `${g.away.name} ${g.neutral ? "vs" : "at"} ${g.home.name}: ${status}${final || live ? `, ${g.away.score ?? "—"} to ${g.home.score ?? "—"}` : ""}. Open game details`;
   return (
-    <article className={`deck relative flex w-full flex-col gap-3 p-4 transition-colors hover:border-line2 ${live ? "!border-[rgba(255,62,165,0.5)]" : ""}`}>
-      <button type="button" aria-label={label} onClick={e => onOpen(g.id, e.currentTarget)} className="absolute inset-0 rounded-[18px] focus-visible:outline-offset-[-2px]" />
+    <article className={`deck relative flex w-full flex-col gap-3 p-4 transition-colors hover:border-line2 ${live ? "!border-[rgb(var(--hot-rgb)/0.5)]" : ""}`}>
+      <button type="button" aria-label={label} onClick={e => onOpen(g.id, e.currentTarget)} className="absolute inset-0 rounded-[10px] focus-visible:outline-offset-[-2px]" />
       <div className="flex items-center gap-2 text-[12px] text-mute">
         {live && <span className="live-dot" aria-hidden />}
-        <span className={`font-semibold ${live ? "text-hot" : final ? "text-ink" : ""}`}>{statusLabel(g)}</span>
+        <span className={`font-semibold tnum ${live ? "text-hot" : final ? "text-ink" : ""}`}>{status}</span>
+        {lg?.state === "in" && <span className="rounded bg-[rgb(var(--hot-rgb)/0.14)] px-1 text-[10.5px] font-semibold text-hot" title="Live score from ESPN, refreshed every 30 seconds">Live</span>}
         {g.neutral && <span className="text-dim">· Neutral</span>}
         {g.confGame && <span className="text-dim">· Conf</span>}
         <span className="ml-auto flex items-center gap-1.5">
-          {g.upset != null && final && <span className="rounded-md bg-[rgba(255,62,165,0.15)] px-1.5 py-0.5 text-[11px] font-bold text-hot">Upset</span>}
+          {g.upset != null && final && <span className="rounded-md bg-[rgb(var(--hot-rgb)/0.15)] px-1.5 py-0.5 text-[11px] font-bold text-hot">Upset</span>}
           <WatchBadge value={g.watch} />
         </span>
       </div>
@@ -91,6 +97,19 @@ export default function GameCard({ g, onOpen }: { g: Game; onOpen: (id: string, 
             )}
             {g.upset != null && final && <span className={`${fw == null ? "ml-auto" : ""} shrink-0 text-hot`}>{pctFmt(g.upset)} winner</span>}
           </div>
+          {li && (
+            <div className="mt-1 flex items-center gap-2 text-[11.5px] text-dim tnum">
+              <span className="truncate" title={`Pregame line${li.provider ? ` (${li.provider})` : ""}${li.model ? ` · DHR ${li.model}` : ""}`}>
+                Line <span className="text-mute">{li.market}</span>{li.total != null ? <> · Total <span className="text-mute">{li.total}</span></> : null}
+              </span>
+              {li.pick && (
+                <span className={`ml-auto shrink-0 ${li.result === "W" ? "font-semibold text-win" : li.result === "L" ? "font-semibold text-loss" : ""}`}
+                  title={`DHR pick against the line: ${li.pick.text}${li.result === "W" ? ", covered" : li.result === "L" ? ", didn't cover" : li.result === "P" ? ", push" : ""}`}>
+                  {li.result ? <>ATS <span aria-hidden>{li.result === "W" ? "✓" : li.result === "L" ? "✗" : "–"}</span><span className="sr-only">{li.result === "W" ? "DHR pick covered" : li.result === "L" ? "DHR pick did not cover" : "push"}</span></> : <>Pick <span className="text-mute">{li.pick.text}</span></>}
+                </span>
+              )}
+            </div>
+          )}
         </div>
       )}
     </article>

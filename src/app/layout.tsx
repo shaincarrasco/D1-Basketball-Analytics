@@ -4,11 +4,23 @@ import "./globals.css";
 import SiteShell from "@/components/site-shell";
 import { getMeta } from "@/lib/server-data";
 
+// Metadata URLs are not basePath-aware, so prefix them (GitHub Pages serves under /D1-Basketball-Analytics).
+const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+
 export const metadata: Metadata = {
   title: { default: "D1 Hoops — College Basketball Analytics", template: "%s · D1 Hoops" },
   description: "Opponent-adjusted power ratings, game predictions, team scouting and player leaderboards for every NCAA Division I men's basketball team.",
   applicationName: "D1 Hoops",
   appleWebApp: { capable: true, title: "D1 Hoops", statusBarStyle: "black-translucent" },
+  manifest: `${BASE}/manifest.webmanifest`,
+  icons: {
+    icon: [
+      { url: `${BASE}/icons/icon.svg`, type: "image/svg+xml" },
+      { url: `${BASE}/icons/favicon-32.png`, sizes: "32x32", type: "image/png" },
+      { url: `${BASE}/icons/icon-192.png`, sizes: "192x192", type: "image/png" },
+    ],
+    apple: [{ url: `${BASE}/icons/apple-touch-icon.png`, sizes: "180x180" }],
+  },
 };
 export const viewport: Viewport = { themeColor: "#0b0d12", width: "device-width", initialScale: 1, viewportFit: "cover" };
 
