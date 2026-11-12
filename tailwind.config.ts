@@ -20,8 +20,8 @@ const config: Config = {
         loss: "rgb(var(--loss-rgb) / <alpha-value>)",
       },
       fontFamily: {
-        display: ["'Big Shoulders Display Variable'", "Impact", "sans-serif"],
-        sans: ["Barlow", "system-ui", "sans-serif"],
+        display: ["'Archivo Variable'", "system-ui", "sans-serif"],
+        sans: ["'Archivo Variable'", "system-ui", "sans-serif"],
       },
       screens: { xs: "420px" },
     },

@@ -9,13 +9,13 @@ export default function ThemeToggle() {
   const flip = () => {
     const next = theme === "light" ? "dark" : "light";
     document.documentElement.dataset.theme = next;
-    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", next === "light" ? "#f5f6fa" : "#060810");
+    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", next === "light" ? "#f5f6fa" : "#0b0d12");
     try { localStorage.setItem("d1h-theme", next); } catch { /* private mode */ }
     setTheme(next);
   };
   const label = theme === "light" ? "Switch to dark mode" : "Switch to light mode";
   return (
-    <button onClick={flip} aria-label={label} title={label} className="grid h-9 w-9 place-items-center rounded-lg border border-line2 bg-deck text-mute hover:text-ink">
+    <button onClick={flip} aria-label={label} title={label} className="grid h-9 w-9 place-items-center rounded-md border border-line bg-deck text-mute hover:text-ink">
       {theme === "light" ? <Moon size={16} aria-hidden /> : <Sun size={16} aria-hidden />}
     </button>
   );

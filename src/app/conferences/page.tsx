@@ -33,10 +33,7 @@ export default function ConferencesPage() {
 
   return (
     <>
-      <PageHeader title="Conferences">
-        All {confs.length} Division I conferences ranked by the average adjusted efficiency margin of their members — how many points per 100 possessions
-        the typical team would beat an average D-I opponent by on a neutral floor. Non-conference records show how each league has fared against outsiders.
-      </PageHeader>
+      <PageHeader title="Conferences">Ranked by the average AdjEM of their members.</PageHeader>
 
       <section aria-labelledby="strength-h" className="mb-10">
         <h2 id="strength-h" className="h-section mb-4">Strength ranking</h2>
@@ -75,7 +72,7 @@ export default function ConferencesPage() {
                         className="absolute top-1/2 h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full border border-night"
                         style={{ left: `${x(t!.adjEM!)}%`, background: "var(--mute)", opacity: 0.85 }} />
                     ))}
-                    {c.avgEM !== null && <span className="absolute top-1/2 h-5 w-[3px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-ink shadow-[0_0_8px_rgb(var(--ink-rgb)/.4)]" style={{ left: `${x(c.avgEM)}%` }} aria-hidden />}
+                    {c.avgEM !== null && <span className="absolute top-1/2 h-5 w-[3px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-ink" style={{ left: `${x(c.avgEM)}%` }} aria-hidden />}
                   </div>
                 </div>
               );

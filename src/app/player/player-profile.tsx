@@ -92,7 +92,6 @@ function Profile({ p, all, detail }: { p: PlayerRow; all: PlayerRow[]; detail: R
   return (
     <div className="space-y-5">
       <section className="deck relative overflow-hidden p-5 sm:p-8" aria-labelledby="player-name">
-        <div className="court-arc" aria-hidden />
         <div className="relative">
           <div className="flex items-center gap-3">
             <TeamLogo src={t?.logo ?? null} name={t?.name ?? "?"} size={44} />
@@ -104,14 +103,14 @@ function Profile({ p, all, detail }: { p: PlayerRow; all: PlayerRow[]; detail: R
               </span>
             </div>
           </div>
-          <h1 id="player-name" className="mt-4 font-display text-[3.2rem] font-black leading-[0.88] tracking-tight sm:text-[5.5rem] lg:text-[6.5rem]">{p.name}</h1>
+          <h1 id="player-name" className="mt-3 text-[2rem] font-bold leading-tight tracking-[-0.02em] sm:text-[2.5rem]">{p.name}</h1>
           <p className="mt-3 text-mute tnum">
             {p.g ?? 0} {p.g === 1 ? "game" : "games"} · {p.gs ?? 0} {p.gs === 1 ? "start" : "starts"} · {fmt(p.min)} minutes per game
           </p>
           <div className="mt-5 grid max-w-xl grid-cols-3 gap-4 sm:gap-8">
-            {([["PTS", p.pts, "text-off"], ["REB", p.reb, ""], ["AST", p.ast, ""]] as const).map(([l, v, c]) => (
+            {([["PTS", p.pts, ""], ["REB", p.reb, ""], ["AST", p.ast, ""]] as const).map(([l, v, c]) => (
               <div key={l}>
-                <div className={`font-display text-[3.2rem] font-black leading-none tnum sm:text-[5rem] ${c}`}>{fmt(v)}</div>
+                <div className={`font-display text-[2.25rem] font-black leading-none tnum sm:text-[2.75rem] ${c}`}>{fmt(v)}</div>
                 <div className="mt-1 text-sm font-semibold text-mute">{l === "PTS" ? "Points" : l === "REB" ? "Rebounds" : "Assists"}<span className="hidden sm:inline"> per game</span></div>
               </div>
             ))}
@@ -185,8 +184,8 @@ function PctBar({ s, p, pct, tone }: { s: PStat; p: PlayerRow; pct: number | nul
           </span>
         </span>
       </div>
-      <div className="mt-1.5 h-1 rounded-full bg-line" role="meter" aria-valuemin={0} aria-valuemax={100} aria-valuenow={pct !== null ? Math.round(pct * 100) : undefined} aria-label={`${s.label} percentile`}>
-        {pct !== null && <div className="h-1 rounded-full" style={{ width: `${Math.max(2, pct * 100)}%`, background: color, boxShadow: pct > 0.85 ? `0 0 10px ${color}` : undefined }} />}
+      <div className="mt-1.5 h-[3px] bg-line" role="meter" aria-valuemin={0} aria-valuemax={100} aria-valuenow={pct !== null ? Math.round(pct * 100) : undefined} aria-label={`${s.label} percentile`}>
+        {pct !== null && <div className="h-[3px]" style={{ width: `${Math.max(2, pct * 100)}%`, background: color }} />}
       </div>
     </div>
   );

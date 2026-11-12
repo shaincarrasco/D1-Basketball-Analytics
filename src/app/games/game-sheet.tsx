@@ -120,7 +120,7 @@ function Scoreline({ g }: { g: Game }) {
   const num = (side: "home" | "away") => {
     const v = played ? g[side].score : g.pred ? Math.round(g.pred[side]) : null;
     const dim = !played || (w != null && w !== side);
-    return <span className={`font-display text-[3.4rem] font-black leading-none tnum sm:text-[5rem] ${dim ? "text-mute" : "text-ink"}`}>{v ?? "—"}</span>;
+    return <span className={`font-display text-[2.75rem] font-black leading-none tnum sm:text-[3.5rem] ${dim ? "text-mute" : "text-ink"}`}>{v ?? "—"}</span>;
   };
   return (
     <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3 sm:gap-6">

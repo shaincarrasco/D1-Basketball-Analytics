@@ -3,52 +3,51 @@
 @tailwind utilities;
 
 /*
-  D1 Hoops — "Arena after dark"
-  Night-court navy base, two neon signal colours with fixed meaning:
-  orange = offence (the ball), cyan = defence (the shot-clock LED).
-  Magenta is reserved for upsets and alerts; mint/rose for results.
+  D1 Hoops. Flat surfaces, one typeface (Archivo; narrowed for numerals),
+  colour only where it carries meaning: orange = offence, blue = defence,
+  green/red = good/bad or win/loss, magenta = upsets and live games.
 */
 :root, html[data-theme="dark"] {
   color-scheme: dark;
-  --bg-rgb: 6 8 16;
-  --deck-rgb: 12 15 28;
-  --deck-2-rgb: 19 24 44;
-  --line-rgb: 30 37 64;
-  --line-2-rgb: 45 55 92;
-  --ink-rgb: 240 242 252;
-  --mute-rgb: 150 157 192;
-  --dim-rgb: 96 104 146;
-  --off-rgb: 255 122 26;
-  --def-rgb: 44 229 255;
-  --hot-rgb: 255 62 165;
-  --win-rgb: 92 255 178;
-  --loss-rgb: 255 92 122;
-  --good-rgb: 92 255 178;
-  --bad-rgb: 255 92 122;
-  --heat-k: 1;
-  --glow: 0.06;
-  --shadow: 0 1px 0 rgb(255 255 255 / 0.03) inset, 0 12px 32px -18px rgb(0 0 0 / 0.8);
+  --bg-rgb: 11 13 18;
+  --deck-rgb: 17 20 27;
+  --deck-2-rgb: 24 28 37;
+  --line-rgb: 34 39 51;
+  --line-2-rgb: 48 55 71;
+  --ink-rgb: 233 235 240;
+  --mute-rgb: 154 161 178;
+  --dim-rgb: 104 112 131;
+  --off-rgb: 240 138 60;
+  --def-rgb: 79 179 217;
+  --hot-rgb: 229 72 127;
+  --win-rgb: 52 195 143;
+  --loss-rgb: 232 86 108;
+  --good-rgb: 52 195 143;
+  --bad-rgb: 232 86 108;
+  --heat-k: 0.9;
+  --glow: 0;
+  --shadow: none;
 }
 html[data-theme="light"] {
   color-scheme: light;
-  --bg-rgb: 245 246 250;
+  --bg-rgb: 246 247 249;
   --deck-rgb: 255 255 255;
-  --deck-2-rgb: 240 242 247;
-  --line-rgb: 228 231 239;
-  --line-2-rgb: 206 212 226;
-  --ink-rgb: 13 17 38;
-  --mute-rgb: 88 95 124;
-  --dim-rgb: 138 144 168;
-  --off-rgb: 226 88 12;
-  --def-rgb: 6 140 176;
-  --hot-rgb: 214 31 120;
-  --win-rgb: 4 150 105;
-  --loss-rgb: 220 38 72;
-  --good-rgb: 16 185 129;
-  --bad-rgb: 244 63 94;
-  --heat-k: 0.9;
-  --glow: 0.035;
-  --shadow: 0 1px 2px rgb(16 24 64 / 0.05), 0 8px 24px -16px rgb(16 24 64 / 0.18);
+  --deck-2-rgb: 241 243 246;
+  --line-rgb: 228 231 236;
+  --line-2-rgb: 208 213 221;
+  --ink-rgb: 16 24 40;
+  --mute-rgb: 93 102 120;
+  --dim-rgb: 139 147 165;
+  --off-rgb: 217 99 27;
+  --def-rgb: 29 127 168;
+  --hot-rgb: 194 24 91;
+  --win-rgb: 7 140 95;
+  --loss-rgb: 209 52 77;
+  --good-rgb: 16 170 110;
+  --bad-rgb: 226 62 88;
+  --heat-k: 0.75;
+  --glow: 0;
+  --shadow: 0 1px 2px rgb(16 24 40 / 0.04);
 }
 :root {
   --bg: rgb(var(--bg-rgb));
@@ -64,8 +63,8 @@ html[data-theme="light"] {
   --hot: rgb(var(--hot-rgb));
   --win: rgb(var(--win-rgb));
   --loss: rgb(var(--loss-rgb));
-  --radius-lg: 16px;
-  --radius-sm: 10px;
+  --radius-lg: 10px;
+  --radius-sm: 8px;
 }
 /* Logos: ESPN publishes a dark-background variant; show the right one per theme. */
 html[data-theme="light"] .logo-dark, html:not([data-theme="light"]) .logo-light.has-dark { display: none; }
@@ -74,34 +73,35 @@ html:not([data-theme="light"]) .logo-dark { display: inline-block; }
 html { background: var(--bg); }
 body {
   color: var(--ink);
-  font-family: Barlow, system-ui, sans-serif;
-  font-size: 15px;
+  font-family: "Archivo Variable", system-ui, sans-serif;
+  font-size: 14.5px;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   min-height: 100dvh;
-  background:
-    radial-gradient(1200px 500px at 85% -10%, rgb(var(--off-rgb) / var(--glow)), transparent 60%),
-    radial-gradient(900px 420px at -10% 10%, rgb(var(--def-rgb) / var(--glow)), transparent 60%),
-    var(--bg);
+  background: var(--bg);
 }
 ::selection { background: rgb(var(--off-rgb) / 0.3); }
 .tnum { font-variant-numeric: tabular-nums; }
-.font-display { font-family: "Big Shoulders Display Variable", Impact, sans-serif; letter-spacing: 0.005em; }
+/* Numerals and titles: the same family, narrowed. Weights are capped so big numbers stay crisp, not posterish. */
+.font-display { font-family: "Archivo Variable", system-ui, sans-serif; font-stretch: 84%; letter-spacing: -0.01em; }
+.font-display.font-black { font-weight: 720; }
+.font-display.font-extrabold { font-weight: 680; }
 
 :focus-visible { outline: 2px solid var(--def); outline-offset: 2px; border-radius: 6px; }
 
 @layer components {
   .deck { background: var(--deck); border: 1px solid var(--line); border-radius: var(--radius-lg); box-shadow: var(--shadow); }
   .deck-flat { background: var(--deck); border: 1px solid var(--line); border-radius: var(--radius-sm); }
-  .h-section { font-family: "Big Shoulders Display Variable", Impact, sans-serif; font-weight: 800; font-size: 1.6rem; line-height: 1; letter-spacing: 0.01em; }
-  .label { font-size: 12px; color: var(--mute); font-weight: 500; }
-  .chip { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line-2); border-radius: 999px; padding: 5px 12px; font-size: 13px; font-weight: 600; color: var(--mute); background: var(--deck); white-space: nowrap; }
-  .chip[aria-pressed="true"], .chip[aria-current="page"] { color: var(--bg); background: var(--ink); border-color: var(--ink); }
-  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border-radius: 10px; padding: 9px 14px; font-weight: 600; font-size: 14px; border: 1px solid var(--line-2); background: var(--deck-2); color: var(--ink); }
+  .h-section { font-weight: 650; font-size: 1.0625rem; line-height: 1.3; letter-spacing: -0.01em; }
+  .label { font-size: 12px; color: var(--mute); font-weight: 450; }
+  .chip { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); border-radius: 6px; padding: 5px 11px; font-size: 13px; font-weight: 550; color: var(--mute); background: transparent; white-space: nowrap; }
+  .chip:hover { color: var(--ink); border-color: var(--line-2); }
+  .chip[aria-pressed="true"], .chip[aria-current="page"] { color: var(--ink); background: var(--deck-2); border-color: var(--line-2); box-shadow: inset 0 -2px 0 var(--ink); }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border-radius: 7px; padding: 7px 12px; font-weight: 550; font-size: 13.5px; border: 1px solid var(--line-2); background: var(--deck-2); color: var(--ink); }
   .btn:hover { border-color: var(--mute); }
   .btn-primary { background: var(--off); border-color: var(--off); color: #1a0a00; }
   .btn-primary:hover { filter: brightness(1.08); border-color: var(--off); }
-  .field { background: var(--deck); border: 1px solid var(--line-2); border-radius: 10px; padding: 9px 12px; font-size: 14px; color: var(--ink); }
+  .field { background: var(--deck); border: 1px solid var(--line-2); border-radius: 7px; padding: 7px 11px; font-size: 14px; color: var(--ink); }
   .field::placeholder { color: var(--dim); }
   select.field { appearance: none; padding-right: 30px; background-image: linear-gradient(45deg, transparent 50%, var(--mute) 50%), linear-gradient(135deg, var(--mute) 50%, transparent 50%); background-position: calc(100% - 16px) 55%, calc(100% - 11px) 55%; background-size: 5px 5px; background-repeat: no-repeat; }
   .link { color: var(--ink); text-decoration: none; }
@@ -109,35 +109,31 @@ body {
 
   /* Data tables */
   .dt { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 13.5px; }
-  .dt th { position: sticky; top: 0; z-index: 2; background: var(--deck); color: var(--mute); font-weight: 600; font-size: 12px; text-align: right; padding: 10px 8px; border-bottom: 1px solid var(--line-2); white-space: nowrap; user-select: none; }
+  .dt th { position: sticky; top: 0; z-index: 2; background: var(--deck); color: var(--mute); font-weight: 550; font-size: 11.5px; text-align: right; padding: 10px 8px; border-bottom: 1px solid var(--line-2); white-space: nowrap; user-select: none; }
   .dt th.l, .dt td.l { text-align: left; }
   .dt th button { all: unset; cursor: pointer; display: inline-flex; gap: 4px; align-items: center; }
   .dt th button:focus-visible { outline: 2px solid var(--def); outline-offset: 2px; }
   .dt th[aria-sort="ascending"], .dt th[aria-sort="descending"] { color: var(--ink); }
-  .dt td { padding: 8px; text-align: right; border-bottom: 1px solid var(--line); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .dt td { padding: 7px 8px; text-align: right; border-bottom: 1px solid var(--line); font-variant-numeric: tabular-nums; white-space: nowrap; }
   .dt tbody tr:hover td { background: rgb(var(--def-rgb) / 0.05); }
   .dt .sticky-col { position: sticky; left: 0; z-index: 1; background: var(--bg); }
   .dt th.sticky-col { z-index: 3; background: var(--deck); }
   .dt tbody tr:hover td.sticky-col { background: color-mix(in srgb, var(--def) 5%, var(--bg)); }
-  .dt .grp-off { box-shadow: inset 0 -2px 0 var(--off); }
-  .dt .grp-def { box-shadow: inset 0 -2px 0 var(--def); }
-  .rank-cell { font-family: "Big Shoulders Display Variable", Impact, sans-serif; font-weight: 800; font-size: 1.15rem; line-height: 1; }
-  .sub-rank { display: block; font-size: 10.5px; color: var(--dim); line-height: 1.1; }
+  .dt .grp-off { box-shadow: inset 0 -1px 0 var(--off); }
+  .dt .grp-def { box-shadow: inset 0 -1px 0 var(--def); }
+  .rank-cell { font-weight: 600; font-size: 13.5px; color: var(--mute); }
+  .sub-rank { display: inline-block; min-width: 1.6em; margin-left: 5px; font-size: 10.5px; color: var(--dim); text-align: right; vertical-align: 1px; }
 
   .scroll-x { overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: thin; scrollbar-color: var(--line-2) transparent; }
   .no-scrollbar { scrollbar-width: none; }
   .no-scrollbar::-webkit-scrollbar { display: none; }
 }
 
-/* Court-line motif used behind hero headers */
-.court-arc { position: absolute; inset: 0; pointer-events: none; overflow: hidden; border-radius: inherit; }
-.court-arc::before { content: ""; position: absolute; right: -140px; top: 50%; width: 420px; height: 420px; transform: translateY(-50%); border: 2px solid color-mix(in srgb, var(--accent, var(--off)) 22%, transparent); border-radius: 50%; }
-.court-arc::after { content: ""; position: absolute; right: 70px; top: 50%; width: 2px; height: 140%; transform: translateY(-50%); background: color-mix(in srgb, var(--accent, var(--off)) 12%, transparent); }
-
-.outline-num { color: transparent; -webkit-text-stroke: 2px var(--accent, var(--off)); text-shadow: 0 0 30px color-mix(in srgb, var(--accent, var(--off)) calc(var(--glow) * 500%), transparent); }
+.outline-num { color: var(--accent, var(--ink)); }
+.court-arc { display: none; }
 
 @keyframes live-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
-.live-dot { width: 8px; height: 8px; border-radius: 999px; background: var(--hot); box-shadow: 0 0 10px var(--hot); animation: live-pulse 1.4s ease-in-out infinite; }
+.live-dot { width: 7px; height: 7px; border-radius: 999px; background: var(--hot); animation: live-pulse 1.4s ease-in-out infinite; }
 @keyframes sheet-in { from { transform: translateY(24px); opacity: 0; } to { transform: none; opacity: 1; } }
 .sheet-in { animation: sheet-in 0.22s ease-out; }
 
@@ -148,4 +144,4 @@ body {
 /* Team-colour accents: --team is set inline from ESPN's primary colour. */
 .team-accent { --accent: color-mix(in oklab, var(--team, var(--off)) 70%, white); }
 html[data-theme="light"] .team-accent { --accent: color-mix(in oklab, var(--team, var(--off)) 88%, black); }
-.team-hero { background: linear-gradient(115deg, color-mix(in srgb, var(--team, var(--off)) 16%, var(--deck)) 0%, var(--deck) 55%); border-top: 3px solid var(--accent); }
+.team-hero { border-top: 3px solid var(--accent); }

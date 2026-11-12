@@ -20,7 +20,7 @@ function Row({ side, score, fav, projected }: { side: Game["home"]; score: numbe
       <TeamLogo src={side.logo} name={side.name} size={24} />
       <span className="w-6 text-right text-xs text-dim tnum">{side.rank ?? ""}</span>
       <span className={`min-w-0 flex-1 truncate font-semibold ${fav ? "" : "text-mute"}`}>{side.name}</span>
-      <span className={`font-display tnum ${projected ? "text-xl font-bold text-mute" : "text-2xl font-black"}`} title={projected ? "Projected score" : undefined}>{score ?? ""}</span>
+      <span className={`font-display tnum ${projected ? "text-lg font-semibold text-dim" : "text-xl font-extrabold"}`} title={projected ? "Projected score" : undefined}>{score ?? ""}</span>
     </div>
   );
 }
@@ -38,14 +38,14 @@ export default function Tonight() {
     <section aria-labelledby="tonight">
       <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h1 id="tonight" className="font-display text-[3rem] font-black leading-[0.9] tracking-tight sm:text-7xl">
+          <h1 id="tonight" className="text-[1.75rem] font-bold leading-tight tracking-[-0.02em] sm:text-[2rem]">
             {day ? (isToday ? "Tonight" : dayLabel(day, { weekday: "long", month: "short", day: "numeric" })) : "Tonight"}
           </h1>
-          <p className="mt-2 text-mute">
+          <p className="mt-0.5 text-[14px] text-mute">
             {slate.data ? (
               <>
                 {games.length} games{live ? <> · <span className="text-hot">{live} in progress at last refresh</span></> : null}
-                {best && best.pred ? <> · best matchup by quality and closeness: <b className="text-ink">{best.away.name} {best.neutral ? "vs" : "at"} {best.home.name}</b></> : null}
+                {best && best.pred ? <> · best matchup <b className="font-semibold text-ink">{best.away.name} {best.neutral ? "vs" : "at"} {best.home.name}</b></> : null}
               </>
             ) : "Loading the slate…"}
           </p>
@@ -55,7 +55,7 @@ export default function Tonight() {
       {index.status === "error" || slate.status === "error" ? (
         <p className="deck p-4 text-sm text-mute">The schedule feed didn’t load. <button className="underline" onClick={() => { index.retry(); slate.retry(); }}>Try again</button></p>
       ) : (
-        <div className="no-scrollbar -mx-4 flex snap-x gap-3 overflow-x-auto px-4 pb-1 sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="no-scrollbar -mx-4 flex snap-x scroll-px-4 gap-3 overflow-x-auto px-4 pb-1 sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 lg:grid-cols-3 xl:grid-cols-4">
           {(slate.data ? games.slice(0, 8) : Array.from({ length: 4 }, () => null)).map((g, i) => g ? (
             <Link key={g.id} href={`/games/?d=${day}&g=${g.id}`} className="deck w-[82vw] max-w-[340px] shrink-0 snap-start p-4 hover:border-line2 sm:w-auto sm:max-w-none">
               <div className="mb-3 flex items-center justify-between text-xs text-mute">

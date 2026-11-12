@@ -9,10 +9,7 @@ export default function RankingsPage() {
   const meta = getMeta(), teams = getTeams();
   return (
     <>
-      <PageHeader title="Power rankings">
-        All {meta.counts.ratedTeams} rated Division I teams, ordered by adjusted efficiency margin — how many points per 100 possessions a team would beat an average D-I opponent by on a neutral floor.
-        Ratings are rebuilt from every box score after each data refresh.
-      </PageHeader>
+      <PageHeader title="Rankings">{meta.counts.ratedTeams} teams by adjusted efficiency margin: points per 100 possessions better than an average D-I team on a neutral floor.</PageHeader>
       <RankingsTable teams={teams} total={meta.counts.ratedTeams} />
     </>
   );

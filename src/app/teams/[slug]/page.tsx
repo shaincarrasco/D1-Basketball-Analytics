@@ -44,17 +44,16 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
   return (
     <article>
       {/* Hero */}
-      <section className="deck team-accent team-hero relative mb-6 overflow-hidden p-5 sm:p-8" style={team.color ? ({ "--team": team.color } as React.CSSProperties) : undefined}>
-        <div className="court-arc" aria-hidden />
-        <div className="relative flex flex-wrap items-center gap-6">
-          <TeamLogo src={team.logo} name={team.name} size={88} className="drop-shadow-[0_0_24px_rgba(255,255,255,.08)]" />
+      <section className="deck team-accent team-hero relative mb-6 overflow-hidden p-5 sm:p-6" style={team.color ? ({ "--team": team.color } as React.CSSProperties) : undefined}>
+        <div className="relative flex flex-wrap items-center gap-5">
+          <TeamLogo src={team.logo} name={team.name} size={64} />
           <div className="order-last min-w-0 basis-full sm:order-none sm:basis-auto sm:flex-1">
             <p className="text-sm text-mute">
               <Link className="link underline decoration-line2 underline-offset-4" href={`/conferences/${team.confSlug}/`}>{team.confName}</Link>
               {team.mascot ? <> · {team.mascot}</> : null}
             </p>
-            <h1 className="font-display text-5xl font-black leading-[0.9] tracking-tight sm:text-7xl">{team.name}</h1>
-            <p className="mt-2 text-[15px] text-mute tnum">
+            <h1 className="text-[2rem] font-bold leading-tight tracking-[-0.02em] sm:text-[2.5rem]">{team.name}</h1>
+            <p className="mt-1 text-[14px] text-mute tnum">
               <b className="text-ink">{team.w}–{team.l}</b> overall · {team.cw}–{team.cl} conference
               {team.streak && <> · <span className={team.streak.startsWith("W") ? "text-win" : "text-loss"}>{team.streak}</span></>}
               {" "}· projected <b className="text-ink">{fmt(team.projW, 1)}–{fmt(team.projL, 1)}</b>
@@ -62,10 +61,10 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
           </div>
           <div className="ml-auto text-right sm:ml-0">
             <div className="label">DHR rank</div>
-            <div className="outline-num font-display text-[5rem] font-black leading-[0.85] sm:text-[8rem]">{team.rank ?? "—"}</div>
+            <div className="outline-num font-display text-[3rem] font-black leading-none tnum sm:text-[3.75rem]">{team.rank ?? "—"}</div>
           </div>
         </div>
-        <dl className="relative mt-6 grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-line bg-line sm:grid-cols-5">
+        <dl className="relative mt-5 grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-line bg-line sm:grid-cols-5">
           {[
             ["AdjEM", signed(team.adjEM, 1), team.rank, "Points per 100 possessions better than an average D-I team"],
             ["Adj offense", fmt(team.adjO), team.adjORank, "Points per 100 vs an average defense"],
@@ -75,7 +74,7 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
           ].map(([label, value, rank, hint]) => (
             <div key={label as string} className="bg-deck px-4 py-3 last:col-span-2 sm:last:col-span-1" title={hint as string}>
               <dt className="label">{label}</dt>
-              <dd className="font-display text-3xl font-extrabold tnum">{value}<span className="ml-2 font-sans text-xs font-semibold text-mute">{rank ? ordinal(rank as number) : ""}</span></dd>
+              <dd className="font-display text-[1.6rem] font-extrabold tnum">{value}<span className="ml-2 font-sans text-xs font-semibold text-mute">{rank ? ordinal(rank as number) : ""}</span></dd>
             </div>
           ))}
         </dl>
@@ -102,7 +101,7 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
               {team.next.wp !== null && (
                 <div className="text-right">
                   <div className="label">Win probability</div>
-                  <div className="font-display text-4xl font-black tnum" style={{ color: team.next.wp >= 0.5 ? "var(--win)" : "var(--loss)" }}>{pctFmt(team.next.wp)}</div>
+                  <div className="font-display text-3xl font-black tnum">{pctFmt(team.next.wp)}</div>
                 </div>
               )}
               {team.next.oppSlug && (
@@ -115,7 +114,7 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
           <section className="deck p-5">
             <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
               <h2 className="h-section">Game by game</h2>
-              <p className="text-xs text-mute">Each bar is the efficiency margin adjusted for that opponent and venue. Above zero = played better than an average D-I team would have.</p>
+              <p className="text-xs text-mute">Margin per 100 possessions, adjusted for opponent and venue</p>
             </div>
             <PerfChart games={played} />
           </section>
@@ -135,8 +134,7 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
 
         <aside className="space-y-6">
           <section className="deck p-5">
-            <h2 className="h-section mb-1 text-off">Offense</h2>
-            <p className="mb-2 text-xs text-mute">Season stats with national rank</p>
+            <h2 className="h-section mb-1 flex items-center gap-2"><i className="h-2.5 w-2.5 rounded-sm bg-off" aria-hidden />Offense</h2>
             <StatBar label="Points per 100 (raw)" value={o?.eff ?? null} rank={or.eff} total={total} />
             <StatBar label="Effective FG%" value={o?.efg ?? null} rank={or.efg} total={total} unit="%" />
             <StatBar label="Turnover rate" value={o?.tov ?? null} rank={or.tov} total={total} unit="%" />
@@ -150,8 +148,7 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
             <StatBar label="Paint points share (style)" value={o?.paintShare ?? null} rank={or.paintShare} total={total} unit="%" tone="neutral" />
           </section>
           <section className="deck p-5">
-            <h2 className="h-section mb-1 text-def">Defense</h2>
-            <p className="mb-2 text-xs text-mute">Opponent stats — rank 1 is the stingiest</p>
+            <h2 className="h-section mb-1 flex items-center gap-2"><i className="h-2.5 w-2.5 rounded-sm bg-def" aria-hidden />Defense</h2>
             <StatBar tone="def" label="Points allowed per 100 (raw)" value={d?.eff ?? null} rank={dr.eff} total={total} />
             <StatBar tone="def" label="Opponent eFG%" value={d?.efg ?? null} rank={dr.efg} total={total} unit="%" />
             <StatBar tone="def" label="Turnovers forced" value={d?.tov ?? null} rank={dr.tov} total={total} unit="%" />
@@ -180,8 +177,7 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
           </section>
           {similar.length > 0 && (
             <section className="deck p-5">
-              <h2 className="h-section mb-1">Statistical comps</h2>
-              <p className="mb-3 text-xs text-mute">Closest teams by adjusted offense, defense and tempo</p>
+              <h2 className="h-section mb-3" title="Closest teams by adjusted offense, defense and tempo">Similar teams</h2>
               <ul className="space-y-2">
                 {similar.map(({ t }) => (
                   <li key={t.id}>
