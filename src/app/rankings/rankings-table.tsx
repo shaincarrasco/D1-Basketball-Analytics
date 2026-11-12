@@ -127,7 +127,7 @@ export default function RankingsTable({ teams, total }: { teams: TeamSummary[]; 
       <div className="mb-2 flex flex-wrap gap-x-5 gap-y-1 text-xs text-mute">
         <span><i className="mr-1.5 inline-block h-2 w-3 rounded-sm bg-off align-middle" />Offense</span>
         <span><i className="mr-1.5 inline-block h-2 w-3 rounded-sm bg-def align-middle" />Defense</span>
-        <span>Small number under a value = national rank. Cell tint: <span className="text-win">top</span> / <span className="text-loss">bottom</span> of D-I.</span>
+        <span>Small number = national rank. Shading marks the top and bottom of D-I.</span>
       </div>
       <DataTable key={view} rows={rows} columns={columns[view]} rowKey={t => t.id} initialSort={view === "Résumé" ? "rec" : "rank"} initialDir={view === "Résumé" ? "desc" : "asc"} csvName={`d1hoops-${view.toLowerCase().replace(/\W/g, "")}.csv`} caption="Division I power rankings" />
       {rows.length === 0 && <p className="mt-4 text-sm text-mute">No teams match “{q}”. Clear the search or pick another conference.</p>}

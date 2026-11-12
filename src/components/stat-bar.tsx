@@ -11,12 +11,12 @@ export default function StatBar({ label, value, rank, total = 356, unit = "", di
       <div className="flex items-baseline justify-between gap-3">
         <span className="text-sm text-mute">{label}</span>
         <span className="tnum">
-          <b className="text-[15px]">{fmt(value, digits)}{value !== null ? unit : ""}</b>
-          {rank ? <span className="ml-2 inline-block min-w-[3.2rem] rounded px-1.5 text-right text-xs text-mute" style={{ background: heat(rank, total) }}>{ordinal(rank)}</span> : null}
+          <b className="text-[14px] font-semibold">{fmt(value, digits)}{value !== null ? unit : ""}</b>
+          {rank ? <span className="ml-2 inline-block min-w-[2.8rem] rounded-sm px-1 text-right text-[11px] text-mute" style={{ background: heat(rank, total) }}>{ordinal(rank)}</span> : null}
         </span>
       </div>
-      <div className="mt-1.5 h-1 rounded-full bg-line">
-        <div className="h-1 rounded-full" style={{ width: `${Math.max(2, fill * 100)}%`, background: color, boxShadow: fill > 0.85 ? `0 0 10px ${color}` : undefined }} />
+      <div className="mt-1.5 h-[3px] bg-line">
+        <div className="h-[3px]" style={{ width: `${Math.max(2, fill * 100)}%`, background: color }} />
       </div>
     </div>
   );

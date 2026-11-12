@@ -9,10 +9,7 @@ export const metadata: Metadata = { title: "Matchup simulator", description: "Pr
 export default function MatchupPage() {
   return (
     <>
-      <PageHeader title="Matchup simulator">
-        Pick any two Division I teams and a site. The projection combines each team&apos;s adjusted offense, defense and tempo into a score,
-        a spread, a win probability and a range of likely margins. The link updates as you go, so you can share it.
-      </PageHeader>
+      <PageHeader title="Matchup">Project any two teams at any site.</PageHeader>
       <Suspense fallback={<Loading label="Loading matchup" />}>
         <MatchupClient />
       </Suspense>

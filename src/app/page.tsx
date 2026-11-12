@@ -75,11 +75,11 @@ export default function Home() {
         <div className="space-y-8">
           {/* Model scorecard */}
           {bt && (
-            <section aria-labelledby="model" className="deck relative overflow-hidden p-5">
-              <h2 id="model" className="h-section">How the model is doing</h2>
-              <p className="mt-1 text-xs text-mute">Every pick made before tip-off using only earlier games. D-I vs D-I.</p>
+            <section aria-labelledby="model" className="deck p-5">
+              <h2 id="model" className="h-section">Model record</h2>
+              <p className="mt-0.5 text-xs text-mute">Picks made before tip-off, D-I vs D-I</p>
               <div className="mt-4 flex items-end gap-4">
-                <div className="font-display text-7xl font-black leading-none text-win tnum">{(bt.accuracy * 100).toFixed(1)}<span className="text-4xl">%</span></div>
+                <div className="font-display text-5xl font-black leading-none tnum">{(bt.accuracy * 100).toFixed(1)}<span className="text-3xl text-mute">%</span></div>
                 <div className="pb-1 text-sm text-mute">
                   <div><b className="text-ink">{bt.correct}–{bt.games - bt.correct}</b> picking winners</div>
                   <div>±<b className="text-ink">{fmt(bt.marginMAE, 1)}</b> pts average miss</div>
@@ -101,7 +101,7 @@ export default function Home() {
                   return (
                     <li key={g.id}>
                       <Link href={`/games/?d=${g.day}&g=${g.id}`} className="deck-flat flex items-center gap-3 px-3 py-2.5 hover:border-line2">
-                        <span className="w-14 shrink-0 text-right font-display text-2xl font-black text-hot tnum">{pctFmt(g.upset)}</span>
+                        <span className="w-12 shrink-0 text-right font-display text-xl font-extrabold text-hot tnum">{pctFmt(g.upset)}</span>
                         <span className="min-w-0 flex-1 text-sm">
                           <span className="block truncate"><b>{w.name}</b> {w.score}, {l.rank ? `#${l.rank} ` : ""}{l.name} {l.score}</span>
                           <span className="text-xs text-mute">{dayLabel(g.day)} · winner’s pregame chance</span>
@@ -122,7 +122,7 @@ export default function Home() {
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
           {leaders.map(b => (
             <div key={b.title} className="deck p-4">
-              <h3 className={`mb-2 font-semibold ${b.tone}`}>{b.title}</h3>
+              <h3 className="mb-2 flex items-center gap-2 text-[13.5px] font-semibold">{b.tone === "text-off" ? <i className="h-2 w-2 rounded-sm bg-off" aria-hidden /> : b.tone === "text-def" ? <i className="h-2 w-2 rounded-sm bg-def" aria-hidden /> : null}{b.title}</h3>
               <ol>
                 {b.list.map((t, i) => (
                   <li key={t.id} className="flex items-center gap-2 border-b border-line py-1.5 text-sm last:border-0">
@@ -145,7 +145,7 @@ export default function Home() {
             <h2 id="players" className="h-section">Most valuable so far</h2>
             <Link href="/players/?view=advanced" className="text-sm font-semibold text-mute hover:text-ink">All players</Link>
           </div>
-          <p className="mb-3 text-xs text-mute">Points over replacement per adjusted game (PORPAG), 20+ minutes a night.</p>
+          <p className="mb-3 text-xs text-mute">PORPAG, minimum 20 minutes per game</p>
           <ul className="grid gap-2 sm:grid-cols-2">
             {topPlayers.map(p => {
               const t = byId.get(p.teamId);
@@ -157,7 +157,7 @@ export default function Home() {
                       <span className="block truncate font-semibold">{p.name}</span>
                       <span className="block truncate text-xs text-mute">{t?.name} · {fmt(p.pts)} pts · {fmt(p.reb)} reb · {fmt(p.ast)} ast</span>
                     </span>
-                    <span className="font-display text-2xl font-black text-off tnum">{fmt(p.porpag, 1)}</span>
+                    <span className="font-display text-xl font-extrabold tnum">{fmt(p.porpag, 1)}</span>
                   </Link>
                 </li>
               );

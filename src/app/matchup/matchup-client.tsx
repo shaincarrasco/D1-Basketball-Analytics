@@ -116,7 +116,7 @@ function Projection({ a, b, proj, site, homeEdge }: { a: TeamSummary; b: TeamSum
         <TeamId t={a} color={A_COLOR} align="l" />
         <div className="order-3 col-span-2 text-center sm:order-2 sm:col-span-1">
           <p className="label">Projected final · {venue}</p>
-          <p className="mt-1 font-display text-[5.2rem] font-black leading-[0.85] tnum sm:text-[7.5rem]" aria-label={`Projected score: ${a.name} ${Math.round(aPts)}, ${b.name} ${Math.round(bPts)}`}>
+          <p className="mt-1 font-display text-[3.5rem] font-black leading-none tnum sm:text-[4.5rem]" aria-label={`Projected score: ${a.name} ${Math.round(aPts)}, ${b.name} ${Math.round(bPts)}`}>
             <span style={{ color: A_COLOR }}>{Math.round(aPts)}</span>
             <span className="mx-2 text-dim sm:mx-4">–</span>
             <span style={{ color: B_COLOR }}>{Math.round(bPts)}</span>
@@ -157,8 +157,9 @@ function TeamId({ t, color, align }: { t: TeamSummary; color: string; align: "l"
     <Link href={`/teams/${t.slug}/`} className={`link group flex min-w-0 items-center gap-3 ${align === "r" ? "flex-row-reverse text-right" : ""}`}>
       <TeamLogo src={t.logo} name={t.name} size={44} />
       <span className="min-w-0">
-        <span className="block font-display text-2xl font-extrabold leading-none sm:text-3xl" style={{ color }}>
-          {t.rank ? <span className="mr-1.5 text-mute">{t.rank}</span> : null}
+        <span className="flex items-center gap-2 text-xl font-semibold leading-tight tracking-[-0.01em] sm:text-2xl" style={align === "r" ? { flexDirection: "row-reverse" } : undefined}>
+          <i className="h-2.5 w-2.5 shrink-0 rounded-sm" style={{ background: color }} aria-hidden />
+          {t.rank ? <span className="text-base font-medium text-mute tnum">{t.rank}</span> : null}
           <span className="group-hover:underline">{t.name}</span>
         </span>
         <span className="mt-1 block truncate text-xs text-mute">{t.confName} · {t.w}–{t.l}{t.mascot ? ` · ${t.mascot}` : ""}</span>
@@ -302,7 +303,7 @@ function FormCard({ t, color }: { t: TeamSummary; color: string }) {
       <div className="flex items-center gap-3">
         <TeamLogo src={t.logo} name={t.name} size={32} />
         <div className="min-w-0 flex-1">
-          <Link href={`/teams/${t.slug}/`} className="link block truncate font-semibold" style={{ color }}>{t.name}</Link>
+          <Link href={`/teams/${t.slug}/`} className="link block truncate font-semibold">{t.name}</Link>
           <p className="text-xs text-mute">{t.w}–{t.l} overall · {t.cw}–{t.cl} conf · streak {t.streak ?? "—"} · {t.sample.toLowerCase()}</p>
         </div>
       </div>

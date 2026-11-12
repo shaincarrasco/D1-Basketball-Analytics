@@ -11,10 +11,7 @@ export default function PlayersPage() {
   const meta = getMeta();
   return (
     <>
-      <PageHeader title="Player leaderboards">
-        All {meta.counts.players.toLocaleString("en-US")} Division I players with box-score minutes this season. Pick a view, set a minutes floor and sort any column.
-        Cell tint shows where a number ranks among players who clear the minutes and games filters, so a hot start in garbage time doesn&apos;t top the board.
-      </PageHeader>
+      <PageHeader title="Players">{meta.counts.players.toLocaleString("en-US")} Division I players. Shading compares each player with others who meet the minutes filter.</PageHeader>
       <Suspense fallback={<Loading label="Loading players" />}>
         <PlayersBoard />
       </Suspense>

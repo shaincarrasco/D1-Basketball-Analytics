@@ -1,12 +1,12 @@
 # D1 Hoops design + code contract
 
-## Look: "arena after dark"
-- Night-court navy base (`bg-night`, panels `deck` / `bg-deck2`, borders `border-line` / `border-line2`).
-- Two neon signal colours with **fixed meaning**: `text-off` / `var(--off)` orange = offence (the ball), `text-def` / `var(--def)` cyan = defence (shot-clock LED). In head-to-head visuals the **away/first team is cyan, home/second team is orange** (see `WinProb`).
-- `hot` magenta is reserved for upsets, live games and alerts. `win` mint / `loss` rose for results only.
-- Type: `font-display` (Big Shoulders Display, condensed, 800–900 weight) for page titles, section headings (`.h-section`), big numbers and rank numerals. Body/UI is Barlow. Numbers in tables use `.tnum`.
-- Boldness lives in big condensed numerals (ranks, scores, projections). Everything else stays quiet: no gradients on panels, no drop shadows, no decorative icons, no ALL-CAPS eyebrow labels, no "→" on buttons, no fade-in-on-scroll.
-- Copy: sentence case, plain verbs, say what a number means. Errors say what failed and how to fix it.
+## Look: flat, editorial, data first
+- Surfaces are flat: `bg-night` page, `deck` panels with a 1px `border-line`, 8–10px radius, no gradients, glows or decorative motifs.
+- One typeface, Archivo. Body text is normal width; `font-display` narrows it for numerals and scores (weights capped in CSS so big numbers stay crisp).
+- Page titles ~2rem bold, section headings `.h-section` ~17px semibold. Big numerals only where the number is the point (scores, ranks, projections).
+- Colour only carries meaning: `off` orange = offence, `def` blue = defence (away/first team blue, home/second team orange in head-to-heads), `win`/`loss` and the heat tints = good/bad, `hot` magenta = upsets and live games. Team names stay ink.
+- Copy is short: one line under a page title, explanations in tooltips (`title`) or the methodology page. No ALL-CAPS labels, no "→" buttons.
+- Light and dark themes come from RGB channel variables in globals.css; never hard-code hex colours in components.
 
 ## Building blocks (src/components, src/lib)
 - `PageHeader` – page title + one-paragraph intro + optional actions.

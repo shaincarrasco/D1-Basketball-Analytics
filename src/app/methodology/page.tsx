@@ -119,10 +119,7 @@ export default function MethodologyPage() {
 
   return (
     <>
-      <PageHeader title="Methodology">
-        How the D1 Hoops Power Rating (DHR {m.version}) turns box scores into ratings and predictions, how accurate those predictions have been,
-        and what every number on the site means. All figures on this page are live from the latest build.
-      </PageHeader>
+      <PageHeader title="Methodology">How DHR {m.version} works, how accurate it has been, and what each stat means.</PageHeader>
 
       <div className="lg:grid lg:grid-cols-[220px_minmax(0,1fr)] lg:gap-10">
         <aside className="mb-6 lg:mb-0">

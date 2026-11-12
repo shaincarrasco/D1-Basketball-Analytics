@@ -55,12 +55,8 @@ export default async function ConferencePage({ params }: Props) {
     <>
       <nav aria-label="Breadcrumb" className="mb-3 text-sm text-mute"><Link href="/conferences/" className="link">Conferences</Link> <span className="text-dim">/</span> {conf.name}</nav>
       <PageHeader title={conf.name}>
-        <span className="mr-3 inline-flex items-baseline gap-1.5"><span className="font-display text-3xl font-black text-ink">#{conf.rank}</span> of {confs.length} conferences</span>
-        <span className="inline-flex items-baseline gap-1.5"><span className="font-display text-3xl font-black text-ink">{signed(conf.avgEM)}</span> average AdjEM</span>
-        <span className="mt-2 block">
-          {conf.size} teams{best ? <> · best: <Link href={`/teams/${best.slug}/`} className="underline hover:text-ink">{best.name}</Link> (#{best.rank})</> : null}.
-          {" "}Standings are ordered by conference win percentage, then projected conference wins.
-        </span>
+        Ranked {conf.rank} of {confs.length} · average AdjEM {signed(conf.avgEM)} · {conf.size} teams
+        {best ? <> · top team <Link href={`/teams/${best.slug}/`} className="underline decoration-line2 underline-offset-2 hover:text-ink">{best.name}</Link></> : null}
       </PageHeader>
 
       <section aria-labelledby="stack-h" className="mb-8">

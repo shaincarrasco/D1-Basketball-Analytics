@@ -5,7 +5,7 @@ export default function PerfChart({ games }: { games: TeamGame[] }) {
   const pts = games.filter(g => g.perf !== null);
   if (!pts.length) return <p className="text-sm text-mute">No completed games against D-I opponents with box scores yet.</p>;
   const W = 760, H = 200, pad = 28, max = Math.max(30, ...pts.map(g => Math.abs(g.perf!)));
-  const bw = Math.min(46, (W - pad * 2) / pts.length);
+  const bw = Math.min(30, (W - pad * 2) / pts.length);
   const y = (v: number) => H / 2 - (v / max) * (H / 2 - 22);
   const avg = pts.reduce((s, g) => s + g.perf!, 0) / pts.length;
   return (
