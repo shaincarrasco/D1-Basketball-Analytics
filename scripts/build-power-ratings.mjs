@@ -12,6 +12,18 @@ const modelPath = "public/data/model-2027.json";
 const readJson = async path => JSON.parse(await readFile(path, "utf8"));
 const [teamPayload, gamePayload] = await Promise.all([readJson(teamPath), readJson(gamePath)]);
 const teamRecords = Array.isArray(teamPayload.teams) ? teamPayload.teams : [];
+// Repair team records the stats feed left without an id/conference (e.g. a conference label
+// missing from the allowlist) using the schedule, so those teams are still rated.
+{
+  const fromGames = new Map();
+  for (const g of gamePayload.games ?? []) {
+    if (g.homeTeamId != null) fromGames.set(g.homeTeam, { teamId: g.homeTeamId, conference: g.homeConference });
+    if (g.awayTeamId != null) fromGames.set(g.awayTeam, { teamId: g.awayTeamId, conference: g.awayConference });
+  }
+  for (const t of teamRecords) {
+    if (t.teamId == null && fromGames.has(t.team)) { const f = fromGames.get(t.team); t.teamId = f.teamId; t.conference ??= f.conference; }
+  }
+}
 const scheduled = Array.isArray(gamePayload.games) ? gamePayload.games : [];
 
 // Optional preseason prior: last season's provider-adjusted ratings (scripts/fetch-prior-ratings.mjs).

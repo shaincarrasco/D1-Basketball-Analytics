@@ -24,6 +24,13 @@ export function derivePbp(sum) {
   if (!home || !away) return null;
   const homeId = String(home.id), awayId = String(away.id);
   const plays = Array.isArray(sum.plays) ? sum.plays : [];
+  // ESPN occasionally reports play scores with home/away reversed (seen on neutral-site games).
+  // Detect it from the final play vs the competitors' scores and read the play scores swapped.
+  const lastScored = [...plays].reverse().find(p => p.homeScore != null && p.awayScore != null);
+  const finalHome = Number(home.score), finalAway = Number(away.score);
+  const swapped = lastScored != null && Number(lastScored.homeScore) === finalAway && Number(lastScored.awayScore) === finalHome && finalHome !== finalAway;
+  const homeScoreOf = p => Number(swapped ? p.awayScore : p.homeScore);
+  const awayScoreOf = p => Number(swapped ? p.homeScore : p.awayScore);
 
   // Pregame line: negative spread = home favoured.
   let line = null;
@@ -39,7 +46,7 @@ export function derivePbp(sum) {
   let lastH = 0, lastA = 0;
   for (const p of plays) {
     const period = p.period?.number ?? 1, t = elapsed(period, p.clock?.displayValue);
-    const h = Number(p.homeScore ?? lastH), a = Number(p.awayScore ?? lastA);
+    const h = p.homeScore == null ? lastH : homeScoreOf(p), a = p.awayScore == null ? lastA : awayScoreOf(p);
     if (h !== lastH || a !== lastA) { flow.push([t, h, a]); lastH = h; lastA = a; }
     const type = p.type?.text ?? "";
     if (p.shootingPlay && type !== "MadeFreeThrow" && !/FreeThrow/i.test(type) && p.coordinate && p.team?.id) {
@@ -93,8 +100,8 @@ export function derivePbp(sum) {
         continue;
       }
       flushSubs();
-      score[homeId] = Number(p.homeScore ?? score[homeId]);
-      score[awayId] = Number(p.awayScore ?? score[awayId]);
+      if (p.homeScore != null) score[homeId] = homeScoreOf(p);
+      if (p.awayScore != null) score[awayId] = awayScoreOf(p);
     }
     flushSubs();
     const end = plays.length ? elapsed(plays.at(-1).period?.number ?? 2, plays.at(-1).clock?.displayValue) : 2400;
