@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { BarChart3, CalendarDays, Home, Search, Swords, Users, Layers, BookOpen, Star } from "lucide-react";
+import { BarChart3, CalendarDays, Home, Search, Swords, Users, Layers, BookOpen, Star, Newspaper } from "lucide-react";
 import CommandSearch from "./command-search";
 import ThemeToggle from "./theme-toggle";
 
@@ -11,6 +11,7 @@ const NAV = [
   { href: "/", label: "Home", icon: Home },
   { href: "/rankings/", label: "Rankings", icon: BarChart3 },
   { href: "/games/", label: "Games", icon: CalendarDays },
+  { href: "/news/", label: "News", icon: Newspaper },
   { href: "/players/", label: "Players", icon: Users },
   { href: "/matchup/", label: "Matchup", icon: Swords },
   { href: "/conferences/", label: "Conferences", icon: Layers },

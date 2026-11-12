@@ -23,6 +23,7 @@ const [teamPayload, gamePayload, playerPayload, directory, model] = await Promis
 const espnRosters = await readJson("public/data/espn-rosters-2027.json").catch(() => ({ teams: {} }));
 const sims = await readJson("public/data/sims-2027.json").catch(() => null);
 const tvListings = await readJson("public/data/espn-tv-2027.json").catch(() => ({ events: {} }));
+const feeds = await readJson("public/data/feeds-2027.json").catch(() => null);
 const recruiting = await readJson("public/data/recruiting.json").catch(() => null);
 const espnGames = await readJson(".cache/espn-player-games-2027.json").catch(() => ({ events: {} }));
 
@@ -496,6 +497,63 @@ for (const g of allGames) {
 }
 console.log(`[app-data] Where to watch: ${tvByGame.size} games with TV/streaming listings.`);
 
+// ---------- news, previews/recaps, polls, availability (feeds from live/src/bin/feeds.rs) ----------
+const eventKey = new Map(); // day:espnA:espnB -> ESPN event id
+for (const [id, ev] of Object.entries(tvListings.events ?? {})) { eventKey.set(`${ev.day}:${ev.homeId}:${ev.awayId}`, id); eventKey.set(`${ev.day}:${ev.awayId}:${ev.homeId}`, id); }
+for (const ev of pbp.values()) { eventKey.set(`${ev.day}:${ev.homeId}:${ev.awayId}`, ev.id); eventKey.set(`${ev.day}:${ev.awayId}:${ev.homeId}`, ev.id); }
+const eventIdByGame = new Map();
+for (const g of allGames) {
+  const h = espnIdOf(g.homeTeamId), a = espnIdOf(g.awayTeamId);
+  const id = h && a ? eventKey.get(`${etDate(g.date)}:${h}:${a}`) : null;
+  if (id) eventIdByGame.set(String(g.id), id);
+}
+const art = id => {
+  const a = feeds?.articles?.[id];
+  return a ? { h: a.headline, url: a.url, t: a.published, kind: a.kind, src: a.source, by: a.byline ?? null } : null;
+};
+const articlesFor = ids => (ids ?? []).map(art).filter(Boolean);
+const newsBySlug = new Map();
+for (const t of teamSummaries) {
+  const e = espnIdBySlug.get(t.slug);
+  if (e && feeds?.teamNews?.[e]) newsBySlug.set(t.slug, articlesFor(feeds.teamNews[e]).slice(0, 15));
+}
+const gameArticles = new Map();
+for (const [gid, eid] of eventIdByGame) { const list = articlesFor(feeds?.gameNews?.[eid]); if (list.length) gameArticles.set(gid, list); }
+// Polls onto team summaries.
+const pollRank = new Map();
+for (const [poll, list] of Object.entries(feeds?.polls ?? {})) for (const e of list) { if (!pollRank.has(e.team)) pollRank.set(e.team, {}); pollRank.get(e.team)[poll] = { rank: e.rank, prev: e.previous ?? null, pts: e.points ?? null, fpv: e.firstPlace ?? null }; }
+// Availability: ESPN-listed injuries, players who stopped appearing in box scores, and
+// injury/suspension headlines that tag the player.
+const injuryWords = /injur|surgery|torn|sprain|fracture|concussion|out for|sidelined|suspend|day-to-day|questionable|status uncertain|will miss|to miss/i;
+const availabilityBySlug = new Map();
+const espnGamesByTeam = new Map(); // espn team id -> sorted days it played (box scores)
+for (const ev of Object.values(espnGames.events ?? {})) for (const side of ev.teams ?? []) { if (!espnGamesByTeam.has(side.teamId)) espnGamesByTeam.set(side.teamId, new Set()); espnGamesByTeam.get(side.teamId).add(ev.day); }
+for (const t of teamSummaries) {
+  const e = espnIdBySlug.get(t.slug);
+  if (!e) continue;
+  const list = [];
+  const teamDays = [...(espnGamesByTeam.get(String(e)) ?? [])].sort();
+  const logs = logsBySlug.get(t.slug) ?? {};
+  for (const row of players.filter(p => p[playerIdx.teamId] === t.id)) {
+    const pid = row[playerIdx.id], name = row[playerIdx.name], aid = aidByPid.get(pid);
+    const espnInj = aid ? (feeds?.injuries ?? []).find(i => i.athlete === aid) : null;
+    if (espnInj) { list.push({ pid, name, status: espnInj.status, detail: espnInj.detail ?? null, since: espnInj.date ?? null, source: "espn" }); continue; }
+    const played = new Set((logs[pid] ?? []).filter(l => (l[LOG_FIELDS.indexOf("min")] ?? 0) > 0).map(l => l[0]));
+    const mins = (logs[pid] ?? []).map(l => l[LOG_FIELDS.indexOf("min")] ?? 0).filter(m => m > 0);
+    const avgMin = mins.length ? mins.reduce((s2, m) => s2 + m, 0) / mins.length : 0;
+    let missed = 0;
+    for (let i = teamDays.length - 1; i >= 0 && !played.has(teamDays[i]); i--) missed++;
+    const headline = aid ? (feeds?.athleteNews?.[aid] ?? []).map(art).find(a => a && injuryWords.test(a.h)) : null;
+    if (played.size && missed > 0 && avgMin >= 12) {
+      list.push({ pid, name, status: missed === 1 ? "Missed last game" : `Missed last ${missed} games`, detail: headline ? headline.h : "Reason not reported", since: teamDays[teamDays.length - missed], source: "box", url: headline?.url ?? null });
+    } else if (headline) {
+      list.push({ pid, name, status: "In the news", detail: headline.h, since: headline.t?.slice(0, 10) ?? null, source: "news", url: headline.url });
+    }
+  }
+  if (list.length) availabilityBySlug.set(t.slug, list);
+}
+console.log(`[app-data] Feeds: ${feeds ? Object.keys(feeds.articles ?? {}).length : 0} articles, ${gameArticles.size} games with previews/recaps, ${[...availabilityBySlug.values()].flat().length} availability notes.`);
+
 // Team-perspective line on every team game log row.
 for (const [tid, list] of teamLog) {
   for (const row of list) {
@@ -514,6 +572,9 @@ for (const t of teamSummaries) {
   t.sim = sim ? { wins: sim.wins, p10: sim.p10, p90: sim.p90, confWins: sim.confWins, title: sim.titleShare, outright: sim.titleOutright, win20: sim.win20 } : null;
   t.espnId = espnIdBySlug.get(t.slug) ?? null;
   if (t.next) t.next.tv = tvByGame.get(t.next.id)?.map(x => x.name) ?? null;
+  const pr = pollRank.get(String(t.espnId));
+  t.ap = pr?.ap ?? null; t.coaches = pr?.coaches ?? null;
+  t.unavailable = (availabilityBySlug.get(t.slug) ?? []).filter(a => a.source !== "news").length;
   const log = teamLog.get(t.id) ?? [];
   t.ats = [log.filter(x => x.ats === "W").length, log.filter(x => x.ats === "L").length, log.filter(x => x.ats === "P").length];
 }
@@ -532,6 +593,30 @@ await write("meta.json", { season: 2027, seasonLabel: "2026–27", provider: "Co
   sims: sims ? { sims: sims.sims, remainingGames: sims.remainingGames, method: sims.method } : null,
   dpr: rapm ? { players: rapm.ratings.size, rows: rapmRows.length, lambda: 2500, method: "Regularised adjusted plus-minus (offence/defence) from ESPN play-by-play lineups, shrunk toward a box-score prior" } : null });
 await write("teams.json", teamSummaries);
+// League news + polls + league-wide availability tracker.
+const slugOfEspn = id => slugByEspn.get(String(id)) ?? null;
+const pollRows = list => (list ?? []).map(e => { const slug = slugOfEspn(e.team), t = slug ? teamSummaries.find(x => x.slug === slug) : null; return { rank: e.rank, prev: e.previous ?? null, pts: e.points ?? null, fpv: e.firstPlace ?? null, slug, name: t?.name ?? null, dhr: t?.rank ?? null, w: t?.w ?? null, l: t?.l ?? null }; });
+await write("news.json", { fetchedAt: feeds?.fetchedAt ?? null, league: articlesFor(feeds?.league).slice(0, 30), polls: { ap: pollRows(feeds?.polls?.ap), coaches: pollRows(feeds?.polls?.coaches) }, pollDate: feeds?.pollDate ?? null });
+await write("injuries.json", teamSummaries.flatMap(t => (availabilityBySlug.get(t.slug) ?? []).map(a => ({ ...a, slug: t.slug, team: t.name, conf: t.conf, rank: t.rank }))));
+
+// Calendar feeds (.ics) per team: subscribe once, updates with every deploy.
+await mkdir(`${OUT}/cal`, { recursive: true });
+const icsEsc = v => String(v ?? "").replace(/\\/g, "\\\\").replace(/([,;])/g, "\\$1").replace(/\n/g, "\\n");
+const icsDate = d => new Date(d).toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
+const siteUrl = "https://shaincarrasco.github.io/D1-Basketball-Analytics";
+for (const t of teamSummaries) {
+  const lines = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//D1 Hoops//Schedule//EN", "CALSCALE:GREGORIAN", "METHOD:PUBLISH", `X-WR-CALNAME:${icsEsc(`${t.name} basketball (D1 Hoops)`)}`, "X-PUBLISHED-TTL:PT6H", "REFRESH-INTERVAL;VALUE=DURATION:PT6H"];
+  for (const g of teamLog.get(t.id) ?? []) {
+    const start = new Date(g.date), end = new Date(start.getTime() + 2 * 3600e3);
+    const vs = g.venue === "A" ? "at" : "vs";
+    const result = g.result ? ` (${g.result} ${g.pts}-${g.oppPts})` : "";
+    const desc = [g.wp != null && !g.result ? `D1 Hoops win probability: ${Math.round(g.wp * 100)}%` : null, g.projPts != null && !g.result ? `Projected: ${Math.round(g.projPts)}-${Math.round(g.projOppPts)}` : null, g.tv?.length ? `Watch: ${g.tv.join(", ")}` : null, `${siteUrl}/games/?d=${g.day}&g=${g.id}`].filter(Boolean).join("\n");
+    lines.push("BEGIN:VEVENT", `UID:${g.id}-${t.slug}@d1hoops`, `DTSTAMP:${icsDate(Date.now())}`, `DTSTART:${icsDate(start)}`, `DTEND:${icsDate(end)}`,
+      `SUMMARY:${icsEsc(`${t.name} ${vs} ${g.opp}${result}`)}`, `DESCRIPTION:${icsEsc(desc)}`, `URL:${siteUrl}/teams/${t.slug}/`, "END:VEVENT");
+  }
+  lines.push("END:VCALENDAR");
+  await writeFile(`${OUT}/cal/${t.slug}.ics`, lines.join("\r\n") + "\r\n");
+}
 await write("conferences.json", conferences);
 await write("players.json", { fields: PLAYER_FIELDS, rows: players });
 
@@ -543,6 +628,8 @@ for (const t of teamSummaries) {
   const perGame = s => s && gp ? { pts: r(div(s.pts, gp)), reb: r(div((s.orb ?? 0) + (s.drb ?? 0), gp)), ast: r(div(s.ast, gp)), tov: r(div(s.tov, gp)), stl: r(div(s.stl, gp)), blk: r(div(s.blk, gp)), paint: r(div(s.paint, gp)), fastBreak: r(div(s.fastBreak, gp)) } : null;
   await write(`team/${t.slug}.json`, { id: t.id, games: teamLog.get(t.id) ?? [], roster, perGame: perGame(tot), oppPerGame: perGame(opp),
     logFields: LOG_FIELDS, logs: logsBySlug.get(t.slug) ?? {}, bios: biosBySlug.get(t.slug) ?? {},
+    news: newsBySlug.get(t.slug) ?? [], availability: availabilityBySlug.get(t.slug) ?? [],
+    playerNews: Object.fromEntries(players.filter(p => p[playerIdx.teamId] === t.id).map(p => [p[playerIdx.id], articlesFor(feeds?.athleteNews?.[aidByPid.get(p[playerIdx.id])]).slice(0, 8)]).filter(([, l]) => l.length)),
     rosterFields: PLAYER_FIELDS, winHist: sims?.teams?.[t.id]?.hist ?? null, shots: shotsBySlug.get(t.slug) ?? null, lineups: lineupsBySlug.get(t.slug) ?? [], onOff: onOffBySlug.get(t.slug) ?? {} });
 }
 
@@ -588,6 +675,7 @@ for (const [day, list] of [...byDay.entries()].sort(([a], [b]) => a.localeCompar
       pred: p ? { wp: r(p.homeWinProb, 3), margin: r(p.margin), home: r(p.homePts), away: r(p.awayPts), tempo: r(p.tempo) } : null,
       watch, upset: winnerWP !== null && winnerWP < 0.35 ? r(winnerWP, 3) : null,
       tv: tvByGame.get(String(g.id)) ?? null,
+      articles: gameArticles.get(String(g.id)) ?? null,
       espnId: marketByGame.get(String(g.id))?.espnId ?? null, line: marketByGame.get(String(g.id))?.line ?? null, flow: marketByGame.get(String(g.id))?.flow ?? null,
       box: hb || ab ? { home: boxLine(hb ?? (ab ? { teamStats: ab.opponentStats } : null)), away: boxLine(ab ?? (hb ? { teamStats: hb.opponentStats } : null)) } : null,
     };

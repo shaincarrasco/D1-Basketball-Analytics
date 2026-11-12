@@ -12,6 +12,8 @@ import { dayLabel, fmt, heatPct, pctFmt, signed, timeLabel } from "@/lib/format"
 import { playerRows } from "@/lib/players";
 import type { Meta, PlayerBio, PlayerTable, TeamDetail, TeamSummary } from "@/lib/types";
 import GameLog from "./game-log";
+import ArticleList from "@/components/article-list";
+import AvailabilityList from "@/components/availability-list";
 import { derive, makePool, MIN_ATT, POS_WORD, pctLabel, recruitText, similarPlayers, starGlyphs, type PlayerRow } from "../players/player-stats";
 import { followRowLink, ROW_LINK_CLASS } from "../players/row-link";
 import { DprCard, OnOff, Similar } from "./impact";
@@ -175,6 +177,28 @@ function Profile({ p, all, detail, teams }: { p: PlayerRow; all: PlayerRow[]; de
           {(p.min ?? 0) < POOL_MIN ? ` He also averages under ${POOL_MIN} minutes, so his percentiles compare a bench role against rotation players.` : ""}
         </p>
       )}
+
+      {(() => {
+        const avail = detail.data?.availability?.find(a => a.pid === p.id);
+        const news = detail.data?.playerNews?.[p.id];
+        if (!avail && !news?.length) return null;
+        return (
+          <div className="grid gap-5 lg:grid-cols-2">
+            {avail && (
+              <section className="deck p-5" aria-labelledby="avail-h">
+                <h2 id="avail-h" className="h-section mb-1">Availability</h2>
+                <AvailabilityList items={[avail]} />
+              </section>
+            )}
+            {news?.length ? (
+              <section className={`deck p-5 ${avail ? "" : "lg:col-span-2"}`} aria-labelledby="pnews-h">
+                <h2 id="pnews-h" className="h-section mb-1">In the news</h2>
+                <ArticleList items={news} max={5} />
+              </section>
+            ) : null}
+          </div>
+        );
+      })()}
 
       <section className="deck min-w-0 p-5" aria-labelledby="log-h">
         <h2 id="log-h" className="h-section mb-3">Game log</h2>

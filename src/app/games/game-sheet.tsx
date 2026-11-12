@@ -13,6 +13,7 @@ import { winProb, remainingAt, clockLabel } from "@/lib/win-prob";
 import FlowChart from "./flow-chart";
 import { WatchBadge } from "./game-card";
 import TvBadges from "@/components/tv-badges";
+import ArticleList from "@/components/article-list";
 import { actualMarginText, favoriteWon, isFinal, isLive, lineInfo, marginText, matchupHref, periodLabel, statusLabel, teamHref, winner } from "./game-utils";
 
 const ROW_TH = "l !static !border-line !bg-transparent !text-[13.5px] !font-normal !text-mute";
@@ -231,6 +232,12 @@ function Projection({ g }: { g: Game }) {
         <>
           {g.tv?.length ? <div className="mb-3 flex flex-wrap items-center gap-2 text-[13px] text-mute">Where to watch <TvBadges tv={g.tv} max={6} size="md" /></div> : null}
           <LineRow g={g} />
+          {g.articles?.length ? (
+            <section className="mb-4" aria-label="Previews and recaps">
+              <h3 className="mb-1 text-[13px] font-semibold text-mute">Previews &amp; recaps</h3>
+              <ArticleList items={g.articles} max={4} />
+            </section>
+          ) : null}
           <div className="deck-flat mb-3 p-3">
             <div className="mb-1 flex justify-between text-xs text-mute"><span>{g.away.name}</span><span>Pregame win probability</span><span>{g.home.name}</span></div>
             <WinProb awayName={g.away.name} homeName={g.home.name} homeWP={p.wp} />

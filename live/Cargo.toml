@@ -5,6 +5,14 @@ edition = "2021"
 description = "Low-latency live score relay for D1 Hoops: polls ESPN's public scoreboard and pushes changes to browsers over Server-Sent Events."
 license = "MIT"
 
+[[bin]]
+name = "d1hoops-live"
+path = "src/main.rs"
+
+[[bin]]
+name = "feeds"
+path = "src/bin/feeds.rs"
+
 [dependencies]
 axum = "0.8"
 tokio = { version = "1", features = ["rt-multi-thread", "macros", "sync", "time", "signal"] }

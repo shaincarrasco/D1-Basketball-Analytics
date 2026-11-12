@@ -7,6 +7,9 @@ import TvBadges from "@/components/tv-badges";
 import StatBar from "@/components/stat-bar";
 import { fmt, ordinal, pctFmt, signed } from "@/lib/format";
 import FavoriteButton from "@/components/favorite-button";
+import ArticleList from "@/components/article-list";
+import AvailabilityList from "@/components/availability-list";
+import CalendarButton from "./calendar-button";
 import type { PlayerField, TeamSummary } from "@/lib/types";
 import GameLog from "./game-log";
 import Roster, { type RosterBio } from "./roster";
@@ -79,8 +82,11 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
               {atsW + atsL + atsP > 0 && <> · <span title="Against the spread vs the pregame line ESPN showed (DraftKings): wins–losses–pushes">ATS <b className="text-ink">{atsText}</b></span></>}
               {" "}· projected <a className="link underline decoration-line2 underline-offset-4" href="#outlook"><b className="text-ink">{fmt(team.projW, 1)}–{fmt(team.projL, 1)}</b></a>
             </p>
-            <div className="mt-3 flex flex-wrap gap-2">
+            <div className="mt-3 flex flex-wrap items-center gap-2">
               <FavoriteButton kind="teams" id={slug} name={team.name} />
+              <CalendarButton slug={slug} name={team.name} />
+              {team.ap && <span className="chip" title={`AP Top 25${team.ap.prev ? `, last week ${team.ap.prev}` : ""}${team.ap.pts ? `, ${team.ap.pts} points` : ""}`}>AP No. {team.ap.rank}</span>}
+              {team.coaches && <span className="chip" title="USA Today Coaches Poll">Coaches No. {team.coaches.rank}</span>}
             </div>
           </div>
           <Link href={`/rankings/?conf=${team.confSlug}`} className="ml-auto rounded-lg text-right hover:opacity-80 sm:ml-0" title={`DHR rankings, ${team.confName} teams`}>
@@ -193,6 +199,14 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
         </div>
 
         <aside id="profile" className="scroll-mt-20 space-y-6">
+          <section className="deck p-5" aria-labelledby="avail-h">
+            <h2 id="avail-h" className="h-section mb-2">Availability</h2>
+            <AvailabilityList items={detail.availability} />
+          </section>
+          <section className="deck p-5" aria-labelledby="news-h">
+            <h2 id="news-h" className="h-section mb-1">Latest news</h2>
+            <ArticleList items={detail.news} max={8} empty="No recent coverage found for this team." />
+          </section>
           <section className="deck p-5">
             <h2 className="h-section mb-1 flex items-center gap-2"><i className="h-2.5 w-2.5 rounded-sm bg-off" aria-hidden />Offense</h2>
             <StatBar label="Points per 100 (raw)" value={o?.eff ?? null} rank={or.eff} total={total} />

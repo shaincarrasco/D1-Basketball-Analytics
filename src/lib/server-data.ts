@@ -22,3 +22,5 @@ export const getGameIndex = () => load<import("./types").GameIndex>("games/index
 export const getGameDay = (day: string) => load<import("./types").GameDay>(`games/${day}.json`);
 /** Every game in the season (build-time only; ~6k rows). */
 export const getAllGames = () => getGameIndex().days.flatMap(d => getGameDay(d.day).games.map(g => ({ ...g, day: d.day })));
+export const getNews = () => load<import("./types").NewsFile>("news.json");
+export const getInjuries = () => load<import("./types").InjuryRow[]>("injuries.json");
