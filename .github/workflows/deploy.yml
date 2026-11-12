@@ -38,7 +38,7 @@ jobs:
         env:
           CBBD_API_KEY: ${{ secrets.CBBD_API_KEY }}
       - name: Fetch current-season team statistics and ratings
-        if: github.event_name != 'push' || contains(github.event.head_commit.message, '[refresh-data]') || !hashFiles('public/data/team-season-2027.json') || !hashFiles('public/data/player-season-2027.json') || !hashFiles('public/data/games-season-2027.json') || !hashFiles('public/data/game-team-boxscores-2027.json') || !hashFiles('public/data/player-details-2027/*.json') || !hashFiles('public/data/overview-2027.json')
+        if: github.event_name != 'push' || contains(github.event.head_commit.message, '[refresh-data]') || !hashFiles('public/data/team-season-2027.json') || !hashFiles('public/data/player-season-2027.json') || !hashFiles('public/data/games-season-2027.json') || !hashFiles('public/data/game-team-boxscores-2027.json') || !hashFiles('public/data/player-details-2027/*.json')
         run: node scripts/fetch-team-stats.mjs
         env:
           CBBD_API_KEY: ${{ secrets.CBBD_API_KEY }}
@@ -47,15 +47,17 @@ jobs:
         run: node scripts/fetch-games.mjs
         env:
           CBBD_API_KEY: ${{ secrets.CBBD_API_KEY }}
-      - name: Calculate free opponent-adjusted national power ratings
+      - name: Fetch last season's ratings once (preseason prior for DHR)
+        run: node scripts/fetch-prior-ratings.mjs
+        env:
+          CBBD_API_KEY: ${{ secrets.CBBD_API_KEY }}
+      - name: Calculate DHR v2 ratings, walk-forward predictions and backtest
         run: node scripts/build-power-ratings.mjs
       - name: Fetch player shooting profiles weekly
         run: node scripts/fetch-player-shooting.mjs
         env:
           CBBD_API_KEY: ${{ secrets.CBBD_API_KEY }}
           GITHUB_EVENT_NAME: ${{ github.event_name }}
-      - name: Build compact overview snapshot
-        run: node scripts/build-overview.mjs
       - name: Save refreshed current-season data snapshots
         if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' || github.event_name == 'push'
         run: |
@@ -66,7 +68,9 @@ jobs:
             git commit -m 'Update 2026-27 basketball data snapshots'
             git push
           fi
-      - name: Build static site
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Build app data layer and static site
         run: npm run build
         env:
           NEXT_PUBLIC_BASE_PATH: /D1-Basketball-Analytics

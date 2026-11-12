@@ -62,19 +62,23 @@ The current-season team, player, and game snapshots are filtered against a canon
 Provider school-name aliases are normalized before matching team records to the directory (including New Orleans and St. Thomas).
 
 
-## D1 Hoops Power Rating (DHR)
+## D1 Hoops Power Rating (DHR) v2
 
-The free national power rating is independently calculated from verified 2026–27 game-level team box scores. It is not KenPom, Bart Torvik, the NCAA NET, or a reproduction of any proprietary rating.
+The national power rating is calculated independently from 2026–27 scores and game-level team box scores (`scripts/lib/rating-model.mjs`, run by `scripts/build-power-ratings.mjs`). It is not KenPom, Bart Torvik, the NCAA NET, or a reproduction of any proprietary rating.
 
-- **AdjO:** opponent-adjusted points scored per 100 possessions.
-- **AdjD:** opponent-adjusted points allowed per 100 possessions; lower is better.
-- **AdjEM:** AdjO − AdjD; the primary national ranking key.
-- **AdjTempo:** opponent-adjusted possessions per 40 minutes.
-- **SOS:** average opponent adjusted efficiency margin for the opponents on the schedule.
-- **Venue adjustment:** estimates the home-court net-efficiency edge from available non-neutral games and normalizes game performances to neutral court.
-- **Opponent adjustment:** iterative fixed-point solve; each team's offense is adjusted for the defenses it faced and each defense for the offenses it faced.
-- **Small-sample stabilization:** ratings are shrunk toward the season's D-I league average using a five-game prior. Sample labels distinguish early (1–3 games), developing (4–7), and established (8+) records.
-- **Coverage:** only games with sufficient team and opponent box-score fields to calculate possessions and efficiency are included. Teams without verified box-score coverage remain unranked; no missing performance is fabricated.
-- **Update:** the rating is recalculated from the current season snapshot during every GitHub Pages build.
+**Model.** For every game side, points per 100 possessions = μ + O[team] + D[opponent] ± h/2 (home +, away −, neutral 0), and possessions per 40 = μT + T[team] + T[opponent]. The terms are solved by ridge-regularised coordinate descent until no rating moves by more than 0.00001.
+- **AdjO** = μ + O, **AdjD** = μ + D (lower is better), **AdjEM** = AdjO − AdjD, **AdjT** = μT + T.
+- **Priors.** Each team is shrunk toward its conference mean with 3 games of weight; each conference mean is shrunk toward the D-I mean with 2 teams of weight. When `public/data/prior-ratings.json` (last season's provider-adjusted ratings, fetched once per season) is present, the prior is instead 60% of last season's margin with 5 games of weight.
+- **Home edge.** h is estimated jointly with the team terms and regularised toward 4.7 points per 100 possessions with 1,000 games of weight. v1 measured the raw home/away gap and got 32.7, because early-season home teams are mostly power-conference programs hosting guarantee games; that inflated every road loser.
+- **Non-D-I opponents** share one pooled rating node; those games count half.
+- **SOS** is the mean current AdjEM of opponents played (non-D-I opponents use the pooled node).
 
-The iterative opponent-adjustment approach is a transparent, established family of methods for estimating adjusted offense and defense from game-level efficiency. DHR's equations, venue treatment, shrinkage and coverage are documented here so its output can be audited. Its values and ranks are original to this project and must not be described as KenPom ratings.
+**Predictions.** Tempo = μT + T[a] + T[b]; each side's points = (μ + O[side] + D[opp] ± h/2) × tempo / 100. Win probability = Φ(margin / σ), σ = √(10.5² + u_a² + u_b²), u = 15.7 / √(games + prior weight) × tempo / 100, so early-season projections are wider.
+
+**Backtest.** Predictions are walk-forward: a game on day D is projected from a model fitted only to games completed before D (Eastern time). `public/data/model-2027.json` stores every pregame projection with accuracy, margin MAE, Brier score, log loss and calibration bins. The home page and methodology page show these live numbers.
+
+**Game performance.** A completed game's adjusted performance = (offensive efficiency − opponent's defensive term − venue) − (defensive efficiency − opponent's offensive term + venue), using current ratings.
+
+**DHR quadrants** (unofficial): Q1 = home vs DHR 1–30, neutral 1–50, away 1–75; Q2 = 31–75 / 51–100 / 76–135; Q3 = 76–160 / 101–200 / 136–240; Q4 = the rest and non-D-I.
+
+**Watchability** (0–100) = 55% geometric mean of both teams' AdjEM percentile + 45% closeness (1 − |2·WP − 1|).
