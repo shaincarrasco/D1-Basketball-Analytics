@@ -1,0 +1,28 @@
+name: Data probe
+# Runs data fetchers that need the CBBD key on probe/** branches and uploads the
+# results as an artifact, so new endpoints can be checked before they join the main pipeline.
+on:
+  push:
+    branches: ["probe/**"]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Recruiting
+        run: node scripts/fetch-recruiting.mjs 2>&1 | tee probe.log
+        env:
+          CBBD_API_KEY: ${{ secrets.CBBD_API_KEY }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: probe
+          path: |
+            probe.log
+            public/data/recruiting.json
+          if-no-files-found: warn
