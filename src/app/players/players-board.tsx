@@ -7,22 +7,29 @@ import DataTable, { type Column } from "@/components/data-table";
 import TeamLogo from "@/components/team-logo";
 import { ErrorState, Loading } from "@/components/states";
 import { useJson } from "@/lib/client-data";
-import { fmt, heatPct } from "@/lib/format";
+import { fmt, heatPct, signed } from "@/lib/format";
 import { playerRows } from "@/lib/players";
 import type { PlayerTable, TeamSummary } from "@/lib/types";
-import { derive, makePool, MIN_ATT, POS_WORD, type PlayerRow, type Pos } from "./player-stats";
+import { derive, DPR_MIN_POSS, makePool, MIN_ATT, POS_WORD, recruitText, starGlyphs, type PlayerRow, type Pos } from "./player-stats";
+import { followRowLink, ROW_LINK_CLASS } from "./row-link";
 
-const VIEWS = ["Scoring", "Efficiency", "Playmaking", "Rebounding & defense", "Shooting profile", "Advanced"] as const;
+const VIEWS = ["Scoring", "Impact", "Efficiency", "Playmaking", "Rebounding & defense", "Shooting profile", "Advanced"] as const;
 type View = (typeof VIEWS)[number];
 const slugOf = (v: View) => v.toLowerCase().replace(/&/g, "").replace(/\s+/g, "-").replace(/-+/g, "-");
 const MIN_OPTS = [0, 10, 15, 20, 25];
 const G_OPTS = [1, 2, 3, 4];
 const POS_OPTS: Pos[] = ["G", "F", "C"];
+const POSS_OPTS = [0, 50, 100, DPR_MIN_POSS, 250, 400];
+const STAR_OPTS = [["any", "Any"], ["5", "5★"], ["4", "4★+"], ["3", "3★+"], ["none", "Unranked"]] as const;
+type StarFilter = (typeof STAR_OPTS)[number][0];
+const starOk = (f: StarFilter, s: number | null) => f === "any" || (f === "none" ? !s : (s ?? 0) >= Number(f));
 
 /** A heat-tinted stat column. `ok` gates small samples out of the tint pool and dims the value. */
 type Stat = {
   key: string; label: string; title: string; get: (r: PlayerRow) => number | null;
   digits?: number; invert?: boolean; ok?: (r: PlayerRow) => boolean; heat?: boolean; group?: "off" | "def"; unit?: string;
+  /** Show a sign (+/−): ratings centred on average. */
+  sign?: boolean;
 };
 
 const S = {
@@ -65,10 +72,17 @@ const S = {
   rimPct: { key: "rimPct", label: "Rim FG%", title: `FG% at the rim (tint needs ${MIN_ATT.zone}+ attempts)`, get: r => r.rimPct, ok: r => (r.rimA ?? 0) >= MIN_ATT.zone, group: "off" },
   midPct: { key: "midPct", label: "Mid FG%", title: `FG% on two-point jumpers (tint needs ${MIN_ATT.zone}+ attempts)`, get: r => r.midPct, ok: r => (r.midA ?? 0) >= MIN_ATT.zone, group: "off" },
   thrPct: { key: "thrPct", label: "3pt FG%", title: `FG% on three-point jumpers (tint needs ${MIN_ATT.zone}+ attempts)`, get: r => r.thrPct, ok: r => (r.thrA ?? 0) >= MIN_ATT.zone, group: "off" },
+  dpr: { key: "dpr", label: "DPR", title: "DPR: points per 100 possessions better than an average D-I player (adjusted plus-minus from lineups, shrunk toward a box-score prior)", get: r => r.dpr, sign: true, ok: r => (r.onPoss ?? 0) >= DPR_MIN_POSS },
+  dprSE: { key: "dprSE", label: "± SE", title: "Standard error of DPR: the rating is likely within about this much of the truth (one SE)", get: r => r.dprSE, invert: true, heat: false },
+  dprO: { key: "dprO", label: "Off", title: "Offensive DPR: points per 100 possessions added on offense", get: r => r.dprO, sign: true, group: "off", ok: r => (r.onPoss ?? 0) >= DPR_MIN_POSS },
+  dprD: { key: "dprD", label: "Def", title: "Defensive DPR: points per 100 possessions saved on defense (positive = good)", get: r => r.dprD, sign: true, group: "def", ok: r => (r.onPoss ?? 0) >= DPR_MIN_POSS },
+  onPoss: { key: "onPoss", label: "Poss", title: "On-court possessions tracked in play-by-play", get: r => r.onPoss, digits: 0, heat: false },
+  dprRank: { key: "dprRank", label: "Rank", title: `National DPR rank among players with ${DPR_MIN_POSS}+ possessions`, get: r => r.dprRank, digits: 0, invert: true, heat: false },
   dunks: { key: "dunks", label: "Dunks", title: "Total dunks made", get: r => r.dunks, digits: 0 },
 } satisfies Record<string, Stat>;
 
 const VIEW_STATS: Record<View, { stats: Stat[]; sort: string }> = {
+  Impact: { stats: [S.g, S.min, S.dpr, S.dprSE, S.dprO, S.dprD, S.onPoss, S.dprRank, S.usg, S.ts], sort: "dpr" },
   Scoring: { stats: [S.g, S.min, S.pts, S.pts40, S.fgPct, S.tpPct, S.ftPct, S.ts, S.tpaRate, S.ftr, S.usg], sort: "pts" },
   Efficiency: { stats: [S.g, S.min, S.ortg, S.drtg, S.net, S.ts, S.efg, S.usg, S.porpag, S.ws40], sort: "ortg" },
   Playmaking: { stats: [S.g, S.min, S.ast, S.ast40, S.tov, S.astTov, S.usg, S.astd, S.ortg], sort: "ast" },
@@ -81,6 +95,8 @@ export default function PlayersBoard() {
   const players = useJson<PlayerTable>("players.json");
   const teams = useJson<TeamSummary[]>("teams.json");
   const [view, setView] = useState<View>("Scoring");
+  const [minPoss, setMinPoss] = useState(DPR_MIN_POSS);
+  const [stars, setStars] = useState<StarFilter>("any");
   const [conf, setConf] = useState("all");
   const [pos, setPos] = useState<"all" | Pos>("all");
   const [minMin, setMinMin] = useState(10);
@@ -101,6 +117,10 @@ export default function PlayersBoard() {
     const g = Number(p.get("g"));
     if (G_OPTS.includes(g)) setMinG(g);
     if (p.get("q")) setQ(p.get("q")!);
+    const ps2 = Number(p.get("poss"));
+    if (p.has("poss") && POSS_OPTS.includes(ps2)) setMinPoss(ps2);
+    const st = STAR_OPTS.find(([k]) => k === p.get("stars"));
+    if (st) setStars(st[0]);
     setHydrated(true);
   }, []);
   useEffect(() => {
@@ -112,9 +132,11 @@ export default function PlayersBoard() {
     if (minMin !== 10) p.set("min", String(minMin));
     if (minG !== 1) p.set("g", String(minG));
     if (q.trim()) p.set("q", q.trim());
+    if (view === "Impact" && minPoss !== DPR_MIN_POSS) p.set("poss", String(minPoss));
+    if (stars !== "any") p.set("stars", stars);
     const s = p.toString();
     window.history.replaceState(null, "", s ? `?${s}` : window.location.pathname);
-  }, [hydrated, view, conf, pos, minMin, minG, q]);
+  }, [hydrated, view, conf, pos, minMin, minG, q, minPoss, stars]);
 
   const all = useMemo<PlayerRow[]>(() => {
     if (!players.data || !teams.data) return [];
@@ -123,13 +145,14 @@ export default function PlayersBoard() {
   }, [players.data, teams.data]);
   const confs = useMemo(() => [...new Map((teams.data ?? []).map(t => [t.confSlug, t.confName])).entries()].sort((a, b) => a[1].localeCompare(b[1])), [teams.data]);
 
-  // Heat pool: everyone who clears the minutes + games floors (independent of search/conf/pos).
-  const pool = useMemo(() => all.filter(r => (r.min ?? 0) >= minMin && (r.g ?? 0) >= minG), [all, minMin, minG]);
+  // Heat pool: everyone who clears the minutes (or, for Impact, possessions) + games floors (independent of search/conf/pos/stars).
+  const impact = view === "Impact";
+  const pool = useMemo(() => all.filter(r => (r.g ?? 0) >= minG && (impact ? (r.onPoss ?? 0) >= minPoss : (r.min ?? 0) >= minMin)), [all, minMin, minG, impact, minPoss]);
   const rows = useMemo(() => {
     const n = q.trim().toLowerCase();
-    return pool.filter(r => (conf === "all" || r.team?.confSlug === conf) && (pos === "all" || r.posN === pos) &&
+    return pool.filter(r => (conf === "all" || r.team?.confSlug === conf) && (pos === "all" || r.posN === pos) && starOk(stars, r.stars) &&
       (!n || r.name.toLowerCase().includes(n) || (r.team && (r.team.name.toLowerCase().includes(n) || r.team.short.toLowerCase() === n))));
-  }, [pool, conf, pos, q]);
+  }, [pool, conf, pos, q, stars]);
 
   const { stats, sort } = VIEW_STATS[view];
   const pools = useMemo(() => {
@@ -149,9 +172,11 @@ export default function PlayersBoard() {
       key: "name", label: "Player", csvLabel: "Player", align: "l", value: r => r.name, first: "asc", sticky: true, width: 196,
       render: r => (
         <div className="flex items-center gap-2.5">
-          <TeamLogo src={r.team?.logo ?? null} name={r.team?.name ?? "?"} size={24} />
+          {r.team ? (
+            <Link href={`/teams/${r.team.slug}/`} tabIndex={-1} aria-hidden className="shrink-0"><TeamLogo src={r.team.logo} name={r.team.name} size={24} /></Link>
+          ) : <TeamLogo src={null} name="?" size={24} />}
           <span className="min-w-0">
-            <Link href={`/player/?id=${r.id}`} className="link block truncate font-semibold">{r.name}</Link>
+            <Link data-row-link href={`/player/?id=${r.id}`} className="link block truncate font-semibold">{r.name}</Link>
             <span className="block truncate text-[11.5px] text-mute">
               {r.team ? <Link href={`/teams/${r.team.slug}/`} className="hover:text-ink">{r.team.name}</Link> : "Unknown team"}
               {r.posN ? <> · {r.posN}</> : null}
@@ -172,19 +197,26 @@ export default function PlayersBoard() {
           const bg = s.heat === false || !okSample ? undefined : heatPct(pools.get(s.key)?.pct(v, s.invert));
           return (
             <span className={`inline-block min-w-[2.9rem] rounded px-1.5 py-0.5 ${okSample ? "" : "text-dim"}`} style={{ background: bg }} title={okSample ? undefined : "Small sample"}>
-              {fmt(v, digits)}
+              {s.sign ? signed(v, digits) : fmt(v, digits)}
             </span>
           );
         },
       };
     }),
-    { key: "conf", label: "Conf", csvLabel: "Conference", align: "l", value: r => r.team?.confName ?? null, first: "asc", render: r => <span className="text-mute">{r.team?.confName ?? "—"}</span> },
+    {
+      key: "stars", label: "Rec.", csvLabel: "Recruiting stars", title: "High-school recruiting stars (College Basketball Data)", align: "l", value: r => r.stars, first: "desc",
+      render: r => r.stars ? <span className="tracking-[0.04em]" title={`${r.stars}-star recruit${r.recRank || r.recYear ? `, ${recruitText(r)}` : ""}`} aria-label={`${r.stars}-star recruit`}>{starGlyphs(r.stars)}</span> : <span className="text-dim">—</span>,
+    },
+    {
+      key: "conf", label: "Conf", csvLabel: "Conference", align: "l", value: r => r.team?.confName ?? null, first: "asc",
+      render: r => r.team ? <Link href={`/conferences/${r.team.confSlug}/`} className="text-mute hover:text-ink">{r.team.confName}</Link> : <span className="text-mute">—</span>,
+    },
   ], [stats, pools]);
 
   if (players.status === "error" || teams.status === "error") return <ErrorState message={players.error ?? teams.error ?? "Could not load players."} retry={() => { players.retry(); teams.retry(); }} />;
   if (!players.data || !teams.data) return <Loading label="Loading players" />;
 
-  const reset = () => { setConf("all"); setPos("all"); setMinMin(10); setMinG(1); setQ(""); };
+  const reset = () => { setConf("all"); setPos("all"); setMinMin(10); setMinG(1); setQ(""); setMinPoss(DPR_MIN_POSS); setStars("any"); };
 
   return (
     <section aria-label="Player leaderboard">
@@ -211,16 +243,31 @@ export default function PlayersBoard() {
             {POS_OPTS.map(p => <option key={p} value={p}>{POS_WORD[p]}s</option>)}
           </select>
         </label>
-        <label className="flex flex-col gap-1">
-          <span className="label">Minutes per game</span>
-          <select className="field" value={minMin} onChange={e => setMinMin(Number(e.target.value))}>
-            {MIN_OPTS.map(m => <option key={m} value={m}>{m === 0 ? "Any minutes" : `${m}+ mpg`}</option>)}
-          </select>
-        </label>
+        {impact ? (
+          <label className="flex flex-col gap-1">
+            <span className="label">On-court possessions</span>
+            <select className="field" value={minPoss} onChange={e => setMinPoss(Number(e.target.value))}>
+              {POSS_OPTS.map(m => <option key={m} value={m}>{m === 0 ? "Any possessions" : `${m}+ possessions`}</option>)}
+            </select>
+          </label>
+        ) : (
+          <label className="flex flex-col gap-1">
+            <span className="label">Minutes per game</span>
+            <select className="field" value={minMin} onChange={e => setMinMin(Number(e.target.value))}>
+              {MIN_OPTS.map(m => <option key={m} value={m}>{m === 0 ? "Any minutes" : `${m}+ mpg`}</option>)}
+            </select>
+          </label>
+        )}
         <label className="flex flex-col gap-1">
           <span className="label">Games played</span>
           <select className="field" value={minG} onChange={e => setMinG(Number(e.target.value))}>
             {G_OPTS.map(g => <option key={g} value={g}>{g === 1 ? "Any games" : `${g}+ games`}</option>)}
+          </select>
+        </label>
+        <label className="flex flex-col gap-1">
+          <span className="label">Recruiting stars</span>
+          <select className="field" value={stars} onChange={e => setStars(e.target.value as StarFilter)}>
+            {STAR_OPTS.map(([k, l]) => <option key={k} value={k}>{k === "any" ? "Any stars" : l}</option>)}
           </select>
         </label>
       </div>
@@ -229,18 +276,20 @@ export default function PlayersBoard() {
         <span><i className="mr-1.5 inline-block h-2 w-3 rounded-sm bg-off align-middle" />Offense</span>
         <span><i className="mr-1.5 inline-block h-2 w-3 rounded-sm bg-def align-middle" />Defense</span>
         <span>
-          Tint: <span className="text-win">top</span> / <span className="text-loss">bottom</span> of the {pool.length.toLocaleString("en-US")} players with {minMin ? `${minMin}+ mpg` : "any minutes"}{minG > 1 ? ` and ${minG}+ games` : ""}. Grey values are small samples.
+          Tint: <span className="text-win">top</span> / <span className="text-loss">bottom</span> of the {pool.length.toLocaleString("en-US")} players with {impact ? (minPoss ? `${minPoss}+ possessions` : "any possessions") : minMin ? `${minMin}+ mpg` : "any minutes"}{minG > 1 ? ` and ${minG}+ games` : ""}. Grey values are small samples{impact ? `; DPR is early-season and ± one standard error, so overlapping players are statistically tied. Ranks need ${DPR_MIN_POSS}+ possessions` : ""}.
         </span>
       </div>
       {rows.length === 0 ? (
         <div className="deck flex flex-col items-start gap-3 p-6">
           <p className="font-semibold">No players match these filters</p>
-          <p className="text-sm text-mute">{q.trim() ? `Nobody named “${q.trim()}” clears the current filters. ` : ""}Lower the minutes or games floor, or widen the conference and position.</p>
+          <p className="text-sm text-mute">{q.trim() ? `Nobody named “${q.trim()}” clears the current filters. ` : ""}Lower the {impact ? "possessions" : "minutes"} or games floor, or widen the conference, position and stars.</p>
           <button className="btn" onClick={reset}>Reset filters</button>
         </div>
       ) : (
+        <div className={ROW_LINK_CLASS} onClick={followRowLink}>
         <DataTable key={view} rows={rows} columns={columns} rowKey={r => r.id} initialSort={sort} initialDir={VIEW_STATS[view].stats.find(s => s.key === sort)?.invert ? "asc" : "desc"}
           pageSize={100} csvName={`d1hoops-players-${slugOf(view)}.csv`} caption={`Player leaderboard: ${view}`} maxHeight="78vh" />
+        </div>
       )}
     </section>
   );

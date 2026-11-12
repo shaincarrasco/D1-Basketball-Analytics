@@ -67,3 +67,40 @@ export const pctLabel = (p: number) => {
   const s = ["th", "st", "nd", "rd"], v = n % 100;
   return n + (s[(v - 20) % 10] || s[v] || s[0]);
 };
+
+/** DPR ranks only count players with this many on-court possessions. */
+export const DPR_MIN_POSS = 150;
+
+/** Recruiting stars as glyphs ("★★★★★"), or "" when unranked. */
+export const starGlyphs = (n: number | null) => (n ? "★".repeat(Math.max(0, Math.min(5, n))) : "");
+
+/** "No. 12 in the 2025 class" from whatever recruiting fields exist; null when none do. */
+export function recruitText(p: Pick<Player, "stars" | "recRank" | "recYear">): string | null {
+  if (!p.stars && !p.recRank && !p.recYear) return null;
+  if (p.recRank && p.recYear) return `No. ${p.recRank} in the ${p.recYear} class`;
+  if (p.recRank) return `No. ${p.recRank} nationally`;
+  if (p.recYear) return `${p.recYear} class`;
+  return `${p.stars}-star recruit`;
+}
+
+/** Similar players: z-scored per-40 box score, usage, TS%, 3PA rate and DPR (Euclidean distance). */
+const SIM_DIMS: ((r: PlayerRow) => number | null)[] = [r => r.pts40, r => r.reb40, r => r.ast40, r => r.usg, r => r.ts, r => r.tpaRate, r => r.dpr];
+export const SIM_MIN_MPG = 10;
+export function similarPlayers(p: PlayerRow, all: PlayerRow[], n = 5): { r: PlayerRow; d: number }[] {
+  const pool = all.filter(r => (r.min ?? 0) >= SIM_MIN_MPG && SIM_DIMS.every(g => g(r) !== null));
+  if (pool.length < 2) return [];
+  const norm = SIM_DIMS.map(g => {
+    const v = pool.map(r => g(r) as number);
+    const mean = v.reduce((a, b) => a + b, 0) / v.length;
+    const sd = Math.sqrt(v.reduce((a, b) => a + (b - mean) ** 2, 0) / v.length) || 1;
+    return { mean, sd };
+  });
+  const dims = SIM_DIMS.map((g, i) => ({ g, i, v: g(p) })).filter(d => d.v !== null);
+  if (dims.length < 3) return [];
+  const zp = dims.map(d => ((d.v as number) - norm[d.i].mean) / norm[d.i].sd);
+  return pool
+    .filter(r => r.id !== p.id)
+    .map(r => ({ r, d: Math.sqrt(dims.reduce((s, d, k) => s + (((d.g(r) as number) - norm[d.i].mean) / norm[d.i].sd - zp[k]) ** 2, 0) / dims.length) }))
+    .sort((a, b) => a.d - b.d)
+    .slice(0, n);
+}
