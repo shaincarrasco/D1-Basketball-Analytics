@@ -10,6 +10,9 @@ import type { Game, TeamSummary } from "./types";
 import { elapsedFrom } from "./win-prob";
 
 const SCOREBOARD = "https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard";
+// Optional push relay (live/ — the Rust service). When set at build time, today's slate
+// streams over Server-Sent Events instead of each browser polling ESPN; polling is the fallback.
+const RELAY = (process.env.NEXT_PUBLIC_LIVE_URL ?? "").replace(/\/$/, "");
 const POLL_MS = 30_000;
 const LEAD_MS = 10 * 60_000; // start polling this long before a tip
 const STALE_TIP_MS = 4 * 3600_000; // a game this long past tip and still "pre" is probably delayed or off
@@ -203,10 +206,31 @@ export function useLiveScores(day: string | null, games: Game[] | null) {
       if (document.hidden) { if (timer) clearTimeout(timer); timer = null; ctrl?.abort(); }
       else if (!timer) tick();
     };
-    document.addEventListener("visibilitychange", onVis);
-    tick();
+    // Push relay for today's slate; falls back to polling on any error.
+    let es: EventSource | null = null;
+    if (RELAY && typeof EventSource !== "undefined") {
+      es = new EventSource(`${RELAY}/events`);
+      es.addEventListener("slate", e => {
+        try {
+          const body = JSON.parse((e as MessageEvent<string>).data) as { day?: string; events?: EspnEvent[] };
+          if (!alive || body.day !== espnDate(day)) return;
+          const m = matchEvents(games, body.events ?? [], espnByTeam);
+          latest.current = m;
+          setByGame(m);
+          setUpdated(Date.now());
+        } catch { /* ignore a malformed message */ }
+      });
+      es.onerror = () => {
+        es?.close(); es = null;
+        if (alive) { document.addEventListener("visibilitychange", onVis); tick(); }
+      };
+    } else {
+      document.addEventListener("visibilitychange", onVis);
+      tick();
+    }
     return () => {
       alive = false;
+      es?.close();
       if (timer) clearTimeout(timer);
       ctrl?.abort();
       document.removeEventListener("visibilitychange", onVis);

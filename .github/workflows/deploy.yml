@@ -4,7 +4,9 @@ on:
   push:
     branches: [main]
   schedule:
-    - cron: "30 11 * * *"
+    - cron: "30 11 * * *" # full refresh (College Basketball Data + ESPN), 6:30 a.m. ET
+    - cron: "0 4 * * *"   # late-night ESPN-only refresh: box scores, play-by-play, lines (11 p.m. ET)
+    - cron: "0 7 * * *"   # after West Coast games (2 a.m. ET)
   workflow_dispatch:
 
 permissions:
@@ -33,21 +35,22 @@ jobs:
           npm audit --json > "$RUNNER_TEMP/npm-audit.json" || true
           node -e 'const a = JSON.parse(require("node:fs").readFileSync(process.env.RUNNER_TEMP + "/npm-audit.json", "utf8")); console.log("Dependency audit:", JSON.stringify(a.metadata?.vulnerabilities ?? {})); for (const [name, item] of Object.entries(a.vulnerabilities ?? {})) console.log(name + ": " + item.severity + " | range " + item.range + " | fix " + JSON.stringify(item.fixAvailable));'
       - name: Fetch and validate current-season player stats
-        if: github.event_name != 'push' || contains(github.event.head_commit.message, '[refresh-data]') || !hashFiles('public/data/team-season-2027.json') || !hashFiles('public/data/player-season-2027.json') || !hashFiles('public/data/games-season-2027.json') || !hashFiles('public/data/game-team-boxscores-2027.json') || !hashFiles('public/data/player-details-2027/*.json')
+        if: (github.event_name != 'schedule' || github.event.schedule == '30 11 * * *') && (github.event_name != 'push' || contains(github.event.head_commit.message, '[refresh-data]') || !hashFiles('public/data/team-season-2027.json') || !hashFiles('public/data/player-season-2027.json') || !hashFiles('public/data/games-season-2027.json') || !hashFiles('public/data/game-team-boxscores-2027.json') || !hashFiles('public/data/player-details-2027/*.json'))
         run: node scripts/fetch-player-stats.mjs
         env:
           CBBD_API_KEY: ${{ secrets.CBBD_API_KEY }}
       - name: Fetch current-season team statistics and ratings
-        if: github.event_name != 'push' || contains(github.event.head_commit.message, '[refresh-data]') || !hashFiles('public/data/team-season-2027.json') || !hashFiles('public/data/player-season-2027.json') || !hashFiles('public/data/games-season-2027.json') || !hashFiles('public/data/game-team-boxscores-2027.json') || !hashFiles('public/data/player-details-2027/*.json')
+        if: (github.event_name != 'schedule' || github.event.schedule == '30 11 * * *') && (github.event_name != 'push' || contains(github.event.head_commit.message, '[refresh-data]') || !hashFiles('public/data/team-season-2027.json') || !hashFiles('public/data/player-season-2027.json') || !hashFiles('public/data/games-season-2027.json') || !hashFiles('public/data/game-team-boxscores-2027.json') || !hashFiles('public/data/player-details-2027/*.json'))
         run: node scripts/fetch-team-stats.mjs
         env:
           CBBD_API_KEY: ${{ secrets.CBBD_API_KEY }}
       - name: Fetch and validate current-season game schedule and results
-        if: github.event_name != 'push' || contains(github.event.head_commit.message, '[refresh-data]') || !hashFiles('public/data/team-season-2027.json') || !hashFiles('public/data/player-season-2027.json') || !hashFiles('public/data/games-season-2027.json') || !hashFiles('public/data/game-team-boxscores-2027.json') || !hashFiles('public/data/player-details-2027/*.json')
+        if: (github.event_name != 'schedule' || github.event.schedule == '30 11 * * *') && (github.event_name != 'push' || contains(github.event.head_commit.message, '[refresh-data]') || !hashFiles('public/data/team-season-2027.json') || !hashFiles('public/data/player-season-2027.json') || !hashFiles('public/data/games-season-2027.json') || !hashFiles('public/data/game-team-boxscores-2027.json') || !hashFiles('public/data/player-details-2027/*.json'))
         run: node scripts/fetch-games.mjs
         env:
           CBBD_API_KEY: ${{ secrets.CBBD_API_KEY }}
       - name: Fetch last season's ratings once (preseason prior for DHR)
+        if: github.event_name != 'schedule' || github.event.schedule == '30 11 * * *'
         run: node scripts/fetch-prior-ratings.mjs
         env:
           CBBD_API_KEY: ${{ secrets.CBBD_API_KEY }}
@@ -55,6 +58,7 @@ jobs:
         continue-on-error: true
         run: node scripts/fetch-espn-player-games.mjs
       - name: Fetch recruiting star ratings (non-fatal)
+        if: github.event_name != 'schedule' || github.event.schedule == '30 11 * * *'
         continue-on-error: true
         run: node scripts/fetch-recruiting.mjs
         env:
@@ -64,6 +68,7 @@ jobs:
       - name: Simulate the rest of the season
         run: node scripts/build-simulations.mjs
       - name: Fetch player shooting profiles weekly
+        if: github.event_name != 'schedule' || github.event.schedule == '30 11 * * *'
         run: node scripts/fetch-player-shooting.mjs
         env:
           CBBD_API_KEY: ${{ secrets.CBBD_API_KEY }}
@@ -82,6 +87,9 @@ jobs:
         run: npm run typecheck
       - name: Build app data layer and static site
         run: npm run build
+        env:
+          # Optional: URL of the live relay (live/), set as a repository variable LIVE_URL.
+          NEXT_PUBLIC_LIVE_URL: ${{ vars.LIVE_URL }}
         env:
           NEXT_PUBLIC_BASE_PATH: /D1-Basketball-Analytics
       - name: Configure Pages
