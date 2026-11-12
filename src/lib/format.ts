@@ -7,8 +7,8 @@ export const signed = (v: number | null | undefined, digits = 1) =>
 export const pctFmt = (p: number | null | undefined, digits = 0) => {
   if (typeof p !== "number" || !Number.isFinite(p)) return "—";
   // Never claim certainty: a 99.7% favourite still loses sometimes.
-  if (p > 0.995 && digits === 0) return ">99%";
-  if (p < 0.005 && digits === 0) return "<1%";
+  if (p >= 0.995 && digits === 0) return ">99%";
+  if (p <= 0.005 && digits === 0) return "<1%";
   return `${(p * 100).toFixed(digits)}%`;
 };
 export const record = (w: number, l: number) => `${w}–${l}`;

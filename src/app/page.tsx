@@ -5,6 +5,13 @@ import { fmt, pctFmt, signed, heat, dayLabel } from "@/lib/format";
 import { getAllGames, getConferences, getMeta, getPlayers, getTeams } from "@/lib/server-data";
 import { playerRows } from "@/lib/players";
 import Tonight from "./_home/tonight";
+import { LinkRow } from "@/components/data-table";
+import YourTeamsStrip from "./following/your-teams-strip";
+
+// Eastern calendar day of an ISO timestamp (the /games/?d= key).
+const etDay = (iso: string) => new Intl.DateTimeFormat("en-CA", { timeZone: "America/New_York" }).format(new Date(iso));
+/** Stretched-link pattern: the primary link covers its `relative` card; other links sit above it. */
+const STRETCH = "after:absolute after:inset-0 after:content-['']";
 
 export default function Home() {
   const meta = getMeta(), teams = getTeams(), confs = getConferences();
@@ -26,6 +33,7 @@ export default function Home() {
 
   return (
     <div className="space-y-10">
+      <YourTeamsStrip />
       <Tonight />
 
       <div className="grid gap-8 xl:grid-cols-[minmax(0,1fr)_380px]">
@@ -43,12 +51,12 @@ export default function Home() {
               </thead>
               <tbody>
                 {top.map(t => (
-                  <tr key={t.id}>
+                  <LinkRow key={t.id} href={`/teams/${t.slug}/`}>
                     <td><span className="rank-cell">{t.rank}</span></td>
                     <td className="l">
                       <Link href={`/teams/${t.slug}/`} className="link flex items-center gap-2.5">
                         <TeamLogo src={t.logo} name={t.name} size={22} />
-                        <span className="font-semibold">{t.name}</span>
+                        <span className="font-semibold group-hover/row:text-off">{t.name}</span>
                         <span className="text-xs text-mute">{t.w}–{t.l}</span>
                       </Link>
                     </td>
@@ -61,11 +69,11 @@ export default function Home() {
                         <span>
                           {t.next.venue === "A" ? "at " : "vs "}
                           {t.next.oppSlug ? <Link className="link" href={`/teams/${t.next.oppSlug}/`}>{t.next.opp}</Link> : t.next.opp}
-                          {t.next.wp !== null && <b className="ml-1.5 text-ink">{pctFmt(t.next.wp)}</b>}
+                          {t.next.wp !== null && <Link href={`/games/?d=${etDay(t.next.date)}&g=${t.next.id}`} className="ml-1.5 font-bold text-ink hover:underline" title={`${t.name}'s pregame win probability — open the game`}>{pctFmt(t.next.wp)}</Link>}
                         </span>
                       ) : "—"}
                     </td>
-                  </tr>
+                  </LinkRow>
                 ))}
               </tbody>
             </table>
@@ -99,14 +107,14 @@ export default function Home() {
                   const homeWon = (g.home.score ?? 0) > (g.away.score ?? 0);
                   const w = homeWon ? g.home : g.away, l = homeWon ? g.away : g.home;
                   return (
-                    <li key={g.id}>
-                      <Link href={`/games/?d=${g.day}&g=${g.id}`} className="deck-flat flex items-center gap-3 px-3 py-2.5 hover:border-line2">
-                        <span className="w-12 shrink-0 text-right font-display text-xl font-extrabold text-hot tnum">{pctFmt(g.upset)}</span>
-                        <span className="min-w-0 flex-1 text-sm">
-                          <span className="block truncate"><b>{w.name}</b> {w.score}, {l.rank ? `#${l.rank} ` : ""}{l.name} {l.score}</span>
-                          <span className="text-xs text-mute">{dayLabel(g.day)} · winner’s pregame chance</span>
+                    <li key={g.id} className="deck-flat relative flex items-center gap-3 px-3 py-2.5 transition-colors hover:border-line2 focus-within:border-line2">
+                      <span className="w-12 shrink-0 text-right font-display text-xl font-extrabold text-hot tnum">{pctFmt(g.upset)}</span>
+                      <span className="min-w-0 flex-1 text-sm">
+                        <span className="block truncate">
+                          <TeamName side={w} bold /> {w.score}, {l.rank ? `#${l.rank} ` : ""}<TeamName side={l} /> {l.score}
                         </span>
-                      </Link>
+                        <Link href={`/games/?d=${g.day}&g=${g.id}`} className={`text-xs text-mute hover:text-ink ${STRETCH}`}>{dayLabel(g.day)} · winner’s pregame chance<span className="sr-only">: {w.name} beat {l.name}, open the game</span></Link>
+                      </span>
                     </li>
                   );
                 })}
@@ -125,10 +133,10 @@ export default function Home() {
               <h3 className="mb-2 flex items-center gap-2 text-[13.5px] font-semibold">{b.tone === "text-off" ? <i className="h-2 w-2 rounded-sm bg-off" aria-hidden /> : b.tone === "text-def" ? <i className="h-2 w-2 rounded-sm bg-def" aria-hidden /> : null}{b.title}</h3>
               <ol>
                 {b.list.map((t, i) => (
-                  <li key={t.id} className="flex items-center gap-2 border-b border-line py-1.5 text-sm last:border-0">
+                  <li key={t.id} className="group relative -mx-2 flex items-center gap-2 rounded-md border-b border-line px-2 py-1.5 text-sm last:border-0 hover:bg-deck2 focus-within:bg-deck2">
                     <span className="w-4 text-xs text-dim">{i + 1}</span>
                     <TeamLogo src={t.logo} name={t.name} size={18} />
-                    <Link href={`/teams/${t.slug}/`} className="link flex-1 truncate">{t.name}</Link>
+                    <Link href={`/teams/${t.slug}/`} className={`link flex-1 truncate group-hover:text-off ${STRETCH}`}>{t.name}</Link>
                     <b className="tnum">{b.key === "sos" ? signed(t[b.key], 1) : fmt(t[b.key])}</b>
                   </li>
                 ))}
@@ -150,15 +158,15 @@ export default function Home() {
             {topPlayers.map(p => {
               const t = byId.get(p.teamId);
               return (
-                <li key={p.id}>
-                  <Link href={`/player/?id=${p.id}`} className="deck-flat flex items-center gap-3 px-3 py-2.5 hover:border-line2">
-                    <TeamLogo src={t?.logo ?? null} name={t?.name ?? ""} size={26} />
-                    <span className="min-w-0 flex-1">
-                      <span className="block truncate font-semibold">{p.name}</span>
-                      <span className="block truncate text-xs text-mute">{t?.name} · {fmt(p.pts)} pts · {fmt(p.reb)} reb · {fmt(p.ast)} ast</span>
+                <li key={p.id} className="deck-flat group relative flex items-center gap-3 px-3 py-2.5 transition-colors hover:border-line2 focus-within:border-line2">
+                  <TeamLogo src={t?.logo ?? null} name={t?.name ?? ""} size={26} />
+                  <span className="min-w-0 flex-1">
+                    <Link href={`/player/?id=${p.id}`} className={`block truncate font-semibold group-hover:text-off ${STRETCH}`}>{p.name}</Link>
+                    <span className="block truncate text-xs text-mute">
+                      {t ? <Link href={`/teams/${t.slug}/`} className="relative z-[1] hover:text-ink hover:underline">{t.name}</Link> : null} · {fmt(p.pts)} pts · {fmt(p.reb)} reb · {fmt(p.ast)} ast
                     </span>
-                    <span className="font-display text-xl font-extrabold tnum">{fmt(p.porpag, 1)}</span>
-                  </Link>
+                  </span>
+                  <span className="font-display text-xl font-extrabold tnum" title="PORPAG">{fmt(p.porpag, 1)}</span>
                 </li>
               );
             })}
@@ -193,4 +201,9 @@ export default function Home() {
       </div>
     </div>
   );
+}
+
+function TeamName({ side, bold }: { side: { slug: string | null; name: string }; bold?: boolean }) {
+  const cls = bold ? "font-bold" : "";
+  return side.slug ? <Link href={`/teams/${side.slug}/`} className={`relative z-[1] hover:text-off hover:underline ${cls}`}>{side.name}</Link> : <span className={cls}>{side.name}</span>;
 }

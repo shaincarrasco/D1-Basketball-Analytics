@@ -1,0 +1,25 @@
+{
+  "name": "D1 Hoops — College Basketball Analytics",
+  "short_name": "D1 Hoops",
+  "description": "Power ratings, game predictions, team scouting and player leaderboards for every NCAA Division I men's basketball team.",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0b0d12",
+  "theme_color": "#0b0d12",
+  "categories": ["sports"],
+  "icons": [
+    { "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Games", "url": "games/", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Rankings", "url": "rankings/", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Following", "url": "following/", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] }
+  ]
+}
