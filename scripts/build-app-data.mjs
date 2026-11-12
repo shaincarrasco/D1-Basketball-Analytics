@@ -22,6 +22,7 @@ const [teamPayload, gamePayload, playerPayload, directory, model] = await Promis
 
 const espnRosters = await readJson("public/data/espn-rosters-2027.json").catch(() => ({ teams: {} }));
 const sims = await readJson("public/data/sims-2027.json").catch(() => null);
+const tvListings = await readJson("public/data/espn-tv-2027.json").catch(() => ({ events: {} }));
 const recruiting = await readJson("public/data/recruiting.json").catch(() => null);
 const espnGames = await readJson(".cache/espn-player-games-2027.json").catch(() => ({ events: {} }));
 
@@ -473,9 +474,33 @@ for (const g of allGames) {
 const market = mGames ? { games: mGames, modelMAE: r(mModelAbs / mGames, 2), lineMAE: r(mLineAbs / mGames, 2), atsW, atsL, atsP,
   note: "Walk-forward model margin vs the pregame spread ESPN shows (DraftKings when listed). Picks count only when the model and the line differ by at least half a point." } : null;
 console.log(`[app-data] Market: ${market ? `${mGames} games, model MAE ${market.modelMAE} vs line ${market.lineMAE}, ATS ${atsW}-${atsL}-${atsP}` : "no lines"}.`);
+// Where to watch: ESPN TV/streaming listings matched by day + both teams (either orientation).
+const tvByKey = new Map();
+for (const ev of Object.values(tvListings.events ?? {})) {
+  if (!ev.tv?.length) continue;
+  const tv = ev.tv.map(([name, type, market]) => ({ name, type, market }));
+  tvByKey.set(`${ev.day}:${ev.homeId}:${ev.awayId}`, tv);
+  tvByKey.set(`${ev.day}:${ev.awayId}:${ev.homeId}`, tv);
+}
+const tvByGame = new Map();
+for (const g of allGames) {
+  const h = espnIdOf(g.homeTeamId), a = espnIdOf(g.awayTeamId), day = etDate(g.date);
+  let tv = h && a ? tvByKey.get(`${day}:${h}:${a}`) : null;
+  // One D-I side (e.g. vs a non-D-I opponent): match on that team alone when it has one listing that day.
+  if (!tv && (h || a)) {
+    const id = h ?? a;
+    const hits = [...tvByKey.entries()].filter(([k]) => k.startsWith(`${day}:${id}:`));
+    if (hits.length === 1) tv = hits[0][1];
+  }
+  if (tv) tvByGame.set(String(g.id), tv);
+}
+console.log(`[app-data] Where to watch: ${tvByGame.size} games with TV/streaming listings.`);
+
 // Team-perspective line on every team game log row.
 for (const [tid, list] of teamLog) {
   for (const row of list) {
+    const tv = tvByGame.get(row.id);
+    if (tv) row.tv = tv.map(t => t.name);
     const m = marketByGame.get(row.id);
     const g = allGames.find(x => String(x.id) === row.id);
     if (!m?.line || !g) continue;
@@ -488,6 +513,7 @@ for (const t of teamSummaries) {
   const sim = sims?.teams?.[t.id];
   t.sim = sim ? { wins: sim.wins, p10: sim.p10, p90: sim.p90, confWins: sim.confWins, title: sim.titleShare, outright: sim.titleOutright, win20: sim.win20 } : null;
   t.espnId = espnIdBySlug.get(t.slug) ?? null;
+  if (t.next) t.next.tv = tvByGame.get(t.next.id)?.map(x => x.name) ?? null;
   const log = teamLog.get(t.id) ?? [];
   t.ats = [log.filter(x => x.ats === "W").length, log.filter(x => x.ats === "L").length, log.filter(x => x.ats === "P").length];
 }
@@ -561,6 +587,7 @@ for (const [day, list] of [...byDay.entries()].sort(([a], [b]) => a.localeCompar
       home, away,
       pred: p ? { wp: r(p.homeWinProb, 3), margin: r(p.margin), home: r(p.homePts), away: r(p.awayPts), tempo: r(p.tempo) } : null,
       watch, upset: winnerWP !== null && winnerWP < 0.35 ? r(winnerWP, 3) : null,
+      tv: tvByGame.get(String(g.id)) ?? null,
       espnId: marketByGame.get(String(g.id))?.espnId ?? null, line: marketByGame.get(String(g.id))?.line ?? null, flow: marketByGame.get(String(g.id))?.flow ?? null,
       box: hb || ab ? { home: boxLine(hb ?? (ab ? { teamStats: ab.opponentStats } : null)), away: boxLine(ab ?? (hb ? { teamStats: hb.opponentStats } : null)) } : null,
     };

@@ -7,6 +7,7 @@ import WinProb from "@/components/win-prob";
 import { fmt, pctFmt } from "@/lib/format";
 import type { LiveGame } from "@/lib/live";
 import type { Game, GameSide } from "@/lib/types";
+import TvBadges from "@/components/tv-badges";
 import { favoriteWon, isFinal, isLive, lineInfo, marginText, statusLabel, teamHref, winner } from "./game-utils";
 
 export function WatchBadge({ value }: { value: number | null }) {
@@ -14,7 +15,7 @@ export function WatchBadge({ value }: { value: number | null }) {
   const tone = value >= 80 ? "border-[rgb(var(--off-rgb)/0.6)] text-off" : value >= 60 ? "border-line2 text-ink" : "border-line text-mute";
   return (
     <span title="Watchability, 0–100: half team quality, half how close the projection is" className={`inline-flex items-baseline gap-1 rounded-md border px-1.5 py-0.5 ${tone}`}>
-      <span className="text-[10.5px] font-semibold text-mute">Watch</span>
+      <span className="text-[10.5px] font-semibold text-mute">Interest</span>
       <span className="font-display text-[15px] font-extrabold leading-none tnum">{value}</span>
     </span>
   );
@@ -52,7 +53,8 @@ function Row({ g, side, which }: { g: Game; side: GameSide; which: "home" | "awa
           {final && w === which && <span className="sr-only"> (winner)</span>}
         </span>
       ) : (
-        <span className="text-right leading-none" title="Projected points">
+        <span className="flex items-baseline gap-1.5 text-right leading-none" title="Projected points (game not finished)">
+          {proj != null && <span className="text-[10px] font-semibold text-dim">Proj</span>}
           <span className="font-display text-[1.35rem] font-bold text-mute tnum">{fmt(proj, 0)}</span>
         </span>
       )}
@@ -84,6 +86,7 @@ export default function GameCard({ g, live: lg, onOpen }: { g: Game; live?: Live
         <Row g={g} side={g.away} which="away" />
         <Row g={g} side={g.home} which="home" />
       </div>
+      {g.tv?.length && !final ? <div className="-mt-1"><TvBadges tv={g.tv} /></div> : null}
       {g.pred && (
         <div className="mt-auto">
           <WinProb awayName={g.away.name} homeName={g.home.name} homeWP={g.pred.wp} compact />

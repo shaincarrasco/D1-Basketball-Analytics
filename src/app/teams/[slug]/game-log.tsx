@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState, useSyncExternalStore } from "react";
 import { X } from "lucide-react";
 import TeamLogo from "@/components/team-logo";
+import TvBadges from "@/components/tv-badges";
 import { fmt, pctFmt, signed, timeLabel } from "@/lib/format";
 import type { TeamGame } from "@/lib/types";
 
@@ -90,7 +91,7 @@ export default function GameLog({ games, logos }: { games: TeamGame[]; logos: Re
                         <span className={g.result === "W" ? "text-win" : "text-loss"}>{g.result}</span> {g.pts}–{g.oppPts}
                         {upset && <span className="ml-2 rounded bg-hot/15 px-1.5 text-[10px] font-bold text-hot">upset</span>}
                       </Link>
-                    ) : g.status === "postponed" || g.status === "cancelled" ? <span className="text-mute capitalize">{g.status}</span> : g.status === "in_progress" ? <Link href={gameHref(g)} className="flex items-center gap-2 text-hot"><span className="live-dot" />In progress</Link> : <span className="text-dim">{timeLabel(g.date)}</span>}
+                    ) : g.status === "postponed" || g.status === "cancelled" ? <span className="text-mute capitalize">{g.status}</span> : g.status === "in_progress" ? <Link href={gameHref(g)} className="flex items-center gap-2 text-hot"><span className="live-dot" />In progress</Link> : <span className="flex items-center gap-2 text-dim">{timeLabel(g.date)}{g.tv?.length ? <TvBadges tv={g.tv} max={2} /> : null}</span>}
                   </td>
                   <td style={{ color: g.wp === null ? undefined : g.wp >= 0.5 ? "var(--ink)" : "var(--mute)" }}>{pctFmt(g.wp)}</td>
                   <td className="text-mute">{g.projPts !== null ? `${fmt(g.projPts, 0)}–${fmt(g.projOppPts, 0)}` : "—"}</td>

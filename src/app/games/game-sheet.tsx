@@ -12,6 +12,7 @@ import type { BoxLine, Game, GameSide } from "@/lib/types";
 import { winProb, remainingAt, clockLabel } from "@/lib/win-prob";
 import FlowChart from "./flow-chart";
 import { WatchBadge } from "./game-card";
+import TvBadges from "@/components/tv-badges";
 import { actualMarginText, favoriteWon, isFinal, isLive, lineInfo, marginText, matchupHref, periodLabel, statusLabel, teamHref, winner } from "./game-utils";
 
 const ROW_TH = "l !static !border-line !bg-transparent !text-[13.5px] !font-normal !text-mute";
@@ -228,6 +229,7 @@ function Projection({ g }: { g: Game }) {
       </div>
       {!p ? <p className="text-sm text-mute">No projection was made for this game.</p> : (
         <>
+          {g.tv?.length ? <div className="mb-3 flex flex-wrap items-center gap-2 text-[13px] text-mute">Where to watch <TvBadges tv={g.tv} max={6} size="md" /></div> : null}
           <LineRow g={g} />
           <div className="deck-flat mb-3 p-3">
             <div className="mb-1 flex justify-between text-xs text-mute"><span>{g.away.name}</span><span>Pregame win probability</span><span>{g.home.name}</span></div>

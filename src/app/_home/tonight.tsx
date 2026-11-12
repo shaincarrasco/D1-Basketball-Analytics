@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useLayoutEffect, useMemo, useRef } from "react";
 import TeamLogo from "@/components/team-logo";
 import WinProb from "@/components/win-prob";
+import TvBadges from "@/components/tv-badges";
 import { dayLabel, etToday, fmt, timeLabel } from "@/lib/format";
 import { useJson } from "@/lib/client-data";
 import { useLiveScores, withLive, type LiveGame } from "@/lib/live";
@@ -31,7 +32,10 @@ function Row({ side, score, fav, projected }: { side: GameSide; score: number | 
           ? <Link href={href} className={`link relative z-10 font-semibold ${fav ? "" : "!text-mute hover:!text-off"}`}>{side.name}</Link>
           : <span className={`font-semibold ${fav ? "" : "text-mute"}`} title="Non-Division I opponent">{side.name}</span>}
       </span>
-      <span className={`font-display tnum ${projected ? "text-lg font-semibold text-dim" : "text-xl font-extrabold"}`} title={projected ? "Projected score" : undefined}>{score ?? ""}</span>
+      <span className="flex items-baseline gap-1.5" title={projected ? "Projected score (game not finished)" : undefined}>
+        {projected && score != null && <span className="text-[10px] font-semibold text-dim">Proj</span>}
+        <span className={`font-display tnum ${projected ? "text-lg font-semibold text-dim" : "text-xl font-extrabold"}`}>{score ?? ""}</span>
+      </span>
     </div>
   );
 }
@@ -43,7 +47,7 @@ function Status({ g, live }: { g: Game; live?: LiveGame }) {
       : <><span className="live-dot" aria-hidden /><span className="text-hot" title="Status as of the last data refresh">In progress</span></>;
   }
   if (g.status === "final") return <span className="font-semibold text-ink">{live?.label || "Final"}</span>;
-  if (g.status === "scheduled") return <>{timeLabel(g.date)} · projected score</>;
+  if (g.status === "scheduled") return <>{timeLabel(g.date)}</>;
   return <span className="capitalize">{g.status.replace("_", " ")}</span>;
 }
 
@@ -120,12 +124,13 @@ function GameTile({ g, day, live }: { g: Game; day: string; live?: LiveGame }) {
           <Status g={g} live={live} />
           {g.neutral && <span>· neutral</span>}
         </span>
-        {g.watch !== null && <span title="Watchability: team quality + projected closeness">Watch {g.watch}</span>}
+        {g.watch !== null && <span title="Watchability: team quality + projected closeness">Interest {g.watch}</span>}
       </div>
       <div className="space-y-1.5">
         <Row side={g.away} score={score("away")} fav={!g.pred || g.pred.wp < 0.5} projected={scheduled} />
         <Row side={g.home} score={score("home")} fav={!g.pred || g.pred.wp >= 0.5} projected={scheduled} />
       </div>
+      {g.tv?.length && g.status !== "final" ? <div className="mt-2.5"><TvBadges tv={g.tv} /></div> : null}
       {g.pred && (
         <div className="mt-3">
           <WinProb awayName={g.away.name} homeName={g.home.name} homeWP={g.pred.wp} compact />

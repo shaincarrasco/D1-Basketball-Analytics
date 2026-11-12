@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getMeta, getTeam, getTeamDetail, getTeams } from "@/lib/server-data";
 import TeamLogo from "@/components/team-logo";
+import TvBadges from "@/components/tv-badges";
 import StatBar from "@/components/stat-bar";
 import { fmt, ordinal, pctFmt, signed } from "@/lib/format";
 import FavoriteButton from "@/components/favorite-button";
@@ -124,6 +125,7 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
                   {team.next.oppSlug ? <Link className="link" href={`/teams/${team.next.oppSlug}/`}>{team.next.opp}</Link> : team.next.opp}
                   {team.next.venue === "N" && <span className="text-xs text-mute">(neutral)</span>}
                 </div>
+                {team.next.tv?.length ? <div className="mt-2"><TvBadges tv={team.next.tv} max={4} size="md" /></div> : null}
               </div>
               {team.next.wp !== null && (
                 <div className="text-right">

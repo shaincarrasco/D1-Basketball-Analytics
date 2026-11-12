@@ -27,7 +27,7 @@ export type TeamSummary = {
   quads: [number, number][];
   close: [number, number];
   projW: number; projL: number; projCW: number; projCL: number;
-  next: { id: string; date: string; opp: string; oppSlug: string | null; oppRank: number | null; venue: Venue; wp: number | null } | null;
+  next: { id: string; date: string; opp: string; oppSlug: string | null; oppRank: number | null; venue: Venue; wp: number | null; tv?: string[] | null } | null;
   /** ESPN team id (for live scores from ESPN's public scoreboard). */
   espnId: string | null;
   /** Against-the-spread record [W, L, P] vs the pregame line ESPN shows. */
@@ -45,6 +45,8 @@ export type TeamGame = {
   offEff: number | null; defEff: number | null; pace: number | null; perf: number | null; quad: number | null;
   /** Pregame spread from this team's perspective (negative = favoured) and the against-the-spread result. */
   line?: number; ats?: "W" | "L" | "P";
+  /** TV / streaming outlets (ESPN listings). */
+  tv?: string[];
 };
 
 /** Columnar player table. Use `playerRows()` to turn it into objects. */
@@ -109,6 +111,8 @@ export type Game = {
   box: { home: BoxLine | null; away: BoxLine | null } | null;
   /** ESPN event id (live scores), pregame line (home perspective, negative = home favoured), score flow [elapsedSec, home, away]. */
   espnId?: string | null;
+  /** Where to watch, from ESPN's listings: outlet name, "TV" | "Streaming" | null, market ("National", "Home", "Away"). */
+  tv?: { name: string; type: string | null; market: string | null }[] | null;
   line?: { spread: number; total: number | null; provider: string | null } | null;
   flow?: [number, number, number][] | null;
 };

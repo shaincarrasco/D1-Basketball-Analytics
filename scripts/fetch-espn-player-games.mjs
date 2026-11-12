@@ -15,7 +15,9 @@ const API = "https://site.api.espn.com/apis/site/v2/sports/basketball/mens-colle
 const SEASON_START = "2026-11-01";
 const ROSTER_PATH = "public/data/espn-rosters-2027.json";
 const GAMES_PATH = ".cache/espn-player-games-2027.json";
-const PBP_DIR = ".cache/espn-pbp-2027"; // one gzipped file per Eastern day: { events: { <id>: derived } }
+const PBP_DIR = ".cache/espn-pbp-2027";
+const TV_PATH = "public/data/espn-tv-2027.json"; // where to watch: { events: { <id>: { day, homeId, awayId, tv: [[name, type, market]] } } }
+const TV_DAYS_AHEAD = 10; // one gzipped file per Eastern day: { events: { <id>: derived } }
 const CONCURRENCY = 6;
 
 const readJson = async (path, fallback) => { try { return JSON.parse(await readFile(path, "utf8")); } catch { return fallback; } };
@@ -80,9 +82,31 @@ for (const f of await readdir(PBP_DIR)) {
 const hasPbp = (day, id) => Boolean(pbpByDay.get(day)?.events?.[id]);
 const dirtyDays = new Set();
 const pending = [];
+// TV / streaming listings for every scanned day, plus the next TV_DAYS_AHEAD days.
+const tvFile = await readJson(TV_PATH, { events: {} });
+tvFile.events ??= {};
+const recordTv = (day, ev) => {
+  const comp = ev.competitions?.[0];
+  const home = comp?.competitors?.find(c => c.homeAway === "home"), away = comp?.competitors?.find(c => c.homeAway === "away");
+  const tv = [];
+  for (const b of comp?.geoBroadcasts ?? []) {
+    const name = b.media?.shortName, type = b.type?.shortName ?? null;
+    if (!name || /radio/i.test(type ?? "")) continue;
+    if (!tv.some(t => t[0] === name)) tv.push([name, type, b.market?.type ?? null]);
+  }
+  for (const b of comp?.broadcasts ?? []) for (const name of b.names ?? []) if (!tv.some(t => t[0] === name)) tv.push([name, null, b.market ?? null]);
+  if (home && away) tvFile.events[ev.id] = { day, homeId: String(home.id), awayId: String(away.id), tv };
+};
+const aheadDays = [];
+for (let i = 1; i <= TV_DAYS_AHEAD; i++) aheadDays.push(etDay(new Date(Date.now() + i * 864e5)));
+await pool(aheadDays, async day => {
+  const board = await getJson(`${API}/scoreboard?dates=${day.replace(/-/g, "")}&groups=50&limit=500`);
+  for (const ev of board?.events ?? []) recordTv(day, ev);
+});
 await pool(days.filter(d => !completeDays.has(d)), async day => {
   const board = await getJson(`${API}/scoreboard?dates=${day.replace(/-/g, "")}&groups=50&limit=500`);
   if (!board?.events) return;
+  for (const ev of board.events) recordTv(day, ev);
   let allDone = true;
   for (const ev of board.events) {
     const state = ev.status?.type?.state;
@@ -140,6 +164,8 @@ await pool(pending, async ({ id, day }) => {
 cache.completeDays = [...completeDays].sort();
 cache.fields = ["athleteId", "name", "starter", "min", "pts", "fgm", "fga", "tpm", "tpa", "ftm", "fta", "orb", "drb", "reb", "ast", "stl", "blk", "tov", "pf"];
 cache.fetchedAt = new Date().toISOString();
+tvFile.fetchedAt = cache.fetchedAt;
+await writeFile(TV_PATH, JSON.stringify(tvFile) + "\n");
 await mkdir(".cache", { recursive: true });
 await writeFile(GAMES_PATH, JSON.stringify(cache) + "\n");
 for (const day of dirtyDays) await writeFile(`${PBP_DIR}/${day}.json.gz`, gzipSync(JSON.stringify(pbpByDay.get(day))));
