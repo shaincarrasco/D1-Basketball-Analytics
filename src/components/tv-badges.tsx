@@ -1,3 +1,4 @@
+"use client";
 // "Where to watch" badges from ESPN's TV/streaming listings. Plain text badges (no network
 // logos); outlets with a known official watch page link to it.
 import { MonitorPlay, Tv } from "lucide-react";
