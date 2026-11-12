@@ -56,7 +56,12 @@ export type Player = {
 export type TeamDetail = {
   id: string; games: TeamGame[]; roster: PlayerTable["rows"];
   perGame: TeamPerGame | null; oppPerGame: TeamPerGame | null;
+  /** Per-player game logs (ESPN box scores) keyed by player id; columns named by logFields. */
+  logFields?: string[];
+  logs?: Record<string, (string | number | null)[][]>;
+  bios?: Record<string, PlayerBio>;
 };
+export type PlayerBio = { jersey: string | null; pos: string | null; ht: string | null; wt: number | null; year: string | null; home: string | null };
 export type TeamPerGame = { pts: number | null; reb: number | null; ast: number | null; tov: number | null; stl: number | null; blk: number | null; paint: number | null; fastBreak: number | null };
 
 export type GameSide = {

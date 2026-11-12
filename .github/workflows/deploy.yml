@@ -51,6 +51,9 @@ jobs:
         run: node scripts/fetch-prior-ratings.mjs
         env:
           CBBD_API_KEY: ${{ secrets.CBBD_API_KEY }}
+      - name: Fetch player game logs and roster bios (ESPN, incremental)
+        continue-on-error: true
+        run: node scripts/fetch-espn-player-games.mjs
       - name: Calculate DHR v2 ratings, walk-forward predictions and backtest
         run: node scripts/build-power-ratings.mjs
       - name: Fetch player shooting profiles weekly

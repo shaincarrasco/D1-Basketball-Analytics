@@ -11,16 +11,17 @@ Free, transparent analytics for every NCAA Division I men's basketball team: opp
 | Rankings | All D-I teams in four views (ratings, four factors, shooting, résumé), conference filter, CSV |
 | Team pages | Rating profile with national ranks, game-by-game adjusted performance, full schedule with win probabilities, roster, résumé quadrants, statistical comps |
 | Games | Day-by-day scoreboard with projections, filters, upset flags and box-score detail |
-| Players | Leaderboards with presets, filters, percentiles; player profiles with shot diet |
+| Players | Leaderboards with presets, filters, percentiles; player profiles with bio, game-by-game log and shot diet |
 | Matchup | Project any two teams on any floor |
 | Conferences | Strength rankings, depth chart, standings with projected records |
 | Methodology | How DHR v2 works, live calibration, glossary |
 
 ## How it works
 1. GitHub Actions (daily at 11:30 UTC, on demand, and on `[refresh-data]` commits) pulls season data from [College Basketball Data](https://collegebasketballdata.com) with the `CBBD_API_KEY` secret.
-2. `scripts/build-power-ratings.mjs` fits DHR v2 and writes walk-forward predictions + backtest to `public/data/model-2027.json`.
-3. `scripts/build-app-data.mjs` (runs automatically before `next build`) turns the raw feeds into compact page data under `public/data/app/`.
-4. Next.js exports a static site to GitHub Pages; team pages are pre-rendered.
+2. `scripts/fetch-espn-player-games.mjs` adds per-game player box scores and roster bios from ESPN's public site API (incremental; completed games are cached in `.cache/`).
+3. `scripts/build-power-ratings.mjs` fits DHR v2 and writes walk-forward predictions + backtest to `public/data/model-2027.json`.
+4. `scripts/build-app-data.mjs` (runs automatically before `next build`) turns the raw feeds into compact page data under `public/data/app/`.
+5. Next.js exports a static site to GitHub Pages; team pages are pre-rendered.
 
 Method details: [METRICS.md](./METRICS.md). Design + code conventions: [docs/DESIGN.md](./docs/DESIGN.md).
 

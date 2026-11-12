@@ -8,7 +8,8 @@ import { Empty, ErrorState, Loading } from "@/components/states";
 import { useJson } from "@/lib/client-data";
 import { dayLabel, fmt, heatPct, pctFmt, signed, timeLabel } from "@/lib/format";
 import { playerRows } from "@/lib/players";
-import type { PlayerTable, TeamDetail, TeamSummary } from "@/lib/types";
+import type { PlayerBio, PlayerTable, TeamDetail, TeamSummary } from "@/lib/types";
+import GameLog from "./game-log";
 import { derive, makePool, MIN_ATT, POS_WORD, pctLabel, type PlayerRow } from "../players/player-stats";
 import ShotDiet, { type ZoneAvg } from "./shot-diet";
 
@@ -64,10 +65,24 @@ export default function PlayerProfile() {
       </Empty>
     );
   }
-  return <Profile p={player} all={all} detail={detail} />;
+  return <Profile p={player} all={all} detail={detail} teams={teams.data} />;
 }
 
-function Profile({ p, all, detail }: { p: PlayerRow; all: PlayerRow[]; detail: ReturnType<typeof useJson<TeamDetail>> }) {
+const YEAR: Record<string, string> = { FR: "Freshman", SO: "Sophomore", JR: "Junior", SR: "Senior", GR: "Graduate", RS: "Redshirt" };
+
+// Jersey-number badge in the team's colour (no player photos).
+function Jersey({ bio, color }: { bio: PlayerBio | null; color: string | null }) {
+  if (!bio?.jersey) return null;
+  return (
+    <span aria-label={`Jersey number ${bio.jersey}`} className="team-accent grid h-12 w-12 shrink-0 place-items-center rounded-lg border-2 font-display text-xl font-extrabold tnum"
+      style={{ "--team": color ?? undefined, borderColor: "var(--accent)", color: "var(--accent)" } as React.CSSProperties}>
+      {bio.jersey}
+    </span>
+  );
+}
+
+function Profile({ p, all, detail, teams }: { p: PlayerRow; all: PlayerRow[]; detail: ReturnType<typeof useJson<TeamDetail>>; teams: TeamSummary[] }) {
+  const bio = detail.data?.bios?.[p.id] ?? null;
   const t = p.team;
   const pool = useMemo(() => all.filter(r => (r.min ?? 0) >= POOL_MIN), [all]);
   const pct = useMemo(() => {
@@ -103,8 +118,16 @@ function Profile({ p, all, detail }: { p: PlayerRow; all: PlayerRow[]; detail: R
               </span>
             </div>
           </div>
-          <h1 id="player-name" className="mt-3 text-[2rem] font-bold leading-tight tracking-[-0.02em] sm:text-[2.5rem]">{p.name}</h1>
-          <p className="mt-3 text-mute tnum">
+          <div className="mt-4 flex items-center gap-3">
+            <Jersey bio={bio} color={t?.color ?? null} />
+            <h1 id="player-name" className="text-[2rem] font-bold leading-tight tracking-[-0.02em] sm:text-[2.5rem]">{p.name}</h1>
+          </div>
+          {bio && (
+            <p className="mt-2 text-sm text-mute">
+              {[bio.pos, bio.ht, bio.wt ? `${bio.wt} lbs` : null, bio.year ? YEAR[bio.year] ?? bio.year : null, bio.home].filter(Boolean).join(" · ")}
+            </p>
+          )}
+          <p className="mt-2 text-mute tnum">
             {p.g ?? 0} {p.g === 1 ? "game" : "games"} · {p.gs ?? 0} {p.gs === 1 ? "start" : "starts"} · {fmt(p.min)} minutes per game
           </p>
           <div className="mt-5 grid max-w-xl grid-cols-3 gap-4 sm:gap-8">
@@ -134,6 +157,12 @@ function Profile({ p, all, detail }: { p: PlayerRow; all: PlayerRow[]; detail: R
           {(p.min ?? 0) < POOL_MIN ? ` He also averages under ${POOL_MIN} minutes, so his percentiles compare a bench role against rotation players.` : ""}
         </p>
       )}
+
+      <section className="deck min-w-0 p-5" aria-labelledby="log-h">
+        <h2 id="log-h" className="h-section mb-3">Game log</h2>
+        {detail.status === "error" ? <p className="text-sm text-mute">The game log didn&apos;t load. <button className="underline" onClick={detail.retry}>Try again</button></p>
+          : detail.data ? <GameLog playerId={p.id} detail={detail.data} teams={teams} /> : <p className="text-sm text-mute">Loading games…</p>}
+      </section>
 
       <div className="grid items-start gap-5 lg:grid-cols-2">
         <section className="deck p-5" aria-labelledby="pct-h">
