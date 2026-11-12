@@ -115,6 +115,7 @@ body {
   .dt th button:focus-visible { outline: 2px solid var(--def); outline-offset: 2px; }
   .dt th[aria-sort="ascending"], .dt th[aria-sort="descending"] { color: var(--ink); }
   .dt td { padding: 7px 8px; text-align: right; border-bottom: 1px solid var(--line); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .dt tfoot td { background: var(--deck-2); border-bottom: 0; }
   .dt tbody tr:hover td { background: rgb(var(--def-rgb) / 0.05); }
   .dt .sticky-col { position: sticky; left: 0; z-index: 1; background: var(--bg); }
   .dt th.sticky-col { z-index: 3; background: var(--deck); }

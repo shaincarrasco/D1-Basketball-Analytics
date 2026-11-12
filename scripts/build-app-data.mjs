@@ -19,6 +19,9 @@ const [teamPayload, gamePayload, playerPayload, directory, model] = await Promis
   readJson("public/data/model-2027.json"),
 ]);
 
+const espnRosters = await readJson("public/data/espn-rosters-2027.json").catch(() => ({ teams: {} }));
+const espnGames = await readJson(".cache/espn-player-games-2027.json").catch(() => ({ events: {} }));
+
 // ---------- helpers ----------
 const num = v => (typeof v === "number" && Number.isFinite(v) ? v : null);
 const r = (v, d = 1) => (num(v) === null ? null : Math.round(v * 10 ** d) / 10 ** d);
@@ -247,6 +250,58 @@ for (const p of playerPayload.players ?? []) {
 }
 const playerIdx = Object.fromEntries(PLAYER_FIELDS.map((f, i) => [f, i]));
 
+// ---------- player game logs + bios (ESPN) ----------
+// ESPN and the stats provider use different player ids, so players are joined by
+// team + normalised name, with a last-name + first-initial fallback when unique.
+const nameKey = n => String(n ?? "").normalize("NFKD").replace(/[\u0300-\u036f]/g, "").toLowerCase()
+  .replace(/\b(jr|sr|ii|iii|iv|v)\b\.?/g, "").replace(/[^a-z]/g, "");
+const looseKey = n => { const parts = String(n ?? "").normalize("NFKD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/\b(jr|sr|ii|iii|iv|v)\b\.?/g, "").replace(/[^a-z ]/g, "").trim().split(/\s+/); return parts.length > 1 ? `${parts[0][0]}${parts.at(-1)}` : parts[0]; };
+const espnIdBySlug = new Map(teamSummaries.map(t => [t.slug, findDir(t.name)?.id ?? null]));
+const slugByEspn = new Map([...espnIdBySlug].filter(([, e]) => e).map(([slug, e]) => [String(e), slug]));
+const LOG_FIELDS = ["day", "opp", "oppSlug", "venue", "result", "teamPts", "oppPts", "starter", "min", "pts", "fgm", "fga", "tpm", "tpa", "ftm", "fta", "orb", "drb", "reb", "ast", "stl", "blk", "tov", "pf"];
+// athleteId -> game rows, per ESPN team
+const espnLines = new Map();
+for (const ev of Object.values(espnGames.events ?? {})) {
+  for (const side of ev.teams ?? []) {
+    const venue = side.neutral ? "N" : side.home ? "H" : "A";
+    const result = side.pts !== null && side.oppPts !== null ? (side.pts > side.oppPts ? "W" : "L") : null;
+    for (const row of side.players ?? []) {
+      const [athleteId, name, starter, ...stats] = row;
+      const key = `${side.teamId}:${athleteId}`;
+      if (!espnLines.has(key)) espnLines.set(key, { name, teamId: side.teamId, rows: [] });
+      espnLines.get(key).rows.push([ev.day, side.oppName, slugByEspn.get(String(side.oppId)) ?? null, venue, result, side.pts, side.oppPts, starter, ...stats]);
+    }
+  }
+}
+const logsBySlug = new Map(), biosBySlug = new Map();
+let matched = 0, unmatched = 0;
+for (const t of teamSummaries) {
+  const espnId = espnIdBySlug.get(t.slug);
+  if (!espnId) continue;
+  const roster = espnRosters.teams?.[espnId] ?? [];
+  const candidates = new Map(); // athleteId -> name
+  for (const a of roster) candidates.set(a.id, a.name);
+  for (const [key, v] of espnLines) if (v.teamId === String(espnId)) candidates.set(key.split(":")[1], v.name);
+  const byFull = new Map(), byLoose = new Map();
+  for (const [id, name] of candidates) {
+    byFull.set(nameKey(name), id);
+    const lk = looseKey(name); byLoose.set(lk, byLoose.has(lk) ? null : id);
+  }
+  const logs = {}, bios = {};
+  for (const row of players.filter(p => p[playerIdx.teamId] === t.id)) {
+    const pid = row[playerIdx.id], name = row[playerIdx.name];
+    const aid = byFull.get(nameKey(name)) ?? byLoose.get(looseKey(name)) ?? null;
+    if (!aid) { unmatched++; continue; }
+    matched++;
+    const lines = espnLines.get(`${espnId}:${aid}`);
+    if (lines) logs[pid] = lines.rows.sort((a, b) => String(a[0]).localeCompare(String(b[0])));
+    const bio = roster.find(a => a.id === aid);
+    if (bio) bios[pid] = { jersey: bio.jersey, pos: bio.pos, ht: bio.ht, wt: bio.wt, year: bio.year, home: bio.home };
+  }
+  logsBySlug.set(t.slug, logs); biosBySlug.set(t.slug, bios);
+}
+console.log(`[app-data] ESPN player match: ${matched} matched, ${unmatched} unmatched.`);
+
 // ---------- write ----------
 await rm(OUT, { recursive: true, force: true });
 await mkdir(`${OUT}/team`, { recursive: true });
@@ -267,7 +322,8 @@ for (const t of teamSummaries) {
   const roster = players.filter(p => p[playerIdx.teamId] === t.id).sort((a, b) => (b[playerIdx.min] ?? 0) * (b[playerIdx.g] ?? 0) - (a[playerIdx.min] ?? 0) * (a[playerIdx.g] ?? 0));
   const tot = factors(record.teamStats), opp = factors(record.opponentStats), gp = record.games || null;
   const perGame = s => s && gp ? { pts: r(div(s.pts, gp)), reb: r(div((s.orb ?? 0) + (s.drb ?? 0), gp)), ast: r(div(s.ast, gp)), tov: r(div(s.tov, gp)), stl: r(div(s.stl, gp)), blk: r(div(s.blk, gp)), paint: r(div(s.paint, gp)), fastBreak: r(div(s.fastBreak, gp)) } : null;
-  await write(`team/${t.slug}.json`, { id: t.id, games: teamLog.get(t.id) ?? [], roster, perGame: perGame(tot), oppPerGame: perGame(opp) });
+  await write(`team/${t.slug}.json`, { id: t.id, games: teamLog.get(t.id) ?? [], roster, perGame: perGame(tot), oppPerGame: perGame(opp),
+    logFields: LOG_FIELDS, logs: logsBySlug.get(t.slug) ?? {}, bios: biosBySlug.get(t.slug) ?? {} });
 }
 
 // Games by Eastern date.
