@@ -477,15 +477,25 @@ const market = mGames ? { games: mGames, modelMAE: r(mModelAbs / mGames, 2), lin
 console.log(`[app-data] Market: ${market ? `${mGames} games, model MAE ${market.modelMAE} vs line ${market.lineMAE}, ATS ${atsW}-${atsL}-${atsP}` : "no lines"}.`);
 // Where to watch: ESPN TV/streaming listings matched by day + both teams (either orientation).
 const tvByKey = new Map();
-for (const ev of Object.values(tvListings.events ?? {})) {
+const listingByKey = new Map(); // day:teamA:teamB -> ESPN event id, for every listed game (pick'em + live on unplayed games)
+for (const [eid, ev] of Object.entries(tvListings.events ?? {})) {
+  listingByKey.set(`${ev.day}:${ev.homeId}:${ev.awayId}`, eid);
+  listingByKey.set(`${ev.day}:${ev.awayId}:${ev.homeId}`, eid);
   if (!ev.tv?.length) continue;
   const tv = ev.tv.map(([name, type, market]) => ({ name, type, market }));
   tvByKey.set(`${ev.day}:${ev.homeId}:${ev.awayId}`, tv);
   tvByKey.set(`${ev.day}:${ev.awayId}:${ev.homeId}`, tv);
 }
 const tvByGame = new Map();
+const eventByGame = new Map();
 for (const g of allGames) {
   const h = espnIdOf(g.homeTeamId), a = espnIdOf(g.awayTeamId), day = etDate(g.date);
+  let eid = h && a ? listingByKey.get(`${day}:${h}:${a}`) : null;
+  if (!eid && (h || a)) {
+    const hits = [...listingByKey.entries()].filter(([k]) => k.startsWith(`${day}:${h ?? a}:`));
+    if (hits.length === 1) eid = hits[0][1];
+  }
+  if (eid) eventByGame.set(String(g.id), eid);
   let tv = h && a ? tvByKey.get(`${day}:${h}:${a}`) : null;
   // One D-I side (e.g. vs a non-D-I opponent): match on that team alone when it has one listing that day.
   if (!tv && (h || a)) {
@@ -676,7 +686,7 @@ for (const [day, list] of [...byDay.entries()].sort(([a], [b]) => a.localeCompar
       watch, upset: winnerWP !== null && winnerWP < 0.35 ? r(winnerWP, 3) : null,
       tv: tvByGame.get(String(g.id)) ?? null,
       articles: gameArticles.get(String(g.id)) ?? null,
-      espnId: marketByGame.get(String(g.id))?.espnId ?? null, line: marketByGame.get(String(g.id))?.line ?? null, flow: marketByGame.get(String(g.id))?.flow ?? null,
+      espnId: marketByGame.get(String(g.id))?.espnId ?? eventByGame.get(String(g.id)) ?? null, line: marketByGame.get(String(g.id))?.line ?? null, flow: marketByGame.get(String(g.id))?.flow ?? null,
       box: hb || ab ? { home: boxLine(hb ?? (ab ? { teamStats: ab.opponentStats } : null)), away: boxLine(ab ?? (hb ? { teamStats: hb.opponentStats } : null)) } : null,
     };
   });

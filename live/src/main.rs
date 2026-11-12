@@ -1,197 +1,149 @@
-//! D1 Hoops live relay.
+//! D1 Hoops app server (Railway).
 //!
-//! One process polls ESPN's public men's college basketball scoreboard for today's
-//! slate (Eastern time) every couple of seconds while games are live, trims each event
-//! to what the site needs, and pushes the slate to every connected browser over
-//! Server-Sent Events the moment anything changes. Browsers no longer poll ESPN every
-//! 30 s each; they get one push within ~one poll interval of ESPN updating.
-//!
-//! Endpoints
-//!   GET /events      SSE stream: an `slate` event with the current slate, then one per change
-//!   GET /scoreboard  latest slate as JSON (same shape as ESPN: { day, updated, events: [...] })
-//!   GET /health      "ok"
-//!
-//! Env: PORT (8080), POLL_LIVE_MS (2000), POLL_IDLE_MS (20000), ESPN_GROUPS (50 = Division I)
+//! One binary serves everything the product needs beyond the static site:
+//!   /                 the exported Next.js site (STATIC_DIR, default ./out)
+//!   /events           live scores over Server-Sent Events (see relay.rs)
+//!   /scoreboard       latest slate as JSON
+//!   /auth/*           same-origin proxy to Neon Auth (first-party cookies, works on Safari)
+//!   /api/*            accounts, follows, Stripe billing, web-push alerts, pick'em
+//! Every integration is optional: missing env vars switch that feature off and
+//! /api/health reports what is live.
 
-use std::{convert::Infallible, env, sync::Arc, time::Duration};
+mod alerts;
+mod api;
+mod auth;
+mod billing;
+mod proxy;
+mod relay;
 
-use axum::{
-    extract::State,
-    http::{header, HeaderValue},
-    response::{
-        sse::{Event, KeepAlive, Sse},
-        IntoResponse,
-    },
-    routing::get,
-    Router,
-};
-use chrono::{Timelike, Utc};
-use chrono_tz::America::New_York;
-use futures_util::{stream, Stream, StreamExt};
-use serde::{Deserialize, Serialize};
+use std::{collections::HashMap, env, sync::Arc};
+
+use axum::{routing::{any, get, post, put}, Router};
 use tokio::sync::{broadcast, RwLock};
-use tokio_stream::wrappers::BroadcastStream;
-use tower_http::{compression::CompressionLayer, cors::CorsLayer};
+use tower_http::{compression::CompressionLayer, cors::CorsLayer, services::{ServeDir, ServeFile}};
 
-const ESPN: &str = "https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard";
-
-// ---------- trimmed ESPN shapes (field names match ESPN so the site parses both) ----------
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-struct StatusType {
-    name: String,
-    state: String,
-    completed: bool,
-    #[serde(rename = "shortDetail", default, skip_serializing_if = "Option::is_none")]
-    short_detail: Option<String>,
-}
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-struct Status {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    clock: Option<f64>,
-    #[serde(rename = "displayClock", default, skip_serializing_if = "Option::is_none")]
-    display_clock: Option<String>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    period: Option<u32>,
-    #[serde(rename = "type")]
-    kind: StatusType,
-}
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-struct TeamRef {
-    id: String,
-}
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-struct LineScore {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    value: Option<f64>,
-}
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-struct Competitor {
-    #[serde(rename = "homeAway")]
-    home_away: String,
-    team: TeamRef,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    score: Option<String>,
-    #[serde(default, skip_serializing_if = "Vec::is_empty")]
-    linescores: Vec<LineScore>,
-}
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-struct Competition {
-    competitors: Vec<Competitor>,
-}
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
-struct EspnEvent {
-    id: String,
-    date: String,
-    status: Status,
-    competitions: Vec<Competition>,
-}
-#[derive(Debug, Deserialize)]
-struct Scoreboard {
-    #[serde(default)]
-    events: Vec<EspnEvent>,
+#[derive(Clone, Default)]
+pub struct Config {
+    pub port: u16,
+    pub static_dir: String,
+    pub public_url: String,
+    pub neon_auth_url: Option<String>,
+    pub database_url: Option<String>,
+    pub stripe_secret: Option<String>,
+    pub stripe_webhook_secret: Option<String>,
+    pub stripe_price_monthly: Option<String>,
+    pub stripe_price_yearly: Option<String>,
+    pub vapid_public: Option<String>,
+    pub vapid_private: Option<String>,
+    pub vapid_subject: String,
 }
 
-#[derive(Debug, Clone, Serialize, Default)]
-struct Slate {
-    day: String,
-    updated: i64,
-    events: Vec<EspnEvent>,
-}
+fn opt(key: &str) -> Option<String> { env::var(key).ok().filter(|v| !v.trim().is_empty()) }
 
-struct AppState {
-    slate: RwLock<Arc<str>>,
-    tx: broadcast::Sender<Arc<str>>,
-}
-
-fn env_ms(key: &str, default: u64) -> Duration {
-    Duration::from_millis(env::var(key).ok().and_then(|v| v.parse().ok()).unwrap_or(default))
-}
-
-/// Today's slate date in Eastern time; until 4 a.m. ET keep showing the previous night.
-fn slate_day() -> String {
-    let now = Utc::now().with_timezone(&New_York);
-    let day = if now.hour() < 4 { now - chrono::Duration::hours(5) } else { now };
-    day.format("%Y%m%d").to_string()
-}
-
-async fn poll_loop(state: Arc<AppState>) {
-    let client = reqwest::Client::builder()
-        .user_agent("d1hoops-live/0.1 (+https://github.com/shaincarrasco/D1-Basketball-Analytics)")
-        .timeout(Duration::from_secs(8))
-        .gzip(true)
-        .build()
-        .expect("http client");
-    let (live_every, idle_every) = (env_ms("POLL_LIVE_MS", 2000), env_ms("POLL_IDLE_MS", 20000));
-    let groups = env::var("ESPN_GROUPS").unwrap_or_else(|_| "50".into());
-    let mut last: Option<(String, Vec<EspnEvent>)> = None;
-    loop {
-        let day = slate_day();
-        let url = format!("{ESPN}?dates={day}&groups={groups}&limit=500");
-        let mut any_live = false;
-        match client.get(&url).send().await.and_then(|r| r.error_for_status()) {
-            Ok(resp) => match resp.json::<Scoreboard>().await {
-                Ok(board) => {
-                    any_live = board.events.iter().any(|e| e.status.kind.state == "in");
-                    let changed = match &last {
-                        Some((d, evs)) => d != &day || evs != &board.events,
-                        None => true,
-                    };
-                    if changed {
-                        let slate = Slate { day: day.clone(), updated: Utc::now().timestamp_millis(), events: board.events.clone() };
-                        let json: Arc<str> = serde_json::to_string(&slate).unwrap_or_default().into();
-                        *state.slate.write().await = json.clone();
-                        let _ = state.tx.send(json); // no receivers is fine
-                        last = Some((day, board.events));
-                    }
-                }
-                Err(e) => eprintln!("[live] bad scoreboard payload: {e}"),
-            },
-            Err(e) => eprintln!("[live] scoreboard request failed: {e}"),
+impl Config {
+    fn from_env() -> Self {
+        Config {
+            port: opt("PORT").and_then(|p| p.parse().ok()).unwrap_or(8080),
+            static_dir: opt("STATIC_DIR").unwrap_or_else(|| "out".into()),
+            public_url: opt("PUBLIC_URL").or_else(|| opt("RAILWAY_PUBLIC_DOMAIN").map(|d| format!("https://{d}"))).unwrap_or_else(|| "http://localhost:8080".into()),
+            neon_auth_url: opt("NEON_AUTH_URL").map(|u| u.trim_end_matches('/').to_string()),
+            database_url: opt("DATABASE_URL"),
+            stripe_secret: opt("STRIPE_SECRET_KEY"),
+            stripe_webhook_secret: opt("STRIPE_WEBHOOK_SECRET"),
+            stripe_price_monthly: opt("STRIPE_PRICE_MONTHLY"),
+            stripe_price_yearly: opt("STRIPE_PRICE_YEARLY"),
+            vapid_public: opt("VAPID_PUBLIC_KEY"),
+            vapid_private: opt("VAPID_PRIVATE_KEY"),
+            vapid_subject: opt("VAPID_SUBJECT").unwrap_or_else(|| "mailto:admin@d1hoops.app".into()),
         }
-        tokio::time::sleep(if any_live { live_every } else { idle_every }).await;
     }
 }
 
-async fn scoreboard(State(state): State<Arc<AppState>>) -> impl IntoResponse {
-    let body = state.slate.read().await.clone();
-    (
-        [
-            (header::CONTENT_TYPE, HeaderValue::from_static("application/json")),
-            (header::CACHE_CONTROL, HeaderValue::from_static("no-store")),
-        ],
-        body.to_string(),
-    )
+#[derive(Clone)]
+pub struct TeamInfo { pub slug: String, pub name: String }
+
+pub struct AppState {
+    pub cfg: Config,
+    pub http: reqwest::Client,
+    pub db: Option<deadpool_postgres::Pool>,
+    pub jwks: auth::Jwks,
+    pub slate: RwLock<Arc<str>>,
+    pub tx: broadcast::Sender<Arc<str>>,
+    /// ESPN team id -> team (from the exported site's teams.json), for alerts.
+    pub teams: RwLock<HashMap<String, TeamInfo>>,
+}
+pub type Shared = Arc<AppState>;
+
+fn db_pool(url: &str) -> Option<deadpool_postgres::Pool> {
+    let mut roots = rustls::RootCertStore::empty();
+    roots.extend(webpki_roots::TLS_SERVER_ROOTS.iter().cloned());
+    let tls = rustls::ClientConfig::builder().with_root_certificates(roots).with_no_client_auth();
+    let mut cfg = deadpool_postgres::Config::new();
+    cfg.url = Some(url.to_string());
+    match cfg.create_pool(Some(deadpool_postgres::Runtime::Tokio1), tokio_postgres_rustls::MakeRustlsConnect::new(tls)) {
+        Ok(p) => Some(p),
+        Err(e) => { eprintln!("[db] pool error: {e}"); None }
+    }
 }
 
-async fn events(State(state): State<Arc<AppState>>) -> Sse<impl Stream<Item = Result<Event, Infallible>>> {
-    let first = state.slate.read().await.clone();
-    let updates = BroadcastStream::new(state.tx.subscribe())
-        .filter_map(|msg| async move { msg.ok() }) // a lagging client just skips to the newest slate
-        .map(|json| Ok(Event::default().event("slate").data(json.to_string())));
-    let initial = stream::once(async move { Ok(Event::default().event("slate").data(first.to_string())) });
-    Sse::new(initial.chain(updates)).keep_alive(KeepAlive::new().interval(Duration::from_secs(15)))
+async fn load_teams(state: &Shared) {
+    let path = format!("{}/data/app/teams.json", state.cfg.static_dir);
+    let Ok(text) = tokio::fs::read_to_string(&path).await else { eprintln!("[teams] {path} not found; alerts need it"); return };
+    let Ok(rows) = serde_json::from_str::<Vec<serde_json::Value>>(&text) else { return };
+    let mut map = HashMap::new();
+    for t in rows {
+        if let (Some(e), Some(slug), Some(name)) = (t["espnId"].as_str(), t["slug"].as_str(), t["name"].as_str()) {
+            map.insert(e.to_string(), TeamInfo { slug: slug.into(), name: name.into() });
+        }
+    }
+    eprintln!("[teams] {} teams loaded", map.len());
+    *state.teams.write().await = map;
 }
 
 #[tokio::main]
 async fn main() {
+    let _ = rustls::crypto::ring::default_provider().install_default();
+    let cfg = Config::from_env();
+    let http = reqwest::Client::builder()
+        .user_agent("d1hoops-server/0.2 (+https://github.com/shaincarrasco/D1-Basketball-Analytics)")
+        .redirect(reqwest::redirect::Policy::none())
+        .gzip(true)
+        .build()
+        .expect("http client");
     let (tx, _) = broadcast::channel(16);
-    let empty: Arc<str> = serde_json::to_string(&Slate::default()).unwrap().into();
-    let state = Arc::new(AppState { slate: RwLock::new(empty), tx });
-    tokio::spawn(poll_loop(state.clone()));
+    let state: Shared = Arc::new(AppState {
+        db: cfg.database_url.as_deref().and_then(db_pool),
+        jwks: auth::Jwks::new(cfg.neon_auth_url.clone()),
+        slate: RwLock::new(serde_json::to_string(&relay::Slate::default()).unwrap().into()),
+        teams: RwLock::new(HashMap::new()),
+        tx, http, cfg: cfg.clone(),
+    });
+    load_teams(&state).await;
+    tokio::spawn(relay::poll_loop(state.clone()));
 
+    let static_dir = cfg.static_dir.clone();
+    let site = ServeDir::new(&static_dir).not_found_service(ServeFile::new(format!("{static_dir}/404.html")));
     let app = Router::new()
-        .route("/events", get(events))
-        .route("/scoreboard", get(scoreboard))
+        .route("/events", get(relay::events))
+        .route("/scoreboard", get(relay::scoreboard))
         .route("/health", get(|| async { "ok" }))
+        .route("/auth/{*rest}", any(proxy::auth_proxy))
+        .route("/api/health", get(api::health))
+        .route("/api/me", get(api::me))
+        .route("/api/follows", put(api::put_follows))
+        .route("/api/picks", get(api::get_picks).put(api::put_pick))
+        .route("/api/checkout", post(billing::checkout))
+        .route("/api/portal", post(billing::portal))
+        .route("/api/stripe/webhook", post(billing::webhook))
+        .route("/api/push/key", get(alerts::public_key))
+        .route("/api/push/subscribe", post(alerts::subscribe))
+        .route("/api/push/unsubscribe", post(alerts::unsubscribe))
+        .fallback_service(site)
         .layer(CompressionLayer::new())
         .layer(CorsLayer::permissive())
         .with_state(state);
 
-    let port = env::var("PORT").ok().and_then(|p| p.parse::<u16>().ok()).unwrap_or(8080);
-    let listener = tokio::net::TcpListener::bind(("0.0.0.0", port)).await.expect("bind");
-    eprintln!("[live] listening on :{port}");
-    axum::serve(listener, app)
-        .with_graceful_shutdown(async { let _ = tokio::signal::ctrl_c().await; })
-        .await
-        .expect("server");
+    let listener = tokio::net::TcpListener::bind(("0.0.0.0", cfg.port)).await.expect("bind");
+    eprintln!("[server] listening on :{} serving {}", cfg.port, cfg.static_dir);
+    axum::serve(listener, app).with_graceful_shutdown(async { let _ = tokio::signal::ctrl_c().await; }).await.expect("server");
 }
