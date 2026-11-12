@@ -14,6 +14,7 @@ import FlowChart from "./flow-chart";
 import { WatchBadge } from "./game-card";
 import TvBadges from "@/components/tv-badges";
 import ArticleList from "@/components/article-list";
+import PickEm from "./pick-em";
 import { actualMarginText, favoriteWon, isFinal, isLive, lineInfo, marginText, matchupHref, periodLabel, statusLabel, teamHref, winner } from "./game-utils";
 
 const ROW_TH = "l !static !border-line !bg-transparent !text-[13.5px] !font-normal !text-mute";
@@ -73,6 +74,7 @@ export default function GameSheet({ g, live, onClose }: { g: Game; live?: LiveGa
         <div className="overflow-y-auto overscroll-contain px-4 pb-8 pt-5 sm:px-6">
           <h2 id={titleId} className="sr-only">{g.away.name} {g.neutral ? "vs" : "at"} {g.home.name}</h2>
           <Scoreline g={g} />
+          <PickEm g={g} started={played || (!!live && live.state !== "pre") || new Date(g.date).getTime() <= Date.now()} />
 
           <div className="mt-4 flex flex-wrap items-center justify-center gap-1.5 text-[12.5px] text-mute">
             {(g.venue || place) && <span>{[g.venue, place].filter(Boolean).join(" · ")}</span>}

@@ -12,7 +12,10 @@ import { elapsedFrom } from "./win-prob";
 const SCOREBOARD = "https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard";
 // Optional push relay (live/ — the Rust service). When set at build time, today's slate
 // streams over Server-Sent Events instead of each browser polling ESPN; polling is the fallback.
-const RELAY = (process.env.NEXT_PUBLIC_LIVE_URL ?? "").replace(/\/$/, "");
+// Relay origin for the SSE stream; "same-origin" when the app server also serves the site (Railway).
+const RELAY_ENV = process.env.NEXT_PUBLIC_LIVE_URL ?? "";
+const RELAY_ON = RELAY_ENV !== "";
+const RELAY = RELAY_ENV === "same-origin" ? "" : RELAY_ENV.replace(/\/$/, "");
 const POLL_MS = 30_000;
 const LEAD_MS = 10 * 60_000; // start polling this long before a tip
 const STALE_TIP_MS = 4 * 3600_000; // a game this long past tip and still "pre" is probably delayed or off
@@ -208,7 +211,7 @@ export function useLiveScores(day: string | null, games: Game[] | null) {
     };
     // Push relay for today's slate; falls back to polling on any error.
     let es: EventSource | null = null;
-    if (RELAY && typeof EventSource !== "undefined") {
+    if (RELAY_ON && typeof EventSource !== "undefined") {
       es = new EventSource(`${RELAY}/events`);
       es.addEventListener("slate", e => {
         try {
