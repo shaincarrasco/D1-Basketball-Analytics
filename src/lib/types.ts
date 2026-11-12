@@ -138,5 +138,7 @@ export type Meta = {
   leagueProfile: Partial<Profile>;
   market: { games: number; modelMAE: number; lineMAE: number; atsW: number; atsL: number; atsP: number; note: string } | null;
   sims: { sims: number; remainingGames: number; method: string } | null;
+  /** D-I field-goal attempts/makes by shot zone (see lib/shots.ts). */
+  shotZones: import("./shots").ZoneStats | null;
   dpr: { players: number; rows: number; lambda: number; method: string } | null;
 };

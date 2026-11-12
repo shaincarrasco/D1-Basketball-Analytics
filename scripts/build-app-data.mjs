@@ -364,6 +364,16 @@ for (const [aid, pid] of pidByAid) {
   const usageScale = Math.min(1.5, Math.max(0.5, (usg ?? 20) / 20));
   prior.set(aid, { O: Math.max(-6, Math.min(6, 0.25 * (ortg - avgOrtg) * usageScale)), D: Math.max(-6, Math.min(6, 0.25 * (drtg - avgDrtg))) });
 }
+// D-I average FG% by shot zone (mirrors src/lib/shots.ts zoneOf) for shot-chart shading.
+const zoneOf = (x, y, value) => {
+  const ang = Math.atan2(x - 25, y) * (180 / Math.PI);
+  if (value === 3) return y < 8.75 ? (x < 25 ? "c3L" : "c3R") : ang < -22 ? "ab3L" : ang > 22 ? "ab3R" : "ab3C";
+  if (Math.hypot(x - 25, y) < 4) return "rim";
+  if (x >= 19 && x <= 31 && y <= 13.75) return "paint";
+  return ang < -30 ? "midL" : ang > 30 ? "midR" : "midC";
+};
+const leagueZones = {};
+for (const ev of pbp.values()) for (const sh of ev.shots ?? []) { const z = zoneOf(sh[2], sh[3], sh[5]); leagueZones[z] ??= { fga: 0, fgm: 0 }; leagueZones[z].fga++; leagueZones[z].fgm += sh[4]; }
 const rapm = rapmRows.length > 500 ? solveRapm(rapmRows, prior) : null;
 console.log(`[app-data] Play-by-play: ${pbp.size} games, ${rapmRows.length} lineup rows, ${rapm?.ratings.size ?? 0} players rated.`);
 const dprOf = pid => {
@@ -492,6 +502,7 @@ const updated = { teams: teamPayload.fetchedAt ?? null, players: playerPayload.f
 const counts = { teams: teamSummaries.length, ratedTeams: teamSummaries.filter(t => t.rank).length, players: players.length, games: allGames.length, finals: finals.length };
 const { predictions: _omit, ...modelInfo } = model;
 await write("meta.json", { season: 2027, seasonLabel: "2026–27", provider: "College Basketball Data", updated, counts, model: modelInfo, leagueProfile, market,
+  shotZones: leagueZones,
   sims: sims ? { sims: sims.sims, remainingGames: sims.remainingGames, method: sims.method } : null,
   dpr: rapm ? { players: rapm.ratings.size, rows: rapmRows.length, lambda: 2500, method: "Regularised adjusted plus-minus (offence/defence) from ESPN play-by-play lineups, shrunk toward a box-score prior" } : null });
 await write("teams.json", teamSummaries);
