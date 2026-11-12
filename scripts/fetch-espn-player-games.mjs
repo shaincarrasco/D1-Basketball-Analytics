@@ -7,12 +7,15 @@
 // Incremental: completed games already in the cache are never re-fetched, and rosters
 // refresh at most every 3 days. Failures are logged and skipped so one bad game can't
 // block the build.
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { mkdir, readFile, readdir, writeFile } from "node:fs/promises";
+import { gunzipSync, gzipSync } from "node:zlib";
+import { derivePbp } from "./lib/espn-pbp.mjs";
 
 const API = "https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball";
 const SEASON_START = "2026-11-01";
 const ROSTER_PATH = "public/data/espn-rosters-2027.json";
 const GAMES_PATH = ".cache/espn-player-games-2027.json";
+const PBP_DIR = ".cache/espn-pbp-2027"; // one gzipped file per Eastern day: { events: { <id>: derived } }
 const CONCURRENCY = 6;
 
 const readJson = async (path, fallback) => { try { return JSON.parse(await readFile(path, "utf8")); } catch { return fallback; } };
@@ -67,6 +70,15 @@ const today = etDay(new Date());
 const days = [];
 for (let d = new Date(`${SEASON_START}T12:00:00Z`); etDay(d) <= today; d = new Date(d.getTime() + 864e5)) days.push(etDay(d));
 
+// Play-by-play summaries already derived, by day.
+await mkdir(PBP_DIR, { recursive: true });
+const pbpByDay = new Map();
+for (const f of await readdir(PBP_DIR)) {
+  if (!f.endsWith(".json.gz")) continue;
+  try { pbpByDay.set(f.slice(0, 10), JSON.parse(gunzipSync(await readFile(`${PBP_DIR}/${f}`)).toString("utf8"))); } catch { /* rebuild that day */ }
+}
+const hasPbp = (day, id) => Boolean(pbpByDay.get(day)?.events?.[id]);
+const dirtyDays = new Set();
 const pending = [];
 await pool(days.filter(d => !completeDays.has(d)), async day => {
   const board = await getJson(`${API}/scoreboard?dates=${day.replace(/-/g, "")}&groups=50&limit=500`);
@@ -75,11 +87,15 @@ await pool(days.filter(d => !completeDays.has(d)), async day => {
   for (const ev of board.events) {
     const state = ev.status?.type?.state;
     if (state !== "post") { if (state !== "postponed" && !/postponed|canceled|cancelled/i.test(ev.status?.type?.name ?? "")) allDone = false; continue; }
-    if (!cache.events[ev.id]) pending.push({ id: ev.id, day });
+    if (!cache.events[ev.id] || !hasPbp(day, ev.id)) pending.push({ id: ev.id, day });
   }
   // A day is "complete" once every game is final and it's at least a day old.
   if (allDone && day < today) completeDays.add(day);
 });
+
+// Cached games from finished days that still lack a play-by-play summary.
+const queued = new Set(pending.map(p => p.id));
+for (const [id, ev] of Object.entries(cache.events)) if (!hasPbp(ev.day, id) && !queued.has(id)) pending.push({ id, day: ev.day });
 
 let fetched = 0;
 await pool(pending, async ({ id, day }) => {
@@ -110,6 +126,14 @@ await pool(pending, async ({ id, day }) => {
     };
   });
   cache.events[id] = { day, date: comp.date ?? null, teams };
+  try {
+    const derived = derivePbp(sum);
+    if (derived) {
+      if (!pbpByDay.has(day)) pbpByDay.set(day, { events: {} });
+      pbpByDay.get(day).events[id] = derived;
+      dirtyDays.add(day);
+    }
+  } catch (error) { console.warn(`[espn] play-by-play for ${id} skipped: ${error.message}`); }
   fetched++;
 });
 
@@ -118,4 +142,5 @@ cache.fields = ["athleteId", "name", "starter", "min", "pts", "fgm", "fga", "tpm
 cache.fetchedAt = new Date().toISOString();
 await mkdir(".cache", { recursive: true });
 await writeFile(GAMES_PATH, JSON.stringify(cache) + "\n");
+for (const day of dirtyDays) await writeFile(`${PBP_DIR}/${day}.json.gz`, gzipSync(JSON.stringify(pbpByDay.get(day))));
 console.log(`[espn] ${fetched} new box scores (${Object.keys(cache.events).length} cached across ${cache.completeDays.length} complete days).`);

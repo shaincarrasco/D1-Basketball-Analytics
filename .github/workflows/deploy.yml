@@ -54,8 +54,15 @@ jobs:
       - name: Fetch player game logs and roster bios (ESPN, incremental)
         continue-on-error: true
         run: node scripts/fetch-espn-player-games.mjs
+      - name: Fetch recruiting star ratings (non-fatal)
+        continue-on-error: true
+        run: node scripts/fetch-recruiting.mjs
+        env:
+          CBBD_API_KEY: ${{ secrets.CBBD_API_KEY }}
       - name: Calculate DHR v2 ratings, walk-forward predictions and backtest
         run: node scripts/build-power-ratings.mjs
+      - name: Simulate the rest of the season
+        run: node scripts/build-simulations.mjs
       - name: Fetch player shooting profiles weekly
         run: node scripts/fetch-player-shooting.mjs
         env:

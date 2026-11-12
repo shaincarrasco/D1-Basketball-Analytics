@@ -28,6 +28,12 @@ export type TeamSummary = {
   close: [number, number];
   projW: number; projL: number; projCW: number; projCL: number;
   next: { id: string; date: string; opp: string; oppSlug: string | null; oppRank: number | null; venue: Venue; wp: number | null } | null;
+  /** ESPN team id (for live scores from ESPN's public scoreboard). */
+  espnId: string | null;
+  /** Against-the-spread record [W, L, P] vs the pregame line ESPN shows. */
+  ats: [number, number, number];
+  /** Season simulation (10,000 runs): expected wins, 10th/90th percentile wins, conference title share, P(20+ wins). */
+  sim: { wins: number; p10: number; p90: number; confWins: number; title: number; outright: number; win20: number } | null;
 };
 
 export type TeamGame = {
@@ -37,6 +43,8 @@ export type TeamGame = {
   /** Pregame win probability (walk-forward; only uses games before this date). */
   wp: number | null; projPts: number | null; projOppPts: number | null;
   offEff: number | null; defEff: number | null; pace: number | null; perf: number | null; quad: number | null;
+  /** Pregame spread from this team's perspective (negative = favoured) and the against-the-spread result. */
+  line?: number; ats?: "W" | "L" | "P";
 };
 
 /** Columnar player table. Use `playerRows()` to turn it into objects. */
@@ -51,6 +59,11 @@ export type Player = {
   /** Shot profile: rim = dunks + layups + tip-ins, mid = two-point jumpers, thr = three-point jumpers (attempts / makes). */
   rimA: number | null; rimM: number | null; midA: number | null; midM: number | null; thrA: number | null; thrM: number | null;
   astd: number | null; dunks: number | null;
+  /** DPR: regularised adjusted plus-minus (points per 100 possessions vs average), offence, defence (positive = good), standard error, on-court possessions, rank (≥150 possessions). */
+  dpr: number | null; dprO: number | null; dprD: number | null; dprSE: number | null; onPoss: number | null;
+  /** High-school recruiting: stars (2–5), national rank, class year. */
+  stars: number | null; recRank: number | null; recYear: number | null;
+  dprRank: number | null;
 };
 
 export type TeamDetail = {
@@ -60,6 +73,16 @@ export type TeamDetail = {
   logFields?: string[];
   logs?: Record<string, (string | number | null)[][]>;
   bios?: Record<string, PlayerBio>;
+  /** Field names for `roster` rows (same as players.json). */
+  rosterFields?: PlayerField[];
+  /** Season simulation win-total distribution: probability of finishing with from, from+1, … wins. */
+  winHist?: { from: number; counts: number[] } | null;
+  /** Shot locations (ESPN coordinates: x 0–50 ft across, y ft out from the basket line). off/def = [x, y, made, value]; byPid = [x, y, made, value, kind J/L/D/T/H, assisted, day]. */
+  shots?: { off: [number, number, number, number][]; def: [number, number, number, number][]; byPid: Record<string, [number, number, number, number, string, number, string][]> } | null;
+  /** Five-man units by minutes (≥2 min): provider player ids, minutes, points for/against, possessions, net per 100. */
+  lineups?: { pids: string[]; min: number; pf: number; pa: number; poss: number; net: number }[];
+  /** On/off per player: minutes on, net per 100 on and off the floor, possessions on. */
+  onOff?: Record<string, { min: number; onNet: number; offNet: number | null; poss: number }>;
 };
 export type PlayerBio = { jersey: string | null; pos: string | null; ht: string | null; wt: number | null; year: string | null; home: string | null };
 export type TeamPerGame = { pts: number | null; reb: number | null; ast: number | null; tov: number | null; stl: number | null; blk: number | null; paint: number | null; fastBreak: number | null };
@@ -84,6 +107,10 @@ export type Game = {
   /** Winner's pregame win probability when it was below 35%. */
   upset: number | null;
   box: { home: BoxLine | null; away: BoxLine | null } | null;
+  /** ESPN event id (live scores), pregame line (home perspective, negative = home favoured), score flow [elapsedSec, home, away]. */
+  espnId?: string | null;
+  line?: { spread: number; total: number | null; provider: string | null } | null;
+  flow?: [number, number, number][] | null;
 };
 export type GameDay = { day: string; games: Game[] };
 export type GameIndex = { days: { day: string; games: number; finals: number }[] };
@@ -109,4 +136,7 @@ export type Meta = {
     backtest: { description: string; all: BacktestBlock; seasoned: BacktestBlock; seasonedRule: string };
   };
   leagueProfile: Partial<Profile>;
+  market: { games: number; modelMAE: number; lineMAE: number; atsW: number; atsL: number; atsP: number; note: string } | null;
+  sims: { sims: number; remainingGames: number; method: string } | null;
+  dpr: { players: number; rows: number; lambda: number; method: string } | null;
 };
