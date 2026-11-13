@@ -2,7 +2,8 @@ import Link from "next/link";
 import TeamLogo from "@/components/team-logo";
 import PerfBars from "@/components/perf-bars";
 import { fmt, pctFmt, signed, heat, dayLabel } from "@/lib/format";
-import { getAllGames, getConferences, getMeta, getPlayers, getTeams } from "@/lib/server-data";
+import { getAllGames, getConferences, getMeta, getNews, getPlayers, getTeams } from "@/lib/server-data";
+import ArticleList from "@/components/article-list";
 import { playerRows } from "@/lib/players";
 import Tonight from "./_home/tonight";
 import { LinkRow } from "@/components/data-table";
@@ -97,6 +98,15 @@ export default function Home() {
               <Link href="/methodology/#backtest" className="mt-4 inline-block text-sm font-semibold text-off hover:underline">See calibration and method</Link>
             </section>
           )}
+
+          {/* News */}
+          <section aria-labelledby="home-news" className="deck p-5">
+            <div className="mb-1 flex items-end justify-between">
+              <h2 id="home-news" className="h-section">Latest news</h2>
+              <Link href="/news/" className="text-sm font-semibold text-mute hover:text-ink">More news &amp; polls</Link>
+            </div>
+            <ArticleList items={getNews().league} max={5} />
+          </section>
 
           {/* Upsets */}
           <section aria-labelledby="upsets">

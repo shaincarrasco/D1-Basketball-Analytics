@@ -27,14 +27,28 @@ export type TeamSummary = {
   quads: [number, number][];
   close: [number, number];
   projW: number; projL: number; projCW: number; projCL: number;
-  next: { id: string; date: string; opp: string; oppSlug: string | null; oppRank: number | null; venue: Venue; wp: number | null } | null;
+  next: { id: string; date: string; opp: string; oppSlug: string | null; oppRank: number | null; venue: Venue; wp: number | null; tv?: string[] | null } | null;
   /** ESPN team id (for live scores from ESPN's public scoreboard). */
   espnId: string | null;
   /** Against-the-spread record [W, L, P] vs the pregame line ESPN shows. */
   ats: [number, number, number];
   /** Season simulation (10,000 runs): expected wins, 10th/90th percentile wins, conference title share, P(20+ wins). */
   sim: { wins: number; p10: number; p90: number; confWins: number; title: number; outright: number; win20: number } | null;
+  /** AP / Coaches poll position this week. */
+  ap?: PollSpot | null; coaches?: PollSpot | null;
+  /** Players currently flagged unavailable (ESPN injury list or missing from recent box scores). */
+  unavailable?: number;
 };
+export type PollSpot = { rank: number; prev: number | null; pts: number | null; fpv: number | null };
+/** A credited link to an outside article (headline, link, time and publisher only). */
+export type Article = { h: string; url: string; t: string; kind: string; src: string; by: string | null };
+/** Availability note: ESPN-listed injury, missed recent games (box scores) or an injury/suspension headline. */
+export type Availability = { pid: string; name: string; status: string; detail: string | null; since: string | null; source: "espn" | "box" | "news"; url?: string | null };
+export type NewsFile = {
+  fetchedAt: string | null; league: Article[]; pollDate: string | null;
+  polls: Record<"ap" | "coaches", { rank: number; prev: number | null; pts: number | null; fpv: number | null; slug: string | null; name: string | null; dhr: number | null; w: number | null; l: number | null }[]>;
+};
+export type InjuryRow = Availability & { slug: string; team: string; conf: string; rank: number | null };
 
 export type TeamGame = {
   id: string; date: string; day: string; status: string; venue: Venue;
@@ -45,6 +59,8 @@ export type TeamGame = {
   offEff: number | null; defEff: number | null; pace: number | null; perf: number | null; quad: number | null;
   /** Pregame spread from this team's perspective (negative = favoured) and the against-the-spread result. */
   line?: number; ats?: "W" | "L" | "P";
+  /** TV / streaming outlets (ESPN listings). */
+  tv?: string[];
 };
 
 /** Columnar player table. Use `playerRows()` to turn it into objects. */
@@ -73,6 +89,10 @@ export type TeamDetail = {
   logFields?: string[];
   logs?: Record<string, (string | number | null)[][]>;
   bios?: Record<string, PlayerBio>;
+  news?: Article[];
+  availability?: Availability[];
+  /** Articles that tag each player (provider player id -> articles). */
+  playerNews?: Record<string, Article[]>;
   /** Field names for `roster` rows (same as players.json). */
   rosterFields?: PlayerField[];
   /** Season simulation win-total distribution: probability of finishing with from, from+1, … wins. */
@@ -109,6 +129,10 @@ export type Game = {
   box: { home: BoxLine | null; away: BoxLine | null } | null;
   /** ESPN event id (live scores), pregame line (home perspective, negative = home favoured), score flow [elapsedSec, home, away]. */
   espnId?: string | null;
+  /** Where to watch, from ESPN's listings: outlet name, "TV" | "Streaming" | null, market ("National", "Home", "Away"). */
+  tv?: { name: string; type: string | null; market: string | null }[] | null;
+  /** Previews and recaps for this game (credited links). */
+  articles?: Article[] | null;
   line?: { spread: number; total: number | null; provider: string | null } | null;
   flow?: [number, number, number][] | null;
 };

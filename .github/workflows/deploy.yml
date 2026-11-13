@@ -63,6 +63,17 @@ jobs:
         run: node scripts/fetch-recruiting.mjs
         env:
           CBBD_API_KEY: ${{ secrets.CBBD_API_KEY }}
+      - name: Cache Rust build
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            live/target
+          key: rust-${{ runner.os }}-${{ hashFiles('live/Cargo.toml', 'live/Cargo.lock') }}
+      - name: Fetch news, previews/recaps, polls and injuries (Rust)
+        continue-on-error: true
+        run: cargo run --release --manifest-path live/Cargo.toml --bin feeds
       - name: Calculate DHR v2 ratings, walk-forward predictions and backtest
         run: node scripts/build-power-ratings.mjs
       - name: Simulate the rest of the season
