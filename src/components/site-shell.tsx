@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { BarChart3, CalendarDays, LayoutGrid, Search, Swords, Users, Layers, BookOpen, Star, Newspaper, ScatterChart, HeartPulse } from "lucide-react";
+import { BarChart3, CalendarDays, LayoutGrid, Search, Swords, Users, Layers, BookOpen, Star, Newspaper, ScatterChart, HeartPulse, Trophy } from "lucide-react";
 import AccountButton from "./account-button";
 import CommandSearch from "./command-search";
 import ThemePicker from "./theme-picker";
@@ -12,6 +12,7 @@ const NAV = [
   { href: "/", label: "Today", icon: LayoutGrid },
   { href: "/rankings/", label: "Rankings", icon: BarChart3 },
   { href: "/games/", label: "Games", icon: CalendarDays },
+  { href: "/bracket/", label: "Bracket", icon: Trophy },
   { href: "/injuries/", label: "Injuries", icon: HeartPulse },
   { href: "/news/", label: "News", icon: Newspaper },
   { href: "/players/", label: "Players", icon: Users },
@@ -21,8 +22,8 @@ const NAV = [
   { href: "/methodology/", label: "Method", icon: BookOpen },
   { href: "/following/", label: "Following", icon: Star },
 ];
-// Phone tab bar, Apple Sports style: the five things people open most.
-const MOBILE = [NAV[0], NAV[1], NAV[2], { href: "/following/", label: "My teams", icon: Star }, NAV.find(n => n.href === "/players/")!];
+// Phone tab bar, Apple Sports style: the six things people open most.
+const MOBILE = [NAV[0], NAV[1], NAV[2], NAV.find(n => n.href === "/bracket/")!, { href: "/following/", label: "My teams", icon: Star }, NAV.find(n => n.href === "/players/")!];
 
 function isActive(path: string, href: string) {
   if (href === "/") return path === "/";
@@ -80,7 +81,7 @@ export default function SiteShell({ children, updated }: { children: React.React
         Box scores and schedules from College Basketball Data. Ratings and projections are D1 Hoops originals — see <Link className="underline hover:text-ink" href="/methodology/">methodology</Link>.
       </footer>
       <nav aria-label="Tabs" className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-night/90 pb-[env(safe-area-inset-bottom)] backdrop-blur-xl lg:hidden">
-        <div className="grid grid-cols-5">
+        <div className="grid grid-cols-6">
           {MOBILE.map(n => {
             const Icon = n.icon, active = isActive(path, n.href);
             return (
