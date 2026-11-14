@@ -12,6 +12,7 @@ import { fmt, signed } from "@sports/ui/format";
 import { playerRows } from "@/lib/players";
 import type { Player, PlayerTable, TeamSummary } from "@/lib/types";
 import { TeamCard } from "./team-cards";
+import TeamInjuries from "./team-injuries";
 
 type Row = Player & { team: TeamSummary | null };
 
@@ -92,6 +93,8 @@ export default function FollowingClient() {
           </ul>
         ) : <HowTo what="teams" />}
       </section>
+
+      <TeamInjuries teamSlugs={fav.teams} playerIds={fav.players} />
 
       <section aria-labelledby="players-h">
         <h2 id="players-h" className="h-section mb-3">Players{myPlayers.length ? <span className="ml-2 text-sm font-normal text-mute">{myPlayers.length}</span> : null}</h2>

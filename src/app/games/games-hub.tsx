@@ -5,12 +5,15 @@ import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Empty, ErrorState, Loading } from "@sports/ui/states";
 import { useJson } from "@sports/ui/client-data";
+import { useInjuries } from "@/lib/injury-hooks";
+import { keyAbsences } from "@/components/whos-out";
 import { liveDay, useLiveScores, withLive } from "@/lib/live";
 import { dayLabel, etToday, pctFmt } from "@sports/ui/format";
 import type { Game, GameDay, GameIndex } from "@/lib/types";
 import DateStrip from "./date-strip";
 import GameCard from "./game-card";
 import GameSheet from "./game-sheet";
+import ProjectionToggle from "@/components/projection-toggle";
 import { FILTERS, SORTS, defaultDay, lineInfo, isDay, matchesFilter, sortGames, summarize, winner, type FilterId, type SortId } from "./game-utils";
 
 function setUrl(mutate: (p: URLSearchParams) => void, mode: "push" | "replace") {
@@ -38,6 +41,10 @@ export default function GamesHub() {
   // Today's slate (and recent days the data hasn't caught up on) gets ESPN's live scores laid over the static data.
   const live = useLiveScores(liveDay(day, today, staticGames), staticGames);
   const games = useMemo(() => (staticGames && live.byGame.size ? staticGames.map(g => withLive(g, live.byGame.get(g.id))) : staticGames), [staticGames, live.byGame]);
+
+  // One cached fetch for every card; failures just mean no badges.
+  const injuries = useInjuries();
+  const absences = useMemo(() => keyAbsences(injuries.data), [injuries.data]);
 
   const [filter, setFilter] = useState<FilterId>("all");
   const [sort, setSort] = useState<SortId>("time");
@@ -117,6 +124,7 @@ export default function GamesHub() {
                 </button>
               ))}
             </div>
+            <ProjectionToggle className="shrink-0" />
             <div className="ml-auto flex w-full gap-2 sm:w-auto">
               <label className="flex-1 sm:flex-none">
                 <span className="sr-only">Conference</span>
@@ -145,13 +153,13 @@ export default function GamesHub() {
             <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4" aria-label={`${shown.length} games`}>
               {shown.map(g => (
                 <li key={g.id} data-game={g.id} className="flex">
-                  <GameCard g={g} live={live.byGame.get(g.id)} onOpen={openGame} />
+                  <GameCard g={g} live={live.byGame.get(g.id)} onOpen={openGame} absences={absences} />
                 </li>
               ))}
             </ul>
           )}
           <p className="mt-4 text-xs text-dim">
-            Bar = pregame win probability (<span className="text-def">away</span> / <span className="text-off">home</span>). Gray numbers on unplayed games are projected points.
+            Bar = pregame win probability (<span className="text-def">away</span> / <span className="text-off">home</span>). Projected scores are hidden until you turn them on; when on, they show in gray on unplayed games.
             ✓/✗ marks whether the pregame favorite won. Line = the pregame spread ESPN shows; ATS ✓/✗ = whether DHR&apos;s pick against it covered. Small numeral before a team = D1 Hoops national rank.
           </p>
         </>

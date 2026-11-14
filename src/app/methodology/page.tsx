@@ -27,6 +27,7 @@ const TOC = [
   { id: "sims", label: "Season simulations" },
   { id: "dpr", label: "Player rating (DPR)" },
   { id: "shot-zones", label: "Shot zones" },
+  { id: "injuries", label: "Injuries and availability" },
   { id: "glossary", label: "Glossary" },
   { id: "sources", label: "Data sources and limits" },
 ];
@@ -441,6 +442,18 @@ minimise  Σ w · (y − fit)²  +  λ · Σ (rating − prior)²        λ = ${
             <p className="text-sm">Left and right follow the labels on the site&apos;s shot charts. Coordinates are logged by ESPN&apos;s scorers and can be off by a foot or two, so shots on a zone boundary may land in its neighbour.</p>
           </Section>
 
+          <Section id="injuries" title="Injuries and availability">
+            <p>College teams don&apos;t have to publish injuries outside conference play, and ESPN&apos;s college injury list is usually empty, so the <Link className="link underline" href="/injuries/">injury tracker</Link> combines four signals and labels every row with how we know:</p>
+            <ul className="mt-3 list-disc space-y-2 pl-5">
+              <li><b>Confirmed:</b> the player is on ESPN&apos;s official injury list.</li>
+              <li><b>Reported:</b> a credited news report: a curated report with a link, or an ESPN headline that tags the player (or names him in his team&apos;s news). The headline is read for the body part, the kind of absence (injury, illness, suspension, eligibility) and the timeline: &ldquo;out for the season&rdquo;, &ldquo;6–8 weeks&rdquo; (which becomes an estimated return window from the report date), &ldquo;until January&rdquo;, &ldquo;indefinitely&rdquo;, &ldquo;day-to-day&rdquo;.</li>
+              <li><b>Inferred:</b> a rotation player (12+ minutes a game) who stopped appearing in ESPN box scores. The team hasn&apos;t said why, and we say so.</li>
+            </ul>
+            <p className="mt-3">Every absence clears itself the moment the player logs minutes again, and a reported reason stays attached until he does, even after the article ages out. Each hourly refresh compares the new list with the last one and writes the difference to a season-long ledger: new absences, statuses that got worse or better, and returns. That ledger is the injury wire, each player&apos;s injury history and the push alerts for teams you follow.</p>
+            <p className="mt-3"><b>Impact estimate.</b> Missing minutes = his minutes per game ÷ 200 (a team plays 5 × 40 player-minutes). Estimated rating lost = minutes ÷ 40 × (his DPR − replacement level), with replacement at −2 points per 100 possessions (a typical end-of-bench player). Team totals add up everyone who is out. &ldquo;With / without&rdquo; is the team&apos;s record and average margin in ESPN-logged games he played and missed, a small and noisy sample this early. None of this changes DHR or the main projections; the matchup page shows an injury-adjusted line as a rough what-if.</p>
+            <p className="mt-3"><b>Official reports.</b> The Big Ten, SEC, ACC, Big 12 and several other conferences publish availability reports before conference games, and the NCAA does for the tournament. We link to them rather than copy them.</p>
+          </Section>
+
           <Section id="glossary" title="Glossary">
             {GLOSSARY.map(g => (
               <div key={g.group}>
@@ -463,7 +476,7 @@ minimise  Σ w · (y − fit)²  +  λ · Σ (rating − prior)²        λ = ${
               <li><b>Refresh:</b> a full pull from College Basketball Data runs every morning, and ESPN results are merged in hourly from noon to 4 a.m. Eastern so ratings, records, schedules and simulations move within the hour. Between refreshes your browser goes further: it takes every game ESPN shows as final that the published ratings don&apos;t include yet, adds it to the same inputs, and refits DHR with the same code, so rankings change minutes after the final horn (marked &ldquo;Updated live&rdquo;). The next refresh publishes the same results officially. Latest pulls — teams {updated(meta.updated.teams)}, games {updated(meta.updated.games)}, players {updated(meta.updated.players)}; site built {updated(meta.updated.built)}.</li>
               <li><b>Coverage:</b> {meta.counts.teams} D-I teams, {meta.counts.players.toLocaleString("en-US")} players and {meta.counts.games.toLocaleString("en-US")} scheduled games ({meta.counts.finals.toLocaleString("en-US")} final). Only games with usable scores enter the rating; missing values show as &ldquo;—&rdquo;, never as zero.</li>
               <li><b>Play-by-play, shots and lines:</b> lineups, substitutions, shot locations, score flow and pregame spreads come from ESPN&apos;s public play-by-play and scoreboard; recruiting stars from College Basketball Data. Live scores on today&apos;s slate are fetched from ESPN in your browser.</li>
-              <li><b>Not available:</b> projections know nothing about injuries, suspensions or rest, and play-by-play is missing for some games (mostly against non-D-I opponents), so lineup, on/off and DPR numbers cover only the games ESPN logged.</li>
+              <li><b>Not available:</b> projections know nothing about injuries, suspensions or rest (the injury tracker is separate and only feeds a labelled what-if on the matchup page), and play-by-play is missing for some games (mostly against non-D-I opponents), so lineup, on/off and DPR numbers cover only the games ESPN logged.</li>
               <li><b>Not KenPom, Torvik or the NET:</b> DHR is calculated independently here. It belongs to the same family of opponent-adjusted efficiency ratings, but its values and ranks are its own and won&apos;t match those systems. DHR quadrants are unofficial and are not what the NCAA selection committee uses.</li>
               <li><b>Early season:</b> with only a few games per team, ratings lean heavily on conference priors and the backtest is small. Treat rankings in November as a rough sketch.</li>
             </ul>

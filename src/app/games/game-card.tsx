@@ -8,6 +8,8 @@ import { fmt, pctFmt } from "@sports/ui/format";
 import type { LiveGame } from "@/lib/live";
 import type { Game, GameSide } from "@/lib/types";
 import TvBadges from "@/components/tv-badges";
+import type { KeyAbsence } from "@/components/whos-out";
+import { useShowProjections } from "@/lib/show-projections";
 import { favoriteWon, isFinal, isLive, lineInfo, marginText, statusLabel, teamHref, winner } from "./game-utils";
 
 export function WatchBadge({ value }: { value: number | null }) {
@@ -28,13 +30,26 @@ export function TeamName({ side, className = "" }: { side: GameSide; className?:
     : <span className={`truncate ${className}`} title="Non-Division I opponent">{side.name}</span>;
 }
 
-function Row({ g, side, which }: { g: Game; side: GameSide; which: "home" | "away" }) {
+/** Subtle red-dot chip: key players out. Text says it in words; names go in the tooltip and aria-label. */
+function AbsenceChip({ a }: { a: KeyAbsence }) {
+  const word = a.inferredOnly ? "missing" : "out";
+  const label = `${a.out} ${word}: ${a.names.join(", ")}${a.inferredOnly ? ". Reason not reported" : ""}`;
+  return (
+    <span title={label} aria-label={label} className="ml-1.5 inline-flex items-center gap-1 whitespace-nowrap rounded-full border border-loss/40 bg-loss/10 px-1.5 text-[10.5px] font-semibold leading-[16px] text-loss">
+      <span className="h-1.5 w-1.5 rounded-full bg-current" aria-hidden />{a.out} {word}
+    </span>
+  );
+}
+
+function Row({ g, side, which, absence }: { g: Game; side: GameSide; which: "home" | "away"; absence?: KeyAbsence }) {
   const w = winner(g);
   const final = isFinal(g), live = isLive(g);
   const lost = final && w != null && w !== which;
   // A live game at 0–0 is a stale snapshot of tip-off; show no score rather than a fake one.
   const showScore = (final || (live && ((g.home.score ?? 0) + (g.away.score ?? 0)) > 0)) && side.score != null;
-  const proj = g.pred ? g.pred[which] : null;
+  // Projected points only when the reader turned them on; otherwise an unplayed game shows no number.
+  const showProj = useShowProjections();
+  const proj = showProj && g.pred ? g.pred[which] : null;
   return (
     <div className="flex items-center gap-2.5">
       {teamHref(side)
@@ -45,28 +60,30 @@ function Row({ g, side, which }: { g: Game; side: GameSide; which: "home" | "awa
       </span>
       <div className="min-w-0 flex-1 leading-tight">
         <TeamName side={side} className={`inline-block max-w-full align-top text-[15px] font-semibold ${lost ? "!text-mute" : ""}`} />
-        <span className="block text-[11.5px] text-dim">{side.id ? side.record ?? "—" : "Non-D-I"}{side.conf ? ` · ${side.conf}` : ""}</span>
+        <span className="block text-[11.5px] text-dim">{side.id ? side.record ?? "—" : "Non-D-I"}{side.conf ? ` · ${side.conf}` : ""}{absence && <AbsenceChip a={absence} />}</span>
       </div>
       {showScore ? (
         <span className={`font-display text-[1.75rem] font-extrabold leading-none tnum ${lost ? "text-mute" : "text-ink"}`}>
           {side.score}
           {final && w === which && <span className="sr-only"> (winner)</span>}
         </span>
-      ) : (
+      ) : proj != null ? (
         <span className="flex items-baseline gap-1.5 text-right leading-none" title="Projected points (game not finished)">
-          {proj != null && <span className="text-[10px] font-semibold text-dim">Proj</span>}
+          <span className="text-[10px] font-semibold text-dim">Proj</span>
           <span className="font-display text-[1.35rem] font-bold text-mute tnum">{fmt(proj, 0)}</span>
         </span>
-      )}
+      ) : null}
     </div>
   );
 }
 
-export default function GameCard({ g, live: lg, onOpen }: { g: Game; live?: LiveGame; onOpen: (id: string, el: HTMLElement) => void }) {
+export default function GameCard({ g, live: lg, onOpen, absences }: { g: Game; live?: LiveGame; onOpen: (id: string, el: HTMLElement) => void; absences?: Map<string, KeyAbsence> }) {
   const final = isFinal(g), live = isLive(g);
   const fw = favoriteWon(g);
   const status = statusLabel(g, lg);
   const li = lineInfo(g);
+  // Only unplayed games: for finals we don't store who was available at the time.
+  const abs = (side: GameSide) => (!final && side.slug ? absences?.get(side.slug) : undefined);
   const label = `${g.away.name} ${g.neutral ? "vs" : "at"} ${g.home.name}: ${status}${final || live ? `, ${g.away.score ?? "—"} to ${g.home.score ?? "—"}` : ""}. Open game details`;
   return (
     <article className={`deck relative flex w-full flex-col gap-3 p-4 transition-colors hover:border-line2 ${live ? "!border-[rgb(var(--hot-rgb)/0.5)]" : ""}`}>
@@ -83,8 +100,8 @@ export default function GameCard({ g, live: lg, onOpen }: { g: Game; live?: Live
         </span>
       </div>
       <div className="flex flex-col gap-2">
-        <Row g={g} side={g.away} which="away" />
-        <Row g={g} side={g.home} which="home" />
+        <Row g={g} side={g.away} which="away" absence={abs(g.away)} />
+        <Row g={g} side={g.home} which="home" absence={abs(g.home)} />
       </div>
       {g.tv?.length && !final ? <div className="-mt-1"><TvBadges tv={g.tv} /></div> : null}
       {g.pred && (

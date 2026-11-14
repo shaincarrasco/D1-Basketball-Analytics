@@ -124,7 +124,7 @@ async fn main() {
     // Per team: news + roster (injuries), all concurrently.
     let results: Vec<(String, Option<Value>, Option<Value>)> = stream::iter(team_ids.clone())
         .map(|id| { let c = client.clone(); async move {
-            let news = get(&c, format!("{API}/news?team={id}&limit=15")).await;
+            let news = get(&c, format!("{API}/news?team={id}&limit=25")).await;
             let roster = get(&c, format!("{API}/teams/{id}/roster")).await;
             (id, news, roster)
         }})

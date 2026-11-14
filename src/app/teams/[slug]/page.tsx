@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getMeta, getTeam, getTeamDetail, getTeams } from "@/lib/server-data";
+import { getInjuries, getMeta, getTeam, getTeamDetail, getTeams } from "@/lib/server-data";
 import TeamLogo from "@sports/ui/team-logo";
 import TvBadges from "@/components/tv-badges";
+import { IfProjections } from "@/components/projection-toggle";
 import StatBar from "@/components/stat-bar";
 import { fmt, pctFmt, signed } from "@sports/ui/format";
 import FavoriteButton from "@/components/favorite-button";
 import ArticleList from "@/components/article-list";
-import AvailabilityList from "@/components/availability-list";
+import TeamAvailability from "./availability";
 import CalendarButton from "./calendar-button";
 import type { PlayerField, TeamSummary } from "@/lib/types";
 import GameLog from "./game-log";
@@ -77,6 +78,9 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
   const leader = (k: "pts" | "reb" | "ast") => [...roster].sort((a, b) => (b[k] ?? -1) - (a[k] ?? -1))[0];
   const leaders = (["pts", "reb", "ast"] as const).map(k => ({ k, p: leader(k) })).filter(x => x.p && x.p[x.k] != null);
   const note = teamNote(team, total);
+  // Official conference reports exist for these leagues only (conference games); skip links we don't have.
+  const REPORT_CONFS = ["Big Ten", "SEC", "ACC", "Big 12", "Big East", "A-10", "MVC"];
+  const reportLinks = REPORT_CONFS.includes(team.conf) ? getInjuries().links.filter(l => l.url && (l.conf === team.conf || l.conf === team.confName)) : [];
   const shortName = (n: string) => { const parts = n.split(" "); return parts.length > 1 ? `${parts[0][0]}. ${parts.slice(1).join(" ")}` : n; };
 
   return (
@@ -114,6 +118,9 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
         <div className="relative mt-5 flex flex-wrap gap-2 [&_.btn]:border-transparent [&_.btn]:bg-black/20 [&_.btn]:text-current">
           <FavoriteButton kind="teams" id={slug} name={team.name} />
           <CalendarButton slug={slug} name={team.name} />
+          {(team.health?.out ?? 0) > 0 && (
+            <a href="#availability" className="btn" title="Jump to the availability report">{(() => { const h = team.health!, known = h.out - (h.missing ?? 0); return known > 0 ? `${known} out${h.missing ? ` · ${h.missing} missing` : ""}` : `${h.missing} missing · reason not reported`; })()}</a>
+          )}
         </div>
       </section>
 
@@ -145,10 +152,12 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
                   <div className="text-[13px] text-mute">{[team.next.oppRank ? `No. ${team.next.oppRank} in the ratings` : null, team.next.venue === "N" ? "neutral site" : null].filter(Boolean).join(", ") || "Unrated opponent"}</div>
                 </div>
                 {nextGame?.projPts != null && nextGame.projOppPts != null && (
-                  <div className="flex flex-col items-end">
-                    <Dots className="text-[24px]">{Math.round(nextGame.projPts)}-{Math.round(nextGame.projOppPts)}</Dots>
-                    <span className="mt-0.5 text-[11px] text-mute">projected</span>
-                  </div>
+                  <IfProjections>
+                    <div className="flex flex-col items-end">
+                      <Dots className="text-[24px]">{Math.round(nextGame.projPts)}-{Math.round(nextGame.projOppPts)}</Dots>
+                      <span className="mt-0.5 text-[11px] text-mute">projected</span>
+                    </div>
+                  </IfProjections>
                 )}
               </div>
               {team.next.wp !== null && (
@@ -238,9 +247,9 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
         </div>
 
         <aside id="profile" className="scroll-mt-32 space-y-6">
-          <section className="deck p-5" aria-labelledby="avail-h">
+          <section id="availability" className="deck scroll-mt-32 p-5" aria-labelledby="avail-h">
             <h2 id="avail-h" className="h-section mb-2">Availability</h2>
-            <AvailabilityList items={detail.availability} />
+            <TeamAvailability slug={slug} health={team.health} items={detail.availability} log={detail.injuryLog} links={reportLinks} />
           </section>
           <section className="deck p-5" aria-labelledby="news-h">
             <h2 id="news-h" className="h-section mb-1">Latest news</h2>

@@ -148,11 +148,14 @@ export default function PlayersBoard() {
   // Heat pool: everyone who clears the minutes (or, for Impact, possessions) + games floors (independent of search/conf/pos/stars).
   const impact = view === "Impact";
   const pool = useMemo(() => all.filter(r => (r.g ?? 0) >= minG && (impact ? (r.onPoss ?? 0) >= minPoss : (r.min ?? 0) >= minMin)), [all, minMin, minG, impact, minPoss]);
+  // `ranked` = everyone the filters allow; the # column counts positions here. The name search only
+  // narrows what's shown, so searching "Jake" shows each Jake at his real rank, not 1, 2, 3…
+  const ranked = useMemo(() => pool.filter(r => (conf === "all" || r.team?.confSlug === conf) && (pos === "all" || r.posN === pos) && starOk(stars, r.stars)),
+    [pool, conf, pos, stars]);
   const rows = useMemo(() => {
     const n = q.trim().toLowerCase();
-    return pool.filter(r => (conf === "all" || r.team?.confSlug === conf) && (pos === "all" || r.posN === pos) && starOk(stars, r.stars) &&
-      (!n || r.name.toLowerCase().includes(n) || (r.team && (r.team.name.toLowerCase().includes(n) || r.team.short.toLowerCase() === n))));
-  }, [pool, conf, pos, q, stars]);
+    return !n ? ranked : ranked.filter(r => r.name.toLowerCase().includes(n) || (r.team && (r.team.name.toLowerCase().includes(n) || r.team.short.toLowerCase() === n)));
+  }, [ranked, q]);
 
   const { stats, sort } = VIEW_STATS[view];
   const pools = useMemo(() => {
@@ -287,7 +290,7 @@ export default function PlayersBoard() {
         </div>
       ) : (
         <div className={ROW_LINK_CLASS} onClick={followRowLink}>
-        <DataTable key={view} rows={rows} columns={columns} rowKey={r => r.id} initialSort={sort} initialDir={VIEW_STATS[view].stats.find(s => s.key === sort)?.invert ? "asc" : "desc"}
+        <DataTable key={view} rows={rows} rankRows={ranked} columns={columns} rowKey={r => r.id} initialSort={sort} initialDir={VIEW_STATS[view].stats.find(s => s.key === sort)?.invert ? "asc" : "desc"}
           pageSize={100} csvName={`d1hoops-players-${slugOf(view)}.csv`} caption={`Player leaderboard: ${view}`} maxHeight="78vh" />
         </div>
       )}

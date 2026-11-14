@@ -3,7 +3,7 @@
 // followed-team accent colours. Everything visual comes from @sports/ui.
 import Link from "next/link";
 import { useMemo } from "react";
-import { BarChart3, BookOpen, CalendarDays, Layers, LayoutGrid, Newspaper, ScatterChart, Star, Swords, Users } from "lucide-react";
+import { BarChart3, BookOpen, CalendarDays, HeartPulse, Layers, LayoutGrid, Newspaper, ScatterChart, Star, Swords, Users } from "lucide-react";
 import SiteShell, { type ShellConfig } from "@sports/ui/site-shell";
 import ThemePicker, { type AccentSwatch } from "@sports/ui/theme-picker";
 import { useJson } from "@sports/ui/client-data";
@@ -16,6 +16,7 @@ const NAV: ShellConfig["nav"] = [
   { href: "/", label: "Today", icon: LayoutGrid },
   { href: "/rankings/", label: "Rankings", icon: BarChart3, match: ["/teams"] },
   { href: "/games/", label: "Games", icon: CalendarDays },
+  { href: "/injuries/", label: "Injuries", icon: HeartPulse },
   { href: "/news/", label: "News", icon: Newspaper },
   { href: "/players/", label: "Players", icon: Users, match: ["/player/"] },
   { href: "/charts/", label: "Charts", icon: ScatterChart },
@@ -25,6 +26,8 @@ const NAV: ShellConfig["nav"] = [
   { href: "/following/", label: "Following", icon: Star, compact: true, title: "Teams and players you follow" },
 ];
 
+const nav = (href: string) => NAV.find(n => n.href === href)!;
+
 const CONFIG: ShellConfig = {
   brand: {
     name: "D1 Hoops",
@@ -32,7 +35,7 @@ const CONFIG: ShellConfig = {
   },
   nav: NAV,
   // Phone tab bar, Apple Sports style: the five things people open most.
-  mobile: [NAV[0], NAV[1], NAV[2], { ...NAV[9], label: "My teams" }, NAV[4]],
+  mobile: [NAV[0], NAV[1], NAV[2], { ...nav("/following/"), label: "My teams" }, nav("/players/")],
   footer: <>Box scores and schedules from College Basketball Data. Ratings and projections are D1 Hoops originals — see <Link className="underline hover:text-ink" href="/methodology/">methodology</Link>.</>,
 };
 

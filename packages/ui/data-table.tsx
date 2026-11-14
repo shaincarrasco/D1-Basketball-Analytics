@@ -4,7 +4,7 @@
 // Optional whole-row links (`rowHref`): the row is clickable with the mouse,
 // keyboard users reach the same page through the row's own primary link
 // (the row highlights while that link has focus), inner links/buttons keep working.
-import { useMemo, useState, type KeyboardEvent, type MouseEvent, type ReactNode } from "react";
+import { useMemo, useRef, useState, type KeyboardEvent, type MouseEvent, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowDown, ArrowUp, Download } from "lucide-react";
 import { downloadCsv } from "./format";
@@ -54,6 +54,8 @@ export type Column<T> = {
   csvLabel?: string;
   title?: string;
   value: (row: T) => number | string | null;
+  /** index = the row's position in the current sort (0-based). With `rankRows`, that position is
+   *  counted among rankRows, so a name search doesn't renumber everyone 1, 2, 3… */
   render?: (row: T, index: number) => ReactNode;
   /** First click sorts this direction. Default: desc for numbers. */
   first?: "asc" | "desc";
@@ -64,8 +66,10 @@ export type Column<T> = {
   sortable?: boolean;
 };
 
-export default function DataTable<T>({ rows, columns, rowKey, initialSort, initialDir = "desc", pageSize = 0, csvName, maxHeight, caption, rowHref }: {
+export default function DataTable<T>({ rows, rankRows, columns, rowKey, initialSort, initialDir = "desc", pageSize = 0, csvName, maxHeight, caption, rowHref }: {
   rows: T[]; columns: Column<T>[]; rowKey: (row: T) => string; initialSort?: string; initialDir?: "asc" | "desc";
+  /** The full list before any search. Rank numbers are positions in this list under the current sort. */
+  rankRows?: T[];
   pageSize?: number; csvName?: string; maxHeight?: string; caption?: string;
   /** Make each row a link to this page (mouse: click anywhere; keyboard: the row's own link). */
   rowHref?: (row: T) => string | null;
@@ -74,18 +78,22 @@ export default function DataTable<T>({ rows, columns, rowKey, initialSort, initi
   const [sort, setSort] = useState<{ key: string | undefined; dir: "asc" | "desc" }>({ key: initialSort, dir: initialDir });
   const [limit, setLimit] = useState(pageSize || Infinity);
 
-  const sorted = useMemo(() => {
+  const sortRows = useMemo(() => {
     const col = columns.find(c => c.key === sort.key);
-    if (!col) return rows;
     const dir = sort.dir === "asc" ? 1 : -1;
-    return [...rows].sort((a, b) => {
+    return (list: T[]) => !col ? list : [...list].sort((a, b) => {
       const x = col.value(a), y = col.value(b);
       if (x === null || x === undefined || x === "") return 1; // nulls always last
       if (y === null || y === undefined || y === "") return -1;
       if (typeof x === "number" && typeof y === "number") return (x - y) * dir;
       return String(x).localeCompare(String(y)) * dir;
     });
-  }, [rows, columns, sort]);
+  }, [columns, sort]);
+  const sorted = useMemo(() => sortRows(rows), [rows, sortRows]);
+  // rowKey is usually an inline arrow; keep it out of the deps so the rank map isn't rebuilt every render.
+  const keyRef = useRef(rowKey);
+  keyRef.current = rowKey;
+  const rankOf = useMemo(() => (rankRows ? new Map(sortRows(rankRows).map((r, i) => [keyRef.current(r), i])) : null), [rankRows, sortRows]);
 
   const toggle = (col: Column<T>) => {
     if (col.sortable === false) return;
@@ -132,7 +140,7 @@ export default function DataTable<T>({ rows, columns, rowKey, initialSort, initi
               <tr key={rowKey(row)} {...(rowHref ? rowLink(rowHref(row)) : {})} className={rowHref && rowHref(row) ? LINK_ROW : undefined}>
                 {columns.map((c, i) => (
                   <td key={c.key} className={`${c.align === "l" ? "l" : ""} ${c.sticky ? "sticky-col" : ""}`} style={c.sticky ? { left: offsets[i], minWidth: c.width, maxWidth: c.width } : undefined}>
-                    {c.render ? c.render(row, ri) : (c.value(row) ?? "—")}
+                    {c.render ? c.render(row, rankOf?.get(rowKey(row)) ?? ri) : (c.value(row) ?? "—")}
                   </td>
                 ))}
               </tr>

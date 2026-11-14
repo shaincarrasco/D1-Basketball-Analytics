@@ -5,6 +5,7 @@ import { getAllGames, getConferences, getMeta, getNews, getPlayers, getTeams } f
 import ArticleList from "@/components/article-list";
 import { playerRows } from "@/lib/players";
 import Today from "./_home/today";
+import InjuryWire from "./_home/injury-wire";
 import Top25 from "./_home/top25";
 import { homeNotes } from "@/lib/notes";
 
@@ -32,6 +33,8 @@ export default function Home() {
   return (
     <div className="space-y-10">
       <Today />
+
+      <InjuryWire />
 
       {notes.length > 0 && (
         <section aria-labelledby="notes-h">
