@@ -30,7 +30,10 @@ export default function FlowChart({ g, now }: { g: Game; now?: number | null }) 
   if (!s) return null;
   const homeS = g.home.short ?? g.home.name, awayS = g.away.short ?? g.away.name;
   const iw = w - PAD_L - PAD_R;
-  const x = (t: number) => PAD_L + (Math.min(t, s.end) / s.end) * iw;
+  // A live game is drawn on the full game clock (to the end of regulation, or of the current OT),
+  // so the line builds left to right as the game goes; a final spans exactly the game.
+  const axisEnd = s.final ? s.end : s.end < REG_SECONDS ? REG_SECONDS : REG_SECONDS + Math.max(1, Math.ceil((s.end - REG_SECONDS) / OT_SECONDS)) * OT_SECONDS;
+  const x = (t: number) => PAD_L + (Math.min(t, axisEnd) / axisEnd) * iw;
   const yW = (p: number) => TOP + (1 - p) * WP_H;
   const maxM = Math.max(5, Math.ceil(Math.max(...s.events.map(e => Math.abs(e.margin)), 1) / 5) * 5);
   const mTop = TOP + WP_H + GAP;
@@ -45,9 +48,9 @@ export default function FlowChart({ g, now }: { g: Game; now?: number | null }) 
 
   // Period boundaries: halftime, end of regulation, each OT.
   const marks: { t: number; label: string }[] = [{ t: HALF_SECONDS, label: "Half" }];
-  if (s.end > REG_SECONDS || s.ots > 0) for (let k = 0; k < Math.max(1, s.ots); k++) marks.push({ t: REG_SECONDS + k * OT_SECONDS, label: k === 0 ? "OT" : `${k + 1}OT` });
+  if (axisEnd > REG_SECONDS || s.ots > 0) for (let k = 0; k < Math.max(1, s.ots, Math.round((axisEnd - REG_SECONDS) / OT_SECONDS)); k++) marks.push({ t: REG_SECONDS + k * OT_SECONDS, label: k === 0 ? "OT" : `${k + 1}OT` });
   const minor: number[] = [];
-  for (let t = 300; t < Math.min(s.end, REG_SECONDS); t += 300) if (t !== HALF_SECONDS) minor.push(t);
+  for (let t = 300; t < Math.min(axisEnd, REG_SECONDS); t += 300) if (t !== HALF_SECONDS) minor.push(t);
 
   // The point under the cursor: keyboard index wins, else hover time, else the latest point.
   const pointAt = (t: number): WPPoint => {
@@ -60,7 +63,7 @@ export default function FlowChart({ g, now }: { g: Game; now?: number | null }) 
 
   const onMove = (e: React.PointerEvent<SVGSVGElement>) => {
     const r = e.currentTarget.getBoundingClientRect();
-    const t = ((e.clientX - r.left - PAD_L) / iw) * s.end;
+    const t = ((e.clientX - r.left - PAD_L) / iw) * axisEnd;
     setCursor(null);
     setHoverT(Math.max(0, Math.min(s.end, t)));
   };
@@ -109,7 +112,7 @@ export default function FlowChart({ g, now }: { g: Game; now?: number | null }) 
 
       <div ref={box} className="relative w-full">
         <svg width={w} height={H} viewBox={`0 0 ${w} ${H}`} className="block touch-pan-y select-none rounded focus-visible:outline-offset-4"
-          role="img" aria-label={summary} tabIndex={0}
+          role="img" aria-label={summary} tabIndex={0} data-events={s.events.length} data-points={s.points.length}
           onPointerMove={onMove} onPointerDown={onMove} onPointerLeave={() => setHoverT(null)} onKeyDown={onKey} onBlur={() => setCursor(null)}>
           <defs>
             <clipPath id={`${uid}-wt`}><rect x={0} y={0} width={w} height={yW(0.5)} /></clipPath>
@@ -149,14 +152,25 @@ export default function FlowChart({ g, now }: { g: Game; now?: number | null }) 
           {big.away && <LeadDot cx={x(big.away.t)} cy={yM(-big.away.size)} label={`${awayS} +${big.away.size}`} tone="def" w={w} />}
 
           {/* period marks */}
-          {marks.map(m => m.t < s.end + 1 && (
+          {marks.map(m => m.t < axisEnd + 1 && (
             <g key={m.label}>
               <line x1={x(m.t)} x2={x(m.t)} y1={TOP} y2={mTop + MG_H} stroke="var(--mute)" strokeDasharray="4 4" strokeOpacity={0.6} />
               <text x={x(m.t)} y={mTop + MG_H + 16} fontSize={11} textAnchor="middle" fill="var(--mute)">{m.label}</text>
             </g>
           ))}
           <text x={PAD_L} y={mTop + MG_H + 16} fontSize={11} fill="var(--dim)">Tip</text>
-          <text x={PAD_L + iw} y={mTop + MG_H + 16} fontSize={11} textAnchor="end" fill="var(--dim)">{s.final ? "Final" : "Now"}</text>
+          <text x={PAD_L + iw} y={mTop + MG_H + 16} fontSize={11} textAnchor="end" fill="var(--dim)">{s.final ? "Final" : "End"}</text>
+          {!s.final && (() => {
+            const last = s.points[s.points.length - 1];
+            const nx = x(s.end);
+            return (
+              <g pointerEvents="none" data-testid="flow-now">
+                <line x1={nx} x2={nx} y1={TOP} y2={mTop + MG_H} stroke="var(--hot)" strokeOpacity={0.55} strokeDasharray="2 3" />
+                <circle cx={nx} cy={yW(last.wp)} r={4} fill={last.wp >= 0.5 ? "var(--off)" : "var(--def)"} stroke="var(--deck)" strokeWidth={2} />
+                {nx < PAD_L + iw - 40 && nx > PAD_L + 30 && marks.every(m => Math.abs(x(m.t) - nx) > 34) && <text x={nx} y={mTop + MG_H + 16} fontSize={11} fontWeight={600} textAnchor="middle" fill="var(--hot)">Now</text>}
+              </g>
+            );
+          })()}
 
           {/* cursor */}
           {active && (
