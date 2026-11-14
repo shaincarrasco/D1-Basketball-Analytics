@@ -8,6 +8,8 @@ import TvBadges from "@/components/tv-badges";
 import { fmt, pctFmt, signed, timeLabel } from "@/lib/format";
 import type { TeamGame } from "@/lib/types";
 import { useLiveRatings } from "@/lib/live-ratings";
+import { useShowProjections } from "@/lib/show-projections";
+import ProjectionToggle from "@/components/projection-toggle";
 
 // The quadrant filter lives in the URL hash (#schedule-q1 … #schedule-q4) so the résumé
 // card and the Quad column can link to it.
@@ -31,6 +33,7 @@ export default function GameLog({ games: published, logos, slug }: { games: Team
     });
   }, [published, live, slug]);
   const router = useRouter();
+  const showProj = useShowProjections();
   const [show, setShow] = useState<"all" | "results" | "upcoming">("all");
   const hash = useSyncExternalStore(subscribe, readHash, () => "");
   const quad = Number(hash.match(/^#schedule-q([1-4])$/)?.[1] ?? 0) || null;
@@ -50,6 +53,7 @@ export default function GameLog({ games: published, logos, slug }: { games: Team
             {s === "all" ? `All ${games.length}` : s === "results" ? `Results ${games.filter(g => g.result).length}` : `Upcoming ${games.filter(upcoming).length}`}
           </button>
         ))}
+        <ProjectionToggle className="ml-auto" />
         {quad && (
           <button type="button" className="chip" aria-pressed="true" onClick={clearQuad} aria-label={`Clear quadrant ${quad} filter`}>
             Quadrant {quad} · {qGames.filter(g => g.result === "W").length}–{qGames.filter(g => g.result === "L").length}
@@ -64,7 +68,7 @@ export default function GameLog({ games: published, logos, slug }: { games: Team
             <tr>
               <th className="l">Date</th><th className="l">Opponent</th><th className="l">Result</th>
               <th title="Pregame win probability (uses only games before that date)">Win prob</th>
-              <th title="Pregame projected score">Projected</th>
+              {showProj && <th title="Pregame projected score">Projected</th>}
               {hasLines && <th title="Pregame spread ESPN showed (DraftKings), this team's side: negative = favored">Line</th>}
               {hasLines && <th title="Result against the spread">ATS</th>}
               <th title="Opponent- and venue-adjusted efficiency margin for the game">Perf</th>
@@ -109,7 +113,7 @@ export default function GameLog({ games: published, logos, slug }: { games: Team
                     ) : g.status === "postponed" || g.status === "cancelled" || g.status === "canceled" ? <span className="text-mute capitalize">{g.status}</span> : g.status === "in_progress" ? <Link href={gameHref(g)} className="flex items-center gap-2 text-hot"><span className="live-dot" />In progress</Link> : <span className="flex items-center gap-2 text-dim">{timeLabel(g.date)}{g.tv?.length ? <TvBadges tv={g.tv} max={2} /> : null}</span>}
                   </td>
                   <td style={{ color: g.wp === null ? undefined : g.wp >= 0.5 ? "var(--ink)" : "var(--mute)" }}>{pctFmt(g.wp)}</td>
-                  <td className="text-mute">{g.projPts !== null ? `${fmt(g.projPts, 0)}–${fmt(g.projOppPts, 0)}` : "—"}</td>
+                  {showProj && <td className="text-mute">{g.projPts !== null ? `${fmt(g.projPts, 0)}–${fmt(g.projOppPts, 0)}` : "—"}</td>}
                   {hasLines && <td className="text-mute">{g.line !== undefined ? lineText(g.line) : "—"}</td>}
                   {hasLines && (
                     <td>{g.ats ? <b className={`font-semibold ${g.ats === "W" ? "text-win" : g.ats === "L" ? "text-loss" : "text-mute"}`} title={g.ats === "W" ? "Covered" : g.ats === "L" ? "Did not cover" : "Push"}>{g.ats}</b> : <span className="text-dim">—</span>}</td>

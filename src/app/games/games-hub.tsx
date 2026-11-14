@@ -13,6 +13,7 @@ import type { Game, GameDay, GameIndex } from "@/lib/types";
 import DateStrip from "./date-strip";
 import GameCard from "./game-card";
 import GameSheet from "./game-sheet";
+import ProjectionToggle from "@/components/projection-toggle";
 import { FILTERS, SORTS, defaultDay, lineInfo, isDay, matchesFilter, sortGames, summarize, winner, type FilterId, type SortId } from "./game-utils";
 
 function setUrl(mutate: (p: URLSearchParams) => void, mode: "push" | "replace") {
@@ -123,6 +124,7 @@ export default function GamesHub() {
                 </button>
               ))}
             </div>
+            <ProjectionToggle className="shrink-0" />
             <div className="ml-auto flex w-full gap-2 sm:w-auto">
               <label className="flex-1 sm:flex-none">
                 <span className="sr-only">Conference</span>
@@ -157,7 +159,7 @@ export default function GamesHub() {
             </ul>
           )}
           <p className="mt-4 text-xs text-dim">
-            Bar = pregame win probability (<span className="text-def">away</span> / <span className="text-off">home</span>). Gray numbers on unplayed games are projected points.
+            Bar = pregame win probability (<span className="text-def">away</span> / <span className="text-off">home</span>). Projected scores are hidden until you turn them on; when on, they show in gray on unplayed games.
             ✓/✗ marks whether the pregame favorite won. Line = the pregame spread ESPN shows; ATS ✓/✗ = whether DHR&apos;s pick against it covered. Small numeral before a team = D1 Hoops national rank.
           </p>
         </>

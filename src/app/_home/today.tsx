@@ -12,6 +12,7 @@ import { dayLabel, etToday, fmt, pctFmt, timeLabel } from "@/lib/format";
 import { useJson } from "@/lib/client-data";
 import { toggleFavorite, useFavorites } from "@/lib/favorites";
 import { useLiveScores, withLive, type LiveGame } from "@/lib/live";
+import { useShowProjections } from "@/lib/show-projections";
 import type { Game, GameDay, GameIndex, GameSide, TeamSummary } from "@/lib/types";
 
 const gameHref = (day: string, id: string) => `/games/?d=${day}&g=${id}`;
@@ -287,7 +288,9 @@ function Featured({ list, day, liveBy }: { list: Feature[]; day: string; liveBy:
 function Scoreboard({ g, day, live, kind, labelled }: { g: Game; day: string; live?: LiveGame; kind: Kind; labelled: boolean }) {
   const st = status(g, live);
   const scheduled = g.status === "scheduled";
-  const score = (k: "home" | "away") => (scheduled ? (g.pred ? Math.round(g.pred[k]) : null) : g[k].score);
+  // Before tip the plate stays dark ("-- : --") unless the reader opted in to projected scores.
+  const showProj = useShowProjections() && scheduled && !!g.pred;
+  const score = (k: "home" | "away") => (scheduled ? (showProj ? Math.round(g.pred![k]) : null) : g[k].score);
   const awayWP = g.pred ? 1 - g.pred.wp : null;
   return (
     <article className="press relative rounded-[22px] border border-line bg-deck p-[18px]">
@@ -304,7 +307,7 @@ function Scoreboard({ g, day, live, kind, labelled }: { g: Game; day: string; li
             <Dots dim className="text-[20px]">:</Dots>
             <Dots glow ghost className="text-[40px]">{String(score("home") ?? "--")}</Dots>
           </div>
-          <span className="text-[11px] font-medium text-mute">{scheduled ? "projected" : g.status === "final" ? "final" : g.status === "in_progress" ? "live" : st.text}</span>
+          <span className="text-[11px] font-medium text-mute">{scheduled ? (showProj ? "projected" : "not started") : g.status === "final" ? "final" : g.status === "in_progress" ? "live" : st.text}</span>
         </div>
         <Side s={g.home} />
       </div>
