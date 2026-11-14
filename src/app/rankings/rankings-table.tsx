@@ -10,13 +10,15 @@ import type { ProfileKey, TeamSummary } from "@/lib/types";
 import { useLiveTeams } from "@/lib/live-ratings";
 import LiveRatingsNote, { RankMove } from "@/components/live-ratings-note";
 import RankList, { type Source } from "./rank-list";
+import { Tag } from "@/components/form/form-badges";
+import { CONSISTENCY_MIN_GAMES, FORM_MIN_GAMES, FORM_WINDOW_DAYS, MOVER_DAYS, type FormRow } from "@/lib/form";
 
-const VIEWS = ["Ratings", "Projections", "Four factors", "Shooting", "Résumé"] as const;
+const VIEWS = ["Ratings", "Form", "Projections", "Four factors", "Shooting", "Résumé"] as const;
 type View = (typeof VIEWS)[number];
-/** URL slug for a view: ratings, projections, fourfactors, shooting, resume. */
+/** URL slug for a view: ratings, form, projections, fourfactors, shooting, resume. */
 const slug = (v: string) => v.toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]/g, "");
 
-export default function RankingsTable({ teams: published, total }: { teams: TeamSummary[]; total: number }) {
+export default function RankingsTable({ teams: published, total, form = {}, formSince = null }: { teams: TeamSummary[]; total: number; form?: Record<string, FormRow>; formSince?: string | null }) {
   const { teams, prevRank, live } = useLiveTeams(published);
   const [view, setView] = useState<View>("Ratings");
   const [conf, setConf] = useState("all");
@@ -101,6 +103,21 @@ export default function RankingsTable({ teams: published, total }: { teams: Team
       { key: "perf", label: "Game form", title: "Adjusted efficiency margin in each game (opponent + venue adjusted)", sortable: false, value: t => t.perf.length ? t.perf.reduce((a, b) => a + b, 0) / t.perf.length : null, render: t => <PerfBars values={t.perf} /> },
       { key: "proj", label: "Proj W–L", title: "Current record plus expected wins in remaining games", value: t => t.projW, render: t => <span>{fmt(t.projW, 1)}–{fmt(t.projL, 1)}</span> },
       { key: "sample", label: "Sample", title: "Rated D-I games; early ratings lean on conference priors", value: t => t.ratedGames, render: t => <span className={t.ratedGames < 4 ? "text-dim" : "text-mute"}>{fmt(t.ratedGames, 0)} g</span> },
+    ],
+    Form: [
+      ...identity,
+      { key: "adjEM", label: "DHR", title: "DHR rating (published): points per 100 possessions better than an average D-I team", value: t => t.adjEM, render: t => <b className="text-[15px]">{signed(t.adjEM, 1)}</b> },
+      { key: "ch7", label: `${MOVER_DAYS}-day`, csvLabel: `DHR change, last ${MOVER_DAYS} days`, title: `Change in DHR rating over the last ${MOVER_DAYS} days${formSince ? ` (since ${formSince})` : ""}; small number = rank then. Blank if the team hasn't played since.`, value: t => form[t.id]?.ch7 ?? null,
+        render: t => { const f = form[t.id]; return f?.ch7 != null ? <span className={f.ch7 >= 0 ? "text-win" : "text-loss"}>{signed(f.ch7, 1)}<span className="sub-rank">{f.rank7}</span></span> : <span className="text-dim" title={`No games in the last ${MOVER_DAYS} days`}>—</span>; } },
+      { key: "chPre", label: "Since pre.", csvLabel: "DHR change since preseason", title: "Change in DHR rating since the preseason rating (built from last season); small number = preseason rank", value: t => form[t.id]?.chPre ?? null,
+        render: t => { const f = form[t.id]; return f?.chPre != null ? <span className={f.chPre >= 0 ? "text-win" : "text-loss"}>{signed(f.chPre, 1)}<span className="sub-rank">{f.rankPre}</span></span> : <span className="text-dim">—</span>; } },
+      { key: "recent", label: `Last ${FORM_WINDOW_DAYS}d`, csvLabel: `Avg game performance, last ${FORM_WINDOW_DAYS} days`, title: `Average opponent- and venue-adjusted margin per 100 possessions in D-I games over the last ${FORM_WINDOW_DAYS} days; small number = games`, value: t => form[t.id]?.recent ?? null,
+        render: t => { const f = form[t.id]; return f?.recent != null ? <span className={f.games < FORM_MIN_GAMES ? "text-dim" : ""}>{signed(f.recent, 1)}<span className="sub-rank">{f.games}g</span></span> : <span className="text-dim">—</span>; } },
+      { key: "gap", label: "Form", csvLabel: `Form: last ${FORM_WINDOW_DAYS} days minus DHR`, title: `Last ${FORM_WINDOW_DAYS} days minus the DHR rating. Hot / Cold only when the gap is bigger than normal noise and there are enough games before and inside the window (see methodology). Grey = not enough games yet.`, value: t => form[t.id]?.gap ?? null,
+        render: t => { const f = form[t.id]; if (f?.gap == null) return <span className="text-dim">—</span>; return <span className="inline-flex items-center justify-end gap-1.5" title={f.why}>{f.badge && <Tag kind={f.badge} why={f.why} />}<span className={f.badge ? "font-semibold" : "text-dim"}>{signed(f.gap, 1)}</span></span>; } },
+      { key: "spread", label: "Consistency", csvLabel: "Game-to-game spread around rating", title: `How far single games land from what the rating expects (± points per 100, lower = steadier). Steady / Volatile after ${CONSISTENCY_MIN_GAMES} games.`, value: t => form[t.id]?.spread ?? null, first: "asc",
+        render: t => { const f = form[t.id]; if (f?.spread == null) return <span className="text-dim">—</span>; return <span className="inline-flex items-center justify-end gap-1.5" title={f.cWhy}>{f.cBadge && <Tag kind={f.cBadge} why={f.cWhy} />}<span className={f.cBadge ? "font-semibold" : "text-dim"}>±{fmt(f.spread, 1)}</span></span>; } },
+      { key: "perf", label: "Game form", title: "Adjusted efficiency margin in each game (opponent + venue adjusted)", sortable: false, value: t => t.perf.length ? t.perf.reduce((a, b) => a + b, 0) / t.perf.length : null, render: t => <PerfBars values={t.perf} /> },
     ],
     Projections: [
       ...identity,
@@ -190,7 +207,9 @@ export default function RankingsTable({ teams: published, total }: { teams: Team
         </div>
       )}
       <div className={view === "Ratings" ? "hidden lg:block" : ""}>
-      {view === "Projections" ? (
+      {view === "Form" ? (
+        <p className="mb-2 text-xs text-mute">How each team is trending. Every number is real results run through the published DHR, adjusted for opponent and venue; nothing here is a projection. Tags: <Tag kind="hot" /> <Tag kind="cold" /> recent form vs rating; <Tag kind="steady" /> <Tag kind="volatile" /> game-to-game swings. Grey = too few games to tag. <Link href="/methodology/#form" className="font-semibold text-bulb-ink hover:underline">How form works</Link></p>
+      ) : view === "Projections" ? (
         <p className="mb-2 text-xs text-mute">10,000 simulations of the rest of the season using current ratings. The bar shows where 80% of simulated win totals land; early-season ranges are wide on purpose.</p>
       ) : (
         <div className="mb-2 flex flex-wrap gap-x-5 gap-y-1 text-xs text-mute">
