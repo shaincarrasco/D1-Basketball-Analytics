@@ -1,14 +1,15 @@
 // Colour themes. Every colour in the app comes from CSS variables set per palette in
 // globals.css (html[data-palette="…"]). This file lists the palettes and accent swatches
 // the picker offers, and applies the viewer's choice. To add a palette: add a block to
-// globals.css and an entry here. To change the default look: edit the "arena" block.
+// globals.css and an entry here. To change the default look: edit DEFAULT_PALETTE here and
+// the :root block in globals.css (and the defaults in app/layout.tsx).
 
 export type Mode = "dark" | "light";
 export type Palette = { id: string; name: string; note: string; mode: Mode; bg: string; deck: string; ink: string; accent: string; themeColor: string };
 
 export const PALETTES: Palette[] = [
+  { id: "blacktop", name: "Blacktop", note: "Night court, electric blue", mode: "dark", bg: "#0E0F12", deck: "#191B20", ink: "#F2F3F5", accent: "#3DA9FF", themeColor: "#0E0F12" },
   { id: "arena", name: "Arena", note: "Scoreboard navy, amber bulbs", mode: "dark", bg: "#0F1B2E", deck: "#16263D", ink: "#EEF2F7", accent: "#FFB31F", themeColor: "#0F1B2E" },
-  { id: "blacktop", name: "Blacktop", note: "Night court, neon lights", mode: "dark", bg: "#0E0F12", deck: "#191B20", ink: "#F2F3F5", accent: "#3DF59A", themeColor: "#0E0F12" },
   { id: "hardwood", name: "Hardwood", note: "Maple floor, painted lines", mode: "light", bg: "#F3EADB", deck: "#FCF8F1", ink: "#221A12", accent: "#C2560E", themeColor: "#F3EADB" },
   { id: "daygame", name: "Day game", note: "Bright gym, clean whites", mode: "light", bg: "#F5F6F9", deck: "#FFFFFF", ink: "#101828", accent: "#D97F00", themeColor: "#F5F6F9" },
 ];
@@ -25,8 +26,8 @@ export const ACCENTS: { name: string; hex: string | null }[] = [
   { name: "Red", hex: "#FF4B4B" },
 ];
 
-export const DEFAULT_PALETTE = "arena";
-export const AUTO = "auto"; // follow the device: Arena when dark, Day game when light
+export const DEFAULT_PALETTE = "blacktop";
+export const AUTO = "auto"; // follow the device: Blacktop when dark, Day game when light
 const K_PALETTE = "d1h-palette", K_ACCENT = "d1h-accent", K_LEGACY = "d1h-theme";
 const HEX = /^#[0-9a-f]{6}$/i;
 
@@ -40,7 +41,7 @@ export function hexToChannels(hex: string) {
 export function readChoice(): ThemeChoice {
   try {
     let palette = localStorage.getItem(K_PALETTE);
-    if (!palette) { const legacy = localStorage.getItem(K_LEGACY); palette = legacy === "light" ? "daygame" : legacy === "dark" ? "arena" : AUTO; }
+    if (!palette) { const legacy = localStorage.getItem(K_LEGACY); palette = legacy === "light" ? "daygame" : legacy === "dark" ? DEFAULT_PALETTE : AUTO; }
     const accent = localStorage.getItem(K_ACCENT);
     return { palette: palette === AUTO || PALETTES.some(p => p.id === palette) ? palette : AUTO, accent: accent && HEX.test(accent) ? accent : null };
   } catch { return { palette: AUTO, accent: null }; }
@@ -74,4 +75,4 @@ export function saveChoice(c: ThemeChoice) {
 }
 
 /** Inline script for <head>: applies the saved theme before first paint (no flash). */
-export const THEME_SCRIPT = `(function(){try{var P=${JSON.stringify(PALETTES.map(p => [p.id, p.mode, p.themeColor]))};var s=localStorage,id=s.getItem("${K_PALETTE}");if(!id){var l=s.getItem("${K_LEGACY}");id=l==="light"?"daygame":l==="dark"?"arena":"auto"}if(id==="auto")id=matchMedia("(prefers-color-scheme: light)").matches?"daygame":"${DEFAULT_PALETTE}";var p=P.filter(function(x){return x[0]===id})[0]||P[0];var e=document.documentElement;e.dataset.palette=p[0];e.dataset.theme=p[1];var a=s.getItem("${K_ACCENT}");if(a&&/^#[0-9a-f]{6}$/i.test(a)){var n=parseInt(a.slice(1),16);e.style.setProperty("--bulb-rgb",(n>>16&255)+" "+(n>>8&255)+" "+(n&255))}var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute("content",p[2])}catch(x){document.documentElement.dataset.palette="${DEFAULT_PALETTE}";document.documentElement.dataset.theme="dark"}})()`;
+export const THEME_SCRIPT = `(function(){try{var P=${JSON.stringify(PALETTES.map(p => [p.id, p.mode, p.themeColor]))};var s=localStorage,id=s.getItem("${K_PALETTE}");if(!id){var l=s.getItem("${K_LEGACY}");id=l==="light"?"daygame":l==="dark"?"${DEFAULT_PALETTE}":"auto"}if(id==="auto")id=matchMedia("(prefers-color-scheme: light)").matches?"daygame":"${DEFAULT_PALETTE}";var p=P.filter(function(x){return x[0]===id})[0]||P[0];var e=document.documentElement;e.dataset.palette=p[0];e.dataset.theme=p[1];var a=s.getItem("${K_ACCENT}");if(a&&/^#[0-9a-f]{6}$/i.test(a)){var n=parseInt(a.slice(1),16);e.style.setProperty("--bulb-rgb",(n>>16&255)+" "+(n>>8&255)+" "+(n&255))}var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute("content",p[2])}catch(x){document.documentElement.dataset.palette="${DEFAULT_PALETTE}";document.documentElement.dataset.theme="dark"}})()`;

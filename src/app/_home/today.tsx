@@ -135,10 +135,8 @@ function DateStrip({ day, today }: { day: string; today: boolean }) {
 function FollowedCircles({ games, day }: { games: Game[]; day: string | null }) {
   const fav = useFavorites();
   const teams = useJson<TeamSummary[]>("teams.json");
-  const list = useMemo(() => {
-    const bySlug = new Map((teams.data ?? []).map(t => [t.slug, t]));
-    return fav.teams.map(s => bySlug.get(s)).filter((t): t is TeamSummary => !!t);
-  }, [teams.data, fav.teams]);
+  const teamBySlug = useMemo(() => new Map((teams.data ?? []).map(t => [t.slug, t])), [teams.data]);
+  const list = useMemo(() => fav.teams.map(s => teamBySlug.get(s)).filter((t): t is TeamSummary => !!t), [teamBySlug, fav.teams]);
   const bySlug = useMemo(() => {
     const m = new Map<string, Game>();
     for (const g of games) { if (g.home.slug) m.set(g.home.slug, g); if (g.away.slug) m.set(g.away.slug, g); }
@@ -179,16 +177,21 @@ function FollowedCircles({ games, day }: { games: Game[]; day: string | null }) 
         if (g && g.status === "in_progress") label = <span className="text-hot">{g.away.score}-{g.home.score}</span>;
         else if (g && g.status === "final") { const mine = g.home.slug === t.slug ? g.home : g.away, opp = mine === g.home ? g.away : g.home; label = <span>{(mine.score ?? 0) > (opp.score ?? 0) ? "W" : "L"} {mine.score}-{opp.score}</span>; }
         else if (g && g.status === "scheduled") label = <span className="text-bulb-ink">{timeLabel(g.date)}</span>;
-        else if (t.next) label = <span>{dayLabel(etDayOf(t.next.date), { weekday: "short" })} {t.next.venue === "A" ? "at" : "vs"} {t.next.opp}</span>;
+        else if (t.next) {
+          // Short opponent code ("MARQ") so the label fits under the circle.
+          const opp = (t.next.oppSlug && teamBySlug.get(t.next.oppSlug)?.short) || t.next.opp.split(" ")[0];
+          label = <span>{dayLabel(etDayOf(t.next.date), { weekday: "short" })} {t.next.venue === "A" ? "at" : "vs"} {opp}</span>;
+        }
         else label = <span>Off</span>;
         return (
           <li key={t.id} className="w-[64px] shrink-0">
-            <Link href={g && day ? gameHref(day, g.id) : `/teams/${t.slug}/`} className="group flex flex-col items-center gap-1.5 text-center">
+            <Link href={g && day ? gameHref(day, g.id) : t.next ? gameHref(etDayOf(t.next.date), t.next.id) : `/teams/${t.slug}/`}
+              aria-label={`${t.name}: ${g ? "today's game" : t.next ? `next game, ${t.next.venue === "A" ? "at" : "vs"} ${t.next.opp}` : "team page"}`}
+              className="group flex flex-col items-center gap-1.5 text-center">
               <span className="grid h-[60px] w-[60px] place-items-center rounded-full bg-deck transition-transform group-active:scale-90" style={{ boxShadow: `inset 0 0 0 ${playing ? 2.5 : 2}px ${playing ? "var(--bulb)" : teamTint(t.color)}` }}>
                 <TeamLogo src={t.logo} name={t.name} size={36} />
               </span>
               <span className="w-full truncate text-[11.5px] font-semibold text-mute">{label}</span>
-              <span className="sr-only">{t.name}</span>
             </Link>
           </li>
         );

@@ -105,7 +105,7 @@ export default function ThemePicker() {
             </div>
             <button type="button" onClick={() => update({ palette: AUTO })} aria-pressed={choice.palette === AUTO}
               className={`mt-2 flex w-full items-center justify-between rounded-2xl border-2 px-3 py-2.5 text-left text-[14px] font-semibold ${choice.palette === AUTO ? "border-bulb" : "border-line hover:border-line2"}`}>
-              <span>Match my device <span className="font-normal text-mute">(Arena at night, Day game by day)</span></span>
+              <span>Match my device <span className="font-normal text-mute">(Blacktop at night, Day game by day)</span></span>
               {choice.palette === AUTO && <Check size={16} aria-hidden className="text-bulb-ink" />}
             </button>
 

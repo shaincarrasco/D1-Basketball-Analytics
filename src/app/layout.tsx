@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     apple: [{ url: `${BASE}/icons/apple-touch-icon.png`, sizes: "180x180" }],
   },
 };
-export const viewport: Viewport = { themeColor: "#0F1B2E", width: "device-width", initialScale: 1, viewportFit: "cover" };
+export const viewport: Viewport = { themeColor: "#0E0F12", width: "device-width", initialScale: 1, viewportFit: "cover" };
 
 // THEME_SCRIPT runs before first paint: saved palette + accent, else the device setting.
 
@@ -36,7 +36,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   const meta = getMeta();
   const updated = new Date(meta.updated.teams ?? meta.updated.built).toLocaleString("en-US", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit", timeZone: "America/New_York", timeZoneName: "short" });
   return (
-    <html lang="en" data-theme="dark" data-palette="arena" suppressHydrationWarning>
+    <html lang="en" data-theme="dark" data-palette="blacktop" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
       </head>

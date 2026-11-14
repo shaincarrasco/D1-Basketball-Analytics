@@ -9,7 +9,7 @@
 ## Colours are themeable
 - Every colour is an RGB channel variable set per palette in `src/app/globals.css` (`html[data-palette="arena" | "blacktop" | "hardwood" | "daygame"]`). Never hard-code hex in components; use the Tailwind names (`bg-deck`, `text-ink`, `bg-bulb`, `text-bulb-ink` for accent text) or `var(--…)`.
 - `src/lib/theme.ts` lists the palettes and accent swatches the picker (`components/theme-picker.tsx`) offers. Viewers pick a palette (or "Match my device") and any accent colour, including their followed teams' colours; it is saved in localStorage and applied before first paint by `THEME_SCRIPT`.
-- To change the default look, edit the `arena` block. To add a palette, add a CSS block and an entry in `PALETTES` (its `mode` sets `data-theme` for light/dark logos).
+- The default is **Blacktop** (near-black, electric-blue accent): `DEFAULT_PALETTE` in `lib/theme.ts`, the `:root` block in `globals.css`, and the `data-palette`/`themeColor` defaults in `app/layout.tsx`. To add a palette, add a CSS block and an entry in `PALETTES` (its `mode` sets `data-theme` for light/dark logos).
 
 ## Building blocks (src/components, src/lib)
 - `PageHeader` – page title + one-paragraph intro + optional actions.
