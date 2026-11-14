@@ -7,6 +7,8 @@ import type { BacktestBlock } from "@/lib/types";
 import { ZONES } from "@/lib/shots";
 import { WP_EPS, WP_SIGMA } from "@/lib/win-prob";
 import CalibrationChart from "./calibration-chart";
+import SkillsMethod from "@/components/skills/skills-method";
+import FormMethodology, { FORM_GLOSSARY, FORM_TOC } from "@/components/form/form-methodology";
 
 export const metadata: Metadata = { title: "Methodology", description: "How the D1 Hoops Power Rating (DHR) is built, how its predictions work, how accurate they have been, and what every metric on the site means." };
 
@@ -26,8 +28,10 @@ const TOC = [
   { id: "win-probability", label: "In-game win probability" },
   { id: "sims", label: "Season simulations" },
   { id: "dpr", label: "Player rating (DPR)" },
+  { id: "skills", label: "Skill projections" },
   { id: "shot-zones", label: "Shot zones" },
   { id: "injuries", label: "Injuries and availability" },
+  ...FORM_TOC,
   { id: "glossary", label: "Glossary" },
   { id: "sources", label: "Data sources and limits" },
 ];
@@ -110,6 +114,7 @@ const GLOSSARY: { group: string; terms: Term[] }[] = [
       { term: "Watchability", def: "0–100 score for upcoming games: 55% quality (the geometric mean of both teams' AdjEM percentiles) and 45% competitiveness (how close the win probability is to 50–50)." },
       { term: "Upset flag", def: "Marks a final where the winner's pregame win probability was below 35%." },
       { term: "Projected W–L", def: "Current record plus the sum of pregame win probabilities in every remaining scheduled game (a game without a projection counts as 50%). Projected conference W–L does the same for league games only. Fractions are expected wins, not a prediction of a specific record." },
+      { term: "Projected, Proj, pregame", def: "Words this site uses for the model's numbers, never for results. Projected (Proj) = what the model expects before a game, season or record plays out. Pregame = the model's call frozen at tip-off, shown next to the real result so you can judge it. Projected scores stay hidden unless you turn them on. A bare small number beside a team is its DHR rank, not the AP poll." },
       { term: "Win probability", def: "Chance the team wins, from the projected margin and its uncertainty (see Predictions). Pregame probabilities on game logs are walk-forward: they use only games completed before that date." },
     ],
   },
@@ -148,7 +153,7 @@ export default function MethodologyPage() {
         <div className="max-w-[54rem] space-y-10">
           <Section id="overview" title="Overview">
             <p>
-              DHR is an original, opponent-adjusted efficiency rating built from every completed {meta.seasonLabel} game involving a Division I team.
+              DHR (the D1 Hoops Power Rating) is an original, opponent-adjusted efficiency rating built from every completed {meta.seasonLabel} game involving a Division I team.
               It asks one question of each game: <b>given who was playing and where, how many points per 100 possessions did each side score, compared with what we would expect?</b>{" "}
               Solving that for every game at once gives each team an offense rating, a defense rating and a tempo rating.
             </p>
@@ -399,6 +404,10 @@ minimise  Σ w · (y − fit)²  +  λ · Σ (rating − prior)²        λ = ${
             {meta.dpr && <p className="text-sm">This build: {meta.dpr.players.toLocaleString("en-US")} players rated from {meta.dpr.rows.toLocaleString("en-US")} lineup rows. {meta.dpr.method}. See the <Link href="/players/" className="underline hover:text-ink">players page</Link>.</p>}
           </Section>
 
+          <Section id="skills" title="Skill projections">
+            <SkillsMethod />
+          </Section>
+
           <Section id="shot-zones" title="Shot zones">
             <p>
               Shot charts use ESPN&apos;s shot coordinates: x runs 0–50 feet across the court and y is feet out from the basket (the rim at x 25, y 0). Every field-goal attempt falls in exactly one zone,
@@ -454,8 +463,10 @@ minimise  Σ w · (y − fit)²  +  λ · Σ (rating − prior)²        λ = ${
             <p className="mt-3"><b>Official reports.</b> The Big Ten, SEC, ACC, Big 12 and several other conferences publish availability reports before conference games, and the NCAA does for the tournament. We link to them rather than copy them.</p>
           </Section>
 
+          <FormMethodology />
+
           <Section id="glossary" title="Glossary">
-            {GLOSSARY.map(g => (
+            {[...GLOSSARY, FORM_GLOSSARY].map(g => (
               <div key={g.group}>
                 <h3 className="mb-2 mt-2 font-semibold text-ink">{g.group}</h3>
                 <dl className="divide-y divide-line rounded-xl border border-line">

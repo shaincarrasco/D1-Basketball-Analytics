@@ -40,7 +40,7 @@ export default function InjuriesPage() {
     ["Out for season", rows.filter(r => r.state === "season").length],
     ["Questionable / day-to-day", rows.filter(r => r.state === "questionable" || r.state === "dtd").length],
     ["Changes in 24h", wire.filter(e => Date.parse(checked) - Date.parse(e.t) <= 864e5).length],
-    ["Top 25 teams affected", new Set(rows.filter(r => (r.rank ?? 999) <= 25).map(r => r.slug)).size],
+    ["DHR top-25 teams affected", new Set(rows.filter(r => (r.rank ?? 999) <= 25).map(r => r.slug)).size],
   ];
 
   // Biggest absences: reported or confirmed absences lead (we know why he's out), then the most costly
@@ -73,7 +73,7 @@ export default function InjuriesPage() {
           <ul className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
             {biggest.map(r => {
               const m = meta[r.slug], eta = etaText(r), i = r.impact;
-              const stat = [i.mpg != null ? `${i.mpg.toFixed(1)} mpg` : null, i.ppg != null ? `${i.ppg.toFixed(1)} ppg` : null, i.netLoss && i.netLoss >= 0.05 ? `est. ${lossText(i.netLoss)} pts per 100` : null].filter(Boolean).join(" · ");
+              const stat = [i.mpg != null ? `${i.mpg.toFixed(1)} mpg` : null, i.ppg != null ? `${i.ppg.toFixed(1)} ppg` : null, i.netLoss && i.netLoss >= 0.05 ? `est. ${lossText(i.netLoss)} pts/100` : null].filter(Boolean).join(" · ");
               return (
                 <li key={r.key} className="deck relative overflow-hidden p-4 pl-5">
                   <span className="absolute inset-y-0 left-0 w-1.5" style={{ background: m?.color ?? "var(--line2)" }} aria-hidden />
@@ -81,7 +81,7 @@ export default function InjuriesPage() {
                     <TeamLogo src={m?.logo ?? null} name={r.team} size={34} />
                     <div className="min-w-0 flex-1">
                       <Link href={playerHref(r)} className="link font-display text-[24px] font-black leading-none">{r.name}</Link>
-                      <p className="mt-1 text-[13px] text-mute"><Link href={`/teams/${r.slug}/`} className="link">{r.team}</Link>{r.rank ? <> · <span className="dots text-[11px]">#{r.rank}</span></> : null}{m?.next ? ` · next ${m.next}` : ""}</p>
+                      <p className="mt-1 text-[13px] text-mute"><Link href={`/teams/${r.slug}/`} className="link">{r.team}</Link>{r.rank ? <> · <span className="dots text-[11px]" title={`DHR rank ${r.rank}`}>#{r.rank}</span></> : null}{m?.next ? ` · next ${m.next}` : ""}</p>
                     </div>
                   </div>
                   <div className="mt-3 flex flex-wrap items-center gap-2">

@@ -3,7 +3,7 @@
 // followed-team accent colours. Everything visual comes from @sports/ui.
 import Link from "next/link";
 import { useMemo } from "react";
-import { BarChart3, BookOpen, CalendarDays, HeartPulse, Layers, LayoutGrid, Newspaper, ScatterChart, Star, Swords, Users } from "lucide-react";
+import { ArrowLeftRight, BarChart3, BookOpen, CalendarDays, HeartPulse, History, Layers, LayoutGrid, Newspaper, ScatterChart, Star, Swords, Trophy, Users, UsersRound } from "lucide-react";
 import SiteShell, { type ShellConfig } from "@sports/ui/site-shell";
 import ThemePicker, { type AccentSwatch } from "@sports/ui/theme-picker";
 import { useJson } from "@sports/ui/client-data";
@@ -16,13 +16,17 @@ const NAV: ShellConfig["nav"] = [
   { href: "/", label: "Today", icon: LayoutGrid },
   { href: "/rankings/", label: "Rankings", icon: BarChart3, match: ["/teams"] },
   { href: "/games/", label: "Games", icon: CalendarDays },
+  { href: "/bracket/", label: "Bracket", icon: Trophy },
   { href: "/injuries/", label: "Injuries", icon: HeartPulse },
-  { href: "/news/", label: "News", icon: Newspaper },
+  { href: "/news/", label: "News", icon: Newspaper, more: true },
   { href: "/players/", label: "Players", icon: Users, match: ["/player/"] },
   { href: "/charts/", label: "Charts", icon: ScatterChart },
   { href: "/matchup/", label: "Matchup", icon: Swords },
-  { href: "/conferences/", label: "Conferences", icon: Layers },
-  { href: "/methodology/", label: "Method", icon: BookOpen },
+  { href: "/conferences/", label: "Conferences", icon: Layers, more: true },
+  { href: "/history/", label: "Past seasons", icon: History, more: true },
+  { href: "/transfers/", label: "Transfer portal", icon: ArrowLeftRight, more: true },
+  { href: "/lineups/", label: "Lineup lab", icon: UsersRound, more: true },
+  { href: "/methodology/", label: "Method", icon: BookOpen, more: true },
   { href: "/following/", label: "Following", icon: Star, compact: true, title: "Teams and players you follow" },
 ];
 
@@ -34,8 +38,8 @@ const CONFIG: ShellConfig = {
     mark: <svg viewBox="0 0 24 24" className="h-6 w-6" aria-hidden><circle cx="12" cy="12" r="11" fill="var(--bulb)" /><path d="M1 12h22M12 1v22M4.2 4.4c3.2 2.6 3.2 12.6 0 15.2M19.8 4.4c-3.2 2.6-3.2 12.6 0 15.2" fill="none" stroke="var(--bg)" strokeWidth="1.3" /></svg>,
   },
   nav: NAV,
-  // Phone tab bar, Apple Sports style: the five things people open most.
-  mobile: [NAV[0], NAV[1], NAV[2], { ...nav("/following/"), label: "My teams" }, nav("/players/")],
+  // Phone tab bar, Apple Sports style: the six things people open most.
+  mobile: [NAV[0], NAV[1], NAV[2], nav("/bracket/"), { ...nav("/following/"), label: "My teams" }, nav("/players/")],
   footer: <>Box scores and schedules from College Basketball Data. Ratings and projections are D1 Hoops originals — see <Link className="underline hover:text-ink" href="/methodology/">methodology</Link>.</>,
 };
 

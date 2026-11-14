@@ -11,12 +11,13 @@ import { useJson } from "@sports/ui/client-data";
 import { lossText } from "@/lib/injuries";
 import { useInjuries } from "@/lib/injury-hooks";
 import WhosOut from "@/components/whos-out";
-import { dayLabel, fmt, heat, ordinal, pctFmt, signed, timeLabel } from "@sports/ui/format";
+import { dayLabel, DHR_RANK_TITLE, fmt, heat, ordinal, pctFmt, signed, timeLabel } from "@sports/ui/format";
 import { project } from "@/lib/predict";
 import { playerRows } from "@/lib/players";
 import type { InjuryFile, Meta, Player, PlayerTable, ProfileKey, TeamSummary } from "@/lib/types";
 import TeamCombobox from "./team-combobox";
 import MarginChart from "./margin-chart";
+import MatchupBreakdown from "../games/breakdown/matchup-breakdown";
 
 type Site = "a" | "n" | "b";
 const Z80 = 1.2816;
@@ -78,6 +79,8 @@ export default function MatchupClient() {
       )}
 
       {proj && <Availability a={a} b={b} proj={proj} file={injuries.data} />}
+
+      {proj && <MatchupBreakdown meta={meta.data} a={a} b={b} site={site} injuries={injuries.data} aColor={A_COLOR} bColor={B_COLOR} />}
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
         <TaleOfTheTape a={a} b={b} total={total} />
@@ -143,7 +146,7 @@ function Projection({ a, b, proj, site, homeEdge }: { a: TeamSummary; b: TeamSum
           <span className="truncate text-right" style={{ color: B_COLOR }}><span className="font-display text-2xl font-extrabold tnum">{pctFmt(1 - pA)}</span> <Link href={`/teams/${b.slug}/`} className="hover:underline">{b.name}</Link></span>
         </div>
         <WinProb awayName={a.name} homeName={b.name} homeWP={1 - pA} compact />
-        <p className="mt-1.5 text-center text-xs text-mute">Win probability</p>
+        <p className="mt-1.5 text-center text-xs text-mute">DHR win probability</p>
       </div>
 
       <dl className="mt-6 grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-line bg-line md:grid-cols-4">
@@ -193,7 +196,7 @@ function TeamId({ t, color, align }: { t: TeamSummary; color: string; align: "l"
       <span className="min-w-0">
         <Link href={`/teams/${t.slug}/`} className="link flex min-w-0 items-center gap-2 text-lg font-semibold leading-tight tracking-[-0.01em] after:absolute after:inset-0 after:content-[''] sm:text-2xl" style={align === "r" ? { flexDirection: "row-reverse" } : undefined}>
           <i className="h-2.5 w-2.5 shrink-0 rounded-sm" style={{ background: color }} aria-hidden />
-          {t.rank ? <span className="text-base font-medium text-mute tnum">{t.rank}</span> : null}
+          {t.rank ? <span className="text-base font-medium text-mute tnum" title={DHR_RANK_TITLE}>{t.rank}</span> : null}
           <span className="group-hover:underline">{t.name}</span>
         </Link>
         <span className="mt-1 block truncate text-xs text-mute">
@@ -216,7 +219,7 @@ function Stat({ label, value, sub, small }: { label: string; value: string; sub?
 
 function RankChip({ rank, total }: { rank: number | null | undefined; total: number }) {
   if (!rank) return null;
-  return <span className="ml-1.5 inline-block min-w-[2.9rem] rounded px-1 text-center text-[11px] text-mute tnum" style={{ background: heat(rank, total) }}>{ordinal(rank)}</span>;
+  return <span className="ml-1.5 inline-block min-w-[2.9rem] rounded px-1 text-center text-[11px] text-mute tnum" style={{ background: heat(rank, total) }} title={`National rank, of ${total}`}>{ordinal(rank)}</span>;
 }
 
 function TaleOfTheTape({ a, b, total }: { a: TeamSummary; b: TeamSummary; total: number }) {

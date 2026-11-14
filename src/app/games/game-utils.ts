@@ -4,11 +4,11 @@ import type { LiveGame } from "@/lib/live";
 import type { Game, GameIndex, GameSide } from "@/lib/types";
 
 export const FILTERS = [
-  { id: "all", label: "All" },
-  { id: "top100", label: "Top 100 matchups" },
-  { id: "conf", label: "Conference" },
-  { id: "close", label: "Close" },
-  { id: "upsets", label: "Upsets" },
+  { id: "all", label: "All", title: undefined },
+  { id: "top100", label: "Top 100 matchups", title: "Both teams in the DHR top 100" },
+  { id: "conf", label: "Conference", title: "Conference games" },
+  { id: "close", label: "Projected close", title: "DHR projected the margin within 5 points before tip-off (finals included, whatever the final score)" },
+  { id: "upsets", label: "Upsets", title: "Finals won by a team with under a 35% pregame chance" },
 ] as const;
 export type FilterId = (typeof FILTERS)[number]["id"];
 

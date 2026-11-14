@@ -2,12 +2,15 @@
 // Game detail sheet: modal on desktop, bottom sheet on phones.
 // Escape / backdrop / close button dismiss it; focus is trapped inside and restored on close.
 import Link from "next/link";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { X } from "lucide-react";
 import TeamLogo from "@sports/ui/team-logo";
 import WinProb from "@/components/win-prob";
-import { dayLabel, fmt, pctFmt, timeLabel } from "@sports/ui/format";
-import type { LiveGame } from "@/lib/live";
+import { dayLabel, fmt, pctFmt, timeLabel, DHR_RANK_TITLE } from "@sports/ui/format";
+import { withLive, type LiveGame } from "@/lib/live";
+import { LIVE_GAME_POLL_MS, progressOf, summaryAsLive, useLiveGame, type LiveGameMode, type LiveGameState, type LiveSummary } from "@/lib/live-game";
+import PlayerBox from "./live/player-box";
+import PlayByPlay from "./live/play-by-play";
 import type { BoxLine, Game, GameSide } from "@/lib/types";
 import { winProb, remainingAt, clockLabel } from "@/lib/win-prob";
 import FlowChart from "./flow-chart";
@@ -15,6 +18,7 @@ import { WatchBadge } from "./game-card";
 import TvBadges from "@/components/tv-badges";
 import ArticleList from "@/components/article-list";
 import PickEm from "./pick-em";
+import GameBreakdown from "./breakdown/game-breakdown";
 import WhosOut from "@/components/whos-out";
 import { useInjuries } from "@/lib/injury-hooks";
 import { setShowProjections, useShowProjections } from "@/lib/show-projections";
@@ -23,7 +27,7 @@ import { actualMarginText, favoriteWon, isFinal, isLive, lineInfo, marginText, m
 const ROW_TH = "l !static !border-line !bg-transparent !text-[13.5px] !font-normal !text-mute";
 const FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
-export default function GameSheet({ g, live, onClose }: { g: Game; live?: LiveGame; onClose: () => void }) {
+export default function GameSheet({ g: gIn, live: liveIn, onClose }: { g: Game; live?: LiveGame; onClose: () => void }) {
   const panel = useRef<HTMLDivElement>(null);
   const closeBtn = useRef<HTMLButtonElement>(null);
   const onCloseRef = useRef(onClose);
@@ -53,6 +57,19 @@ export default function GameSheet({ g, live, onClose }: { g: Game; live?: LiveGa
     };
   }, []);
 
+  // Live detail from ESPN's game summary: polled while the game is on, fetched once for a game
+  // that went final today (before the nightly refresh adds its flow), or on request for older finals.
+  const espnId = liveIn?.espnId ?? gIn.espnId ?? null;
+  const [wantDetail, setWantDetail] = useState(false);
+  const inProgress = liveIn ? liveIn.state === "in" : isLive(gIn);
+  const mode: LiveGameMode = !espnId ? null : inProgress ? "poll"
+    : isFinal(gIn) && (wantDetail || (liveIn?.state === "post" && !gIn.flow?.length)) ? "once" : null;
+  const detail = useLiveGame(espnId, mode, { homeTeamId: liveIn?.homeTeamId, awayTeamId: liveIn?.awayTeamId, home: gIn.home.score, away: gIn.away.score });
+  // Whichever feed is further along (summary every 15 s, scoreboard every 30 s) drives the header.
+  const summaryLive = useMemo(() => (detail.data && detail.data.state !== "pre" ? summaryAsLive(detail.data) : null), [detail.data]);
+  const live = summaryLive && progressOf(summaryLive) >= progressOf(liveIn) ? summaryLive : liveIn;
+  const g = useMemo(() => (live && live !== liveIn ? withLive(gIn, live) : gIn), [gIn, live, liveIn]);
+
   const final = isFinal(g), isLiveNow = isLive(g);
   const played = final || isLiveNow;
   const titleId = `game-${g.id}-title`;
@@ -68,7 +85,7 @@ export default function GameSheet({ g, live, onClose }: { g: Game; live?: LiveGa
         <div className="flex shrink-0 items-center gap-2 border-b border-line px-4 py-3 sm:px-6">
           {isLiveNow && <span className="live-dot" aria-hidden />}
           <span className={`text-sm font-semibold ${isLiveNow ? "text-hot" : "text-ink"}`}>{statusLabel(g, live)}</span>
-          {live?.state === "in" && <span className="rounded bg-[rgb(var(--hot-rgb)/0.14)] px-1.5 py-0.5 text-[11px] font-semibold text-hot" title="Score and clock from ESPN's live scoreboard, refreshed every 30 seconds">Live</span>}
+          {live?.state === "in" && <span className="rounded bg-[rgb(var(--hot-rgb)/0.14)] px-1.5 py-0.5 text-[11px] font-semibold text-hot" title="Score and clock from ESPN, refreshed every 15 to 30 seconds while this is open">Live</span>}
           <span className="truncate text-sm text-mute">· {dayLabel(etDay(g.date), { weekday: "short", month: "short", day: "numeric" })}{final || isLiveNow ? "" : timeLabel(g.date) === "TBA" ? " · tip time TBA" : ""}</span>
           <span className="ml-auto"><WatchBadge value={g.watch} /></span>
           <button ref={closeBtn} onClick={onClose} className="btn ml-1 !p-2" aria-label="Close game details"><X size={18} aria-hidden /></button>
@@ -88,10 +105,13 @@ export default function GameSheet({ g, live, onClose }: { g: Game; live?: LiveGa
           </div>
 
           {played && <LineScore g={g} />}
-          {played && <GameFlow g={g} live={live} />}
+          {played && mode === "poll" && <LiveStatus d={detail} />}
+          {played && <GameFlow g={g} live={live} summary={detail.data} />}
+          {played && <LiveDetail g={g} d={detail} mode={mode} espnId={espnId} onLoad={() => setWantDetail(true)} />}
           {!final && <Availability g={g} />}
           <Projection g={g} />
-          <BoxCompare g={g} />
+          <GameBreakdown g={g} />
+          <BoxCompare g={g} summary={detail.data} />
 
           <div className="mt-6 flex flex-wrap gap-2">
             {[g.away, g.home].map(s => {
@@ -118,7 +138,7 @@ function SideBlock({ side, align, tone }: { side: GameSide; align: "l" | "r"; to
       <div className="min-w-0">
         <span className="flex items-center justify-center gap-1.5 sm:justify-start" style={align === "r" ? { justifyContent: "flex-end" } : undefined}>
           <i className="inline-block h-2 w-2 shrink-0 rounded-full" style={{ background: `var(--${tone})` }} aria-hidden />
-          {side.rank && <span className="font-display text-sm font-bold text-dim">{side.rank}</span>}
+          {side.rank && <span className="font-display text-sm font-bold text-dim" title={DHR_RANK_TITLE} aria-label={`DHR rank ${side.rank}`}>{side.rank}</span>}
         </span>
         {href ? <Link href={href} className="link">{name}</Link> : name}
         <span className="block text-[12px] text-dim">{side.id ? side.record ?? "—" : "Non-D-I"}{side.conf ? ` · ${side.conf}` : ""}</span>
@@ -173,16 +193,19 @@ function LineScore({ g }: { g: Game }) {
   );
 }
 
-function GameFlow({ g, live }: { g: Game; live?: LiveGame }) {
+function GameFlow({ g, live, summary }: { g: Game; live?: LiveGame; summary: LiveSummary | null }) {
   const inGame = live?.state === "in" && live.elapsed != null && g.home.score != null && g.away.score != null;
+  // ESPN's live plays when they cover at least as much of the game as the published flow.
+  const liveFlow = summary && summary.state !== "pre" && summary.flow.length >= 2 && summary.flow.length >= (g.flow?.length ?? 0) ? summary.flow : null;
   // Extend a stale in-progress flow to the live clock and score.
   const flowGame = useMemo(() => {
+    if (liveFlow) return { ...g, flow: liveFlow };
     if (!inGame || !g.flow?.length) return g;
     const last = g.flow[g.flow.length - 1];
     const now: [number, number, number] = [Math.max(last[0], live!.elapsed!), g.home.score!, g.away.score!];
     return { ...g, flow: [...g.flow, now] };
-  }, [g, inGame, live]);
-  const hasFlow = (g.flow?.length ?? 0) >= 2;
+  }, [g, inGame, live, liveFlow]);
+  const hasFlow = (flowGame.flow?.length ?? 0) >= 2;
   const homeS = g.home.short ?? g.home.name, awayS = g.away.short ?? g.away.name;
   return (
     <section className="mt-7" aria-labelledby={`gf-${g.id}`}>
@@ -195,13 +218,79 @@ function GameFlow({ g, live }: { g: Game; live?: LiveGame }) {
           <div className="deck-flat p-3">
             <div className="mb-1 flex justify-between text-xs text-mute"><span>{awayS}</span><span>Live win probability · {clockLabel(live!.elapsed!)}</span><span>{homeS}</span></div>
             <WinProb awayName={g.away.name} homeName={g.home.name} homeWP={wp} />
-            <p className="mt-2 text-[11.5px] text-dim">From the live score, time left and the pregame projection. The full game-flow chart appears after the nightly data refresh.</p>
+            <p className="mt-2 text-[11.5px] text-dim">From the live score, time left and the pregame projection. {summary ? "The chart starts with the first basket." : "The full game-flow chart appears after the nightly data refresh."}</p>
           </div>
         );
       })() : (
         <p className="text-sm text-mute">Play-by-play isn&apos;t available for this game{isFinal(g) ? "" : " yet"}.</p>
       )}
     </section>
+  );
+}
+
+const timeOf = (ms: number) => new Date(ms).toLocaleTimeString([], { hour: "numeric", minute: "2-digit", second: "2-digit" });
+
+/** One line under the line score while polling: where the live detail comes from and how fresh it is. */
+function LiveStatus({ d }: { d: LiveGameState }) {
+  const text = d.data
+    ? `Box score and plays live from ESPN · updated ${d.updated ? timeOf(d.updated) : "just now"}${d.data.state === "post" ? " · game over" : ` · refreshes every ${LIVE_GAME_POLL_MS / 1000} s`}`
+    : d.error ? "" : "Loading live box score and plays from ESPN…";
+  if (d.error && !d.data) return null; // LiveDetail explains it
+  return (
+    <p className="mt-3 text-[12px] text-mute" data-testid="live-status">
+      {d.data?.state === "in" && <span className="live-dot mr-1.5 inline-block align-middle" aria-hidden />}
+      {text}
+      {d.error && d.data && <span className="ml-1 text-loss">Couldn&apos;t refresh just now; showing the last update.</span>}
+    </p>
+  );
+}
+
+/** Player box score and play-by-play from the ESPN summary, with honest loading / unavailable states. */
+function LiveDetail({ g, d, mode, espnId, onLoad }: { g: Game; d: LiveGameState; mode: LiveGameMode; espnId: string | null; onLoad: () => void }) {
+  const final = isFinal(g);
+  const sum = d.data;
+  if (!sum) {
+    // Older finals: nothing is fetched until the reader asks.
+    if (!mode) {
+      if (!final || !espnId) return null;
+      return (
+        <section className="mt-7" aria-labelledby={`ld-${g.id}`}>
+          <h3 id={`ld-${g.id}`} className="h-section mb-2 !text-xl">Player stats &amp; plays</h3>
+          <p className="mb-2 text-sm text-mute">Player box score and full play-by-play come from ESPN and load on request.</p>
+          <button type="button" className="btn" onClick={onLoad}>Load from ESPN</button>
+        </section>
+      );
+    }
+    return (
+      <section className="mt-7" aria-labelledby={`ld-${g.id}`}>
+        <h3 id={`ld-${g.id}`} className="h-section mb-2 !text-xl">Player box score</h3>
+        {d.error ? (
+          <p className="text-sm text-mute" data-testid="live-unavailable">
+            Live details are unavailable right now: ESPN&apos;s game feed didn&apos;t respond. The score above still updates{mode === "poll" ? ", and we'll keep trying" : ""}.
+            {mode === "once" && <> <button type="button" className="underline" onClick={d.reload}>Try again</button></>}
+          </p>
+        ) : <p className="text-sm text-mute">Loading from ESPN…</p>}
+      </section>
+    );
+  }
+  const live = sum.state === "in";
+  return (
+    <>
+      <section className="mt-7" aria-labelledby={`pb-${g.id}`}>
+        <div className="mb-2 flex flex-wrap items-baseline gap-x-3">
+          <h3 id={`pb-${g.id}`} className="h-section !text-xl">Player box score</h3>
+          {live && <span className="text-[12px] font-semibold text-hot">Live</span>}
+        </div>
+        {!sum.box.home && !sum.box.away
+          ? <p className="text-sm text-mute">ESPN hasn&apos;t posted player stats for this game yet.</p>
+          : <PlayerBox away={sum.box.away} home={sum.box.home} awaySide={g.away} homeSide={g.home} live={live} />}
+      </section>
+      <section className="mt-7" aria-labelledby={`pp-${g.id}`}>
+        <h3 id={`pp-${g.id}`} className="h-section mb-2 !text-xl">Play-by-play</h3>
+        {sum.plays.length ? <PlayByPlay plays={sum.plays} away={g.away} home={g.home} final={sum.state === "post"} />
+          : <p className="text-sm text-mute">ESPN hasn&apos;t posted any plays yet.</p>}
+      </section>
+    </>
   );
 }
 
@@ -290,11 +379,16 @@ type Stat = { label: string; a: number | null; h: number | null; text?: (s: BoxL
 const pct = (m: number | null, a: number | null) => (m != null && a ? m / a : null);
 const shoot = (m: number | null, a: number | null) => `${m ?? "—"}-${a ?? "—"} · ${pctFmt(pct(m, a), 1)}`;
 
-function BoxCompare({ g }: { g: Game }) {
-  const a = g.box?.away, h = g.box?.home;
+function BoxCompare({ g, summary }: { g: Game; summary: LiveSummary | null }) {
+  // Published box score first; for a game the nightly build hasn't covered, ESPN's live team line.
+  const fromLive = !(g.box?.away && g.box?.home) && !!summary?.box.away?.team && !!summary?.box.home?.team;
+  const a = fromLive ? summary!.box.away!.team : g.box?.away, h = fromLive ? summary!.box.home!.team : g.box?.home;
   return (
     <section className="mt-7" aria-labelledby={`bx-${g.id}`}>
-      <h3 id={`bx-${g.id}`} className="h-section mb-2 !text-xl">Team box score</h3>
+      <div className="mb-2 flex flex-wrap items-baseline gap-x-3">
+        <h3 id={`bx-${g.id}`} className="h-section !text-xl">Team box score</h3>
+        {fromLive && <span className="text-[12px] text-mute">{summary!.state === "in" ? "Live from ESPN, so far" : "From ESPN"}</span>}
+      </div>
       {!a || !h ? (
         <p className="text-sm text-mute">Team box scores aren&apos;t available for this game yet.{isFinal(g) ? "" : " They appear once the game is final."}</p>
       ) : (

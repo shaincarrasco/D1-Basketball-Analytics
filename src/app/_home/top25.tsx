@@ -25,7 +25,7 @@ export default function Top25({ teams: published, total }: { teams: TeamSummary[
       <table className="dt">
         <caption className="sr-only">Top 25 teams by adjusted efficiency margin</caption>
         <thead>
-          <tr><th>Rk</th><th className="l">Team</th><th>AdjEM</th><th className="grp-off">AdjO</th><th className="grp-def">AdjD</th><th className="l hidden md:table-cell">Form</th><th className="l">Next</th></tr>
+          <tr><th title="DHR rank, of every rated D-I team">Rk</th><th className="l">Team</th><th title="DHR rating: points per 100 possessions better than an average D-I team (adjusted efficiency margin)">AdjEM</th><th className="grp-off">AdjO</th><th className="grp-def">AdjD</th><th className="l hidden md:table-cell">Form</th><th className="l" title="Next game, with this team's pregame win chance from DHR">Next</th></tr>
         </thead>
         <tbody>
           {top.map(t => (

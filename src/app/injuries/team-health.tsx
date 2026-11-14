@@ -15,7 +15,7 @@ export default function TeamHealthBars({ teams, meta }: { teams: TeamHealth[]; m
     <div>
       <div className="mb-3 seg max-w-xs" role="group" aria-label="Which teams">
         <button aria-pressed={!top50} onClick={() => setTop50(false)}>All teams</button>
-        <button aria-pressed={top50} onClick={() => setTop50(true)}>Top 50</button>
+        <button aria-pressed={top50} onClick={() => setTop50(true)} title="Teams in the DHR top 50">Top 50</button>
       </div>
       {!list.length ? <div className="deck p-5 text-sm text-mute">No teams with missing minutes right now.</div> : (
         <ol className="deck divide-y divide-line overflow-hidden">
@@ -25,7 +25,7 @@ export default function TeamHealthBars({ teams, meta }: { teams: TeamHealth[]; m
                 <div className="flex items-center gap-2.5">
                   <TeamLogo src={meta[t.slug]?.logo ?? null} name={t.team} size={24} />
                   <span className="font-display text-[18px] font-bold leading-none">{t.team}</span>
-                  {t.rank ? <span className="dots text-[11px] text-dim">{t.rank}</span> : null}
+                  {t.rank ? <span className="dots text-[11px] text-dim" title={`DHR rank ${t.rank}`}>{t.rank}</span> : null}
                   <span className="ml-auto text-right text-[13px] text-mute"><span className="font-display text-[18px] font-bold text-loss">{lossText(t.netLoss)}</span> <span className="text-[11px]">est. pts/100</span></span>
                 </div>
                 <div className="mt-2 flex items-center gap-3">

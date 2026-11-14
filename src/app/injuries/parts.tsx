@@ -11,7 +11,7 @@ export function TeamTag({ slug, name, rank, meta, size = 20 }: { slug: string; n
     <Link href={`/teams/${slug}/`} className="link inline-flex items-center gap-1.5 align-middle">
       <TeamLogo src={meta?.logo ?? null} name={name} size={size} />
       <span>{name}</span>
-      {rank ? <span className="dots text-[11px] text-dim" title={`D1 Hoops rank ${rank}`}>{rank}</span> : null}
+      {rank ? <span className="dots text-[11px] text-dim" title={`DHR rank ${rank}`}>{rank}</span> : null}
     </Link>
   );
 }

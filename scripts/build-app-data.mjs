@@ -639,6 +639,14 @@ await write("meta.json", { season: 2027, seasonLabel: "2026–27", provider: "Co
   sims: sims ? { sims: sims.sims, remainingGames: sims.remainingGames, method: sims.method } : null,
   dpr: rapm ? { players: rapm.ratings.size, rows: rapmRows.length, lambda: 2500, method: "Regularised adjusted plus-minus (offence/defence) from ESPN play-by-play lineups, shrunk toward a box-score prior" } : null });
 await write("teams.json", teamSummaries);
+// Form, consistency, movers and rating timelines (src/lib/form.ts): DHR history from the ratings
+// build plus each team's dated, opponent- and venue-adjusted game performances.
+{
+  const history = await readJson("public/data/rating-history-2027.json").catch(() => null);
+  const asOf = finals.length ? finals.map(g => etDate(g.date)).sort().at(-1) : null;
+  const perf = Object.fromEntries([...teamLog].map(([id, list]) => [id, list.filter(x => x.result && x.perf !== null).map(x => [x.day, x.perf])]));
+  await write("form.json", { asOf, history, perf });
+}
 // League news + polls + league-wide availability tracker.
 const slugOfEspn = id => slugByEspn.get(String(id)) ?? null;
 const pollRows = list => (list ?? []).map(e => { const slug = slugOfEspn(e.team), t = slug ? teamSummaries.find(x => x.slug === slug) : null; return { rank: e.rank, prev: e.previous ?? null, pts: e.points ?? null, fpv: e.firstPlace ?? null, slug, name: t?.name ?? null, dhr: t?.rank ?? null, w: t?.w ?? null, l: t?.l ?? null }; });
@@ -666,6 +674,11 @@ for (const t of teamSummaries) {
 }
 await write("conferences.json", conferences);
 await write("players.json", { fields: PLAYER_FIELDS, rows: players });
+
+// ---------- transfer portal (joins public/data/portal-2027.json to teams + players; see scripts/fetch-portal.mjs) ----------
+const { linkPortal } = await import("./fetch-portal.mjs");
+await write("portal.json", linkPortal(await readJson("public/data/portal-2027.json").catch(() => null), { teams: teamSummaries, players: { fields: PLAYER_FIELDS, rows: players } }));
+// ---------- end transfer portal ----------
 
 // Team detail files: game log + roster.
 for (const t of teamSummaries) {
@@ -738,3 +751,13 @@ for (const [day, list] of [...byDay.entries()].sort(([a], [b]) => a.localeCompar
 await write("games/index.json", { days: index });
 
 console.log(`[app-data] ${teamSummaries.length} teams, ${conferences.length} conferences, ${players.length} players, ${index.length} game days written to ${OUT}.`);
+
+// Projected NCAA tournament field + bubble watch (reads the files written above).
+try {
+  await import("./build-bracket.mjs");
+} catch (error) {
+  // Never let the bracket break the data build: publish an honest "not available" file instead.
+  console.warn("[bracket] Build failed; publishing an unavailable bracket. " + (error instanceof Error ? error.stack : error));
+  const { writeFile: wf } = await import("node:fs/promises");
+  await wf(`${OUT}/bracket.json`, JSON.stringify({ ok: false, reason: "The bracket projection could not be built from today's data." }));
+}

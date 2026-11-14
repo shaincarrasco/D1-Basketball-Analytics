@@ -1,12 +1,14 @@
 import Link from "next/link";
 import TeamLogo from "@sports/ui/team-logo";
-import { fmt, pctFmt, signed, dayLabel } from "@sports/ui/format";
+import { fmt, pctFmt, signed, dayLabel, DHR_RANK_TITLE } from "@sports/ui/format";
 import { getAllGames, getConferences, getMeta, getNews, getPlayers, getTeams } from "@/lib/server-data";
 import ArticleList from "@/components/article-list";
 import { playerRows } from "@/lib/players";
 import Today from "./_home/today";
 import InjuryWire from "./_home/injury-wire";
 import Top25 from "./_home/top25";
+import FormWatch from "./_home/form-watch";
+import DhrIntro from "@/components/dhr-intro";
 import { homeNotes } from "@/lib/notes";
 
 /** Stretched-link pattern: the primary link covers its `relative` card; other links sit above it. */
@@ -22,16 +24,17 @@ export default function Home() {
   const players = playerRows(getPlayers(), getPlayers().rows).filter(p => (p.min ?? 0) >= 20 && (p.g ?? 0) >= 2);
   const topPlayers = [...players].sort((a, b) => (b.porpag ?? -9) - (a.porpag ?? -9)).slice(0, 6);
   const leaders = [
-    { title: "Best offense", key: "adjO" as const, list: [...teams].filter(t => t.adjO !== null).sort((a, b) => b.adjO! - a.adjO!).slice(0, 5), tone: "text-off" },
-    { title: "Best defense", key: "adjD" as const, list: [...teams].filter(t => t.adjD !== null).sort((a, b) => a.adjD! - b.adjD!).slice(0, 5), tone: "text-def" },
-    { title: "Fastest tempo", key: "adjT" as const, list: [...teams].filter(t => t.adjT !== null).sort((a, b) => b.adjT! - a.adjT!).slice(0, 5), tone: "text-ink" },
-    { title: "Toughest schedule", key: "sos" as const, list: [...teams].filter(t => t.sos !== null).sort((a, b) => b.sos! - a.sos!).slice(0, 5), tone: "text-ink" },
+    { title: "Best offense", unit: "pts/100", hint: "Points per 100 possessions, adjusted for opponent and venue", key: "adjO" as const, list: [...teams].filter(t => t.adjO !== null).sort((a, b) => b.adjO! - a.adjO!).slice(0, 5), tone: "text-off" },
+    { title: "Best defense", unit: "allowed/100", hint: "Points allowed per 100 possessions, adjusted (lower is better)", key: "adjD" as const, list: [...teams].filter(t => t.adjD !== null).sort((a, b) => a.adjD! - b.adjD!).slice(0, 5), tone: "text-def" },
+    { title: "Fastest tempo", unit: "poss/40", hint: "Possessions per 40 minutes, adjusted", key: "adjT" as const, list: [...teams].filter(t => t.adjT !== null).sort((a, b) => b.adjT! - a.adjT!).slice(0, 5), tone: "text-ink" },
+    { title: "Toughest schedule", unit: "opp. rating", hint: "Average DHR rating of opponents played so far", key: "sos" as const, list: [...teams].filter(t => t.sos !== null).sort((a, b) => b.sos! - a.sos!).slice(0, 5), tone: "text-ink" },
   ];
   const maxConf = Math.max(...confs.map(c => Math.abs(c.avgEM ?? 0)));
   const notes = homeNotes(teams, playerRows(getPlayers(), getPlayers().rows), meta);
 
   return (
     <div className="space-y-10">
+      <DhrIntro />
       <Today />
 
       <InjuryWire />
@@ -66,7 +69,7 @@ export default function Home() {
                 <div className="pb-1 text-sm text-mute">
                   <div><b className="text-ink">{bt.correct}–{bt.games - bt.correct}</b> picking winners</div>
                   <div>±<b className="text-ink">{fmt(bt.marginMAE, 1)}</b> pts average miss</div>
-                  <div>Brier <b className="text-ink">{bt.brier.toFixed(3)}</b></div>
+                  <div title="Brier score: how far the win probabilities were from what happened. Lower is better; a coin flip scores 0.250.">Brier <b className="text-ink">{bt.brier.toFixed(3)}</b> <span className="text-dim">(lower is better)</span></div>
                 </div>
               </div>
               <Link href="/methodology/#backtest" className="mt-4 inline-block text-sm font-semibold text-off hover:underline">See calibration and method</Link>
@@ -95,7 +98,7 @@ export default function Home() {
                       <span className="w-12 shrink-0 text-right font-display text-xl font-extrabold text-hot tnum">{pctFmt(g.upset)}</span>
                       <span className="min-w-0 flex-1 text-sm">
                         <span className="block truncate">
-                          <TeamName side={w} bold /> {w.score}, {l.rank ? `#${l.rank} ` : ""}<TeamName side={l} /> {l.score}
+                          <TeamName side={w} bold /> {w.score}, {l.rank ? <span title={DHR_RANK_TITLE}>#{l.rank} </span> : ""}<TeamName side={l} /> {l.score}
                         </span>
                         <Link href={`/games/?d=${g.day}&g=${g.id}`} className={`text-xs text-mute hover:text-ink ${STRETCH}`}>{dayLabel(g.day)} · winner’s pregame chance<span className="sr-only">: {w.name} beat {l.name}, open the game</span></Link>
                       </span>
@@ -108,13 +111,15 @@ export default function Home() {
         </div>
       </div>
 
+      <FormWatch />
+
       {/* Leaders */}
       <section aria-labelledby="leaders">
         <h2 id="leaders" className="h-section mb-3">Category leaders</h2>
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
           {leaders.map(b => (
             <div key={b.title} className="deck p-4">
-              <h3 className="mb-2 flex items-center gap-2 text-[13.5px] font-semibold">{b.tone === "text-off" ? <i className="h-2 w-2 rounded-sm bg-off" aria-hidden /> : b.tone === "text-def" ? <i className="h-2 w-2 rounded-sm bg-def" aria-hidden /> : null}{b.title}</h3>
+              <h3 className="mb-2 flex items-center gap-2 text-[13.5px] font-semibold" title={b.hint}>{b.tone === "text-off" ? <i className="h-2 w-2 rounded-sm bg-off" aria-hidden /> : b.tone === "text-def" ? <i className="h-2 w-2 rounded-sm bg-def" aria-hidden /> : null}{b.title}<span className="ml-auto text-[11px] font-normal text-dim">{b.unit}</span></h3>
               <ol>
                 {b.list.map((t, i) => (
                   <li key={t.id} className="group relative -mx-2 flex items-center gap-2 rounded-md border-b border-line px-2 py-1.5 text-sm last:border-0 hover:bg-deck2 focus-within:bg-deck2">
@@ -137,7 +142,7 @@ export default function Home() {
             <h2 id="players" className="h-section">Most valuable so far</h2>
             <Link href="/players/?view=advanced" className="text-sm font-semibold text-mute hover:text-ink">All players</Link>
           </div>
-          <p className="mb-3 text-xs text-mute">PORPAG, minimum 20 minutes per game</p>
+          <p className="mb-3 text-xs text-mute">PORPAG: offensive points added per game over a replacement-level player. 20+ minutes per game.</p>
           <ul className="grid gap-2 sm:grid-cols-2">
             {topPlayers.map(p => {
               const t = byId.get(p.teamId);
@@ -150,7 +155,7 @@ export default function Home() {
                       {t ? <Link href={`/teams/${t.slug}/`} className="relative z-[1] hover:text-ink hover:underline">{t.name}</Link> : null} · {fmt(p.pts)} pts · {fmt(p.reb)} reb · {fmt(p.ast)} ast
                     </span>
                   </span>
-                  <span className="font-display text-xl font-extrabold tnum" title="PORPAG">{fmt(p.porpag, 1)}</span>
+                  <span className="font-display text-xl font-extrabold tnum" title="PORPAG: points over replacement per game">{fmt(p.porpag, 1)}</span>
                 </li>
               );
             })}
@@ -163,6 +168,7 @@ export default function Home() {
             <h2 id="confs" className="h-section">Conference strength</h2>
             <Link href="/conferences/" className="text-sm font-semibold text-mute hover:text-ink">All conferences</Link>
           </div>
+          <p className="mb-2 text-xs text-mute">Average DHR rating of member teams. 0 = an average D-I team.</p>
           <ol className="space-y-1">
             {confs.slice(0, 12).map(c => (
               <li key={c.slug}>

@@ -104,7 +104,7 @@ export default function AllAbsences({ rows, teams }: { rows: InjuryRow[]; teams:
             <span className="sr-only">Sort by</span>
             <select value={sort} onChange={e => touch(setSort)(e.target.value as Sort)} className={field}>
               <option value="impact">Sort: Impact</option>
-              <option value="rank">Sort: Team rank</option>
+              <option value="rank">Sort: Team rank (DHR)</option>
               <option value="recent">Sort: Most recent</option>
             </select>
           </label>
@@ -115,8 +115,8 @@ export default function AllAbsences({ rows, teams }: { rows: InjuryRow[]; teams:
         <div className="flex flex-wrap items-center gap-1.5" role="group" aria-label="Confidence, team set">
           {CONFS.map(c => <button key={c} className="chip" aria-pressed={cf.has(c)} onClick={() => toggleCf(c)}>{CONF_NAME[c]}</button>)}
           <span className="mx-1 h-5 w-px bg-line2" aria-hidden />
-          <button className="chip" aria-pressed={top === "25"} onClick={() => touch(setTop)(top === "25" ? "all" : "25")}>Top 25</button>
-          <button className="chip" aria-pressed={top === "100"} onClick={() => touch(setTop)(top === "100" ? "all" : "100")}>Top 100</button>
+          <button className="chip" aria-pressed={top === "25"} onClick={() => touch(setTop)(top === "25" ? "all" : "25")} title="Teams in the DHR top 25">Top 25</button>
+          <button className="chip" aria-pressed={top === "100"} onClick={() => touch(setTop)(top === "100" ? "all" : "100")} title="Teams in the DHR top 100">Top 100</button>
           <button className="chip" aria-pressed={mine} onClick={() => touch(setMine)(!mine)}>My teams</button>
         </div>
         <p className="text-[13px] text-mute" role="status">{list.length} of {rows.length} absences{mine && !fav.teams.length ? " · you haven't followed any teams yet" : ""}</p>

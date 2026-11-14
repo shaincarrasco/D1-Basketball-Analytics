@@ -56,7 +56,7 @@ export default function CommandSearch({ onClose }: { onClose: () => void }) {
       // Empty query: followed teams first, then every page.
       const bySlug = new Map((teams.data ?? []).map(t => [t.slug, t]));
       const mine: Hit[] = fav.teams.map(s => bySlug.get(s)).filter((t): t is TeamSummary => !!t).slice(0, 6)
-        .map(t => ({ kind: "Following", label: t.name, sub: `${t.rank ? `#${t.rank} · ` : ""}${t.w}–${t.l}${t.next ? ` · next ${t.next.venue === "A" ? "at" : "vs"} ${t.next.opp}` : ""}`, href: `/teams/${t.slug}/`, logo: t.logo }));
+        .map(t => ({ kind: "Following", label: t.name, sub: `${t.rank ? `DHR #${t.rank} · ` : ""}${t.w}–${t.l}${t.next ? ` · next ${t.next.venue === "A" ? "at" : "vs"} ${t.next.opp}` : ""}`, href: `/teams/${t.slug}/`, logo: t.logo }));
       return [...mine, ...PAGES];
     }
     const out: (Hit & { score: number })[] = [];
@@ -64,7 +64,7 @@ export default function CommandSearch({ onClose }: { onClose: () => void }) {
     const teamById = new Map((teams.data ?? []).map(t => [t.id, t]));
     for (const t of teams.data ?? []) {
       const s = Math.min(...[t.name, t.short, `${t.name} ${t.mascot ?? ""}`].map(score).map(x => (x < 0 ? 99 : x)));
-      if (s < 99) out.push({ kind: "Team", label: t.name, sub: `${t.rank ? `#${t.rank} · ` : ""}${t.confName} · ${t.w}–${t.l}`, href: `/teams/${t.slug}/`, logo: t.logo, score: s });
+      if (s < 99) out.push({ kind: "Team", label: t.name, sub: `${t.rank ? `DHR #${t.rank} · ` : ""}${t.confName} · ${t.w}–${t.l}`, href: `/teams/${t.slug}/`, logo: t.logo, score: s });
     }
     for (const c of confs.data ?? []) { const s = Math.min(score(c.name), score(c.code) < 0 ? 99 : score(c.code)); if (s >= 0 && s < 99) out.push({ kind: "Conference", label: c.name, sub: `#${c.rank} conference`, href: `/conferences/${c.slug}/`, score: s + 0.5 }); }
     if (players.data && n.length >= 2) {

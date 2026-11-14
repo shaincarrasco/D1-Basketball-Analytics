@@ -6,11 +6,14 @@ import TeamLogo from "@sports/ui/team-logo";
 import TvBadges from "@/components/tv-badges";
 import { IfProjections } from "@/components/projection-toggle";
 import StatBar from "@/components/stat-bar";
-import { fmt, pctFmt, signed } from "@sports/ui/format";
+import { DHR_RANK_TITLE, fmt, pctFmt, signed } from "@sports/ui/format";
 import FavoriteButton from "@/components/favorite-button";
 import ArticleList from "@/components/article-list";
 import TeamAvailability from "./availability";
 import CalendarButton from "./calendar-button";
+import BracketChip from "@/components/bracket-chip";
+import ProgramHistory from "@/components/program-history";
+import TeamTransfers from "@/components/team-transfers";
 import type { PlayerField, TeamSummary } from "@/lib/types";
 import GameLog from "./game-log";
 import { LiveNextGate, LiveRank, LiveRecord, LiveTiles } from "./live-hero";
@@ -26,6 +29,10 @@ import { Dots } from "@/components/dots";
 import { playerRows } from "@/lib/players";
 import { teamNote } from "@/lib/notes";
 import { onTeam, teamHex } from "@sports/ui/color";
+import TeamFormCard from "@/components/form/team-form-card";
+import IndispensableCard from "@/components/form/indispensable-card";
+import { getAllForms, getForm, getIndispensable, getMovers } from "@/lib/form-server";
+import { teamHistory } from "@/lib/form";
 
 // Older data files predate `rosterFields`; this is the column order they were written with.
 const LEGACY_FIELDS: PlayerField[] = ["id", "name", "teamId", "pos", "g", "gs", "min", "pts", "reb", "orb", "drb", "ast", "stl", "blk", "tov", "pf",
@@ -99,9 +106,9 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
           </div>
         </div>
         <div className="relative mt-5 flex items-end gap-4">
-          <Link href={`/rankings/?conf=${team.confSlug}`} title={`D1 Hoops rank. See ${team.confName} teams`} className="plate flex shrink-0 flex-col items-center px-3.5 pb-1.5 pt-2.5">
+          <Link href={`/rankings/?conf=${team.confSlug}`} title={`DHR rank: our D1 Hoops Power Rating, not the AP poll. See ${team.confName} teams`} className="plate flex shrink-0 flex-col items-center px-3.5 pb-1.5 pt-2.5">
             <LiveRank team={team} />
-            <span className="text-[11px] font-semibold text-dim">of {total}</span>
+            <span className="text-[11px] font-semibold text-dim">DHR · of {total}</span>
           </Link>
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-3">
@@ -118,6 +125,7 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
         <div className="relative mt-5 flex flex-wrap gap-2 [&_.btn]:border-transparent [&_.btn]:bg-black/20 [&_.btn]:text-current">
           <FavoriteButton kind="teams" id={slug} name={team.name} />
           <CalendarButton slug={slug} name={team.name} />
+          <BracketChip slug={slug} className="!border-transparent !bg-black/20 !text-current [&_.text-mute]:!text-current [&_.text-mute]:opacity-75" />
           {(team.health?.out ?? 0) > 0 && (
             <a href="#availability" className="btn" title="Jump to the availability report">{(() => { const h = team.health!, known = h.out - (h.missing ?? 0); return known > 0 ? `${known} out${h.missing ? ` · ${h.missing} missing` : ""}` : `${h.missing} missing · reason not reported`; })()}</a>
           )}
@@ -149,7 +157,7 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
                   <div className="truncate font-display text-[23px] font-extrabold leading-tight">
                     {team.next.venue === "A" ? "at " : "vs "}{team.next.oppSlug ? <Link className="link" href={`/teams/${team.next.oppSlug}/`}>{team.next.opp}</Link> : team.next.opp}
                   </div>
-                  <div className="text-[13px] text-mute">{[team.next.oppRank ? `No. ${team.next.oppRank} in the ratings` : null, team.next.venue === "N" ? "neutral site" : null].filter(Boolean).join(", ") || "Unrated opponent"}</div>
+                  <div className="text-[13px] text-mute">{[team.next.oppRank ? `DHR No. ${team.next.oppRank}` : null, team.next.venue === "N" ? "neutral site" : null].filter(Boolean).join(", ") || "Unrated opponent"}</div>
                 </div>
                 {nextGame?.projPts != null && nextGame.projOppPts != null && (
                   <IfProjections>
@@ -166,7 +174,7 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
                     <div style={{ width: `${team.next.wp * 100}%`, background: `color-mix(in oklab, ${color} 78%, white)` }} />
                     <div className="flex-1 bg-line2" />
                   </div>
-                  <div className="mt-1.5 flex justify-between text-[13px] font-bold tnum"><span>{team.short ?? team.name} {pctFmt(team.next.wp)}</span><span className="text-mute">{pctFmt(1 - team.next.wp)}</span></div>
+                  <div className="mt-1.5 flex justify-between gap-2 text-[13px] font-bold tnum"><span>{team.short ?? team.name} {pctFmt(team.next.wp)}</span><span className="truncate font-medium text-mute">Pregame win chance</span><span className="text-mute">{pctFmt(1 - team.next.wp)}</span></div>
                 </div>
               )}
               {team.next.oppSlug && (
@@ -201,6 +209,8 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
             </section>
           )}
           {note && <p className="note text-[15px] leading-[1.45]">{note}</p>}
+
+          <TeamFormCard name={team.name} form={getAllForms().byId.get(team.id)!} points={teamHistory(getForm(), team.id)} mover={getMovers().rows.find(m => m.id === team.id) ?? null} color={`color-mix(in oklab, ${color} 62%, var(--ink))`} total={total} />
 
           {/* Game form */}
           <section id="form" className="deck scroll-mt-32 p-5">
@@ -251,6 +261,8 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
             <h2 id="avail-h" className="h-section mb-2">Availability</h2>
             <TeamAvailability slug={slug} health={team.health} items={detail.availability} log={detail.injuryLog} links={reportLinks} />
           </section>
+          <TeamTransfers slug={slug} />
+          <IndispensableCard rows={getIndispensable().filter(p => p.teamId === team.id)} />
           <section className="deck p-5" aria-labelledby="news-h">
             <h2 id="news-h" className="h-section mb-1">Latest news</h2>
             <ArticleList items={detail.news} max={8} empty="No recent coverage found for this team." />
@@ -300,6 +312,7 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
             </table>
             <p className="mt-2 text-xs text-dim">Quadrants use DHR ranks with NET-style cutoffs. They are not the NCAA&apos;s official quadrants.</p>
           </section>
+          <ProgramHistory teamId={team.id} color={color} />
           {similar.length > 0 && (
             <section className="deck p-5">
               <h2 className="h-section mb-3" title="Closest teams by adjusted offense, defense and tempo">Similar teams</h2>
@@ -309,7 +322,7 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
                     <Link href={`/teams/${t.slug}/`} className="link flex items-center gap-3 rounded-lg px-2 py-1.5 hover:bg-deck2">
                       <TeamLogo src={t.logo} name={t.name} size={26} />
                       <span className="flex-1 font-semibold">{t.name}</span>
-                      <span className="text-xs text-mute tnum">#{t.rank} · {fmt(t.adjO)} / {fmt(t.adjD)}</span>
+                      <span className="text-xs text-mute tnum" title="DHR rank · adjusted offense / defense (points per 100 possessions)"><span title={DHR_RANK_TITLE}>#{t.rank}</span> · {fmt(t.adjO)} / {fmt(t.adjD)}</span>
                     </Link>
                   </li>
                 ))}

@@ -14,7 +14,7 @@ export default function StandingsTable({ rows, total, csvName }: { rows: Standin
   );
   const pct = (w: number, l: number) => (w + l ? w / (w + l) : null);
   const columns: Column<StandingRow>[] = [
-    { key: "pos", label: "#", value: r => r.pos, first: "asc", sticky: true, width: 40, render: r => <span className="rank-cell">{r.pos}</span> },
+    { key: "pos", label: "#", title: "Place in the conference standings", value: r => r.pos, first: "asc", sticky: true, width: 40, render: r => <span className="rank-cell">{r.pos}</span> },
     { key: "name", label: "Team", align: "l", value: r => r.name, first: "asc", sticky: true, width: 190,
       render: r => (
         <Link href={`/teams/${r.slug}/`} className="link flex items-center gap-2.5">
@@ -43,5 +43,10 @@ export default function StandingsTable({ rows, total, csvName }: { rows: Standin
     { key: "perf", label: "Game form", title: "Adjusted efficiency margin in each game (opponent + venue adjusted)", sortable: false, value: r => (r.perf.length ? r.perf.reduce((a, b) => a + b, 0) / r.perf.length : null), render: r => <PerfBars values={r.perf} /> },
     { key: "proj", label: "Proj W–L", title: "Projected final overall record", value: r => r.projW, render: r => `${fmt(r.projW)}–${fmt(r.projL)}` },
   ];
-  return <DataTable rows={rows} columns={columns} rowKey={r => r.id} initialSort="pos" initialDir="asc" csvName={csvName} rowHref={r => `/teams/${r.slug}/`} caption="Conference standings" />;
+  return (
+    <>
+      <DataTable rows={rows} columns={columns} rowKey={r => r.id} initialSort="pos" initialDir="asc" csvName={csvName} rowHref={r => `/teams/${r.slug}/`} caption="Conference standings" />
+      <p className="mt-2 text-xs text-mute"># = place in the league standings. DHR and the small numbers = national rank of {total}. Proj and Exp. columns are model projections.</p>
+    </>
+  );
 }

@@ -47,7 +47,7 @@ export default function Scouting({ p, pool }: { p: PlayerRow; pool: PlayerRow[] 
     <section aria-labelledby="scout-h">
       <div className="mb-2.5 flex flex-wrap items-baseline justify-between gap-2">
         <h2 id="scout-h" className="h-section">Scouting report</h2>
-        <span className="text-sm text-mute">vs {pool.length.toLocaleString("en-US")} D-I rotation players</span>
+        <span className="text-sm text-mute">Grades are percentiles vs {pool.length.toLocaleString("en-US")} D-I rotation players (10+ mpg)</span>
       </div>
       <ul className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-4">
         {tiles.map(({ s, pct }) => {

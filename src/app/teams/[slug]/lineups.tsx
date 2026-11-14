@@ -1,6 +1,7 @@
 "use client";
 // Five-man units from play-by-play. Small samples (< 40 possessions) are dimmed.
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import DataTable, { type Column } from "@sports/ui/data-table";
 import { fmt, signed } from "@sports/ui/format";
 import type { TeamDetail } from "@/lib/types";
@@ -14,6 +15,7 @@ const short = (name: string) => {
 };
 
 export default function Lineups({ lineups, names }: { lineups: Unit[]; names: Record<string, string> }) {
+  const slug = usePathname()?.match(/\/teams\/([^/]+)/)?.[1] ?? null;
   if (!lineups.length) return <p className="text-sm text-mute">No five-man units with play-by-play yet.</p>;
   const dim = (u: Unit, node: React.ReactNode) => <span className={u.poss < SMALL ? "opacity-50" : undefined}>{node}</span>;
   const columns: Column<Unit>[] = [
@@ -41,6 +43,7 @@ export default function Lineups({ lineups, names }: { lineups: Unit[]; names: Re
   return (
     <div>
       <DataTable rows={lineups} columns={columns} rowKey={u => u.pids.join("-")} initialSort="min" pageSize={10} caption="Five-man lineups" />
+      {slug && <p className="mt-2 text-sm"><Link href={`/lineups/?team=${slug}`} className="link font-semibold underline">Projected best lineups and any-five builder in the Lineup lab</Link></p>}
       <p className="mt-2 text-xs text-dim">Units with fewer than {SMALL} possessions are dimmed: net ratings over a few minutes swing wildly and aren&apos;t adjusted for opponent.</p>
     </div>
   );

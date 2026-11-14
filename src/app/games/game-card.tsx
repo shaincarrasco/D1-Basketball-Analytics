@@ -4,7 +4,7 @@
 import Link from "next/link";
 import TeamLogo from "@sports/ui/team-logo";
 import WinProb from "@/components/win-prob";
-import { fmt, pctFmt } from "@sports/ui/format";
+import { DHR_RANK_TITLE, fmt, pctFmt } from "@sports/ui/format";
 import type { LiveGame } from "@/lib/live";
 import type { Game, GameSide } from "@/lib/types";
 import TvBadges from "@/components/tv-badges";
@@ -55,7 +55,7 @@ function Row({ g, side, which, absence }: { g: Game; side: GameSide; which: "hom
       {teamHref(side)
         ? <Link href={teamHref(side)!} tabIndex={-1} aria-hidden className="relative z-10 shrink-0"><TeamLogo src={side.logo} name={side.name} size={28} /></Link>
         : <TeamLogo src={side.logo} name={side.name} size={28} />}
-      <span className="w-6 shrink-0 text-right font-display text-[13px] font-bold leading-none text-dim tnum" aria-label={side.rank ? `Ranked ${side.rank}` : undefined}>
+      <span className="w-6 shrink-0 text-right font-display text-[13px] font-bold leading-none text-dim tnum" title={side.rank ? DHR_RANK_TITLE : undefined} aria-label={side.rank ? `DHR rank ${side.rank}` : undefined}>
         {side.rank ?? ""}
       </span>
       <div className="min-w-0 flex-1 leading-tight">
@@ -108,14 +108,14 @@ export default function GameCard({ g, live: lg, onOpen, absences }: { g: Game; l
         <div className="mt-auto">
           <WinProb awayName={g.away.name} homeName={g.home.name} homeWP={g.pred.wp} compact />
           <div className="mt-1.5 flex items-center gap-2 text-[12px] text-mute tnum">
-            <span className="truncate">{final ? "Proj: " : ""}<span className="font-semibold text-ink">{marginText(g)}</span></span>
-            <span className="shrink-0 text-dim">{pctFmt(Math.max(g.pred.wp, 1 - g.pred.wp))}</span>
+            <span className="truncate" title="DHR's projected margin, set before tip-off">Proj: <span className="font-semibold text-ink">{marginText(g)}</span></span>
+            <span className="shrink-0 text-dim" title="The favorite's pregame win chance">{pctFmt(Math.max(g.pred.wp, 1 - g.pred.wp))}</span>
             {fw != null && (
               <span className={`ml-auto shrink-0 font-semibold ${fw ? "text-win" : "text-loss"}`} title={fw ? "Pregame favorite won" : "Pregame favorite lost"}>
                 <span aria-hidden>{fw ? "✓" : "✗"}</span><span className="sr-only">{fw ? "Model pick correct" : "Model pick wrong"}</span>
               </span>
             )}
-            {g.upset != null && final && <span className={`${fw == null ? "ml-auto" : ""} shrink-0 text-hot`}>{pctFmt(g.upset)} winner</span>}
+            {g.upset != null && final && <span className={`${fw == null ? "ml-auto" : ""} shrink-0 text-hot`} title="The winner's pregame win chance">{pctFmt(g.upset)} winner</span>}
           </div>
           {li && (
             <div className="mt-1 flex items-center gap-2 text-[11.5px] text-dim tnum">

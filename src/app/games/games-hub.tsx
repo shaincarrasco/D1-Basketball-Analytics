@@ -119,7 +119,7 @@ export default function GamesHub() {
           <div className="mb-4 flex flex-wrap items-center gap-2">
             <div className="no-scrollbar -mx-1 flex max-w-full gap-1.5 overflow-x-auto px-1" role="group" aria-label="Filter games">
               {FILTERS.map(f => (
-                <button key={f.id} className="chip" aria-pressed={filter === f.id} onClick={() => setFilter(f.id)}>
+                <button key={f.id} className="chip" aria-pressed={filter === f.id} onClick={() => setFilter(f.id)} title={f.title}>
                   {f.label}<span className="tnum opacity-60">{counts[f.id]}</span>
                 </button>
               ))}
@@ -159,8 +159,8 @@ export default function GamesHub() {
             </ul>
           )}
           <p className="mt-4 text-xs text-dim">
-            Bar = pregame win probability (<span className="text-def">away</span> / <span className="text-off">home</span>). Projected scores are hidden until you turn them on; when on, they show in gray on unplayed games.
-            ✓/✗ marks whether the pregame favorite won. Line = the pregame spread ESPN shows; ATS ✓/✗ = whether DHR&apos;s pick against it covered. Small numeral before a team = D1 Hoops national rank.
+            Bar = pregame win probability (<span className="text-def">away</span> / <span className="text-off">home</span>). Proj = DHR&apos;s margin set before tip-off, with the favorite&apos;s win chance beside it. Projected scores are hidden until you turn them on; when on, they show in gray on unplayed games.
+            ✓/✗ marks whether the pregame favorite won. Line = the pregame spread ESPN shows; ATS ✓/✗ = whether DHR&apos;s pick against it covered. Small numeral before a team = DHR national rank (not the AP poll).
           </p>
         </>
       )}
@@ -196,7 +196,7 @@ function DaySummaryLine({ s, games, onOpen, liveData, updated }: { s: ReturnType
           Biggest upset:{" "}
           <button className="font-semibold text-hot underline-offset-2 hover:underline" onClick={() => onOpen(b.id)}>
             {b[w].name} over {b[w === "home" ? "away" : "home"].name}
-          </button>{" "}({pctFmt(b.upset)})
+          </button>{" "}({pctFmt(b.upset)} pregame chance)
         </span>
       )}
     </p>
