@@ -8,7 +8,7 @@ import { Plus } from "lucide-react";
 import TeamLogo from "@/components/team-logo";
 import TvBadges from "@/components/tv-badges";
 import { Dots } from "@/components/dots";
-import { dayLabel, etToday, fmt, pctFmt, timeLabel } from "@/lib/format";
+import { dayLabel, DHR_RANK_TITLE, etToday, fmt, pctFmt, timeLabel } from "@/lib/format";
 import { useJson } from "@/lib/client-data";
 import { toggleFavorite, useFavorites } from "@/lib/favorites";
 import { useLiveScores, withLive, type LiveGame } from "@/lib/live";
@@ -242,13 +242,13 @@ function why(g: Game, kind: Kind) {
   if (!g.pred) return null;
   const m = Math.abs(g.pred.margin);
   const fav = g.pred.wp >= 0.5 ? g.home : g.away, dog = fav === g.home ? g.away : g.home;
-  if (kind === "closest") return `Model margin: ${fmt(m, 1)} points`;
-  if (kind === "upset") return `${dog.name} wins ${pctFmt(Math.min(g.pred.wp, 1 - g.pred.wp))} of the time`;
+  if (kind === "closest") return `Proj margin: ${fmt(m, 1)} points`;
+  if (kind === "upset") return `Model gives ${dog.name} a ${pctFmt(Math.min(g.pred.wp, 1 - g.pred.wp))} chance`;
   const unbeaten = (s: GameSide) => !!s.record && /^\d+-0$/.test(s.record) && s.record !== "0-0";
   const top25 = (s: GameSide) => (s.rank ?? 999) <= 25;
-  if (top25(g.home) && top25(g.away)) return `Two top-25 teams, ${fav.name} by ${fmt(m, 1)}`;
-  if (unbeaten(g.home) && unbeaten(g.away)) return `Both unbeaten, ${fav.name} by ${fmt(m, 1)}`;
-  return `${fav.name} by ${fmt(m, 1)}`;
+  if (top25(g.home) && top25(g.away)) return `Two top-25 teams · Proj: ${fav.name} by ${fmt(m, 1)}`;
+  if (unbeaten(g.home) && unbeaten(g.away)) return `Both unbeaten · Proj: ${fav.name} by ${fmt(m, 1)}`;
+  return `Proj: ${fav.name} by ${fmt(m, 1)}`;
 }
 
 /** Swipeable featured cards with labelled pills, Apple Sports style. */
@@ -319,7 +319,7 @@ function Scoreboard({ g, day, live, kind, labelled }: { g: Game; day: string; li
           </div>
           <div className="mt-1.5 flex items-center justify-between gap-2 text-[13px]">
             <b className="tnum">{pctFmt(awayWP)}</b>
-            <span className="truncate text-mute">{scheduled ? why(g, kind) : `Pregame: ${pctFmt(Math.max(g.pred.wp, awayWP))} favorite`}</span>
+            <span className="truncate text-mute">{scheduled ? why(g, kind) : "Pregame win chance"}</span>
             <b className="tnum">{pctFmt(g.pred.wp)}</b>
           </div>
         </div>
@@ -333,7 +333,7 @@ function Side({ s }: { s: GameSide }) {
     <>
       <TeamLogo src={s.logo} name={s.name} size={52} />
       <span className="mt-1.5 max-w-[104px] truncate font-display text-[19px] font-extrabold leading-tight">{s.name}</span>
-      <span className="text-xs text-mute">{[s.rank ? `No. ${s.rank}` : null, s.record].filter(Boolean).join(", ")}</span>
+      <span className="text-xs text-mute" title={s.rank ? DHR_RANK_TITLE : undefined}>{[s.rank ? `DHR No. ${s.rank}` : null, s.record].filter(Boolean).join(", ")}</span>
     </>
   );
   return s.slug
@@ -349,7 +349,7 @@ function GameRow({ g, day, live }: { g: Game; day: string; live?: LiveGame }) {
   const line = (s: GameSide, win: boolean) => (
     <div className="flex items-center gap-2">
       <i className="h-[18px] w-1 shrink-0 rounded-full" style={{ background: teamTint(s.color) }} aria-hidden />
-      <span className="w-6 text-right text-[11px] font-semibold text-dim tnum">{s.rank ?? ""}</span>
+      <span className="w-6 text-right text-[11px] font-semibold text-dim tnum" title={s.rank ? DHR_RANK_TITLE : undefined}>{s.rank ?? ""}</span>
       <span className={`truncate font-display text-[19px] font-extrabold leading-tight ${played && !win ? "text-mute" : ""}`}>{s.name}</span>
       <span className="shrink-0 text-xs text-dim">{s.record}</span>
       {played && <Dots dim={!win} className="ml-auto text-[19px]">{s.score ?? ""}</Dots>}
@@ -367,7 +367,7 @@ function GameRow({ g, day, live }: { g: Game; day: string; live?: LiveGame }) {
             <span className="max-w-[78px] truncate text-xs text-mute">{g.tv?.[0]?.name ?? "No TV listed"}</span>
           </div>
           {fav && favWP !== null && (
-            <div className="flex w-[50px] shrink-0 flex-col items-end">
+            <div className="flex w-[50px] shrink-0 flex-col items-end" title={`${fav.name}'s pregame win chance (DHR model)`}>
               <span className="font-display text-xl font-extrabold tnum">{Math.round(favWP * 100)}%</span>
               <span className="text-[11px] text-mute">{fav.short ?? ""}</span>
             </div>
@@ -384,7 +384,8 @@ function FinalCard({ g, day }: { g: Game; day: string }) {
   const homeWon = (g.home.score ?? 0) > (g.away.score ?? 0);
   const w = homeWon ? g.home : g.away, l = homeWon ? g.away : g.home;
   const wWP = g.pred ? (homeWon ? g.pred.wp : 1 - g.pred.wp) : null;
-  const note = g.upset !== null ? `${w.name} had a ${pctFmt(g.upset)} chance` : wWP !== null ? `${w.name} was a ${pctFmt(wWP)} favorite` : null;
+  const note = g.upset !== null ? `${w.name} had a ${pctFmt(g.upset)} pregame chance`
+    : wWP !== null ? (wWP >= 0.5 ? `${w.name} was a ${pctFmt(wWP)} pregame favorite` : `${w.name} had a ${pctFmt(wWP)} pregame chance`) : null;
   return (
     <article className="press relative flex flex-col gap-2 rounded-[18px] bg-deck px-4 py-3 hover:bg-deck2">
       <Link href={gameHref(day, g.id)} className="absolute inset-0 rounded-[18px]" aria-label={`${w.name} ${w.score}, ${l.name} ${l.score}. Open game`} />
