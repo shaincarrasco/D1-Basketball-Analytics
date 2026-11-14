@@ -86,3 +86,15 @@ test("a curated absence clears itself once the player logs minutes", () => {
   const { rows } = buildInjuries(w);
   assert.equal(rows.find(r => r.name === "Ace Guard").source, "box"); // he played Nov 3, so the curated note is stale
 });
+
+test("a reported reason sticks after the article ages out of the feed", () => {
+  const w = world();
+  w.feeds = { ...w.feeds, articles: { x: { headline: "Ace Guard out 4-6 weeks with hand fracture", url: "https://example.com/x", published: "2026-11-08T12:00:00Z" } }, athleteNews: { a1: ["x"] } };
+  const first = buildInjuries(w);
+  assert.equal(first.rows.find(r => r.name === "Ace Guard").body, "Hand");
+  const w2 = world({ ledger: first.ledger, now: "2026-12-05T15:00:00Z" }); // article gone, still hasn't played
+  const row = buildInjuries(w2).rows.find(r => r.name === "Ace Guard");
+  assert.equal(row.source, "news");
+  assert.equal(row.expected, "4–6 weeks");
+  assert.ok(row.eta);
+});

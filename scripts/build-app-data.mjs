@@ -642,7 +642,7 @@ const slugOfEspn = id => slugByEspn.get(String(id)) ?? null;
 const pollRows = list => (list ?? []).map(e => { const slug = slugOfEspn(e.team), t = slug ? teamSummaries.find(x => x.slug === slug) : null; return { rank: e.rank, prev: e.previous ?? null, pts: e.points ?? null, fpv: e.firstPlace ?? null, slug, name: t?.name ?? null, dhr: t?.rank ?? null, w: t?.w ?? null, l: t?.l ?? null }; });
 await write("news.json", { fetchedAt: feeds?.fetchedAt ?? null, league: articlesFor(feeds?.league).slice(0, 30), polls: { ap: pollRows(feeds?.polls?.ap), coaches: pollRows(feeds?.polls?.coaches) }, pollDate: feeds?.pollDate ?? null });
 await write("injuries.json", { checked: injuryCheck, rows: injuries.rows, teams: injuries.teamHealth.map(({ keys, ...h }) => h), wire: injuries.wire, links: await readJson("public/data/availability-report-links.json").catch(() => []) });
-await write("injury-wire.json", { checked: injuryCheck, wire: injuries.wire.slice(0, 150).map(({ t, kind, key, name, slug, team, status, from, body, rank, pid }) => ({ t, kind, key, name, slug, team, status, from: from ?? null, body: body ?? null, rank, pid })) });
+await write("injury-wire.json", { checked: injuryCheck, wire: injuries.wire.slice(0, 150).map(({ t, kind, key, name, slug, team, status, from, body, rank, pid, source }) => ({ t, kind, key, name, slug, team, status, from: from ?? null, body: body ?? null, rank, pid, source })) });
 
 // Calendar feeds (.ics) per team: subscribe once, updates with every deploy.
 await mkdir(`${OUT}/cal`, { recursive: true });

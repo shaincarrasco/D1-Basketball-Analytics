@@ -12,6 +12,7 @@ import { classify, INJURY_WORDS, OUT_STATES, STATE_LABEL, STATES } from "./injur
 
 const DAY = 864e5;
 const REPLACEMENT_DPR = -2; // a typical end-of-bench player, points per 100 vs average
+const DPR_SHRINK_POSS = 1500;
 const HEADLINE_DAYS = 45; // how long an injury headline can stand on its own
 const MONITOR_DAYS = 4; // "hurt in the win" stays a note only this long
 const EVENTS_PER_PLAYER = 40;
@@ -122,6 +123,12 @@ export function buildInjuries(p) {
           break;
         }
       }
+      // Sticky reasons: articles age out of the feed after three weeks, but a reported absence
+      // stands until he actually plays again (the ledger remembers what was reported).
+      const was = p.ledger?.players?.[key]?.open;
+      if (!s && was && was.source !== "box" && !playedSince(was.since)) {
+        s = { state: was.state, kind: was.kind ?? classify(was.detail ?? "").kind, body: was.body, expected: was.expected, weeks: was.weeks ?? null, detail: was.detail, since: was.since, source: was.source, url: was.url, publisher: was.publisher ?? null, confidence: was.source === "espn" ? "confirmed" : "reported" };
+      }
       if (!s && missed > 0 && gp > 0 && (mpg ?? 0) >= 12 && teamDays.length - missed >= 1) {
         s = { state: "missed", kind: "unknown", body: null, expected: null, weeks: null, detail: null, since: teamDays[teamDays.length - missed], source: "box", url: null, confidence: "inferred" };
       }
@@ -130,7 +137,9 @@ export function buildInjuries(p) {
       if (s.source === "box" && heads[0]) s.detail = heads[0].headline, s.url = heads[0].url;
 
       const eta = s.weeks && s.since ? [addDays(s.since, s.weeks[0] * 7), addDays(s.since, s.weeks[1] * 7)] : null;
-      const dpr = c.dpr ?? null; // already shrunk toward a box-score prior, so small samples stay modest
+      // DPR swings ±8 on a few hundred possessions, so for the impact estimate pull it toward average
+      // until the sample is big (half weight at 1,500 on-court possessions).
+      const dpr = c.dpr != null && c.onPoss ? c.dpr * (c.onPoss / (c.onPoss + DPR_SHRINK_POSS)) : null;
       const out = OUT_STATES.has(s.state);
       const netLoss = mpg != null ? Math.max(0, (mpg / 40) * ((dpr ?? 0) - REPLACEMENT_DPR)) : null;
       // Team record with and without him (ESPN-covered games only).
@@ -148,7 +157,7 @@ export function buildInjuries(p) {
       rows.push({
         key, pid: c.pid, aid: c.aid, name: c.name, pos: c.pos ?? null,
         slug: t.slug, team: t.name, conf: t.conf, rank: t.rank,
-        state: s.state, status: labelFor(s.state, s.kind, missed, yetToPlay), kind: s.kind, body: s.body ?? null, expected: s.expected ?? null, eta,
+        state: s.state, status: labelFor(s.state, s.kind, missed, yetToPlay), kind: s.kind, weeks: s.weeks ?? null, body: s.body ?? null, expected: s.expected ?? null, eta,
         detail: s.detail, since: s.since, source: s.source, url: s.url ?? null, publisher: s.publisher ?? (s.source === "news" ? "ESPN" : null), confidence: s.confidence,
         missed, lastPlayed, gp, yetToPlay,
         impact: { mpg: r1(mpg), ppg: r1(c.pts), rpg: r1(c.reb), apg: r1(c.ast), minShare: mpg != null ? r3(mpg / 200) : null, dpr: r1(dpr), netLoss: out ? r1(netLoss) : 0 },
@@ -162,7 +171,7 @@ export function buildInjuries(p) {
   const prev = p.ledger?.players ?? {};
   const firstRun = !p.ledger;
   const players = structuredClone(prev);
-  const snap = r => ({ state: r.state, status: r.status, body: r.body, expected: r.expected, detail: r.detail, source: r.source, url: r.url, since: r.since, missed: r.missed });
+  const snap = r => ({ state: r.state, status: r.status, kind: r.kind, body: r.body, expected: r.expected, weeks: r.weeks, detail: r.detail, source: r.source, url: r.url, publisher: r.publisher, since: r.since, missed: r.missed });
   const push = (e, ev) => { e.events.push(ev); if (e.events.length > EVENTS_PER_PLAYER) e.events.splice(0, e.events.length - EVENTS_PER_PLAYER); };
   const current = new Map(rows.map(r => [r.key, r]));
   for (const r of rows) {

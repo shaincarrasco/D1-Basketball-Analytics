@@ -1,1 +1,110 @@
-[]
+[
+ {
+  "team": "uconn",
+  "name": "Solo Ball",
+  "status": "Out for season",
+  "body": "Wrist",
+  "kind": "injury",
+  "expected": "Season",
+  "detail": "Needs wrist surgery and will take a medical redshirt, sitting out all of 2026-27 and aiming to return in 2027-28.",
+  "reported": "2026-04-20",
+  "source": "ESPN",
+  "url": "https://africa.espn.com/mens-college-basketball/story/_/id/48544576/uconn-solo-ball-wrist-surgery-miss-all-next-season"
+ },
+ {
+  "team": "michigan",
+  "name": "Brandon McCoy Jr.",
+  "status": "Out for season",
+  "body": "ACL",
+  "kind": "injury",
+  "expected": "Season",
+  "detail": "The five-star freshman tore his ACL on Michigan's summer trip to Lithuania and is done for 2026-27.",
+  "reported": "2026-09-01",
+  "source": "CBS Sports",
+  "url": "https://www.cbssports.com/college-basketball/news/brandon-mccoy-jr-injury-michigan-freshman-miss-2026-27-season/"
+ },
+ {
+  "team": "st-john-s",
+  "name": "Donnie Freeman",
+  "status": "Out for season",
+  "body": "Achilles",
+  "kind": "injury",
+  "expected": "Season",
+  "detail": "The Syracuse transfer tore his Achilles in a noncontact workout injury in early July and has already had surgery.",
+  "reported": "2026-07-02",
+  "source": "CBS Sports",
+  "url": "https://www.cbssports.com/college-basketball/news/st-johns-donnie-freeman-injury-early-top-25-and-1-college-basketball-rankings/"
+ },
+ {
+  "team": "miami",
+  "name": "Marcus Allen",
+  "status": "Out for season",
+  "body": "ACL",
+  "kind": "injury",
+  "expected": "Season",
+  "detail": "After beating lymphoma, the junior forward tore his ACL during summer workouts in the Bahamas, ending his planned comeback this year.",
+  "reported": "2026-08-03",
+  "source": "Roundtable (Miami)",
+  "url": "https://roundtable.io/sports/ncaa/miami/news/miami-hurricanes-marcus-allen-to-miss-2026-27-college-basketball-season"
+ },
+ {
+  "team": "kansas",
+  "name": "Melvin Council Jr.",
+  "status": "Out",
+  "body": "Foot",
+  "kind": "injury",
+  "expected": "Until January",
+  "detail": "Broke a bone in his right foot in practice on Nov. 9 and was set for surgery; Bill Self hopes he is back around conference play and he may miss the rest of nonconference.",
+  "reported": "2026-11-09",
+  "source": "Associated Press via YourValley",
+  "url": "https://www.yourvalley.net/stories/no-15-kansas-loses-melvin-council-jr-to-broken-foot-ahead-of-champions-classic-vs-no-14-kentucky,739309"
+ },
+ {
+  "team": "texas-tech",
+  "name": "JT Toppin",
+  "status": "Out",
+  "body": "ACL",
+  "kind": "injury",
+  "expected": "Indefinite",
+  "detail": "Still rehabbing the ACL he tore last February, with no timetable set for his return to games as of late October.",
+  "reported": "2026-10-28",
+  "source": "Associated Press via La Nacion",
+  "url": "https://www.lanacion.com.ar/usa/no-19-texas-tech-waiting-on-all-america-post-jt-toppin-while-darrion-williams-back-after-year-away-nid28102026/"
+ },
+ {
+  "team": "boise-state",
+  "name": "Ty Rodgers",
+  "status": "Out",
+  "body": "Lower body",
+  "kind": "injury",
+  "expected": "Indefinite",
+  "detail": "The Illinois transfer had surgery after a workout injury in June and is out indefinitely, with the 2026-27 season in doubt.",
+  "reported": "2026-06-16",
+  "source": "Sports Illustrated (Boise State Broncos On SI)",
+  "url": "https://www.si.com/college/boise-state/basketball/boise-state-men-basketball-highest-rated-portal-signee-suffers-serious-injury-what-it-means-for-2026-27-season"
+ },
+ {
+  "team": "south-florida",
+  "name": "AJ Dancler",
+  "status": "Out for season",
+  "body": "Knee",
+  "kind": "injury",
+  "expected": "Season",
+  "detail": "Hurt his knee in summer workouts, had surgery in late August, and will miss the whole 2026-27 season.",
+  "reported": "2026-08-31",
+  "source": "South Florida Athletics",
+  "url": "https://gousfbulls.com/news/2026/8/31/mens-basketball-mens-basketball-announces-aj-dancler-will-miss-season-with-injury"
+ },
+ {
+  "team": "missouri",
+  "name": "Jaylen Carey",
+  "status": "Suspended",
+  "body": null,
+  "kind": "suspension",
+  "expected": "Indefinite",
+  "detail": "The Tennessee transfer was suspended indefinitely by Dennis Gates for a team-rules violation just before the opener; he also missed both exhibitions.",
+  "reported": "2026-11-02",
+  "source": "Saturday Down South",
+  "url": "https://www.saturdaydownsouth.com/news/college-basketball/dennis-gates-announces-indefinite-suspension-for-transfer-forward/"
+ }
+]

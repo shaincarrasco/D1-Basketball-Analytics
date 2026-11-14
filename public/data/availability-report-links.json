@@ -1,1 +1,50 @@
-[]
+[
+ {
+  "conf": "NCAA",
+  "url": "https://www.ncaa.com/di-mens-basketball-player-availability",
+  "note": "NCAA tournament games. Reports the night before and about two hours before tip.",
+  "verified": true
+ },
+ {
+  "conf": "Big Ten",
+  "url": null,
+  "note": "Conference games. Reports are published on BigTen.org; we haven't confirmed this season's page yet.",
+  "verified": false
+ },
+ {
+  "conf": "SEC",
+  "url": "https://www.secsports.com/mbbreports",
+  "note": "Conference games. Initial report the day before, final report on game day.",
+  "verified": true
+ },
+ {
+  "conf": "ACC",
+  "url": "https://theacc.com/sports/2025/12/29/availability-reporting-mbb.aspx",
+  "note": "Conference games. Initial report the night before, final about two hours before tip.",
+  "verified": true
+ },
+ {
+  "conf": "Big 12",
+  "url": null,
+  "note": "Conference games. Reports are published on Big12Sports.com; we haven't confirmed this season's page yet.",
+  "verified": false
+ },
+ {
+  "conf": "Big East",
+  "url": "https://www.bigeast.com/sports/2025/11/26/2526_mbb_availability_reports.aspx",
+  "note": "Conference games. Reports posted about three hours before tip.",
+  "verified": true
+ },
+ {
+  "conf": "A-10",
+  "url": "https://atlantic10.com/sports/2025/12/3/availability-reporting-mbb-current.aspx",
+  "note": "Conference games. Final report about 2\u00be hours before tip.",
+  "verified": true
+ },
+ {
+  "conf": "MVC",
+  "url": "https://mvc-sports.com/sports/2025/12/27/MBB_1227251036.aspx",
+  "note": "Conference games. Initial report 9 p.m. the night before, update about two hours before tip.",
+  "verified": true
+ }
+]

@@ -1,8 +1,6 @@
-"use client";
-// Shared injury helpers: ordering, colours, plain-English labels and the "new since your last visit" marker.
-import { useEffect, useState } from "react";
-import type { Availability, InjuryConfidence, InjuryEvent, InjuryFile, InjuryState, InjurySource } from "./types";
-import { useJson } from "./client-data";
+// Shared injury helpers: ordering, colours and plain-English labels. Pure, so server and client
+// components can both import it; the hooks live in injury-hooks.ts.
+import type { Availability, InjuryConfidence, InjuryEvent, InjuryState, InjurySource } from "./types";
 
 export const STATE_ORDER: InjuryState[] = ["season", "out", "doubtful", "questionable", "dtd", "missed", "monitor"];
 /** States that take a player off the floor (they count toward missing minutes). */
@@ -37,20 +35,5 @@ export function timeAgo(iso: string | null | undefined, now = Date.now()) {
   return d === 1 ? "yesterday" : `${d} days ago`;
 }
 
-/** The league-wide injury file (rows, team health, change wire, official report links). */
-export const useInjuries = () => useJson<InjuryFile>("injuries.json");
-
-// "New since your last visit": the time this device last opened an injury view.
-const SEEN_KEY = "d1h-injuries-seen";
-export function useLastSeen(mark = true): string | null {
-  const [seen, setSeen] = useState<string | null>(null);
-  useEffect(() => {
-    let prev: string | null = null;
-    try { prev = localStorage.getItem(SEEN_KEY); } catch { /* storage unavailable */ }
-    setSeen(prev);
-    if (!mark) return;
-    const t = window.setTimeout(() => { try { localStorage.setItem(SEEN_KEY, new Date().toISOString()); } catch { /* storage unavailable */ } }, 4000);
-    return () => window.clearTimeout(t);
-  }, [mark]);
-  return seen;
-}
+/** Where to send someone for a player: his profile if he has a stats line, else his team page. */
+export const playerHref = (r: { pid: string | null; slug: string }) => (r.pid ? `/player/?id=${r.pid}` : `/teams/${r.slug}/`);

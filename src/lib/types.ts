@@ -57,7 +57,7 @@ export type Availability = {
   key: string; pid: string | null; aid: string | null; name: string; pos: string | null;
   state: InjuryState; status: string; kind: "injury" | "illness" | "suspension" | "eligibility" | "personal" | "unknown";
   /** Body part ("Knee", "ACL", "Illness"…), expected absence ("Season", "6–8 weeks", "Until January", "Indefinite"…), estimated return window [from, to] (yyyy-mm-dd). */
-  body: string | null; expected: string | null; eta: [string, string] | null;
+  body: string | null; expected: string | null; eta: [string, string] | null; weeks?: [number, number] | null;
   detail: string | null; since: string | null; source: InjurySource; url: string | null; publisher: string | null; confidence: InjuryConfidence;
   /** Consecutive team games missed (ESPN box scores), last game played, games played, never played this season. */
   missed: number; lastPlayed: string | null; gp: number; yetToPlay: boolean;

@@ -21,7 +21,7 @@ pub async fn subscribe(State(state): State<Shared>, headers: HeaderMap, Json(bod
     let user = require_user(&headers, &state).await?;
     let c = db(&state).await?;
     if profile_plan(&c, &user).await? != "pro" { return Err(err(StatusCode::PAYMENT_REQUIRED, "Alerts are part of D1 Hoops Pro.")); }
-    let prefs = body.prefs.unwrap_or_else(|| json!({ "tipoff": true, "close": true, "final": true }));
+    let prefs = body.prefs.unwrap_or_else(|| json!({ "tipoff": true, "close": true, "final": true, "injury": true }));
     c.execute("INSERT INTO app.push_subscriptions (endpoint, user_id, p256dh, auth, prefs) VALUES ($1, $2, $3, $4, $5) ON CONFLICT (endpoint) DO UPDATE SET user_id = EXCLUDED.user_id, p256dh = EXCLUDED.p256dh, auth = EXCLUDED.auth, prefs = EXCLUDED.prefs",
         &[&body.endpoint, &user.sub, &body.keys.p256dh, &body.keys.auth, &prefs]).await.map_err(db_err)?;
     Ok(Json(json!({ "ok": true })))
@@ -70,24 +70,32 @@ fn detect(prev: &[EspnEvent], next: &[EspnEvent], name: &dyn Fn(&str) -> String)
 }
 
 pub async fn on_slate(state: Shared, prev: Vec<EspnEvent>, next: Vec<EspnEvent>) {
-    let (Some(pool), Some(public), Some(private)) = (state.db.clone(), state.cfg.vapid_public.clone(), state.cfg.vapid_private.clone()) else { return };
+    if state.db.is_none() || state.cfg.vapid_public.is_none() || state.cfg.vapid_private.is_none() { return }
     if prev.is_empty() { return; } // first poll after a restart: no transitions to report
     let teams = state.teams.read().await.clone();
     let name = |id: &str| teams.get(id).map(|t| t.name.clone()).unwrap_or_else(|| "Opponent".into());
-    let alerts = detect(&prev, &next, &name);
+    let alerts: Vec<(Alert, Vec<String>)> = detect(&prev, &next, &name).into_iter().map(|a| {
+        let slugs = a.teams.iter().filter_map(|id| teams.get(id).map(|t| t.slug.clone())).collect();
+        (a, slugs)
+    }).collect();
+    dispatch(&state, alerts, "/games/").await;
+}
+
+/// Claim each alert once (app.sent_alerts), then push it to Pro followers of its team slugs
+/// whose prefs don't turn that kind off. Shared by the live-game and injury paths.
+async fn dispatch(state: &Shared, alerts: Vec<(Alert, Vec<String>)>, path: &str) {
+    let (Some(pool), Some(_), Some(private)) = (state.db.clone(), state.cfg.vapid_public.clone(), state.cfg.vapid_private.clone()) else { return };
     if alerts.is_empty() { return; }
     let Ok(c) = pool.get().await else { return };
     let Ok(client) = std::panic::catch_unwind(HyperWebPushClient::new) else { return };
-    let _ = public;
-    for a in alerts {
+    for (a, slugs) in alerts {
         // Claim the alert once across restarts / instances.
         if c.execute("INSERT INTO app.sent_alerts (key) VALUES ($1) ON CONFLICT DO NOTHING", &[&a.key]).await.unwrap_or(0) == 0 { continue; }
-        let slugs: Vec<String> = a.teams.iter().filter_map(|id| teams.get(id).map(|t| t.slug.clone())).collect();
         if slugs.is_empty() { continue; }
         let rows = match c.query(
             "SELECT DISTINCT s.endpoint, s.p256dh, s.auth FROM app.push_subscriptions s JOIN app.follows f ON f.user_id = s.user_id AND f.kind = 'team' AND f.ref = ANY($1) JOIN app.profiles p ON p.user_id = s.user_id AND p.plan = 'pro' WHERE COALESCE((s.prefs ->> $2)::boolean, true)",
             &[&slugs, &a.kind]).await { Ok(r) => r, Err(e) => { let _ = db_err(e); continue } };
-        let url = format!("{}/games/", state.cfg.public_url);
+        let url = format!("{}{}", state.cfg.public_url, path);
         let payload = json!({ "title": a.title, "body": a.body, "url": url, "tag": a.key }).to_string();
         for r in rows {
             let (endpoint, p256dh, auth): (String, String, String) = (r.get(0), r.get(1), r.get(2));
@@ -102,6 +110,63 @@ pub async fn on_slate(state: Shared, prev: Vec<EspnEvent>, next: Vec<EspnEvent>)
                 if gone { let _ = c.execute("DELETE FROM app.push_subscriptions WHERE endpoint = $1", &[&endpoint]).await; }
             }
         }
+    }
+}
+
+/// Injury news only alerts for fresh events: a restart or first deploy must not replay the feed.
+const INJURY_WINDOW_SECS: i64 = 6 * 3600;
+
+/// Pure: injury wire JSON + now -> alerts (new / worse / returned within the last 6 hours).
+/// `teams` holds the follower slug, not an ESPN id.
+fn injury_alerts(wire: &Value, now: chrono::DateTime<chrono::Utc>) -> Vec<Alert> {
+    let Some(events) = wire.get("wire").and_then(Value::as_array) else { return vec![] };
+    let s = |e: &Value, k: &str| e.get(k).and_then(Value::as_str).filter(|v| !v.trim().is_empty()).map(str::to_string);
+    let mut out = vec![];
+    for e in events {
+        let (Some(t), Some(kind), Some(key), Some(name), Some(slug)) = (s(e, "t"), s(e, "kind"), s(e, "key"), s(e, "name"), s(e, "slug")) else { continue };
+        if !matches!(kind.as_str(), "new" | "worse" | "returned") { continue; }
+        // Box-score inferences ("missed last game", reason unknown) stay on the site, not in pushes.
+        if s(e, "source").as_deref() == Some("box") { continue; }
+        let Ok(at) = chrono::DateTime::parse_from_rfc3339(&t) else { continue };
+        let age = (now - at.with_timezone(&chrono::Utc)).num_seconds();
+        if !(0..=INJURY_WINDOW_SECS).contains(&age) { continue; }
+        let team = s(e, "team").unwrap_or_else(|| slug.clone());
+        let status = s(e, "status").unwrap_or_else(|| "Unavailable".into());
+        let part = s(e, "body");
+        let (title, body) = if kind == "returned" {
+            (format!("Back: {name} returns for {team}"), part.map(|p| format!("{p}.")).unwrap_or_else(|| "Listed as available again.".into()))
+        } else {
+            let detail = match (part, s(e, "from")) {
+                (Some(p), Some(f)) => format!("{p}: {f} \u{2192} {status}"),
+                (Some(p), None) => p,
+                (None, Some(f)) => format!("{f} \u{2192} {status}"),
+                (None, None) => "Reason not reported.".into(),
+            };
+            (format!("Injury: {name} ({team}) \u{2014} {status}"), detail)
+        };
+        out.push(Alert { key: format!("inj:{key}:{kind}:{t}"), kind: "injury", teams: vec![slug], title, body });
+    }
+    out
+}
+
+pub const DEFAULT_INJURY_FEED: &str = "https://shaincarrasco.github.io/D1-Basketball-Analytics/data/app/injury-wire.json";
+
+/// Background task: every 10 minutes, fetch the injury wire and push fresh events to followers.
+pub async fn injury_loop(state: Shared) {
+    if state.db.is_none() || state.cfg.vapid_private.is_none() { return } // nothing to send with
+    let url = state.cfg.injury_feed_url.clone();
+    loop {
+        match state.http.get(&url).timeout(std::time::Duration::from_secs(20)).send().await.and_then(|r| r.error_for_status()) {
+            Ok(r) => match r.json::<Value>().await {
+                Ok(wire) => {
+                    let alerts = injury_alerts(&wire, chrono::Utc::now()).into_iter().map(|a| { let s = a.teams.clone(); (a, s) }).collect();
+                    dispatch(&state, alerts, "/injuries/").await;
+                }
+                Err(e) => eprintln!("[injury] bad feed json: {e}"),
+            },
+            Err(e) => eprintln!("[injury] fetch failed: {e}"),
+        }
+        tokio::time::sleep(std::time::Duration::from_secs(600)).await;
     }
 }
 
@@ -127,5 +192,30 @@ mod tests {
         let a = detect(&[ev("in", 2, 1.0, 70, 65, false)], &[ev("post", 2, 0.0, 70, 65, true)], &name);
         assert_eq!(a[0].title, "Final: Duke 70, Kansas 65");
         assert!(detect(&[ev("in", 2, 100.0, 80, 60, false)], &[ev("in", 2, 90.0, 82, 60, false)], &name).is_empty());
+    }
+
+    #[test]
+    fn injury_selection() {
+        let now = chrono::DateTime::parse_from_rfc3339("2026-11-14T14:00:00Z").unwrap().with_timezone(&chrono::Utc);
+        let wire = json!({ "checked": "x", "wire": [
+            { "t": "2026-11-14T12:00:00Z", "kind": "new", "key": "duke:1", "name": "A B", "slug": "duke", "team": "Duke", "status": "Out", "from": null, "body": "Ankle" },
+            { "t": "2026-11-14T13:00:00Z", "kind": "worse", "key": "duke:2", "name": "C D", "slug": "duke", "team": "Duke", "status": "Out", "from": "Questionable", "body": null },
+            { "t": "2026-11-14T13:30:00Z", "kind": "returned", "key": "duke:3", "name": "E F", "slug": "duke", "team": "Duke", "status": "Available", "from": "Out", "body": null },
+            { "t": "2026-11-14T13:30:00Z", "kind": "better", "key": "duke:4", "name": "G H", "slug": "duke", "team": "Duke", "status": "Probable", "from": null, "body": null },
+            { "t": "2026-11-14T13:30:00Z", "kind": "cleared", "key": "duke:5", "name": "I J", "slug": "duke", "team": "Duke", "status": "x", "from": null, "body": null },
+            { "t": "2026-11-14T06:00:00Z", "kind": "new", "key": "duke:6", "name": "K L", "slug": "duke", "team": "Duke", "status": "Out", "from": null, "body": null },
+            { "t": "2026-11-14T15:00:00Z", "kind": "new", "key": "duke:7", "name": "M N", "slug": "duke", "team": "Duke", "status": "Out", "from": null, "body": null },
+            { "t": "2026-11-14T13:00:00Z", "kind": "new", "key": "duke:9", "name": "Q R", "slug": "duke", "team": "Duke", "status": "Missed last game", "from": null, "body": null, "source": "box" },
+            { "t": "garbage", "kind": "new", "key": "duke:8", "name": "O P", "slug": "duke", "team": "Duke", "status": "Out", "from": null, "body": null }
+        ] });
+        let a = injury_alerts(&wire, now);
+        assert_eq!(a.len(), 3);
+        assert!(a.iter().all(|x| x.kind == "injury" && x.teams == ["duke"]));
+        assert_eq!(a[0].key, "inj:duke:1:new:2026-11-14T12:00:00Z");
+        assert_eq!(a[0].title, "Injury: A B (Duke) \u{2014} Out");
+        assert_eq!(a[0].body, "Ankle");
+        assert_eq!(a[1].body, "Questionable \u{2192} Out");
+        assert_eq!(a[2].title, "Back: E F returns for Duke");
+        assert!(injury_alerts(&json!({}), now).is_empty());
     }
 }
