@@ -382,6 +382,16 @@ describe("ranking", () => {
     expect(bestMoment(game(0.5, 0), ot, s)!.kind).toBe("overtime");
     expect(bestMoment(game(0.5, 0), clock(2, 30, 70, 69))!.kind).toBe("close");
   });
+  it("every live game with a projection gets at least our live win chance", () => {
+    const ms = scoreboardMoments(game(0.86), clock(2, 680, 52, 44));
+    expect(ms).toHaveLength(1);
+    expect(ms[0].text).toMatch(/^Our model gives Wake Forest a 9\d% chance to win from here$/);
+    expect(ms[0].model).toBe(true);
+    expect(scoreboardMoments(game(0.4, -2), clock(1, 600, 20, 26))[0].body).toMatch(/^Our model gives Southern Utah an? \d+% chance to win from here$/);
+    // Dropped once play-by-play has something real to say.
+    const [s] = bothWays([], { period: 2, clock: 680, homePlayers: [{ name: "Hunter Sallis", pts: 22 }] });
+    expect(kinds(gameMoments(game(0.86), clock(2, 680, 52, 44), s))).toEqual(["player"]);
+  });
   it("falls back to scoreboard moments without a summary", () => {
     expect(bestMoment(game(0.86), clock(2, 581, 50, 56), null)!.kind).toBe("upset");
   });

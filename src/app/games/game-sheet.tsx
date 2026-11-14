@@ -14,7 +14,7 @@ import PlayByPlay from "./live/play-by-play";
 import type { BoxLine, Game, GameSide } from "@/lib/types";
 import { winProb, remainingAt, clockLabel } from "@/lib/win-prob";
 import FlowChart from "./flow-chart";
-import { WatchBadge } from "./game-card";
+import { MomentList, WatchBadge } from "./game-card";
 import TvBadges from "@/components/tv-badges";
 import ArticleList from "@/components/article-list";
 import PickEm from "./pick-em";
@@ -106,6 +106,7 @@ export default function GameSheet({ g: gIn, live: liveIn, onClose }: { g: Game; 
 
           {played && <LineScore g={g} />}
           {played && mode === "poll" && <LiveStatus d={detail} />}
+          {isLiveNow && <MomentList g={g} live={live} summary={detail.data} />}
           {played && <GameFlow g={g} live={live} summary={detail.data} />}
           {played && <LiveDetail g={g} d={detail} mode={mode} espnId={espnId} onLoad={() => setWantDetail(true)} />}
           {!final && <Availability g={g} />}

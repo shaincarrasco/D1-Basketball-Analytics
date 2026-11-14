@@ -17,7 +17,7 @@ import { REG_SECONDS, HALF_SECONDS, OT_SECONDS, clockLabel, remainingAt, winProb
 
 export type MomentKind =
   | "upset" | "comeback" | "overtime" | "close" | "blowout" | "swing"
-  | "run" | "lead-changes" | "player" | "dunks" | "buzzer";
+  | "run" | "lead-changes" | "player" | "dunks" | "buzzer" | "chance";
 
 export type Moment = {
   kind: MomentKind;
@@ -58,6 +58,9 @@ export function pctText(p: number): string {
   if (p > 0.995) return "over 99%";
   return `${Math.round(p * 100)}%`;
 }
+
+/** "a 96%", "an 81%", "an 8%", "an 11%", "an under 1%"… kept simple: "an" before 8, 11, 18 and the 80s. */
+const aPct = (p: number) => { const t = pctText(p); const n = Math.round(p * 100); return `${n === 8 || n === 11 || n === 18 || (n >= 80 && n <= 89) ? "an" : "a"} ${t}`; };
 
 export const otName = (period: number) => (period <= 3 ? "overtime" : period === 4 ? "double overtime" : period === 5 ? "triple overtime" : `${period - 2} overtimes`);
 const otLabel = (period: number) => { const n = otName(period); return n[0].toUpperCase() + n.slice(1); };
@@ -176,6 +179,12 @@ export function scoreboardMoments(g: Game, live: MomentClock | null | undefined)
       out.push(make("swing", 20 + 60 * ((Math.abs(d) - 0.25) / 0.75) + (flipped ? 15 : 0), "Big swing",
         `Our model has ${nameOf(g, s)} at ${pctText(now)} to win, up from ${pctText(before)} before tip`, { side: s, model: true }));
     }
+  }
+  // Fallback so every live card says something: our live win chance from here (ranks below everything).
+  if (pre && liveHome != null && !out.length) {
+    const s: Side = liveHome >= 0.5 ? "home" : "away";
+    const p = s === "home" ? liveHome : 1 - liveHome;
+    out.push(make("chance", 3, null, `Our model gives ${nameOf(g, s)} ${aPct(p)} chance to win from here`, { side: s, model: true }));
   }
   return out;
 }
@@ -417,14 +426,15 @@ export function playMoments(g: Game, s: LiveSummary | null | undefined, now?: Mo
 
 // ---- ranking ------------------------------------------------------------------------------
 
-const KIND_ORDER: MomentKind[] = ["overtime", "buzzer", "close", "upset", "comeback", "run", "player", "swing", "dunks", "lead-changes", "blowout"];
+const KIND_ORDER: MomentKind[] = ["overtime", "buzzer", "close", "upset", "comeback", "run", "player", "swing", "dunks", "lead-changes", "blowout", "chance"];
 
 /**
  * All candidates for a live game, best first. Play-by-play candidates join when a summary is
  * given; one moment per kind except players, runs and buzzer-beaters (one per player / the best run).
  */
 export function gameMoments(g: Game, live: MomentClock | null | undefined, summary?: LiveSummary | null): Moment[] {
-  const all = [...scoreboardMoments(g, live), ...(summary ? playMoments(g, summary, live) : [])];
+  const plays = summary ? playMoments(g, summary, live) : [];
+  const all = [...scoreboardMoments(g, live).filter(m => m.kind !== "chance" || !plays.length), ...plays];
   const byKind = new Map<string, Moment>();
   for (const mo of all) {
     const key = mo.kind === "player" ? `player:${mo.body.split(" has ")[0]}` : mo.kind === "buzzer" ? `buzzer:${mo.t}` : mo.kind;

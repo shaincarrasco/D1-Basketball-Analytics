@@ -2,10 +2,13 @@
 // One scoreboard card. The whole card opens the detail sheet (a full-cover button);
 // team names sit above it as real links to the team pages.
 import Link from "next/link";
+import { useMemo } from "react";
 import TeamLogo from "@/components/team-logo";
 import WinProb from "@/components/win-prob";
 import { DHR_RANK_TITLE, fmt, pctFmt } from "@/lib/format";
 import type { LiveGame } from "@/lib/live";
+import type { LiveSummary } from "@/lib/live-game";
+import { gameMoments, momentWhen, type Moment } from "@/lib/moments";
 import type { Game, GameSide } from "@/lib/types";
 import TvBadges from "@/components/tv-badges";
 import type { KeyAbsence } from "@/components/whos-out";
@@ -77,14 +80,46 @@ function Row({ g, side, which, absence }: { g: Game; side: GameSide; which: "hom
   );
 }
 
-export default function GameCard({ g, live: lg, onOpen, absences }: { g: Game; live?: LiveGame; onOpen: (id: string, el: HTMLElement) => void; absences?: Map<string, KeyAbsence> }) {
+const MODEL_TITLE = "Uses DHR's model: the pregame win probability set before tip-off";
+
+/** One live moment in plain words: a short coloured lead ("12–0 run") and the sentence. */
+export function MomentLine({ m, className = "" }: { m: Moment; className?: string }) {
+  return (
+    <p data-testid="moment" data-kind={m.kind} className={`text-[13.5px] leading-snug text-ink ${className}`} title={m.model ? MODEL_TITLE : undefined}>
+      {m.lead && <span className="font-semibold text-hot">{m.lead}: </span>}
+      {m.body}
+    </p>
+  );
+}
+
+/** The game sheet's "Moments" list for a live game: the best few candidates, newest context first. */
+export function MomentList({ g, live, summary }: { g: Game; live?: LiveGame; summary: LiveSummary | null }) {
+  const list = useMemo(() => gameMoments(g, live, summary && summary.state === "in" ? summary : null).slice(0, 5), [g, live, summary]);
+  if (!list.length) return null;
+  return (
+    <section className="mt-7" aria-labelledby={`mo-${g.id}`}>
+      <h3 id={`mo-${g.id}`} className="h-section mb-2 !text-xl">Moments</h3>
+      <ul className="overflow-hidden rounded-[14px] border border-line" data-testid="moment-list">
+        {list.map((m, i) => (
+          <li key={`${m.kind}-${i}`} className="flex min-h-[44px] items-baseline gap-3 border-b border-line px-3.5 py-2.5 last:border-0">
+            <span className="w-[52px] shrink-0 text-[12.5px] font-semibold text-mute tnum">{momentWhen(m)}</span>
+            <MomentLine m={m} className="min-w-0 flex-1" />
+          </li>
+        ))}
+      </ul>
+      {list.some(m => m.model) && <p className="mt-1.5 text-[12px] text-dim">&ldquo;Our pregame chance&rdquo; and &ldquo;our model&rdquo; are DHR&apos;s win probabilities, not betting odds.</p>}
+    </section>
+  );
+}
+
+export default function GameCard({ g, live: lg, onOpen, absences, moment }: { g: Game; live?: LiveGame; onOpen: (id: string, el: HTMLElement) => void; absences?: Map<string, KeyAbsence>; moment?: Moment | null }) {
   const final = isFinal(g), live = isLive(g);
   const fw = favoriteWon(g);
   const status = statusLabel(g, lg);
   const li = lineInfo(g);
   // Only unplayed games: for finals we don't store who was available at the time.
   const abs = (side: GameSide) => (!final && side.slug ? absences?.get(side.slug) : undefined);
-  const label = `${g.away.name} ${g.neutral ? "vs" : "at"} ${g.home.name}: ${status}${final || live ? `, ${g.away.score ?? "—"} to ${g.home.score ?? "—"}` : ""}. Open game details`;
+  const label = `${g.away.name} ${g.neutral ? "vs" : "at"} ${g.home.name}: ${status}${final || live ? `, ${g.away.score ?? "—"} to ${g.home.score ?? "—"}` : ""}.${live && moment ? ` ${moment.text}.` : ""} Open game details`;
   return (
     <article className={`deck relative flex w-full flex-col gap-3 p-4 transition-colors hover:border-line2 ${live ? "!border-[rgb(var(--hot-rgb)/0.5)]" : ""}`}>
       <button type="button" aria-label={label} onClick={e => onOpen(g.id, e.currentTarget)} className="absolute inset-0 rounded-[10px] focus-visible:outline-offset-[-2px]" />
@@ -103,6 +138,7 @@ export default function GameCard({ g, live: lg, onOpen, absences }: { g: Game; l
         <Row g={g} side={g.away} which="away" absence={abs(g.away)} />
         <Row g={g} side={g.home} which="home" absence={abs(g.home)} />
       </div>
+      {live && moment && <MomentLine m={moment} className="-mt-0.5" />}
       {g.tv?.length && !final ? <div className="-mt-1"><TvBadges tv={g.tv} /></div> : null}
       {g.pred && (
         <div className="mt-auto">

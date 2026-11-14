@@ -14,6 +14,7 @@ import { toggleFavorite, useFavorites } from "@/lib/favorites";
 import { useLiveScores, withLive, type LiveGame } from "@/lib/live";
 import { useShowProjections } from "@/lib/show-projections";
 import type { Game, GameDay, GameIndex, GameSide, TeamSummary } from "@/lib/types";
+import LiveStrip from "./live-strip";
 
 const gameHref = (day: string, id: string) => `/games/?d=${day}&g=${id}`;
 const etDayOf = (iso: string) => new Intl.DateTimeFormat("en-CA", { timeZone: "America/New_York" }).format(new Date(iso));
@@ -75,6 +76,7 @@ export default function Today() {
         {day && <Link href={`/games/?d=${day}`} className="btn hidden sm:inline-flex">Full scoreboard</Link>}
       </div>
 
+      {isToday && live.anyLive && <LiveStrip count={liveCount} />}
       {day && <DateStrip day={day} today={isToday} />}
       <FollowedCircles games={games} day={day} />
 
