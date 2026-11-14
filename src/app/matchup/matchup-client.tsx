@@ -17,6 +17,7 @@ import { playerRows } from "@/lib/players";
 import type { InjuryFile, Meta, Player, PlayerTable, ProfileKey, TeamSummary } from "@/lib/types";
 import TeamCombobox from "./team-combobox";
 import MarginChart from "./margin-chart";
+import MatchupBreakdown from "../games/breakdown/matchup-breakdown";
 
 type Site = "a" | "n" | "b";
 const Z80 = 1.2816;
@@ -78,6 +79,8 @@ export default function MatchupClient() {
       )}
 
       {proj && <Availability a={a} b={b} proj={proj} file={injuries.data} />}
+
+      {proj && <MatchupBreakdown meta={meta.data} a={a} b={b} site={site} injuries={injuries.data} aColor={A_COLOR} bColor={B_COLOR} />}
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
         <TaleOfTheTape a={a} b={b} total={total} />
