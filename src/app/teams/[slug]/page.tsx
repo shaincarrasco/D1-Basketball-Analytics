@@ -24,6 +24,7 @@ import ShotProfile from "./shot-profile";
 import ZoneTable from "./zone-table";
 import Lineups from "./lineups";
 import TeamTabs from "./team-tabs";
+import TeamRosterValue from "@/components/nil/team-roster-value";
 import { ViewTransition } from "react";
 import { Dots } from "@/components/dots";
 import { playerRows } from "@/lib/players";
@@ -234,6 +235,7 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
               <p className="text-xs text-mute">DPR = points per 100 possessions vs an average D-I player, ± one standard error</p>
             </div>
             <Roster slug={slug} rows={detail.roster} fields={fields} onOff={detail.onOff ?? {}} bios={bios} />
+            <TeamRosterValue teamId={team.id} slug={slug} short={team.short} />
           </section>
 
           {/* Lineups */}
