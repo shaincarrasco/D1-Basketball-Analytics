@@ -4,9 +4,9 @@ import { fmt, pctFmt, signed, dayLabel } from "@/lib/format";
 import { getAllGames, getConferences, getMeta, getNews, getPlayers, getTeams } from "@/lib/server-data";
 import ArticleList from "@/components/article-list";
 import { playerRows } from "@/lib/players";
-import Tonight from "./_home/tonight";
+import Today from "./_home/today";
 import Top25 from "./_home/top25";
-import YourTeamsStrip from "./following/your-teams-strip";
+import { homeNotes } from "@/lib/notes";
 
 /** Stretched-link pattern: the primary link covers its `relative` card; other links sit above it. */
 const STRETCH = "after:absolute after:inset-0 after:content-['']";
@@ -27,11 +27,27 @@ export default function Home() {
     { title: "Toughest schedule", key: "sos" as const, list: [...teams].filter(t => t.sos !== null).sort((a, b) => b.sos! - a.sos!).slice(0, 5), tone: "text-ink" },
   ];
   const maxConf = Math.max(...confs.map(c => Math.abs(c.avgEM ?? 0)));
+  const notes = homeNotes(teams, playerRows(getPlayers(), getPlayers().rows), meta);
 
   return (
     <div className="space-y-10">
-      <YourTeamsStrip />
-      <Tonight />
+      <Today />
+
+      {notes.length > 0 && (
+        <section aria-labelledby="notes-h">
+          <h2 id="notes-h" className="h-section mb-1">From the box scores</h2>
+          <ul className="grid gap-x-8 md:grid-cols-3">
+            {notes.map(n => (
+              <li key={n.text} className="border-t border-line py-4">
+                <Link href={n.href ?? "#"} className="group flex gap-4">
+                  <span className="dots min-w-[72px] shrink-0 whitespace-nowrap text-[28px]">{n.big}</span>
+                  <span className="text-[15px] leading-[1.45] group-hover:text-bulb-ink">{n.text}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       <div className="grid gap-8 xl:grid-cols-[minmax(0,1fr)_380px]">
         <Top25 teams={teams.filter(t => t.rank && t.rank <= 50)} total={total} />

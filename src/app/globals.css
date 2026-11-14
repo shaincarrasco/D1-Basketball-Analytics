@@ -3,41 +3,92 @@
 @tailwind utilities;
 
 /*
-  D1 Hoops. Flat surfaces, one typeface (Archivo; narrowed for numerals),
-  colour only where it carries meaning: orange = offence, blue = defence,
-  green/red = good/bad or win/loss, magenta = upsets and live games.
+  D1 Hoops, "the gym after dark". Every colour is a CSS variable set per palette below;
+  components never hard-code hex. Palettes are listed for the picker in src/lib/theme.ts.
+  --bulb is the scoreboard accent (ranks, scores, active states) and is the one colour
+  viewers can override from the picker. Offence/defence, good/bad and live keep their
+  own meanings: off, def, win/good, loss/bad, hot.
 */
-:root, html[data-theme="dark"] {
+:root, html[data-palette="arena"] {
   color-scheme: dark;
-  --bg-rgb: 11 13 18;
-  --deck-rgb: 17 20 27;
-  --deck-2-rgb: 24 28 37;
-  --line-rgb: 34 39 51;
-  --line-2-rgb: 48 55 71;
-  --ink-rgb: 233 235 240;
-  --mute-rgb: 154 161 178;
-  --dim-rgb: 104 112 131;
-  --off-rgb: 240 138 60;
-  --def-rgb: 79 179 217;
-  --hot-rgb: 229 72 127;
-  --win-rgb: 52 195 143;
-  --loss-rgb: 232 86 108;
-  --good-rgb: 52 195 143;
-  --bad-rgb: 232 86 108;
+  --bg-rgb: 15 27 46;
+  --deck-rgb: 22 38 61;
+  --deck-2-rgb: 29 48 76;
+  --line-rgb: 36 55 90;
+  --line-2-rgb: 52 75 114;
+  --ink-rgb: 238 242 247;
+  --mute-rgb: 160 175 198;
+  --dim-rgb: 118 135 162;
+  --bulb-rgb: 255 179 31;
+  --off-rgb: 255 130 92;
+  --def-rgb: 94 184 255;
+  --hot-rgb: 255 77 141;
+  --win-rgb: 69 214 158;
+  --loss-rgb: 255 107 107;
+  --good-rgb: 69 214 158;
+  --bad-rgb: 255 107 107;
+  --scoreboard-rgb: 9 17 31;
   --heat-k: 0.9;
-  --glow: 0;
+  --glow: 1;
   --shadow: none;
 }
-html[data-theme="light"] {
+html[data-palette="blacktop"] {
+  color-scheme: dark;
+  --bg-rgb: 14 15 18;
+  --deck-rgb: 25 27 32;
+  --deck-2-rgb: 33 36 43;
+  --line-rgb: 42 46 55;
+  --line-2-rgb: 60 65 77;
+  --ink-rgb: 242 243 245;
+  --mute-rgb: 165 170 182;
+  --dim-rgb: 118 124 138;
+  --bulb-rgb: 61 245 154;
+  --off-rgb: 255 138 76;
+  --def-rgb: 92 170 255;
+  --hot-rgb: 255 77 157;
+  --win-rgb: 61 245 154;
+  --loss-rgb: 255 92 108;
+  --good-rgb: 61 245 154;
+  --bad-rgb: 255 92 108;
+  --scoreboard-rgb: 6 7 9;
+  --heat-k: 0.9;
+  --glow: 1;
+  --shadow: none;
+}
+html[data-palette="hardwood"] {
   color-scheme: light;
-  --bg-rgb: 246 247 249;
+  --bg-rgb: 243 234 219;
+  --deck-rgb: 252 248 241;
+  --deck-2-rgb: 238 228 211;
+  --line-rgb: 226 213 192;
+  --line-2-rgb: 205 189 163;
+  --ink-rgb: 34 26 18;
+  --mute-rgb: 104 90 74;
+  --dim-rgb: 146 131 112;
+  --bulb-rgb: 194 86 14;
+  --off-rgb: 205 84 32;
+  --def-rgb: 28 106 160;
+  --hot-rgb: 196 30 98;
+  --win-rgb: 20 132 88;
+  --loss-rgb: 200 50 60;
+  --good-rgb: 24 160 105;
+  --bad-rgb: 214 62 72;
+  --scoreboard-rgb: 34 26 18;
+  --heat-k: 0.75;
+  --glow: 0;
+  --shadow: 0 1px 2px rgb(60 40 20 / 0.06);
+}
+html[data-palette="daygame"] {
+  color-scheme: light;
+  --bg-rgb: 245 246 249;
   --deck-rgb: 255 255 255;
-  --deck-2-rgb: 241 243 246;
-  --line-rgb: 228 231 236;
-  --line-2-rgb: 208 213 221;
+  --deck-2-rgb: 240 242 246;
+  --line-rgb: 226 230 236;
+  --line-2-rgb: 205 211 221;
   --ink-rgb: 16 24 40;
-  --mute-rgb: 93 102 120;
+  --mute-rgb: 90 100 118;
   --dim-rgb: 139 147 165;
+  --bulb-rgb: 217 127 0;
   --off-rgb: 217 99 27;
   --def-rgb: 29 127 168;
   --hot-rgb: 194 24 91;
@@ -45,9 +96,10 @@ html[data-theme="light"] {
   --loss-rgb: 209 52 77;
   --good-rgb: 16 170 110;
   --bad-rgb: 226 62 88;
+  --scoreboard-rgb: 16 24 40;
   --heat-k: 0.75;
   --glow: 0;
-  --shadow: 0 1px 2px rgb(16 24 40 / 0.04);
+  --shadow: 0 1px 2px rgb(16 24 40 / 0.05);
 }
 :root {
   --bg: rgb(var(--bg-rgb));
@@ -63,9 +115,16 @@ html[data-theme="light"] {
   --hot: rgb(var(--hot-rgb));
   --win: rgb(var(--win-rgb));
   --loss: rgb(var(--loss-rgb));
-  --radius-lg: 10px;
-  --radius-sm: 8px;
+  --bulb: rgb(var(--bulb-rgb));
+  /* Accent as text: on light palettes darken it so numerals keep contrast. */
+  --bulb-ink: var(--bulb);
+  --scoreboard: rgb(var(--scoreboard-rgb));
+  --radius-lg: 18px;
+  --radius-sm: 12px;
+  --font-display: "Big Shoulders Display Variable", "Arial Narrow", system-ui, sans-serif;
+  --font-dots: "Doto Variable", ui-monospace, monospace;
 }
+html[data-theme="light"] { --bulb-ink: color-mix(in oklab, var(--bulb) 78%, black); }
 /* Logos: ESPN publishes a dark-background variant; show the right one per theme. */
 html[data-theme="light"] .logo-dark, html:not([data-theme="light"]) .logo-light.has-dark { display: none; }
 html:not([data-theme="light"]) .logo-dark { display: inline-block; }
@@ -73,46 +132,58 @@ html:not([data-theme="light"]) .logo-dark { display: inline-block; }
 html { background: var(--bg); }
 body {
   color: var(--ink);
-  font-family: "Archivo Variable", system-ui, sans-serif;
-  font-size: 14.5px;
+  font-family: "Barlow", system-ui, sans-serif;
+  font-size: 15px;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   min-height: 100dvh;
   background: var(--bg);
 }
-::selection { background: rgb(var(--off-rgb) / 0.3); }
+::selection { background: rgb(var(--bulb-rgb) / 0.32); }
 .tnum { font-variant-numeric: tabular-nums; }
-/* Numerals and titles: the same family, narrowed. Weights are capped so big numbers stay crisp, not posterish. */
-.font-display { font-family: "Archivo Variable", system-ui, sans-serif; font-stretch: 84%; letter-spacing: -0.01em; }
-.font-display.font-black { font-weight: 720; }
-.font-display.font-extrabold { font-weight: 680; }
+/* Titles, names and stat values: Big Shoulders, an athletic condensed face. */
+.font-display { font-family: var(--font-display); letter-spacing: 0.005em; }
+h1, h2, .h-section { font-family: var(--font-display); }
+/* Scoreboard bulbs: dot-matrix numerals for ranks and scores only. */
+.dots { font-family: var(--font-dots); font-weight: 900; color: var(--bulb-ink); font-variant-numeric: tabular-nums; letter-spacing: 0.02em; }
+.dots-glow { text-shadow: 0 0 calc(12px * var(--glow)) rgb(var(--bulb-rgb) / calc(0.55 * var(--glow))); }
+.dots-off { color: color-mix(in oklab, var(--bulb-ink) 38%, var(--deck)); text-shadow: none; }
+/* Dark plate behind bulbs, like a scoreboard face. */
+.plate { background: var(--scoreboard); border-radius: 12px; }
 
-:focus-visible { outline: 2px solid var(--def); outline-offset: 2px; border-radius: 6px; }
+:focus-visible { outline: 2px solid var(--bulb); outline-offset: 2px; }
 
 @layer components {
   .deck { background: var(--deck); border: 1px solid var(--line); border-radius: var(--radius-lg); box-shadow: var(--shadow); }
   .deck-flat { background: var(--deck); border: 1px solid var(--line); border-radius: var(--radius-sm); }
-  .h-section { font-weight: 650; font-size: 1.0625rem; line-height: 1.3; letter-spacing: -0.01em; }
+  .h-section { font-weight: 800; font-size: 1.5rem; line-height: 1.15; letter-spacing: 0.005em; }
   .label { font-size: 12px; color: var(--mute); font-weight: 450; }
-  .chip { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); border-radius: 6px; padding: 5px 11px; font-size: 13px; font-weight: 550; color: var(--mute); background: transparent; white-space: nowrap; }
-  .chip:hover { color: var(--ink); border-color: var(--line-2); }
-  .chip[aria-pressed="true"], .chip[aria-current="page"] { color: var(--ink); background: var(--deck-2); border-color: var(--line-2); box-shadow: inset 0 -2px 0 var(--ink); }
-  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border-radius: 7px; padding: 7px 12px; font-weight: 550; font-size: 13.5px; border: 1px solid var(--line-2); background: var(--deck-2); color: var(--ink); }
+  .chip { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); border-radius: 999px; padding: 6px 13px; font-size: 13.5px; font-weight: 600; color: var(--ink); background: transparent; white-space: nowrap; }
+  .chip:hover { border-color: var(--line-2); }
+  .chip[aria-pressed="true"], .chip[aria-current="page"] { color: var(--bg); background: var(--ink); border-color: var(--ink); }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border-radius: 999px; padding: 8px 16px; font-weight: 600; font-size: 14px; border: 1px solid var(--line-2); background: var(--deck-2); color: var(--ink); }
   .btn:hover { border-color: var(--mute); }
-  .btn-primary { background: var(--off); border-color: var(--off); color: #1a0a00; }
-  .btn-primary:hover { filter: brightness(1.08); border-color: var(--off); }
-  .field { background: var(--deck); border: 1px solid var(--line-2); border-radius: 7px; padding: 7px 11px; font-size: 14px; color: var(--ink); }
+  .btn-primary { background: var(--bulb); border-color: var(--bulb); color: var(--scoreboard); }
+  .btn-primary:hover { filter: brightness(1.08); border-color: var(--bulb); }
+  /* iOS-style segmented control */
+  .seg { display: flex; background: var(--deck); border-radius: 12px; padding: 3px; gap: 2px; }
+  .seg > * { flex: 1; text-align: center; padding: 7px 10px; border-radius: 9px; font-size: 14px; font-weight: 600; color: var(--mute); white-space: nowrap; }
+  .seg > [aria-pressed="true"], .seg > [aria-current="page"] { background: var(--deck-2); color: var(--ink); box-shadow: inset 0 0 0 1px var(--line-2); }
+  /* Box-score footnote: a plain fact with an accent rule. */
+  .note { display: flex; gap: 14px; align-items: flex-start; }
+  .note::before { content: ""; width: 3px; align-self: stretch; border-radius: 2px; background: var(--bulb); flex-shrink: 0; }
+  .field { background: var(--deck); border: 1px solid var(--line-2); border-radius: 10px; padding: 8px 12px; font-size: 15px; color: var(--ink); }
   .field::placeholder { color: var(--dim); }
   select.field { appearance: none; padding-right: 30px; background-image: linear-gradient(45deg, transparent 50%, var(--mute) 50%), linear-gradient(135deg, var(--mute) 50%, transparent 50%); background-position: calc(100% - 16px) 55%, calc(100% - 11px) 55%; background-size: 5px 5px; background-repeat: no-repeat; }
   .link { color: var(--ink); text-decoration: none; }
-  .link:hover { color: var(--off); }
+  .link:hover { color: var(--bulb-ink); }
 
   /* Data tables */
   .dt { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 13.5px; }
   .dt th { position: sticky; top: 0; z-index: 2; background: var(--deck); color: var(--mute); font-weight: 550; font-size: 11.5px; text-align: right; padding: 10px 8px; border-bottom: 1px solid var(--line-2); white-space: nowrap; user-select: none; }
   .dt th.l, .dt td.l { text-align: left; }
   .dt th button { all: unset; cursor: pointer; display: inline-flex; gap: 4px; align-items: center; }
-  .dt th button:focus-visible { outline: 2px solid var(--def); outline-offset: 2px; }
+  .dt th button:focus-visible { outline: 2px solid var(--bulb); outline-offset: 2px; }
   .dt th[aria-sort="ascending"], .dt th[aria-sort="descending"] { color: var(--ink); }
   .dt td { padding: 7px 8px; text-align: right; border-bottom: 1px solid var(--line); font-variant-numeric: tabular-nums; white-space: nowrap; }
   .dt tfoot td { background: var(--deck-2); border-bottom: 0; }
@@ -122,7 +193,7 @@ body {
   .dt tbody tr:hover td.sticky-col { background: color-mix(in srgb, var(--def) 5%, var(--bg)); }
   .dt .grp-off { box-shadow: inset 0 -1px 0 var(--off); }
   .dt .grp-def { box-shadow: inset 0 -1px 0 var(--def); }
-  .rank-cell { font-weight: 600; font-size: 13.5px; color: var(--mute); }
+  .rank-cell { font-family: var(--font-dots); font-weight: 900; font-size: 16px; color: var(--bulb-ink); }
   .sub-rank { display: inline-block; min-width: 1.6em; margin-left: 5px; font-size: 10.5px; color: var(--dim); text-align: right; vertical-align: 1px; }
 
   .scroll-x { overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: thin; scrollbar-color: var(--line-2) transparent; }
@@ -146,3 +217,11 @@ body {
 .team-accent { --accent: color-mix(in oklab, var(--team, var(--off)) 70%, white); }
 html[data-theme="light"] .team-accent { --accent: color-mix(in oklab, var(--team, var(--off)) 88%, black); }
 .team-hero { border-top: 3px solid var(--accent); }
+
+@layer utilities {
+  /* Accent used as text: darkened on light palettes for contrast. */
+  .text-bulb-ink { color: var(--bulb-ink); }
+}
+/* Bulbs on a dark plate stay bright on every palette. */
+.plate .dots { color: var(--bulb); }
+.plate .dots.dots-off { color: color-mix(in oklab, var(--bulb) 30%, var(--scoreboard)); }

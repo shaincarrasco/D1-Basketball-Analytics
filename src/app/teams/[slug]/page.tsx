@@ -19,13 +19,18 @@ import SeasonOutlook from "./season-outlook";
 import ShotProfile from "./shot-profile";
 import ZoneTable from "./zone-table";
 import Lineups from "./lineups";
+import { Dots } from "@/components/dots";
+import { playerRows } from "@/lib/players";
+import { teamNote } from "@/lib/notes";
+import { onTeam, teamHex } from "@/lib/color";
 
 // Older data files predate `rosterFields`; this is the column order they were written with.
 const LEGACY_FIELDS: PlayerField[] = ["id", "name", "teamId", "pos", "g", "gs", "min", "pts", "reb", "orb", "drb", "ast", "stl", "blk", "tov", "pf",
   "usg", "ortg", "drtg", "net", "porpag", "efg", "ts", "fgm", "fga", "tpm", "tpa", "ftm", "fta", "ws", "ws40", "orbPct", "ftr",
   "rimA", "rimM", "midA", "midM", "thrA", "thrM", "astd", "dunks"];
 const etDay = (iso: string) => new Intl.DateTimeFormat("en-CA", { timeZone: "America/New_York" }).format(new Date(iso));
-const NAV: [string, string][] = [["outlook", "Outlook"], ["form", "Game by game"], ["schedule", "Schedule"], ["roster", "Roster"], ["lineups", "Lineups"], ["shots", "Shot profile"], ["profile", "Team stats"]];
+// Segmented tabs: each jumps to its part of the page (one long scroll, like a team card in Apple Sports).
+const NAV: [string, string][] = [["overview", "Overview"], ["schedule", "Schedule"], ["roster", "Roster"], ["shots", "Shots"], ["profile", "Stats"]];
 
 export const dynamicParams = false;
 export function generateStaticParams() {
@@ -64,79 +69,108 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
   const [atsW, atsL, atsP] = team.ats ?? [0, 0, 0];
   const atsText = `${atsW}–${atsL}${atsP ? `–${atsP}` : ""}`;
   const shots = detail.shots ?? { off: [], def: [] };
+  const color = teamHex(team.color) ?? "#24375A", ink = onTeam(color);
+  const nextGame = team.next ? detail.games.find(g => g.id === team.next!.id) ?? null : null;
+  const roster = playerRows({ fields }, detail.roster).filter(p => (p.g ?? 0) > 0);
+  const leader = (k: "pts" | "reb" | "ast") => [...roster].sort((a, b) => (b[k] ?? -1) - (a[k] ?? -1))[0];
+  const leaders = (["pts", "reb", "ast"] as const).map(k => ({ k, p: leader(k) })).filter(x => x.p && x.p[x.k] != null);
+  const note = teamNote(team, total);
+  const shortName = (n: string) => { const parts = n.split(" "); return parts.length > 1 ? `${parts[0][0]}. ${parts.slice(1).join(" ")}` : n; };
 
   return (
     <article>
-      {/* Hero */}
-      <section className="deck team-accent team-hero relative mb-6 overflow-hidden p-5 sm:p-6" style={team.color ? ({ "--team": team.color } as React.CSSProperties) : undefined}>
-        <div className="relative flex flex-wrap items-center gap-5">
-          <TeamLogo src={team.logo} name={team.name} size={64} />
-          <div className="order-last min-w-0 basis-full sm:order-none sm:basis-auto sm:flex-1">
-            <p className="text-sm text-mute">
-              <Link className="link underline decoration-line2 underline-offset-4" href={`/conferences/${team.confSlug}/`}>{team.confName}</Link>
-              {team.mascot ? <> · {team.mascot}</> : null}
-            </p>
-            <h1 className="text-[2rem] font-bold leading-tight tracking-[-0.02em] sm:text-[2.5rem]">{team.name}</h1>
-            <p className="mt-1 text-[14px] text-mute tnum">
-              <b className="text-ink"><LiveRecord team={team} /></b> overall · <Link className="link underline decoration-line2 underline-offset-4" href={`/conferences/${team.confSlug}/#standings-h`} title={`${team.confName} standings`}><LiveRecord team={team} conf /> conference</Link>
-              {team.streak && <> · <span className={team.streak.startsWith("W") ? "text-win" : "text-loss"}>{team.streak}</span></>}
-              {atsW + atsL + atsP > 0 && <> · <span title="Against the spread vs the pregame line ESPN showed (DraftKings): wins–losses–pushes">ATS <b className="text-ink">{atsText}</b></span></>}
-              {" "}· projected <a className="link underline decoration-line2 underline-offset-4" href="#outlook"><b className="text-ink">{fmt(team.projW, 1)}–{fmt(team.projL, 1)}</b></a>
-            </p>
-            <div className="mt-3 flex flex-wrap items-center gap-2">
-              <FavoriteButton kind="teams" id={slug} name={team.name} />
-              <CalendarButton slug={slug} name={team.name} />
-              {team.ap && <span className="chip" title={`AP Top 25${team.ap.prev ? `, last week ${team.ap.prev}` : ""}${team.ap.pts ? `, ${team.ap.pts} points` : ""}`}>AP No. {team.ap.rank}</span>}
-              {team.coaches && <span className="chip" title="USA Today Coaches Poll">Coaches No. {team.coaches.rank}</span>}
-            </div>
+      {/* Hero: full-bleed team colour, rank on a scoreboard plate */}
+      <section className="team-accent relative -mx-4 -mt-6 mb-0 overflow-hidden px-4 pb-6 pt-6 sm:-mx-6 sm:px-6 lg:mx-0 lg:mt-0 lg:rounded-[22px] lg:px-8 lg:pt-8"
+        style={{ background: color, color: ink, "--team": team.color ?? undefined } as React.CSSProperties}>
+        <svg className="pointer-events-none absolute -right-20 top-6 h-[300px] w-[300px] opacity-[0.13]" viewBox="0 0 300 300" fill="none" stroke="currentColor" strokeWidth="3" aria-hidden>
+          <circle cx="150" cy="150" r="60" /><circle cx="150" cy="150" r="140" /><path d="M150 0v300" />
+        </svg>
+        <div className="relative flex items-center justify-between gap-3 text-[15px] font-semibold">
+          <Link href={`/conferences/${team.confSlug}/`} className="opacity-85 hover:opacity-100" style={{ color: ink }}>{team.confName}</Link>
+          <div className="flex items-center gap-2">
+            {team.ap && <span className="rounded-full px-2.5 py-1 text-[13px]" style={{ background: "rgb(0 0 0 / 0.22)" }} title={`AP Top 25${team.ap.prev ? `, last week ${team.ap.prev}` : ""}`}>AP {team.ap.rank}</span>}
+            {team.coaches && <span className="hidden rounded-full px-2.5 py-1 text-[13px] sm:inline" style={{ background: "rgb(0 0 0 / 0.22)" }} title="USA Today Coaches Poll">Coaches {team.coaches.rank}</span>}
           </div>
-          <Link href={`/rankings/?conf=${team.confSlug}`} className="ml-auto rounded-lg text-right hover:opacity-80 sm:ml-0" title={`DHR rankings, ${team.confName} teams`}>
-            <div className="label">DHR rank</div>
-            <LiveRank team={team} />
-          </Link>
         </div>
-        <LiveTiles team={team} />
-        {team.ratedGames < 5 && (
-          <p className="relative mt-3 text-xs text-mute">Early-season rating from {fmt(team.ratedGames, 0)} rated D-I game{team.ratedGames === 1 ? "" : "s"} — it leans on the {team.confName} average and will move a lot.</p>
-        )}
+        <div className="relative mt-5 flex items-end gap-4">
+          <Link href={`/rankings/?conf=${team.confSlug}`} title={`D1 Hoops rank. See ${team.confName} teams`} className="plate flex shrink-0 flex-col items-center px-3.5 pb-1.5 pt-2.5">
+            <LiveRank team={team} />
+            <span className="text-[11px] font-semibold text-dim">of {total}</span>
+          </Link>
+          <div className="min-w-0 flex-1">
+            <div className="flex items-center gap-3">
+              <span className="hidden shrink-0 sm:block"><TeamLogo src={team.logo} name={team.name} size={44} /></span>
+              <h1 className="truncate font-display text-[3.25rem] font-black leading-[0.9] sm:text-[4rem]">{team.name}</h1>
+            </div>
+            <p className="mt-1.5 text-[15px] font-semibold opacity-90">{team.mascot ? `${team.mascot}, ` : ""}<LiveRecord team={team} /> (<LiveRecord team={team} conf /> {team.confName})</p>
+            <p className="text-[14px] opacity-75 tnum">
+              {team.streak && Number(team.streak.slice(1)) >= 2 && <>{team.streak.startsWith("W") ? "Won" : "Lost"} {team.streak.slice(1)} straight. </>}Projected <a href="#outlook" className="underline decoration-current/40 underline-offset-4">{fmt(team.projW, 0)}-{fmt(team.projL, 0)}</a>
+              {atsW + atsL + atsP > 0 && <span title="Against the spread vs the pregame line ESPN showed (DraftKings): wins–losses–pushes">, ATS {atsText}</span>}
+            </p>
+          </div>
+        </div>
+        <div className="relative mt-5 flex flex-wrap gap-2 [&_.btn]:border-transparent [&_.btn]:bg-black/20 [&_.btn]:text-current">
+          <FavoriteButton kind="teams" id={slug} name={team.name} />
+          <CalendarButton slug={slug} name={team.name} />
+        </div>
       </section>
 
-      <nav aria-label="On this page" className="scroll-x -mt-2 mb-6 flex gap-1.5 pb-1">
-        {NAV.map(([id, label]) => <a key={id} href={`#${id}`} className="chip">{label}</a>)}
+      <nav aria-label="On this page" className="sticky top-[calc(3.5rem+env(safe-area-inset-top))] z-30 -mx-4 mb-5 flex gap-6 overflow-x-auto border-b border-line bg-night/95 px-4 backdrop-blur no-scrollbar sm:-mx-6 sm:px-6 lg:mx-0 lg:px-1">
+        {NAV.map(([id, label], i) => (
+          <a key={id} href={`#${id}`} className={`whitespace-nowrap border-b-[3px] py-3 text-[15px] font-semibold ${i === 0 ? "border-bulb text-ink" : "border-transparent text-mute hover:text-ink"}`}>{label}</a>
+        ))}
       </nav>
 
-      <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_360px]">
+      <div id="overview" className="scroll-mt-32">
+        <LiveTiles team={team} total={total} />
+        {team.ratedGames < 5 && (
+          <p className="mt-2 text-xs text-mute">Early-season rating from {fmt(team.ratedGames, 0)} rated D-I game{team.ratedGames === 1 ? "" : "s"}. It leans on the {team.confName} average and will move a lot.</p>
+        )}
+      </div>
+
+      <div className="mt-6 grid gap-6 xl:grid-cols-[minmax(0,1fr)_360px]">
         <div className="min-w-0 space-y-6">
           {/* Next game */}
           {team.next && (
             <LiveNextGate nextId={team.next.id} slug={slug} opp={team.next.opp} day={etDay(team.next.date)}>
-            <section className="deck flex flex-wrap items-center gap-4 p-5">
-              <div className="min-w-0 basis-full sm:basis-auto sm:flex-1">
-                <div className="label">Next game · <Link className="link underline decoration-line2 underline-offset-4" href={`/games/?d=${etDay(team.next.date)}&g=${team.next.id}`}>{new Date(team.next.date).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric", timeZone: "America/New_York" })}</Link></div>
-                <div className="mt-1 flex items-center gap-2 text-lg font-semibold">
-                  {team.next.venue === "A" ? "at" : "vs"}
-                  {team.next.oppSlug ? <TeamLogo src={logos[team.next.oppSlug] ?? null} name={team.next.opp} size={24} /> : null}
-                  {team.next.oppRank ? <span className="text-sm text-mute">#{team.next.oppRank}</span> : null}
-                  {team.next.oppSlug ? <Link className="link" href={`/teams/${team.next.oppSlug}/`}>{team.next.opp}</Link> : team.next.opp}
-                  {team.next.venue === "N" && <span className="text-xs text-mute">(neutral)</span>}
+            <section className="rounded-[22px] border border-line bg-deck p-[18px]">
+              <div className="flex items-center justify-between gap-2 text-[13px]">
+                <Link className="font-semibold text-mute hover:text-ink" href={`/games/?d=${etDay(team.next.date)}&g=${team.next.id}`}>Next game, {new Date(team.next.date).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric", timeZone: "America/New_York" })}</Link>
+                {team.next.tv?.length ? <TvBadges tv={team.next.tv} max={2} /> : null}
+              </div>
+              <div className="mt-3 flex items-center gap-3">
+                {team.next.oppSlug ? <TeamLogo src={logos[team.next.oppSlug] ?? null} name={team.next.opp} size={46} /> : null}
+                <div className="min-w-0 flex-1">
+                  <div className="truncate font-display text-[23px] font-extrabold leading-tight">
+                    {team.next.venue === "A" ? "at " : "vs "}{team.next.oppSlug ? <Link className="link" href={`/teams/${team.next.oppSlug}/`}>{team.next.opp}</Link> : team.next.opp}
+                  </div>
+                  <div className="text-[13px] text-mute">{[team.next.oppRank ? `No. ${team.next.oppRank} in the ratings` : null, team.next.venue === "N" ? "neutral site" : null].filter(Boolean).join(", ") || "Unrated opponent"}</div>
                 </div>
-                {team.next.tv?.length ? <div className="mt-2"><TvBadges tv={team.next.tv} max={4} size="md" /></div> : null}
+                {nextGame?.projPts != null && nextGame.projOppPts != null && (
+                  <div className="flex flex-col items-end">
+                    <Dots className="text-[24px]">{Math.round(nextGame.projPts)}-{Math.round(nextGame.projOppPts)}</Dots>
+                    <span className="mt-0.5 text-[11px] text-mute">projected</span>
+                  </div>
+                )}
               </div>
               {team.next.wp !== null && (
-                <div className="text-right">
-                  <div className="label">Win probability</div>
-                  <div className="font-display text-3xl font-black tnum">{pctFmt(team.next.wp)}</div>
+                <div className="mt-3.5">
+                  <div className="flex h-1.5 gap-0.5 overflow-hidden rounded-full" aria-hidden>
+                    <div style={{ width: `${team.next.wp * 100}%`, background: `color-mix(in oklab, ${color} 78%, white)` }} />
+                    <div className="flex-1 bg-line2" />
+                  </div>
+                  <div className="mt-1.5 flex justify-between text-[13px] font-bold tnum"><span>{team.short ?? team.name} {pctFmt(team.next.wp)}</span><span className="text-mute">{pctFmt(1 - team.next.wp)}</span></div>
                 </div>
               )}
               {team.next.oppSlug && (
-                <Link className="btn" href={`/matchup/?a=${team.slug}&b=${team.next.oppSlug}&site=${team.next.venue === "H" ? "a" : team.next.venue === "A" ? "b" : "n"}`}>Open in matchup simulator</Link>
+                <Link className="mt-3 inline-block text-sm font-semibold text-bulb-ink" href={`/matchup/?a=${team.slug}&b=${team.next.oppSlug}&site=${team.next.venue === "H" ? "a" : team.next.venue === "A" ? "b" : "n"}`}>Open in the matchup simulator</Link>
               )}
             </section>
             </LiveNextGate>
           )}
 
           {/* Season outlook */}
-          <section id="outlook" className="deck scroll-mt-20 p-5">
+          <section id="outlook" className="deck scroll-mt-32 p-5">
             <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
               <h2 className="h-section">Season outlook</h2>
               <p className="text-xs text-mute">{(meta.sims?.sims ?? 10000).toLocaleString()} simulations of the rest of the schedule, rating uncertainty included</p>
@@ -144,8 +178,25 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
             <SeasonOutlook team={team} hist={detail.winHist ?? null} sims={meta.sims?.sims ?? 10000} />
           </section>
 
+          {/* Leaders + note */}
+          {leaders.length > 0 && (
+            <section aria-labelledby="leaders-h">
+              <h2 id="leaders-h" className="h-section mb-2.5">Team leaders</h2>
+              <div className="grid grid-cols-3 gap-2.5">
+                {leaders.map(({ k, p }) => (
+                  <Link key={k} href={`/player/?id=${p.id}`} className="flex flex-col gap-1 rounded-[18px] bg-deck p-3.5 hover:bg-deck2">
+                    <span className="text-xs font-semibold text-mute">{k === "pts" ? "Points" : k === "reb" ? "Rebounds" : "Assists"}</span>
+                    <span className="font-display text-[32px] font-black leading-none tnum">{fmt(p[k])}</span>
+                    <span className="truncate text-[13px] font-semibold">{shortName(p.name)}</span>
+                  </Link>
+                ))}
+              </div>
+            </section>
+          )}
+          {note && <p className="note text-[15px] leading-[1.45]">{note}</p>}
+
           {/* Game form */}
-          <section id="form" className="deck scroll-mt-20 p-5">
+          <section id="form" className="deck scroll-mt-32 p-5">
             <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
               <h2 className="h-section">Game by game</h2>
               <p className="text-xs text-mute">Margin per 100 possessions, adjusted for opponent and venue</p>
@@ -154,13 +205,13 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
           </section>
 
           {/* Schedule */}
-          <section id="schedule" className="scroll-mt-20">
+          <section id="schedule" className="scroll-mt-32">
             <h2 className="h-section mb-3">Schedule &amp; results</h2>
             <GameLog games={detail.games} logos={logos} slug={slug} />
           </section>
 
           {/* Roster */}
-          <section id="roster" className="scroll-mt-20">
+          <section id="roster" className="scroll-mt-32">
             <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
               <h2 className="h-section">Roster</h2>
               <p className="text-xs text-mute">DPR = points per 100 possessions vs an average D-I player, ± one standard error</p>
@@ -169,7 +220,7 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
           </section>
 
           {/* Lineups */}
-          <section id="lineups" className="scroll-mt-20">
+          <section id="lineups" className="scroll-mt-32">
             <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
               <h2 className="h-section">Best five-man units</h2>
               <p className="text-xs text-mute">From play-by-play, units with 2+ minutes together</p>
@@ -178,7 +229,7 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
           </section>
 
           {/* Shot profile */}
-          <section id="shots" className="deck scroll-mt-20 p-5">
+          <section id="shots" className="deck scroll-mt-32 p-5">
             <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
               <h2 className="h-section">Shot profile</h2>
               <p className="text-xs text-mute">Tracked field-goal attempts, for and against</p>
@@ -188,7 +239,7 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
           </section>
         </div>
 
-        <aside id="profile" className="scroll-mt-20 space-y-6">
+        <aside id="profile" className="scroll-mt-32 space-y-6">
           <section className="deck p-5" aria-labelledby="avail-h">
             <h2 id="avail-h" className="h-section mb-2">Availability</h2>
             <AvailabilityList items={detail.availability} />

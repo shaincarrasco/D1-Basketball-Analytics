@@ -1,8 +1,14 @@
 import type { Metadata, Viewport } from "next";
-import "@fontsource-variable/archivo/wdth.css";
+import "@fontsource/barlow/400.css";
+import "@fontsource/barlow/500.css";
+import "@fontsource/barlow/600.css";
+import "@fontsource/barlow/700.css";
+import "@fontsource-variable/big-shoulders-display";
+import "@fontsource-variable/doto";
 import "./globals.css";
 import SiteShell from "@/components/site-shell";
 import { getMeta } from "@/lib/server-data";
+import { THEME_SCRIPT } from "@/lib/theme";
 
 // Metadata URLs are not basePath-aware, so prefix them (GitHub Pages serves under /D1-Basketball-Analytics).
 const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
@@ -22,16 +28,15 @@ export const metadata: Metadata = {
     apple: [{ url: `${BASE}/icons/apple-touch-icon.png`, sizes: "180x180" }],
   },
 };
-export const viewport: Viewport = { themeColor: "#0b0d12", width: "device-width", initialScale: 1, viewportFit: "cover" };
+export const viewport: Viewport = { themeColor: "#0F1B2E", width: "device-width", initialScale: 1, viewportFit: "cover" };
 
-// Runs before first paint: saved choice, else the device setting.
-const THEME_SCRIPT = `(function(){try{var t=localStorage.getItem("d1h-theme");if(t!=="light"&&t!=="dark")t=matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";document.documentElement.dataset.theme=t;var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute("content",t==="light"?"#f5f6fa":"#0b0d12")}catch(e){document.documentElement.dataset.theme="dark"}})()`;
+// THEME_SCRIPT runs before first paint: saved palette + accent, else the device setting.
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const meta = getMeta();
   const updated = new Date(meta.updated.teams ?? meta.updated.built).toLocaleString("en-US", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit", timeZone: "America/New_York", timeZoneName: "short" });
   return (
-    <html lang="en" data-theme="dark" suppressHydrationWarning>
+    <html lang="en" data-theme="dark" data-palette="arena" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
       </head>

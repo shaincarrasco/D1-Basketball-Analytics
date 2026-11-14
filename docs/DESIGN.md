@@ -1,19 +1,22 @@
 # D1 Hoops design + code contract
 
-## Look: flat, editorial, data first
-- Surfaces are flat: `bg-night` page, `deck` panels with a 1px `border-line`, 8–10px radius, no gradients, glows or decorative motifs.
-- One typeface, Archivo. Body text is normal width; `font-display` narrows it for numerals and scores (weights capped in CSS so big numbers stay crisp).
-- Page titles ~2rem bold, section headings `.h-section` ~17px semibold. Big numerals only where the number is the point (scores, ranks, projections).
-- Colour only carries meaning: `off` orange = offence, `def` blue = defence (away/first team blue, home/second team orange in head-to-heads), `win`/`loss` and the heat tints = good/bad, `hot` magenta = upsets and live games. Team names stay ink.
-- Copy is short: one line under a page title, explanations in tooltips (`title`) or the methodology page. No ALL-CAPS labels, no "→" buttons.
-- Light and dark themes come from RGB channel variables in globals.css; never hard-code hex colours in components.
+## Look: "the gym after dark"
+- College basketball, retro and plain, with Apple Sports-style touch patterns: a date strip, followed-team circles, grouped game rows, segmented controls, and swipe actions on ranking rows.
+- Type: **Big Shoulders Display** (`font-display`, all h1/h2/`.h-section`) for titles, names and stat values; **Barlow** for body; **Doto** dot-matrix (`.dots`, `<Dots>`) only for ranks and scores, like scoreboard bulbs. `.plate` is the dark scoreboard face behind big bulbs.
+- Colour carries meaning: `bulb` = the accent (ranks, scores, active tab, links), `off` = offence, `def` = defence, `win`/`loss` and the heat tints = good/bad, `hot` = upsets and live games. Team colours are identity only (hero band, rings, edge bars).
+- Copy is short and factual. "Notes" (`.note`, `lib/notes.ts`) are box-score footnotes generated from real fields; a note that the data can't support is skipped, never padded.
+
+## Colours are themeable
+- Every colour is an RGB channel variable set per palette in `src/app/globals.css` (`html[data-palette="arena" | "blacktop" | "hardwood" | "daygame"]`). Never hard-code hex in components; use the Tailwind names (`bg-deck`, `text-ink`, `bg-bulb`, `text-bulb-ink` for accent text) or `var(--…)`.
+- `src/lib/theme.ts` lists the palettes and accent swatches the picker (`components/theme-picker.tsx`) offers. Viewers pick a palette (or "Match my device") and any accent colour, including their followed teams' colours; it is saved in localStorage and applied before first paint by `THEME_SCRIPT`.
+- To change the default look, edit the `arena` block. To add a palette, add a CSS block and an entry in `PALETTES` (its `mode` sets `data-theme` for light/dark logos).
 
 ## Building blocks (src/components, src/lib)
 - `PageHeader` – page title + one-paragraph intro + optional actions.
 - `DataTable<T>` – sortable table with sticky identity columns, CSV export, incremental rendering (`pageSize`). Columns: `{ key, label, value, render?, first?, align?, group?: "off"|"def", sticky?, width? }`.
-- `TeamLogo`, `PerfBars` (game-form bars), `WinProb` (split probability bar), `StatBar` (stat + national-rank meter), `Loading` / `ErrorState` / `Empty`.
+- `Dots` / `RankPlate` (scoreboard numerals), `TeamLogo`, `PerfBars` (game-form bars), `WinProb` (split probability bar), `StatBar` (stat + national-rank meter), `Loading` / `ErrorState` / `Empty`.
 - `heat(rank, total)` / `heatPct(p)` give the mint/rose cell tint; `fmt`, `signed`, `pctFmt`, `dayLabel`, `timeLabel`, `etToday` in `lib/format.ts`.
-- Utility classes in `globals.css`: `.deck`, `.chip` (+ `aria-pressed="true"`), `.btn`, `.btn-primary`, `.field`, `.dt`, `.rank-cell`, `.sub-rank`, `.h-section`, `.label`, `.link`, `.scroll-x`, `.live-dot`.
+- Utility classes in `globals.css`: `.deck`, `.chip` (+ `aria-pressed="true"`), `.seg` (segmented control), `.note`, `.dots`, `.plate`, `.btn`, `.btn-primary`, `.field`, `.dt`, `.rank-cell`, `.sub-rank`, `.h-section`, `.label`, `.link`, `.scroll-x`, `.live-dot`.
 
 ## Data
 - Build-time (server components): `lib/server-data.ts` → `getMeta()`, `getTeams()`, `getConferences()`, `getPlayers()`, `getTeam(slug)`, `getTeamDetail(slug)`.
