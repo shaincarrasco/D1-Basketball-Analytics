@@ -4,7 +4,7 @@ import { Suspense } from "react";
 import PlayersTabs from "../../players/players-tabs";
 import PageHeader from "@/components/page-header";
 import { Loading } from "@/components/states";
-import Builder from "./builder";
+import { BasketballBuilder as Builder } from "@/sports/basketball/ui";
 
 export const metadata: Metadata = { title: "Chart builder", description: "Make your own Division I player charts: scatter plots with quadrants, leaderboards, swarm charts and percentile comparisons. Share with a link or download as PNG." };
 

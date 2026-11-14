@@ -2,6 +2,7 @@
 // Charts draw with literal colours (read from the palette's CSS variables) so an exported
 // PNG/SVG looks exactly like the page. Re-reads when the viewer switches palette or accent.
 import { useEffect, useState } from "react";
+import type { SportPack, Tone } from "@/sport-kit";
 
 export type ChartTheme = { bg: string; deck: string; line: string; line2: string; ink: string; mute: string; dim: string; bulb: string; good: string; bad: string; off: string; def: string; hot: string; display: string; body: string };
 
@@ -30,8 +31,10 @@ export function useChartTheme() {
   return t;
 }
 
-/** Position colours (guards / forwards / centers / unknown). */
-export const posColor = (t: ChartTheme, p: string | null) => (p === "G" ? t.def : p === "F" ? t.bulb : p === "C" ? t.off : t.dim);
+/** Palette colour for a position tone. */
+export const toneColor = (t: ChartTheme, tone: Tone) => t[tone];
+/** A row's position colour (dim when unknown). */
+export const posColor = <R,>(pack: SportPack<R>, t: ChartTheme, pos: string | null) => { const p = pack.positions.find(x => x.key === pos); return p ? toneColor(t, p.tone) : t.dim; };
 
 /** Download an on-page <svg> as SVG or a 2× PNG. */
 export async function exportSvg(svg: SVGSVGElement, name: string, kind: "png" | "svg", bg: string) {
