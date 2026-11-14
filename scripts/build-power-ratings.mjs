@@ -5,12 +5,16 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { isD1Conference } from "./d1-conferences.mjs";
 import { fit, predict, rating, NON_D1 } from "./lib/rating-model.mjs";
+import { normalizeGames } from "./lib/game-status.mjs";
 
 const teamPath = "public/data/team-season-2027.json";
 const gamePath = "public/data/games-season-2027.json";
 const modelPath = "public/data/model-2027.json";
 const readJson = async path => JSON.parse(await readFile(path, "utf8"));
 const [teamPayload, gamePayload] = await Promise.all([readJson(teamPath), readJson(gamePath)]);
+const scorelessFinals = normalizeGames(gamePayload.games);
+if (scorelessFinals) console.log(`[build-power-ratings] ${scorelessFinals} scoreless "final" game(s) treated as cancelled.`);
+
 const teamRecords = Array.isArray(teamPayload.teams) ? teamPayload.teams : [];
 // Repair team records the stats feed left without an id/conference (e.g. a conference label
 // missing from the allowlist) using the schedule, so those teams are still rated.

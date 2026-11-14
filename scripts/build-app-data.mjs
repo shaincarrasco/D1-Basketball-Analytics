@@ -9,6 +9,7 @@
 import { mkdir, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import { isD1Conference } from "./d1-conferences.mjs";
 import { boxPossessions, loadPbp, solveRapm } from "./lib/pbp-analytics.mjs";
+import { normalizeGames } from "./lib/game-status.mjs";
 
 const OUT = "public/data/app";
 const readJson = async path => JSON.parse(await readFile(path, "utf8"));
@@ -19,6 +20,9 @@ const [teamPayload, gamePayload, playerPayload, directory, model] = await Promis
   readJson("public/data/team-directory.json").catch(() => ({ teams: [] })),
   readJson("public/data/model-2027.json"),
 ]);
+
+const scorelessFinals = normalizeGames(gamePayload.games);
+if (scorelessFinals) console.log(`[build-app-data] ${scorelessFinals} scoreless "final" game(s) treated as cancelled.`);
 
 const espnRosters = await readJson("public/data/espn-rosters-2027.json").catch(() => ({ teams: {} }));
 const sims = await readJson("public/data/sims-2027.json").catch(() => null);
@@ -308,6 +312,39 @@ for (const t of teamSummaries) {
   logsBySlug.set(t.slug, logs); biosBySlug.set(t.slug, bios);
 }
 console.log(`[app-data] ESPN player match: ${matched} matched, ${unmatched} unmatched.`);
+// ---------- season averages catch up to the box scores ----------
+// The stats provider's season table can trail ESPN's box scores by a game or two. When a
+// player's game log has more games than his season row, rebuild the box-score stats from the
+// log so the profile, leaderboards and team leaders agree with the game log. Ratings that need
+// play-by-play (usage, ORtg, DPR, shot zones) stay as published until the next provider refresh.
+{
+  const L = Object.fromEntries(LOG_FIELDS.map((f, i) => [f, i]));
+  let caughtUp = 0, agree = 0, compared = 0;
+  const byId = new Map(players.map(row => [row[playerIdx.id], row]));
+  for (const logs of logsBySlug.values()) {
+    for (const [pid, rows] of Object.entries(logs)) {
+      const row = byId.get(pid);
+      if (!row) continue;
+      const played = rows.filter(x => (x[L.min] ?? 0) > 0);
+      const sum = k => played.reduce((a, x) => a + (num(x[L[k]]) ?? 0), 0);
+      const gl = played.length, gp = num(row[playerIdx.g]) ?? 0;
+      if (gl === gp && gl > 0 && row[playerIdx.pts] !== null) { compared++; if (Math.abs(sum("pts") / gl - row[playerIdx.pts]) < 0.15) agree++; }
+      if (gl <= gp) continue;
+      const set = (k, v) => { row[playerIdx[k]] = v; };
+      const per = k => r(sum(k) / gl);
+      const fgm = sum("fgm"), fga = sum("fga"), tpm = sum("tpm"), tpa = sum("tpa"), ftm = sum("ftm"), fta = sum("fta"), pts = sum("pts");
+      set("g", gl); set("gs", played.filter(x => x[L.starter]).length);
+      for (const k of ["min", "pts", "reb", "orb", "drb", "ast", "stl", "blk", "tov", "pf"]) set(k, per(k));
+      set("fgm", fgm); set("fga", fga); set("tpm", tpm); set("tpa", tpa); set("ftm", ftm); set("fta", fta);
+      set("efg", fga ? r(((fgm + 0.5 * tpm) / fga) * 100) : null);
+      set("ts", fga + fta ? r((pts / (2 * (fga + 0.44 * fta))) * 100) : null);
+      set("ftr", fga ? r((fta / fga) * 100) : null);
+      caughtUp++;
+    }
+  }
+  console.log(`[app-data] Season averages rebuilt from box scores for ${caughtUp} players a game behind; ${agree}/${compared} up-to-date players match their logs.`);
+}
+
 
 // ---------- play-by-play: shots, lineups, on/off, DPR, game flow, lines ----------
 const pbp = await loadPbp(".cache/espn-pbp-2027");
@@ -658,7 +695,7 @@ const sideInfo = (g, side) => {
   return {
     id: s ? id : null, slug: s?.slug ?? null, name: side === "home" ? g.homeTeam : g.awayTeam, short: s?.short ?? null, logo: s?.logo ?? null, color: s?.color ?? null,
     conf: s?.conf ?? null, rank: s?.rank ?? null, adjEM: s?.adjEM ?? null, record: s ? `${s.w}-${s.l}` : null,
-    score: g.status === "scheduled" ? null : side === "home" ? g.homeScore : g.awayScore, periods: (side === "home" ? g.homePeriodPoints : g.awayPeriodPoints) ?? null,
+    score: g.status === "final" || g.status === "in_progress" ? (side === "home" ? g.homeScore : g.awayScore) : null, periods: (side === "home" ? g.homePeriodPoints : g.awayPeriodPoints) ?? null,
   };
 };
 const boxLine = row => {
