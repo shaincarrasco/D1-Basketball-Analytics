@@ -9,6 +9,7 @@ import "./globals.css";
 import SiteShell from "@/components/site-shell";
 import { getMeta } from "@/lib/server-data";
 import { THEME_SCRIPT } from "@/lib/theme";
+import { DHR_INTRO_SCRIPT } from "@/components/dhr-intro-script";
 
 // Metadata URLs are not basePath-aware, so prefix them (GitHub Pages serves under /D1-Basketball-Analytics).
 const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
@@ -39,6 +40,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <html lang="en" data-theme="dark" data-palette="blacktop" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+        <script dangerouslySetInnerHTML={{ __html: DHR_INTRO_SCRIPT }} />
       </head>
       <body>
         <SiteShell updated={updated}>{children}</SiteShell>

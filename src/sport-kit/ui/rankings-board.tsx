@@ -72,7 +72,7 @@ export default function RankingsBoard<R>({ pack, data, routes, keep }: { pack: S
   const noun = pack.nouns.player[0].toUpperCase() + pack.nouns.player.slice(1);
   const tierText = pack.tiers.slice(0, -1).map(t => `${t.label} = top ${100 - t.min}%`).join(", ");
   const columns = useMemo<Column<Ranked<R>>[]>(() => [
-    { key: "rk", label: "#", value: x => rankOf.get(E.id(x.r)) ?? null, first: "asc", sticky: true, width: 46, render: x => <span className="rank-cell">{rankOf.get(E.id(x.r))}</span> },
+    { key: "rk", label: "#", title: `Rank among every ${pack.nouns.player} in this pool. Searching a name doesn't change it.`, value: x => rankOf.get(E.id(x.r)) ?? null, first: "asc", sticky: true, width: 46, render: x => <span className="rank-cell">{rankOf.get(E.id(x.r))}</span> },
     {
       key: "name", label: noun, csvLabel: noun, align: "l", value: x => E.name(x.r), first: "asc", sticky: true, width: 200,
       render: x => {

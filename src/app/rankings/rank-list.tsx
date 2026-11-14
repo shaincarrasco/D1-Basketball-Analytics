@@ -55,7 +55,7 @@ export default function RankList({ teams, prevRank, source }: { teams: TeamSumma
   return (
     <div>
       <div className="flex items-center gap-3 px-4 pb-2 text-xs font-semibold text-dim" aria-hidden>
-        <span className="w-[74px]">Rank</span><span className="flex-1">Team</span><span className="w-[38px] text-right">Form</span><span className="w-[56px] text-right">Rating</span>
+        <span className="w-[74px]">Rank</span><span className="flex-1">Team</span><span className="w-[38px] text-right">Form</span><span className="w-[56px] text-right">DHR</span>
       </div>
       <ul className="overflow-hidden rounded-[18px] bg-deck">
         {rows.slice(0, shown).map(t => (

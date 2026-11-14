@@ -3,7 +3,7 @@
 import Link from "next/link";
 import FavoriteButton from "@/components/favorite-button";
 import TeamLogo from "@/components/team-logo";
-import { dayLabel, fmt, pctFmt, timeLabel } from "@/lib/format";
+import { dayLabel, DHR_RANK_TITLE, fmt, pctFmt, timeLabel } from "@/lib/format";
 import type { TeamSummary } from "@/lib/types";
 
 /** Eastern calendar day (YYYY-MM-DD) of an ISO timestamp — the key used by /games/?d=. */
@@ -19,11 +19,11 @@ function NextGame({ t, compact }: { t: TeamSummary; compact?: boolean }) {
       <Link href={gameHref(n.date, n.id)} className="hover:text-ink hover:underline">{when}</Link>
       <span className="min-w-0 truncate">
         {n.venue === "A" ? "at" : "vs"}{" "}
-        {n.oppRank ? <span className="text-dim tnum">{n.oppRank} </span> : null}
+        {n.oppRank ? <span className="text-dim tnum" title={DHR_RANK_TITLE}>{n.oppRank} </span> : null}
         {n.oppSlug ? <Link href={`/teams/${n.oppSlug}/`} className="font-medium text-ink hover:text-off">{n.opp}</Link> : <span className="text-ink">{n.opp}</span>}
         {n.venue === "N" ? <span className="text-dim"> (neutral)</span> : null}
       </span>
-      {n.wp !== null && <Link href={gameHref(n.date, n.id)} className="font-semibold text-ink tnum hover:underline" title="Pregame win probability">{pctFmt(n.wp)}</Link>}
+      {n.wp !== null && <Link href={gameHref(n.date, n.id)} className="font-semibold text-ink tnum hover:underline" title={`${t.name}'s pregame win chance (DHR)`}>{pctFmt(n.wp)}</Link>}
     </p>
   );
 }
@@ -47,7 +47,7 @@ export function TeamCard({ t }: { t: TeamSummary }) {
         <TeamLogo src={t.logo} name={t.name} size={40} />
         <div className="min-w-0 flex-1">
           <h3 className="flex items-baseline gap-2 text-[17px] font-semibold leading-tight">
-            {t.rank ? <span className="text-sm font-medium text-mute tnum" title="DHR rank">{t.rank}</span> : null}
+            {t.rank ? <span className="text-sm font-medium text-mute tnum" title={DHR_RANK_TITLE}>{t.rank}</span> : null}
             <Link href={`/teams/${t.slug}/`} className="link truncate after:absolute after:inset-0 after:rounded-[10px] after:content-['']">{t.name}</Link>
           </h3>
           <p className="mt-0.5 text-xs text-mute">
@@ -64,7 +64,7 @@ export function TeamCard({ t }: { t: TeamSummary }) {
           <span title="10,000 season simulations: expected wins (10th–90th percentile) and conference title share">
             <b className="text-ink tnum">{fmt(t.sim.wins, 1)}</b> exp. wins <span className="tnum">({t.sim.p10}–{t.sim.p90})</span> · <b className="text-ink tnum">{pctFmt(t.sim.title)}</b> title
           </span>
-        ) : <span>Proj {fmt(t.projW)}–{fmt(t.projL)}</span>}
+        ) : <span title="Projected final record">Proj {fmt(t.projW)}–{fmt(t.projL)}</span>}
       </div>
     </article>
   );
@@ -77,7 +77,7 @@ export function TeamChip({ t }: { t: TeamSummary }) {
         <TeamLogo src={t.logo} name={t.name} size={26} />
         <span className="min-w-0 flex-1">
           <span className="flex items-baseline gap-1.5">
-            {t.rank ? <span className="text-xs text-mute tnum">{t.rank}</span> : null}
+            {t.rank ? <span className="text-xs text-mute tnum" title={DHR_RANK_TITLE}>{t.rank}</span> : null}
             <Link href={`/teams/${t.slug}/`} className="link truncate font-semibold after:absolute after:inset-0 after:content-['']">{t.name}</Link>
           </span>
         </span>

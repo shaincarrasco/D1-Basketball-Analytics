@@ -8,7 +8,7 @@ import ShotChart from "@/components/shot-chart";
 import TeamLogo from "@/components/team-logo";
 import { Empty, ErrorState, Loading } from "@/components/states";
 import { useJson } from "@/lib/client-data";
-import { dayLabel, fmt, pctFmt, signed, timeLabel } from "@/lib/format";
+import { dayLabel, DHR_RANK_TITLE, fmt, pctFmt, signed, timeLabel } from "@/lib/format";
 import { playerRows } from "@/lib/players";
 import type { Meta, PlayerBio, PlayerTable, TeamDetail, TeamSummary } from "@/lib/types";
 import GameLog from "./game-log";
@@ -115,12 +115,12 @@ function Profile({ p, all, detail, teams }: { p: PlayerRow; all: PlayerRow[]; de
                 {bio && <p className="text-sm text-mute">{[bio.ht, bio.wt ? `${bio.wt} lbs` : null, bio.year ? (YEAR[bio.year] ?? bio.year).toLowerCase() : null].filter(Boolean).join(", ")}</p>}
                 {(bio?.home || recruitText(p)) && (
                   <p className="text-sm text-mute" title="High-school recruiting ranking (College Basketball Data)">
-                    {[bio?.home, p.stars ? `${p.stars}-star` : null, p.recRank && p.recYear ? `No. ${p.recRank} in ${p.recYear}` : null].filter(Boolean).join(", ")}
+                    {[bio?.home, p.stars ? `${p.stars}-star` : null, p.recRank && p.recYear ? `No. ${p.recRank} recruit in the ${p.recYear} class` : null].filter(Boolean).join(", ")}
                   </p>
                 )}
               </div>
             </div>
-            <dl className="mt-5 flex overflow-hidden rounded-2xl bg-deck" aria-label="Per-game averages">
+            <dl className="mt-5 flex overflow-hidden rounded-2xl bg-deck" aria-label="Season averages">
               {([["MIN", p.min, 1], ["PTS", p.pts, 1], ["REB", p.reb, 1], ["AST", p.ast, 1], ["BLK", p.blk, 1], ["TS%", p.ts, 1]] as const).map(([l, v, d], i) => (
                 <div key={l} className={`flex flex-1 flex-col items-center gap-0.5 py-2.5 ${i ? "border-l border-line" : ""}`}>
                   <dt className="text-[11px] font-bold tracking-[0.04em] text-mute">{l}</dt>
@@ -196,7 +196,7 @@ function Profile({ p, all, detail, teams }: { p: PlayerRow; all: PlayerRow[]; de
           <p className="mb-3 mt-1 text-sm text-mute">Everyone who has played for {t?.short ?? "the team"} this season, by minutes.</p>
           <Teammates p={p} all={all} detail={detail} />
         </section>
-        {t && <TeamContext t={t} detail={detail.data} />}
+        {t && <TeamContext t={t} detail={detail.data} rated={teams.filter(x => x.rank).length} />}
       </div>
     </div>
   );
@@ -288,7 +288,7 @@ function Teammates({ p, all, detail }: { p: PlayerRow; all: PlayerRow[]; detail:
   );
 }
 
-function TeamContext({ t, detail }: { t: TeamSummary; detail: TeamDetail | null }) {
+function TeamContext({ t, detail, rated }: { t: TeamSummary; detail: TeamDetail | null; rated: number }) {
   const recent = (detail?.games ?? []).filter(g => g.result !== null).slice(-5).reverse();
   const n = t.next;
   return (
@@ -304,25 +304,25 @@ function TeamContext({ t, detail }: { t: TeamSummary; detail: TeamDetail | null 
       <div className="mt-4 grid grid-cols-3 gap-3 border-y border-line py-4">
         <div>
           <div className="font-display text-4xl font-black leading-none tnum">{t.rank ? `#${t.rank}` : "—"}</div>
-          <div className="label mt-1">DHR rank</div>
+          <div className="label mt-1">DHR rank, of {rated}</div>
         </div>
         <div>
           <div className="font-display text-2xl font-extrabold leading-none text-off tnum">{t.adjORank ? `#${t.adjORank}` : "—"}</div>
-          <div className="label mt-1">Offense</div>
+          <div className="label mt-1">Offense rank</div>
         </div>
         <div>
           <div className="font-display text-2xl font-extrabold leading-none text-def tnum">{t.adjDRank ? `#${t.adjDRank}` : "—"}</div>
-          <div className="label mt-1">Defense</div>
+          <div className="label mt-1">Defense rank</div>
         </div>
       </div>
-      <p className="mt-2 text-xs text-mute">Adjusted margin {signed(t.adjEM)} per 100 possessions · {t.sample}</p>
+      <p className="mt-2 text-xs text-mute">DHR rating {signed(t.adjEM)} per 100 possessions · {t.sample}</p>
 
       <h3 className="mt-5 text-sm font-semibold">Next game</h3>
       {n ? (
         <Link href={`/games/?d=${etDay(n.date)}&g=${n.id}`} className="link mt-1.5 block rounded-lg border border-line p-3 hover:border-line2">
           <span className="block text-xs text-mute">{dayLabel(etDay(n.date))} · {timeLabel(n.date)}{n.venue === "N" ? " · Neutral site" : ""}</span>
-          <span className="mt-0.5 block font-semibold">{n.venue === "A" ? "at" : "vs"} {n.oppRank ? <span className="text-mute">#{n.oppRank} </span> : null}{n.opp}</span>
-          {n.wp !== null && <span className="mt-0.5 block text-sm text-mute tnum">{pctFmt(n.wp)} win probability</span>}
+          <span className="mt-0.5 block font-semibold">{n.venue === "A" ? "at" : "vs"} {n.oppRank ? <span className="text-mute" title={DHR_RANK_TITLE}>#{n.oppRank} </span> : null}{n.opp}</span>
+          {n.wp !== null && <span className="mt-0.5 block text-sm text-mute tnum">{pctFmt(n.wp)} pregame win chance (DHR)</span>}
         </Link>
       ) : <p className="mt-1 text-sm text-mute">No upcoming game on the schedule.</p>}
 

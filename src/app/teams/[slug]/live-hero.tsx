@@ -41,13 +41,14 @@ export function LiveTiles({ team, total }: { team: TeamSummary; total: number })
           <div key={label} className={`flex flex-col gap-1.5 px-3.5 py-3.5 ${i ? "border-l border-line" : ""}`} title={hint}>
             <dt className="text-[13px] font-semibold text-mute">{label}</dt>
             <dd className="font-display text-[28px] font-extrabold leading-none tnum">{value}</dd>
-            <dd className="flex items-baseline gap-1"><span className="text-xs text-mute">No.</span><Dots className="text-[20px]">{rank ?? "—"}</Dots></dd>
+            <dd className="flex items-baseline gap-1"><span className="text-xs text-mute">No.</span><Dots className="text-[20px]">{rank ?? "—"}</Dots><span className="text-xs text-dim">of {total}</span></dd>
             <dd className="h-1 rounded-full bg-line" aria-hidden><div className="h-1 rounded-full bg-ink" style={{ width: rank ? `${Math.max(3, (1 - (rank - 1) / total) * 100)}%` : 0 }} /></dd>
           </div>
         ))}
       </dl>
       <p className="mt-2 text-[13px] text-mute tnum">
-        Rating <b className="text-ink">{signed(t.adjEM, 1)}</b> per 100 possessions{t.rank ? `, ${ordinal(t.rank)} of ${total}` : ""}. Schedule so far <b className="text-ink">{signed(t.sos, 1)}</b>{t.sosRank ? `, ${ordinal(t.sosRank)}` : ""}.
+        DHR rating <b className="text-ink">{signed(t.adjEM, 1)}</b> per 100 possessions{t.rank ? `, ${ordinal(t.rank)} of ${total}` : ""}. Schedule so far <b className="text-ink">{signed(t.sos, 1)}</b>{t.sosRank ? `, ${ordinal(t.sosRank)}` : ""}.{" "}
+        <Link href="/methodology/#overview" className="font-semibold text-bulb-ink hover:underline">What&apos;s DHR?</Link>
       </p>
     </div>
   );

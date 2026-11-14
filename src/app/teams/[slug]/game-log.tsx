@@ -67,7 +67,7 @@ export default function GameLog({ games: published, logos, slug }: { games: Team
           <thead>
             <tr>
               <th className="l">Date</th><th className="l">Opponent</th><th className="l">Result</th>
-              <th title="Pregame win probability (uses only games before that date)">Win prob</th>
+              <th title="Pregame win chance from DHR (uses only games before that date)">Pregame win %</th>
               {showProj && <th title="Pregame projected score">Projected</th>}
               {hasLines && <th title="Pregame spread ESPN showed (DraftKings), this team's side: negative = favored">Line</th>}
               {hasLines && <th title="Result against the spread">ATS</th>}
