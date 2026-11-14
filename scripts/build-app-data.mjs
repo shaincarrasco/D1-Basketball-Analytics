@@ -740,4 +740,11 @@ await write("games/index.json", { days: index });
 console.log(`[app-data] ${teamSummaries.length} teams, ${conferences.length} conferences, ${players.length} players, ${index.length} game days written to ${OUT}.`);
 
 // Projected NCAA tournament field + bubble watch (reads the files written above).
-await import("./build-bracket.mjs");
+try {
+  await import("./build-bracket.mjs");
+} catch (error) {
+  // Never let the bracket break the data build: publish an honest "not available" file instead.
+  console.warn("[bracket] Build failed; publishing an unavailable bracket. " + (error instanceof Error ? error.stack : error));
+  const { writeFile: wf } = await import("node:fs/promises");
+  await wf(`${OUT}/bracket.json`, JSON.stringify({ ok: false, reason: "The bracket projection could not be built from today's data." }));
+}

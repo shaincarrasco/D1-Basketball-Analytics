@@ -102,7 +102,7 @@ export default function FlowChart({ g, now }: { g: Game; now?: number | null }) 
         <Stat label="Biggest swing" value={swing ? `${Math.round(Math.abs(swing.delta) * 100)}%` : "—"} sub={swing ? `${swing.delta > 0 ? homeS : awayS} score · ${clockLabel(swing.t)}` : ""} title="Largest change in win probability from one scoring play" />
       </dl>
 
-      <p className="mb-1 flex flex-wrap items-baseline gap-x-2 text-[13px] text-mute tnum" aria-live="polite">
+      <p className="mb-1 flex flex-wrap items-baseline gap-x-2 text-[13px] text-mute tnum">
         <span className="font-semibold text-ink">{timeText(shown.t)}</span>
         <span>{awayS} {shown.away}, {homeS} {shown.home}</span>
         {s.final && shown.t >= s.end && shown.home !== shown.away

@@ -151,7 +151,8 @@ export function liveDay(day: string | null, today: string, games: Game[] | null)
 export function useLiveScores(day: string | null, games: Game[] | null) {
   const [byGame, setByGame] = useState<Map<string, LiveGame>>(new Map());
   const [updated, setUpdated] = useState<number | null>(null);
-  const needTeams = !!day && !!games?.some(g => !g.espnId);
+  // Always load team ids: they also orient home/away when a game matched by ESPN id is listed the other way round (neutral sites).
+  const needTeams = !!day && !!games?.length;
   const teams = useJson<TeamSummary[]>(needTeams ? "teams.json" : null);
   const espnByTeam = useMemo(() => {
     const m = new Map<string, string>();

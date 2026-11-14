@@ -2,7 +2,7 @@
 // App chrome: sticky top bar (desktop nav + search), bottom tab bar on phones.
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BarChart3, CalendarDays, LayoutGrid, Search, Swords, Users, Layers, BookOpen, Star, Newspaper, ScatterChart, HeartPulse, Trophy, ChevronDown, History } from "lucide-react";
 import AccountButton from "./account-button";
 import CommandSearch from "./command-search";
@@ -36,6 +36,18 @@ function isActive(path: string, href: string) {
 export default function SiteShell({ children, updated }: { children: React.ReactNode; updated: string }) {
   const path = usePathname() ?? "/";
   const [searchOpen, setSearchOpen] = useState(false);
+  // "More" menu: a native <details>, closed on Escape, outside click, focus leaving, or picking a link.
+  const more = useRef<HTMLDetailsElement>(null);
+  useEffect(() => {
+    const close = (refocus = false) => { const d = more.current; if (d?.open) { d.open = false; if (refocus) d.querySelector("summary")?.focus(); } };
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") close(true); };
+    const onDown = (e: PointerEvent) => { if (more.current && !more.current.contains(e.target as Node)) close(); };
+    const onFocus = (e: FocusEvent) => { if (more.current && !more.current.contains(e.target as Node)) close(); };
+    document.addEventListener("keydown", onKey);
+    document.addEventListener("pointerdown", onDown);
+    document.addEventListener("focusin", onFocus);
+    return () => { document.removeEventListener("keydown", onKey); document.removeEventListener("pointerdown", onDown); document.removeEventListener("focusin", onFocus); };
+  }, []);
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if ((e.key === "k" && (e.metaKey || e.ctrlKey)) || (e.key === "/" && !(e.target instanceof HTMLInputElement) && !(e.target instanceof HTMLTextAreaElement) && !(e.target instanceof HTMLSelectElement))) {
@@ -65,14 +77,14 @@ export default function SiteShell({ children, updated }: { children: React.React
                 {n.href === "/following/" ? <><Star size={14} aria-hidden /><span className="sr-only xl:not-sr-only">{n.label}</span></> : n.label}
               </Link>
             ))}
-            <details key={path} className="group relative">
+            <details ref={more} key={path} className="group relative">
               <summary aria-current={NAV.some(n => n.more && isActive(path, n.href)) ? "page" : undefined}
                 className="relative flex cursor-pointer list-none items-center gap-1 whitespace-nowrap px-2 py-[17px] text-[14px] font-semibold text-mute hover:text-ink aria-[current=page]:text-ink [&::-webkit-details-marker]:hidden">
                 More<ChevronDown size={14} aria-hidden className="transition-transform group-open:rotate-180" />
               </summary>
               <div className="absolute right-0 top-full z-50 mt-1 min-w-[200px] rounded-xl border border-line bg-deck p-1.5 shadow-xl">
                 {NAV.filter(n => n.more).map(n => (
-                  <Link key={n.href} href={n.href} aria-current={isActive(path, n.href) ? "page" : undefined}
+                  <Link key={n.href} href={n.href} aria-current={isActive(path, n.href) ? "page" : undefined} onClick={() => { if (more.current) more.current.open = false; }}
                     className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-[14px] font-semibold text-mute hover:bg-deck2 hover:text-ink aria-[current=page]:text-ink">
                     <n.icon size={15} aria-hidden />{n.label}
                   </Link>

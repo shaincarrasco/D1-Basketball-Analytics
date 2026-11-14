@@ -235,7 +235,7 @@ function LiveStatus({ d }: { d: LiveGameState }) {
     : d.error ? "" : "Loading live box score and plays from ESPN…";
   if (d.error && !d.data) return null; // LiveDetail explains it
   return (
-    <p className="mt-3 text-[12px] text-mute" aria-live="polite" data-testid="live-status">
+    <p className="mt-3 text-[12px] text-mute" data-testid="live-status">
       {d.data?.state === "in" && <span className="live-dot mr-1.5 inline-block align-middle" aria-hidden />}
       {text}
       {d.error && d.data && <span className="ml-1 text-loss">Couldn&apos;t refresh just now; showing the last update.</span>}
