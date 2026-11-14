@@ -8,6 +8,7 @@
 // Input/output: public/data/games-season-2027.json (in place). Reads .cache/espn-player-games-2027.json
 // and public/data/team-directory.json.
 import { readFile, writeFile } from "node:fs/promises";
+import { isScorelessFinal } from "./lib/game-status.mjs";
 
 const GAMES = "public/data/games-season-2027.json";
 const readJson = async (path, fallback) => { try { return JSON.parse(await readFile(path, "utf8")); } catch { return fallback; } };
@@ -50,7 +51,8 @@ const sidePoss = side => {
 const today = etDate(new Date().toISOString());
 let merged = 0, ambiguous = 0;
 for (const g of payload.games) {
-  if (g.status === "final" || g.status === "postponed" || g.status === "canceled") continue;
+  // A 0-0 "final" is a provider placeholder, not a result: let ESPN's real score replace it.
+  if ((g.status === "final" && !isScorelessFinal(g)) || g.status === "postponed" || g.status === "canceled") continue;
   const day = etDate(g.date);
   if (day > today) continue;
   const h = espnIdOf(g.homeTeam), a = espnIdOf(g.awayTeam);

@@ -13,10 +13,10 @@ export default function TeamTabs({ items }: { items: [string, string][] }) {
     const pick = () => {
       raf = 0;
       const line = (bar.current?.getBoundingClientRect().bottom ?? 110) + 24;
-      let cur = items[0][0];
-      for (const el of sections) if (el.getBoundingClientRect().top <= line) cur = el.id;
-      // At the very bottom the last section may be too short to reach the line.
-      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) cur = sections.at(-1)?.id ?? cur;
+      // The section whose top most recently passed under the bar. Comparing tops (not list
+      // order) keeps a side column, like Stats on wide screens, from claiming the tab early.
+      let cur = items[0][0], best = -Infinity;
+      for (const el of sections) { const top = el.getBoundingClientRect().top; if (top <= line && top > best) { best = top; cur = el.id; } }
       setActive(cur);
     };
     const onScroll = () => { if (!raf) raf = requestAnimationFrame(pick); };

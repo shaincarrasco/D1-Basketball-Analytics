@@ -14,7 +14,7 @@ const [teamPayload, gamePayload, model] = await Promise.all([
 ]);
 
 const scorelessFinals = normalizeGames(gamePayload.games);
-if (scorelessFinals) console.log(`[build-simulations] ${scorelessFinals} scoreless "final" game(s) treated as cancelled.`);
+if (scorelessFinals) console.log(`[build-simulations] ${scorelessFinals} scoreless "final" game(s) treated as not played (scheduled or cancelled).`);
 
 // Seeded PRNG so a rebuild with the same data gives the same odds.
 let seed = 20262027;

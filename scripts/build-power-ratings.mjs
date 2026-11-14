@@ -13,7 +13,7 @@ const modelPath = "public/data/model-2027.json";
 const readJson = async path => JSON.parse(await readFile(path, "utf8"));
 const [teamPayload, gamePayload] = await Promise.all([readJson(teamPath), readJson(gamePath)]);
 const scorelessFinals = normalizeGames(gamePayload.games);
-if (scorelessFinals) console.log(`[build-power-ratings] ${scorelessFinals} scoreless "final" game(s) treated as cancelled.`);
+if (scorelessFinals) console.log(`[build-power-ratings] ${scorelessFinals} scoreless "final" game(s) treated as not played (scheduled or cancelled).`);
 
 const teamRecords = Array.isArray(teamPayload.teams) ? teamPayload.teams : [];
 // Repair team records the stats feed left without an id/conference (e.g. a conference label

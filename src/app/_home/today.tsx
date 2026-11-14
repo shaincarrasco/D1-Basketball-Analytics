@@ -47,7 +47,8 @@ export default function Today() {
     const liveFirst = (g: Game) => (g.status === "in_progress" ? 0 : 1);
     return list.sort((a, b) => liveFirst(a) - liveFirst(b) || (b.watch ?? 0) - (a.watch ?? 0));
   }, [staticGames, live.byGame]);
-  const best = games.find(g => g.pred && g.home.id && g.away.id) ?? games[0];
+  const showable = (g: Game) => g.status === "scheduled" || g.status === "in_progress" || g.status === "final";
+  const best = games.find(g => showable(g) && g.pred && g.home.id && g.away.id) ?? games.find(showable) ?? games[0];
   const rest = games.filter(g => g !== best).slice(0, 6);
   const liveCount = games.filter(g => g.status === "in_progress").length;
   const finals = useMemo(() => {
@@ -223,7 +224,7 @@ function Scoreboard({ g, day, live, top }: { g: Game; day: string; live?: LiveGa
       <Link href={gameHref(day, g.id)} className="absolute inset-0 rounded-[22px]" aria-label={`${g.away.name} ${g.neutral ? "vs" : "at"} ${g.home.name}, open game`} />
       <div className="flex items-center justify-between text-[13px]">
         <span className="font-medium text-mute">{top}</span>
-        <span className="flex items-center gap-2 font-semibold">{st.live && <span className="live-dot" aria-hidden />}<span className={st.live ? "text-hot" : ""}>{st.text}</span>{g.tv?.length && g.status !== "final" ? <span className="relative z-[1]"><TvBadges tv={g.tv} max={1} /></span> : null}</span>
+        <span className="flex items-center gap-2 font-semibold">{st.live && <span className="live-dot" aria-hidden />}<span className={st.live ? "text-hot" : ""}>{st.text}</span>{g.tv?.length && (scheduled || g.status === "in_progress") ? <span className="relative z-[1]"><TvBadges tv={g.tv} max={1} /></span> : null}</span>
       </div>
       <div className="mt-4 flex items-center justify-between gap-2">
         <Side s={g.away} />
@@ -233,7 +234,7 @@ function Scoreboard({ g, day, live, top }: { g: Game; day: string; live?: LiveGa
             <Dots dim className="text-[20px]">:</Dots>
             <Dots glow ghost className="text-[40px]">{String(score("home") ?? "--")}</Dots>
           </div>
-          <span className="text-[11px] font-medium text-mute">{scheduled ? "projected" : g.status === "final" ? "final" : "live"}</span>
+          <span className="text-[11px] font-medium text-mute">{scheduled ? "projected" : g.status === "final" ? "final" : g.status === "in_progress" ? "live" : st.text}</span>
         </div>
         <Side s={g.home} />
       </div>

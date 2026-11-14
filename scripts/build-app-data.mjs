@@ -22,7 +22,7 @@ const [teamPayload, gamePayload, playerPayload, directory, model] = await Promis
 ]);
 
 const scorelessFinals = normalizeGames(gamePayload.games);
-if (scorelessFinals) console.log(`[build-app-data] ${scorelessFinals} scoreless "final" game(s) treated as cancelled.`);
+if (scorelessFinals) console.log(`[build-app-data] ${scorelessFinals} scoreless "final" game(s) treated as not played (scheduled or cancelled).`);
 
 const espnRosters = await readJson("public/data/espn-rosters-2027.json").catch(() => ({ teams: {} }));
 const sims = await readJson("public/data/sims-2027.json").catch(() => null);

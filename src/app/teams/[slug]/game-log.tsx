@@ -37,7 +37,8 @@ export default function GameLog({ games: published, logos, slug }: { games: Team
   useEffect(() => { if (quad) document.getElementById("schedule")?.scrollIntoView({ block: "start" }); }, [quad]);
   const clearQuad = () => { history.replaceState(null, "", window.location.pathname + window.location.search); window.dispatchEvent(new HashChangeEvent("hashchange")); };
 
-  const list = games.filter(g => (show === "all" || (show === "results" ? g.result : !g.result)) && (!quad || g.quad === quad));
+  const upcoming = (g: (typeof games)[number]) => !g.result && g.status !== "canceled" && g.status !== "cancelled" && g.status !== "postponed";
+  const list = games.filter(g => (show === "all" || (show === "results" ? g.result : upcoming(g))) && (!quad || g.quad === quad));
   const hasLines = games.some(g => g.line !== undefined);
   const qGames = quad ? games.filter(g => g.quad === quad && g.result) : [];
 
@@ -46,7 +47,7 @@ export default function GameLog({ games: published, logos, slug }: { games: Team
       <div className="mb-3 flex flex-wrap items-center gap-1.5" role="group" aria-label="Filter games">
         {(["all", "results", "upcoming"] as const).map(s => (
           <button key={s} type="button" className="chip" aria-pressed={show === s} onClick={() => setShow(s)}>
-            {s === "all" ? `All ${games.length}` : s === "results" ? `Results ${games.filter(g => g.result).length}` : `Upcoming ${games.filter(g => !g.result).length}`}
+            {s === "all" ? `All ${games.length}` : s === "results" ? `Results ${games.filter(g => g.result).length}` : `Upcoming ${games.filter(upcoming).length}`}
           </button>
         ))}
         {quad && (
@@ -105,7 +106,7 @@ export default function GameLog({ games: published, logos, slug }: { games: Team
                         <span className={g.result === "W" ? "text-win" : "text-loss"}>{g.result}</span> {g.pts}–{g.oppPts}
                         {upset && <span className="ml-2 rounded bg-hot/15 px-1.5 text-[10px] font-bold text-hot">upset</span>}
                       </Link>
-                    ) : g.status === "postponed" || g.status === "cancelled" ? <span className="text-mute capitalize">{g.status}</span> : g.status === "in_progress" ? <Link href={gameHref(g)} className="flex items-center gap-2 text-hot"><span className="live-dot" />In progress</Link> : <span className="flex items-center gap-2 text-dim">{timeLabel(g.date)}{g.tv?.length ? <TvBadges tv={g.tv} max={2} /> : null}</span>}
+                    ) : g.status === "postponed" || g.status === "cancelled" || g.status === "canceled" ? <span className="text-mute capitalize">{g.status}</span> : g.status === "in_progress" ? <Link href={gameHref(g)} className="flex items-center gap-2 text-hot"><span className="live-dot" />In progress</Link> : <span className="flex items-center gap-2 text-dim">{timeLabel(g.date)}{g.tv?.length ? <TvBadges tv={g.tv} max={2} /> : null}</span>}
                   </td>
                   <td style={{ color: g.wp === null ? undefined : g.wp >= 0.5 ? "var(--ink)" : "var(--mute)" }}>{pctFmt(g.wp)}</td>
                   <td className="text-mute">{g.projPts !== null ? `${fmt(g.projPts, 0)}–${fmt(g.projOppPts, 0)}` : "—"}</td>
