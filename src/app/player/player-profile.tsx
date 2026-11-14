@@ -23,6 +23,7 @@ import { DprCard, OnOff, Similar } from "./impact";
 import ShotDiet, { type ZoneAvg } from "./shot-diet";
 import Scouting from "./scouting";
 import SkillProjections from "@/components/skills/skill-projections";
+import NilPlayerCard from "@/components/nil/nil-player-card";
 import { onTeam, teamHex } from "@/lib/color";
 
 const POOL_MIN = 10;
@@ -160,6 +161,8 @@ function Profile({ p, all, detail, teams }: { p: PlayerRow; all: PlayerRow[]; de
       <Scouting p={p} pool={pool} />
 
       <SkillProjections playerId={p.id} teamSlug={t?.slug ?? null} name={p.name} />
+
+      <NilPlayerCard playerId={p.id} name={p.name} />
 
       <FrameworkRanks p={p} all={all} />
 

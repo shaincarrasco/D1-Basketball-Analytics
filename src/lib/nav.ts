@@ -3,7 +3,7 @@
 // so a new page is added in one place.
 import type { LucideIcon } from "lucide-react";
 import {
-  ArrowLeftRight, BarChart3, BookOpen, CalendarDays, HeartPulse, History, Layers, LayoutGrid,
+  ArrowLeftRight, BadgeDollarSign, BarChart3, BookOpen, CalendarDays, HeartPulse, History, Layers, LayoutGrid,
   LineChart, Newspaper, PenTool, ScatterChart, ShieldAlert, Sparkles, Swords, Trophy, Users, UsersRound,
 } from "lucide-react";
 
@@ -45,6 +45,7 @@ export const HUBS: Hub[] = [
       { href: "/players/rankings/", label: "Rankings", desc: "Ten ways to rank players, or set your own weights", icon: Sparkles },
       { href: "/players/projections/", label: "Skill projections", desc: "Projected shooting, passing and defense with grades", icon: LineChart },
       { href: "/players/indispensable/", label: "Most indispensable", desc: "How far each team would fall without him", icon: ShieldAlert },
+      { href: "/players/nil/", label: "NIL value", desc: "Our estimated market value for every player, with reported figures", icon: BadgeDollarSign },
       { href: "/charts/", label: "Charts", desc: "Who stands out, in 21 curated charts", icon: ScatterChart },
     ],
   },
