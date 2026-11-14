@@ -333,7 +333,7 @@ function Side({ s }: { s: GameSide }) {
     <>
       <TeamLogo src={s.logo} name={s.name} size={52} />
       <span className="mt-1.5 max-w-[104px] truncate font-display text-[19px] font-extrabold leading-tight">{s.name}</span>
-      <span className="text-xs text-mute" title={s.rank ? DHR_RANK_TITLE : undefined}>{[s.rank ? `DHR No. ${s.rank}` : null, s.record].filter(Boolean).join(", ")}</span>
+      <span className="text-xs text-mute" title={s.rank ? DHR_RANK_TITLE : undefined}>{[s.rank ? `DHR No. ${s.rank}` : null, s.record].filter(Boolean).map((t, i) => <span key={i} className="whitespace-nowrap">{i ? ", " : ""}{t}</span>)}</span>
     </>
   );
   return s.slug
