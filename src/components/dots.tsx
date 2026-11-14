@@ -1,12 +1,13 @@
 // Scoreboard-bulb numerals (Doto). Reserved for ranks and scores so the accent keeps one meaning.
+// Never wrap: "--" (no score yet) would otherwise break after the first hyphen on narrow screens.
 export function Dots({ children, glow = false, dim = false, ghost = false, className = "", title }: { children: React.ReactNode; glow?: boolean; dim?: boolean; ghost?: boolean; className?: string; title?: string }) {
-  const lit = <span title={title} className={`dots leading-none ${glow ? "dots-glow" : ""} ${dim ? "dots-off" : ""} ${ghost ? "" : className}`}>{children}</span>;
+  const lit = <span title={title} className={`dots whitespace-nowrap leading-none ${glow ? "dots-glow" : ""} ${dim ? "dots-off" : ""} ${ghost ? "" : className}`}>{children}</span>;
   if (!ghost) return lit;
   // Unlit bulbs behind the number, like a real scoreboard ("88" under "12").
   const len = String(typeof children === "string" || typeof children === "number" ? children : "").length || 2;
   return (
-    <span className={`relative inline-block leading-none ${className}`}>
-      <span aria-hidden className="dots dots-unlit absolute inset-0 text-right leading-none">{"8".repeat(len)}</span>
+    <span className={`relative inline-block whitespace-nowrap leading-none ${className}`}>
+      <span aria-hidden className="dots dots-unlit absolute inset-0 whitespace-nowrap text-right leading-none">{"8".repeat(len)}</span>
       <span className="relative">{lit}</span>
     </span>
   );
