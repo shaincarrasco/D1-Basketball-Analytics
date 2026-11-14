@@ -169,7 +169,7 @@ function FitCard({ nil }: { nil: NilData }) {
   const pct = (v: number | null) => (v === null ? "—" : `${Math.round(v * 100)}%`);
   return (
     <div className="deck p-4">
-      <div className="flex items-center gap-2"><h2 className="font-display text-2xl font-extrabold uppercase">How good is it?</h2><EstimateTag>Model</EstimateTag></div>
+      <div className="flex items-center gap-2"><h2 className="font-display text-2xl font-extrabold">How accurate is it?</h2><EstimateTag>Model</EstimateTag></div>
       <p className="mt-1 text-[14px] leading-snug text-mute">
         Estimate = <b className="text-ink">team roster budget</b> × <b className="text-ink">his share</b>. Budgets come from CBS Sports&apos; spending tiers for 80 high-major programs and from program strength elsewhere; shares come from minutes, DPR, recruiting rank and position, fitted to {c.fitted} publicly reported 2026–27 figures.
       </p>

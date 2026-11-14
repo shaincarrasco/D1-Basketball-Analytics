@@ -27,11 +27,11 @@ export function ReportList({ reports, sources, className = "" }: { reports: NilR
 
 /** Small tag that says what a number is. */
 export function EstimateTag({ children = "Estimate" }: { children?: React.ReactNode }) {
-  return <span className="rounded-full border border-line2 px-2 py-0.5 text-[10.5px] font-bold uppercase tracking-[0.06em] text-mute">{children}</span>;
+  return <span className="rounded-full border border-line2 px-2 py-0.5 text-[12px] font-semibold text-mute">{children}</span>;
 }
 
 export function ReportedTag() {
-  return <span className="rounded-full bg-deck2 px-2 py-0.5 text-[10.5px] font-bold uppercase tracking-[0.06em] text-ink">Reported</span>;
+  return <span className="rounded-full bg-deck2 px-2 py-0.5 text-[12px] font-semibold text-ink">Reported</span>;
 }
 
 export { fmtMoney };
