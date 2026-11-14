@@ -72,7 +72,7 @@ jobs:
             ~/.cargo/git
             live/target
           key: rust-${{ runner.os }}-${{ hashFiles('live/Cargo.toml', 'live/Cargo.lock') }}
-      - name: Fetch news, previews/recaps, polls and injuries (Rust)
+      - name: Fetch news, previews/recaps, polls and injury reports (Rust)
         continue-on-error: true
         run: cargo run --release --manifest-path live/Cargo.toml --bin feeds
       - name: Fill results the schedule provider hasn't published yet (ESPN box scores)
@@ -96,8 +96,10 @@ jobs:
           if ! git diff --cached --quiet; then
             git commit -m 'Update 2026-27 basketball data snapshots'
             # main may have moved during the run (a merge or an overlapping refresh): replay on top, ours wins.
-            git push || { git pull --rebase -X theirs && git push; } || echo "::warning::Data snapshot push skipped; the next refresh will retry."
+            git push || { git pull --rebase -X theirs && git push; } || { git rebase --abort 2>/dev/null || true; echo "::warning::Data snapshot push skipped; the next refresh will retry."; }
           fi
+      - name: Test the injury engine
+        run: node --test scripts/lib/injuries.test.mjs
       - name: Typecheck
         run: npm run typecheck
       - name: Build app data layer and static site
@@ -106,6 +108,16 @@ jobs:
           NEXT_PUBLIC_BASE_PATH: /D1-Basketball-Analytics
           # Optional: URL of the live relay (live/), set as a repository variable LIVE_URL.
           NEXT_PUBLIC_LIVE_URL: ${{ vars.LIVE_URL }}
+      - name: Save the injury ledger (status changes and returns since the last check)
+        if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' || github.event_name == 'push'
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add public/data/injury-ledger-2027.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'Update injury ledger'
+            git push || { git pull --rebase -X theirs && git push; } || { git rebase --abort 2>/dev/null || true; echo "::warning::Injury ledger push skipped; the next refresh will retry."; }
+          fi
       - name: Configure Pages
         uses: actions/configure-pages@v5
         with:

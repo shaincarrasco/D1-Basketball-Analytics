@@ -38,17 +38,55 @@ export type TeamSummary = {
   ap?: PollSpot | null; coaches?: PollSpot | null;
   /** Players currently flagged unavailable (ESPN injury list or missing from recent box scores). */
   unavailable?: number;
+  /** Injury load: players out, limited, share of minutes missing, estimated rating lost (points per 100). */
+  health?: { out: number; missing: number; limited: number; minShare: number; netLoss: number } | null;
 };
 export type PollSpot = { rank: number; prev: number | null; pts: number | null; fpv: number | null };
 /** A credited link to an outside article (headline, link, time and publisher only). */
 export type Article = { h: string; url: string; t: string; kind: string; src: string; by: string | null };
-/** Availability note: ESPN-listed injury, missed recent games (box scores) or an injury/suspension headline. */
-export type Availability = { pid: string; name: string; status: string; detail: string | null; since: string | null; source: "espn" | "box" | "news"; url?: string | null };
+/** Normalised availability state, most to least serious. "missed" = inferred from box scores; "monitor" = hurt or in the news, no absence yet. */
+export type InjuryState = "season" | "out" | "doubtful" | "questionable" | "dtd" | "missed" | "monitor";
+/** confirmed = ESPN's official list; reported = a credited news report; inferred = box scores only (reason unknown). */
+export type InjuryConfidence = "confirmed" | "reported" | "inferred";
+export type InjurySource = "espn" | "manual" | "news" | "box";
+/**
+ * One current absence (built by scripts/lib/injuries.mjs). Every row says where it came from.
+ * `pid` is null for roster players with no stats line yet (link those to the team page).
+ */
+export type Availability = {
+  key: string; pid: string | null; aid: string | null; name: string; pos: string | null;
+  state: InjuryState; status: string; kind: "injury" | "illness" | "suspension" | "eligibility" | "personal" | "unknown";
+  /** Body part ("Knee", "ACL", "Illness"…), expected absence ("Season", "6–8 weeks", "Until January", "Indefinite"…), estimated return window [from, to] (yyyy-mm-dd). */
+  body: string | null; expected: string | null; eta: [string, string] | null; weeks?: [number, number] | null;
+  detail: string | null; since: string | null; source: InjurySource; url: string | null; publisher: string | null; confidence: InjuryConfidence;
+  /** Consecutive team games missed (ESPN box scores), last game played, games played, never played this season. */
+  missed: number; lastPlayed: string | null; gp: number; yetToPlay: boolean;
+  /** mpg/ppg…; minShare = share of the team's 200 player-minutes; netLoss ≈ team rating lost, points per 100 possessions (0 unless he's out). */
+  impact: { mpg: number | null; ppg: number | null; rpg: number | null; apg: number | null; minShare: number | null; dpr: number | null; netLoss: number | null };
+  /** Team record and average margin with / without him: [W, L, avg margin]. */
+  ww: { with: [number, number, number | null]; without: [number, number, number | null] } | null;
+};
+export type InjuryRow = Availability & { slug: string; team: string; conf: string; rank: number | null };
+/** A change in the injury ledger. kind: new flag, got worse, improved, other update, back in the lineup, or dropped off the list. */
+export type InjuryEvent = {
+  t: string; kind: "new" | "worse" | "better" | "update" | "returned" | "cleared";
+  state: InjuryState | null; status: string; from?: string | null; body: string | null; detail: string | null; url: string | null; source: InjurySource;
+};
+export type WireEvent = InjuryEvent & { key: string; pid: string | null; name: string; slug: string; team: string; conf: string | null; rank: number | null; netLoss: number | null };
+/** Team health: players out (missing = the subset inferred from box scores, reason not reported; limited: questionable / day-to-day), share of minutes missing, estimated rating lost per 100, points per game lost. */
+export type TeamHealth = { slug: string; team: string; conf: string; rank: number | null; out: number; missing: number; limited: number; minShare: number; netLoss: number; ppgLost: number };
+/** Official availability report pages (conference games / NCAA tournament only). */
+export type ReportLink = { conf: string; url: string | null; note: string | null; verified?: boolean };
+export type InjuryFile = { checked: string; rows: InjuryRow[]; teams: TeamHealth[]; wire: WireEvent[]; links: ReportLink[] };
+/** Season-long injury history for one player (team detail file). */
+export type InjuryLogEntry = {
+  key: string; pid: string | null; name: string; open: boolean; events: InjuryEvent[];
+  stints: { from: string; to: string | null; state: InjuryState; body: string | null; kind: string | null; missed: number }[];
+};
 export type NewsFile = {
   fetchedAt: string | null; league: Article[]; pollDate: string | null;
   polls: Record<"ap" | "coaches", { rank: number; prev: number | null; pts: number | null; fpv: number | null; slug: string | null; name: string | null; dhr: number | null; w: number | null; l: number | null }[]>;
 };
-export type InjuryRow = Availability & { slug: string; team: string; conf: string; rank: number | null };
 
 export type TeamGame = {
   id: string; date: string; day: string; status: string; venue: Venue;
@@ -91,6 +129,8 @@ export type TeamDetail = {
   bios?: Record<string, PlayerBio>;
   news?: Article[];
   availability?: Availability[];
+  /** Every player with an injury history this season (current and past absences). */
+  injuryLog?: InjuryLogEntry[];
   /** Articles that tag each player (provider player id -> articles). */
   playerNews?: Record<string, Article[]>;
   /** Field names for `roster` rows (same as players.json). */

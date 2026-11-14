@@ -36,6 +36,7 @@ pub struct Config {
     pub vapid_public: Option<String>,
     pub vapid_private: Option<String>,
     pub vapid_subject: String,
+    pub injury_feed_url: String,
 }
 
 fn opt(key: &str) -> Option<String> { env::var(key).ok().filter(|v| !v.trim().is_empty()) }
@@ -55,6 +56,7 @@ impl Config {
             vapid_public: opt("VAPID_PUBLIC_KEY"),
             vapid_private: opt("VAPID_PRIVATE_KEY"),
             vapid_subject: opt("VAPID_SUBJECT").unwrap_or_else(|| "mailto:admin@d1hoops.app".into()),
+            injury_feed_url: opt("INJURY_FEED_URL").unwrap_or_else(|| alerts::DEFAULT_INJURY_FEED.into()),
         }
     }
 }
@@ -120,6 +122,7 @@ async fn main() {
     });
     load_teams(&state).await;
     tokio::spawn(relay::poll_loop(state.clone()));
+    tokio::spawn(alerts::injury_loop(state.clone()));
 
     let static_dir = cfg.static_dir.clone();
     let site = ServeDir::new(&static_dir).not_found_service(ServeFile::new(format!("{static_dir}/404.html")));

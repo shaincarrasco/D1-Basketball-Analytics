@@ -117,7 +117,7 @@ function SignedIn({ me, health, refresh }: { me: Me; health: Health; refresh: ()
 
 function AlertsPanel({ pro }: { pro: boolean }) {
   const [on, setOn] = useState<boolean | null>(null);
-  const [prefs, setPrefs] = useState<AlertPrefs>({ tipoff: true, close: true, final: true });
+  const [prefs, setPrefs] = useState<AlertPrefs>({ tipoff: true, close: true, final: true, injury: true });
   const [busy, setBusy] = useState(false), [error, setError] = useState<string | null>(null);
   useEffect(() => { currentPushSubscription().then(s => setOn(!!s)); }, []);
   const toggle = async () => {
@@ -138,7 +138,7 @@ function AlertsPanel({ pro }: { pro: boolean }) {
         <>
           <fieldset className="grid gap-2 text-[14px]">
             <legend className="sr-only">Alert types</legend>
-            {([["tipoff", "Tip-off"], ["close", "Close game in the final 4 minutes"], ["final", "Final score"]] as const).map(([k, label]) => (
+            {([["tipoff", "Tip-off"], ["close", "Close game in the final 4 minutes"], ["final", "Final score"], ["injury", "Injury news for my teams"]] as const).map(([k, label]) => (
               <label key={k} className="flex items-center gap-2">
                 <input type="checkbox" checked={prefs[k]} onChange={e => save({ ...prefs, [k]: e.target.checked })} className="h-4 w-4 accent-[var(--off)]" /> {label}
               </label>

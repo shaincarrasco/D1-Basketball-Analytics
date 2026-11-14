@@ -5,6 +5,8 @@ import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Empty, ErrorState, Loading } from "@/components/states";
 import { useJson } from "@/lib/client-data";
+import { useInjuries } from "@/lib/injury-hooks";
+import { keyAbsences } from "@/components/whos-out";
 import { liveDay, useLiveScores, withLive } from "@/lib/live";
 import { dayLabel, etToday, pctFmt } from "@/lib/format";
 import type { Game, GameDay, GameIndex } from "@/lib/types";
@@ -38,6 +40,10 @@ export default function GamesHub() {
   // Today's slate (and recent days the data hasn't caught up on) gets ESPN's live scores laid over the static data.
   const live = useLiveScores(liveDay(day, today, staticGames), staticGames);
   const games = useMemo(() => (staticGames && live.byGame.size ? staticGames.map(g => withLive(g, live.byGame.get(g.id))) : staticGames), [staticGames, live.byGame]);
+
+  // One cached fetch for every card; failures just mean no badges.
+  const injuries = useInjuries();
+  const absences = useMemo(() => keyAbsences(injuries.data), [injuries.data]);
 
   const [filter, setFilter] = useState<FilterId>("all");
   const [sort, setSort] = useState<SortId>("time");
@@ -145,7 +151,7 @@ export default function GamesHub() {
             <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4" aria-label={`${shown.length} games`}>
               {shown.map(g => (
                 <li key={g.id} data-game={g.id} className="flex">
-                  <GameCard g={g} live={live.byGame.get(g.id)} onOpen={openGame} />
+                  <GameCard g={g} live={live.byGame.get(g.id)} onOpen={openGame} absences={absences} />
                 </li>
               ))}
             </ul>

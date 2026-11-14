@@ -15,6 +15,8 @@ import { WatchBadge } from "./game-card";
 import TvBadges from "@/components/tv-badges";
 import ArticleList from "@/components/article-list";
 import PickEm from "./pick-em";
+import WhosOut from "@/components/whos-out";
+import { useInjuries } from "@/lib/injury-hooks";
 import { actualMarginText, favoriteWon, isFinal, isLive, lineInfo, marginText, matchupHref, periodLabel, statusLabel, teamHref, winner } from "./game-utils";
 
 const ROW_TH = "l !static !border-line !bg-transparent !text-[13.5px] !font-normal !text-mute";
@@ -86,6 +88,7 @@ export default function GameSheet({ g, live, onClose }: { g: Game; live?: LiveGa
 
           {played && <LineScore g={g} />}
           {played && <GameFlow g={g} live={live} />}
+          {!final && <Availability g={g} />}
           <Projection g={g} />
           <BoxCompare g={g} />
 
@@ -196,6 +199,19 @@ function GameFlow({ g, live }: { g: Game; live?: LiveGame }) {
       })() : (
         <p className="text-sm text-mute">Play-by-play isn&apos;t available for this game{isFinal(g) ? "" : " yet"}.</p>
       )}
+    </section>
+  );
+}
+
+/** Current availability for unplayed games. Finals get nothing: we don't store who was available at the time. */
+function Availability({ g }: { g: Game }) {
+  const injuries = useInjuries(); // sheet only mounts when open, so this loads lazily (cached after the first fetch)
+  const teams = [g.away, g.home].filter(s => s.slug).map(s => ({ slug: s.slug!, name: s.name }));
+  if (!teams.length) return null;
+  return (
+    <section className="mt-7" aria-labelledby={`wo-${g.id}`}>
+      <h3 id={`wo-${g.id}`} className="h-section mb-2 !text-xl">Who&apos;s out</h3>
+      {injuries.status === "error" ? <p className="text-sm text-mute">Availability didn&apos;t load. <button className="underline" onClick={injuries.retry}>Try again</button></p> : <WhosOut file={injuries.data} teams={teams} />}
     </section>
   );
 }

@@ -24,5 +24,12 @@ cargo run --release          # PORT=8080 POLL_LIVE_MS=2000 POLL_IDLE_MS=20000
 ```
 Set `STATIC_DIR=../out` to serve a local build of the site too. In production the root `Dockerfile` builds the site and this server into one image (Railway).
 
+## Injury alerts
+Every 10 minutes the server fetches the injury wire and sends a web-push alert (kind `injury`, click-through `/injuries/`) to Pro followers of the team for each `new` / `worse` / `returned` event from the last 6 hours, once per event (`app.sent_alerts`). Needs `DATABASE_URL` and the VAPID keys; otherwise it stays idle. Users can switch it off with the `injury` alert preference.
+
+| Variable | Default |
+| --- | --- |
+| `INJURY_FEED_URL` | `https://shaincarrasco.github.io/D1-Basketball-Analytics/data/app/injury-wire.json` |
+
 ## Connect the site
 Set a repository **variable** `LIVE_URL` (Settings → Secrets and variables → Actions → Variables) to the relay's public URL, e.g. `https://d1hoops-live.fly.dev`. The next deploy bakes it in as `NEXT_PUBLIC_LIVE_URL`; the site then streams today's games from the relay and falls back to polling ESPN directly if the relay is unreachable.
