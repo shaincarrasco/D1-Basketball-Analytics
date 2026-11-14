@@ -14,12 +14,13 @@ export type FormFile = { asOf: string | null; history: RatingHistory | null; per
 export const FORM_WINDOW_DAYS = 30;
 /** Hot / Cold needs at least this many games in the window... */
 export const FORM_MIN_GAMES = 4;
-/** ...and this many games before it. Otherwise "recent" and "season" are the same games and the
- *  gap only measures how far the rating still leans on last season. */
+/** ...and this many games before it to compare with. Form is recent games vs the team's own
+ *  earlier games, not vs DHR: DHR is pulled toward last season early on, so against DHR good
+ *  teams would look "hot" and bad teams "cold" for weeks. */
 export const FORM_MIN_GAMES_BEFORE = 2;
-/** The recent average must beat (or trail) the rating by at least this many points per 100... */
+/** The recent average must beat (or trail) the earlier average by at least this many points per 100... */
 export const FORM_MIN_GAP = 6;
-/** ...and by at least this many standard errors of a recent average (single games are noisy). */
+/** ...and by at least this many standard errors of that difference (single games are noisy). */
 export const FORM_Z = 1.5;
 /** Steady / Volatile needs this many games. */
 export const CONSISTENCY_MIN_GAMES = 6;
@@ -43,10 +44,10 @@ export const DPR_PRIOR_POSS = 300;
 
 // ---------- words (shared with the methodology page) ----------
 export const FORM_WORDS = {
-  hot: "Hot: playing clearly better over the last 30 days than its DHR rating, after adjusting each game for opponent and venue.",
-  cold: "Cold: playing clearly worse over the last 30 days than its DHR rating, after adjusting each game for opponent and venue.",
-  steady: "Steady: game-to-game results stay close to what its rating expects. Fewer surprises either way.",
-  volatile: "Volatile: results swing well above and below what its rating expects. Capable of big wins and bad losses.",
+  hot: "Hot: playing clearly better over the last 30 days than in its earlier games, with each game adjusted for opponent and venue.",
+  cold: "Cold: playing clearly worse over the last 30 days than in its earlier games, with each game adjusted for opponent and venue.",
+  steady: "Steady: its games land close to its own average. Fewer surprises either way.",
+  volatile: "Volatile: its games swing well above and below its own average. Capable of big wins and bad losses.",
   indispensable: "How much the team's DHR rating would drop if this player sat and a typical end-of-bench player took his minutes.",
 } as const;
 
@@ -61,16 +62,17 @@ export function firstFormDay(file: FormFile): string | null {
   return days.length ? addDays(days[0], FORM_WINDOW_DAYS) : null;
 }
 
-/** Typical single-game spread around expectation across D-I: RMS of (game performance − DHR rating). */
+/** Typical single-game spread across D-I: pooled within-team standard deviation of game performance. */
 export function leagueSpread(file: FormFile, teams: TeamSummary[]): { sd: number; games: number } {
-  const em = new Map(teams.map(t => [t.id, t.adjEM]));
-  let ss = 0, n = 0;
+  const rated = new Set(teams.filter(t => t.adjEM != null).map(t => t.id));
+  let ss = 0, df = 0, n = 0;
   for (const [id, list] of Object.entries(file.perf)) {
-    const r = em.get(id);
-    if (r == null) continue;
-    for (const [, p] of list) { ss += (p - r) ** 2; n++; }
+    if (!rated.has(id) || list.length < 2) continue;
+    const m = mean(list.map(x => x[1]));
+    for (const [, p] of list) ss += (p - m) ** 2;
+    df += list.length - 1; n += list.length;
   }
-  return n >= 100 ? { sd: Math.sqrt(ss / n), games: n } : { sd: DEFAULT_GAME_SPREAD, games: n };
+  return df >= 100 ? { sd: Math.sqrt(ss / df), games: n } : { sd: DEFAULT_GAME_SPREAD, games: n };
 }
 
 export type FormBadge = "hot" | "cold" | null;
@@ -80,8 +82,8 @@ export type TeamForm = {
   /** Window [from, to] inclusive. */
   from: string | null; to: string | null;
   games: number; before: number;
-  /** Average game performance in the window and the DHR rating it is compared with (points per 100). */
-  recent: number | null; rating: number | null; gap: number | null;
+  /** Average game performance in the window and before it, and the difference (points per 100). DHR for context. */
+  recent: number | null; earlier: number | null; gap: number | null; rating: number | null;
   /** Size of gap the badge needs with this many games. */
   needed: number | null;
   badge: FormBadge;
@@ -94,31 +96,34 @@ export function teamForm(team: TeamSummary, file: FormFile, spread: number): Tea
   const to = file.asOf, from = to ? addDays(to, -(FORM_WINDOW_DAYS - 1)) : null;
   const list = file.perf[team.id] ?? [];
   const inWin = from ? list.filter(x => x[0] >= from) : [];
-  const before = list.length - inWin.length;
+  const early = from ? list.filter(x => x[0] < from) : list;
+  const before = early.length;
   const rating = team.adjEM;
   const recent = inWin.length ? mean(inWin.map(x => x[1])) : null;
-  const gap = recent != null && rating != null ? recent - rating : null;
-  const needed = inWin.length ? Math.max(FORM_MIN_GAP, (FORM_Z * spread) / Math.sqrt(inWin.length)) : null;
+  const earlier = early.length ? mean(early.map(x => x[1])) : null;
+  const gap = recent != null && earlier != null ? recent - earlier : null;
+  const needed = inWin.length && before ? Math.max(FORM_MIN_GAP, FORM_Z * spread * Math.sqrt(1 / inWin.length + 1 / before)) : null;
   let badge: FormBadge = null, why: string;
   if (rating == null) why = "Not rated yet.";
   else if (inWin.length < FORM_MIN_GAMES) why = `Needs ${FORM_MIN_GAMES} D-I games in the last ${FORM_WINDOW_DAYS} days (has ${inWin.length}).`;
-  else if (before < FORM_MIN_GAMES_BEFORE) why = `Every game so far is inside the last ${FORM_WINDOW_DAYS} days, so there is no earlier play to compare with yet.`;
+  else if (before < FORM_MIN_GAMES_BEFORE) why = before === 0 ? `Every game so far is inside the last ${FORM_WINDOW_DAYS} days, so there are no earlier games to compare with yet.` : `Needs ${FORM_MIN_GAMES_BEFORE} earlier games to compare with (has ${before}).`;
   else if (gap != null && needed != null && Math.abs(gap) >= needed) {
     badge = gap > 0 ? "hot" : "cold";
-    why = `${gap > 0 ? "+" : "−"}${Math.abs(gap).toFixed(1)} per 100 possessions ${gap > 0 ? "better" : "worse"} than its rating over its last ${inWin.length} games.`;
-  } else why = `Within ${needed!.toFixed(1)} points per 100 of its rating over its last ${inWin.length} games: normal variation.`;
+    why = `${Math.abs(gap).toFixed(1)} points per 100 possessions ${gap > 0 ? "better" : "worse"} over its last ${inWin.length} games than in its ${before} before.`;
+  } else why = `Within ${needed!.toFixed(1)} points per 100 of its earlier games: normal variation for ${inWin.length} recent and ${before} earlier games.`;
 
-  // Consistency: spread of every game around what the rating expects.
+  // Consistency: spread of a team's games around its own average.
   const all = list.map(x => x[1]);
-  const sd = rating != null && all.length >= 2 ? Math.sqrt(all.reduce((s, p) => s + (p - rating) ** 2, 0) / all.length) : null;
+  const m = mean(all);
+  const sd = all.length >= 2 ? Math.sqrt(all.reduce((s, p) => s + (p - m) ** 2, 0) / (all.length - 1)) : null;
   const ratio = sd != null ? sd / spread : null;
   let cBadge: ConsistencyBadge = null, cWhy: string;
   if (sd == null || all.length < CONSISTENCY_MIN_GAMES) cWhy = `Needs ${CONSISTENCY_MIN_GAMES} D-I games with box scores (has ${all.length}).`;
-  else if (ratio! <= STEADY_RATIO) { cBadge = "steady"; cWhy = `Games land within ±${sd.toFixed(1)} per 100 of its rating, tighter than a typical team (±${spread.toFixed(1)}).`; }
-  else if (ratio! >= VOLATILE_RATIO) { cBadge = "volatile"; cWhy = `Games swing ±${sd.toFixed(1)} per 100 around its rating, wider than a typical team (±${spread.toFixed(1)}).`; }
-  else cWhy = `Games swing ±${sd.toFixed(1)} per 100 around its rating, close to a typical team (±${spread.toFixed(1)}).`;
+  else if (ratio! <= STEADY_RATIO) { cBadge = "steady"; cWhy = `Games land within ±${sd.toFixed(1)} per 100 of its average, tighter than a typical team (±${spread.toFixed(1)}).`; }
+  else if (ratio! >= VOLATILE_RATIO) { cBadge = "volatile"; cWhy = `Games swing ±${sd.toFixed(1)} per 100 around its average, wider than a typical team (±${spread.toFixed(1)}).`; }
+  else cWhy = `Games swing ±${sd.toFixed(1)} per 100 around its average, close to a typical team (±${spread.toFixed(1)}).`;
 
-  return { id: team.id, from, to, games: inWin.length, before, recent, rating, gap, needed, badge, why, consistency: { games: all.length, spread: sd, ratio, badge: cBadge, why: cWhy } };
+  return { id: team.id, from, to, games: inWin.length, before, recent, earlier, gap, rating, needed, badge, why, consistency: { games: all.length, spread: sd, ratio, badge: cBadge, why: cWhy } };
 }
 
 /** Form for every rated team, keyed by team id. */
@@ -219,7 +224,7 @@ export function indispensability(players: Player[], teams: TeamSummary[]): Indis
 
 /** Flat per-team row for tables (rankings Form view). */
 export type FormRow = {
-  badge: FormBadge; why: string; recent: number | null; gap: number | null; games: number;
+  badge: FormBadge; why: string; recent: number | null; earlier: number | null; gap: number | null; games: number; before: number;
   cBadge: ConsistencyBadge; cWhy: string; spread: number | null; cGames: number;
   ch7: number | null; rank7: number | null; games7: number | null; chPre: number | null; rankPre: number | null;
 };
@@ -230,7 +235,7 @@ export function formRows(forms: Map<string, TeamForm>, week: Mover[], season: Mo
   for (const [id, f] of forms) {
     const a = w.get(id), b = s.get(id);
     out[id] = {
-      badge: f.badge, why: f.why, recent: r1(f.recent), gap: r1(f.gap), games: f.games,
+      badge: f.badge, why: f.why, recent: r1(f.recent), earlier: r1(f.earlier), gap: r1(f.gap), games: f.games, before: f.before,
       cBadge: f.consistency.badge, cWhy: f.consistency.why, spread: r1(f.consistency.spread), cGames: f.consistency.games,
       ch7: a ? r1(a.change) : null, rank7: a?.rankThen ?? null, games7: a?.games ?? null, chPre: b ? r1(b.change) : null, rankPre: b?.rankThen ?? null,
     };

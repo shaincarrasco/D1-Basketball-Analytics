@@ -64,7 +64,7 @@ export default function FormWatch() {
       <div className="grid gap-4 lg:grid-cols-2">
         <div className="deck p-4">
           <h3 className="text-[13.5px] font-semibold">Hottest &amp; coldest <span className="font-normal text-dim">· last {FORM_WINDOW_DAYS} days</span></h3>
-          <p className="mb-2 text-xs text-mute">Recent games vs the DHR rating, each adjusted for opponent and venue</p>
+          <p className="mb-2 text-xs text-mute">Each team&rsquo;s last 30 days vs its earlier games, adjusted for opponent and venue</p>
           {hot.length || cold.length ? (
             <div className="grid gap-4 sm:grid-cols-2">
               {[["Hot", hot], ["Cold", cold]].map(([label, list]) => (

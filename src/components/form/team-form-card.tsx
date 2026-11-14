@@ -31,10 +31,10 @@ export default function TeamFormCard({ name, form, points, mover, color, total }
             <><b className={`tnum ${mover.change >= 0 ? "text-win" : "text-loss"}`}>{signed(mover.change, 1)}</b> DHR points, No. {mover.rankThen} → No. {mover.rankNow} ({mover.games} game{mover.games === 1 ? "" : "s"} played).</>
           ) : <span className="text-mute">No games in the last {MOVER_DAYS} days.</span>}
         </Row>
-        <Row label={`Form (${FORM_WINDOW_DAYS} days)`} title="Average opponent- and venue-adjusted game performance over the last 30 days, compared with the DHR rating">
+        <Row label={`Form (${FORM_WINDOW_DAYS} days)`} title="Average opponent- and venue-adjusted game performance over the last 30 days, compared with the team's earlier games">
           {form.badge ? <span className="mr-1.5 align-middle"><Tag kind={form.badge} /></span> : null}
-          {form.recent != null && form.gap != null ? (
-            <>Averaging <b className="tnum">{signed(form.recent, 1)}</b> per 100 possessions over {form.games} D-I game{form.games === 1 ? "" : "s"}, <b className="tnum">{signed(form.gap, 1)}</b> vs its rating. </>
+          {form.recent != null ? (
+            <>Averaging <b className="tnum">{signed(form.recent, 1)}</b> per 100 possessions over {form.games} recent D-I game{form.games === 1 ? "" : "s"}{form.earlier != null && form.gap != null ? <>, vs <b className="tnum">{signed(form.earlier, 1)}</b> in {form.before} earlier ({signed(form.gap, 1)})</> : null}. </>
           ) : null}
           <span className="text-mute">{form.badge ? "" : `No tag yet. ${form.why}`}</span>
         </Row>

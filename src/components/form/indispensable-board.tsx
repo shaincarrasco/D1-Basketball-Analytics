@@ -78,7 +78,7 @@ export default function IndispensableBoard() {
         </label>
       </div>
       <p className="mb-2 text-xs text-mute">
-        DHR drop = minutes ÷ 40 × (DPR used − replacement), replacement = {REPLACEMENT_DPR} per 100. {all.length.toLocaleString("en-US")} players with {INDISPENSABLE_MIN_GAMES}+ games and {INDISPENSABLE_MIN_MPG}+ minutes a game. An estimate, not a measured result: early-season DPR is noisy, so it is pulled toward average and minutes carry most of the weight for now.
+        DHR drop = minutes ÷ 40 × (DPR used − replacement), replacement = {signed(REPLACEMENT_DPR, 0)} per 100. {all.length.toLocaleString("en-US")} players with {INDISPENSABLE_MIN_GAMES}+ games and {INDISPENSABLE_MIN_MPG}+ minutes a game. An estimate, not a measured result: early-season DPR is noisy, so it is pulled toward average and minutes carry most of the weight for now.
       </p>
       {rows.length === 0 ? (
         <div className="deck p-6 text-sm text-mute">No players match “{q.trim()}”. Clear the search or pick another conference.</div>
