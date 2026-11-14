@@ -18,6 +18,8 @@ export type Me = {
 const OFF: Health = { ok: false, accounts: false, billing: false, alerts: false, prices: { monthly: false, yearly: false } };
 let healthP: Promise<Health> | null = null;
 export function getHealth(): Promise<Health> {
+  // GitHub Pages builds set a base path and have no app server: skip the request (it can only 404).
+  if (process.env.NEXT_PUBLIC_BASE_PATH) return Promise.resolve(OFF);
   healthP ??= fetch("/api/health", { cache: "no-store" })
     .then(r => (r.ok && r.headers.get("content-type")?.includes("json") ? r.json() : OFF))
     .catch(() => OFF);
