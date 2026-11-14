@@ -4,7 +4,7 @@
 import { forwardRef, useMemo, useState, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { makePool, pctLabel, type PlayerRow } from "@/app/players/player-stats";
-import { teamHex } from "@/lib/color";
+import { luminance, teamHex } from "@/lib/color";
 import { fmtMetric, HIGH_MAJOR_LABEL, inPool, METRIC, val, type Metric } from "@/lib/player-metrics";
 import { posColor, type ChartTheme } from "./theme";
 import type { ChartSpec } from "./spec";
@@ -36,7 +36,18 @@ const tickFmt = (m: Metric, v: number) => (Math.abs(v) >= 100 || Number.isIntege
 function dotColor(spec: ChartSpec, t: ChartTheme, r: PlayerRow) {
   if (spec.color === "pos") return posColor(t, r.posN);
   if (spec.color === "conf") return spec.hiConf && r.team?.confSlug === spec.hiConf ? t.bulb : t.line2;
-  return teamHex(r.team?.color) ?? t.mute;
+  return readableTeam(t, r);
+}
+/** Team colour that stays visible on the current background: very dark colours on dark palettes
+ *  (and very light ones on light palettes) fall back to the alternate colour, then get mixed toward contrast. */
+const bgDark = (t: ChartTheme) => { const m = t.bg.match(/\d+/g); return m ? (Number(m[0]) * 0.3 + Number(m[1]) * 0.59 + Number(m[2]) * 0.11) < 128 : true; };
+export function readableTeam(t: ChartTheme, r: PlayerRow) {
+  const dark = bgDark(t);
+  const ok = (h: string | null) => { const l = luminance(h); return l !== null && (dark ? l > 0.07 : l < 0.6); };
+  const main = teamHex(r.team?.color), alt = teamHex(r.team?.altColor);
+  if (ok(main)) return main!;
+  if (ok(alt)) return alt!;
+  return main ? `color-mix(in srgb, ${main} 55%, ${dark ? "#ffffff" : "#000000"})` : t.mute;
 }
 export function poolText(spec: ChartSpec, confs: [string, string][]) {
   const p = spec.pool, bits: string[] = [];
@@ -61,6 +72,19 @@ function Frame({ h, title, sub, t, foot, children, compact }: { h: number; title
   );
 }
 
+function PosLegend({ t, y, compact }: { t: ChartTheme; y: number; compact?: boolean }) {
+  const items = [["G", "Guards"], ["F", "Forwards"], ["C", "Centers"]] as const;
+  const fs = compact ? 14 : 12.5;
+  return (
+    <g>
+      {items.map(([k, label], i) => {
+        const x = W - 28 - (items.length - i) * (compact ? 104 : 92);
+        return <g key={k}><circle cx={x} cy={y - 4} r={5} fill={posColor(t, k)} /><text x={x + 10} y={y} fill={t.mute} fontFamily={t.body} fontSize={fs}>{label}</text></g>;
+      })}
+    </g>
+  );
+}
+
 type Hover = { r: PlayerRow; x: number; y: number; lines: string[] } | null;
 function Tip({ hover, h }: { hover: Hover; h: number }) {
   if (!hover) return null;
@@ -76,8 +100,8 @@ function Tip({ hover, h }: { hover: Hover; h: number }) {
 }
 
 /** Greedy label placement: try a few spots around each dot, skip ones that would collide. */
-function placeLabels(items: { x: number; y: number; text: string; r: number; hi?: boolean }[], bounds: { l: number; r: number; t: number; b: number }, fs: number) {
-  const placed: { x: number; y: number; w: number; h: number }[] = [];
+function placeLabels(items: { x: number; y: number; text: string; r: number; hi?: boolean }[], bounds: { l: number; r: number; t: number; b: number }, fs: number, reserved: { x: number; y: number; w: number; h: number }[] = []) {
+  const placed: { x: number; y: number; w: number; h: number }[] = [...reserved];
   const out: { x: number; y: number; text: string; anchor: "start" | "end" | "middle"; lx: number; ly: number; hi?: boolean }[] = [];
   const hit = (a: { x: number; y: number; w: number; h: number }) => placed.some(b => a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y);
   for (const it of items) {
@@ -132,7 +156,7 @@ export const Scatter = forwardRef<SVGSVGElement, ChartProps>(function Scatter({ 
 
   if (!mx || !my) return null;
   const title = spec.title || `${my.short} vs ${mx.short}`;
-  const sub = `${my.label} by ${mx.label.toLowerCase()} · ${data && !data.empty ? data.pts.length.toLocaleString("en-US") : 0} ${poolText(spec, confs)}`;
+  const sub = `${my.label} by ${/^[A-Z][a-z]/.test(mx.label) ? mx.label[0].toLowerCase() + mx.label.slice(1) : mx.label} · ${data && !data.empty ? data.pts.length.toLocaleString("en-US") : 0} ${poolText(spec, confs)}`;
   const foot = `Lines = medians${mx.invert || my.invert ? " · flipped axes put better to the top/right" : ""}${ms ? ` · dot size = ${ms.short}` : ""}`;
   if (!data || data.empty) return <Empty h={H} t={t} title={title} sub={sub} ref={ref} />;
 
@@ -140,9 +164,14 @@ export const Scatter = forwardRef<SVGSVGElement, ChartProps>(function Scatter({ 
   const highlighting = spec.ids.length > 0 || (spec.color === "conf" && !!spec.hiConf);
   const order = [...pts].sort((a, b) => Number(a.hi) - Number(b.hi) || (spec.color === "conf" ? Number(a.r.team?.confSlug === spec.hiConf) - Number(b.r.team?.confSlug === spec.hiConf) : 0) || b.rad - a.rad);
   const ranked = [...pts].filter(p => !p.hi && (spec.color !== "conf" || !spec.hiConf || p.r.team?.confSlug === spec.hiConf)).sort((a, b) => b.score - a.score).slice(0, spec.labels);
-  const labels = placeLabels([...pts.filter(p => p.hi), ...ranked].map(p => ({ x: p.px, y: p.py, r: p.rad, text: shortName(p.r.name), hi: p.hi })), { l: L + 2, r: R - 2, t: T + 2, b: B - 2 }, compact ? 13 : 11.5);
-  const xt = niceTicks(Math.min(data.x0, data.x1), Math.max(data.x0, data.x1)), yt = niceTicks(Math.min(data.y0, data.y1), Math.max(data.y0, data.y1));
   const q = spec.quads;
+  const cfs = compact ? 15 : 13, cw = (txt: string) => txt.length * cfs * 0.62 + 6;
+  const reserved = [
+    q[0] && { x: L + 6, y: T + 4, w: cw(q[0]), h: cfs + 6 }, q[1] && { x: R - 6 - cw(q[1]), y: T + 4, w: cw(q[1]), h: cfs + 6 },
+    q[2] && { x: L + 6, y: B - 12 - cfs - 2, w: cw(q[2]), h: cfs + 6 }, q[3] && { x: R - 6 - cw(q[3]), y: B - 12 - cfs - 2, w: cw(q[3]), h: cfs + 6 },
+  ].filter((b): b is { x: number; y: number; w: number; h: number } => !!b);
+  const labels = placeLabels([...pts.filter(p => p.hi), ...ranked].map(p => ({ x: p.px, y: p.py, r: p.rad, text: shortName(p.r.name), hi: p.hi })), { l: L + 2, r: R - 2, t: T + 2, b: B - 2 }, compact ? 13 : 11.5, reserved);
+  const xt = niceTicks(Math.min(data.x0, data.x1), Math.max(data.x0, data.x1)), yt = niceTicks(Math.min(data.y0, data.y1), Math.max(data.y0, data.y1));
   const qs = { fill: t.dim, fontFamily: t.display, fontWeight: 800, fontSize: compact ? 15 : 13, letterSpacing: "0.06em", stroke: t.deck, strokeWidth: 4, paintOrder: "stroke" } as const;
 
   const move = (e: React.PointerEvent<SVGRectElement>) => {
@@ -161,6 +190,7 @@ export const Scatter = forwardRef<SVGSVGElement, ChartProps>(function Scatter({ 
           {yt.map(v => <g key={`y${v}`}><line x1={L} x2={R} y1={fy(v)} y2={fy(v)} stroke={t.line} strokeWidth={1} opacity={0.55} /><text x={L - 8} y={fy(v) + 4} fill={t.dim} fontSize={compact ? 13 : 11.5} fontFamily={t.body} textAnchor="end">{tickFmt(my, v)}</text></g>)}
           <line x1={fx(medX)} x2={fx(medX)} y1={T} y2={B} stroke={t.mute} strokeDasharray="4 4" strokeWidth={1.2} opacity={0.7} />
           <line x1={L} x2={R} y1={fy(medY)} y2={fy(medY)} stroke={t.mute} strokeDasharray="4 4" strokeWidth={1.2} opacity={0.7} />
+          {spec.color === "pos" && <PosLegend t={t} y={62} compact={compact} />}
           {q[0] && <text x={L + 10} y={T + 20} {...qs}>{q[0].toUpperCase()}</text>}
           {q[1] && <text x={R - 10} y={T + 20} textAnchor="end" {...qs}>{q[1].toUpperCase()}</text>}
           {q[2] && <text x={L + 10} y={B - 12} {...qs}>{q[2].toUpperCase()}</text>}
@@ -226,7 +256,7 @@ export const Bars = forwardRef<SVGSVGElement, ChartProps>(function Bars({ spec, 
     <svg ref={ref} viewBox={`0 0 ${W} ${H2}`} className="block h-auto w-full" role="img" aria-label={`${title}. ${sub}`}>
       <Frame h={H2} t={t} title={title} sub={sub} foot={`Dashed line = median of the pool (${fmtMetric(m, data.med)})${m.invert ? " · shorter is better" : ""}`} compact={compact}>
         {data.top.map((p, i) => {
-          const y = T + i * rowH, x = fx(p.v), c = spec.ids.includes(p.r.id) ? t.bulb : teamHex(p.r.team?.color) ?? t.mute;
+          const y = T + i * rowH, x = fx(p.v), c = spec.ids.includes(p.r.id) ? t.bulb : readableTeam(t, p.r);
           const barX = Math.min(zero, x), barW = Math.max(2, Math.abs(x - zero));
           return (
             <g key={p.r.id} style={{ cursor: "pointer" }} onClick={() => open(p.r)}>
@@ -315,6 +345,7 @@ export const Swarm = forwardRef<SVGSVGElement, ChartProps>(function Swarm({ spec
               <line x1={fx(data.med![bi])} x2={fx(data.med![bi])} y1={T + bi * bandH + 6} y2={T + (bi + 1) * bandH - 6} stroke={t.mute} strokeDasharray="4 4" />
             </g>
           ))}
+          {spec.color === "pos" && !splitRows && <PosLegend t={t} y={62} compact={compact} />}
           {pts.map(p => <circle key={p.r.id} cx={p.px} cy={p.py} r={p.hi ? data.rad! + 2 : data.rad!} fill={p.hi ? t.bulb : spec.color === "pos" ? posColor(t, p.r.posN) : dotColor(spec, t, p.r)} fillOpacity={spec.ids.length && !p.hi ? 0.3 : 0.85} stroke={p.hi ? t.ink : "none"} strokeWidth={1.4} />)}
           {labels.map(l => <text key={l.text + l.lx} x={l.x} y={l.y} textAnchor={l.anchor} fontFamily={t.body} fontWeight={700} fontSize={compact ? 13 : 11.5} fill={l.hi ? t.bulb : t.ink} stroke={t.deck} strokeWidth={3} paintOrder="stroke">{l.text}</text>)}
           <text x={(L + R) / 2} y={T + groups.length * bandH + 40} fill={t.mute} fontSize={compact ? 15 : 13} fontFamily={t.body} fontWeight={600} textAnchor="middle">{m.label} →</text>
