@@ -7,6 +7,7 @@ import { playerRows } from "@/lib/players";
 import Today from "./_home/today";
 import InjuryWire from "./_home/injury-wire";
 import Top25 from "./_home/top25";
+import FormWatch from "./_home/form-watch";
 import DhrIntro from "@/components/dhr-intro";
 import { homeNotes } from "@/lib/notes";
 
@@ -109,6 +110,8 @@ export default function Home() {
           </section>
         </div>
       </div>
+
+      <FormWatch />
 
       {/* Leaders */}
       <section aria-labelledby="leaders">

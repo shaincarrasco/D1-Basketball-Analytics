@@ -3,6 +3,8 @@ import Link from "next/link";
 import PageHeader from "@/components/page-header";
 import { getMeta, getTeams } from "@/lib/server-data";
 import RankingsTable from "./rankings-table";
+import { formRows } from "@/lib/form";
+import { getAllForms, getMovers, getPreseasonMovers } from "@/lib/form-server";
 
 export const metadata: Metadata = { title: "Power rankings", description: "Every Division I team ranked by the D1 Hoops opponent-adjusted efficiency margin." };
 
@@ -14,7 +16,7 @@ export default function RankingsPage() {
         All {meta.counts.ratedTeams} teams, ranked by DHR, our rating: points per 100 possessions better than an average D-I team, adjusted for opponent and venue.{" "}
         <Link href="/methodology/#overview" className="font-semibold text-bulb-ink hover:underline">What&apos;s DHR?</Link>
       </PageHeader>
-      <RankingsTable teams={teams} total={meta.counts.ratedTeams} />
+      <RankingsTable teams={teams} total={meta.counts.ratedTeams} form={formRows(getAllForms().byId, getMovers().rows, getPreseasonMovers().rows)} formSince={getMovers().since} />
     </>
   );
 }

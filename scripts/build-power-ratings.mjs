@@ -93,12 +93,26 @@ if (!fitGames.length) throw new Error("No completed games available; refusing to
 // Walk-forward: ratings for day D use only games completed before D.
 const dates = [...new Set(allGames.map(g => g.et))].sort();
 const predictions = {};
+// Rating history: every walk-forward refit is a snapshot of DHR "through" its last game day
+// (null = preseason, before any game). Published compactly for form, movers and timelines.
+const historyIds = teamRecords.filter(t => isD1(t.conference) && t.teamId != null).map(t => String(t.teamId));
+const historySnapshots = [];
+const snapshot = (m, through) => {
+  const em = historyIds.map(id => {
+    const r = rating(m, id, true);
+    return r.known || r.hasSeasonPrior ? Math.round(r.adjEM * 100) / 100 : null;
+  });
+  const last = historySnapshots.at(-1);
+  if (last && last.through === through) last.em = em; else historySnapshots.push({ through, em });
+};
 let model = null, fittedThrough = -1;
 for (const day of dates) {
   const usable = fitGames.filter((_, i) => finals[i].et < day);
   if (usable.length !== fittedThrough) {
     model = fit(usable, { warm: model ?? undefined, seasonPrior: seasonPrior ?? undefined });
     fittedThrough = usable.length;
+    const lastDay = finals.filter(g => g.et < day).at(-1)?.et ?? null;
+    snapshot(model, lastDay);
   }
   for (const g of allGames.filter(x => x.et === day)) {
     const home = rating(model, String(g.homeTeamId), isD1(g.homeConference));
@@ -114,6 +128,7 @@ for (const day of dates) {
 
 // Current ratings from every completed game.
 const current = fit(fitGames, { warm: model ?? undefined, seasonPrior: seasonPrior ?? undefined });
+snapshot(current, finals.at(-1)?.et ?? null);
 
 // Backtest the out-of-sample predictions.
 const evaluate = rows => {
@@ -217,6 +232,13 @@ await writeFile(modelPath, JSON.stringify({
     games: fitGames.map(g => [g.gameId, g.homeId, g.awayId, ci(g.homeConf), ci(g.awayConf), g.neutral ? 1 : 0, g.homePts, g.awayPts, Math.round(g.poss * 10) / 10, g.minutes, g.weight]),
   }) + "\n");
 }
+
+// [snapshot i][team j] = DHR (AdjEM) through snapshot i's last game day; null = not rated yet.
+await writeFile("public/data/rating-history-2027.json", JSON.stringify({
+  v: 1, season: 2027, teams: historyIds,
+  through: historySnapshots.map(s => s.through), em: historySnapshots.map(s => s.em),
+}) + "\n");
+console.log(`[DHR v2] Rating history: ${historySnapshots.length} snapshots (${historySnapshots[0]?.through ?? "preseason"} → ${historySnapshots.at(-1)?.through}).`);
 
 console.log(`[DHR v2] ${rated.length} teams ranked from ${fitGames.length} completed games in ${current.iterations} iterations.`);
 console.log(`[DHR v2] League ${current.mu.toFixed(2)} pts/100, tempo ${current.muT.toFixed(1)}, home edge ${current.h.toFixed(2)} pts/100 (${((current.h * current.muT) / 100).toFixed(2)} pts/game).`);
