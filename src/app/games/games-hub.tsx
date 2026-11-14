@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Empty, ErrorState, Loading } from "@/components/states";
 import { useJson } from "@/lib/client-data";
-import { useLiveScores, withLive } from "@/lib/live";
+import { liveDay, useLiveScores, withLive } from "@/lib/live";
 import { dayLabel, etToday, pctFmt } from "@/lib/format";
 import type { Game, GameDay, GameIndex } from "@/lib/types";
 import DateStrip from "./date-strip";
@@ -35,8 +35,8 @@ export default function GamesHub() {
   const dayData = useJson<GameDay>(listed ? `games/${listed.day}.json` : null);
   // useJson keeps the previous day's data for one render after the file changes.
   const staticGames = dayData.status === "ready" && dayData.data.day === day ? dayData.data.games : null;
-  // Today's slate gets ESPN's live scores laid over the static (once-a-day) data.
-  const live = useLiveScores(day === today ? day : null, staticGames);
+  // Today's slate (and recent days the data hasn't caught up on) gets ESPN's live scores laid over the static data.
+  const live = useLiveScores(liveDay(day, today, staticGames), staticGames);
   const games = useMemo(() => (staticGames && live.byGame.size ? staticGames.map(g => withLive(g, live.byGame.get(g.id))) : staticGames), [staticGames, live.byGame]);
 
   const [filter, setFilter] = useState<FilterId>("all");

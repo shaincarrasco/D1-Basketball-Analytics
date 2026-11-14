@@ -19,7 +19,9 @@
 
 export const NON_D1 = "non-d1";
 
-const ENV = (() => { try { return JSON.parse(process.env.DHR_TUNE ?? "{}"); } catch { return {}; } })();
+// Runs in Node (pipeline) and in the browser (live post-game ratings), so env access is guarded.
+const env = typeof process !== "undefined" && process.env ? process.env : {};
+const ENV = (() => { try { return JSON.parse(env.DHR_TUNE ?? "{}"); } catch { return {}; } })();
 const DEFAULTS_BASE = {
   teamPrior: 3, // games of conference-mean prior per team
   conferencePrior: 2, // teams of national-mean prior per conference
@@ -134,7 +136,7 @@ export function fit(games, options = {}) {
     const nextH = hn / hd;
     delta = Math.max(delta, Math.abs(nextH - h));
     h = nextH;
-    if (process.env.DHR_DEBUG && iterations % 100 === 0) console.log("iter", iterations, delta.toFixed(7), h.toFixed(3));
+    if (env.DHR_DEBUG && iterations % 100 === 0) console.log("iter", iterations, delta.toFixed(7), h.toFixed(3));
     if (delta < cfg.tolerance) break;
   }
 

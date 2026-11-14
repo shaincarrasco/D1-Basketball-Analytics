@@ -1,23 +1,19 @@
 import Link from "next/link";
 import TeamLogo from "@/components/team-logo";
-import PerfBars from "@/components/perf-bars";
-import { fmt, pctFmt, signed, heat, dayLabel } from "@/lib/format";
+import { fmt, pctFmt, signed, dayLabel } from "@/lib/format";
 import { getAllGames, getConferences, getMeta, getNews, getPlayers, getTeams } from "@/lib/server-data";
 import ArticleList from "@/components/article-list";
 import { playerRows } from "@/lib/players";
 import Tonight from "./_home/tonight";
-import { LinkRow } from "@/components/data-table";
+import Top25 from "./_home/top25";
 import YourTeamsStrip from "./following/your-teams-strip";
 
-// Eastern calendar day of an ISO timestamp (the /games/?d= key).
-const etDay = (iso: string) => new Intl.DateTimeFormat("en-CA", { timeZone: "America/New_York" }).format(new Date(iso));
 /** Stretched-link pattern: the primary link covers its `relative` card; other links sit above it. */
 const STRETCH = "after:absolute after:inset-0 after:content-['']";
 
 export default function Home() {
   const meta = getMeta(), teams = getTeams(), confs = getConferences();
   const total = meta.counts.ratedTeams;
-  const top = teams.filter(t => t.rank).slice(0, 25);
   const games = getAllGames();
   const upsets = games.filter(g => g.upset !== null && g.home.id && g.away.id).sort((a, b) => a.upset! - b.upset!).slice(0, 5);
   const bt = meta.model.backtest.all;
@@ -38,48 +34,7 @@ export default function Home() {
       <Tonight />
 
       <div className="grid gap-8 xl:grid-cols-[minmax(0,1fr)_380px]">
-        {/* Top 25 */}
-        <section aria-labelledby="top25" className="min-w-0">
-          <div className="mb-3 flex items-end justify-between gap-3">
-            <h2 id="top25" className="h-section">DHR top 25</h2>
-            <Link href="/rankings/" className="text-sm font-semibold text-mute hover:text-ink">All {total} teams</Link>
-          </div>
-          <div className="scroll-x rounded-xl border border-line">
-            <table className="dt">
-              <caption className="sr-only">Top 25 teams by adjusted efficiency margin</caption>
-              <thead>
-                <tr><th>Rk</th><th className="l">Team</th><th>AdjEM</th><th className="grp-off">AdjO</th><th className="grp-def">AdjD</th><th className="l hidden md:table-cell">Form</th><th className="l">Next</th></tr>
-              </thead>
-              <tbody>
-                {top.map(t => (
-                  <LinkRow key={t.id} href={`/teams/${t.slug}/`}>
-                    <td><span className="rank-cell">{t.rank}</span></td>
-                    <td className="l">
-                      <Link href={`/teams/${t.slug}/`} className="link flex items-center gap-2.5">
-                        <TeamLogo src={t.logo} name={t.name} size={22} />
-                        <span className="font-semibold group-hover/row:text-off">{t.name}</span>
-                        <span className="text-xs text-mute">{t.w}–{t.l}</span>
-                      </Link>
-                    </td>
-                    <td><b>{signed(t.adjEM, 1)}</b></td>
-                    <td><span className="rounded px-1.5 py-0.5" style={{ background: heat(t.adjORank, total) }}>{fmt(t.adjO)}</span></td>
-                    <td><span className="rounded px-1.5 py-0.5" style={{ background: heat(t.adjDRank, total) }}>{fmt(t.adjD)}</span></td>
-                    <td className="l hidden md:table-cell"><PerfBars values={t.perf} width={70} height={20} /></td>
-                    <td className="l text-[13px] text-mute">
-                      {t.next ? (
-                        <span>
-                          {t.next.venue === "A" ? "at " : "vs "}
-                          {t.next.oppSlug ? <Link className="link" href={`/teams/${t.next.oppSlug}/`}>{t.next.opp}</Link> : t.next.opp}
-                          {t.next.wp !== null && <Link href={`/games/?d=${etDay(t.next.date)}&g=${t.next.id}`} className="ml-1.5 font-bold text-ink hover:underline" title={`${t.name}'s pregame win probability — open the game`}>{pctFmt(t.next.wp)}</Link>}
-                        </span>
-                      ) : "—"}
-                    </td>
-                  </LinkRow>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </section>
+        <Top25 teams={teams.filter(t => t.rank && t.rank <= 50)} total={total} />
 
         <div className="space-y-8">
           {/* Model scorecard */}

@@ -5,13 +5,14 @@ import { getMeta, getTeam, getTeamDetail, getTeams } from "@/lib/server-data";
 import TeamLogo from "@/components/team-logo";
 import TvBadges from "@/components/tv-badges";
 import StatBar from "@/components/stat-bar";
-import { fmt, ordinal, pctFmt, signed } from "@/lib/format";
+import { fmt, pctFmt, signed } from "@/lib/format";
 import FavoriteButton from "@/components/favorite-button";
 import ArticleList from "@/components/article-list";
 import AvailabilityList from "@/components/availability-list";
 import CalendarButton from "./calendar-button";
 import type { PlayerField, TeamSummary } from "@/lib/types";
 import GameLog from "./game-log";
+import { LiveNextGate, LiveRank, LiveRecord, LiveTiles } from "./live-hero";
 import Roster, { type RosterBio } from "./roster";
 import PerfChart from "./perf-chart";
 import SeasonOutlook from "./season-outlook";
@@ -77,7 +78,7 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
             </p>
             <h1 className="text-[2rem] font-bold leading-tight tracking-[-0.02em] sm:text-[2.5rem]">{team.name}</h1>
             <p className="mt-1 text-[14px] text-mute tnum">
-              <b className="text-ink">{team.w}–{team.l}</b> overall · <Link className="link underline decoration-line2 underline-offset-4" href={`/conferences/${team.confSlug}/#standings-h`} title={`${team.confName} standings`}>{team.cw}–{team.cl} conference</Link>
+              <b className="text-ink"><LiveRecord team={team} /></b> overall · <Link className="link underline decoration-line2 underline-offset-4" href={`/conferences/${team.confSlug}/#standings-h`} title={`${team.confName} standings`}><LiveRecord team={team} conf /> conference</Link>
               {team.streak && <> · <span className={team.streak.startsWith("W") ? "text-win" : "text-loss"}>{team.streak}</span></>}
               {atsW + atsL + atsP > 0 && <> · <span title="Against the spread vs the pregame line ESPN showed (DraftKings): wins–losses–pushes">ATS <b className="text-ink">{atsText}</b></span></>}
               {" "}· projected <a className="link underline decoration-line2 underline-offset-4" href="#outlook"><b className="text-ink">{fmt(team.projW, 1)}–{fmt(team.projL, 1)}</b></a>
@@ -91,23 +92,10 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
           </div>
           <Link href={`/rankings/?conf=${team.confSlug}`} className="ml-auto rounded-lg text-right hover:opacity-80 sm:ml-0" title={`DHR rankings, ${team.confName} teams`}>
             <div className="label">DHR rank</div>
-            <div className="outline-num font-display text-[3rem] font-black leading-none tnum sm:text-[3.75rem]">{team.rank ?? "—"}</div>
+            <LiveRank team={team} />
           </Link>
         </div>
-        <dl className="relative mt-5 grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-line bg-line sm:grid-cols-5">
-          {[
-            ["AdjEM", signed(team.adjEM, 1), team.rank, "Points per 100 possessions better than an average D-I team"],
-            ["Adj offense", fmt(team.adjO), team.adjORank, "Points per 100 vs an average defense"],
-            ["Adj defense", fmt(team.adjD), team.adjDRank, "Points allowed per 100 vs an average offense"],
-            ["Tempo", fmt(team.adjT), team.adjTRank, "Adjusted possessions per 40 minutes"],
-            ["Schedule", signed(team.sos, 1), team.sosRank, "Average AdjEM of opponents so far"],
-          ].map(([label, value, rank, hint]) => (
-            <div key={label as string} className="bg-deck px-4 py-3 last:col-span-2 sm:last:col-span-1" title={hint as string}>
-              <dt className="label">{label}</dt>
-              <dd className="font-display text-[1.6rem] font-extrabold tnum">{value}<span className="ml-2 font-sans text-xs font-semibold text-mute">{rank ? ordinal(rank as number) : ""}</span></dd>
-            </div>
-          ))}
-        </dl>
+        <LiveTiles team={team} />
         {team.ratedGames < 5 && (
           <p className="relative mt-3 text-xs text-mute">Early-season rating from {fmt(team.ratedGames, 0)} rated D-I game{team.ratedGames === 1 ? "" : "s"} — it leans on the {team.confName} average and will move a lot.</p>
         )}
@@ -121,6 +109,7 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
         <div className="min-w-0 space-y-6">
           {/* Next game */}
           {team.next && (
+            <LiveNextGate nextId={team.next.id} slug={slug} opp={team.next.opp} day={etDay(team.next.date)}>
             <section className="deck flex flex-wrap items-center gap-4 p-5">
               <div className="min-w-0 basis-full sm:basis-auto sm:flex-1">
                 <div className="label">Next game · <Link className="link underline decoration-line2 underline-offset-4" href={`/games/?d=${etDay(team.next.date)}&g=${team.next.id}`}>{new Date(team.next.date).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric", timeZone: "America/New_York" })}</Link></div>
@@ -143,6 +132,7 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
                 <Link className="btn" href={`/matchup/?a=${team.slug}&b=${team.next.oppSlug}&site=${team.next.venue === "H" ? "a" : team.next.venue === "A" ? "b" : "n"}`}>Open in matchup simulator</Link>
               )}
             </section>
+            </LiveNextGate>
           )}
 
           {/* Season outlook */}
@@ -166,7 +156,7 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
           {/* Schedule */}
           <section id="schedule" className="scroll-mt-20">
             <h2 className="h-section mb-3">Schedule &amp; results</h2>
-            <GameLog games={detail.games} logos={logos} />
+            <GameLog games={detail.games} logos={logos} slug={slug} />
           </section>
 
           {/* Roster */}

@@ -70,7 +70,8 @@ const allGames = scheduled
 const toFitGame = g => {
   const box = boxByGame.get(String(g.id));
   const nonD1 = !isD1(g.homeConference) || !isD1(g.awayConference);
-  const poss = box?.poss ?? null;
+  // Provider box score first; for results merged from ESPN before the provider publishes them, ESPN's box.
+  const poss = box?.poss ?? finite(g.espnPossessions) ?? null;
   return {
     gameId: String(g.id), date: g.date,
     homeId: nodeId(g.homeTeamId, g.homeConference), awayId: nodeId(g.awayTeamId, g.awayConference),
@@ -194,6 +195,24 @@ await writeFile(modelPath, JSON.stringify({
   backtest,
   predictions,
 }) + "\n");
+
+// Inputs for the site's live post-game ratings: the exact games, priors and converged ratings, so a
+// browser can add tonight's finals and refit with this same model before the next pipeline run.
+{
+  const r4 = v => Math.round(v * 1e4) / 1e4;
+  const confs = [...new Set([...current.conf.values()])];
+  const ci = c => confs.indexOf(c ?? NON_D1);
+  await writeFile("public/data/dhr-input-2027.json", JSON.stringify({
+    v: 1, builtAt: new Date().toISOString(),
+    through: finals.length ? finals[finals.length - 1].et : null,
+    confs,
+    teams: teamRecords.filter(t => isD1(t.conference) && t.teamId != null).map(t => [String(t.teamId), ci(t.conference)]),
+    seasonPrior: seasonPrior ? Object.fromEntries([...seasonPrior].map(([k, v]) => [k, [r4(v.O), r4(v.D)]])) : null,
+    warm: { h: r4(current.h), r: Object.fromEntries([...current.O.keys()].map(k => [k, [r4(current.O.get(k)), r4(current.D.get(k)), r4(current.T.get(k))]])) },
+    // [gameId, homeId, awayId, homeConf#, awayConf#, neutral, homePts, awayPts, poss, minutes, weight]
+    games: fitGames.map(g => [g.gameId, g.homeId, g.awayId, ci(g.homeConf), ci(g.awayConf), g.neutral ? 1 : 0, g.homePts, g.awayPts, Math.round(g.poss * 10) / 10, g.minutes, g.weight]),
+  }) + "\n");
+}
 
 console.log(`[DHR v2] ${rated.length} teams ranked from ${fitGames.length} completed games in ${current.iterations} iterations.`);
 console.log(`[DHR v2] League ${current.mu.toFixed(2)} pts/100, tempo ${current.muT.toFixed(1)}, home edge ${current.h.toFixed(2)} pts/100 (${((current.h * current.muT) / 100).toFixed(2)} pts/game).`);
