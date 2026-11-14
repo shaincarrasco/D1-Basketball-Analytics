@@ -4,12 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "predev": "node scripts/build-app-data.mjs && node scripts/build-skills.mjs && node scripts/build-lineup-lab.mjs && node scripts/build-nav-preview.mjs",
+    "predev": "node scripts/build-app-data.mjs && node scripts/build-skills.mjs && node scripts/build-lineup-lab.mjs && node scripts/build-nav-preview.mjs && node scripts/build-nil.mjs",
     "build": "next build",
-    "prebuild": "node scripts/build-app-data.mjs && node scripts/build-skills.mjs && node scripts/build-lineup-lab.mjs && node scripts/build-nav-preview.mjs",
+    "prebuild": "node scripts/build-app-data.mjs && node scripts/build-skills.mjs && node scripts/build-lineup-lab.mjs && node scripts/build-nav-preview.mjs && node scripts/build-nil.mjs",
     "start": "npx serve@latest out",
     "typecheck": "tsc --noEmit",
-    "data": "node scripts/build-power-ratings.mjs && node scripts/build-simulations.mjs && node scripts/build-app-data.mjs && node scripts/build-skills.mjs && node scripts/build-lineup-lab.mjs && node scripts/build-nav-preview.mjs",
+    "data": "node scripts/build-power-ratings.mjs && node scripts/build-simulations.mjs && node scripts/build-app-data.mjs && node scripts/build-skills.mjs && node scripts/build-lineup-lab.mjs && node scripts/build-nav-preview.mjs && node scripts/build-nil.mjs",
     "test": "vitest run",
     "new-sport": "node scripts/new-sport.mjs"
   },

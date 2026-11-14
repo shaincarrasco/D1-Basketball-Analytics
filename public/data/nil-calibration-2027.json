@@ -1,0 +1,827 @@
+{
+  "formatVersion": 1,
+  "season": 2027,
+  "seasonLabel": "2026–27",
+  "compiled": "2026-11-14",
+  "about": "Publicly reported 2026–27 men's basketball compensation figures that D1 Hoops uses to calibrate and check its NIL estimates. Every figure is copied from the cited report with its date. Reported figures are themselves mostly unconfirmed: deals are private, many go around the clearinghouse, and agents and schools both have reasons to inflate them. Nothing here is a D1 Hoops estimate.",
+  "caveats": [
+    "Most player figures are reports or estimates by journalists and On3, not confirmed contracts. Schools and players rarely disclose terms.",
+    "Some reports give a floor ('at least $3.9 million'), an asking price, or a range. We keep those as floors or ranges and never turn them into a single number.",
+    "Reports can disagree (Jackson Shelstad: about $2 million in May, at least $3.9 million in July). Both are kept.",
+    "On3's NIL Valuation is On3's own proprietary model, not a reported deal; those rows are marked kind 'on3'.",
+    "Program budgets combine revenue sharing and collective/NIL money as the sources describe them; definitions differ between reports."
+  ],
+  "sources": {
+    "br-2026-05-06": {
+      "title": "Duke reportedly among 15 MCBB teams expected to spend $20M+ on roster for 2026-27 season",
+      "publisher": "Bleacher Report (citing On3's Pete Nakos)",
+      "author": "Joseph Zucker",
+      "date": "2026-05-06",
+      "url": "https://bleacherreport.com/articles/25425574-duke-reportedly-among-15-mcbb-teams-expected-spend-20m-roster-2026-27-season"
+    },
+    "ics-2026-05-05": {
+      "title": "Tennessee lands portal star Juke Harris at exorbitant price",
+      "publisher": "Inside College Sports newsletter (citing CBS Sports' Matt Norlander)",
+      "author": "Aaron Torres",
+      "date": "2026-05-05",
+      "url": "https://inside-college-sports.beehiiv.com/p/tennessee-lands-portal-star-juke-harris-at-exorbitant-price-just-how-much-does-a-title-team-cost"
+    },
+    "si-2026-03-05": {
+      "title": "The Price of Winning: College hoops GMs talk budgets, superstar costs ahead of April transfer portal",
+      "publisher": "Sports Illustrated",
+      "author": "Kevin Sweeney",
+      "date": "2026-03-05",
+      "url": "https://www.si.com/college-basketball/price-of-winning-general-managers-talk-budgets-superstar-costs-april-transfer-portal"
+    },
+    "kbtx-2026-06-23": {
+      "title": "Cost of SEC men's basketball rosters remains on the rise",
+      "publisher": "KBTX (citing On3's Pete Nakos)",
+      "author": null,
+      "date": "2026-06-23",
+      "url": "https://www.kbtx.com/2026/06/24/cost-sec-mens-basketball-rosters-remains-rise/"
+    },
+    "on3-memphis": {
+      "title": "Memphis AD Ed Scott reveals $9 million rev-share budget for men's basketball, $7 million for football in 2026-27",
+      "publisher": "On3",
+      "author": null,
+      "date": null,
+      "dateNote": "Page shows no publication date; figures are for fiscal 2026-27 starting July 1, 2026.",
+      "url": "https://commit-list-tweaks-on3-studio-team.vercel.app/nil/news/memphis-ad-ed-scott-reveals-9-million-rev-share-budget-mens-basketball-7-million-football-2026-27/"
+    },
+    "si-2026-06-01": {
+      "title": "Comparing reported Milan Momcilovic price tag to AJ Dybantsa",
+      "publisher": "Sports Illustrated (citing Jeff Goodman, May 26, 2026)",
+      "author": "Kenneth Teape",
+      "date": "2026-06-01",
+      "url": "https://www.si.com/college/iowa-state/basketball/comparing-reported-milan-momcilovic-price-tag-to-aj-dybantsa"
+    },
+    "si-2026-07-14": {
+      "title": "Kentucky's Milan Momcilovic is reportedly one of the highest-paid athletes in college sports",
+      "publisher": "Sports Illustrated (citing On3's top-10 NIL valuations list of July 14, 2026)",
+      "author": "Andrew Stefaniak",
+      "date": "2026-07-14",
+      "url": "https://www.si.com/college/kentucky/men-s-basketball/kentucky-s-milan-momcilovic-is-reportedly-one-of-the-highest-paid-athletes-in-college-sports"
+    },
+    "fw-2026-07-28": {
+      "title": "LeBron James will reportedly earn less money than almost 18 college basketball players next season",
+      "publisher": "Fadeaway World (summarising The Athletic, Brendan Marks and Joe Rexrode, July 25, 2026)",
+      "author": "Siddhant Gupta",
+      "date": "2026-07-28",
+      "url": "https://fadeawayworld.net/nba/philadelphia-76ers/lebron-james-will-reportedly-earn-less-money-than-almost-18-college-basketball-players-next-season"
+    },
+    "si-2026-08-03": {
+      "title": "Blue Devils' NIL earnings make even LeBron James look cheap",
+      "publisher": "Sports Illustrated (citing The Athletic, July 25, 2026)",
+      "author": "Hugh Straine",
+      "date": "2026-08-03",
+      "url": "https://www.si.com/college/duke/blue-devils-this-nil-earnings-make-even-lebron-james-look-cheap"
+    },
+    "ab-2026-05-29": {
+      "title": "By forgoing NBA Draft, Yessoufou and Haugh stand to make $7M and $8M, respectively",
+      "publisher": "Athletic Business",
+      "author": "Paul Steinbach",
+      "date": "2026-05-29",
+      "url": "https://www.athleticbusiness.com/operations/personnel/article/15826341/by-forgoing-nba-draft-yessoufou-and-haugh-stand-to-make-7m-and-8m-respectively"
+    },
+    "sk-holt-2026-05": {
+      "title": "\"Too low\": Hoops fans react as 5-star recruit Caleb Holt's NIL valuation is revealed following recent Adidas deal",
+      "publisher": "Sportskeeda (On3 NIL Valuation)",
+      "author": null,
+      "date": null,
+      "dateNote": "No date on the page; published after May 18, 2026.",
+      "url": "https://www.sportskeeda.com/us/high-school-sports/news-too-low-hoops-fans-react-5-star-recruit-caleb-holt-s-nil-valuation-revealed-following-recent-adidas-deal"
+    },
+    "sportsnaut-2026-04-09": {
+      "title": "Transfer portal cost for Michigan, Duke to replace top stars",
+      "publisher": "Sportsnaut (citing Jeff Goodman's poll of 10+ high-major coaches, assistants and GMs, April 8, 2026)",
+      "author": "Jason Burgos",
+      "date": "2026-04-09",
+      "url": "https://sportsnaut.com/college-basketball/transfer-portal-cost-for-michigan-duke-to-replace-top-stars"
+    },
+    "fos-2026-04-30": {
+      "title": "Dusty May: Michigan's next men's basketball roster will cost more than $10M",
+      "publisher": "Front Office Sports",
+      "author": null,
+      "date": "2026-04-30",
+      "url": "https://frontofficesports.com/dusty-may-michigans-next-mens-basketball-roster-will-cost-more-than-10m/"
+    },
+    "fos-2026-03-11": {
+      "title": "Why the rev-share era hasn't been a boon for basketball-only schools",
+      "publisher": "Front Office Sports",
+      "author": null,
+      "date": "2026-03-11",
+      "dateNote": "Updated Oct. 1, 2026.",
+      "url": "https://frontofficesports.com/why-rev-share-era-hasnt-been-a-boon-for-basketball-only-schools/"
+    },
+    "br-2026-10-21": {
+      "title": "Duke, UNC, Kentucky headline 'Tier 1' schools spending $20M+ on CBB rosters, new CBS report says",
+      "publisher": "Bleacher Report (citing CBS Sports, Matt Norlander and Isaac Trotter)",
+      "author": "Joseph Zucker",
+      "date": "2026-10-21",
+      "url": "https://bleacherreport.com/articles/25517245-duke-unc-kentucky-headline-tier-1-schools-spending-20m-cbb-rosters-new-cbs-report-says"
+    },
+    "ab-2026-10-22": {
+      "title": "Report: Average cost of a Power Five men's basketball roster hits $13.5M",
+      "publisher": "Athletic Business (reporting the CBS Sports study by Matt Norlander and Isaac Trotter)",
+      "author": "Andy Berg",
+      "date": "2026-10-22",
+      "url": "https://www.athleticbusiness.com/operations/budgeting/article/15838183/report-average-cost-of-a-power-five-mens-basketball-roster-hits-135m"
+    },
+    "roundtable-2026-10-23": {
+      "title": "What is Florida men's basketball's NIL budget in 2026-27?",
+      "publisher": "Roundtable (citing CBS Sports)",
+      "author": "Jordon Lawrenz",
+      "date": "2026-10-23",
+      "url": "https://roundtable.io/sports/ncaa/florida/news/what-is-florida-mens-basketballs-nil-budget-in-2026-27"
+    },
+    "si-2026-08-01": {
+      "title": "Does Penn State want to fund a basketball team that can compete in the Big Ten?",
+      "publisher": "Sports Illustrated (citing The Athletic, July 26, 2026, and the Centre Daily Times)",
+      "author": null,
+      "date": "2026-08-01",
+      "url": "https://www.si.com/college/pennstate/basketball/does-penn-state-want-to-fund-basketball-team-compete-in-big-ten"
+    },
+    "wtvr-2026-05-07": {
+      "title": "VCU NIL (Beyond the Roster)",
+      "publisher": "WTVR CBS 6",
+      "author": "Lane Casadonte",
+      "date": "2026-05-07",
+      "url": "https://www.wtvr.com/sports/beyond-the-roster/vcu-nil-may-7-2026"
+    },
+    "csd-2025-12-20": {
+      "title": "Pay to play: University of Wyoming's battle to remain Division I in an NIL world",
+      "publisher": "Cowboy State Daily",
+      "author": null,
+      "date": "2025-12-20",
+      "url": "https://cowboystatedaily.com/2025/12/20/pay-to-play-university-of-wyomings-battle-to-remain-division-i-in-an-nil-world"
+    },
+    "brobible-2026-03-17": {
+      "title": "North Carolina basketball coach reveals embarrassing amount of NIL money for recruiting at Greensboro",
+      "publisher": "BroBible (citing UNCG coach Mike Jones on the TeedOff Sports podcast)",
+      "author": "Grayson Weir",
+      "date": "2026-03-17",
+      "url": "https://brobible.com/sports/article/unc-greensboro-north-carolina-basketball-nil-money-budget-mike-jones"
+    },
+    "fo68-2026-04-16": {
+      "title": "Playing GM in a booming NIL market",
+      "publisher": "The Field of 68 Daily (citing EvanMiya analysis)",
+      "author": "Sam Lance",
+      "date": "2026-04-16",
+      "url": "https://fieldof68.beehiiv.com/p/playing-gm-in-a-booming-nil-market"
+    },
+    "l500-2026-07-15": {
+      "title": "A year of NIL Go: review",
+      "publisher": "Legal 500 (Frankfurt Kurnit Klein & Selz)",
+      "author": null,
+      "date": "2026-07-15",
+      "url": "https://www.legal500.com/intelligence/united-states/media-telecoms-it-entertainment/a-year-of-nil-go-review"
+    },
+    "ct-2026-05-15": {
+      "title": "50 highest paid college athletes – 2026",
+      "publisher": "College Transitions (On3 NIL Valuations)",
+      "author": null,
+      "date": "2026-05-15",
+      "url": "https://www.collegetransitions.com/blog/highest-paid-college-athletes/"
+    },
+    "fos-2023-12-22": {
+      "title": "'Absolute bulls---. Completely made up.' Don't believe everything you read about NIL deals in the transfer portal",
+      "publisher": "Front Office Sports",
+      "author": "Amanda Christovich",
+      "date": "2023-12-22",
+      "url": "https://frontofficesports.com/article/absolute-bulls-completely-made-up-dont-believe-everything-you-read-about-nil-deals-in-the-transfer-portal/"
+    }
+  },
+  "landscape": {
+    "revenueShareCap": [
+      {
+        "season": "2025–26",
+        "amount": 20500000,
+        "text": "about $20.5 million per athletic department (all sports)",
+        "source": "kbtx-2026-06-23"
+      },
+      {
+        "season": "2026–27",
+        "amount": 21300000,
+        "text": "an estimated $21.3 million per athletic department (all sports), effective July 1, 2026",
+        "source": "kbtx-2026-06-23"
+      }
+    ],
+    "notes": [
+      {
+        "text": "Schools with FBS football were expected to give most of the cap (about 75%) to football, which left roughly $4 million of revenue-share money for men's basketball at a typical power-conference school; collectives and outside NIL make up the rest of a basketball roster budget.",
+        "source": "fos-2026-03-11"
+      },
+      {
+        "text": "NIL Go (the College Sports Commission clearinghouse) requires D-I athletes to report third-party NIL deals worth $600 or more and asks whether the payer is school-associated, whether the deal has a valid business purpose, and whether the pay is in the range paid to similarly situated athletes. In its first year it approved over $355 million in deals and rejected nearly $90 million.",
+        "source": "l500-2026-07-15"
+      },
+      {
+        "text": "A staffer quoted in May 2026: 'Everyone over a $5 million payroll is not submitting deals' to the clearinghouse, so reported figures are hard to verify.",
+        "source": "br-2026-05-06"
+      },
+      {
+        "text": "EvanMiya estimated the D-I player market rose about 65% from 2025 to 2026 (power-conference players +73%, low- and mid-major players +44%), and that a center costs about 61% more than a point guard of equal talent ($1.3 million vs $813,000).",
+        "source": "fo68-2026-04-16"
+      },
+      {
+        "text": "A poll of 10+ high-major coaches, assistants and GMs (April 2026) put top wings at $2.5–3 million, high-impact guards at $3–4 million and top big men at $4–5 million.",
+        "source": "sportsnaut-2026-04-09"
+      },
+      {
+        "text": "GMs surveyed in March 2026 priced an all-conference high-major player at $2–2.5 million (one said about $3 million) and top stars at $4 million or a little more; one GM expected no more than about 10 players to reach $4 million, an assistant said about 25.",
+        "source": "si-2026-03-05"
+      },
+      {
+        "text": "The Athletic (July 25, 2026) reported at least 18 men's college basketball players would make at least $3.9 million in 2026–27.",
+        "source": "si-2026-08-03"
+      },
+      {
+        "text": "Wyoming's coach described his 2025–26 split: the best player gets about 20% of the budget, the next 18%, then 16%, and so on down a roster of up to 15.",
+        "source": "csd-2025-12-20"
+      },
+      {
+        "text": "Industry experts have long warned that headline NIL numbers are often inflated and that 'no one talks numbers'.",
+        "source": "fos-2023-12-22"
+      }
+    ]
+  },
+  "programs": {
+    "cbsTiers": {
+      "about": "CBS Sports (Matt Norlander and Isaac Trotter) placed the 79 power-conference programs plus Gonzaga in seven 2026–27 roster-spending tiers. Average $13.5 million (about $7 million the year before). Conference averages: SEC $17.3M, Big East $13.6M, Big Ten $12.7M, Big 12 $12.6M, ACC $11.9M. Florida, Louisville and Kentucky top $25 million. No high-major spends under $5 million.",
+      "source": "ab-2026-10-22",
+      "alsoSource": [
+        "br-2026-10-21",
+        "roundtable-2026-10-23"
+      ],
+      "tiers": [
+        {
+          "tier": 1,
+          "low": 20000000,
+          "high": null,
+          "label": "$20M or more",
+          "teams": [
+            "Duke",
+            "Florida",
+            "Kentucky",
+            "Illinois",
+            "Louisville",
+            "Michigan",
+            "North Carolina",
+            "St. John's",
+            "Tennessee",
+            "Texas",
+            "Texas Tech"
+          ],
+          "over25": [
+            "Florida",
+            "Louisville",
+            "Kentucky"
+          ]
+        },
+        {
+          "tier": 2,
+          "low": null,
+          "high": 20000000,
+          "label": "just under $20M",
+          "teams": [
+            "Arkansas",
+            "UConn",
+            "Indiana",
+            "Kansas"
+          ]
+        },
+        {
+          "tier": 3,
+          "low": 15100000,
+          "high": 17500000,
+          "label": "$15.1M–$17.5M",
+          "teams": [
+            "Arizona",
+            "Auburn",
+            "Cincinnati",
+            "Gonzaga",
+            "Houston",
+            "Miami",
+            "Michigan State",
+            "LSU",
+            "Missouri",
+            "Oklahoma",
+            "Oklahoma State",
+            "Ole Miss",
+            "South Carolina",
+            "Texas A&M",
+            "USC",
+            "Vanderbilt"
+          ]
+        },
+        {
+          "tier": 4,
+          "low": 12100000,
+          "high": 15000000,
+          "label": "$12.1M–$15M",
+          "teams": [
+            "Alabama",
+            "Baylor",
+            "BYU",
+            "Creighton",
+            "Georgetown",
+            "Marquette",
+            "Maryland",
+            "Mississippi State",
+            "Ohio State",
+            "Oregon",
+            "Pittsburgh",
+            "Providence",
+            "SMU",
+            "UCLA",
+            "Villanova",
+            "Virginia",
+            "West Virginia",
+            "Xavier"
+          ]
+        },
+        {
+          "tier": 5,
+          "low": 10000000,
+          "high": 12000000,
+          "label": "$10M–$12M",
+          "teams": [
+            "Clemson",
+            "Georgia",
+            "Iowa State",
+            "Minnesota",
+            "NC State",
+            "Nebraska",
+            "Syracuse",
+            "TCU",
+            "Wisconsin"
+          ]
+        },
+        {
+          "tier": 6,
+          "low": 7100000,
+          "high": 9900000,
+          "label": "$7.1M–$9.9M",
+          "teams": [
+            "Arizona State",
+            "Butler",
+            "California",
+            "DePaul",
+            "Florida State",
+            "Iowa",
+            "Northwestern",
+            "Penn State",
+            "Purdue",
+            "Rutgers",
+            "Seton Hall",
+            "UCF",
+            "Utah",
+            "Virginia Tech"
+          ]
+        },
+        {
+          "tier": 7,
+          "low": 5000000,
+          "high": 7000000,
+          "label": "$5M–$7M",
+          "teams": [
+            "Boston College",
+            "Colorado",
+            "Georgia Tech",
+            "Kansas State",
+            "Notre Dame",
+            "Stanford",
+            "Wake Forest",
+            "Washington"
+          ]
+        }
+      ]
+    },
+    "reported": [
+      {
+        "team": "Memphis",
+        "season": "2026–27",
+        "low": 9000000,
+        "high": null,
+        "kind": "floor",
+        "text": "$9 million 'guaranteed' revenue-share budget for men's basketball (collective NIL would be on top); $4.99 million the year before, the most in the American.",
+        "source": "on3-memphis"
+      },
+      {
+        "team": "VCU",
+        "season": "2026–27",
+        "low": 5000000,
+        "high": 5000000,
+        "kind": "approx",
+        "text": "AD Ed McLaughlin: a competitive men's basketball budget is 'around $5 million' per year; Sweet 16 contenders cost $10–12 million.",
+        "source": "wtvr-2026-05-07"
+      },
+      {
+        "team": "Wyoming",
+        "season": "2025–26",
+        "low": 550000,
+        "high": 550000,
+        "kind": "prior-season",
+        "text": "About $550,000 for a roster of up to 15 (2025–26); the coach said every Mountain West opponent except Air Force spends more.",
+        "source": "csd-2025-12-20"
+      },
+      {
+        "team": "UNC Greensboro",
+        "season": "2024–25",
+        "low": 95000,
+        "high": 95000,
+        "kind": "prior-season",
+        "text": "$95,000 in total NIL money (2024–25); boosters increased it for 2025–26 but no figure was given.",
+        "source": "brobible-2026-03-17"
+      },
+      {
+        "team": "Michigan",
+        "season": "2026–27",
+        "low": 10000000,
+        "high": null,
+        "kind": "floor",
+        "text": "Dusty May expects to spend more than $10 million (about $10 million in 2025–26).",
+        "source": "fos-2026-04-30"
+      },
+      {
+        "team": "Texas A&M",
+        "season": "2026–27",
+        "low": 20000000,
+        "high": 20000000,
+        "kind": "approx",
+        "text": "About $20 million including revenue sharing and NIL (On3's Pete Nakos; the coach declined to give a number).",
+        "source": "kbtx-2026-06-23"
+      },
+      {
+        "team": "Big Ten (average)",
+        "season": "2026–27",
+        "low": 14300000,
+        "high": 14300000,
+        "kind": "average",
+        "text": "Average NIL spending of $14.3 million per Big Ten program, from anonymous Big Ten coaches (The Athletic, July 26, 2026), up from $8.5 million.",
+        "source": "si-2026-08-01"
+      }
+    ]
+  },
+  "players": [
+    {
+      "name": "Thomas Haugh",
+      "team": "Florida",
+      "low": 5000000,
+      "high": 10000000,
+      "kind": "range",
+      "reports": [
+        {
+          "text": "$5 million to stay at Florida",
+          "value": 5000000,
+          "source": "br-2026-05-06"
+        },
+        {
+          "text": "at least $8 million to skip the NBA Draft",
+          "value": 8000000,
+          "source": "ab-2026-05-29"
+        },
+        {
+          "text": "could exceed $10 million (CBS's Matt Norlander)",
+          "value": 10000000,
+          "source": "fw-2026-07-28"
+        }
+      ]
+    },
+    {
+      "name": "Milan Momcilovic",
+      "team": "Kentucky",
+      "low": 6000000,
+      "high": 7000000,
+      "kind": "range",
+      "reports": [
+        {
+          "text": "up to about $7 million (Jeff Goodman, May 26)",
+          "value": 7000000,
+          "source": "si-2026-06-01"
+        },
+        {
+          "text": "On3 estimates Kentucky paid about $6 million",
+          "value": 6000000,
+          "source": "si-2026-07-14"
+        },
+        {
+          "text": "above $5 million (The Athletic)",
+          "value": 5000000,
+          "source": "fw-2026-07-28"
+        }
+      ]
+    },
+    {
+      "name": "Tounde Yessoufou",
+      "team": "St. John's",
+      "low": 6000000,
+      "high": 7000000,
+      "kind": "range",
+      "reports": [
+        {
+          "text": "upward of $6 million",
+          "value": 6000000,
+          "source": "si-2026-06-01"
+        },
+        {
+          "text": "upwards of $7 million",
+          "value": 7000000,
+          "source": "ab-2026-05-29"
+        },
+        {
+          "text": "above $5 million (The Athletic)",
+          "value": 5000000,
+          "source": "fw-2026-07-28"
+        }
+      ]
+    },
+    {
+      "name": "Flory Bidunga",
+      "team": "Louisville",
+      "low": 5000000,
+      "high": 5000000,
+      "kind": "deal",
+      "reports": [
+        {
+          "text": "$5 million (On3's Pete Nakos)",
+          "value": 5000000,
+          "source": "br-2026-05-06"
+        },
+        {
+          "text": "above $5 million (The Athletic)",
+          "value": 5000000,
+          "source": "fw-2026-07-28"
+        }
+      ]
+    },
+    {
+      "name": "Tyran Stokes",
+      "team": "Kansas",
+      "low": 5000000,
+      "high": 5000000,
+      "kind": "on3",
+      "reports": [
+        {
+          "text": "On3 estimate: $5 million",
+          "value": 5000000,
+          "source": "si-2026-07-14"
+        },
+        {
+          "text": "at least $3.9 million (The Athletic)",
+          "value": 3900000,
+          "source": "fw-2026-07-28"
+        }
+      ]
+    },
+    {
+      "name": "Juke Harris",
+      "team": "Tennessee",
+      "low": 4000000,
+      "high": 5000000,
+      "kind": "range",
+      "reports": [
+        {
+          "text": "up to $4 million (On3's Pete Nakos)",
+          "value": 4000000,
+          "source": "br-2026-05-06"
+        },
+        {
+          "text": "$5 million asking price (CBS's Matt Norlander)",
+          "value": 5000000,
+          "source": "ics-2026-05-05"
+        },
+        {
+          "text": "at least $3.9 million (The Athletic)",
+          "value": 3900000,
+          "source": "fw-2026-07-28"
+        }
+      ]
+    },
+    {
+      "name": "Jackson Shelstad",
+      "team": "Louisville",
+      "low": 2000000,
+      "high": 3900000,
+      "kind": "range",
+      "note": "Reports conflict: about $2 million in May, at least $3.9 million in July.",
+      "reports": [
+        {
+          "text": "$2 million (On3's Pete Nakos)",
+          "value": 2000000,
+          "source": "br-2026-05-06"
+        },
+        {
+          "text": "at least $3.9 million (The Athletic)",
+          "value": 3900000,
+          "source": "si-2026-08-03"
+        }
+      ]
+    },
+    {
+      "name": "Caleb Holt",
+      "team": "Arizona",
+      "low": 1300000,
+      "high": 1300000,
+      "kind": "on3-recruit",
+      "note": "On3's NIL Valuation after his Adidas deal, before he enrolled at Arizona. It measures his marketing value as a recruit, not what a school pays, so it is shown for comparison and not used to fit the model.",
+      "reports": [
+        {
+          "text": "On3 NIL Valuation: $1.3 million",
+          "value": 1300000,
+          "source": "sk-holt-2026-05"
+        }
+      ],
+      "fit": false
+    },
+    {
+      "name": "Massamba Diop",
+      "team": "Gonzaga",
+      "low": 5000000,
+      "high": null,
+      "kind": "floor",
+      "note": "Spelled 'Mossamba Diop' in the report.",
+      "reports": [
+        {
+          "text": "above $5 million (The Athletic)",
+          "value": 5000000,
+          "source": "fw-2026-07-28"
+        }
+      ]
+    },
+    {
+      "name": "PJ Haggerty",
+      "team": "Texas A&M",
+      "low": 3900000,
+      "high": null,
+      "kind": "floor",
+      "reports": [
+        {
+          "text": "at least $3.9 million (The Athletic)",
+          "value": 3900000,
+          "source": "fw-2026-07-28"
+        }
+      ]
+    },
+    {
+      "name": "Somto Cyril",
+      "team": "Miami",
+      "low": 3900000,
+      "high": null,
+      "kind": "floor",
+      "reports": [
+        {
+          "text": "at least $3.9 million (The Athletic)",
+          "value": 3900000,
+          "source": "fw-2026-07-28"
+        }
+      ]
+    },
+    {
+      "name": "John Blackwell",
+      "team": "Duke",
+      "low": 3900000,
+      "high": null,
+      "kind": "floor",
+      "reports": [
+        {
+          "text": "at least $3.9 million (The Athletic)",
+          "value": 3900000,
+          "source": "si-2026-08-03"
+        }
+      ]
+    },
+    {
+      "name": "Aiden Sherrell",
+      "team": "Indiana",
+      "low": 3900000,
+      "high": null,
+      "kind": "floor",
+      "reports": [
+        {
+          "text": "at least $3.9 million (The Athletic)",
+          "value": 3900000,
+          "source": "fw-2026-07-28"
+        }
+      ]
+    },
+    {
+      "name": "JT Toppin",
+      "team": "Texas Tech",
+      "low": 3900000,
+      "high": null,
+      "kind": "floor",
+      "reports": [
+        {
+          "text": "at least $3.9 million (The Athletic)",
+          "value": 3900000,
+          "source": "fw-2026-07-28"
+        }
+      ]
+    },
+    {
+      "name": "Samet Yigitoglu",
+      "team": "Indiana",
+      "low": 3900000,
+      "high": null,
+      "kind": "floor",
+      "note": "Spelled 'Semet' in the report.",
+      "reports": [
+        {
+          "text": "at least $3.9 million (The Athletic)",
+          "value": 3900000,
+          "source": "fw-2026-07-28"
+        }
+      ]
+    },
+    {
+      "name": "Zoom Diallo",
+      "team": "Kentucky",
+      "low": 3900000,
+      "high": null,
+      "kind": "floor",
+      "reports": [
+        {
+          "text": "at least $3.9 million (The Athletic)",
+          "value": 3900000,
+          "source": "fw-2026-07-28"
+        }
+      ]
+    },
+    {
+      "name": "Sananda Fru",
+      "team": "Marquette",
+      "low": 3900000,
+      "high": null,
+      "kind": "floor",
+      "reports": [
+        {
+          "text": "at least $3.9 million (The Athletic)",
+          "value": 3900000,
+          "source": "fw-2026-07-28"
+        }
+      ]
+    },
+    {
+      "name": "Moustapha Thiam",
+      "team": "Michigan",
+      "low": 3900000,
+      "high": null,
+      "kind": "floor",
+      "reports": [
+        {
+          "text": "at least $3.9 million (The Athletic)",
+          "value": 3900000,
+          "source": "fw-2026-07-28"
+        }
+      ]
+    },
+    {
+      "name": "David Punch",
+      "team": "Texas",
+      "low": 3900000,
+      "high": null,
+      "kind": "floor",
+      "reports": [
+        {
+          "text": "at least $3.9 million (The Athletic)",
+          "value": 3900000,
+          "source": "fw-2026-07-28"
+        }
+      ]
+    }
+  ],
+  "priorSeason": {
+    "about": "On3 NIL Valuations published for the 2025–26 season (most listed under the player's 2025–26 school) for players now on 2026–27 rosters. Shown for context only and NOT used to fit the model: they are a year old, the market rose about 65% since (EvanMiya), and On3's valuation is its own model, not a deal.",
+    "players": [
+      {
+        "name": "PJ Haggerty",
+        "team": "Texas A&M",
+        "then": "Memphis",
+        "value": 2600000,
+        "source": "ct-2026-05-15"
+      },
+      {
+        "name": "Denzel Aberdeen",
+        "team": "Florida",
+        "then": "Kentucky",
+        "value": 2200000,
+        "source": "ct-2026-05-15"
+      },
+      {
+        "name": "Flory Bidunga",
+        "team": "Louisville",
+        "then": "Kansas",
+        "value": 2100000,
+        "source": "ct-2026-05-15"
+      },
+      {
+        "name": "JT Toppin",
+        "team": "Texas Tech",
+        "then": "Texas Tech",
+        "value": 2800000,
+        "source": "ct-2026-05-15"
+      }
+    ]
+  }
+}
