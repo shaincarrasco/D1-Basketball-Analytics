@@ -145,7 +145,19 @@ export async function currentPushSubscription() {
   const reg = await navigator.serviceWorker.getRegistration("/");
   return (await reg?.pushManager.getSubscription()) ?? null;
 }
-export type AlertPrefs = { tipoff: boolean; close: boolean; final: boolean; injury: boolean };
+export type AlertPrefs = { tipoff: boolean; halftime: boolean; close: boolean; overtime: boolean; upsets: boolean; final: boolean; injury: boolean };
+/** Same defaults the server uses for a kind a subscription's prefs don't mention (live/src/alerts.rs PREF_KINDS). */
+export const DEFAULT_ALERT_PREFS: AlertPrefs = { tipoff: true, halftime: false, close: true, overtime: true, upsets: true, final: true, injury: true };
+/** What this device is subscribed with (server copy), filled out with the defaults; null if not subscribed. */
+export async function getAlertPrefs(): Promise<AlertPrefs | null> {
+  const sub = await currentPushSubscription();
+  if (!sub) return null;
+  const { prefs } = await api<{ prefs: Partial<Record<keyof AlertPrefs, unknown>> | null }>("push/prefs", { method: "POST", body: JSON.stringify({ endpoint: sub.endpoint }) });
+  if (!prefs) return null;
+  const out = { ...DEFAULT_ALERT_PREFS };
+  for (const k of Object.keys(out) as (keyof AlertPrefs)[]) if (typeof prefs[k] === "boolean") out[k] = prefs[k] as boolean;
+  return out;
+}
 export async function enableAlerts(prefs: AlertPrefs) {
   if (!pushSupported()) throw new Error("This browser can't receive alerts. On iPhone, add D1 Hoops to your Home Screen first.");
   if ((await Notification.requestPermission()) !== "granted") throw new Error("Notifications are blocked for this site. Allow them in your browser settings, then try again.");
