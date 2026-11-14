@@ -8,6 +8,7 @@ import { ZONES } from "@/lib/shots";
 import { WP_EPS, WP_SIGMA } from "@/lib/win-prob";
 import CalibrationChart from "./calibration-chart";
 import SkillsMethod from "@/components/skills/skills-method";
+import NilMethod from "@/components/nil/nil-method";
 import FormMethodology, { FORM_GLOSSARY, FORM_TOC } from "@/components/form/form-methodology";
 
 export const metadata: Metadata = { title: "Methodology", description: "How the D1 Hoops Power Rating (DHR) is built, how its predictions work, how accurate they have been, and what every metric on the site means." };
@@ -29,6 +30,7 @@ const TOC = [
   { id: "sims", label: "Season simulations" },
   { id: "dpr", label: "Player rating (DPR)" },
   { id: "skills", label: "Skill projections" },
+  { id: "nil", label: "Estimated NIL value" },
   { id: "shot-zones", label: "Shot zones" },
   { id: "injuries", label: "Injuries and availability" },
   ...FORM_TOC,
@@ -406,6 +408,10 @@ minimise  Σ w · (y − fit)²  +  λ · Σ (rating − prior)²        λ = ${
 
           <Section id="skills" title="Skill projections">
             <SkillsMethod />
+          </Section>
+
+          <Section id="nil" title="Estimated NIL value">
+            <NilMethod />
           </Section>
 
           <Section id="shot-zones" title="Shot zones">
