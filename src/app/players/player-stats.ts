@@ -47,26 +47,8 @@ export function derive(p: Player, team: TeamSummary | null): PlayerRow {
   };
 }
 
-/** Sorted-pool percentile: share of the pool this value beats (0–1, 1 = best). */
-export function makePool(values: number[]) {
-  const s = [...values].sort((a, b) => a - b);
-  const lower = (v: number) => { let lo = 0, hi = s.length; while (lo < hi) { const m = (lo + hi) >> 1; if (s[m] < v) lo = m + 1; else hi = m; } return lo; };
-  const upper = (v: number) => { let lo = 0, hi = s.length; while (lo < hi) { const m = (lo + hi) >> 1; if (s[m] <= v) lo = m + 1; else hi = m; } return lo; };
-  return {
-    size: s.length,
-    pct(v: number | null, invert = false): number | null {
-      if (v === null || !s.length) return null;
-      return invert ? (s.length - upper(v)) / s.length : lower(v) / s.length;
-    },
-  };
-}
-
-/** Percentile (0–1) → "87th". Never shows 100th. */
-export const pctLabel = (p: number) => {
-  const n = Math.min(99, Math.max(1, Math.round(p * 100)));
-  const s = ["th", "st", "nd", "rd"], v = n % 100;
-  return n + (s[(v - 20) % 10] || s[v] || s[0]);
-};
+// Percentile helpers live in the sport kit; re-exported so existing imports keep working.
+export { makePool, pctLabel } from "@/sport-kit/stats";
 
 /** DPR ranks only count players with this many on-court possessions. */
 export const DPR_MIN_POSS = 150;

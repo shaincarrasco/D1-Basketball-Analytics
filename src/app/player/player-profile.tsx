@@ -14,7 +14,7 @@ import type { Meta, PlayerBio, PlayerTable, TeamDetail, TeamSummary } from "@/li
 import GameLog from "./game-log";
 import ArticleList from "@/components/article-list";
 import AvailabilityList from "@/components/availability-list";
-import FrameworkRanks from "./framework-ranks";
+import { BasketballFrameworkRanks as FrameworkRanks } from "@/sports/basketball/ui";
 import { derive, MIN_ATT, POS_WORD, recruitText, similarPlayers, type PlayerRow } from "../players/player-stats";
 import { followRowLink, ROW_LINK_CLASS } from "../players/row-link";
 import { DprCard, OnOff, Similar } from "./impact";
