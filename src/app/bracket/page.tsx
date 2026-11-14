@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import PageHeader from "@/components/page-header";
-import { Empty } from "@/components/states";
+import PageHeader from "@sports/ui/page-header";
+import { Empty } from "@sports/ui/states";
 import { getBracket } from "./load";
 import BracketView from "./bracket-view";
 

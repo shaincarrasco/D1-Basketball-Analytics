@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import PageHeader from "@/components/page-header";
-import { fmt, signed } from "@/lib/format";
+import PageHeader from "@sports/ui/page-header";
+import { fmt, signed } from "@sports/ui/format";
 import { getConferences, getMeta, getTeams } from "@/lib/server-data";
 import StandingsTable, { type StandingRow } from "./standings-table";
 

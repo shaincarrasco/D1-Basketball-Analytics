@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import PageHeader from "@/components/page-header";
-import { Empty } from "@/components/states";
+import PageHeader from "@sports/ui/page-header";
+import { Empty } from "@sports/ui/states";
 import { getTeams } from "@/lib/server-data";
 import { HISTORY_FIRST, HISTORY_LAST, seasonLabel } from "@/lib/history";
 import { getSeasonIndex } from "./load";

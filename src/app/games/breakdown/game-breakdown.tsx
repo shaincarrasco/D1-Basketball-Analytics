@@ -4,8 +4,8 @@
 // tale of the tape (collapsed).
 import { useEffect, useMemo, useState } from "react";
 import { gameBuild, modelBefore, reproduces, type DhrInput } from "@/lib/breakdown";
-import { loadJson, useJson } from "@/lib/client-data";
-import { dayLabel } from "@/lib/format";
+import { loadJson, useJson } from "@sports/ui/client-data";
+import { dayLabel } from "@sports/ui/format";
 import { OUT_STATES } from "@/lib/injuries";
 import { useInjuries } from "@/lib/injury-hooks";
 import type { Game, GameDay, InjuryFile, TeamSummary } from "@/lib/types";

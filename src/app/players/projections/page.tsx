@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import PageHeader from "@/components/page-header";
-import { Loading } from "@/components/states";
+import PageHeader from "@sports/ui/page-header";
+import { Loading } from "@sports/ui/states";
 import ProjectionsBoard from "./projections-board";
 
 export const metadata: Metadata = { title: "Player skill projections", description: "Projected shooting, scoring, playmaking, rebounding and defense for every Division I player: this season blended with what players like him usually do, with the sample behind each number." };

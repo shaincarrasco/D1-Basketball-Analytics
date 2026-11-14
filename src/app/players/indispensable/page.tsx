@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import Link from "next/link";
-import PageHeader from "@/components/page-header";
-import { Loading } from "@/components/states";
+import PageHeader from "@sports/ui/page-header";
+import { Loading } from "@sports/ui/states";
 import IndispensableBoard from "@/components/form/indispensable-board";
 
 export const metadata: Metadata = { title: "Most indispensable players", description: "How much each Division I team's DHR rating would drop without a player: minutes played times his DPR impact over a bench replacement." };

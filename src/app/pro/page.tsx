@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import PageHeader from "@/components/page-header";
+import PageHeader from "@sports/ui/page-header";
 import ProClient from "./pro-client";
 
 export const metadata: Metadata = { title: "Pro", description: "D1 Hoops Pro: live tip-off, close-game, overtime, upset and final alerts for the teams you follow." };

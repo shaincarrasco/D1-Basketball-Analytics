@@ -2,10 +2,10 @@
 // Live preview on the right of each menu panel, from the small nav-preview.json built with
 // the site's data. Loaded the first time a panel opens.
 import Link from "next/link";
-import TeamLogo from "@/components/team-logo";
+import TeamLogo from "@sports/ui/team-logo";
 import { Dots } from "@/components/dots";
-import { useJson } from "@/lib/client-data";
-import { signed, timeLabel, pctFmt } from "@/lib/format";
+import { useJson } from "@sports/ui/client-data";
+import { signed, timeLabel, pctFmt } from "@sports/ui/format";
 import type { HubKey } from "@/lib/nav";
 
 type T = { name: string; short: string; slug: string; logo: string | null; color: string | null; rank: number | null };

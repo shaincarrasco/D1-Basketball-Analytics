@@ -2,8 +2,8 @@
 // Play-by-play from ESPN's game summary, newest first, grouped by period.
 // "Scoring plays" narrows to baskets and free throws; scoring plays show the score after them.
 import { useMemo, useState } from "react";
-import TeamLogo from "@/components/team-logo";
-import { teamHex } from "@/lib/color";
+import TeamLogo from "@sports/ui/team-logo";
+import { teamHex } from "@sports/ui/color";
 import type { Play } from "@/lib/live-game";
 import type { GameSide } from "@/lib/types";
 

@@ -2,7 +2,7 @@
 // Projected field: region brackets (desktop), seed list (phones by default) and the bubble.
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import TeamLogo from "@/components/team-logo";
+import TeamLogo from "@sports/ui/team-logo";
 import { Dots } from "@/components/dots";
 import { BUBBLE_GROUPS, pctLabel, type BracketFile, type BracketSlot, type BracketTeam } from "@/lib/bracket";
 

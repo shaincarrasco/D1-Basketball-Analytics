@@ -3,9 +3,9 @@
 // (also used by /transfers/ team view); the default export is the self-loading team-page card.
 import Link from "next/link";
 import { ArrowDownLeft, ArrowUpRight } from "lucide-react";
-import TeamLogo from "@/components/team-logo";
-import { useJson } from "@/lib/client-data";
-import { etToday, fmt } from "@/lib/format";
+import TeamLogo from "@sports/ui/team-logo";
+import { useJson } from "@sports/ui/client-data";
+import { etToday, fmt } from "@sports/ui/format";
 import { IMPACT_SHORT, STATUS_LABEL, signedImpact, teamMoves, windowPhase, windowText, type PortalEntry, type PortalFile, type TeamMoves } from "@/lib/portal";
 
 type Logos = Record<string, string | null>;

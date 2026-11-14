@@ -5,6 +5,9 @@
 // Projected net per 100 possessions vs an average D-I lineup, before opponent:
 //   base   = sum of the five players' DPR offense and DPR defense (DPR is additive by design:
 //            it is solved as "points each player adds on top of the other nine on the floor").
+//   scale  = reality check: the share of a summed DPR that shows up in real, opponent-adjusted
+//            team margins (fitted on every D-I team in scripts/build-lineup-lab.mjs, ~0.4 early on).
+//            Without it five top players add up to +60, far beyond any real team.
 //   fit    = small rule-of-thumb adjustments for things a sum of individuals misses:
 //            spacing, ball handling, shot creation, rim protection, defensive rebounding.
 //            Each is zero for a normal lineup and only moves the number at the extremes.
@@ -58,69 +61,89 @@ export function fitAdjustments(players) {
   const ns = t.shooters.length, nh = t.handlers.length;
   out.push({
     key: "spacing", label: "Spacing", side: "off", value: R.spacing[ns],
+    short: ns ? `${plural(ns, "shooter")}: ${list(t.shooters.map(lastName))}` : "No 3-point shooters",
     detail: `${plural(ns, "shooter")} (projected ${R.shooter.tp}%+ from three on ${R.shooter.tpa40}+ attempts per 40)${ns ? `: ${list(t.shooters.map(lastName))}` : ""}. Two is normal; with fewer, defenses can pack the paint.`,
   });
   out.push({
     key: "handling", label: "Ball handling", side: "off", value: R.handling[Math.min(2, nh)],
+    short: nh ? `${plural(nh, "handler")}: ${list(t.handlers.map(lastName))}` : "No one sets up teammates",
     detail: nh ? `${plural(nh, "ball handler")} (projected assist rate ${R.handler.ast}%+): ${list(t.handlers.map(lastName))}.` : `No one is projected to assist on ${R.handler.ast}%+ of teammate baskets.`,
   });
   const u = t.usg;
   const usgAdj = u < R.usage.low ? -R.usage.lowPer * (R.usage.low - u) : u > R.usage.high ? -R.usage.highPer * (u - R.usage.high) : 0;
   out.push({
     key: "usage", label: "Shot creation", side: "off", value: r1(usgAdj),
+    short: u < R.usage.low ? `Usage adds up to only ${Math.round(u)}%` : u > R.usage.high ? `Usage adds up to ${Math.round(u)}%: too many scorers` : `Usage adds up to ${Math.round(u)}%, balanced`,
     detail: `Projected usage adds up to ${Math.round(u)}% (a lineup has to use 100%). ${u < R.usage.low ? "Low-usage players would have to take shots they usually pass up." : u > R.usage.high ? "Several players used to having the ball would have to share it." : `Between ${R.usage.low}% and ${R.usage.high}% counts as balanced.`}`,
   });
   const b = t.maxBlk;
   const rimAdj = b >= R.rim.elite ? R.rim.eliteBonus : b >= R.rim.good ? 0 : b >= R.rim.ok ? R.rim.thin : R.rim.none;
   out.push({
     key: "rim", label: "Rim protection", side: "def", value: rimAdj,
+    short: t.blocker && b > 0 ? `${lastName(t.blocker)} blocks ${b.toFixed(1)}% of twos${b >= R.rim.elite ? " (elite)" : b < R.rim.ok ? " (not a rim protector)" : ""}` : "No shot blocker",
     detail: `Best shot blocker: ${t.blocker ? `${lastName(t.blocker)}, projected to block ${b.toFixed(1)}% of opponent twos` : "none"}. ${R.rim.good}%+ is a real rim protector${b >= R.rim.elite ? `; ${R.rim.elite}%+ is elite` : ""}.`,
   });
   const d = t.drb;
   const boardAdj = Math.max(R.boards.min, Math.min(R.boards.max, d < R.boards.low ? -R.boards.lowPer * (R.boards.low - d) : d > R.boards.high ? R.boards.highPer * (d - R.boards.high) : 0));
   out.push({
-    key: "boards", label: "Size and rebounding", side: "def", value: r1(boardAdj),
+    key: "boards", label: "Rebounding", side: "def", value: r1(boardAdj),
+    short: `Defensive rebounding adds up to ${Math.round(d)}%${d < R.boards.low ? ", thin" : d > R.boards.high ? ", big" : ""}`,
     detail: `Projected defensive rebound rates add up to ${Math.round(d)}% (typical lineup: ${R.boards.low}–${R.boards.high}%). Rebounders overlap, so extra size above that helps only a little.`,
   });
   return out.map(a => ({ ...a, value: a.value === 0 ? 0 : a.value })); // no "-0"
 }
 
-/** Plain-words balance warnings (any size >= 1; most need all five). */
+/** Plain-words balance warnings (any size >= 1; most need all five). title is the chip, text one line. */
 export function warnings(players) {
   const R = RULES, t = traits(players), w = [];
   const full = players.length === 5;
-  if (full && t.handlers.length === 0) w.push({ key: "handler", level: "high", text: "No ball handler. Nobody here is projected to set up teammates (assist rate 18%+), so expect more turnovers and late-clock shots." });
-  if (full && t.shooters.length <= 1) w.push({ key: "spacing", level: t.shooters.length ? "mid" : "high", text: `Cramped floor. ${t.shooters.length ? "Only one player is" : "No one is"} a real 3-point threat (projected ${R.shooter.tp}%+ on ${R.shooter.tpa40}+ attempts per 40), so defenses can sag into the paint.` });
-  if (t.bigs.length >= 3) w.push({ key: "bigs", level: t.bigs.length >= 4 ? "high" : "mid", text: `${t.bigs.length === 5 ? "Five" : t.bigs.length === 4 ? "Four" : "Three"} bigs (centers or 6′9″+): ${list(t.bigs.map(lastName))}. Hard to space the floor and to guard quick perimeter players.` });
-  if (full && t.guards === 0) w.push({ key: "guards", level: "mid", text: "No guards listed. Someone has to bring the ball up against pressure." });
-  if (full && t.bigs.length === 0 && t.drb < R.boards.low) w.push({ key: "small", level: "mid", text: `Small lineup with no big: projected defensive rebounding adds up to ${Math.round(t.drb)}%, below a typical unit.` });
-  else if (full && t.drb < R.boards.low) w.push({ key: "boards", level: "mid", text: `Thin on the glass: projected defensive rebounding adds up to ${Math.round(t.drb)}%, below a typical unit (${R.boards.low}%+).` });
-  if (full && t.maxBlk < R.rim.ok) w.push({ key: "rim", level: "mid", text: "No rim protector. Nobody here blocks 2%+ of opponent twos." });
-  if (full && t.usg > R.usage.high) w.push({ key: "usage-high", level: "low", text: `One ball, many scorers: projected usage adds up to ${Math.round(t.usg)}%. Someone gives up shots.` });
-  if (full && t.usg < R.usage.low) w.push({ key: "usage-low", level: "mid", text: `Who takes the shots? Projected usage adds up to only ${Math.round(t.usg)}%.` });
+  const add = (key, level, title, text) => w.push({ key, level, title, text });
+  if (full && t.handlers.length === 0) add("handler", "high", "No ball handler", `Nobody has a projected assist rate of ${R.handler.ast}%+. Expect turnovers and late-clock shots.`);
+  if (full && t.shooters.length <= 1) add("spacing", t.shooters.length ? "mid" : "high", t.shooters.length ? "One shooter" : "No shooters", `${t.shooters.length ? "Only one player is" : "No one is"} a real 3-point threat, so defenses can pack the paint.`);
+  if (t.bigs.length >= 3) add("bigs", t.bigs.length >= 4 ? "high" : "mid", `${t.bigs.length === 5 ? "Five" : t.bigs.length === 4 ? "Four" : "Three"} bigs`, `${list(t.bigs.map(lastName))}: hard to space the floor or guard quick wings.`);
+  if (full && t.guards === 0) add("guards", "mid", "No guards", "Someone has to bring the ball up against pressure.");
+  if (full && t.bigs.length === 0 && t.drb < R.boards.low) add("small", "mid", "Small lineup", `No big, and defensive rebounding adds up to only ${Math.round(t.drb)}%.`);
+  else if (full && t.drb < R.boards.low) add("boards", "mid", "Thin on the glass", `Defensive rebounding adds up to ${Math.round(t.drb)}% (typical ${R.boards.low}%+).`);
+  if (full && t.maxBlk < R.rim.ok) add("rim", "mid", "No rim protector", `Nobody blocks ${R.rim.ok}%+ of opponent twos.`);
+  if (full && t.usg > R.usage.high) add("usage-high", "low", "One ball, many scorers", `Usage adds up to ${Math.round(t.usg)}%. Someone gives up shots.`);
+  if (full && t.usg < R.usage.low) add("usage-low", "mid", "Who takes the shots?", `Usage adds up to only ${Math.round(t.usg)}%.`);
   const thin = players.filter(p => (p.op ?? 0) < R.smallSample);
-  if (thin.length) w.push({ key: "sample", level: "info", text: `${list(thin.map(lastName))} ${thin.length === 1 ? "has" : "have"} fewer than ${R.smallSample} play-by-play possessions, so ${thin.length === 1 ? "his rating is" : "their ratings are"} mostly the box-score starting point.` });
-  if (t.teams > 1) w.push({ key: "teams", level: "info", text: `Players from ${t.teams} teams have never shared a floor. Only the fit adjustments model how they'd mesh.` });
+  if (thin.length) add("sample", "info", "Small sample", `${list(thin.map(lastName))} ${thin.length === 1 ? "has" : "have"} under ${R.smallSample} play-by-play possessions, so ${thin.length === 1 ? "his rating leans" : "their ratings lean"} on the box score.`);
+  if (t.teams > 1) add("teams", "info", "Never played together", `Players from ${t.teams} teams. Only the fit adjustments model how they'd mesh.`);
   return w;
 }
 
-/** Full projection for five players. eff = D-I average points per 100 possessions. */
-export function projectLineup(players, eff) {
+/** Full projection for five players. eff = D-I average points per 100 possessions; scale = the
+ *  reality check on the DPR sum (1 = raw sum, which the build uses to check the parts). */
+export function projectLineup(players, eff, scale = 1) {
   const sum = k => players.reduce((s, p) => s + (p[k] ?? 0), 0);
   const base = { off: sum("o"), def: sum("d") };
   const adjustments = fitAdjustments(players);
   const fitOff = adjustments.filter(a => a.side === "off").reduce((s, a) => s + a.value, 0);
   const fitDef = adjustments.filter(a => a.side === "def").reduce((s, a) => s + a.value, 0);
-  const off = base.off + fitOff, def = base.def + fitDef;
+  const off = scale * base.off + fitOff, def = scale * base.def + fitDef;
   // Rough 1-SE band: players' DPR errors combined as if independent (teammates' errors are partly
   // offsetting, fit adjustments add their own uncertainty, so read it as a rough size, not a CI).
-  const se = Math.sqrt(players.reduce((s, p) => s + (p.se ?? 3) ** 2, 0));
+  const se = scale * Math.sqrt(players.reduce((s, p) => s + (p.se ?? 3) ** 2, 0));
   return {
     base, adjustments, fit: { off: fitOff, def: fitDef, total: fitOff + fitDef },
+    scale, raw: base.off + base.def + fitOff + fitDef,
     off, def, net: off + def, se,
     ptsFor: eff + off, ptsAgainst: eff - def,
     warnings: warnings(players),
   };
+}
+
+/** Where a projected net sits among every D-I team's projected starting five (sorted ascending). */
+export function verdict(net, reference) {
+  const n = reference.length;
+  if (!n) return { label: "Projected", tone: "mid", pct: null, beyond: false };
+  let below = 0;
+  while (below < n && reference[below] < net) below++;
+  const pct = below / n;
+  const beyond = net > reference[n - 1];
+  const label = pct >= 0.95 ? "Elite" : pct >= 0.8 ? "Very good" : pct >= 0.6 ? "Good" : pct >= 0.4 ? "Average" : pct >= 0.2 ? "Below average" : "Weak";
+  return { label, tone: pct >= 0.6 ? "good" : pct >= 0.4 ? "mid" : "bad", pct, beyond };
 }
 
 /** Points-per-possession noise for an observed unit: SD of its net per 100 after `poss` possessions each way. */

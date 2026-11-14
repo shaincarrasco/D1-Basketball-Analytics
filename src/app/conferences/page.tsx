@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import PageHeader from "@/components/page-header";
+import PageHeader from "@sports/ui/page-header";
 import { getConferences, getMeta, getTeams } from "@/lib/server-data";
-import { signed } from "@/lib/format";
+import { signed } from "@sports/ui/format";
 import ConferencesTable, { type ConfRow } from "./conferences-table";
 
 export const metadata: Metadata = { title: "Conferences", description: "Every Division I conference ranked by average adjusted efficiency margin, with depth charts and non-conference records." };

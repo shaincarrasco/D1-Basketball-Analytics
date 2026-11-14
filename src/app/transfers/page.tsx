@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ExternalLink } from "lucide-react";
-import PageHeader from "@/components/page-header";
+import PageHeader from "@sports/ui/page-header";
 import { IMPACT_HELP, dateLong, windowText } from "@/lib/portal";
 import { getPortal } from "./load";
 import Board from "./board";

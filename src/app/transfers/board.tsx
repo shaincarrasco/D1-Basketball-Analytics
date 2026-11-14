@@ -4,19 +4,19 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { Search } from "lucide-react";
-import DataTable, { type Column } from "@/components/data-table";
-import TeamLogo from "@/components/team-logo";
+import DataTable, { type Column } from "@sports/ui/data-table";
+import TeamLogo from "@sports/ui/team-logo";
 import { TransferLedger } from "@/components/team-transfers";
-import { useJson } from "@/lib/client-data";
-import { fmt, signed } from "@/lib/format";
-import { rankPool, withDefaults } from "@/sport-kit";
+import { useJson } from "@sports/ui/client-data";
+import { fmt, signed } from "@sports/ui/format";
+import { rankPool, withDefaults } from "@sports/kit";
 import { useBasketball } from "@/sports/basketball/data";
 import { basketball, FRAMEWORKS } from "@/sports/basketball/pack";
 import { ELIG_LABEL, IMPACT_SHORT, STATUS_LABEL, allTeamMoves, dateShort, signedImpact, teamMoves, type PortalEntry, type PortalPlace, type TeamMoves } from "@/lib/portal";
 import type { TeamSummary } from "@/lib/types";
 import { grade } from "../player/scouting";
 import { POS_WORD, starGlyphs, type Pos } from "../players/player-stats";
-import { followRowLink, ROW_LINK_CLASS } from "../players/row-link";
+import { followRowLink, ROW_LINK_CLASS } from "@sports/ui/row-link";
 
 type View = "players" | "teams";
 type St = "active" | "available" | "committed" | "withdrawn" | "all";

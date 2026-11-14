@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useId, useState, type ReactNode } from "react";
 import { ChevronDown } from "lucide-react";
 import { displayMargin, injuryShift, pubOne, type Build } from "@/lib/breakdown";
-import { fmt, signed } from "@/lib/format";
+import { fmt, signed } from "@sports/ui/format";
 
 /** Collapsible section: content mounts only when opened (opening counts as asking for projections). */
 export function Disclosure({ title, sub, children, defaultOpen = false, testId }: { title: string; sub?: string; children: ReactNode; defaultOpen?: boolean; testId?: string }) {

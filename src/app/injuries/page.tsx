@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ExternalLink } from "lucide-react";
-import PageHeader from "@/components/page-header";
-import TeamLogo from "@/components/team-logo";
+import PageHeader from "@sports/ui/page-header";
+import TeamLogo from "@sports/ui/team-logo";
 import InjuryPill, { ConfidenceTag } from "@/components/injury-pill";
 import { getInjuries, getTeams } from "@/lib/server-data";
 import { OUT_STATES, SOURCE_LABEL, etaText, lossText, playerHref } from "@/lib/injuries";
-import { teamHex } from "@/lib/color";
+import { teamHex } from "@sports/ui/color";
 import type { InjuryRow } from "@/lib/types";
 import AllAbsences from "./all-absences";
 import Freshness from "./freshness";

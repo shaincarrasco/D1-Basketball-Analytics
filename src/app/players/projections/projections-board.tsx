@@ -4,19 +4,19 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { Search } from "lucide-react";
-import DataTable, { type Column } from "@/components/data-table";
-import TeamLogo from "@/components/team-logo";
-import { ErrorState, Loading } from "@/components/states";
-import { PoolControls } from "@/sport-kit/ui/controls";
-import { shortName } from "@/sport-kit/ui/charts";
-import { heatPct } from "@/lib/format";
-import { teamHex } from "@/lib/color";
-import { inPool, readPool, withDefaults, writePool, type Pool } from "@/sport-kit";
+import DataTable, { type Column } from "@sports/ui/data-table";
+import TeamLogo from "@sports/ui/team-logo";
+import { ErrorState, Loading } from "@sports/ui/states";
+import { PoolControls } from "@sports/kit/ui/controls";
+import { shortName } from "@sports/kit/ui/charts";
+import { heatPct } from "@sports/ui/format";
+import { teamHex } from "@sports/ui/color";
+import { inPool, readPool, withDefaults, writePool, type Pool } from "@sports/kit";
 import { useBasketball } from "@/sports/basketball/data";
 import { basketball } from "@/sports/basketball/pack";
 import { fmtSkill, gradeTone, ownShare, pct99, SKILL_DESC, SKILL_KEYS, SKILL_NAME, skillsOf, useSkills, type SkillCell, type SkillKey, type SkillStatMeta } from "@/lib/skills";
 import type { PlayerRow } from "@/app/players/player-stats";
-import { followRowLink, ROW_LINK_CLASS } from "@/app/players/row-link";
+import { followRowLink, ROW_LINK_CLASS } from "@sports/ui/row-link";
 
 type Ranked = { r: PlayerRow; c: SkillCell; own: number };
 const POOL0: Pool = withDefaults(basketball, { min: "10", g: "1" });

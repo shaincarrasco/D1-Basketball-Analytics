@@ -1,7 +1,7 @@
 // DHR over the season: one point per ratings refit (preseason first). Server-rendered.
 // The line is an SVG stretched to the box; labels and points are HTML so they stay crisp
 // and readable at any width.
-import { dayLabel, signed } from "@/lib/format";
+import { dayLabel, signed } from "@sports/ui/format";
 import { addDays, type HistoryPoint } from "@/lib/form";
 
 const DAY = 864e5;

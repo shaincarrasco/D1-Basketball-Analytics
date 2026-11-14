@@ -4,7 +4,7 @@
 // Words: "Projected" (Proj) = the model's estimate of the skill; "This season" = his real box-score
 // number so far; "Starting point" = the prior (what players like him usually do). Same vocabulary as
 // the methodology glossary ("Projected, Proj, pregame").
-import { useJson } from "@/lib/client-data";
+import { useJson } from "@sports/ui/client-data";
 
 export const SKILL_KEYS = ["ft", "tp", "two", "rim", "mid", "pts", "usg", "ast", "tov", "orb", "drb", "stl", "blk"] as const;
 export type SkillKey = (typeof SKILL_KEYS)[number];

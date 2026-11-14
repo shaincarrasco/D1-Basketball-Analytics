@@ -2,9 +2,9 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import type { TeamHealth } from "@/lib/types";
-import TeamLogo from "@/components/team-logo";
+import TeamLogo from "@sports/ui/team-logo";
 import { lossText, pct } from "@/lib/injuries";
-import { teamHex } from "@/lib/color";
+import { teamHex } from "@sports/ui/color";
 import type { TeamMetaMap } from "./parts";
 
 export default function TeamHealthBars({ teams, meta }: { teams: TeamHealth[]; meta: TeamMetaMap }) {

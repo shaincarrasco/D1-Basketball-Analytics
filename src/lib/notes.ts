@@ -1,7 +1,7 @@
 // "From the box scores": short, plain facts pulled straight from the data at build time.
 // Every note is a template over real fields; when the data doesn't support a note it is
 // skipped, never padded. Keep the tone of a box-score footnote: a number, then what it means.
-import { fmt, ordinal } from "./format";
+import { fmt, ordinal } from "@sports/ui/format";
 import type { Meta, Player, TeamSummary, ProfileKey } from "./types";
 
 export type Note = { big: string; text: string; href?: string };

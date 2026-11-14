@@ -45,7 +45,7 @@ Every 10 minutes the server fetches the injury wire and sends a web-push alert (
 
 | Variable | Default |
 | --- | --- |
-| `INJURY_FEED_URL` | `https://shaincarrasco.github.io/D1-Basketball-Analytics/data/app/injury-wire.json` |
+| `INJURY_FEED_URL` | `https://shaincarrasco.github.io/Sports-Analytics/d1-hoops/data/app/injury-wire.json` |
 
 ## Connect the site
 Set a repository **variable** `LIVE_URL` (Settings → Secrets and variables → Actions → Variables) to the relay's public URL, e.g. `https://d1hoops-live.fly.dev`. The next deploy bakes it in as `NEXT_PUBLIC_LIVE_URL`; the site then streams today's games from the relay and falls back to polling ESPN directly if the relay is unreachable.

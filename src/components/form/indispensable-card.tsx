@@ -1,6 +1,6 @@
 // Team page: the players this team can least afford to lose (same formula as the injury tracker).
 import Link from "next/link";
-import { fmt } from "@/lib/format";
+import { fmt } from "@sports/ui/format";
 import { FORM_WORDS, INDISPENSABLE_MIN_GAMES, INDISPENSABLE_MIN_MPG, type Indispensable } from "@/lib/form";
 
 export default function IndispensableCard({ rows, max = 3 }: { rows: Indispensable[]; max?: number }) {

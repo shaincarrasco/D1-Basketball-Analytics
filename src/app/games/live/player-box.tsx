@@ -2,7 +2,7 @@
 // Player box score from ESPN's game summary: one team at a time (toggle), starters then bench,
 // team totals in the footer. Player names stay pinned while the numbers scroll sideways on phones.
 import { useState } from "react";
-import { pctFmt } from "@/lib/format";
+import { pctFmt } from "@sports/ui/format";
 import type { PlayerLine, StatLine, TeamBox } from "@/lib/live-game";
 import type { GameSide } from "@/lib/types";
 

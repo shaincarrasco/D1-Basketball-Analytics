@@ -1,10 +1,10 @@
 // DPR headline (hero), raw on/off split and similar players for the player profile.
 import Link from "next/link";
 import { Dots } from "@/components/dots";
-import { fmt, signed } from "@/lib/format";
+import { fmt, signed } from "@sports/ui/format";
 import type { TeamDetail } from "@/lib/types";
 import { DPR_MIN_POSS, POS_WORD, SIM_MIN_MPG, type PlayerRow } from "../players/player-stats";
-import { followRowLink, ROW_LINK_CLASS } from "../players/row-link";
+import { followRowLink, ROW_LINK_CLASS } from "@sports/ui/row-link";
 
 const DPR_HINT = "DPR: points per 100 possessions better than an average D-I player, from play-by-play lineups (regularised adjusted plus-minus, shrunk toward a box-score prior). ± is one standard error.";
 

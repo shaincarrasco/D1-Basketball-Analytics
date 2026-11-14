@@ -7,7 +7,7 @@ import {
 } from "@/lib/form";
 import { getAllForms, getForm } from "@/lib/form-server";
 import { getTeams } from "@/lib/server-data";
-import { signed } from "@/lib/format";
+import { signed } from "@sports/ui/format";
 
 export const FORM_TOC = [{ id: "form", label: "Form, movers, indispensable" }];
 

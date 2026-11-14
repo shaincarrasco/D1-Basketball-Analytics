@@ -4,15 +4,15 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { Search } from "lucide-react";
-import DataTable, { type Column } from "@/components/data-table";
-import TeamLogo from "@/components/team-logo";
-import { ErrorState, Loading } from "@/components/states";
-import { useJson } from "@/lib/client-data";
-import { DHR_RANK_TITLE, fmt, signed } from "@/lib/format";
+import DataTable, { type Column } from "@sports/ui/data-table";
+import TeamLogo from "@sports/ui/team-logo";
+import { ErrorState, Loading } from "@sports/ui/states";
+import { useJson } from "@sports/ui/client-data";
+import { DHR_RANK_TITLE, fmt, signed } from "@sports/ui/format";
 import { DPR_SHRINK_POSS, FORM_WORDS, INDISPENSABLE_MIN_GAMES, INDISPENSABLE_MIN_MPG, REPLACEMENT_DPR, indispensability, type Indispensable } from "@/lib/form";
 import { playerRows } from "@/lib/players";
 import type { PlayerTable, TeamSummary } from "@/lib/types";
-import { followRowLink, ROW_LINK_CLASS } from "@/app/players/row-link";
+import { followRowLink, ROW_LINK_CLASS } from "@sports/ui/row-link";
 
 type Row = Indispensable & { team: TeamSummary | null };
 

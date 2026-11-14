@@ -2,7 +2,7 @@
 // useBasketball() (public/data/players.json); these never ship as real players.
 import { derive, type PlayerRow } from "@/app/players/player-stats";
 import type { Player, TeamSummary } from "@/lib/types";
-import { fakeName, fakeTeams, seeded } from "@/sport-kit/fixtures";
+import { fakeName, fakeTeams, seeded } from "@sports/kit/fixtures";
 
 export function fixtures(n = 160): PlayerRow[] {
   const rng = seeded(41);

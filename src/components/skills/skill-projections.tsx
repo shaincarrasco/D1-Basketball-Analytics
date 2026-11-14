@@ -5,7 +5,7 @@
 import Link from "next/link";
 import { useMemo } from "react";
 import { ChevronDown } from "lucide-react";
-import { ordinal } from "@/lib/format";
+import { ordinal } from "@sports/ui/format";
 import {
   basisLine, fmtSkill, gradeTone, lookalike, oppText, pct99, profileWord, sampleText, SKILL_DESC, SKILL_KEYS, SKILL_NAME, useTeamSkills,
   type SkillDetailCell, type SkillKey, type SkillPlayerDetail, type SkillStatMeta,

@@ -3,7 +3,7 @@
 // read client-side from bracket.json. Links to the bracket. Renders nothing until the
 // projection loads, or if it isn't published.
 import Link from "next/link";
-import { useJson } from "@/lib/client-data";
+import { useJson } from "@sports/ui/client-data";
 import { bracketStatus, pctLabel, type BracketFile } from "@/lib/bracket";
 
 export function useBracket() {

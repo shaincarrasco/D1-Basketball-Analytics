@@ -2,7 +2,7 @@
 // Scrollable day pills centred on the selected day, with prev/next, Today and a native date picker.
 import { useEffect, useLayoutEffect, useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { dayLabel } from "@/lib/format";
+import { dayLabel } from "@sports/ui/format";
 import type { GameIndex } from "@/lib/types";
 
 /** `home` is where Today jumps: today if it has games, else the nearest game day. */

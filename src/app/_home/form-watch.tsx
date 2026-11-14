@@ -1,9 +1,9 @@
 // Home: hottest / coldest teams over 30 days and the biggest DHR movers this week.
 // Every list only shows teams that clear the thresholds in src/lib/form.ts.
 import Link from "next/link";
-import TeamLogo from "@/components/team-logo";
+import TeamLogo from "@sports/ui/team-logo";
 import { Tag } from "@/components/form/form-badges";
-import { dayLabel, DHR_RANK_TITLE, signed } from "@/lib/format";
+import { dayLabel, DHR_RANK_TITLE, signed } from "@sports/ui/format";
 import { FORM_MIN_GAMES, FORM_MIN_GAMES_BEFORE, FORM_WINDOW_DAYS, MOVER_DAYS, firstFormDay, type Mover } from "@/lib/form";
 import { getAllForms, getForm, getMovers } from "@/lib/form-server";
 import { getTeams } from "@/lib/server-data";

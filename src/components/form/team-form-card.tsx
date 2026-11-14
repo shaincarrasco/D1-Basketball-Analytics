@@ -1,6 +1,6 @@
 // Team page: rating timeline, recent form, consistency and the 7-day move, in plain words.
 import Link from "next/link";
-import { signed } from "@/lib/format";
+import { signed } from "@sports/ui/format";
 import { FORM_WINDOW_DAYS, MOVER_DAYS, type HistoryPoint, type Mover, type TeamForm } from "@/lib/form";
 import { Tag } from "./form-badges";
 import RatingTimeline from "./rating-timeline";

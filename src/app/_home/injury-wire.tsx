@@ -3,9 +3,9 @@
 // Followed teams come first, then Top-50 teams and the changes that matter most (new / worse / back).
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import TeamLogo from "@/components/team-logo";
+import TeamLogo from "@sports/ui/team-logo";
 import InjuryPill from "@/components/injury-pill";
-import { useJson } from "@/lib/client-data";
+import { useJson } from "@sports/ui/client-data";
 import { useFavorites } from "@/lib/favorites";
 import { EVENT_LABEL, timeAgo } from "@/lib/injuries";
 import { useInjuries } from "@/lib/injury-hooks";

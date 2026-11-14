@@ -105,7 +105,7 @@ async fn main() {
     let dir: Value = serde_json::from_str(&fs::read_to_string(root.join("public/data/team-directory.json")).expect("team-directory.json")).expect("json");
     let team_ids: Vec<String> = dir["teams"].as_array().into_iter().flatten().filter_map(|t| s(&t["id"])).collect();
     let client = reqwest::Client::builder()
-        .user_agent("d1hoops-feeds/0.1 (+https://github.com/shaincarrasco/D1-Basketball-Analytics)")
+        .user_agent("d1hoops-feeds/0.1 (+https://github.com/shaincarrasco/Sports-Analytics)")
         .timeout(Duration::from_secs(15)).gzip(true).build().expect("client");
 
     let mut articles: HashMap<String, Article> = HashMap::new();

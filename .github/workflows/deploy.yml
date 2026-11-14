@@ -99,12 +99,14 @@ jobs:
         run: node scripts/fetch-portal.mjs
         env:
           CBBD_API_KEY: ${{ secrets.CBBD_API_KEY }}
+      - name: Refresh tennis data (Baseline site; cached, only new matches are fetched)
+        run: node apps/tennis/scripts/fetch-tennis.mjs || echo "::warning::Tennis refresh failed; the site keeps the last snapshot."
       - name: Save refreshed current-season data snapshots
         if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' || github.event_name == 'push'
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add package-lock.json public/data/ .cache/
+          git add package-lock.json public/data/ .cache/ apps/tennis/public/data/app/ apps/tennis/data-cache/
           if ! git diff --cached --quiet; then
             git commit -m 'Update 2026-27 basketball data snapshots'
             # main may have moved during the run (a merge or an overlapping refresh): replay on top, ours wins.
@@ -112,14 +114,31 @@ jobs:
           fi
       - name: Test the injury engine
         run: node --test scripts/lib/injuries.test.mjs
-      - name: Typecheck
-        run: npm run typecheck
+      - name: Typecheck and test (all sites and shared packages)
+        run: |
+          npm run typecheck
+          npm run typecheck -w @sites/tennis
+          npm test
       - name: Build app data layer and static site
         run: npm run build
         env:
-          NEXT_PUBLIC_BASE_PATH: /D1-Basketball-Analytics
+          # Paths follow the repo name, so renaming the repo can't break the sites.
+          NEXT_PUBLIC_BASE_PATH: /${{ github.event.repository.name }}/d1-hoops
+          SITE_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/d1-hoops
           # Optional: URL of the live relay (live/), set as a repository variable LIVE_URL.
           NEXT_PUBLIC_LIVE_URL: ${{ vars.LIVE_URL }}
+      - name: Build the tennis site
+        run: npm run build -w @sites/tennis
+        env:
+          SITE_BASE_PATH: /${{ github.event.repository.name }}/tennis
+      - name: Assemble the Pages site (hub at /, D1 Hoops at /d1-hoops/, tennis at /tennis/)
+        run: |
+          rm -rf pages && mkdir -p pages
+          cp -r out pages/d1-hoops
+          cp -r apps/tennis/out pages/tennis
+          cp site-hub/index.html pages/index.html
+          cp site-hub/404.html pages/404.html
+          touch pages/.nojekyll
       - name: Save the injury ledger (status changes and returns since the last check)
         if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' || github.event_name == 'push'
         run: |
@@ -137,7 +156,7 @@ jobs:
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./out
+          path: ./pages
 
   deploy:
     environment:

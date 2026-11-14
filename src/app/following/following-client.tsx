@@ -2,13 +2,13 @@
 import Link from "next/link";
 import { useMemo } from "react";
 import { Star } from "lucide-react";
-import DataTable, { type Column } from "@/components/data-table";
+import DataTable, { type Column } from "@sports/ui/data-table";
 import FavoriteButton from "@/components/favorite-button";
-import TeamLogo from "@/components/team-logo";
-import { ErrorState, Loading } from "@/components/states";
-import { useJson } from "@/lib/client-data";
+import TeamLogo from "@sports/ui/team-logo";
+import { ErrorState, Loading } from "@sports/ui/states";
+import { useJson } from "@sports/ui/client-data";
 import { useFavorites } from "@/lib/favorites";
-import { fmt, signed } from "@/lib/format";
+import { fmt, signed } from "@sports/ui/format";
 import { playerRows } from "@/lib/players";
 import type { Player, PlayerTable, TeamSummary } from "@/lib/types";
 import { TeamCard } from "./team-cards";

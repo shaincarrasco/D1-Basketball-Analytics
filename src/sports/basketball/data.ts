@@ -2,11 +2,11 @@
 // Basketball data adapter: every D-I player joined to his team, with derived rates,
 // in the SportData shape the sport kit's pages expect.
 import { useMemo } from "react";
-import { useJson } from "@/lib/client-data";
+import { useJson } from "@sports/ui/client-data";
 import { playerRows } from "@/lib/players";
 import type { PlayerTable, TeamSummary } from "@/lib/types";
 import { derive, type PlayerRow } from "@/app/players/player-stats";
-import type { SportData } from "@/sport-kit";
+import type { SportData } from "@sports/kit";
 
 export function useBasketball(): SportData<PlayerRow> {
   const players = useJson<PlayerTable>("players.json");

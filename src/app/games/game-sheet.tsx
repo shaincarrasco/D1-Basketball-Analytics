@@ -4,9 +4,9 @@
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { X } from "lucide-react";
-import TeamLogo from "@/components/team-logo";
+import TeamLogo from "@sports/ui/team-logo";
 import WinProb from "@/components/win-prob";
-import { dayLabel, fmt, pctFmt, timeLabel, DHR_RANK_TITLE } from "@/lib/format";
+import { dayLabel, fmt, pctFmt, timeLabel, DHR_RANK_TITLE } from "@sports/ui/format";
 import { withLive, type LiveGame } from "@/lib/live";
 import { LIVE_GAME_POLL_MS, progressOf, summaryAsLive, useLiveGame, type LiveGameMode, type LiveGameState, type LiveSummary } from "@/lib/live-game";
 import PlayerBox from "./live/player-box";

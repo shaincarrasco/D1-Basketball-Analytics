@@ -2,9 +2,9 @@
 // One scoreboard card. The whole card opens the detail sheet (a full-cover button);
 // team names sit above it as real links to the team pages.
 import Link from "next/link";
-import TeamLogo from "@/components/team-logo";
+import TeamLogo from "@sports/ui/team-logo";
 import WinProb from "@/components/win-prob";
-import { DHR_RANK_TITLE, fmt, pctFmt } from "@/lib/format";
+import { DHR_RANK_TITLE, fmt, pctFmt } from "@sports/ui/format";
 import type { LiveGame } from "@/lib/live";
 import type { Game, GameSide } from "@/lib/types";
 import TvBadges from "@/components/tv-badges";

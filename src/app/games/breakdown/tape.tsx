@@ -3,7 +3,7 @@
 // defense with an edge mark where the gap is real. Season stats, not opponent-adjusted (except AdjO/AdjD/tempo).
 import { Fragment } from "react";
 import { TAPE_FACTORS } from "@/lib/breakdown";
-import { fmt, heat, ordinal, signed } from "@/lib/format";
+import { fmt, heat, ordinal, signed } from "@sports/ui/format";
 import type { TeamSummary } from "@/lib/types";
 
 type Cell = { v: string; r: number | null };

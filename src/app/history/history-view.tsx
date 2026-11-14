@@ -4,11 +4,11 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { Search } from "lucide-react";
-import DataTable, { type Column } from "@/components/data-table";
-import TeamLogo from "@/components/team-logo";
+import DataTable, { type Column } from "@sports/ui/data-table";
+import TeamLogo from "@sports/ui/team-logo";
 import { Dots } from "@/components/dots";
-import { Empty, ErrorState, Loading } from "@/components/states";
-import { fmt, heat, signed } from "@/lib/format";
+import { Empty, ErrorState, Loading } from "@sports/ui/states";
+import { fmt, heat, signed } from "@sports/ui/format";
 import { finishLabel, historyUrl, movers, postDepth, postLabel, type HistoryConference, type HistorySeason, type HistoryTeam, type Mover, type SeasonInfo } from "@/lib/history";
 
 /** CBBD team id → [current slug, logo]. */

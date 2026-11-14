@@ -2,7 +2,7 @@
 // behind /charts/, /charts/build/ and /players/rankings/. The engine lives in
 // src/sport-kit; this file is the only basketball-specific part.
 import { DPR_MIN_POSS, MIN_ATT, type PlayerRow } from "@/app/players/player-stats";
-import { floorFilter, positionFilter, type FilterDef, type Metric, type SportPack } from "@/sport-kit";
+import { floorFilter, positionFilter, type FilterDef, type Metric, type SportPack } from "@sports/kit";
 
 type M = Metric<PlayerRow>;
 const per40 = (v: number | null, r: PlayerRow) => (v !== null && r.min ? (v / r.min) * 40 : null);

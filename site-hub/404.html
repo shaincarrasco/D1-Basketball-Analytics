@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Not found · Sports Analytics</title>
+<script>
+  // D1 Hoops used to live at the top of this site. A link like /<repo>/rankings/ now lives at
+  // /<repo>/d1-hoops/rankings/, so forward anything that isn't already under a site.
+  (function () {
+    var parts = location.pathname.split("/"); // ["", repo, first, ...]
+    var repo = parts[1], first = parts[2] || "";
+    if (repo && first && first !== "d1-hoops" && first !== "tennis") {
+      location.replace("/" + repo + "/d1-hoops/" + parts.slice(2).join("/") + location.search + location.hash);
+    }
+  })();
+</script>
+<style>body{margin:0;min-height:100vh;display:grid;place-items:center;background:#0E0F12;color:#F2F3F5;font:16px/1.5 system-ui,sans-serif;text-align:center}a{color:#D4FF3A}</style>
+</head>
+<body><main><h1>Page not found</h1><p><a id="home" href="/">Back to Sports Analytics</a></p></main>
+<script>var r = location.pathname.split("/")[1]; if (r) document.getElementById("home").href = "/" + r + "/";</script>
+</body>
+</html>

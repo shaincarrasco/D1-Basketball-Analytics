@@ -2,7 +2,7 @@
 // Client hooks for injury views: the league file and the "new since your last visit" marker.
 import { useEffect, useState } from "react";
 import type { InjuryFile } from "./types";
-import { useJson } from "./client-data";
+import { useJson } from "@sports/ui/client-data";
 
 /** The league-wide injury file (rows, team health, change wire, official report links). */
 export const useInjuries = () => useJson<InjuryFile>("injuries.json");

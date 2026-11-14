@@ -6,8 +6,8 @@
 // final within a minute or two. The next pipeline run publishes the same results officially.
 import { useEffect, useState } from "react";
 import { fit, rating, NON_D1, type FitGame, type Model } from "../../scripts/lib/rating-model.mjs";
-import { loadJson } from "./client-data";
-import { etToday } from "./format";
+import { loadJson } from "@sports/ui/client-data";
+import { etToday } from "@sports/ui/format";
 import { matchEvents, type EspnEvent } from "./live";
 import type { Game, GameDay, TeamSummary } from "./types";
 

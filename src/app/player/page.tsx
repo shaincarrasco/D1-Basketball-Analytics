@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { Loading } from "@/components/states";
+import { Loading } from "@sports/ui/states";
 import PlayerProfile from "./player-profile";
 
 export const metadata: Metadata = { title: "Player profile", description: "Per-game stats, D-I percentiles, shot diet and team context for a Division I player." };

@@ -1,5 +1,5 @@
 // A labelled stat with a national-rank meter. Rank 1 fills the bar.
-import { fmt, heat, ordinal } from "@/lib/format";
+import { fmt, heat, ordinal } from "@sports/ui/format";
 
 export default function StatBar({ label, value, rank, total = 356, unit = "", digits = 1, tone = "off", hint }: {
   label: string; value: number | null; rank?: number | null; total?: number; unit?: string; digits?: number; tone?: "off" | "def" | "neutral"; hint?: string;

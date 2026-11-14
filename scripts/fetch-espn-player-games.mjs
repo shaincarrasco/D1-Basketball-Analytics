@@ -24,7 +24,7 @@ const readJson = async (path, fallback) => { try { return JSON.parse(await readF
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 async function getJson(url, attempt = 1) {
   try {
-    const res = await fetch(url, { headers: { Accept: "application/json", "User-Agent": "d1-hoops-analytics (github.com/shaincarrasco/D1-Basketball-Analytics)" } });
+    const res = await fetch(url, { headers: { Accept: "application/json", "User-Agent": "d1-hoops-analytics (github.com/shaincarrasco/Sports-Analytics)" } });
     if (res.status === 429 || res.status >= 500) throw new Error(`HTTP ${res.status}`);
     if (!res.ok) return null;
     return await res.json();

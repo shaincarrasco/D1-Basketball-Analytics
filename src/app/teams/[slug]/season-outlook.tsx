@@ -1,6 +1,6 @@
 // Server-rendered season outlook: simulation summary tiles + final win-total distribution.
 import Link from "next/link";
-import { fmt, pctFmt } from "@/lib/format";
+import { fmt, pctFmt } from "@sports/ui/format";
 import type { TeamDetail, TeamSummary } from "@/lib/types";
 
 type Sim = NonNullable<TeamSummary["sim"]>;

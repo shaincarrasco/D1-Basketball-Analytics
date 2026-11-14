@@ -3,12 +3,12 @@
 // Next.js keeps useSearchParams in sync with history.pushState / replaceState.
 import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Empty, ErrorState, Loading } from "@/components/states";
-import { useJson } from "@/lib/client-data";
+import { Empty, ErrorState, Loading } from "@sports/ui/states";
+import { useJson } from "@sports/ui/client-data";
 import { useInjuries } from "@/lib/injury-hooks";
 import { keyAbsences } from "@/components/whos-out";
 import { liveDay, useLiveScores, withLive } from "@/lib/live";
-import { dayLabel, etToday, pctFmt } from "@/lib/format";
+import { dayLabel, etToday, pctFmt } from "@sports/ui/format";
 import type { Game, GameDay, GameIndex } from "@/lib/types";
 import DateStrip from "./date-strip";
 import GameCard from "./game-card";

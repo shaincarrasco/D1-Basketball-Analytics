@@ -1,6 +1,6 @@
 // Shot diet: attempt/make bars by zone (rim, mid-range, three) with the D-I average.
 // Orange = makes, the line colour behind it = misses.
-import { fmt } from "@/lib/format";
+import { fmt } from "@sports/ui/format";
 import { MIN_ATT, type PlayerRow } from "../players/player-stats";
 
 export type ZoneAvg = { rim: number | null; mid: number | null; thr: number | null };

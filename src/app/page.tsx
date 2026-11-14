@@ -1,6 +1,6 @@
 import Link from "next/link";
-import TeamLogo from "@/components/team-logo";
-import { fmt, pctFmt, signed, dayLabel, DHR_RANK_TITLE } from "@/lib/format";
+import TeamLogo from "@sports/ui/team-logo";
+import { fmt, pctFmt, signed, dayLabel, DHR_RANK_TITLE } from "@sports/ui/format";
 import { getAllGames, getConferences, getMeta, getNews, getPlayers, getTeams } from "@/lib/server-data";
 import ArticleList from "@/components/article-list";
 import { playerRows } from "@/lib/players";

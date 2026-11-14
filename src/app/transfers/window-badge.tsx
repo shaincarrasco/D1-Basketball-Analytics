@@ -2,7 +2,7 @@
 // "Opens in 143 days" / "Open: 5 days left" / "Closed", worked out in the reader's browser
 // (the page is static, so a build-time countdown would go stale).
 import { useEffect, useState } from "react";
-import { etToday } from "@/lib/format";
+import { etToday } from "@sports/ui/format";
 import { windowPhase } from "@/lib/portal";
 
 export default function WindowBadge({ opens, closes }: { opens: string; closes: string }) {

@@ -8,7 +8,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { ChevronDown, Search, Star } from "lucide-react";
 import AccountButton from "./account-button";
 import CommandSearch from "./command-search";
-import ThemePicker from "./theme-picker";
+import ThemePicker from "@sports/ui/theme-picker";
+import { useTeamSwatches } from "./team-swatches";
 import HubPreview from "./nav/hub-preview";
 import { HUBS, hubFor, sectionFor, type HubKey } from "@/lib/nav";
 
@@ -114,7 +115,7 @@ export default function SiteShell({ children, updated }: { children: React.React
               className={`flex h-9 w-9 items-center justify-center rounded-full border border-line bg-deck hover:text-ink ${following ? "text-bulb-ink" : "text-mute"}`}>
               <Star size={16} aria-hidden fill={following ? "currentColor" : "none"} /><span className="sr-only">Following</span>
             </Link>
-            <ThemePicker />
+            <ThemePicker useSwatches={useTeamSwatches} />
             <AccountButton />
           </div>
         </div>

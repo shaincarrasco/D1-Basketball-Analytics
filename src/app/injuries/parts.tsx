@@ -1,6 +1,6 @@
 // Small shared pieces for the injuries hub (server- and client-safe).
 import Link from "next/link";
-import TeamLogo from "@/components/team-logo";
+import TeamLogo from "@sports/ui/team-logo";
 
 /** Per-team display data the server passes down (logo, colour, next game). */
 export type TeamMeta = { name: string; logo: string | null; color: string | null; next: string | null };
