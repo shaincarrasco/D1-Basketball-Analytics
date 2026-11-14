@@ -8,6 +8,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useJson } from "./client-data";
 import type { Game, TeamSummary } from "./types";
 import { elapsedFrom } from "./win-prob";
+import { etToday } from "./format";
 
 const SCOREBOARD = "https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard";
 // Optional push relay (live/ — the Rust service). When set at build time, today's slate
@@ -33,7 +34,7 @@ export type LiveGame = {
 };
 
 type EspnCompetitor = { homeAway: "home" | "away"; team: { id: string }; score?: string; linescores?: { value?: number }[] };
-type EspnEvent = {
+export type EspnEvent = {
   id: string; date: string;
   status: { clock?: number; displayClock?: string; period?: number; type: { name: string; state: LiveState; completed: boolean; shortDetail?: string } };
   competitions: { competitors: EspnCompetitor[] }[];
@@ -131,9 +132,18 @@ export function withLive(g: Game, l: LiveGame | undefined): Game {
 
 const espnDate = (day: string) => day.replace(/-/g, "");
 
+/** The day to overlay live scores on: today, or one of the last three days while any of its games still lacks a final. */
+export function liveDay(day: string | null, today: string, games: Game[] | null): string | null {
+  if (!day || !games) return null;
+  if (day === today) return day;
+  const age = (Date.parse(`${today}T12:00:00Z`) - Date.parse(`${day}T12:00:00Z`)) / 864e5;
+  const open = games.some(g => g.status !== "final" && g.status !== "postponed" && g.status !== "canceled");
+  return age > 0 && age <= 3 && open ? day : null;
+}
+
 /**
- * Live overlay for one day's games. Pass `day` only when it is today (Eastern); otherwise it
- * does nothing. Returns the matched live states keyed by our game id.
+ * Live overlay for one day's games. Pass `day` for today (Eastern) or a recent day whose games
+ * the published data hasn't marked final yet (see liveDay); pass null to do nothing. Returns the matched live states keyed by our game id.
  */
 export function useLiveScores(day: string | null, games: Game[] | null) {
   const [byGame, setByGame] = useState<Map<string, LiveGame>>(new Map());
@@ -211,7 +221,7 @@ export function useLiveScores(day: string | null, games: Game[] | null) {
     };
     // Push relay for today's slate; falls back to polling on any error.
     let es: EventSource | null = null;
-    if (RELAY_ON && typeof EventSource !== "undefined") {
+    if (RELAY_ON && typeof EventSource !== "undefined" && day === etToday()) {
       es = new EventSource(`${RELAY}/events`);
       es.addEventListener("slate", e => {
         try {

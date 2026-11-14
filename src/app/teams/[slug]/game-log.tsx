@@ -1,12 +1,13 @@
 "use client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState, useSyncExternalStore } from "react";
+import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import { X } from "lucide-react";
 import TeamLogo from "@/components/team-logo";
 import TvBadges from "@/components/tv-badges";
 import { fmt, pctFmt, signed, timeLabel } from "@/lib/format";
 import type { TeamGame } from "@/lib/types";
+import { useLiveRatings } from "@/lib/live-ratings";
 
 // The quadrant filter lives in the URL hash (#schedule-q1 … #schedule-q4) so the résumé
 // card and the Quad column can link to it.
@@ -15,7 +16,20 @@ const readHash = () => window.location.hash;
 const gameHref = (g: TeamGame) => `/games/?d=${g.day}&g=${g.id}`;
 const lineText = (v: number) => (v === 0 ? "PK" : signed(v, 1));
 
-export default function GameLog({ games, logos }: { games: TeamGame[]; logos: Record<string, string | null> }) {
+export default function GameLog({ games: published, logos, slug }: { games: TeamGame[]; logos: Record<string, string | null>; slug: string }) {
+  // Results that finished after the last data refresh, from the live ratings store.
+  const live = useLiveRatings();
+  const games = useMemo(() => {
+    if (!live) return published;
+    const byId = new Map(live.finals.map(f => [f.id, f]));
+    return published.map(g => {
+      const f = byId.get(g.id);
+      if (!f || g.result) return g;
+      const home = f.game.home.slug === slug;
+      const pts = home ? f.homePts : f.awayPts, oppPts = home ? f.awayPts : f.homePts;
+      return { ...g, status: "final", pts, oppPts, result: pts > oppPts ? ("W" as const) : ("L" as const) };
+    });
+  }, [published, live, slug]);
   const router = useRouter();
   const [show, setShow] = useState<"all" | "results" | "upcoming">("all");
   const hash = useSyncExternalStore(subscribe, readHash, () => "");

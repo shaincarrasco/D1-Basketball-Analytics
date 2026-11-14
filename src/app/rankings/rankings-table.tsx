@@ -7,13 +7,16 @@ import PerfBars from "@/components/perf-bars";
 import TeamLogo from "@/components/team-logo";
 import { fmt, heat, pctFmt, signed } from "@/lib/format";
 import type { ProfileKey, TeamSummary } from "@/lib/types";
+import { useLiveTeams } from "@/lib/live-ratings";
+import LiveRatingsNote, { RankMove } from "@/components/live-ratings-note";
 
 const VIEWS = ["Ratings", "Projections", "Four factors", "Shooting", "Résumé"] as const;
 type View = (typeof VIEWS)[number];
 /** URL slug for a view: ratings, projections, fourfactors, shooting, resume. */
 const slug = (v: string) => v.toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]/g, "");
 
-export default function RankingsTable({ teams, total }: { teams: TeamSummary[]; total: number }) {
+export default function RankingsTable({ teams: published, total }: { teams: TeamSummary[]; total: number }) {
+  const { teams, prevRank, live } = useLiveTeams(published);
   const [view, setView] = useState<View>("Ratings");
   const [conf, setConf] = useState("all");
   const [q, setQ] = useState("");
@@ -69,7 +72,7 @@ export default function RankingsTable({ teams, total }: { teams: TeamSummary[]; 
   });
 
   const identity: Column<TeamSummary>[] = [
-    { key: "rank", label: "Rk", value: t => t.rank, first: "asc", sticky: true, width: 46, render: t => <span className="rank-cell">{t.rank ?? "—"}</span> },
+    { key: "rank", label: "Rk", value: t => t.rank, first: "asc", sticky: true, width: 62, render: t => <span className="whitespace-nowrap"><span className="rank-cell">{t.rank ?? "—"}</span><RankMove now={t.rank} before={prevRank.get(t.id)} /></span> },
     {
       key: "name", label: "Team", align: "l", value: t => t.name, first: "asc", sticky: true, width: 210,
       render: t => (
@@ -173,6 +176,7 @@ export default function RankingsTable({ teams, total }: { teams: TeamSummary[]; 
           </label>
         </div>
       </div>
+      <LiveRatingsNote live={live} className="mb-2" />
       {view === "Projections" ? (
         <p className="mb-2 text-xs text-mute">10,000 simulations of the rest of the season using current ratings. The bar shows where 80% of simulated win totals land; early-season ranges are wide on purpose.</p>
       ) : (

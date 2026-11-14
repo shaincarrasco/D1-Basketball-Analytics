@@ -5,8 +5,9 @@ on:
     branches: [main]
   schedule:
     - cron: "30 11 * * *" # full refresh (College Basketball Data + ESPN), 6:30 a.m. ET
-    - cron: "0 4 * * *"   # late-night ESPN-only refresh: box scores, play-by-play, lines (11 p.m. ET)
-    - cron: "0 7 * * *"   # after West Coast games (2 a.m. ET)
+    # Hourly ESPN-only refreshes from noon to 4 a.m. ET: new finals move ratings, records, schedules
+    # and simulations within the hour. Off-the-hour minute because GitHub delays :00 crons the most.
+    - cron: "17 0-8,16-23 * * *"
   workflow_dispatch:
 
 permissions:
@@ -74,6 +75,8 @@ jobs:
       - name: Fetch news, previews/recaps, polls and injuries (Rust)
         continue-on-error: true
         run: cargo run --release --manifest-path live/Cargo.toml --bin feeds
+      - name: Fill results the schedule provider hasn't published yet (ESPN box scores)
+        run: node scripts/merge-espn-finals.mjs
       - name: Calculate DHR v2 ratings, walk-forward predictions and backtest
         run: node scripts/build-power-ratings.mjs
       - name: Simulate the rest of the season
@@ -92,7 +95,8 @@ jobs:
           git add package-lock.json public/data/ .cache/
           if ! git diff --cached --quiet; then
             git commit -m 'Update 2026-27 basketball data snapshots'
-            git push
+            # main may have moved during the run (a merge or an overlapping refresh): replay on top, ours wins.
+            git push || { git pull --rebase -X theirs && git push; } || echo "::warning::Data snapshot push skipped; the next refresh will retry."
           fi
       - name: Typecheck
         run: npm run typecheck

@@ -598,6 +598,8 @@ const write = (path, data) => writeFile(`${OUT}/${path}`, JSON.stringify(data));
 const updated = { teams: teamPayload.fetchedAt ?? null, players: playerPayload.fetchedAt ?? null, games: gamePayload.fetchedAt ?? null, built: new Date().toISOString() };
 const counts = { teams: teamSummaries.length, ratedTeams: teamSummaries.filter(t => t.rank).length, players: players.length, games: allGames.length, finals: finals.length };
 const { predictions: _omit, ...modelInfo } = model;
+// Live post-game ratings (src/lib/live-ratings.ts) refit from the exact pipeline inputs.
+try { await write("dhr-input.json", JSON.parse(await readFile("public/data/dhr-input-2027.json", "utf8"))); } catch { /* optional */ }
 await write("meta.json", { season: 2027, seasonLabel: "2026–27", provider: "College Basketball Data", updated, counts, model: modelInfo, leagueProfile, market,
   shotZones: leagueZones,
   sims: sims ? { sims: sims.sims, remainingGames: sims.remainingGames, method: sims.method } : null,
