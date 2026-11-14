@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import PageHeader from "@/components/page-header";
 import ProClient from "./pro-client";
 
-export const metadata: Metadata = { title: "Pro", description: "D1 Hoops Pro: live tip-off, close-game and final alerts for the teams you follow." };
+export const metadata: Metadata = { title: "Pro", description: "D1 Hoops Pro: live tip-off, close-game, overtime, upset and final alerts for the teams you follow." };
 
 const FREE = [
   "DHR ratings, rankings and season simulations",
@@ -14,8 +14,11 @@ const FREE = [
 const PRO = [
   "Tip-off alerts for every team you follow",
   "Close-game alerts in the final four minutes",
-  "Final scores the moment games end",
-  "Choose which alerts you get, per device",
+  "Overtime alerts when a game goes to OT",
+  "Upset alerts when an underdog leads late",
+  "Final scores the moment games end, and halftime scores if you want them",
+  "Injury news for your teams",
+  "Choose which alerts you get on each device; tap one to open the game",
 ];
 
 export default function ProPage() {

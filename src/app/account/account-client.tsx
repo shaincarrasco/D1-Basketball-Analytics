@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Bell, BellOff, CreditCard, LogOut } from "lucide-react";
 import {
   useAccount, signIn, signUp, signOut, signInWithGoogle, openBillingPortal, startCheckout,
-  enableAlerts, disableAlerts, currentPushSubscription, pushSupported, type AlertPrefs, type Me, type Health,
+  enableAlerts, disableAlerts, currentPushSubscription, getAlertPrefs, pushSupported, DEFAULT_ALERT_PREFS, type AlertPrefs, type Me, type Health,
 } from "@/lib/account";
 import { PRICES } from "@/lib/pricing";
 
@@ -62,7 +62,7 @@ function SignInForm() {
       <ul className="grid content-start gap-3 text-[14px] leading-relaxed text-mute">
         <li><span className="font-semibold text-ink">Your follows everywhere.</span> Teams and players you star on this device sync to every device you sign in on.</li>
         <li><span className="font-semibold text-ink">Pick&apos;em.</span> Pick winners from any game&apos;s details before tip-off, then see how you did next to the model.</li>
-        <li><span className="font-semibold text-ink">Pro alerts.</span> Tip-off, close-game and final alerts for your teams. <Link href="/pro/" className="underline hover:text-ink">See Pro</Link></li>
+        <li><span className="font-semibold text-ink">Pro alerts.</span> Tip-off, close-game, overtime, upset and final alerts for your teams, plus injury news. <Link href="/pro/" className="underline hover:text-ink">See Pro</Link></li>
       </ul>
     </div>
   );
@@ -115,11 +115,42 @@ function SignedIn({ me, health, refresh }: { me: Me; health: Health; refresh: ()
   );
 }
 
+const ALERT_KINDS: { key: keyof AlertPrefs; label: string; hint: string }[] = [
+  { key: "tipoff", label: "Tip-off", hint: "When the game starts." },
+  { key: "halftime", label: "Halftime score", hint: "The score at the break." },
+  { key: "close", label: "Close game", hint: "Within 5 points in the final 4 minutes." },
+  { key: "overtime", label: "Overtime", hint: "When the game is headed to overtime." },
+  { key: "upsets", label: "Upset brewing", hint: "The underdog leads by 5 or more in the second half or overtime. Underdog means under a 25% chance to win before tip-off, in our model." },
+  { key: "final", label: "Final score", hint: "When the game ends." },
+  { key: "injury", label: "Injury news", hint: "New injuries and players returning." },
+];
+
+function Switch({ checked, onChange, labelledBy, describedBy }: { checked: boolean; onChange: (v: boolean) => void; labelledBy: string; describedBy: string }) {
+  return (
+    <button type="button" role="switch" aria-checked={checked} aria-labelledby={labelledBy} aria-describedby={describedBy} onClick={() => onChange(!checked)}
+      className={`relative inline-flex h-[26px] w-[44px] shrink-0 items-center rounded-full border transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-off ${checked ? "border-off bg-off" : "border-line2 bg-deck2"}`}>
+      <span aria-hidden className={`inline-block h-5 w-5 rounded-full shadow transition-transform ${checked ? "translate-x-[20px] bg-[#1a0a00]" : "translate-x-[2px] bg-mute"}`} />
+    </button>
+  );
+}
+
 function AlertsPanel({ pro }: { pro: boolean }) {
   const [on, setOn] = useState<boolean | null>(null);
-  const [prefs, setPrefs] = useState<AlertPrefs>({ tipoff: true, close: true, final: true, injury: true });
+  const [prefs, setPrefs] = useState<AlertPrefs>(DEFAULT_ALERT_PREFS);
   const [busy, setBusy] = useState(false), [error, setError] = useState<string | null>(null);
-  useEffect(() => { currentPushSubscription().then(s => setOn(!!s)); }, []);
+  useEffect(() => {
+    let live = true;
+    (async () => {
+      const sub = await currentPushSubscription();
+      if (!sub) { if (live) setOn(false); return; }
+      // Show what this device is actually subscribed with; kinds added since then use the defaults.
+      const saved = await getAlertPrefs().catch(() => undefined);
+      if (!live) return;
+      if (saved) setPrefs(saved);
+      setOn(saved === undefined ? true : saved !== null);
+    })();
+    return () => { live = false; };
+  }, []);
   const toggle = async () => {
     setBusy(true); setError(null);
     try { if (on) { await disableAlerts(); setOn(false); } else { await enableAlerts(prefs); setOn(true); } }
@@ -136,14 +167,18 @@ function AlertsPanel({ pro }: { pro: boolean }) {
         <p className="text-[14px] text-mute">This browser can&apos;t receive alerts. On iPhone, tap Share → Add to Home Screen, then open D1 Hoops from there.</p>
       ) : (
         <>
-          <fieldset className="grid gap-2 text-[14px]">
-            <legend className="sr-only">Alert types</legend>
-            {([["tipoff", "Tip-off"], ["close", "Close game in the final 4 minutes"], ["final", "Final score"], ["injury", "Injury news for my teams"]] as const).map(([k, label]) => (
-              <label key={k} className="flex items-center gap-2">
-                <input type="checkbox" checked={prefs[k]} onChange={e => save({ ...prefs, [k]: e.target.checked })} className="h-4 w-4 accent-[var(--off)]" /> {label}
-              </label>
+          <p className="text-[13px] text-mute">For games involving teams you <Link href="/following/" className="underline hover:text-ink">follow</Link>. Tap an alert to open that game.</p>
+          <ul className="divide-y divide-line border-y border-line" aria-label="Alert types">
+            {ALERT_KINDS.map(({ key, label, hint }) => (
+              <li key={key} className="flex items-center justify-between gap-4 py-3">
+                <div className="min-w-0">
+                  <p id={`alert-${key}`} className="text-[14px] font-semibold">{label}</p>
+                  <p id={`alert-${key}-hint`} className="text-[13px] leading-snug text-mute">{hint}</p>
+                </div>
+                <Switch checked={prefs[key]} onChange={v => save({ ...prefs, [key]: v })} labelledBy={`alert-${key}`} describedBy={`alert-${key}-hint`} />
+              </li>
             ))}
-          </fieldset>
+          </ul>
           {error && <p role="alert" className="text-[13px] text-loss">{error}</p>}
           <div><button className={`btn ${on ? "" : "btn-primary"}`} disabled={busy || on === null} onClick={toggle}>
             {on ? <><BellOff size={15} aria-hidden /> Turn off alerts</> : <><Bell size={15} aria-hidden /> Turn on alerts</>}
