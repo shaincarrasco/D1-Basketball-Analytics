@@ -1,0 +1,29 @@
+{
+ "provider": "College Basketball Data /recruiting/portal",
+ "endpoint": "https://api.collegebasketballdata.com/recruiting/portal",
+ "season": 2027,
+ "seasonLabel": "2026–27",
+ "cycle": "Spring 2027 window: players leaving 2026–27 rosters for 2027–28",
+ "year": null,
+ "fetchedAt": null,
+ "status": "not-open",
+ "window": {
+  "opens": "2027-04-06",
+  "closes": "2027-04-20",
+  "basis": "NCAA Division I rule adopted Jan. 14, 2026: the men's basketball notification-of-transfer window opens the day after the NCAA tournament championship game and stays open 15 days. The 2027 title game is April 5, 2027 (Detroit), so the window runs April 6–20, 2027. The NCAA had not published 2027-specific dates when this was written.",
+  "coachingChange": "After a head-coach change, players get a separate 15-day window that opens five days after the new coach is hired or announced (or on day 31 if no coach is named within 30 days); that extra window is available from the April window through Jan. 2.",
+  "sources": [
+   {
+    "label": "NCAA.org: Division I Cabinet adopts new transfer windows (Jan. 14, 2026)",
+    "url": "https://www.ncaa.org/news/2026/1/14/media-center-division-i-cabinet-adopts-new-transfer-windows-in-several-sports.aspx"
+   },
+   {
+    "label": "Local 4 Detroit: 2027 Final Four at Ford Field, April 3 and 5, 2027",
+    "url": "https://www.clickondetroit.com/news/local/2026/04/07/detroit-to-host-2027-ncaa-mens-final-four-heres-what-to-know"
+   }
+  ]
+ },
+ "note": "Not fetched yet: the 2027 window has not opened. scripts/fetch-portal.mjs fills this file from CBBD once it does. CBBD publishes no entry or commitment dates; firstSeen / committedSeen will be the dates our daily fetch first saw each entry and its destination.",
+ "count": 0,
+ "entries": []
+}
