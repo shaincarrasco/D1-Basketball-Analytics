@@ -6,7 +6,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { X } from "lucide-react";
 import TeamLogo from "@/components/team-logo";
 import WinProb from "@/components/win-prob";
-import { dayLabel, fmt, pctFmt, timeLabel } from "@/lib/format";
+import { dayLabel, fmt, pctFmt, timeLabel, DHR_RANK_TITLE } from "@/lib/format";
 import { withLive, type LiveGame } from "@/lib/live";
 import { LIVE_GAME_POLL_MS, progressOf, summaryAsLive, useLiveGame, type LiveGameMode, type LiveGameState, type LiveSummary } from "@/lib/live-game";
 import PlayerBox from "./live/player-box";
@@ -24,7 +24,6 @@ import { setShowProjections, useShowProjections } from "@/lib/show-projections";
 import { actualMarginText, favoriteWon, isFinal, isLive, lineInfo, marginText, matchupHref, periodLabel, statusLabel, teamHref, winner } from "./game-utils";
 
 const ROW_TH = "l !static !border-line !bg-transparent !text-[13.5px] !font-normal !text-mute";
-const DHR_RANK_TITLE = "D1 Hoops rank (DHR power rating), not the AP poll";
 const FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
 export default function GameSheet({ g: gIn, live: liveIn, onClose }: { g: Game; live?: LiveGame; onClose: () => void }) {

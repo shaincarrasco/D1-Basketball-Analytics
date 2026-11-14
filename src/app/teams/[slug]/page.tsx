@@ -11,6 +11,7 @@ import FavoriteButton from "@/components/favorite-button";
 import ArticleList from "@/components/article-list";
 import TeamAvailability from "./availability";
 import CalendarButton from "./calendar-button";
+import BracketChip from "@/components/bracket-chip";
 import type { PlayerField, TeamSummary } from "@/lib/types";
 import GameLog from "./game-log";
 import { LiveNextGate, LiveRank, LiveRecord, LiveTiles } from "./live-hero";
@@ -118,6 +119,7 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
         <div className="relative mt-5 flex flex-wrap gap-2 [&_.btn]:border-transparent [&_.btn]:bg-black/20 [&_.btn]:text-current">
           <FavoriteButton kind="teams" id={slug} name={team.name} />
           <CalendarButton slug={slug} name={team.name} />
+          <BracketChip slug={slug} className="!border-transparent !bg-black/20 !text-current [&_.text-mute]:!text-current [&_.text-mute]:opacity-75" />
           {(team.health?.out ?? 0) > 0 && (
             <a href="#availability" className="btn" title="Jump to the availability report">{(() => { const h = team.health!, known = h.out - (h.missing ?? 0); return known > 0 ? `${known} out${h.missing ? ` · ${h.missing} missing` : ""}` : `${h.missing} missing · reason not reported`; })()}</a>
           )}
