@@ -81,10 +81,21 @@ function Builder({ data, picks, setPicks, onHow }: { data: LabData; picks: strin
   const matches = useMemo(() => {
     const s = fold(q.trim());
     if (s.length < 2) return [];
+    // Best match first: the team itself ("duke"), then a name that starts with it, then the rest.
+    const score = (p: LabPlayer) => {
+      const t = data.teams.get(p.t), team = fold(t?.name ?? ""), short = fold(t?.short ?? ""), name = fold(p.n);
+      if (team === s || short === s) return 0;
+      if (name.split(/[\s'-]+/).some(w => w.startsWith(s)) || name.startsWith(s)) return 1;
+      if (team.startsWith(s) || short.startsWith(s)) return 2;
+      return name.includes(s) || team.includes(s) || short.includes(s) ? 3 : -1;
+    };
     return data.players
-      .filter(p => !picks.includes(p.id) && (fold(p.n).includes(s) || fold(data.teams.get(p.t)?.name ?? "").includes(s) || fold(data.teams.get(p.t)?.short ?? "").includes(s)))
-      .sort((a, b) => b.mpg - a.mpg)
-      .slice(0, 8);
+      .filter(p => !picks.includes(p.id))
+      .map(p => ({ p, sc: score(p) }))
+      .filter(x => x.sc >= 0)
+      .sort((a, b) => a.sc - b.sc || b.p.mpg - a.p.mpg)
+      .slice(0, 8)
+      .map(x => x.p);
   }, [q, data, picks]);
   useEffect(() => setActive(0), [q]);
 
