@@ -17,6 +17,7 @@ import ArticleList from "@/components/article-list";
 import PickEm from "./pick-em";
 import WhosOut from "@/components/whos-out";
 import { useInjuries } from "@/lib/injury-hooks";
+import { setShowProjections, useShowProjections } from "@/lib/show-projections";
 import { actualMarginText, favoriteWon, isFinal, isLive, lineInfo, marginText, matchupHref, periodLabel, statusLabel, teamHref, winner } from "./game-utils";
 
 const ROW_TH = "l !static !border-line !bg-transparent !text-[13.5px] !font-normal !text-mute";
@@ -129,8 +130,9 @@ function SideBlock({ side, align, tone }: { side: GameSide; align: "l" | "r"; to
 function Scoreline({ g }: { g: Game }) {
   const played = (isFinal(g) || isLive(g)) && g.home.score != null && g.away.score != null;
   const w = winner(g);
+  const showProj = useShowProjections() && !played && !!g.pred;
   const num = (side: "home" | "away") => {
-    const v = played ? g[side].score : g.pred ? Math.round(g.pred[side]) : null;
+    const v = played ? g[side].score : showProj ? Math.round(g.pred![side]) : null;
     const dim = !played || (w != null && w !== side);
     return <span className={`font-display text-[2.75rem] font-black leading-none tnum sm:text-[3.5rem] ${dim ? "text-mute" : "text-ink"}`}>{v ?? "—"}</span>;
   };
@@ -139,7 +141,7 @@ function Scoreline({ g }: { g: Game }) {
       <SideBlock side={g.away} align="l" tone="def" />
       <div className="text-center">
         <div className="flex items-center gap-2 sm:gap-4">{num("away")}<span className="font-display text-2xl text-dim">–</span>{num("home")}</div>
-        <div className="mt-1 text-[11.5px] text-mute">{played ? (isFinal(g) ? "Final score" : "Current score") : "Projected score"}</div>
+        <div className="mt-1 text-[11.5px] text-mute">{played ? (isFinal(g) ? "Final score" : "Current score") : showProj ? "Projected score" : isLive(g) ? "Just tipped off" : "Not started"}</div>
       </div>
       <SideBlock side={g.home} align="r" tone="off" />
     </div>
@@ -239,6 +241,7 @@ function Projection({ g }: { g: Game }) {
   const p = g.pred;
   const final = isFinal(g);
   const fw = favoriteWon(g);
+  const showProj = useShowProjections();
   const poss = g.box?.home?.poss != null && g.box?.away?.poss != null ? (g.box.home.poss + g.box.away.poss) / 2 : g.box?.home?.poss ?? g.box?.away?.poss ?? null;
   return (
     <section className="mt-7" aria-labelledby={`pj-${g.id}`}>
@@ -264,16 +267,19 @@ function Projection({ g }: { g: Game }) {
             <table className="dt [&_td]:!whitespace-normal [&_th]:!whitespace-normal">
               <thead><tr><th className="l" scope="col">Measure</th><th scope="col">Projected</th>{final && <th scope="col">Actual</th>}</tr></thead>
               <tbody>
-                <tr><th scope="row" className={ROW_TH}>Score ({g.away.short ?? g.away.name}–{g.home.short ?? g.home.name})</th><td>{fmt(p.away)}–{fmt(p.home)}</td>{final && <td className="font-semibold">{g.away.score ?? "—"}–{g.home.score ?? "—"}</td>}</tr>
+                {showProj && <tr><th scope="row" className={ROW_TH}>Score ({g.away.short ?? g.away.name}–{g.home.short ?? g.home.name})</th><td>{fmt(p.away)}–{fmt(p.home)}</td>{final && <td className="font-semibold">{g.away.score ?? "—"}–{g.home.score ?? "—"}</td>}</tr>}
                 <tr><th scope="row" className={ROW_TH}>Margin</th><td>{marginText(g)}</td>{final && <td className="font-semibold">{actualMarginText(g)}</td>}</tr>
                 {g.line && (
                   <tr><th scope="row" className={ROW_TH}>Market spread</th><td>{lineInfo(g)?.market ?? "—"}</td>{final && <td className="font-semibold">{(() => { const c = lineInfo(g)?.covered; return c ? `${g[c].short ?? g[c].name} covered` : g.home.score != null ? "Push" : "—"; })()}</td>}</tr>
                 )}
-                <tr><th scope="row" className={ROW_TH}>Total points</th><td>{fmt(p.away + p.home)}</td>{final && <td className="font-semibold">{g.home.score != null && g.away.score != null ? g.home.score + g.away.score : "—"}</td>}</tr>
+                {showProj && <tr><th scope="row" className={ROW_TH}>Total points</th><td>{fmt(p.away + p.home)}</td>{final && <td className="font-semibold">{g.home.score != null && g.away.score != null ? g.home.score + g.away.score : "—"}</td>}</tr>}
                 <tr><th scope="row" className={ROW_TH}>Tempo (possessions)</th><td>{fmt(p.tempo)}</td>{final && <td className="font-semibold">{fmt(poss)}</td>}</tr>
               </tbody>
             </table>
           </div>
+          <button type="button" className="mt-2 text-[13px] font-semibold text-bulb-ink hover:underline" onClick={() => setShowProjections(!showProj)}>
+            {showProj ? "Hide projected scores" : "Show projected score"}
+          </button>
         </>
       )}
     </section>

@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { getInjuries, getMeta, getTeam, getTeamDetail, getTeams } from "@/lib/server-data";
 import TeamLogo from "@/components/team-logo";
 import TvBadges from "@/components/tv-badges";
+import { IfProjections } from "@/components/projection-toggle";
 import StatBar from "@/components/stat-bar";
 import { fmt, pctFmt, signed } from "@/lib/format";
 import FavoriteButton from "@/components/favorite-button";
@@ -151,10 +152,12 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
                   <div className="text-[13px] text-mute">{[team.next.oppRank ? `No. ${team.next.oppRank} in the ratings` : null, team.next.venue === "N" ? "neutral site" : null].filter(Boolean).join(", ") || "Unrated opponent"}</div>
                 </div>
                 {nextGame?.projPts != null && nextGame.projOppPts != null && (
-                  <div className="flex flex-col items-end">
-                    <Dots className="text-[24px]">{Math.round(nextGame.projPts)}-{Math.round(nextGame.projOppPts)}</Dots>
-                    <span className="mt-0.5 text-[11px] text-mute">projected</span>
-                  </div>
+                  <IfProjections>
+                    <div className="flex flex-col items-end">
+                      <Dots className="text-[24px]">{Math.round(nextGame.projPts)}-{Math.round(nextGame.projOppPts)}</Dots>
+                      <span className="mt-0.5 text-[11px] text-mute">projected</span>
+                    </div>
+                  </IfProjections>
                 )}
               </div>
               {team.next.wp !== null && (

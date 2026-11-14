@@ -9,6 +9,7 @@ import type { LiveGame } from "@/lib/live";
 import type { Game, GameSide } from "@/lib/types";
 import TvBadges from "@/components/tv-badges";
 import type { KeyAbsence } from "@/components/whos-out";
+import { useShowProjections } from "@/lib/show-projections";
 import { favoriteWon, isFinal, isLive, lineInfo, marginText, statusLabel, teamHref, winner } from "./game-utils";
 
 export function WatchBadge({ value }: { value: number | null }) {
@@ -46,7 +47,9 @@ function Row({ g, side, which, absence }: { g: Game; side: GameSide; which: "hom
   const lost = final && w != null && w !== which;
   // A live game at 0–0 is a stale snapshot of tip-off; show no score rather than a fake one.
   const showScore = (final || (live && ((g.home.score ?? 0) + (g.away.score ?? 0)) > 0)) && side.score != null;
-  const proj = g.pred ? g.pred[which] : null;
+  // Projected points only when the reader turned them on; otherwise an unplayed game shows no number.
+  const showProj = useShowProjections();
+  const proj = showProj && g.pred ? g.pred[which] : null;
   return (
     <div className="flex items-center gap-2.5">
       {teamHref(side)
@@ -64,12 +67,12 @@ function Row({ g, side, which, absence }: { g: Game; side: GameSide; which: "hom
           {side.score}
           {final && w === which && <span className="sr-only"> (winner)</span>}
         </span>
-      ) : (
+      ) : proj != null ? (
         <span className="flex items-baseline gap-1.5 text-right leading-none" title="Projected points (game not finished)">
-          {proj != null && <span className="text-[10px] font-semibold text-dim">Proj</span>}
+          <span className="text-[10px] font-semibold text-dim">Proj</span>
           <span className="font-display text-[1.35rem] font-bold text-mute tnum">{fmt(proj, 0)}</span>
         </span>
-      )}
+      ) : null}
     </div>
   );
 }
