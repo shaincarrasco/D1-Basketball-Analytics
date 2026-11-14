@@ -74,7 +74,7 @@ export default function RankingsTable({ teams: published, total }: { teams: Team
   });
 
   const identity: Column<TeamSummary>[] = [
-    { key: "rank", label: "Rk", value: t => t.rank, first: "asc", sticky: true, width: 62, render: t => <span className="whitespace-nowrap"><span className="rank-cell">{t.rank ?? "—"}</span><RankMove now={t.rank} before={prevRank.get(t.id)} /></span> },
+    { key: "rank", label: "Rk", title: `National DHR rank, of ${total}. Searching or picking a conference never changes it.`, value: t => t.rank, first: "asc", sticky: true, width: 62, render: t => <span className="whitespace-nowrap"><span className="rank-cell">{t.rank ?? "—"}</span><RankMove now={t.rank} before={prevRank.get(t.id)} /></span> },
     {
       key: "name", label: "Team", align: "l", value: t => t.name, first: "asc", sticky: true, width: 210,
       render: t => (
@@ -93,7 +93,7 @@ export default function RankingsTable({ teams: published, total }: { teams: Team
   const columns: Record<View, Column<TeamSummary>[]> = {
     Ratings: [
       ...identity,
-      { key: "adjEM", label: "AdjEM", title: "Adjusted efficiency margin (AdjO − AdjD)", value: t => t.adjEM, render: t => <b className="text-[15px]">{signed(t.adjEM, 1)}</b> },
+      { key: "adjEM", label: "AdjEM", title: "DHR rating: adjusted efficiency margin (AdjO − AdjD), points per 100 possessions vs an average D-I team", value: t => t.adjEM, render: t => <b className="text-[15px]">{signed(t.adjEM, 1)}</b> },
       { key: "adjO", label: "AdjO", title: "Adjusted offense: points per 100 possessions vs an average D-I defense", group: "off", value: t => t.adjO, render: t => rankCell(t.adjO, t.adjORank) },
       { key: "adjD", label: "AdjD", title: "Adjusted defense: points allowed per 100 possessions vs an average D-I offense (lower is better)", group: "def", first: "asc", value: t => t.adjD, render: t => rankCell(t.adjD, t.adjDRank) },
       { key: "adjT", label: "Tempo", title: "Adjusted possessions per 40 minutes (style, not quality)", value: t => t.adjT, render: t => <span>{fmt(t.adjT)}<span className="sub-rank">{t.adjTRank}</span></span> },
@@ -150,10 +150,10 @@ export default function RankingsTable({ teams: published, total }: { teams: Team
       { key: "crec", label: "Conf", value: t => t.cw - t.cl, render: t => `${t.cw}–${t.cl}` },
       ...[0, 1, 2, 3].map(i => ({ key: `q${i + 1}`, label: `Q${i + 1}`, title: `Record vs DHR quadrant ${i + 1} (unofficial, NET-style cutoffs by venue)`, value: (t: TeamSummary) => t.quads[i][0] - t.quads[i][1] * 0.5, render: (t: TeamSummary) => <span className={t.quads[i][0] + t.quads[i][1] ? "" : "text-dim"}>{t.quads[i][0]}–{t.quads[i][1]}</span> })),
       { key: "close", label: "≤5 pts", title: "Record in games decided by five points or fewer", value: t => t.close[0] - t.close[1], render: t => `${t.close[0]}–${t.close[1]}` },
-      { key: "sos", label: "SOS", value: t => t.sos, render: t => rankCell(t.sos, t.sosRank) },
+      { key: "sos", label: "SOS", title: "Average DHR rating of opponents played", value: t => t.sos, render: t => rankCell(t.sos, t.sosRank) },
       { key: "streak", label: "Streak", value: t => t.streak, render: t => <span className={t.streak?.startsWith("W") ? "text-win" : "text-loss"}>{t.streak ?? "—"}</span> },
-      { key: "proj", label: "Proj W–L", value: t => t.projW, render: t => `${fmt(t.projW, 1)}–${fmt(t.projL, 1)}` },
-      { key: "projc", label: "Proj conf", value: t => t.projCW, render: t => `${fmt(t.projCW, 1)}–${fmt(t.projCL, 1)}` },
+      { key: "proj", label: "Proj W–L", title: "Projected final record: current record plus expected wins in remaining games", value: t => t.projW, render: t => `${fmt(t.projW, 1)}–${fmt(t.projL, 1)}` },
+      { key: "projc", label: "Proj conf", title: "Projected final conference record", value: t => t.projCW, render: t => `${fmt(t.projCW, 1)}–${fmt(t.projCL, 1)}` },
     ],
   };
 
@@ -196,7 +196,7 @@ export default function RankingsTable({ teams: published, total }: { teams: Team
         <div className="mb-2 flex flex-wrap gap-x-5 gap-y-1 text-xs text-mute">
           <span><i className="mr-1.5 inline-block h-2 w-3 rounded-sm bg-off align-middle" />Offense</span>
           <span><i className="mr-1.5 inline-block h-2 w-3 rounded-sm bg-def align-middle" />Defense</span>
-          <span>Small number = national rank. Shading marks the top and bottom of D-I.</span>
+          <span>Rk and small numbers = national rank, even when you search or filter. Shading marks the top and bottom of D-I.</span>
         </div>
       )}
       <DataTable key={view} rows={rows} columns={columns[view]} rowKey={t => t.id} rowHref={t => `/teams/${t.slug}/`} initialSort={view === "Résumé" ? "rec" : view === "Projections" ? "simW" : "rank"} initialDir={view === "Résumé" || view === "Projections" ? "desc" : "asc"} csvName={`d1hoops-${slug(view)}.csv`} caption="Division I power rankings" />

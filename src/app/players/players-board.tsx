@@ -170,7 +170,7 @@ export default function PlayersBoard() {
   }, [stats, pool]);
 
   const columns = useMemo<Column<PlayerRow>[]>(() => [
-    { key: "rk", label: "#", value: () => null, sortable: false, sticky: true, width: 40, render: (_r, i) => <span className="rank-cell text-mute">{i + 1}</span> },
+    { key: "rk", label: "#", title: "Rank in the current sort among players who meet the filters. Searching a name doesn't change it.", value: () => null, sortable: false, sticky: true, width: 40, render: (_r, i) => <span className="rank-cell text-mute">{i + 1}</span> },
     {
       key: "name", label: "Player", csvLabel: "Player", align: "l", value: r => r.name, first: "asc", sticky: true, width: 196,
       render: r => (
@@ -279,7 +279,7 @@ export default function PlayersBoard() {
         <span><i className="mr-1.5 inline-block h-2 w-3 rounded-sm bg-off align-middle" />Offense</span>
         <span><i className="mr-1.5 inline-block h-2 w-3 rounded-sm bg-def align-middle" />Defense</span>
         <span>
-          Tint: <span className="text-win">top</span> / <span className="text-loss">bottom</span> of the {pool.length.toLocaleString("en-US")} players with {impact ? (minPoss ? `${minPoss}+ possessions` : "any possessions") : minMin ? `${minMin}+ mpg` : "any minutes"}{minG > 1 ? ` and ${minG}+ games` : ""}. Grey values are small samples{impact ? `; DPR is early-season and ± one standard error, so overlapping players are statistically tied. Ranks need ${DPR_MIN_POSS}+ possessions` : ""}.
+          Tint: <span className="text-win">top</span> / <span className="text-loss">bottom</span> of the {pool.length.toLocaleString("en-US")} players with {impact ? (minPoss ? `${minPoss}+ possessions` : "any possessions") : minMin ? `${minMin}+ mpg` : "any minutes"}{minG > 1 ? ` and ${minG}+ games` : ""}. # = rank among the {ranked.length.toLocaleString("en-US")} players who meet the filters; a name search keeps it. Grey values are small samples{impact ? `; DPR is early-season and ± one standard error, so overlapping players are statistically tied. Ranks need ${DPR_MIN_POSS}+ possessions` : ""}.
         </span>
       </div>
       {rows.length === 0 ? (

@@ -17,7 +17,7 @@ export default function TeamAvailability({ slug, health, items, log, links }: {
           <div className="flex gap-5">
             <div><span className="font-display text-[28px] font-black leading-none tnum">{health.out}</span><span className="block text-[11px] font-semibold text-mute">out</span></div>
             <div><span className="font-display text-[28px] font-black leading-none tnum">{health.limited}</span><span className="block text-[11px] font-semibold text-mute">limited</span></div>
-            <div title="Estimated team rating lost while these players are out, points per 100 possessions"><span className="font-display text-[28px] font-black leading-none tnum">{lossText(health.netLoss)}</span><span className="block text-[11px] font-semibold text-mute">est. pts/100</span></div>
+            <div title="Estimated team rating lost while these players are out, points per 100 possessions"><span className="font-display text-[28px] font-black leading-none tnum">{lossText(health.netLoss)}</span><span className="block text-[11px] font-semibold text-mute">est. rating lost</span></div>
           </div>
           <div className="mt-3" role="img" aria-label={`${pct(share)} of team minutes missing`}>
             <div className="h-1.5 overflow-hidden rounded-full bg-line2"><div className="h-full rounded-full bg-loss" style={{ width: `${share * 100}%` }} /></div>

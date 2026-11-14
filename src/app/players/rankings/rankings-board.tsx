@@ -72,7 +72,7 @@ export default function RankingsBoard() {
   const totalW = active.reduce((a, [, w]) => a + w, 0) || 1;
 
   const columns = useMemo<Column<Ranked>[]>(() => [
-    { key: "rk", label: "#", value: x => rankOf.get(x.r.id) ?? null, first: "asc", sticky: true, width: 46, render: x => <span className="rank-cell">{rankOf.get(x.r.id)}</span> },
+    { key: "rk", label: "#", title: "Rank among every player in this pool. Searching a name doesn't change it.", value: x => rankOf.get(x.r.id) ?? null, first: "asc", sticky: true, width: 46, render: x => <span className="rank-cell">{rankOf.get(x.r.id)}</span> },
     {
       key: "name", label: "Player", csvLabel: "Player", align: "l", value: x => x.r.name, first: "asc", sticky: true, width: 200,
       render: x => (
