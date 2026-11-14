@@ -667,6 +667,11 @@ for (const t of teamSummaries) {
 await write("conferences.json", conferences);
 await write("players.json", { fields: PLAYER_FIELDS, rows: players });
 
+// ---------- transfer portal (joins public/data/portal-2027.json to teams + players; see scripts/fetch-portal.mjs) ----------
+const { linkPortal } = await import("./fetch-portal.mjs");
+await write("portal.json", linkPortal(await readJson("public/data/portal-2027.json").catch(() => null), { teams: teamSummaries, players: { fields: PLAYER_FIELDS, rows: players } }));
+// ---------- end transfer portal ----------
+
 // Team detail files: game log + roster.
 for (const t of teamSummaries) {
   const record = teamById.get(t.id);
