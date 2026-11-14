@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import PlayersTabs from "./players-tabs";
 import PageHeader from "@sports/ui/page-header";
 import { Loading } from "@sports/ui/states";
 import { getMeta } from "@/lib/server-data";
@@ -13,7 +12,6 @@ export default function PlayersPage() {
   return (
     <>
       <PageHeader title="Players">{meta.counts.players.toLocaleString("en-US")} Division I players. Impact ranks them by DPR, our lineup-based rating. Shading compares each player with others who meet the filters.</PageHeader>
-      <PlayersTabs active="board" />
       <Suspense fallback={<Loading label="Loading players" />}>
         <PlayersBoard />
       </Suspense>

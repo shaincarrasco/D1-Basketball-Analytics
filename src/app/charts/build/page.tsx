@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
-import PlayersTabs from "../../players/players-tabs";
 import PageHeader from "@sports/ui/page-header";
 import { Loading } from "@sports/ui/states";
 import { BasketballBuilder as Builder } from "@/sports/basketball/ui";
@@ -14,7 +13,6 @@ export default function BuildPage() {
       <PageHeader title="Chart builder" actions={<Link href="/charts/" className="btn">Back to the gallery</Link>}>
         Pick any two stats, any pool of players, and who to call out. Every setting is saved in the link.
       </PageHeader>
-      <PlayersTabs active="build" />
       <Suspense fallback={<Loading label="Loading builder" />}>
         <Builder />
       </Suspense>

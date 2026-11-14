@@ -6,7 +6,7 @@ import "@fontsource/barlow/700.css";
 import "@fontsource-variable/big-shoulders-display";
 import "@fontsource-variable/doto";
 import "@sports/ui/theme.css";
-import SiteShell from "@/components/hoops-shell";
+import SiteShell from "@/components/site-shell";
 import { getMeta } from "@/lib/server-data";
 import { THEME_SCRIPT } from "@sports/ui/theme";
 import { DHR_INTRO_SCRIPT } from "@/components/dhr-intro-script";

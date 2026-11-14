@@ -4,12 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "predev": "node scripts/build-app-data.mjs && node scripts/build-skills.mjs && node scripts/build-lineup-lab.mjs",
+    "predev": "node scripts/build-app-data.mjs && node scripts/build-skills.mjs && node scripts/build-lineup-lab.mjs && node scripts/build-nav-preview.mjs",
     "build": "next build",
-    "prebuild": "node scripts/build-app-data.mjs && node scripts/build-skills.mjs && node scripts/build-lineup-lab.mjs",
+    "prebuild": "node scripts/build-app-data.mjs && node scripts/build-skills.mjs && node scripts/build-lineup-lab.mjs && node scripts/build-nav-preview.mjs",
     "start": "npx serve@latest out",
     "typecheck": "tsc --noEmit",
-    "data": "node scripts/build-power-ratings.mjs && node scripts/build-simulations.mjs && node scripts/build-app-data.mjs && node scripts/build-skills.mjs && node scripts/build-lineup-lab.mjs",
+    "data": "node scripts/build-power-ratings.mjs && node scripts/build-simulations.mjs && node scripts/build-app-data.mjs && node scripts/build-skills.mjs && node scripts/build-lineup-lab.mjs && node scripts/build-nav-preview.mjs",
     "test": "vitest run",
     "new-pack": "node scripts/new-pack.mjs",
     "new-site": "node scripts/new-site.mjs"
