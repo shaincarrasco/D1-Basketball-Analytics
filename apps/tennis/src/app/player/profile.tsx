@@ -63,7 +63,7 @@ export default function Profile() {
             {recent.map((r, i) => (
               <li key={i} className="flex flex-wrap items-baseline gap-x-3 gap-y-0.5 py-2 text-[14px]">
                 <span className={`w-5 font-display text-lg font-extrabold ${r.won ? "text-good" : "text-bad"}`}>{r.won ? "W" : "L"}</span>
-                <span className="min-w-0 flex-1">vs <Link className="link font-semibold" href={`/player/?id=${r.oppId}`}>{r.opp}</Link>{r.oppRank ? <span className="text-dim"> (#{r.oppRank})</span> : null}<span className="block text-xs text-dim">{r.event} · {r.round} · {r.surface}</span></span>
+                <span className="min-w-0 flex-1">vs <Link className="link font-semibold" href={`/player/?id=${r.oppId}`}>{r.opp}</Link>{r.oppRank ? <span className="text-dim"> (#{r.oppRank})</span> : null}<span className="block text-xs text-dim">{[r.event, r.round, r.surface].filter(Boolean).join(" · ")}</span></span>
                 <span className="font-display text-lg font-extrabold tnum">{r.score}</span>
                 <span className="w-20 text-right text-xs text-dim">{r.date}</span>
               </li>

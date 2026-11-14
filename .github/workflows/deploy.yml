@@ -94,7 +94,7 @@ jobs:
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add package-lock.json public/data/ .cache/ apps/tennis/public/data/ apps/tennis/data-cache/
+          git add package-lock.json public/data/ .cache/ apps/tennis/public/data/app/ apps/tennis/data-cache/
           if ! git diff --cached --quiet; then
             git commit -m 'Update 2026-27 basketball data snapshots'
             # main may have moved during the run (a merge or an overlapping refresh): replay on top, ours wins.

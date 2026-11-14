@@ -5,12 +5,12 @@ import Link from "next/link";
 import { useMemo } from "react";
 import { BarChart3 } from "lucide-react";
 import { heatPct } from "@sports/ui/format";
-import { encodeSpec, makeSpec, poolText, rankPool, tierOf, withDefaults, writePool, type SportPack } from "../index";
+import { encodeSpec, makeSpec, poolText, rankPool, tierOf, withDefaults, writePool, type Pool, type SportPack } from "../index";
 import { withQuery, type KitRoutes } from "./gallery";
 
-export default function FrameworkRanks<R>({ pack, p, all, routes }: { pack: SportPack<R>; p: R; all: R[]; routes: KitRoutes }) {
+export default function FrameworkRanks<R>({ pack, p, all, routes, pool: poolOver, lists }: { pack: SportPack<R>; p: R; all: R[]; routes: KitRoutes; /** Compare against this pool instead of the pack's profilePool (e.g. the player's own tour). */ pool?: Pool; lists?: Record<string, [string, string][]> }) {
   const E = pack.entity, id = E.id(p);
-  const pool = useMemo(() => withDefaults(pack, pack.ranking.profilePool), [pack]);
+  const pool = useMemo(() => withDefaults(pack, { ...pack.ranking.profilePool, ...poolOver }), [pack, poolOver]);
   const ranks = useMemo(() => pack.frameworks.map(f => {
     const list = rankPool(pack, all, pool, f.weights, "all", true);
     const i = list.findIndex(x => E.id(x.r) === id);
@@ -18,16 +18,16 @@ export default function FrameworkRanks<R>({ pack, p, all, routes }: { pack: Spor
   }), [pack, E, all, id, pool]);
   if (!ranks.some(r => r.rank)) return null;
   const best = [...ranks].filter(r => r.x).sort((a, b) => b.x!.standing - a.x!.standing)[0];
-  const chart = withQuery(routes.builder, encodeSpec(pack, makeSpec(pack, { type: "profile", ids: [id], pool: pack.ranking.profilePool })));
+  const chart = withQuery(routes.builder, encodeSpec(pack, makeSpec(pack, { type: "profile", ids: [id], pool })));
   const poolQs = (() => { const q = new URLSearchParams(); writePool(pack, pool, q); return q.toString(); })();
   return (
     <section className="deck p-5" aria-labelledby="fw-h">
       <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
-        <h2 id="fw-h" className="h-section font-display uppercase">Where {pack.nouns.pronoun} ranks</h2>
+        <h2 id="fw-h" className="h-section font-display uppercase">Where {pack.nouns.pronoun} {pack.nouns.pronoun === "they" ? "rank" : "ranks"}</h2>
         <Link href={chart} className="btn !px-3 !py-1.5 text-[13px]"><BarChart3 size={14} aria-hidden /> Chart the profile</Link>
       </div>
       <p className="mb-3 text-sm text-mute">
-        Rank in each of our ranking lenses, among {poolText(pack, pool, {})}.
+        Rank in each of our ranking lenses, among {poolText(pack, pool, lists ?? {})}.
         {best?.x ? <> Best fit: <b className="text-ink">{best.f.label}</b> ({tierOf(pack, best.x.standing).toLowerCase()}).</> : null}
       </p>
       <ul className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5">

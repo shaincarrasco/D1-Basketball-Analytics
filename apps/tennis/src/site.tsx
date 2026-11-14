@@ -1,6 +1,7 @@
 "use client";
 // Baseline: brand, nav and the sport pack wiring. This file plus the pack is what makes the
 // site tennis; everything else comes from @sports/ui and @sports/kit.
+import { useMemo } from "react";
 import { BarChart3, LayoutGrid, ListOrdered, ScatterChart, SlidersHorizontal } from "lucide-react";
 import SiteShell, { type ShellConfig } from "@sports/ui/site-shell";
 import ThemePicker from "@sports/ui/theme-picker";
@@ -38,5 +39,10 @@ export function Shell({ children, updated }: { children: React.ReactNode; update
 export function SiteGallery() { return <Gallery pack={pack} data={useSportData(pack)} routes={routes} />; }
 export function SiteBuilder() { return <Builder pack={pack} data={useSportData(pack)} />; }
 export function SiteRankings() { return <RankingsBoard pack={pack} data={useSportData(pack)} routes={routes} />; }
-export function SiteFrameworkRanks({ p, all }: { p: TennisRow; all: TennisRow[] }) { return <FrameworkRanks pack={pack} p={p} all={all} routes={routes} />; }
+const TOURS: Record<string, [string, string][]> = { tour: [["men", "Men's tour"], ["women", "Women's tour"]] };
+/** "Where they rank", against the player's own tour. */
+export function SiteFrameworkRanks({ p, all }: { p: TennisRow; all: TennisRow[] }) {
+  const pool = useMemo(() => ({ tour: p.tour }), [p.tour]); // stable, so the 9 rankings compute once
+  return <FrameworkRanks pack={pack} p={p} all={all} routes={routes} pool={pool} lists={TOURS} />;
+}
 export { useSportData };
