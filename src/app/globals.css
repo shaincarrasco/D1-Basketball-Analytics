@@ -5,11 +5,12 @@
 /*
   D1 Hoops, "the gym after dark". Every colour is a CSS variable set per palette below;
   components never hard-code hex. Palettes are listed for the picker in src/lib/theme.ts.
+  Default palette: Blacktop (near-black with an electric-blue accent).
   --bulb is the scoreboard accent (ranks, scores, active states) and is the one colour
   viewers can override from the picker. Offence/defence, good/bad and live keep their
   own meanings: off, def, win/good, loss/bad, hot.
 */
-:root, html[data-palette="arena"] {
+html[data-palette="arena"] {
   color-scheme: dark;
   --bg-rgb: 15 27 46;
   --deck-rgb: 22 38 61;
@@ -32,7 +33,7 @@
   --glow: 1;
   --shadow: none;
 }
-html[data-palette="blacktop"] {
+:root, html[data-palette="blacktop"] {
   color-scheme: dark;
   --bg-rgb: 14 15 18;
   --deck-rgb: 25 27 32;
@@ -42,9 +43,9 @@ html[data-palette="blacktop"] {
   --ink-rgb: 242 243 245;
   --mute-rgb: 165 170 182;
   --dim-rgb: 118 124 138;
-  --bulb-rgb: 61 245 154;
+  --bulb-rgb: 61 169 255;
   --off-rgb: 255 138 76;
-  --def-rgb: 92 170 255;
+  --def-rgb: 120 196 255;
   --hot-rgb: 255 77 157;
   --win-rgb: 61 245 154;
   --loss-rgb: 255 92 108;
