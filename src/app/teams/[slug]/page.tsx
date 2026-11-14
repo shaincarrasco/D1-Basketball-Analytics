@@ -26,6 +26,10 @@ import { Dots } from "@/components/dots";
 import { playerRows } from "@/lib/players";
 import { teamNote } from "@/lib/notes";
 import { onTeam, teamHex } from "@/lib/color";
+import TeamFormCard from "@/components/form/team-form-card";
+import IndispensableCard from "@/components/form/indispensable-card";
+import { getAllForms, getForm, getIndispensable, getMovers } from "@/lib/form-server";
+import { teamHistory } from "@/lib/form";
 
 // Older data files predate `rosterFields`; this is the column order they were written with.
 const LEGACY_FIELDS: PlayerField[] = ["id", "name", "teamId", "pos", "g", "gs", "min", "pts", "reb", "orb", "drb", "ast", "stl", "blk", "tov", "pf",
@@ -202,6 +206,8 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
           )}
           {note && <p className="note text-[15px] leading-[1.45]">{note}</p>}
 
+          <TeamFormCard name={team.name} form={getAllForms().byId.get(team.id)!} points={teamHistory(getForm(), team.id)} mover={getMovers().rows.find(m => m.id === team.id) ?? null} color={`color-mix(in oklab, ${color} 62%, var(--ink))`} total={total} />
+
           {/* Game form */}
           <section id="form" className="deck scroll-mt-32 p-5">
             <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
@@ -251,6 +257,7 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
             <h2 id="avail-h" className="h-section mb-2">Availability</h2>
             <TeamAvailability slug={slug} health={team.health} items={detail.availability} log={detail.injuryLog} links={reportLinks} />
           </section>
+          <IndispensableCard rows={getIndispensable().filter(p => p.teamId === team.id)} />
           <section className="deck p-5" aria-labelledby="news-h">
             <h2 id="news-h" className="h-section mb-1">Latest news</h2>
             <ArticleList items={detail.news} max={8} empty="No recent coverage found for this team." />
