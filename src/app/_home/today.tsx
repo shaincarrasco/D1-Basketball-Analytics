@@ -3,7 +3,7 @@
 // the best game on a scoreboard card, the rest of the worthwhile games as grouped rows, and
 // last night's finals. On today's slate ESPN's live scores are laid over the static data.
 import Link from "next/link";
-import { useMemo } from "react";
+import { useMemo, useRef, useState } from "react";
 import { Plus } from "lucide-react";
 import TeamLogo from "@/components/team-logo";
 import TvBadges from "@/components/tv-badges";
@@ -47,9 +47,8 @@ export default function Today() {
     const liveFirst = (g: Game) => (g.status === "in_progress" ? 0 : 1);
     return list.sort((a, b) => liveFirst(a) - liveFirst(b) || (b.watch ?? 0) - (a.watch ?? 0));
   }, [staticGames, live.byGame]);
-  const showable = (g: Game) => g.status === "scheduled" || g.status === "in_progress" || g.status === "final";
-  const best = games.find(g => showable(g) && g.pred && g.home.id && g.away.id) ?? games.find(showable) ?? games[0];
-  const rest = games.filter(g => g !== best).slice(0, 6);
+  const featured = useMemo(() => pickFeatured(games), [games]);
+  const rest = games.filter(g => !featured.some(f => f.g === g)).slice(0, 6);
   const liveCount = games.filter(g => g.status === "in_progress").length;
   const finals = useMemo(() => {
     const list = (prev.data?.games ?? []).filter(g => g.status === "final" && g.home.score !== null && g.away.score !== null && g.home.id && g.away.id);
@@ -86,7 +85,7 @@ export default function Today() {
         <p className="deck p-5 text-sm text-mute">No games on this day. <Link className="underline" href="/games/">Pick another date</Link>.</p>
       ) : (
         <div className="grid items-start gap-6 lg:grid-cols-2 lg:grid-rows-[auto_1fr] [&>*]:min-w-0">
-          {best && <Scoreboard g={best} day={day!} live={live.byGame.get(best.id)} top={isToday ? "Best game tonight" : "Best game"} />}
+          {featured.length > 0 && <Featured list={featured} day={day!} liveBy={live.byGame} />}
           {rest.length > 0 && (
             <div className="lg:row-span-2">
               <div className="mb-2.5 flex items-baseline justify-between">
@@ -204,17 +203,85 @@ function FollowedCircles({ games, day }: { games: Game[]; day: string | null }) 
   );
 }
 
-function why(g: Game) {
-  if (!g.pred) return null;
-  const m = Math.abs(g.pred.margin);
-  const unbeaten = (s: GameSide) => !!s.record && /^\d+-0$/.test(s.record) && s.record !== "0-0";
-  const top25 = (s: GameSide) => (s.rank ?? 999) <= 25;
-  if (unbeaten(g.home) && unbeaten(g.away)) return `Both unbeaten. Margin: ${fmt(m, 1)} pts`;
-  if (top25(g.home) && top25(g.away)) return `Two top-25 teams, ${fmt(m, 1)}-point margin`;
-  return m < 3 ? `Projected within ${fmt(Math.max(1, Math.ceil(m)), 0)} pts` : `${g.pred.margin >= 0 ? g.home.name : g.away.name} by ${fmt(m, 1)}`;
+type Kind = "best" | "closest" | "upset";
+type Feature = { kind: Kind; g: Game };
+
+/**
+ * Up to three featured games: the best matchup (highest watch score: matchup quality x
+ * competitiveness, see build-app-data), the closest projected game between two real D-I
+ * teams, and an upset watch (a top-25 favourite whose opponent wins 20%+ of the time).
+ * Games still to play come first; once a slate is over the finals are featured instead.
+ */
+function pickFeatured(games: Game[]): Feature[] {
+  const rated = games.filter(g => g.pred && g.home.id && g.away.id && g.status !== "canceled" && g.status !== "postponed");
+  const open = rated.filter(g => g.status !== "final");
+  const pool = open.length ? open : rated.filter(g => g.status === "final");
+  if (!pool.length) return [];
+  const out: Feature[] = [];
+  const used = (g: Game) => out.some(f => f.g === g);
+  const best = [...pool].sort((a, b) => (b.watch ?? 0) - (a.watch ?? 0))[0];
+  out.push({ kind: "best", g: best });
+  const real = (s: GameSide) => s.rank !== null && s.rank <= 250;
+  const closest = pool.filter(g => !used(g) && real(g.home) && real(g.away))
+    .sort((a, b) => Math.abs(a.pred!.margin) - Math.abs(b.pred!.margin) || (b.watch ?? 0) - (a.watch ?? 0))[0];
+  if (closest && Math.abs(closest.pred!.margin) < 4) out.push({ kind: "closest", g: closest });
+  const dog = (g: Game) => Math.min(g.pred!.wp, 1 - g.pred!.wp);
+  const favRank = (g: Game) => (g.pred!.wp >= 0.5 ? g.home.rank : g.away.rank) ?? 999;
+  const upset = pool.filter(g => !used(g) && favRank(g) <= 25 && dog(g) >= 0.2).sort((a, b) => dog(b) - dog(a))[0];
+  if (upset) out.push({ kind: "upset", g: upset });
+  return out;
 }
 
-function Scoreboard({ g, day, live, top }: { g: Game; day: string; live?: LiveGame; top: string }) {
+const KIND_LABEL: Record<Kind, string> = { best: "Best matchup", closest: "Closest game", upset: "Upset watch" };
+
+function why(g: Game, kind: Kind) {
+  if (!g.pred) return null;
+  const m = Math.abs(g.pred.margin);
+  const fav = g.pred.wp >= 0.5 ? g.home : g.away, dog = fav === g.home ? g.away : g.home;
+  if (kind === "closest") return `Model margin: ${fmt(m, 1)} points`;
+  if (kind === "upset") return `${dog.name} wins ${pctFmt(Math.min(g.pred.wp, 1 - g.pred.wp))} of the time`;
+  const unbeaten = (s: GameSide) => !!s.record && /^\d+-0$/.test(s.record) && s.record !== "0-0";
+  const top25 = (s: GameSide) => (s.rank ?? 999) <= 25;
+  if (top25(g.home) && top25(g.away)) return `Two top-25 teams, ${fav.name} by ${fmt(m, 1)}`;
+  if (unbeaten(g.home) && unbeaten(g.away)) return `Both unbeaten, ${fav.name} by ${fmt(m, 1)}`;
+  return `${fav.name} by ${fmt(m, 1)}`;
+}
+
+/** Swipeable featured cards with labelled pills, Apple Sports style. */
+function Featured({ list, day, liveBy }: { list: Feature[]; day: string; liveBy: Map<string, LiveGame> }) {
+  const track = useRef<HTMLDivElement>(null);
+  const [at, setAt] = useState(0);
+  const GAP = 12; // matches gap-3
+  const go = (i: number) => { const el = track.current; if (el) el.scrollTo({ left: i * (el.clientWidth + GAP), behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" }); };
+  const onScroll = () => { const el = track.current; if (el) setAt(Math.round(el.scrollLeft / Math.max(1, el.clientWidth + GAP))); };
+  return (
+    <section aria-roledescription="carousel" aria-label="Featured games">
+      {list.length > 1 && (
+        <div className="mb-2.5 flex gap-1.5" role="group" aria-label="Featured game">
+          {list.map((f, i) => (
+            <button key={f.kind} type="button" className="chip !py-1 !text-[13px]" aria-pressed={at === i} onClick={() => go(i)}>
+              {KIND_LABEL[f.kind]}
+            </button>
+          ))}
+        </div>
+      )}
+      <div ref={track} onScroll={onScroll} className="no-scrollbar flex snap-x snap-mandatory gap-3 overflow-x-auto overscroll-x-contain">
+        {list.map((f, i) => (
+          <div key={f.kind} className="w-full shrink-0 snap-center" aria-roledescription="slide" aria-label={`${i + 1} of ${list.length}: ${KIND_LABEL[f.kind]}`}>
+            <Scoreboard g={f.g} day={day} live={liveBy.get(f.g.id)} kind={f.kind} labelled={list.length > 1} />
+          </div>
+        ))}
+      </div>
+      {list.length > 1 && (
+        <div className="mt-2.5 flex justify-center gap-1.5" aria-hidden>
+          {list.map((f, i) => <i key={f.kind} className={`h-1.5 rounded-full transition-all ${at === i ? "w-4 bg-ink" : "w-1.5 bg-line2"}`} />)}
+        </div>
+      )}
+    </section>
+  );
+}
+
+function Scoreboard({ g, day, live, kind, labelled }: { g: Game; day: string; live?: LiveGame; kind: Kind; labelled: boolean }) {
   const st = status(g, live);
   const scheduled = g.status === "scheduled";
   const score = (k: "home" | "away") => (scheduled ? (g.pred ? Math.round(g.pred[k]) : null) : g[k].score);
@@ -223,7 +290,7 @@ function Scoreboard({ g, day, live, top }: { g: Game; day: string; live?: LiveGa
     <article className="press relative rounded-[22px] border border-line bg-deck p-[18px]">
       <Link href={gameHref(day, g.id)} className="absolute inset-0 rounded-[22px]" aria-label={`${g.away.name} ${g.neutral ? "vs" : "at"} ${g.home.name}, open game`} />
       <div className="flex items-center justify-between text-[13px]">
-        <span className="font-medium text-mute">{top}</span>
+        <span className="font-medium text-mute">{labelled ? (g.neutral ? "Neutral site" : `at ${g.home.name}`) : KIND_LABEL[kind]}</span>
         <span className="flex items-center gap-2 font-semibold">{st.live && <span className="live-dot" aria-hidden />}<span className={st.live ? "text-hot" : ""}>{st.text}</span>{g.tv?.length && (scheduled || g.status === "in_progress") ? <span className="relative z-[1]"><TvBadges tv={g.tv} max={1} /></span> : null}</span>
       </div>
       <div className="mt-4 flex items-center justify-between gap-2">
@@ -246,7 +313,7 @@ function Scoreboard({ g, day, live, top }: { g: Game; day: string; live?: LiveGa
           </div>
           <div className="mt-1.5 flex items-center justify-between gap-2 text-[13px]">
             <b className="tnum">{pctFmt(awayWP)}</b>
-            <span className="truncate text-mute">{scheduled ? why(g) : `Pregame: ${pctFmt(Math.max(g.pred.wp, awayWP))} favorite`}</span>
+            <span className="truncate text-mute">{scheduled ? why(g, kind) : `Pregame: ${pctFmt(Math.max(g.pred.wp, awayWP))} favorite`}</span>
             <b className="tnum">{pctFmt(g.pred.wp)}</b>
           </div>
         </div>

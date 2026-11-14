@@ -704,16 +704,21 @@ const boxLine = row => {
   return { fgm: a.fgm, fga: a.fga, tpm: a.tpm, tpa: a.tpa, ftm: a.ftm, fta: a.fta, orb: a.orb, drb: a.drb, ast: a.ast, stl: a.stl, blk: a.blk, tov: a.tov,
     paint: a.paint, fastBreak: a.fastBreak, offTov: a.offTov, poss: r(a.poss), largestLead: num(row.teamStats?.points?.largestLead) };
 };
-const emSorted = teamSummaries.filter(t => t.adjEM !== null).map(t => t.adjEM).sort((a, b) => a - b);
-const emPct = em => (em === null ? 0 : emSorted.filter(x => x <= em).length / emSorted.length);
+// Team quality on a 0–1 scale from the rating: +30 or better (a top-five team) = 1, -5 or worse = 0.
+// Linear in points, so No. 11 vs No. 30 is a real gap (percentiles squash the top of the table).
+const teamQ = em => (em === null ? 0 : Math.max(0, Math.min(1, (em + 5) / 35)));
 const index = [];
 for (const [day, list] of [...byDay.entries()].sort(([a], [b]) => a.localeCompare(b))) {
   const games = list.sort((a, b) => a.date.localeCompare(b.date)).map(g => {
     const p = preds[g.id];
     const home = sideInfo(g, "home"), away = sideInfo(g, "away");
-    // Watchability: half quality (both teams' rating percentile), half competitiveness.
+    // Watchability = matchup quality x competitiveness. Quality leans on the weaker team (a
+    // game is only as good as its worse side); a coin flip between two weak teams still scores
+    // low, and a 70/30 game between two top-25 teams beats a toss-up between No. 30 and No. 60.
     const closeness = p ? 1 - Math.abs(2 * p.homeWinProb - 1) : 0;
-    const watch = p ? Math.round(100 * (0.55 * Math.sqrt(emPct(home.adjEM) * emPct(away.adjEM)) + 0.45 * closeness)) : null;
+    const qa = teamQ(home.adjEM), qb = teamQ(away.adjEM);
+    const quality = 0.65 * Math.min(qa, qb) + 0.35 * Math.max(qa, qb);
+    const watch = p ? Math.round(100 * quality * (0.55 + 0.45 * closeness)) : null;
     const final = g.status === "final" && num(g.homeScore) !== null;
     const winnerWP = final && p ? (g.homeScore > g.awayScore ? p.homeWinProb : 1 - p.homeWinProb) : null;
     const hb = boxByGameTeam.get(`${g.id}:${g.homeTeamId}`), ab = boxByGameTeam.get(`${g.id}:${g.awayTeamId}`);
