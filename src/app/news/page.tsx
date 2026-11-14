@@ -46,7 +46,7 @@ export default function NewsPage() {
             <p className="mb-3 text-xs text-mute">{news.pollDate ? `Poll of ${new Date(news.pollDate).toLocaleDateString("en-US", { month: "short", day: "numeric" })}. ` : ""}Gap = AP rank minus DHR rank; a big positive gap means the voters rate a team lower than the numbers do.</p>
             {ap.length ? (
               <table className="dt">
-                <thead><tr><th>AP</th><th className="l">Team</th><th>DHR</th><th title="AP rank minus DHR rank">Gap</th></tr></thead>
+                <thead><tr><th>AP</th><th className="l">Team</th><th title="DHR rank: our D1 Hoops Power Rating">DHR</th><th title="AP rank minus DHR rank">Gap</th></tr></thead>
                 <tbody>
                   {ap.map(r => {
                     const gap = r.dhr ? r.rank - r.dhr : null;
