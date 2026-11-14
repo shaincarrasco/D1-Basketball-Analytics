@@ -148,8 +148,8 @@ pub async fn events(State(state): State<Shared>) -> Sse<impl Stream<Item = Resul
     let first = state.slate.read().await.clone();
     let updates = BroadcastStream::new(state.tx.subscribe())
         .filter_map(|msg| async move { msg.ok() }) // a lagging client just skips to the newest slate
-        .map(|json| Ok(Event::default().event("slate").data(json.to_string())));
-    let initial = stream::once(async move { Ok(Event::default().event("slate").data(first.to_string())) });
+        .map(|json| Ok(Event::default().event("slate").data(json)));
+    let initial = stream::once(async move { Ok(Event::default().event("slate").data(first)) });
     Sse::new(initial.chain(updates)).keep_alive(KeepAlive::new().interval(Duration::from_secs(15)))
 }
 
