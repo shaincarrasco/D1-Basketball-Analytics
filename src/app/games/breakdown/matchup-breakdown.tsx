@@ -30,6 +30,7 @@ export default function MatchupBreakdown({ meta, a, b, site, injuries, aColor, b
             sign={1}
             injury={injuries ? { aLoss: loss(a.slug), bLoss: loss(b.slug), aOut: out(a.slug), bOut: out(b.slug) } : null}
             verified={null}
+            points="exact"
             asOf={<>Built from each team&apos;s current DHR rating, the same numbers as the projection above.</>}
           />
         </Disclosure>

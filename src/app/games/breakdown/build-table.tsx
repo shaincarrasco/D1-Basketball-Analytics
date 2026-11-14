@@ -26,14 +26,18 @@ export function Disclosure({ title, sub, children, defaultOpen = false, testId }
   );
 }
 
-/** Round parts to one decimal so the shown parts add up to the shown total (largest remainder). */
+/**
+ * Round parts to one decimal so the shown parts add up to the shown total (largest remainder).
+ * The first part (the league average) is never nudged: it reads the same in every column.
+ */
 function roundParts(parts: number[]): number[] {
   const total = Math.round(parts.reduce((s, v) => s + v, 0) * 10);
   const scaled = parts.map(v => v * 10);
   const out = scaled.map(Math.round);
   let diff = total - out.reduce((s, v) => s + v, 0);
-  const order = scaled.map((v, i) => ({ i, rem: v - Math.round(v) })).sort((x, y) => (diff > 0 ? y.rem - x.rem : x.rem - y.rem));
-  for (let k = 0; diff !== 0 && k < order.length; k++) { out[order[k].i] += diff > 0 ? 1 : -1; diff += diff > 0 ? -1 : 1; }
+  const order = scaled.map((v, i) => ({ i, rem: v - Math.round(v) })).filter(x => x.i > 0)
+    .sort((x, y) => (diff > 0 ? y.rem - x.rem : x.rem - y.rem));
+  for (let k = 0; diff !== 0; k = (k + 1) % order.length) { out[order[k].i] += diff > 0 ? 1 : -1; diff += diff > 0 ? -1 : 1; }
   return out.map(v => v / 10);
 }
 
@@ -43,10 +47,12 @@ export type BuildSide = { name: string; short: string; color: string; href?: str
 export type InjuryWhatIf = { aLoss: number; bLoss: number; aOut: string[]; bOut: string[] };
 
 const TH = "px-3 py-2 text-left text-[13px] font-normal text-mute";
-const TD = "px-3 py-2 text-right tnum";
+const TD = "whitespace-nowrap px-3 py-2 text-right tnum";
 
-export default function BuildTable({ b, A, B, sign, injury, asOf, verified }: {
+export default function BuildTable({ b, A, B, sign, injury, asOf, verified, points = "published" }: {
   b: Build; A: BuildSide; B: BuildSide;
+  /** "published" = points as g.pred publishes them (one decimal each; total = their sum, as the game sheet shows it); "exact" = the total from full precision (as /matchup/ shows it). */
+  points?: "published" | "exact";
   /** Orientation of the published margin: 1 = A − B, −1 = B − A (games publish home − away; A is the away team). */
   sign: 1 | -1;
   /** Current injury what-if (unplayed games only). null = not shown. */
@@ -62,6 +68,7 @@ export default function BuildTable({ b, A, B, sign, injury, asOf, verified }: {
   const bParts = roundParts([b.mu, b.b.O, b.a.D, (-b.venue * b.h) / 2]);
   const pace = roundParts([b.muT, b.a.T, b.b.T]);
   const aPts = pubOne(b.aPts), bPts = pubOne(b.bPts);
+  const total = points === "exact" ? b.total : aPts + bPts;
   const host = b.venue === 1 ? A : b.venue === -1 ? B : null;
   const shift = injury ? injuryShift(injury.aLoss, injury.bLoss, b.tempo) : 0;
   const margin = toAB(d.margin);
@@ -117,10 +124,10 @@ export default function BuildTable({ b, A, B, sign, injury, asOf, verified }: {
               <th scope="row" className="px-3 py-2 text-left text-[13px]">= Projected margin <span className="font-normal text-mute">(DHR)</span></th>
               <td className={`${TD} text-[15px]`}>{by(margin)}</td>
             </tr>
-            <tr className={injury ? "border-b border-line" : ""}><th scope="row" className={TH}>Projected total ({fmt(aPts)} + {fmt(bPts)})</th><td className={TD} data-testid="build-total">{fmt(aPts + bPts)}</td></tr>
+            <tr className={injury ? "border-b border-line" : ""}><th scope="row" className={TH}>Projected total{points === "published" ? ` (${fmt(aPts)} + ${fmt(bPts)})` : " (both teams)"}</th><td className={TD} data-testid="build-total">{fmt(total)}</td></tr>
             {injury && (
               <>
-                <tr className="border-b border-line">
+                <tr className={Math.abs(shift) >= 0.05 ? "border-b border-line" : ""}>
                   <th scope="row" className={TH}>
                     Injuries (estimate, not in the model)
                     <span className="mt-0.5 block text-[12px] text-dim">
@@ -131,10 +138,12 @@ export default function BuildTable({ b, A, B, sign, injury, asOf, verified }: {
                   </th>
                   <td className={TD}>{Math.abs(shift) < 0.05 ? "No change" : `${fmt(Math.abs(shift))} toward ${shift > 0 ? A.short : B.short}`}</td>
                 </tr>
-                <tr>
-                  <th scope="row" className="px-3 py-2 text-left text-[13px]">= Injury-adjusted margin <span className="text-mute">(rough what-if)</span></th>
-                  <td className={TD}>{by(margin + shift)}</td>
-                </tr>
+                {Math.abs(shift) >= 0.05 && (
+                  <tr>
+                    <th scope="row" className="px-3 py-2 text-left text-[13px]">= Injury-adjusted margin <span className="text-mute">(rough what-if)</span></th>
+                    <td className={TD}>{by(margin + shift)}</td>
+                  </tr>
+                )}
               </>
             )}
           </tbody>
