@@ -344,3 +344,104 @@ export function useLiveGame(espnId: string | null | undefined, mode: LiveGameMod
 
   return { data, loading, error, updated, reload: () => setAttempt(a => a + 1) };
 }
+
+// ---- many games (the Live view) -----------------------------------------------------------------
+
+/** Live view: how often each live game's summary is refreshed. */
+export const LIVE_LIST_POLL_MS = 50_000;
+/** Live view: at most this many summary requests at once. */
+export const LIVE_LIST_MAX_IN_FLIGHT = 4;
+/** A summary fetched this recently is skipped when the list restarts (a game joins or leaves). */
+const LIST_FRESH_MS = 20_000;
+/** After repeated failures a game sits out up to this many rounds (about 5 minutes). */
+const LIST_MAX_SKIP = 5;
+
+export type SummaryTarget = { id: string; espnId: string; orient: Orient };
+export type SummaryEntry = { data: LiveSummary; at: number };
+
+/**
+ * ESPN summaries for a list of live games (the games hub's Live view). While `enabled`, fetches
+ * every target now and then every 50 s, at most four requests in flight; pauses while the tab is
+ * hidden (aborting what's in flight) and resumes on return; aborts everything when disabled or
+ * unmounted. A game whose summary fails sits out 1, 3, then 5 rounds before it's tried again.
+ * Failures are silent: the map simply has no (or an older) entry for that game. Keyed by our game id.
+ */
+export function useLiveSummaries(targets: SummaryTarget[], enabled: boolean): Map<string, SummaryEntry> {
+  const [data, setData] = useState<Map<string, SummaryEntry>>(new Map());
+  const targetsRef = useRef(targets);
+  targetsRef.current = targets;
+  const dataRef = useRef(data);
+  dataRef.current = data;
+  // Restart only when the set of games changes, not on every scoreboard refresh.
+  const key = targets.map(t => `${t.id}:${t.espnId}`).sort().join(",");
+
+  useEffect(() => {
+    if (!enabled || !key) return;
+    let alive = true, running = false, again = false;
+    let timer: ReturnType<typeof setTimeout> | null = null;
+    const ctrls = new Set<AbortController>();
+    const fails = new Map<string, { n: number; skip: number }>();
+
+    const schedule = () => {
+      if (alive && !document.hidden && !timer) timer = setTimeout(round, LIVE_LIST_POLL_MS);
+    };
+    const fetchOne = async (t: SummaryTarget) => {
+      const c = new AbortController();
+      ctrls.add(c);
+      try {
+        const res = await fetch(`${SUMMARY}?event=${encodeURIComponent(t.espnId)}`, { signal: c.signal, cache: "no-store" });
+        if (!res.ok) throw new Error(String(res.status));
+        const parsed = parseSummary(await res.json(), t.espnId, t.orient);
+        if (!parsed) throw new Error("unusable summary");
+        if (!alive) return;
+        fails.delete(t.id);
+        setData(prev => new Map(prev).set(t.id, { data: parsed, at: Date.now() }));
+      } catch {
+        if (!alive || c.signal.aborted) return;
+        const n = (fails.get(t.id)?.n ?? 0) + 1;
+        fails.set(t.id, { n, skip: Math.min(LIST_MAX_SKIP, 2 ** (n - 1) - 1) });
+      } finally {
+        ctrls.delete(c);
+      }
+    };
+    const round = async (first = false) => {
+      timer = null;
+      if (!alive || document.hidden) return;
+      if (running) { again = true; return; }
+      running = true;
+      const now = Date.now();
+      const queue = targetsRef.current.filter(t => {
+        const f = fails.get(t.id);
+        if (f && f.skip > 0) { f.skip--; return false; }
+        const have = dataRef.current.get(t.id);
+        return !(first && have && have.data.espnId === t.espnId && now - have.at < LIST_FRESH_MS);
+      });
+      let next = 0;
+      const worker = async () => {
+        while (alive && !document.hidden && next < queue.length) await fetchOne(queue[next++]);
+      };
+      await Promise.all(Array.from({ length: Math.min(LIVE_LIST_MAX_IN_FLIGHT, queue.length) }, worker));
+      running = false;
+      if (again && alive && !document.hidden) { again = false; round(); return; }
+      again = false;
+      schedule();
+    };
+    const onVis = () => {
+      if (document.hidden) {
+        if (timer) clearTimeout(timer);
+        timer = null;
+        for (const c of ctrls) c.abort();
+      } else if (!timer) round();
+    };
+    document.addEventListener("visibilitychange", onVis);
+    round(true);
+    return () => {
+      alive = false;
+      if (timer) clearTimeout(timer);
+      for (const c of ctrls) c.abort();
+      document.removeEventListener("visibilitychange", onVis);
+    };
+  }, [enabled, key]);
+
+  return data;
+}
