@@ -110,6 +110,7 @@ const GLOSSARY: { group: string; terms: Term[] }[] = [
       { term: "Watchability", def: "0–100 score for upcoming games: 55% quality (the geometric mean of both teams' AdjEM percentiles) and 45% competitiveness (how close the win probability is to 50–50)." },
       { term: "Upset flag", def: "Marks a final where the winner's pregame win probability was below 35%." },
       { term: "Projected W–L", def: "Current record plus the sum of pregame win probabilities in every remaining scheduled game (a game without a projection counts as 50%). Projected conference W–L does the same for league games only. Fractions are expected wins, not a prediction of a specific record." },
+      { term: "Projected, Proj, pregame", def: "Words this site uses for the model's numbers, never for results. Projected (Proj) = what the model expects before a game, season or record plays out. Pregame = the model's call frozen at tip-off, shown next to the real result so you can judge it. Projected scores stay hidden unless you turn them on. A bare small number beside a team is its DHR rank, not the AP poll." },
       { term: "Win probability", def: "Chance the team wins, from the projected margin and its uncertainty (see Predictions). Pregame probabilities on game logs are walk-forward: they use only games completed before that date." },
     ],
   },
@@ -148,7 +149,7 @@ export default function MethodologyPage() {
         <div className="max-w-[54rem] space-y-10">
           <Section id="overview" title="Overview">
             <p>
-              DHR is an original, opponent-adjusted efficiency rating built from every completed {meta.seasonLabel} game involving a Division I team.
+              DHR (the D1 Hoops Power Rating) is an original, opponent-adjusted efficiency rating built from every completed {meta.seasonLabel} game involving a Division I team.
               It asks one question of each game: <b>given who was playing and where, how many points per 100 possessions did each side score, compared with what we would expect?</b>{" "}
               Solving that for every game at once gives each team an offense rating, a defense rating and a tempo rating.
             </p>

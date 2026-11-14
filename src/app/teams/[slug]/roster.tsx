@@ -41,7 +41,7 @@ export default function Roster({ slug, rows, fields, onOff, bios }: {
   ];
   if (hasDpr) columns.push({
     key: "dpr", label: "DPR", csvLabel: "DPR",
-    title: "DHR player rating: points per 100 possessions better than an average D-I player, from play-by-play lineups (± one standard error). Green/red only when the whole band is above/below zero.",
+    title: "DPR, our player rating: points per 100 possessions better than an average D-I player, from play-by-play lineups (± one standard error). Green/red only when the whole band is above/below zero.",
     value: p => p.dpr,
     render: p => {
       if (p.dpr == null) return "—";

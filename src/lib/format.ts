@@ -12,6 +12,8 @@ export const pctFmt = (p: number | null | undefined, digits = 0) => {
   return `${(p * 100).toFixed(digits)}%`;
 };
 export const record = (w: number, l: number) => `${w}–${l}`;
+/** Tooltip for a bare rank numeral beside a team: it is our rating's rank, not a poll. */
+export const DHR_RANK_TITLE = "DHR rank: our D1 Hoops Power Rating, not the AP poll";
 
 const ET = "America/New_York";
 export const dayLabel = (day: string, opts: Intl.DateTimeFormatOptions = { weekday: "short", month: "short", day: "numeric" }) =>

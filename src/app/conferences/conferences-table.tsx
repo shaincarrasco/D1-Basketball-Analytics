@@ -2,7 +2,7 @@
 import Link from "next/link";
 import DataTable, { type Column } from "@/components/data-table";
 import TeamLogo from "@/components/team-logo";
-import { fmt, heat, signed } from "@/lib/format";
+import { DHR_RANK_TITLE, fmt, heat, signed } from "@/lib/format";
 
 export type ConfRow = {
   slug: string; name: string; rank: number; size: number;
@@ -23,10 +23,10 @@ export default function ConferencesTable({ rows }: { rows: ConfRow[] }) {
   );
 
   const columns: Column<ConfRow>[] = [
-    { key: "rank", label: "Rk", value: r => r.rank, first: "asc", sticky: true, width: 46, render: r => <span className="rank-cell">{r.rank}</span> },
+    { key: "rank", label: "Rk", title: "Conference rank by average DHR rating", value: r => r.rank, first: "asc", sticky: true, width: 46, render: r => <span className="rank-cell">{r.rank}</span> },
     { key: "name", label: "Conference", align: "l", value: r => r.name, first: "asc", sticky: true, width: 170,
       render: r => <Link href={`/conferences/${r.slug}/`} className="link block truncate font-semibold group-hover/row:text-off">{r.name}</Link> },
-    { key: "avgEM", label: "Avg AdjEM", title: "Average adjusted efficiency margin of member teams", value: r => r.avgEM, render: r => <b className="text-[15px]">{signed(r.avgEM)}</b> },
+    { key: "avgEM", label: "Avg AdjEM", title: "Average DHR rating (adjusted efficiency margin) of member teams", value: r => r.avgEM, render: r => <b className="text-[15px]">{signed(r.avgEM)}</b> },
     { key: "avgO", label: "AdjO", title: "Average adjusted offense", group: "off", value: r => r.avgO, render: r => cell(r.avgO, oRank.get(r.slug)) },
     { key: "avgD", label: "AdjD", title: "Average adjusted defense (lower is better)", group: "def", first: "asc", value: r => r.avgD, render: r => cell(r.avgD, dRank.get(r.slug)) },
     { key: "avgT", label: "Tempo", title: "Average adjusted possessions per 40 minutes", value: r => r.avgT, render: r => <span>{fmt(r.avgT)}<span className="sub-rank">{tRank.get(r.slug)}</span></span> },
@@ -35,12 +35,17 @@ export default function ConferencesTable({ rows }: { rows: ConfRow[] }) {
         <Link href={`/teams/${r.best.slug}/`} className="link flex items-center gap-2">
           <TeamLogo src={r.best.logo} name={r.best.name} size={20} />
           <span className="max-w-[10rem] truncate">{r.best.name}</span>
-          <span className="text-xs text-mute">#{r.best.rank ?? "—"}</span>
+          <span className="text-xs text-mute" title={DHR_RANK_TITLE}>#{r.best.rank ?? "—"}</span>
         </Link>
       ) : "—" },
     { key: "nc", label: "Non-conf", title: "Record against teams outside the conference (non-D-I opponents included)", value: r => pct(r),
       render: r => <span>{r.ncW}–{r.ncL} <span className="sub-rank">{pct(r) === null ? "" : `${(pct(r)! * 100).toFixed(0)}%`}</span></span> },
     { key: "size", label: "Teams", value: r => r.size },
   ];
-  return <DataTable rows={rows} columns={columns} rowKey={r => r.slug} initialSort="rank" initialDir="asc" csvName="d1hoops-conferences.csv" rowHref={r => `/conferences/${r.slug}/`} caption="Conference strength ranking" />;
+  return (
+    <>
+      <DataTable rows={rows} columns={columns} rowKey={r => r.slug} initialSort="rank" initialDir="asc" csvName="d1hoops-conferences.csv" rowHref={r => `/conferences/${r.slug}/`} caption="Conference strength ranking" />
+      <p className="mt-2 text-xs text-mute">Small numbers rank the {n} conferences against each other. Best team # = national DHR rank.</p>
+    </>
+  );
 }
