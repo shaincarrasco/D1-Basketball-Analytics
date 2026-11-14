@@ -6,7 +6,7 @@ Data stays fresh on its own: the GitHub Action refreshes data three times a day 
 
 ## 1. Create the service
 
-1. In Railway, go to **New project → Deploy from GitHub repo → shaincarrasco/D1-Basketball-Analytics**. Railway picks up `railway.json` and the root `Dockerfile`.
+1. In Railway, go to **New project → Deploy from GitHub repo → shaincarrasco/Sports-Analytics**. Railway picks up `railway.json` and the root `Dockerfile`.
 2. Under **Settings → Networking**, generate a domain (or add your own).
 3. Add the variables below and redeploy.
 

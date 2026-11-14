@@ -122,15 +122,23 @@ jobs:
       - name: Build app data layer and static site
         run: npm run build
         env:
-          NEXT_PUBLIC_BASE_PATH: /D1-Basketball-Analytics
+          # Paths follow the repo name, so renaming the repo can't break the sites.
+          NEXT_PUBLIC_BASE_PATH: /${{ github.event.repository.name }}/d1-hoops
+          SITE_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/d1-hoops
           # Optional: URL of the live relay (live/), set as a repository variable LIVE_URL.
           NEXT_PUBLIC_LIVE_URL: ${{ vars.LIVE_URL }}
-      - name: Build the tennis site into /tennis/
-        run: |
-          npm run build -w @sites/tennis
-          rm -rf out/tennis && cp -r apps/tennis/out out/tennis
+      - name: Build the tennis site
+        run: npm run build -w @sites/tennis
         env:
-          SITE_BASE_PATH: /D1-Basketball-Analytics/tennis
+          SITE_BASE_PATH: /${{ github.event.repository.name }}/tennis
+      - name: Assemble the Pages site (hub at /, D1 Hoops at /d1-hoops/, tennis at /tennis/)
+        run: |
+          rm -rf pages && mkdir -p pages
+          cp -r out pages/d1-hoops
+          cp -r apps/tennis/out pages/tennis
+          cp site-hub/index.html pages/index.html
+          cp site-hub/404.html pages/404.html
+          touch pages/.nojekyll
       - name: Save the injury ledger (status changes and returns since the last check)
         if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' || github.event_name == 'push'
         run: |
@@ -148,7 +156,7 @@ jobs:
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./out
+          path: ./pages
 
   deploy:
     environment:

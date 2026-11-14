@@ -110,7 +110,7 @@ async fn main() {
     let _ = rustls::crypto::ring::default_provider().install_default();
     let cfg = Config::from_env();
     let http = reqwest::Client::builder()
-        .user_agent("d1hoops-server/0.2 (+https://github.com/shaincarrasco/D1-Basketball-Analytics)")
+        .user_agent("d1hoops-server/0.2 (+https://github.com/shaincarrasco/Sports-Analytics)")
         .redirect(reqwest::redirect::Policy::none())
         .gzip(true)
         .build()

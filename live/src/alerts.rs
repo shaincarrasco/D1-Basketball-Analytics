@@ -334,7 +334,7 @@ fn injury_alerts(wire: &Value, now: chrono::DateTime<chrono::Utc>) -> Vec<Alert>
     out
 }
 
-pub const DEFAULT_INJURY_FEED: &str = "https://shaincarrasco.github.io/D1-Basketball-Analytics/data/app/injury-wire.json";
+pub const DEFAULT_INJURY_FEED: &str = "https://shaincarrasco.github.io/Sports-Analytics/d1-hoops/data/app/injury-wire.json";
 
 /// Background task: every 10 minutes, fetch the injury wire and push fresh events to followers.
 pub async fn injury_loop(state: Shared) {

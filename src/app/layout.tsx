@@ -11,7 +11,7 @@ import { getMeta } from "@/lib/server-data";
 import { THEME_SCRIPT } from "@sports/ui/theme";
 import { DHR_INTRO_SCRIPT } from "@/components/dhr-intro-script";
 
-// Metadata URLs are not basePath-aware, so prefix them (GitHub Pages serves under /D1-Basketball-Analytics).
+// Metadata URLs are not basePath-aware, so prefix them (GitHub Pages serves D1 Hoops under /<repo>/d1-hoops).
 const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 
 export const metadata: Metadata = {

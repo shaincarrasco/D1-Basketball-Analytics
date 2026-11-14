@@ -2,7 +2,9 @@
 
 Free, transparent analytics for every NCAA Division I men's basketball team: opponent-adjusted power ratings, walk-forward game predictions with a live backtest, team scouting pages, player leaderboards, a matchup simulator and conference standings.
 
-**Live site:** https://shaincarrasco.github.io/D1-Basketball-Analytics/
+**Live sites:** D1 Hoops https://shaincarrasco.github.io/Sports-Analytics/d1-hoops/ · Baseline (tennis) https://shaincarrasco.github.io/Sports-Analytics/tennis/ · hub https://shaincarrasco.github.io/Sports-Analytics/
+
+This repo is a monorepo of sports sites built from shared blocks; see [docs/BLOCKS.md](docs/BLOCKS.md).
 
 ## What's in it
 | Page | What it does |

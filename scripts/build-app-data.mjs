@@ -658,7 +658,7 @@ await write("injury-wire.json", { checked: injuryCheck, wire: injuries.wire.slic
 await mkdir(`${OUT}/cal`, { recursive: true });
 const icsEsc = v => String(v ?? "").replace(/\\/g, "\\\\").replace(/([,;])/g, "\\$1").replace(/\n/g, "\\n");
 const icsDate = d => new Date(d).toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
-const siteUrl = "https://shaincarrasco.github.io/D1-Basketball-Analytics";
+const siteUrl = process.env.SITE_URL ?? "https://shaincarrasco.github.io/Sports-Analytics/d1-hoops";
 for (const t of teamSummaries) {
   const lines = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//D1 Hoops//Schedule//EN", "CALSCALE:GREGORIAN", "METHOD:PUBLISH", `X-WR-CALNAME:${icsEsc(`${t.name} basketball (D1 Hoops)`)}`, "X-PUBLISHED-TTL:PT6H", "REFRESH-INTERVAL;VALUE=DURATION:PT6H"];
   for (const g of teamLog.get(t.id) ?? []) {

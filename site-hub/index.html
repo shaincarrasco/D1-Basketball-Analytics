@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sports Analytics</title>
+<meta name="description" content="D1 Hoops (college basketball) and Baseline (pro tennis): rankings, charts and live scores.">
+<meta name="theme-color" content="#0E0F12">
+<style>
+  :root { color-scheme: dark; }
+  body { margin: 0; min-height: 100vh; background: #0E0F12; color: #F2F3F5; font: 16px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; display: grid; place-items: center; }
+  main { width: min(920px, 100% - 40px); padding: 48px 0; }
+  h1 { font: 900 clamp(40px, 8vw, 72px)/0.95 "Arial Narrow", system-ui, sans-serif; letter-spacing: -0.01em; text-transform: uppercase; margin: 0 0 8px; }
+  p.lede { color: #9AA0AA; margin: 0 0 32px; }
+  .grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+  a.card { display: block; text-decoration: none; color: inherit; background: #191B20; border: 1px solid #2A2D35; border-radius: 20px; padding: 24px; transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease; }
+  a.card:hover, a.card:focus-visible { transform: translateY(-2px); border-color: var(--c); box-shadow: 0 0 0 1px var(--c), 0 12px 40px -12px var(--c); outline: none; }
+  .ball { width: 56px; height: 56px; border-radius: 50%; background: var(--c); box-shadow: 0 0 28px -4px var(--c); margin-bottom: 18px; }
+  h2 { font: 800 30px/1 "Arial Narrow", system-ui, sans-serif; text-transform: uppercase; margin: 0 0 6px; }
+  .card p { color: #9AA0AA; margin: 0; }
+  .go { margin-top: 16px; font-weight: 700; color: var(--c); }
+</style>
+</head>
+<body>
+<main>
+  <h1>Sports Analytics</h1>
+  <p class="lede">Rankings, charts and live scores, one site per sport.</p>
+  <div class="grid">
+    <a class="card" href="d1-hoops/" style="--c:#FF8C28"><div class="ball"></div><h2>D1 Hoops</h2><p>College basketball: power ratings, predictions, player rankings and charts for every D-I team.</p><div class="go">Open D1 Hoops →</div></a>
+    <a class="card" href="tennis/" style="--c:#D4FF3A"><div class="ball"></div><h2>Baseline</h2><p>Pro tennis: live scores, world rankings, serve and return stats for both tours.</p><div class="go">Open Baseline →</div></a>
+  </div>
+</main>
+</body>
+</html>
