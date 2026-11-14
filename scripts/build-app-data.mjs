@@ -10,6 +10,7 @@ import { mkdir, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import { isD1Conference } from "./d1-conferences.mjs";
 import { boxPossessions, loadPbp, solveRapm } from "./lib/pbp-analytics.mjs";
 import { normalizeGames } from "./lib/game-status.mjs";
+import { buildInjuries } from "./lib/injuries.mjs";
 
 const OUT = "public/data/app";
 const readJson = async path => JSON.parse(await readFile(path, "utf8"));
@@ -569,37 +570,29 @@ for (const [gid, eid] of eventIdByGame) { const list = articlesFor(feeds?.gameNe
 // Polls onto team summaries.
 const pollRank = new Map();
 for (const [poll, list] of Object.entries(feeds?.polls ?? {})) for (const e of list) { if (!pollRank.has(e.team)) pollRank.set(e.team, {}); pollRank.get(e.team)[poll] = { rank: e.rank, prev: e.previous ?? null, pts: e.points ?? null, fpv: e.firstPlace ?? null }; }
-// Availability: ESPN-listed injuries, players who stopped appearing in box scores, and
-// injury/suspension headlines that tag the player.
-const injuryWords = /injur|surgery|torn|sprain|fracture|concussion|out for|sidelined|suspend|day-to-day|questionable|status uncertain|will miss|to miss/i;
+// Availability: the injury engine (scripts/lib/injuries.mjs) merges ESPN's injury list, curated
+// reports, injury headlines and box-score absences, scores each absence and updates the ledger.
+const espnGamesByTeam = new Map(); // espn team id -> days it played (box scores)
+// Only games with a box score count: a game in progress (or one ESPN hasn't filed) has no player lines yet.
+for (const ev of Object.values(espnGames.events ?? {})) for (const side of ev.teams ?? []) { if (!side.players?.length) continue; if (!espnGamesByTeam.has(side.teamId)) espnGamesByTeam.set(side.teamId, new Set()); espnGamesByTeam.get(side.teamId).add(ev.day); }
+const INJURY_LEDGER = "public/data/injury-ledger-2027.json";
+const injuryCheck = feeds?.fetchedAt && Date.parse(feeds.fetchedAt) > Date.now() - 6 * 3600e3 ? new Date(feeds.fetchedAt).toISOString() : new Date().toISOString();
+const injuries = buildInjuries({
+  teams: teamSummaries, espnIdBySlug, rosters: espnRosters.teams ?? {},
+  teamPlayers: tid => players.filter(p => p[playerIdx.teamId] === tid).map(p => ({ pid: p[playerIdx.id], name: p[playerIdx.name], pos: p[playerIdx.pos], g: p[playerIdx.g], min: p[playerIdx.min], pts: p[playerIdx.pts], reb: p[playerIdx.reb], ast: p[playerIdx.ast], dpr: p[playerIdx.dpr], onPoss: p[playerIdx.onPoss] })),
+  logsBySlug, logFields: LOG_FIELDS, aidByPid,
+  teamDaysByEspn: new Map([...espnGamesByTeam].map(([k, v]) => [String(k), [...v].sort()])),
+  teamGames: teamLog, feeds,
+  curated: await readJson("public/data/injury-reports-2027.json").catch(() => []),
+  ledger: await readJson(INJURY_LEDGER).catch(() => null),
+  now: injuryCheck,
+});
 const availabilityBySlug = new Map();
-const espnGamesByTeam = new Map(); // espn team id -> sorted days it played (box scores)
-for (const ev of Object.values(espnGames.events ?? {})) for (const side of ev.teams ?? []) { if (!espnGamesByTeam.has(side.teamId)) espnGamesByTeam.set(side.teamId, new Set()); espnGamesByTeam.get(side.teamId).add(ev.day); }
-for (const t of teamSummaries) {
-  const e = espnIdBySlug.get(t.slug);
-  if (!e) continue;
-  const list = [];
-  const teamDays = [...(espnGamesByTeam.get(String(e)) ?? [])].sort();
-  const logs = logsBySlug.get(t.slug) ?? {};
-  for (const row of players.filter(p => p[playerIdx.teamId] === t.id)) {
-    const pid = row[playerIdx.id], name = row[playerIdx.name], aid = aidByPid.get(pid);
-    const espnInj = aid ? (feeds?.injuries ?? []).find(i => i.athlete === aid) : null;
-    if (espnInj) { list.push({ pid, name, status: espnInj.status, detail: espnInj.detail ?? null, since: espnInj.date ?? null, source: "espn" }); continue; }
-    const played = new Set((logs[pid] ?? []).filter(l => (l[LOG_FIELDS.indexOf("min")] ?? 0) > 0).map(l => l[0]));
-    const mins = (logs[pid] ?? []).map(l => l[LOG_FIELDS.indexOf("min")] ?? 0).filter(m => m > 0);
-    const avgMin = mins.length ? mins.reduce((s2, m) => s2 + m, 0) / mins.length : 0;
-    let missed = 0;
-    for (let i = teamDays.length - 1; i >= 0 && !played.has(teamDays[i]); i--) missed++;
-    const headline = aid ? (feeds?.athleteNews?.[aid] ?? []).map(art).find(a => a && injuryWords.test(a.h)) : null;
-    if (played.size && missed > 0 && avgMin >= 12) {
-      list.push({ pid, name, status: missed === 1 ? "Missed last game" : `Missed last ${missed} games`, detail: headline ? headline.h : "Reason not reported", since: teamDays[teamDays.length - missed], source: "box", url: headline?.url ?? null });
-    } else if (headline) {
-      list.push({ pid, name, status: "In the news", detail: headline.h, since: headline.t?.slice(0, 10) ?? null, source: "news", url: headline.url });
-    }
-  }
-  if (list.length) availabilityBySlug.set(t.slug, list);
-}
-console.log(`[app-data] Feeds: ${feeds ? Object.keys(feeds.articles ?? {}).length : 0} articles, ${gameArticles.size} games with previews/recaps, ${[...availabilityBySlug.values()].flat().length} availability notes.`);
+for (const row of injuries.rows) { if (!availabilityBySlug.has(row.slug)) availabilityBySlug.set(row.slug, []); availabilityBySlug.get(row.slug).push(row); }
+const healthBySlug = new Map(injuries.teamHealth.map(h => [h.slug, h]));
+await writeFile(INJURY_LEDGER, JSON.stringify(injuries.ledger));
+console.log(`[app-data] Injuries: ${injuries.rows.length} flagged (${injuries.rows.filter(r => r.confidence !== "inferred").length} with a reported reason), ${injuries.wire.length} changes in the last three weeks.`);
+console.log(`[app-data] Feeds: ${feeds ? Object.keys(feeds.articles ?? {}).length : 0} articles, ${gameArticles.size} games with previews/recaps, ${injuries.rows.length} availability notes.`);
 
 // Team-perspective line on every team game log row.
 for (const [tid, list] of teamLog) {
@@ -621,7 +614,9 @@ for (const t of teamSummaries) {
   if (t.next) t.next.tv = tvByGame.get(t.next.id)?.map(x => x.name) ?? null;
   const pr = pollRank.get(String(t.espnId));
   t.ap = pr?.ap ?? null; t.coaches = pr?.coaches ?? null;
-  t.unavailable = (availabilityBySlug.get(t.slug) ?? []).filter(a => a.source !== "news").length;
+  const hl = healthBySlug.get(t.slug);
+  t.unavailable = hl?.out ?? 0;
+  t.health = hl ? { out: hl.out, limited: hl.limited, minShare: hl.minShare, netLoss: hl.netLoss } : null;
   const log = teamLog.get(t.id) ?? [];
   t.ats = [log.filter(x => x.ats === "W").length, log.filter(x => x.ats === "L").length, log.filter(x => x.ats === "P").length];
 }
@@ -646,7 +641,8 @@ await write("teams.json", teamSummaries);
 const slugOfEspn = id => slugByEspn.get(String(id)) ?? null;
 const pollRows = list => (list ?? []).map(e => { const slug = slugOfEspn(e.team), t = slug ? teamSummaries.find(x => x.slug === slug) : null; return { rank: e.rank, prev: e.previous ?? null, pts: e.points ?? null, fpv: e.firstPlace ?? null, slug, name: t?.name ?? null, dhr: t?.rank ?? null, w: t?.w ?? null, l: t?.l ?? null }; });
 await write("news.json", { fetchedAt: feeds?.fetchedAt ?? null, league: articlesFor(feeds?.league).slice(0, 30), polls: { ap: pollRows(feeds?.polls?.ap), coaches: pollRows(feeds?.polls?.coaches) }, pollDate: feeds?.pollDate ?? null });
-await write("injuries.json", teamSummaries.flatMap(t => (availabilityBySlug.get(t.slug) ?? []).map(a => ({ ...a, slug: t.slug, team: t.name, conf: t.conf, rank: t.rank }))));
+await write("injuries.json", { checked: injuryCheck, rows: injuries.rows, teams: injuries.teamHealth.map(({ keys, ...h }) => h), wire: injuries.wire, links: await readJson("public/data/availability-report-links.json").catch(() => []) });
+await write("injury-wire.json", { checked: injuryCheck, wire: injuries.wire.slice(0, 150).map(({ t, kind, key, name, slug, team, status, from, body, rank, pid }) => ({ t, kind, key, name, slug, team, status, from: from ?? null, body: body ?? null, rank, pid })) });
 
 // Calendar feeds (.ics) per team: subscribe once, updates with every deploy.
 await mkdir(`${OUT}/cal`, { recursive: true });
@@ -677,7 +673,7 @@ for (const t of teamSummaries) {
   const perGame = s => s && gp ? { pts: r(div(s.pts, gp)), reb: r(div((s.orb ?? 0) + (s.drb ?? 0), gp)), ast: r(div(s.ast, gp)), tov: r(div(s.tov, gp)), stl: r(div(s.stl, gp)), blk: r(div(s.blk, gp)), paint: r(div(s.paint, gp)), fastBreak: r(div(s.fastBreak, gp)) } : null;
   await write(`team/${t.slug}.json`, { id: t.id, games: teamLog.get(t.id) ?? [], roster, perGame: perGame(tot), oppPerGame: perGame(opp),
     logFields: LOG_FIELDS, logs: logsBySlug.get(t.slug) ?? {}, bios: biosBySlug.get(t.slug) ?? {},
-    news: newsBySlug.get(t.slug) ?? [], availability: availabilityBySlug.get(t.slug) ?? [],
+    news: newsBySlug.get(t.slug) ?? [], availability: availabilityBySlug.get(t.slug) ?? [], injuryLog: injuries.historyBySlug.get(t.slug) ?? [],
     playerNews: Object.fromEntries(players.filter(p => p[playerIdx.teamId] === t.id).map(p => [p[playerIdx.id], articlesFor(feeds?.athleteNews?.[aidByPid.get(p[playerIdx.id])]).slice(0, 8)]).filter(([, l]) => l.length)),
     rosterFields: PLAYER_FIELDS, winHist: sims?.teams?.[t.id]?.hist ?? null, shots: shotsBySlug.get(t.slug) ?? null, lineups: lineupsBySlug.get(t.slug) ?? [], onOff: onOffBySlug.get(t.slug) ?? {} });
 }
