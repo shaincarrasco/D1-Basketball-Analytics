@@ -1,5 +1,5 @@
 // Split bar: left share = away win probability (cyan), right = home (orange).
-import { pctFmt } from "@/lib/format";
+import { pctFmt } from "@sports/ui/format";
 
 export default function WinProb({ awayName, homeName, homeWP, compact = false }: { awayName: string; homeName: string; homeWP: number; compact?: boolean }) {
   const away = 1 - homeWP;

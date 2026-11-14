@@ -1,0 +1,7 @@
+{
+  "name": "@sports/packs",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Ready-made sport packs (tennis, soccer, football) with fixtures. Import as @sports/packs/<sport>.",
+  "peerDependencies": { "@sports/kit": "*" }
+}

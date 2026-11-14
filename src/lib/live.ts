@@ -5,10 +5,10 @@
 // tab is hidden, sleeps until shortly before the next tip otherwise, and fails silently: on any
 // error the pages keep showing the static data.
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useJson } from "./client-data";
+import { useJson } from "@sports/ui/client-data";
 import type { Game, TeamSummary } from "./types";
 import { elapsedFrom } from "./win-prob";
-import { etToday } from "./format";
+import { etToday } from "@sports/ui/format";
 
 const SCOREBOARD = "https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/scoreboard";
 // Optional push relay (live/ — the Rust service). When set at build time, today's slate

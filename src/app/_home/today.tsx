@@ -5,11 +5,11 @@
 import Link from "next/link";
 import { useMemo, useRef, useState } from "react";
 import { Plus } from "lucide-react";
-import TeamLogo from "@/components/team-logo";
+import TeamLogo from "@sports/ui/team-logo";
 import TvBadges from "@/components/tv-badges";
 import { Dots } from "@/components/dots";
-import { dayLabel, etToday, fmt, pctFmt, timeLabel } from "@/lib/format";
-import { useJson } from "@/lib/client-data";
+import { dayLabel, etToday, fmt, pctFmt, timeLabel } from "@sports/ui/format";
+import { useJson } from "@sports/ui/client-data";
 import { toggleFavorite, useFavorites } from "@/lib/favorites";
 import { useLiveScores, withLive, type LiveGame } from "@/lib/live";
 import type { Game, GameDay, GameIndex, GameSide, TeamSummary } from "@/lib/types";

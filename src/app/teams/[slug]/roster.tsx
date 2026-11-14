@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
-import DataTable, { type Column } from "@/components/data-table";
-import { fmt, signed } from "@/lib/format";
+import DataTable, { type Column } from "@sports/ui/data-table";
+import { fmt, signed } from "@sports/ui/format";
 import { playerRows } from "@/lib/players";
 import type { Player, PlayerField, PlayerTable, TeamDetail } from "@/lib/types";
 

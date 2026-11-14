@@ -1,0 +1,9 @@
+{
+  "name": "@sports/kit",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Sport-agnostic engine: SportPack contract, percentile rankings, chart specs, validator, and the chart/rankings UI (@sports/kit/ui/*).",
+  "main": "index.ts",
+  "types": "index.ts",
+  "peerDependencies": { "next": "*", "react": "*", "@sports/ui": "*" }
+}

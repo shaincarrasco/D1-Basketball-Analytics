@@ -4,7 +4,7 @@
 // and use the arrow keys, to step through every scoring play.
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { pctFmt } from "@/lib/format";
+import { pctFmt } from "@sports/ui/format";
 import type { Game } from "@/lib/types";
 import { HALF_SECONDS, OT_SECONDS, REG_SECONDS, WP_SIGMA, clockLabel, flowSummary, type WPPoint } from "@/lib/win-prob";
 

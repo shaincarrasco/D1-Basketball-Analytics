@@ -4,9 +4,9 @@
 import Link from "next/link";
 import { useEffect, useMemo, useRef } from "react";
 import { X } from "lucide-react";
-import TeamLogo from "@/components/team-logo";
+import TeamLogo from "@sports/ui/team-logo";
 import WinProb from "@/components/win-prob";
-import { dayLabel, fmt, pctFmt, timeLabel } from "@/lib/format";
+import { dayLabel, fmt, pctFmt, timeLabel } from "@sports/ui/format";
 import type { LiveGame } from "@/lib/live";
 import type { BoxLine, Game, GameSide } from "@/lib/types";
 import { winProb, remainingAt, clockLabel } from "@/lib/win-prob";

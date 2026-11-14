@@ -2,8 +2,8 @@
 // Followed-team cards: full card for /following/, compact card for the home strip.
 import Link from "next/link";
 import FavoriteButton from "@/components/favorite-button";
-import TeamLogo from "@/components/team-logo";
-import { dayLabel, fmt, pctFmt, timeLabel } from "@/lib/format";
+import TeamLogo from "@sports/ui/team-logo";
+import { dayLabel, fmt, pctFmt, timeLabel } from "@sports/ui/format";
 import type { TeamSummary } from "@/lib/types";
 
 /** Eastern calendar day (YYYY-MM-DD) of an ISO timestamp — the key used by /games/?d=. */

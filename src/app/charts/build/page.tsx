@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
 import PlayersTabs from "../../players/players-tabs";
-import PageHeader from "@/components/page-header";
-import { Loading } from "@/components/states";
+import PageHeader from "@sports/ui/page-header";
+import { Loading } from "@sports/ui/states";
 import { BasketballBuilder as Builder } from "@/sports/basketball/ui";
 
 export const metadata: Metadata = { title: "Chart builder", description: "Make your own Division I player charts: scatter plots with quadrants, leaderboards, swarm charts and percentile comparisons. Share with a link or download as PNG." };

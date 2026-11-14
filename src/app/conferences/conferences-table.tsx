@@ -1,8 +1,8 @@
 "use client";
 import Link from "next/link";
-import DataTable, { type Column } from "@/components/data-table";
-import TeamLogo from "@/components/team-logo";
-import { fmt, heat, signed } from "@/lib/format";
+import DataTable, { type Column } from "@sports/ui/data-table";
+import TeamLogo from "@sports/ui/team-logo";
+import { fmt, heat, signed } from "@sports/ui/format";
 
 export type ConfRow = {
   slug: string; name: string; rank: number; size: number;

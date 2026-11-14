@@ -48,7 +48,7 @@ export function derive(p: Player, team: TeamSummary | null): PlayerRow {
 }
 
 // Percentile helpers live in the sport kit; re-exported so existing imports keep working.
-export { makePool, pctLabel } from "@/sport-kit/stats";
+export { makePool, pctLabel } from "@sports/kit/stats";
 
 /** DPR ranks only count players with this many on-court possessions. */
 export const DPR_MIN_POSS = 150;

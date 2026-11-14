@@ -5,10 +5,10 @@ import "@fontsource/barlow/600.css";
 import "@fontsource/barlow/700.css";
 import "@fontsource-variable/big-shoulders-display";
 import "@fontsource-variable/doto";
-import "./globals.css";
-import SiteShell from "@/components/site-shell";
+import "@sports/ui/theme.css";
+import SiteShell from "@/components/hoops-shell";
 import { getMeta } from "@/lib/server-data";
-import { THEME_SCRIPT } from "@/lib/theme";
+import { THEME_SCRIPT } from "@sports/ui/theme";
 
 // Metadata URLs are not basePath-aware, so prefix them (GitHub Pages serves under /D1-Basketball-Analytics).
 const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? "";

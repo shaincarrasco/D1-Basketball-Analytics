@@ -1,9 +1,9 @@
 "use client";
 import Link from "next/link";
-import DataTable, { type Column } from "@/components/data-table";
+import DataTable, { type Column } from "@sports/ui/data-table";
 import PerfBars from "@/components/perf-bars";
-import TeamLogo from "@/components/team-logo";
-import { fmt, heat, pctFmt, signed } from "@/lib/format";
+import TeamLogo from "@sports/ui/team-logo";
+import { fmt, heat, pctFmt, signed } from "@sports/ui/format";
 import type { TeamSummary } from "@/lib/types";
 
 export type StandingRow = TeamSummary & { pos: number };

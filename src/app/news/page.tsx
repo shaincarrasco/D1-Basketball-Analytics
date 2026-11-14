@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import PageHeader from "@/components/page-header";
+import PageHeader from "@sports/ui/page-header";
 import ArticleList from "@/components/article-list";
-import TeamLogo from "@/components/team-logo";
+import TeamLogo from "@sports/ui/team-logo";
 import { getInjuries, getNews, getTeams } from "@/lib/server-data";
 import InjuryTable from "./injury-table";
 

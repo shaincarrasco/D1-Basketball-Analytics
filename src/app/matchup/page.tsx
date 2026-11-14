@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import PageHeader from "@/components/page-header";
-import { Loading } from "@/components/states";
+import PageHeader from "@sports/ui/page-header";
+import { Loading } from "@sports/ui/states";
 import MatchupClient from "./matchup-client";
 
 export const metadata: Metadata = { title: "Matchup simulator", description: "Project a score, spread and win probability for any two Division I teams on a neutral or home court." };

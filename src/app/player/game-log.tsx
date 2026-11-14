@@ -2,8 +2,8 @@
 // Game-by-game box score lines for one player, with a points/game-score strip on top.
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import TeamLogo from "@/components/team-logo";
-import { fmt } from "@/lib/format";
+import TeamLogo from "@sports/ui/team-logo";
+import { fmt } from "@sports/ui/format";
 import type { TeamDetail, TeamSummary } from "@/lib/types";
 
 type Line = {

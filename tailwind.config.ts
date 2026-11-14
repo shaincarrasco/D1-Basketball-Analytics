@@ -1,34 +1,8 @@
 import type { Config } from "tailwindcss";
+import preset from "./packages/ui/tailwind-preset";
 
 const config: Config = {
-  content: ["./src/**/*.{js,ts,jsx,tsx,mdx}"],
-  theme: {
-    extend: {
-      colors: {
-        night: "rgb(var(--bg-rgb) / <alpha-value>)",
-        deck: "rgb(var(--deck-rgb) / <alpha-value>)",
-        deck2: "rgb(var(--deck-2-rgb) / <alpha-value>)",
-        line: "rgb(var(--line-rgb) / <alpha-value>)",
-        line2: "rgb(var(--line-2-rgb) / <alpha-value>)",
-        ink: "rgb(var(--ink-rgb) / <alpha-value>)",
-        mute: "rgb(var(--mute-rgb) / <alpha-value>)",
-        dim: "rgb(var(--dim-rgb) / <alpha-value>)",
-        off: "rgb(var(--off-rgb) / <alpha-value>)",
-        def: "rgb(var(--def-rgb) / <alpha-value>)",
-        hot: "rgb(var(--hot-rgb) / <alpha-value>)",
-        win: "rgb(var(--win-rgb) / <alpha-value>)",
-        loss: "rgb(var(--loss-rgb) / <alpha-value>)",
-        bulb: "rgb(var(--bulb-rgb) / <alpha-value>)",
-        scoreboard: "rgb(var(--scoreboard-rgb) / <alpha-value>)",
-      },
-      fontFamily: {
-        display: ["'Big Shoulders Display Variable'", "'Arial Narrow'", "system-ui", "sans-serif"],
-        sans: ["Barlow", "system-ui", "sans-serif"],
-        dots: ["'Doto Variable'", "ui-monospace", "monospace"],
-      },
-      screens: { xs: "420px" },
-    },
-  },
-  plugins: [],
+  presets: [preset as Config],
+  content: ["./src/**/*.{js,ts,jsx,tsx,mdx}", "./packages/{ui,kit}/**/*.{ts,tsx}"],
 };
 export default config;

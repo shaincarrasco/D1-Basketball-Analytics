@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getMeta, getTeam, getTeamDetail, getTeams } from "@/lib/server-data";
-import TeamLogo from "@/components/team-logo";
+import TeamLogo from "@sports/ui/team-logo";
 import TvBadges from "@/components/tv-badges";
 import StatBar from "@/components/stat-bar";
-import { fmt, pctFmt, signed } from "@/lib/format";
+import { fmt, pctFmt, signed } from "@sports/ui/format";
 import FavoriteButton from "@/components/favorite-button";
 import ArticleList from "@/components/article-list";
 import AvailabilityList from "@/components/availability-list";
@@ -24,7 +24,7 @@ import { ViewTransition } from "react";
 import { Dots } from "@/components/dots";
 import { playerRows } from "@/lib/players";
 import { teamNote } from "@/lib/notes";
-import { onTeam, teamHex } from "@/lib/color";
+import { onTeam, teamHex } from "@sports/ui/color";
 
 // Older data files predate `rosterFields`; this is the column order they were written with.
 const LEGACY_FIELDS: PlayerField[] = ["id", "name", "teamId", "pos", "g", "gs", "min", "pts", "reb", "orb", "drb", "ast", "stl", "blk", "tov", "pf",

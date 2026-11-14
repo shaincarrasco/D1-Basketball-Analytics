@@ -2,7 +2,7 @@
 // Home: "Your teams" strip, shown only when this device follows at least one team.
 import Link from "next/link";
 import { useMemo } from "react";
-import { useJson } from "@/lib/client-data";
+import { useJson } from "@sports/ui/client-data";
 import { useFavorites } from "@/lib/favorites";
 import type { TeamSummary } from "@/lib/types";
 import { TeamChip } from "./team-cards";

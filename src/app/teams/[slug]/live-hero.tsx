@@ -1,7 +1,7 @@
 "use client";
 // Team hero numbers with live post-game ratings applied (record, DHR rank, rating tiles).
 import Link from "next/link";
-import { fmt, ordinal, signed } from "@/lib/format";
+import { fmt, ordinal, signed } from "@sports/ui/format";
 import { useLiveRatings, withLiveTeam } from "@/lib/live-ratings";
 import { RankMove } from "@/components/live-ratings-note";
 import { Dots } from "@/components/dots";

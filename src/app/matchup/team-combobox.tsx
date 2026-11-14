@@ -2,7 +2,7 @@
 // Searchable team picker (ARIA combobox): type to filter, arrow keys to move, Enter to pick, Escape to close.
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { ChevronDown } from "lucide-react";
-import TeamLogo from "@/components/team-logo";
+import TeamLogo from "@sports/ui/team-logo";
 import type { TeamSummary } from "@/lib/types";
 
 const norm = (s: string) => s.toLowerCase().normalize("NFKD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9 ]/g, "");

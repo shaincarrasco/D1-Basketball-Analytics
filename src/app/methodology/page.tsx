@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import PageHeader from "@/components/page-header";
-import { fmt, pctFmt } from "@/lib/format";
+import PageHeader from "@sports/ui/page-header";
+import { fmt, pctFmt } from "@sports/ui/format";
 import { getMeta } from "@/lib/server-data";
 import type { BacktestBlock } from "@/lib/types";
 import { ZONES } from "@/lib/shots";

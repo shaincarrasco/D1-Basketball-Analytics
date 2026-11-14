@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import PlayersTabs from "./players-tabs";
-import PageHeader from "@/components/page-header";
-import { Loading } from "@/components/states";
+import PageHeader from "@sports/ui/page-header";
+import { Loading } from "@sports/ui/states";
 import { getMeta } from "@/lib/server-data";
 import PlayersBoard from "./players-board";
 

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import PageHeader from "@/components/page-header";
+import PageHeader from "@sports/ui/page-header";
 import { getMeta, getTeams } from "@/lib/server-data";
 import RankingsTable from "./rankings-table";
 

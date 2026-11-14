@@ -3,7 +3,7 @@
 // from percentiles against rotation players (the same pool as the rest of the page); a skill
 // with too few attempts shows "Few attempts" instead of a grade.
 import { useMemo } from "react";
-import { fmt } from "@/lib/format";
+import { fmt } from "@sports/ui/format";
 import { makePool, MIN_ATT, pctLabel, type PlayerRow } from "../players/player-stats";
 
 type Skill = { key: string; name: string; get: (r: PlayerRow) => number | null; show: (r: PlayerRow) => string; invert?: boolean; ok?: (r: PlayerRow) => boolean };

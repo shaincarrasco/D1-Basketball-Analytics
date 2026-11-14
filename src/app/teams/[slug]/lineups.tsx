@@ -1,8 +1,8 @@
 "use client";
 // Five-man units from play-by-play. Small samples (< 40 possessions) are dimmed.
 import Link from "next/link";
-import DataTable, { type Column } from "@/components/data-table";
-import { fmt, signed } from "@/lib/format";
+import DataTable, { type Column } from "@sports/ui/data-table";
+import { fmt, signed } from "@sports/ui/format";
 import type { TeamDetail } from "@/lib/types";
 
 type Unit = NonNullable<TeamDetail["lineups"]>[number];

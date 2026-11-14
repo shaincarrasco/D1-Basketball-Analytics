@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import PageHeader from "@/components/page-header";
+import PageHeader from "@sports/ui/page-header";
 import FollowingClient from "./following-client";
 
 export const metadata: Metadata = { title: "Following", description: "The teams and players you follow on D1 Hoops: next games, records, ranks and key stats." };

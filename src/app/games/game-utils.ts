@@ -1,5 +1,5 @@
 // Pure helpers for the games hub: filters, sorts, day summaries, labels.
-import { fmt, timeLabel } from "@/lib/format";
+import { fmt, timeLabel } from "@sports/ui/format";
 import type { LiveGame } from "@/lib/live";
 import type { Game, GameIndex, GameSide } from "@/lib/types";
 

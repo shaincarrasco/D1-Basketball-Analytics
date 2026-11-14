@@ -3,15 +3,15 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { Search } from "lucide-react";
-import DataTable, { type Column } from "@/components/data-table";
-import TeamLogo from "@/components/team-logo";
-import { ErrorState, Loading } from "@/components/states";
-import { useJson } from "@/lib/client-data";
-import { fmt, heatPct, signed } from "@/lib/format";
+import DataTable, { type Column } from "@sports/ui/data-table";
+import TeamLogo from "@sports/ui/team-logo";
+import { ErrorState, Loading } from "@sports/ui/states";
+import { useJson } from "@sports/ui/client-data";
+import { fmt, heatPct, signed } from "@sports/ui/format";
 import { playerRows } from "@/lib/players";
 import type { PlayerTable, TeamSummary } from "@/lib/types";
 import { derive, DPR_MIN_POSS, makePool, MIN_ATT, POS_WORD, recruitText, starGlyphs, type PlayerRow, type Pos } from "./player-stats";
-import { followRowLink, ROW_LINK_CLASS } from "./row-link";
+import { followRowLink, ROW_LINK_CLASS } from "@sports/ui/row-link";
 
 const VIEWS = ["Scoring", "Impact", "Efficiency", "Playmaking", "Rebounding & defense", "Shooting profile", "Advanced"] as const;
 type View = (typeof VIEWS)[number];

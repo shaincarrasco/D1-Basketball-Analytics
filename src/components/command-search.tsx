@@ -3,10 +3,10 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Search, X } from "lucide-react";
-import { useJson } from "@/lib/client-data";
+import { useJson } from "@sports/ui/client-data";
 import { useFavorites } from "@/lib/favorites";
 import type { Conference, PlayerTable, TeamSummary } from "@/lib/types";
-import TeamLogo from "./team-logo";
+import TeamLogo from "@sports/ui/team-logo";
 
 type Hit = { kind: "Team" | "Player" | "Conference" | "Page" | "Following"; label: string; sub: string; href: string; logo?: string | null };
 const PAGES: Hit[] = [

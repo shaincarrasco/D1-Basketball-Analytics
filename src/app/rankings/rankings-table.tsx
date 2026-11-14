@@ -2,10 +2,10 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { Search } from "lucide-react";
-import DataTable, { type Column } from "@/components/data-table";
+import DataTable, { type Column } from "@sports/ui/data-table";
 import PerfBars from "@/components/perf-bars";
-import TeamLogo from "@/components/team-logo";
-import { fmt, heat, pctFmt, signed } from "@/lib/format";
+import TeamLogo from "@sports/ui/team-logo";
+import { fmt, heat, pctFmt, signed } from "@sports/ui/format";
 import type { ProfileKey, TeamSummary } from "@/lib/types";
 import { useLiveTeams } from "@/lib/live-ratings";
 import LiveRatingsNote, { RankMove } from "@/components/live-ratings-note";

@@ -1,11 +1,11 @@
 "use client";
 // Home-page top 25, with live post-game ratings applied as soon as results are final.
 import Link from "next/link";
-import TeamLogo from "@/components/team-logo";
+import TeamLogo from "@sports/ui/team-logo";
 import PerfBars from "@/components/perf-bars";
-import { LinkRow } from "@/components/data-table";
+import { LinkRow } from "@sports/ui/data-table";
 import LiveRatingsNote, { RankMove } from "@/components/live-ratings-note";
-import { fmt, pctFmt, signed, heat } from "@/lib/format";
+import { fmt, pctFmt, signed, heat } from "@sports/ui/format";
 import { useLiveTeams } from "@/lib/live-ratings";
 import type { TeamSummary } from "@/lib/types";
 

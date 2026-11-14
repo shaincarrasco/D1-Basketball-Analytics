@@ -1,7 +1,7 @@
 "use client";
 // Subscribe to the team's schedule (webcal) or download the .ics once.
 import { CalendarPlus } from "lucide-react";
-import { dataUrl } from "@/lib/client-data";
+import { dataUrl } from "@sports/ui/client-data";
 
 export default function CalendarButton({ slug, name }: { slug: string; name: string }) {
   const subscribe = () => {

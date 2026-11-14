@@ -5,10 +5,10 @@
 import Link from "next/link";
 import { useMemo, useRef, useState, ViewTransition } from "react";
 import { ArrowLeftRight, Star } from "lucide-react";
-import TeamLogo from "@/components/team-logo";
+import TeamLogo from "@sports/ui/team-logo";
 import { Dots } from "@/components/dots";
 import { RankMove } from "@/components/live-ratings-note";
-import { signed } from "@/lib/format";
+import { signed } from "@sports/ui/format";
 import { toggleFavorite, useFavorites } from "@/lib/favorites";
 import type { TeamSummary } from "@/lib/types";
 
