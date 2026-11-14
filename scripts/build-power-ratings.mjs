@@ -218,7 +218,6 @@ await writeFile(modelPath, JSON.stringify({
 // Inputs for the site's live post-game ratings: the exact games, priors and converged ratings, so a
 // browser can add tonight's finals and refit with this same model before the next pipeline run.
 {
-  const r4 = v => Math.round(v * 1e4) / 1e4;
   const confs = [...new Set([...current.conf.values()])];
   const ci = c => confs.indexOf(c ?? NON_D1);
   await writeFile("public/data/dhr-input-2027.json", JSON.stringify({
@@ -226,10 +225,12 @@ await writeFile(modelPath, JSON.stringify({
     through: finals.length ? finals[finals.length - 1].et : null,
     confs,
     teams: teamRecords.filter(t => isD1(t.conference) && t.teamId != null).map(t => [String(t.teamId), ci(t.conference)]),
-    seasonPrior: seasonPrior ? Object.fromEntries([...seasonPrior].map(([k, v]) => [k, [r4(v.O), r4(v.D)]])) : null,
-    warm: { h: r4(current.h), r: Object.fromEntries([...current.O.keys()].map(k => [k, [r4(current.O.get(k)), r4(current.D.get(k)), r4(current.T.get(k))]])) },
+    // Everything here is exact, not rounded: the site refits from it to explain each projection,
+    // and rounded inputs (possessions, priors) drifted far enough to flip a published decimal.
+    seasonPrior: seasonPrior ? Object.fromEntries([...seasonPrior].map(([k, v]) => [k, [v.O, v.D]])) : null,
+    warm: { h: current.h, r: Object.fromEntries([...current.O.keys()].map(k => [k, [current.O.get(k), current.D.get(k), current.T.get(k)]])) },
     // [gameId, homeId, awayId, homeConf#, awayConf#, neutral, homePts, awayPts, poss, minutes, weight]
-    games: fitGames.map(g => [g.gameId, g.homeId, g.awayId, ci(g.homeConf), ci(g.awayConf), g.neutral ? 1 : 0, g.homePts, g.awayPts, Math.round(g.poss * 10) / 10, g.minutes, g.weight]),
+    games: fitGames.map(g => [g.gameId, g.homeId, g.awayId, ci(g.homeConf), ci(g.awayConf), g.neutral ? 1 : 0, g.homePts, g.awayPts, g.poss, g.minutes, g.weight]),
   }) + "\n");
 }
 
