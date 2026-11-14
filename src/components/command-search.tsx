@@ -16,7 +16,8 @@ const PAGES: Hit[] = [
   { kind: "Page", label: "Matchup simulator", sub: "Project any two teams", href: "/matchup/" },
   { kind: "Page", label: "Conferences", sub: "Strength and standings", href: "/conferences/" },
   { kind: "Page", label: "Following", sub: "Your teams and players", href: "/following/" },
-  { kind: "Page", label: "News, polls & injuries", sub: "Headlines, AP poll vs DHR, availability tracker", href: "/news/" },
+  { kind: "Page", label: "Injuries", sub: "Every absence, the injury wire, team health", href: "/injuries/" },
+  { kind: "Page", label: "News & polls", sub: "Headlines, AP poll vs DHR", href: "/news/" },
   { kind: "Page", label: "Methodology", sub: "How the model works and how it's doing", href: "/methodology/" },
 ];
 const norm = (s: string) => s.toLowerCase().normalize("NFKD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9 ]/g, "");

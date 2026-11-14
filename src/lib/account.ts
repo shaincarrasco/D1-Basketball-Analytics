@@ -145,7 +145,7 @@ export async function currentPushSubscription() {
   const reg = await navigator.serviceWorker.getRegistration("/");
   return (await reg?.pushManager.getSubscription()) ?? null;
 }
-export type AlertPrefs = { tipoff: boolean; close: boolean; final: boolean };
+export type AlertPrefs = { tipoff: boolean; close: boolean; final: boolean; injury: boolean };
 export async function enableAlerts(prefs: AlertPrefs) {
   if (!pushSupported()) throw new Error("This browser can't receive alerts. On iPhone, add D1 Hoops to your Home Screen first.");
   if ((await Notification.requestPermission()) !== "granted") throw new Error("Notifications are blocked for this site. Allow them in your browser settings, then try again.");

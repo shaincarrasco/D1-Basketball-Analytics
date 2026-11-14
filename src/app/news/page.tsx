@@ -4,27 +4,40 @@ import PageHeader from "@/components/page-header";
 import ArticleList from "@/components/article-list";
 import TeamLogo from "@/components/team-logo";
 import { getInjuries, getNews, getTeams } from "@/lib/server-data";
-import InjuryTable from "./injury-table";
+import { EVENT_LABEL, shortDate } from "@/lib/injuries";
 
-export const metadata: Metadata = { title: "News, polls & availability", description: "College basketball headlines with credit to the publisher, the AP and Coaches polls next to the D1 Hoops ratings, and a league-wide availability tracker." };
+export const metadata: Metadata = { title: "News & polls", description: "College basketball headlines with credit to the publisher, and the AP poll next to the D1 Hoops ratings. Injuries have their own page." };
 
 export default function NewsPage() {
-  const news = getNews(), injuries = getInjuries(), teams = getTeams();
+  const news = getNews(), teams = getTeams();
+  const wire = [...getInjuries().wire].sort((a, b) => b.t.localeCompare(a.t)).slice(0, 6);
   const logo = new Map(teams.map(t => [t.slug, t.logo]));
   const ap = news.polls.ap ?? [];
   return (
     <>
-      <PageHeader title="News">Headlines link to the original publisher. Polls sit next to our ratings, and the availability tracker flags who&apos;s missing.</PageHeader>
+      <PageHeader title="News">Headlines link to the original publisher. Polls sit next to our ratings, and the injury wire shows the latest changes.</PageHeader>
       <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_420px]">
         <div className="min-w-0 space-y-6">
           <section className="deck p-5" aria-labelledby="head-h">
             <h2 id="head-h" className="h-section mb-1">Headlines</h2>
             <ArticleList items={news.league} max={20} />
           </section>
-          <section aria-labelledby="inj-h">
-            <h2 id="inj-h" className="h-section mb-1">Availability tracker</h2>
-            <p className="mb-3 text-sm text-mute">Three sources, labelled on every row: ESPN&apos;s injury list, players who stopped appearing in box scores (reason usually not reported), and injury or suspension headlines that tag the player.</p>
-            <InjuryTable rows={injuries} />
+          <section className="deck p-5" aria-labelledby="inj-h">
+            <div className="mb-2 flex items-baseline justify-between gap-3">
+              <h2 id="inj-h" className="h-section">Injury wire</h2>
+              <Link href="/injuries/" className="link text-sm font-semibold">All injuries →</Link>
+            </div>
+            {wire.length ? (
+              <ul className="divide-y divide-line">
+                {wire.map(e => (
+                  <li key={e.key + e.t + e.kind} className="flex items-baseline gap-3 py-2 text-[14px]">
+                    <span className="w-[68px] shrink-0 text-xs font-bold uppercase tracking-wide text-mute">{EVENT_LABEL[e.kind]}</span>
+                    <span className="min-w-0 flex-1"><span className="font-semibold">{e.name}</span> <span className="text-mute">· {e.team} · {e.status}</span></span>
+                    <span className="shrink-0 text-xs text-dim">{shortDate(e.t)}</span>
+                  </li>
+                ))}
+              </ul>
+            ) : <p className="text-sm text-mute">No changes yet. We check ESPN&apos;s injury list, box scores and injury headlines every hour.</p>}
           </section>
         </div>
         <aside>

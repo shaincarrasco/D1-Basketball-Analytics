@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { BarChart3, CalendarDays, LayoutGrid, Search, Swords, Users, Layers, BookOpen, Star, Newspaper, ScatterChart } from "lucide-react";
+import { BarChart3, CalendarDays, LayoutGrid, Search, Swords, Users, Layers, BookOpen, Star, Newspaper, ScatterChart, HeartPulse } from "lucide-react";
 import AccountButton from "./account-button";
 import CommandSearch from "./command-search";
 import ThemePicker from "./theme-picker";
@@ -12,6 +12,7 @@ const NAV = [
   { href: "/", label: "Today", icon: LayoutGrid },
   { href: "/rankings/", label: "Rankings", icon: BarChart3 },
   { href: "/games/", label: "Games", icon: CalendarDays },
+  { href: "/injuries/", label: "Injuries", icon: HeartPulse },
   { href: "/news/", label: "News", icon: Newspaper },
   { href: "/players/", label: "Players", icon: Users },
   { href: "/charts/", label: "Charts", icon: ScatterChart },
@@ -21,7 +22,7 @@ const NAV = [
   { href: "/following/", label: "Following", icon: Star },
 ];
 // Phone tab bar, Apple Sports style: the five things people open most.
-const MOBILE = [NAV[0], NAV[1], NAV[2], { href: "/following/", label: "My teams", icon: Star }, NAV[4]];
+const MOBILE = [NAV[0], NAV[1], NAV[2], { href: "/following/", label: "My teams", icon: Star }, NAV.find(n => n.href === "/players/")!];
 
 function isActive(path: string, href: string) {
   if (href === "/") return path === "/";

@@ -13,7 +13,9 @@ import { playerRows } from "@/lib/players";
 import type { Meta, PlayerBio, PlayerTable, TeamDetail, TeamSummary } from "@/lib/types";
 import GameLog from "./game-log";
 import ArticleList from "@/components/article-list";
-import AvailabilityList from "@/components/availability-list";
+import { AvailabilityRow } from "@/components/availability-list";
+import InjuryHistory from "@/components/injury-history";
+import InjuryPill from "@/components/injury-pill";
 import { BasketballFrameworkRanks as FrameworkRanks } from "@/sports/basketball/ui";
 import { derive, MIN_ATT, POS_WORD, recruitText, similarPlayers, type PlayerRow } from "../players/player-stats";
 import { followRowLink, ROW_LINK_CLASS } from "../players/row-link";
@@ -76,6 +78,9 @@ function Jersey({ bio, color }: { bio: PlayerBio | null; color: string | null })
 function Profile({ p, all, detail, teams }: { p: PlayerRow; all: PlayerRow[]; detail: ReturnType<typeof useJson<TeamDetail>>; teams: TeamSummary[] }) {
   const bio = detail.data?.bios?.[p.id] ?? null;
   const t = p.team;
+  const avail = detail.data?.availability?.find(a => a.pid === p.id) ?? null;
+  const news = detail.data?.playerNews?.[p.id];
+  const history = detail.data?.injuryLog?.find(e => e.pid === p.id && (e.stints.length || e.events.length)) ?? null;
   const pool = useMemo(() => all.filter(r => (r.min ?? 0) >= POOL_MIN), [all]);
   const ranked = useMemo(() => all.reduce((n, r) => (r.dprRank ? n + 1 : n), 0), [all]);
   const similar = useMemo(() => similarPlayers(p, all), [p, all]);
@@ -144,31 +149,33 @@ function Profile({ p, all, detail, teams }: { p: PlayerRow; all: PlayerRow[]; de
         </p>
       )}
 
+      {avail && (
+        <section className="deck border-l-4 border-l-loss p-5" aria-labelledby="avail-h">
+          <h2 id="avail-h" className="h-section mb-2 flex items-center gap-2">Availability <InjuryPill state={avail.state} label={avail.status} size="sm" /></h2>
+          <AvailabilityRow a={avail} linkName={false} />
+        </section>
+      )}
+
       <Scouting p={p} pool={pool} />
 
       <FrameworkRanks p={p} all={all} />
 
-      {(() => {
-        const avail = detail.data?.availability?.find(a => a.pid === p.id);
-        const news = detail.data?.playerNews?.[p.id];
-        if (!avail && !news?.length) return null;
-        return (
-          <div className="grid gap-5 lg:grid-cols-2">
-            {avail && (
-              <section className="deck p-5" aria-labelledby="avail-h">
-                <h2 id="avail-h" className="h-section mb-1">Availability</h2>
-                <AvailabilityList items={[avail]} />
-              </section>
-            )}
-            {news?.length ? (
-              <section className={`deck p-5 ${avail ? "" : "lg:col-span-2"}`} aria-labelledby="pnews-h">
-                <h2 id="pnews-h" className="h-section mb-1">In the news</h2>
-                <ArticleList items={news} max={5} />
-              </section>
-            ) : null}
-          </div>
-        );
-      })()}
+      {(news?.length || history) ? (
+        <div className="grid gap-5 lg:grid-cols-2">
+          {history && (
+            <section className="deck p-5" aria-labelledby="inj-h">
+              <h2 id="inj-h" className="h-section mb-2">Injury history</h2>
+              <InjuryHistory log={[history]} showNames={false} slug={t?.slug} />
+            </section>
+          )}
+          {news?.length ? (
+            <section className={`deck p-5 ${history ? "" : "lg:col-span-2"}`} aria-labelledby="pnews-h">
+              <h2 id="pnews-h" className="h-section mb-1">In the news</h2>
+              <ArticleList items={news} max={5} />
+            </section>
+          ) : null}
+        </div>
+      ) : null}
 
       <section className="deck min-w-0 p-5" aria-labelledby="log-h">
         <h2 id="log-h" className="h-section mb-3">Game log</h2>

@@ -11,6 +11,9 @@ This project is free-first. No provider is assumed to be free, unrestricted, com
 | API Ninjas | Supplemental sports endpoints if current college coverage exists | Optional credential; validate coverage before use |
 | SportsDataverse / hoopR | Historical datasets and research workflows | Research/ETL candidate; check package maintenance and data license |
 | School/conference open data | Rosters, bios, releases and schedule context | Manual/provider-specific ingestion; preserve attribution |
+| ESPN injuries, rosters, news (public site API) | Injury list, roster status, athlete-tagged injury headlines | Integrated hourly (`live/src/bin/feeds.rs`). The college injury list is usually empty, so headlines and box scores carry most of the signal |
+| Curated injury reports | Long-term absences with a credited link (`public/data/injury-reports-2027.json`) | Integrated; each entry needs a source URL; entries clear when the player logs minutes |
+| Conference / NCAA availability reports | Official pregame statuses (Big Ten, SEC, ACC, Big 12, Big East, A-10, MVC; NCAA tournament) | Linked, not ingested: the reports are served by a vendor app that only displays on the official sites. Links live in `public/data/availability-report-links.json` |
 
 ## Integration rules
 1. Confirm endpoint, schema, quota, attribution and license before shipping an adapter.
@@ -23,3 +26,6 @@ This project is free-first. No provider is assumed to be free, unrestricted, com
 8. Distinguish regular season, postseason, exhibition and neutral-site context.
 9. Keep men's and women's competitions separate unless explicitly supported.
 10. For lineups/on-off, require reliable substitution events and complete play-by-play; do not fabricate lineups from box scores.
+
+## Injury tracking
+`scripts/lib/injuries.mjs` merges the signals above into one status per player (`public/data/app/injuries.json`) and keeps a season-long ledger of changes (`public/data/injury-ledger-2027.json`, committed after each deploy build). Every row carries its source and confidence (confirmed / reported / inferred). Tests: `node --test scripts/lib/injuries.test.mjs`.

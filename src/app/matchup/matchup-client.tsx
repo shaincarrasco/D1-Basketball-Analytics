@@ -8,10 +8,13 @@ import TeamLogo from "@/components/team-logo";
 import WinProb from "@/components/win-prob";
 import { ErrorState, Loading } from "@/components/states";
 import { useJson } from "@/lib/client-data";
+import { lossText } from "@/lib/injuries";
+import { useInjuries } from "@/lib/injury-hooks";
+import WhosOut from "@/components/whos-out";
 import { dayLabel, fmt, heat, ordinal, pctFmt, signed, timeLabel } from "@/lib/format";
 import { project } from "@/lib/predict";
 import { playerRows } from "@/lib/players";
-import type { Meta, Player, PlayerTable, ProfileKey, TeamSummary } from "@/lib/types";
+import type { InjuryFile, Meta, Player, PlayerTable, ProfileKey, TeamSummary } from "@/lib/types";
 import TeamCombobox from "./team-combobox";
 import MarginChart from "./margin-chart";
 
@@ -24,6 +27,7 @@ export default function MatchupClient() {
   const teams = useJson<TeamSummary[]>("teams.json");
   const meta = useJson<Meta>("meta.json");
   const players = useJson<PlayerTable>("players.json");
+  const injuries = useInjuries();
 
   const ranked = useMemo(() => [...(teams.data ?? [])].sort((x, y) => (x.rank ?? 999) - (y.rank ?? 999) || x.name.localeCompare(y.name)), [teams.data]);
   const bySlug = useMemo(() => new Map(ranked.map(t => [t.slug, t])), [ranked]);
@@ -73,6 +77,8 @@ export default function MatchupClient() {
         <div className="deck p-6 text-sm text-mute">One of these teams has no DHR rating yet, so there is nothing to project. Pick a team with at least one rated D-I game.</div>
       )}
 
+      {proj && <Availability a={a} b={b} proj={proj} file={injuries.data} />}
+
       <div className="grid gap-6 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
         <TaleOfTheTape a={a} b={b} total={total} />
       <section aria-labelledby="form-h">
@@ -98,7 +104,7 @@ export default function MatchupClient() {
 
 
       <p className="text-sm text-mute">
-        Projections use each team&apos;s current DHR rating only — no injuries, lineups or rest. Early in the season ratings rest on a handful of games
+        The main projection uses each team&apos;s current DHR rating only — no injuries, lineups or rest. The injury-adjusted line above is a rough what-if, not part of the model. Early in the season ratings rest on a handful of games
         ({a.name}: {fmt(a.ratedGames, 1)}, {b.name}: {fmt(b.ratedGames, 1)} rated) and lean on conference priors, so expect them to move and treat the margin range as the honest answer.
         See the <Link href="/methodology/" className="underline hover:text-ink">methodology</Link> for how the model is built and how well it has predicted games so far.
       </p>
@@ -154,6 +160,28 @@ function Projection({ a, b, proj, site, homeEdge }: { a: TeamSummary; b: TeamSum
         </div>
         <MarginChart margin={m} sigma={proj.sigma} aShort={a.short} bShort={b.short} />
       </div>
+    </section>
+  );
+}
+
+/** Availability + a rough what-if. netLoss is points per 100 possessions, so scale by tempo/100 to get points per game. */
+function Availability({ a, b, proj, file }: { a: TeamSummary; b: TeamSummary; proj: NonNullable<ReturnType<typeof project>>; file: InjuryFile | null }) {
+  const ha = file?.teams.find(t => t.slug === a.slug)?.netLoss ?? 0, hb = file?.teams.find(t => t.slug === b.slug)?.netLoss ?? 0;
+  const tempo = proj.tempo || 68; // fall back to 68 possessions if the projection has no tempo
+  const shift = (hb - ha) * (tempo / 100); // A − B: A losing rating lowers the margin, B losing it raises it
+  const adj = proj.margin + shift;
+  const fmtM = (v: number) => (Math.round(v * 10) === 0 ? "even" : v > 0 ? `${a.name} by ${v.toFixed(1)}` : `${b.name} by ${(-v).toFixed(1)}`);
+  return (
+    <section aria-labelledby="avail-h">
+      <h2 id="avail-h" className="h-section mb-3">Availability</h2>
+      <WhosOut file={file} teams={[{ slug: a.slug, name: a.name }, { slug: b.slug, name: b.name }]} />
+      {file && (
+        <p className="deck-flat mt-3 px-4 py-3 text-sm text-mute">
+          <b className="text-ink">Injury-adjusted view (estimate):</b> {fmtM(adj)}
+          {Math.abs(shift) >= 0.05 ? <> — the projected margin of {fmtM(proj.margin)} shifted {shift > 0 ? "toward" : "against"} {a.name} by {Math.abs(shift).toFixed(1)} (est. rating lost: {a.short} {lossText(ha)}, {b.short} {lossText(hb)} per 100 × {fmt(tempo, 0)} possessions ÷ 100)</> : <> — neither team has an estimated rating loss, so it matches the projection</>}.
+          A rough what-if that is not in the main model; absences from box scores have no stated reason and may be short-term.
+        </p>
+      )}
     </section>
   );
 }
