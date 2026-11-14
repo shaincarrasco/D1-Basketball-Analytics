@@ -10,8 +10,9 @@ export type LabPlayer = {
   orb: number | null; drb: number | null; blk: number | null; stl: number | null;
 };
 
-export type FitAdjustment = { key: "spacing" | "handling" | "usage" | "rim" | "boards"; label: string; side: "off" | "def"; value: number; detail: string };
-export type LabWarning = { key: string; level: "high" | "mid" | "low" | "info"; text: string };
+export type FitAdjustment = { key: "spacing" | "handling" | "usage" | "rim" | "boards"; label: string; side: "off" | "def"; value: number; detail: string; short: string };
+export type LabWarning = { key: string; level: "high" | "mid" | "low" | "info"; title: string; text: string };
+export type Verdict = { label: "Elite" | "Very good" | "Good" | "Average" | "Below average" | "Weak" | "Projected"; tone: "good" | "mid" | "bad"; pct: number | null; beyond: boolean };
 export type LineupTraits = {
   shooters: LabPlayer[]; handlers: LabPlayer[]; bigs: LabPlayer[]; guards: number;
   usg: number; drb: number; orb: number; blocker: LabPlayer | null; maxBlk: number; avgHt: number | null; teams: number;
@@ -20,6 +21,8 @@ export type LineupProjection = {
   base: { off: number; def: number };
   adjustments: FitAdjustment[];
   fit: { off: number; def: number; total: number };
+  /** Reality-check multiplier on the DPR sum, and the unscaled total (DPR sum + fit). */
+  scale: number; raw: number;
   off: number; def: number; net: number; se: number;
   ptsFor: number; ptsAgainst: number;
   warnings: LabWarning[];
@@ -42,6 +45,7 @@ export declare function isBig(p: LabPlayer): boolean;
 export declare function traits(players: LabPlayer[]): LineupTraits;
 export declare function fitAdjustments(players: LabPlayer[]): FitAdjustment[];
 export declare function warnings(players: LabPlayer[]): LabWarning[];
-export declare function projectLineup(players: LabPlayer[], eff: number): LineupProjection;
+export declare function projectLineup(players: LabPlayer[], eff: number, scale?: number): LineupProjection;
+export declare function verdict(net: number, reference: number[]): Verdict;
 export declare function observedSd(poss: number): number | null;
 export declare function htText(ht: number | null): string;
