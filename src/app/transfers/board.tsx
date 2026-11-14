@@ -133,22 +133,20 @@ export default function Board({ entries }: { entries: PortalEntry[] }) {
   const columns = useMemo<Column<Row>[]>(() => [
     { key: "rk", label: "#", value: () => null, sortable: false, sticky: true, width: 40, render: (_r, i) => <span className="rank-cell text-mute">{i + 1}</span> },
     {
-      key: "name", label: "Player", csvLabel: "Player", align: "l", value: r => r.name, first: "asc", sticky: true, width: 172,
+      key: "name", label: "Player", csvLabel: "Player", align: "l", value: r => r.name, first: "asc", sticky: true, width: 156,
       render: r => (
         <span className="block min-w-0">
           {r.pid ? <Link data-row-link href={`/player/?id=${r.pid}`} className="link block truncate font-semibold">{r.name}</Link> : <span className="block truncate font-semibold">{r.name}</span>}
           <span className="block truncate text-[11.5px] text-mute">
             {[r.posN ? POS_WORD[r.posN] : r.pos, r.yrs !== null ? `${r.yrs} yr${r.yrs === 1 ? "" : "s"} left` : null].filter(Boolean).join(" · ") || "—"}
           </span>
+          {/* Phones: the From / To columns are off-screen, so show the move here. */}
+          <span className="block truncate text-[11.5px] sm:hidden">
+            <span className="text-mute">{r.from?.name ?? "?"} → </span>
+            {r.status === "committed" && r.to ? <span className="font-semibold">{r.to.name}</span> : <span className={r.status === "available" ? "font-semibold text-hot" : "text-mute"}>{STATUS_LABEL[r.status]}</span>}
+          </span>
         </span>
       ),
-    },
-    { key: "from", label: "From", csvLabel: "From", align: "l", width: 170, value: r => r.from?.name ?? null, first: "asc", render: r => (r.from ? <Place p={r.from} logos={logos} muted /> : <span className="text-dim">—</span>) },
-    {
-      key: "to", label: "To", csvLabel: "To", align: "l", width: 170, first: "asc",
-      value: r => (r.status === "committed" ? r.to?.name ?? null : STATUS_LABEL[r.status]),
-      render: r => r.status === "committed" && r.to ? <Place p={r.to} logos={logos} />
-        : <span className={`chip !px-2.5 !py-0.5 text-[12px] ${r.status === "available" ? "!border-hot text-hot" : "text-mute"}`} title={r.elig ? ELIG_LABEL[r.elig] ?? r.elig : undefined}>{STATUS_LABEL[r.status]}</span>,
     },
     {
       key: "impact", label: "Impact", csvLabel: "Impact (pts/100 over replacement)", title: IMPACT_SHORT, value: r => r.impact,
@@ -157,6 +155,13 @@ export default function Board({ entries }: { entries: PortalEntry[] }) {
     {
       key: "grade", label: "Grade", csvLabel: "Scouting grade (Overall lens)", title: "Our scouting grade: his Overall-lens percentile among D-I players at 10+ mpg, on the scouting-report letter scale", value: r => r.standing,
       render: r => r.grade ? <span className="font-display text-[16px] font-black" style={{ color: r.grade[0] === "A" ? "var(--win)" : r.grade[0] === "D" ? "var(--loss)" : undefined }} title={`Better than ${r.standing}% of D-I rotation players (Overall lens)`}>{r.grade}</span> : <span className="text-dim" title={r.pid ? "Under 10 mpg or fewer than 2 games" : "No stats line"}>—</span>,
+    },
+    { key: "from", label: "From", csvLabel: "From", align: "l", width: 170, value: r => r.from?.name ?? null, first: "asc", render: r => (r.from ? <Place p={r.from} logos={logos} muted /> : <span className="text-dim">—</span>) },
+    {
+      key: "to", label: "To", csvLabel: "To", align: "l", width: 170, first: "asc",
+      value: r => (r.status === "committed" ? r.to?.name ?? null : STATUS_LABEL[r.status]),
+      render: r => r.status === "committed" && r.to ? <Place p={r.to} logos={logos} />
+        : <span className={`chip !px-2.5 !py-0.5 text-[12px] ${r.status === "available" ? "!border-hot text-hot" : "text-mute"}`} title={r.elig ? ELIG_LABEL[r.elig] ?? r.elig : undefined}>{STATUS_LABEL[r.status]}</span>,
     },
     { key: "min", label: "MPG", title: "Minutes per game, 2026–27", value: r => r.stats?.min ?? null, render: r => fmt(r.stats?.min ?? null) },
     { key: "pts", label: "PTS", title: "Points per game, 2026–27", value: r => r.stats?.pts ?? null, render: r => fmt(r.stats?.pts ?? null) },
@@ -179,7 +184,7 @@ export default function Board({ entries }: { entries: PortalEntry[] }) {
   const teamCols = useMemo<Column<TeamMoves>[]>(() => [
     { key: "rk", label: "#", value: () => null, sortable: false, sticky: true, width: 40, render: (_r, i) => <span className="rank-cell text-mute">{i + 1}</span> },
     {
-      key: "team", label: "Team", align: "l", sticky: true, width: 170, value: m => m.name, first: "asc",
+      key: "team", label: "Team", align: "l", sticky: true, width: 150, value: m => m.name, first: "asc",
       render: m => (
         <button className="flex min-w-0 items-center gap-2 text-left" onClick={() => { setTeam(m.slug); window.scrollTo({ top: 0, behavior: "smooth" }); }}>
           <TeamLogo src={logos[m.slug] ?? null} name={m.name} size={20} />
@@ -187,11 +192,11 @@ export default function Board({ entries }: { entries: PortalEntry[] }) {
         </button>
       ),
     },
-    { key: "outN", label: "Out", title: "Players who left through the portal (withdrawn players excluded)", value: m => m.out.length },
-    { key: "lost", label: "Lost", title: "Impact of the players who left", value: m => m.lost, render: m => <span className="text-loss tnum">{m.lost ? `−${fmt(m.lost)}` : "0.0"}</span> },
-    { key: "inN", label: "In", title: "Portal players who committed here", value: m => m.inn.length },
-    { key: "added", label: "Added", title: "Impact of the players who committed here", value: m => m.added, render: m => <span className="text-win tnum">{m.added ? `+${fmt(m.added)}` : "0.0"}</span> },
     { key: "net", label: "Net", title: "Added minus lost", value: m => m.net, render: m => <b className={`font-display text-[16px] font-extrabold tnum ${m.net > 0.04 ? "text-win" : m.net < -0.04 ? "text-loss" : ""}`}>{signedImpact(m.net)}</b> },
+    { key: "outN", label: "Out", title: "Players who left through the portal (withdrawn players excluded)", value: m => m.out.length },
+    { key: "lost", label: "Lost", title: "Impact of the players who left", value: m => m.lost, render: m => <span className={`tnum ${m.lost ? "text-loss" : "text-dim"}`}>{m.lost ? `−${fmt(m.lost)}` : "0.0"}</span> },
+    { key: "inN", label: "In", title: "Portal players who committed here", value: m => m.inn.length },
+    { key: "added", label: "Added", title: "Impact of the players who committed here", value: m => m.added, render: m => <span className={`tnum ${m.added ? "text-win" : "text-dim"}`}>{m.added ? `+${fmt(m.added)}` : "0.0"}</span> },
   ], [logos]);
 
   const reset = () => { setQ(""); setPos("all"); setConf("all"); setFrom("all"); setTo("all"); setSt("active"); setStars("any"); };
@@ -299,7 +304,7 @@ export default function Board({ entries }: { entries: PortalEntry[] }) {
                 </h2>
                 <button className="btn !px-3 !py-1.5 text-[13px]" onClick={() => setTeam(null)}>Clear</button>
               </div>
-              {selected ? <TransferLedger moves={selected} logos={logos} /> : <p className="text-sm text-mute">No portal moves for {selectedName} yet.</p>}
+              {selected ? <TransferLedger moves={selected} logos={logos} wide /> : <p className="text-sm text-mute">No portal moves for {selectedName} yet.</p>}
             </section>
           )}
           <div className="mb-2 flex flex-wrap items-end justify-between gap-2">

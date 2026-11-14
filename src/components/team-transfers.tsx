@@ -20,23 +20,15 @@ function Move({ e, dir, logos }: { e: PortalEntry; dir: "out" | "in"; logos?: Lo
           {e.pid ? <Link href={`/player/?id=${e.pid}`} className="link truncate font-semibold">{e.name}</Link> : <span className="truncate font-semibold">{e.name}</span>}
           {e.posN && <span className="shrink-0 text-xs text-dim">{e.posN}</span>}
         </div>
-        <p className="mt-0.5 flex min-w-0 items-center gap-1.5 text-[12.5px] text-mute">
-          {dir === "out" ? (
-            other ? (
-              <>
-                <span className="shrink-0">To</span>
-                {other.slug && logos ? <TeamLogo src={logos[other.slug] ?? null} name={other.name} size={14} /> : null}
-                {other.slug ? <Link href={`/teams/${other.slug}/`} className="truncate hover:text-ink">{other.name}</Link> : <span className="truncate">{other.name}</span>}
-              </>
-            ) : <span className="font-semibold text-hot">{STATUS_LABEL[e.status]}</span>
-          ) : other ? (
-            <>
-              <span className="shrink-0">From</span>
+        <p className="mt-0.5 flex flex-wrap items-center gap-x-1.5 text-[12.5px] text-mute">
+          {dir === "out" && !other ? <span className="font-semibold text-hot">{STATUS_LABEL[e.status]}</span> : other ? (
+            <span className="inline-flex min-w-0 items-center gap-1.5">
+              <span>{dir === "out" ? "To" : "From"}</span>
               {other.slug && logos ? <TeamLogo src={logos[other.slug] ?? null} name={other.name} size={14} /> : null}
-              {other.slug ? <Link href={`/teams/${other.slug}/`} className="truncate hover:text-ink">{other.name}</Link> : <span className="truncate">{other.name}</span>}
-            </>
+              {other.slug ? <Link href={`/teams/${other.slug}/`} className="hover:text-ink">{other.name}</Link> : <span>{other.name}{other.d1 ? "" : " (not D-I)"}</span>}
+            </span>
           ) : null}
-          {s ? <span className="shrink-0 tnum">· {fmt(s.min)} mpg, {fmt(s.pts)} ppg</span> : null}
+          {s ? <span className="tnum text-dim">{fmt(s.min)} mpg · {fmt(s.pts)} ppg</span> : <span className="text-dim">No 2026–27 D-I stats</span>}
         </p>
       </div>
       <span className={`shrink-0 pt-0.5 text-right font-display text-[17px] font-extrabold leading-none tnum ${e.impact === null ? "text-dim" : ""}`} title={e.impact === null ? "No 2026–27 D-I stats line we could match" : IMPACT_SHORT}>
@@ -47,7 +39,7 @@ function Move({ e, dir, logos }: { e: PortalEntry; dir: "out" | "in"; logos?: Lo
 }
 
 /** Who a team lost / added, with impact totals and the net. */
-export function TransferLedger({ moves, logos }: { moves: TeamMoves; logos?: Logos }) {
+export function TransferLedger({ moves, logos, wide = false }: { moves: TeamMoves; logos?: Logos; /** Two columns from the sm breakpoint (only where the container is wide, not in a sidebar). */ wide?: boolean }) {
   const tone = moves.net > 0.04 ? "text-win" : moves.net < -0.04 ? "text-loss" : "text-ink";
   const col = (dir: "out" | "in") => {
     const list = dir === "out" ? moves.out : moves.inn, total = dir === "out" ? moves.lost : moves.added, unknown = dir === "out" ? moves.outUnknown : moves.inUnknown;
@@ -74,7 +66,7 @@ export function TransferLedger({ moves, logos }: { moves: TeamMoves; logos?: Log
         <span className="text-[13px] font-semibold text-mute" title={IMPACT_SHORT}>Net impact</span>
         <span className={`font-display text-[28px] font-black leading-none tnum ${tone}`}>{signedImpact(moves.net)}</span>
       </div>
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className={`grid gap-4 ${wide ? "sm:grid-cols-2" : ""}`}>
         {col("out")}
         {col("in")}
       </div>
