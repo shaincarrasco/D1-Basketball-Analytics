@@ -18,6 +18,7 @@ const cache = new WeakMap<object, Record<string, Metric<unknown>>>();
 /** Metric lookup by key (cached per pack). */
 export function metricIndex<R>(pack: SportPack<R>): Record<string, Metric<R>> {
   let idx = cache.get(pack);
-  if (!idx) { idx = Object.fromEntries(pack.metrics.map(m => [m.key, m])) as Record<string, Metric<unknown>>; cache.set(pack, idx); }
+  // Null-prototype object: URL values like "constructor" or "__proto__" must not look like metrics.
+  if (!idx) { idx = Object.assign(Object.create(null), Object.fromEntries(pack.metrics.map(m => [m.key, m]))) as Record<string, Metric<unknown>>; cache.set(pack, idx); }
   return idx as Record<string, Metric<R>>;
 }

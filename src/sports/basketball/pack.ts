@@ -127,7 +127,7 @@ export const basketball: SportPack<PlayerRow> = {
   nouns: { player: "player", players: "players", pool: "D-I players", pronoun: "he" },
   entity,
   positions: [...POSITIONS],
-  groups: { label: "Conference", list: "conf" },
+  groups: { label: "Conference", list: "conf", short: "Conf" },
   metrics: METRICS,
   metricGroups: ["Impact", "Scoring", "Shooting", "Playmaking", "Rebounding", "Defense", "Volume"],
   filters: FILTERS,

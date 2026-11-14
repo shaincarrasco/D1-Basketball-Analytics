@@ -1,7 +1,7 @@
 // The validator must actually catch the mistakes a new pack is likely to make.
 import { describe, expect, it } from "vitest";
 import { pack as basketball, fixtures } from "@/sports/basketball";
-import { decodeSpec, encodeSpec, makeSpec, rankPool, validatePack, withDefaults, type SportPack } from "@/sport-kit";
+import { decodeSpec, decodeWeights, encodeSpec, makeSpec, rankPool, sanitizePool, validatePack, withDefaults, type SportPack } from "@/sport-kit";
 import type { PlayerRow } from "@/app/players/player-stats";
 
 const broken = (patch: (p: SportPack<PlayerRow>) => void) => {
@@ -36,5 +36,26 @@ describe("basketball compatibility", () => {
     const raw = rankPool(basketball, rows, pool, w, "all", false), adj = rankPool(basketball, rows, pool, w, "all", true);
     const spread = (xs: { blend: number }[]) => Math.max(...xs.map(x => Math.abs(x.blend - 0.5)));
     expect(spread(adj)).toBeLessThan(spread(raw));
+  });
+});
+
+describe("hostile or stale links", () => {
+  it("ignore prototype keys like constructor and __proto__", () => {
+    const s = decodeSpec(basketball, "x=constructor&y=__proto__&m=toString,ts");
+    expect(s.x).toBe(basketball.charts.defaultX);
+    expect(s.y).toBe(basketball.charts.defaultY);
+    expect(s.metrics).toEqual(["ts"]);
+    expect(decodeWeights(basketball, "constructor:10,toString:5")).toBeNull();
+  });
+  it("drop duplicate stats, weights and ids", () => {
+    expect(decodeWeights(basketball, "ts:10,ts:20,usg:5")).toEqual([["ts", 10], ["usg", 5]]);
+    expect(decodeSpec(basketball, "ids=a,a,b&m=ts,ts").ids).toEqual(["a", "b"]);
+  });
+  it("reset unknown conferences once data has loaded", () => {
+    const lists = { conf: [["sec", "SEC"]] as [string, string][] };
+    const bad = withDefaults(basketball, { conf: "bogus", min: "20" });
+    expect(sanitizePool(basketball, bad, lists)).toEqual({ ...bad, conf: "all" });
+    const ok = withDefaults(basketball, { conf: "sec" });
+    expect(sanitizePool(basketball, ok, lists)).toBe(ok);
   });
 });

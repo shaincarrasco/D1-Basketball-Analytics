@@ -4,7 +4,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ArrowLeftRight, Check, Download, Link2, RotateCcw } from "lucide-react";
 import { ErrorState, Loading } from "@/components/states";
-import { CHART_TYPES, decodeSpec, defaultSpec, encodeSpec, metricIndex, type ChartSpec, type ColorBy, type SportData, type SportPack } from "@/sport-kit";
+import { CHART_TYPES, decodeSpec, defaultSpec, encodeSpec, metricIndex, sanitizePool, type ChartSpec, type ColorBy, type SportData, type SportPack } from "@/sport-kit";
 import { Chart } from "./charts";
 import { MetricSelect, PlayerPicker, PoolControls } from "./controls";
 import { exportSvg, useChartTheme } from "./theme";
@@ -27,6 +27,10 @@ export default function Builder<R>({ pack, data, keep }: { pack: SportPack<R>; d
     for (const [k, v] of Object.entries(keep ?? {})) p.set(k, v);
     window.history.replaceState(null, "", `?${p}`);
   }, [pack, s, hydrated, keep]);
+
+  useEffect(() => {
+    if (ready && hydrated) setS(prev => { const pool = sanitizePool(pack, prev.pool, lists); return pool === prev.pool ? prev : { ...prev, pool }; });
+  }, [pack, ready, hydrated, lists]);
 
   const set = (patch: Partial<ChartSpec>) => setS(prev => ({ ...prev, ...patch }));
   const name = useMemo(() => `${pack.filePrefix}-${(s.title || `${s.type}-${s.x}${s.type === "scatter" ? `-${s.y}` : ""}`).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}`, [pack, s]);
@@ -166,7 +170,7 @@ export default function Builder<R>({ pack, data, keep }: { pack: SportPack<R>; d
           <Chart ref={svg} pack={pack} spec={s} rows={rows} theme={theme} lists={lists} />
         </div>
         <p className="mt-3 text-[13px] leading-relaxed text-dim">
-          Hover or tap a dot for the numbers; click to open the {pack.nouns.player}. Standouts are the {pack.nouns.players} furthest from the medians toward the top right.
+          Hover or tap a dot for the numbers{rows.some(r => pack.entity.href(r)) ? <>; click to open the {pack.nouns.player}</> : null}. Standouts are the {pack.nouns.players} furthest from the medians toward the top right.
           Rates need a minimum sample before a {pack.nouns.player} appears, so tiny samples don&apos;t pass as outliers.
         </p>
       </section>

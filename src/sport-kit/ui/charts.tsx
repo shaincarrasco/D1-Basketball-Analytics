@@ -278,13 +278,17 @@ export function Swarm<R>({ pack, spec, rows, theme: t, lists, compact, ref }: Ch
   const [hover, setHover] = useState<Hover<R>>(null);
   const m = metricIndex(pack)[spec.x];
   const splitRows = spec.split && pack.positions.length > 1 && (spec.pool.pos ?? "all") === "all";
-  const groups = useMemo<(string | null)[]>(() => (splitRows ? pack.positions.map(p => p.key) : [null]), [splitRows, pack.positions]);
+  const pool = useMemo(() => (m ? rows.filter(r => inPool(pack, spec.pool, r)).map(r => ({ r, v: val(m, r), pos: E.pos(r) })).filter((p): p is { r: R; v: number; pos: string | null } => p.v !== null) : []), [pack, E, rows, spec.pool, m]);
+  // One band per position that actually has values for this stat (no empty QB band on a tackles chart).
+  const groups = useMemo<(string | null)[]>(() => {
+    const present = splitRows ? pack.positions.map(p => p.key).filter(k => pool.some(p => p.pos === k)) : [];
+    return present.length > 1 ? present : [null];
+  }, [splitRows, pack.positions, pool]);
   // Three bands of 150 for basketball; more positions get thinner bands so the chart stays a sane height.
   const bandH = groups.length > 1 ? Math.max(64, Math.round(450 / groups.length)) : 300, T = 84, L = 96, R = W - 28;
   const H = T + groups.length * bandH + 64;
   const data = useMemo(() => {
     if (!m) return null;
-    const pool = rows.filter(r => inPool(pack, spec.pool, r)).map(r => ({ r, v: val(m, r), pos: E.pos(r) })).filter((p): p is { r: R; v: number; pos: string | null } => p.v !== null);
     if (pool.length < 3) return { pts: [], size: 0 };
     const vs = pool.map(p => p.v), lo = Math.min(...vs), hi = Math.max(...vs), d = (hi - lo || 1) * 0.03;
     const x0 = lo - d, x1 = hi + d;
@@ -312,7 +316,7 @@ export function Swarm<R>({ pack, spec, rows, theme: t, lists, compact, ref }: Ch
       }
     });
     return { pts, size: pool.length, fx, x0, x1, rad, med: groups.map((g) => median(pool.filter(p => g === null || p.pos === g).map(p => p.v))) };
-  }, [pack, E, rows, spec.pool, spec.ids, m, compact, groups, bandH, L, R]);
+  }, [E, pool, spec.ids, m, compact, groups, bandH, L, R]);
   if (!m || !data) return null;
   const title = spec.title || `Where everyone sits: ${m.short}`;
   const sub = `${m.label} · ${data.size.toLocaleString("en-US")} ${poolText(pack, spec.pool, lists)}${groups.length > 1 ? ", by position" : ""}`;
@@ -331,6 +335,8 @@ export function Swarm<R>({ pack, spec, rows, theme: t, lists, compact, ref }: Ch
     setHover(b ? { r: b.r, x: b.px, y: b.py, lines: [`${m.short} ${fmtMetric(m, b.v)}`] } : null);
   };
   const posOf = (k: string) => pack.positions.find(p => p.key === k);
+  // Full names ("GUARDS") when they fit the 72px gutter; otherwise keys ("DL", "LB").
+  const useKeys = groups.length > 4 || groups.some(g => g !== null && (posOf(g)?.plural.length ?? 0) > 10);
   const bandFs = groups.length > 4 ? (compact ? 14 : 12.5) : compact ? 16 : 14;
   return (
     <div className="relative">
@@ -340,11 +346,11 @@ export function Swarm<R>({ pack, spec, rows, theme: t, lists, compact, ref }: Ch
           {groups.map((g, bi) => (
             <g key={bi}>
               {bi > 0 && <line x1={L - 80} x2={R} y1={T + bi * bandH} y2={T + bi * bandH} stroke={t.line} />}
-              <text x={24} y={T + bi * bandH + bandH / 2 + 5} fill={g ? posColor(pack, t, g) : t.mute} fontFamily={t.display} fontWeight={800} fontSize={bandFs} letterSpacing="0.06em">{g ? (groups.length > 4 ? g : posOf(g)?.plural ?? g).toUpperCase() : "ALL"}</text>
+              <text x={24} y={T + bi * bandH + bandH / 2 + 5} fill={g ? posColor(pack, t, g) : t.mute} fontFamily={t.display} fontWeight={800} fontSize={bandFs} letterSpacing="0.06em">{g ? (useKeys ? g : posOf(g)?.plural ?? g).toUpperCase() : "ALL"}</text>
               <line x1={fx(data.med![bi])} x2={fx(data.med![bi])} y1={T + bi * bandH + 6} y2={T + (bi + 1) * bandH - 6} stroke={t.mute} strokeDasharray="4 4" />
             </g>
           ))}
-          {spec.color === "pos" && !splitRows && pack.positions.length > 0 && <PosLegend pack={pack} t={t} y={62} compact={compact} />}
+          {spec.color === "pos" && groups.length === 1 && pack.positions.length > 0 && <PosLegend pack={pack} t={t} y={62} compact={compact} />}
           {pts.map(p => <circle key={p.id} cx={p.px} cy={p.py} r={p.hi ? data.rad! + 2 : data.rad!} fill={p.hi ? t.bulb : dotColor(pack, spec, t, p.r)} fillOpacity={spec.ids.length && !p.hi ? 0.3 : 0.85} stroke={p.hi ? t.ink : "none"} strokeWidth={1.4} />)}
           {labels.map(l => <text key={l.text + l.lx} x={l.x} y={l.y} textAnchor={l.anchor} fontFamily={t.body} fontWeight={700} fontSize={compact ? 13 : 11.5} fill={l.hi ? t.bulb : t.ink} stroke={t.deck} strokeWidth={3} paintOrder="stroke">{l.text}</text>)}
           <text x={(L + R) / 2} y={T + groups.length * bandH + 40} fill={t.mute} fontSize={compact ? 15 : 13} fontFamily={t.body} fontWeight={600} textAnchor="middle">{m.label} →</text>

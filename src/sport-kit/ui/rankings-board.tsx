@@ -12,7 +12,7 @@ import { heatPct } from "@/lib/format";
 import { teamHex } from "@/lib/color";
 import { followRowLink, ROW_LINK_CLASS } from "@/app/players/row-link";
 import {
-  decodeWeights, encodeSpec, encodeWeights, fmtMetric, makeSpec, metricIndex, pctLabel, rankPool, readPool, tierOf, val, withDefaults, writePool,
+  decodeWeights, encodeSpec, encodeWeights, fmtMetric, makeSpec, metricIndex, pctLabel, rankPool, readPool, sanitizePool, tierOf, val, withDefaults, writePool,
   type Pool, type Ranked, type SportData, type SportPack, type Weights,
 } from "@/sport-kit";
 import { shortName } from "./charts";
@@ -24,7 +24,7 @@ const scoreBg = (s: number) => heatPct(s / 100);
 export default function RankingsBoard<R>({ pack, data, routes, keep }: { pack: SportPack<R>; data: SportData<R>; routes: KitRoutes; keep?: Record<string, string> }) {
   const { rows, lists, ready, error, retry } = data;
   const E = pack.entity, METRIC = metricIndex(pack);
-  const FW = useMemo(() => Object.fromEntries(pack.frameworks.map(f => [f.key, f])), [pack]);
+  const FW = useMemo(() => Object.assign(Object.create(null), Object.fromEntries(pack.frameworks.map(f => [f.key, f]))) as Record<string, (typeof pack.frameworks)[number]>, [pack]);
   const first = pack.frameworks[0];
   const [fw, setFw] = useState(first.key);
   const [weights, setWeights] = useState<Weights>(first.weights);
@@ -56,6 +56,8 @@ export default function RankingsBoard<R>({ pack, data, routes, keep }: { pack: S
     const s = p.toString();
     window.history.replaceState(null, "", s ? `?${s}` : window.location.pathname);
   }, [pack, keep, first.key, hydrated, fw, weights, pool, relative, shrink]);
+
+  useEffect(() => { if (ready && hydrated) setPool(prev => sanitizePool(pack, prev, lists)); }, [pack, ready, hydrated, lists]);
 
   const ranked = useMemo(() => (ready ? rankPool(pack, rows, pool, weights, relative, shrink) : []), [pack, ready, rows, pool, weights, relative, shrink]);
   const rankOf = useMemo(() => new Map(ranked.map((x, i) => [E.id(x.r), i + 1])), [E, ranked]);
@@ -103,7 +105,7 @@ export default function RankingsBoard<R>({ pack, data, routes, keep }: { pack: S
         },
       };
     }),
-    ...(pack.groups ? [{ key: "grp", label: pack.groups.label.slice(0, 4), csvLabel: pack.groups.label, align: "l", value: (x: Ranked<R>) => E.team(x.r)?.groupName ?? null, first: "asc", render: (x: Ranked<R>) => <span className="text-mute">{E.team(x.r)?.groupName ?? "—"}</span> } as Column<Ranked<R>>] : []),
+    ...(pack.groups ? [{ key: "grp", label: pack.groups.short ?? pack.groups.label, csvLabel: pack.groups.label, align: "l", value: (x: Ranked<R>) => E.team(x.r)?.groupName ?? null, first: "asc", render: (x: Ranked<R>) => <span className="text-mute">{E.team(x.r)?.groupName ?? "—"}</span> } as Column<Ranked<R>>] : []),
   ], [pack, E, METRIC, noun, tierText, active, totalW, rankOf]);
 
   if (error) return <ErrorState message={error} retry={retry} />;
@@ -204,7 +206,7 @@ export default function RankingsBoard<R>({ pack, data, routes, keep }: { pack: S
       ) : shown.length === 0 ? (
         <div className="deck p-6 text-mute">Nobody matches. Loosen the filters above.</div>
       ) : (
-        <div className={ROW_LINK_CLASS} onClick={followRowLink}>
+        <div className={shown.some(x => E.href(x.r)) ? ROW_LINK_CLASS : undefined} onClick={followRowLink}>
           <DataTable key={fw + active.map(([k]) => k).join()} rows={shown} columns={columns} rowKey={x => E.id(x.r)} initialSort="rk" initialDir="asc"
             pageSize={100} csvName={`${pack.filePrefix}-rankings-${fw}.csv`} caption={`${noun} rankings: ${fw}`} maxHeight="78vh" />
         </div>
@@ -212,7 +214,7 @@ export default function RankingsBoard<R>({ pack, data, routes, keep }: { pack: S
       <p className="mt-3 max-w-3xl text-[13px] leading-relaxed text-dim">
         How it works: each stat becomes a percentile against the pool{pack.positions.length > 0 ? <> (or against the {pack.nouns.player}&apos;s position)</> : null}, the percentiles are blended by weight, and the score is that weighted average (100 = best in the pool at everything). Tiers come from where the score ranks in the pool.
         Stats with too small a sample are left out of that {pack.nouns.player}&apos;s blend; {pack.nouns.players} need {Math.round(pack.ranking.minCoverage * 100)}% of the weight covered to be ranked.
-        &ldquo;Adjust for small samples&rdquo; pulls each blend toward average until a {pack.nouns.player} has about {pack.ranking.shrinkK * 4} {pack.ranking.shrinkUnit}, so a hot start can&apos;t top the list on its own.
+        &ldquo;Adjust for small samples&rdquo; pulls each blend toward average: halfway at {pack.ranking.shrinkK.toLocaleString("en-US")} {pack.ranking.shrinkUnit} played, less and less after that, so a hot start can&apos;t top the list on its own.
       </p>
     </section>
   );

@@ -163,7 +163,7 @@ export const football: SportPack<FootballRow> = {
         spec: { x: "contCatch", y: "dropRate", title: "Contested catches vs drops", quads: ["Safe hands, few contested", "Wins contested and holds on", "Drops, few contested", "Wins contested, drops some"] } },
 
       { id: "pass-rush-press", section: "Pass rush", blurb: "Pressure rate against sacks per pass-rush snap, for defensive linemen.",
-        spec: { x: "pressRate", y: "sackSnap", title: "Pressure vs sacks", pool: { pos: "DL" }, quads: ["Pressures, no finish", "Pressure and sacks", "Quiet pass rush", "Finishes, rarely pressures"] } },
+        spec: { x: "pressRate", y: "sackSnap", title: "Pressure vs sacks", pool: { pos: "DL" }, quads: ["Finishes, rarely pressures", "Pressure and sacks", "Quiet pass rush", "Pressures, no finish"] } },
       { id: "sacks-leaders", section: "Pass rush", blurb: "Sacks per game across every defender who rushes the passer.",
         spec: { type: "bars", x: "sacksG", title: "Sacks per game leaders" } },
 

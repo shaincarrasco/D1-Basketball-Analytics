@@ -61,6 +61,7 @@ export function encodeWeights(w: Weights) { return w.map(([k, v]) => `${k}:${v}`
 export function decodeWeights<R>(pack: SportPack<R>, s: string | null): Weights | null {
   if (!s) return null;
   const M = metricIndex(pack);
-  const w = s.split(",").map(p => p.split(":")).filter(([k, v]) => M[k] && Number.isFinite(Number(v))).map(([k, v]) => [k, Math.max(0, Math.min(100, Math.round(Number(v))))] as [string, number]);
+  const seen = new Set<string>();
+  const w = s.split(",").map(p => p.split(":")).filter(([k, v]) => M[k] && Number.isFinite(Number(v)) && !seen.has(k) && !!seen.add(k)).map(([k, v]) => [k, Math.max(0, Math.min(100, Math.round(Number(v))))] as [string, number]);
   return w.length ? w.slice(0, 12) : null;
 }

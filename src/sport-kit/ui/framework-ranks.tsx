@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useMemo } from "react";
 import { BarChart3 } from "lucide-react";
 import { heatPct } from "@/lib/format";
-import { encodeSpec, makeSpec, rankPool, tierOf, withDefaults, writePool, type SportPack } from "@/sport-kit";
+import { encodeSpec, makeSpec, poolText, rankPool, tierOf, withDefaults, writePool, type SportPack } from "@/sport-kit";
 import { withQuery, type KitRoutes } from "./gallery";
 
 export default function FrameworkRanks<R>({ pack, p, all, routes }: { pack: SportPack<R>; p: R; all: R[]; routes: KitRoutes }) {
@@ -27,7 +27,7 @@ export default function FrameworkRanks<R>({ pack, p, all, routes }: { pack: Spor
         <Link href={chart} className="btn !px-3 !py-1.5 text-[13px]"><BarChart3 size={14} aria-hidden /> Chart the profile</Link>
       </div>
       <p className="mb-3 text-sm text-mute">
-        Rank in each of our ranking lenses, among {pack.nouns.pool}{pack.ranking.profilePool ? " who clear the usual playing-time floor" : ""}.
+        Rank in each of our ranking lenses, among {poolText(pack, pool, {})}.
         {best?.x ? <> Best fit: <b className="text-ink">{best.f.label}</b> ({tierOf(pack, best.x.standing).toLowerCase()}).</> : null}
       </p>
       <ul className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5">

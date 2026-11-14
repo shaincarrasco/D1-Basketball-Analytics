@@ -138,7 +138,7 @@ export type SportPack<R> = {
   /** Empty for sports without positions (tennis): position splits are then hidden. */
   positions: Position[];
   /** Optional grouping used for "light up a conference/league". */
-  groups?: { label: string; list: string };
+  groups?: { label: string; list: string; /** Column header in rankings ("Conf"); defaults to label. */ short?: string };
   metrics: Metric<R>[];
   metricGroups: string[];
   filters: FilterDef<R>[];

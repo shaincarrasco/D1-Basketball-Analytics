@@ -64,8 +64,9 @@ export function decodeSpec<R>(pack: SportPack<R>, qs: string, base: ChartSpec = 
   const hc = p.get("hc"); if (hc && hc.length <= 40) s.hiGroup = hc;
   const num = (k: string, lo: number, hi: number) => { const v = Number(p.get(k)); return p.has(k) && Number.isFinite(v) ? Math.max(lo, Math.min(hi, Math.round(v))) : null; };
   s.labels = num("lb", 0, 40) ?? s.labels;
-  if (p.get("ids")) s.ids = p.get("ids")!.split(",").filter(Boolean).slice(0, 12);
-  if (p.get("m")) { const m = p.get("m")!.split(",").filter(k => M[k]); if (m.length) s.metrics = m.slice(0, 14); }
+  const list = (k: string) => [...new Set(p.get(k)!.split(",").filter(Boolean))];
+  if (p.get("ids")) s.ids = list("ids").slice(0, 12);
+  if (p.get("m")) { const m = list("m").filter(k => M[k]); if (m.length) s.metrics = m.slice(0, 14); }
   if (p.get("q")) { const q = p.get("q")!.split("|"); s.quads = [q[0] ?? "", q[1] ?? "", q[2] ?? "", q[3] ?? ""].map(x => x.slice(0, 32)) as ChartSpec["quads"]; }
   if (p.get("ti")) s.title = p.get("ti")!.slice(0, 90);
   s.n = num("n", 5, 40) ?? s.n;

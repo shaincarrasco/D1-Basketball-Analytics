@@ -38,6 +38,21 @@ export function readPool<R>(pack: SportPack<R>, p: URLSearchParams, base?: Pool)
   return pool;
 }
 
+/**
+ * Call once data has loaded: a data-driven filter value that doesn't exist (?conf=bogus,
+ * a league that was renamed) falls back to the default instead of silently matching nobody.
+ * Returns the same object when nothing changed.
+ */
+export function sanitizePool<R>(pack: SportPack<R>, pool: Pool, lists: Lists): Pool {
+  let out: Pool | null = null;
+  for (const f of pack.filters) {
+    if (Array.isArray(f.options)) continue;
+    const v = pool[f.key];
+    if (v !== undefined && !f.options(lists).some(o => o.value === v)) (out ??= { ...pool })[f.key] = f.default;
+  }
+  return out ?? pool;
+}
+
 /** "Big Ten guards, 15+ mpg, 2+ games" */
 export function poolText<R>(pack: SportPack<R>, pool: Pool, lists: Lists) {
   let noun = pack.nouns.pool;
