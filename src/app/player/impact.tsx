@@ -1,5 +1,6 @@
 // DPR headline (hero), raw on/off split and similar players for the player profile.
 import Link from "next/link";
+import { Dots } from "@/components/dots";
 import { fmt, signed } from "@/lib/format";
 import type { TeamDetail } from "@/lib/types";
 import { DPR_MIN_POSS, POS_WORD, SIM_MIN_MPG, type PlayerRow } from "../players/player-stats";
@@ -31,29 +32,39 @@ export function DprCard({ p, ranked }: { p: PlayerRow; ranked: number }) {
   const poss = p.onPoss ?? 0;
   const thin = poss < DPR_MIN_POSS;
   return (
-    <div className="rounded-lg border border-line p-4 sm:p-5" title={DPR_HINT}>
+    <div className="self-start rounded-[22px] border border-line bg-deck p-[18px]" title={DPR_HINT}>
       <div className="flex items-baseline justify-between gap-3">
-        <span className="text-sm font-semibold">DPR <span className="font-normal text-mute">player rating</span></span>
-        <Link href="/players/?view=impact" className="link text-xs text-mute">Leaderboard</Link>
+        <span className="text-[13px] font-semibold text-mute">Player rating (DPR)</span>
+        <Link href="/players/?view=impact" className="text-[13px] font-semibold text-bulb-ink">Leaderboard</Link>
       </div>
       {p.dpr === null ? (
         <p className="mt-2 text-sm text-mute">No rating yet: he hasn&apos;t been on the floor for a tracked possession.</p>
       ) : (
         <>
-          <div className="mt-1 flex items-baseline gap-2">
-            <span className="font-display text-[2.75rem] font-black leading-none tnum">{signed(p.dpr)}</span>
-            {p.dprSE !== null && <span className="text-lg text-mute tnum">± {fmt(p.dprSE)}</span>}
-          </div>
-          <p className="mt-1 text-sm text-mute">points per 100 possessions vs an average D-I player</p>
-          <Band v={p.dpr} se={p.dprSE} />
-          <div className="mt-3 grid grid-cols-2 gap-3 border-t border-line pt-3">
-            <div>
-              <div className="text-xs font-semibold text-off">Offense</div>
-              <div className="font-display text-xl font-extrabold tnum">{signed(p.dprO)}</div>
+          <div className="mt-2 flex items-center gap-3.5">
+            {p.dprRank ? (
+              <div className="plate flex shrink-0 flex-col items-center px-3 pb-1.5 pt-2">
+                <Dots glow className="text-[40px]">{p.dprRank}</Dots>
+                <span className="mt-0.5 text-[10px] font-semibold text-dim">in D-I</span>
+              </div>
+            ) : null}
+            <div className="min-w-0">
+              <div className="flex items-baseline gap-2">
+                <span className="font-display text-[2.6rem] font-black leading-none tnum">{signed(p.dpr)}</span>
+                {p.dprSE !== null && <span className="text-base text-mute tnum">± {fmt(p.dprSE)}</span>}
+              </div>
+              <p className="mt-1 text-[13px] leading-snug text-mute">points per 100 possessions over an average D-I player</p>
             </div>
-            <div>
+          </div>
+          <Band v={p.dpr} se={p.dprSE} />
+          <div className="mt-3 grid grid-cols-2 gap-2.5">
+            <div className="rounded-xl bg-night px-3 py-2.5">
+              <div className="text-xs font-semibold text-off">Offense</div>
+              <div className="font-display text-[22px] font-extrabold tnum">{signed(p.dprO)}</div>
+            </div>
+            <div className="rounded-xl bg-night px-3 py-2.5">
               <div className="text-xs font-semibold text-def">Defense</div>
-              <div className="font-display text-xl font-extrabold tnum">{signed(p.dprD)}</div>
+              <div className="font-display text-[22px] font-extrabold tnum">{signed(p.dprD)}</div>
             </div>
           </div>
           <p className="mt-3 text-sm tnum">

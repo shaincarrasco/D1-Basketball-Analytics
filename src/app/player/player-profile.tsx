@@ -8,35 +8,20 @@ import ShotChart from "@/components/shot-chart";
 import TeamLogo from "@/components/team-logo";
 import { Empty, ErrorState, Loading } from "@/components/states";
 import { useJson } from "@/lib/client-data";
-import { dayLabel, fmt, heatPct, pctFmt, signed, timeLabel } from "@/lib/format";
+import { dayLabel, fmt, pctFmt, signed, timeLabel } from "@/lib/format";
 import { playerRows } from "@/lib/players";
 import type { Meta, PlayerBio, PlayerTable, TeamDetail, TeamSummary } from "@/lib/types";
 import GameLog from "./game-log";
 import ArticleList from "@/components/article-list";
 import AvailabilityList from "@/components/availability-list";
-import { derive, makePool, MIN_ATT, POS_WORD, pctLabel, recruitText, similarPlayers, starGlyphs, type PlayerRow } from "../players/player-stats";
+import { derive, MIN_ATT, POS_WORD, recruitText, similarPlayers, type PlayerRow } from "../players/player-stats";
 import { followRowLink, ROW_LINK_CLASS } from "../players/row-link";
 import { DprCard, OnOff, Similar } from "./impact";
 import ShotDiet, { type ZoneAvg } from "./shot-diet";
+import Scouting from "./scouting";
+import { onTeam, teamHex } from "@/lib/color";
 
 const POOL_MIN = 10;
-type PStat = { key: string; label: string; get: (r: PlayerRow) => number | null; digits?: number; unit?: string; invert?: boolean; ok?: (r: PlayerRow) => boolean; hint: string };
-const OFF_STATS: PStat[] = [
-  { key: "pts", label: "Points", get: r => r.pts, hint: "Points per game" },
-  { key: "ast", label: "Assists", get: r => r.ast, hint: "Assists per game" },
-  { key: "ts", label: "True shooting", get: r => r.ts, unit: "%", ok: r => (r.fga ?? 0) + (r.fta ?? 0) >= MIN_ATT.fg, hint: "Points per shooting possession, free throws included" },
-  { key: "tpPct", label: "Three-point %", get: r => r.tpPct, unit: "%", ok: r => (r.tpa ?? 0) >= MIN_ATT.three, hint: `Needs ${MIN_ATT.three}+ attempts for a percentile` },
-  { key: "usg", label: "Usage", get: r => r.usg, unit: "%", hint: "Share of team possessions he uses while on the floor" },
-  { key: "ortg", label: "Offensive rating", get: r => r.ortg, hint: "Points produced per 100 possessions used" },
-  { key: "tov", label: "Turnovers", get: r => r.tov, invert: true, hint: "Per game; fewer ranks higher" },
-];
-const DEF_STATS: PStat[] = [
-  { key: "reb", label: "Rebounds", get: r => r.reb, hint: "Rebounds per game" },
-  { key: "orbPct", label: "Offensive rebound %", get: r => r.orbPct, unit: "%", hint: "Share of available offensive boards grabbed" },
-  { key: "stl", label: "Steals", get: r => r.stl, hint: "Steals per game" },
-  { key: "blk", label: "Blocks", get: r => r.blk, hint: "Blocks per game" },
-  { key: "drtg", label: "Defensive rating", get: r => r.drtg, invert: true, hint: "Points allowed per 100 possessions on the floor; lower ranks higher" },
-];
 const ET = "America/New_York";
 const etDay = (iso: string) => new Intl.DateTimeFormat("en-CA", { timeZone: ET }).format(new Date(iso));
 
@@ -76,13 +61,13 @@ export default function PlayerProfile() {
 
 const YEAR: Record<string, string> = { FR: "Freshman", SO: "Sophomore", JR: "Junior", SR: "Senior", GR: "Graduate", RS: "Redshirt" };
 
-// Jersey-number badge in the team's colour (no player photos).
+// Jersey tile in the team's colour, with a retro collar stripe (no player photos).
 function Jersey({ bio, color }: { bio: PlayerBio | null; color: string | null }) {
-  if (!bio?.jersey) return null;
+  const bg = teamHex(color) ?? "#24375A", ink = onTeam(bg);
   return (
-    <span aria-label={`Jersey number ${bio.jersey}`} className="team-accent grid h-12 w-12 shrink-0 place-items-center rounded-lg border-2 font-display text-xl font-extrabold tnum"
-      style={{ "--team": color ?? undefined, borderColor: "var(--accent)", color: "var(--accent)" } as React.CSSProperties}>
-      {bio.jersey}
+    <span aria-label={bio?.jersey ? `Jersey number ${bio.jersey}` : undefined} className="relative grid h-[104px] w-[88px] shrink-0 place-items-center overflow-hidden rounded-[18px] sm:h-[120px] sm:w-[100px]" style={{ background: bg, color: ink }}>
+      <i className="absolute inset-x-0 top-3 h-1.5 opacity-90" style={{ background: ink }} aria-hidden />
+      <span className="pt-3 font-display text-[60px] font-black leading-none tnum sm:text-[68px]">{bio?.jersey ?? "—"}</span>
     </span>
   );
 }
@@ -91,15 +76,6 @@ function Profile({ p, all, detail, teams }: { p: PlayerRow; all: PlayerRow[]; de
   const bio = detail.data?.bios?.[p.id] ?? null;
   const t = p.team;
   const pool = useMemo(() => all.filter(r => (r.min ?? 0) >= POOL_MIN), [all]);
-  const pct = useMemo(() => {
-    const out = new Map<string, number | null>();
-    for (const s of [...OFF_STATS, ...DEF_STATS]) {
-      const vals: number[] = [];
-      for (const r of pool) { const v = s.get(r); if (v !== null && (!s.ok || s.ok(r))) vals.push(v); }
-      out.set(s.key, s.ok && !s.ok(p) ? null : makePool(vals).pct(s.get(p), s.invert));
-    }
-    return out;
-  }, [pool, p]);
   const ranked = useMemo(() => all.reduce((n, r) => (r.dprRank ? n + 1 : n), 0), [all]);
   const similar = useMemo(() => similarPlayers(p, all), [p, all]);
   const zoneAvg = useMemo<ZoneAvg>(() => {
@@ -114,58 +90,47 @@ function Profile({ p, all, detail, teams }: { p: PlayerRow; all: PlayerRow[]; de
 
   return (
     <div className="space-y-5">
-      <section className="deck relative overflow-hidden p-5 sm:p-8" aria-labelledby="player-name">
-        <div className="relative grid gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
+      <section className="relative" aria-labelledby="player-name">
+        <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_360px]">
           <div className="min-w-0">
-          <div className="flex items-start justify-between gap-3">
-          <div className="flex min-w-0 items-center gap-3">
-            <TeamLogo src={t?.logo ?? null} name={t?.name ?? "?"} size={44} />
-            <div className="min-w-0 text-sm leading-tight">
-              {t ? <Link href={`/teams/${t.slug}/`} className="link block truncate text-base font-semibold">{t.name}{t.mascot ? ` ${t.mascot}` : ""}</Link> : <span className="block font-semibold">Unknown team</span>}
-              <span className="text-mute">
-                {t ? <Link href={`/conferences/${t.confSlug}/`} className="hover:text-ink">{t.confName}</Link> : null}
-                {p.posN ? ` · ${POS_WORD[p.posN]}` : ""}
-              </span>
+            <div className="flex items-center justify-between gap-3">
+              {t ? (
+                <Link href={`/teams/${t.slug}/`} className="flex min-w-0 items-center gap-2 text-[15px] font-semibold text-bulb-ink">
+                  <TeamLogo src={t.logo} name={t.name} size={24} /><span className="truncate">{t.name}</span>
+                </Link>
+              ) : <span className="font-semibold">Unknown team</span>}
+              <FavoriteButton kind="players" id={p.id} name={p.name} />
             </div>
-          </div>
-          <FavoriteButton kind="players" id={p.id} name={p.name} />
-          </div>
-          <div className="mt-4 flex items-center gap-3">
-            <Jersey bio={bio} color={t?.color ?? null} />
-            <h1 id="player-name" className="text-[2rem] font-bold leading-tight tracking-[-0.02em] sm:text-[2.5rem]">{p.name}</h1>
-          </div>
-          {bio && (
-            <p className="mt-2 text-sm text-mute">
-              {[bio.pos, bio.ht, bio.wt ? `${bio.wt} lbs` : null, bio.year ? YEAR[bio.year] ?? bio.year : null, bio.home].filter(Boolean).join(" · ")}
-            </p>
-          )}
-          {recruitText(p) && (
-            <p className="mt-1.5 text-sm" title="High-school recruiting ranking (College Basketball Data)">
-              {p.stars ? <span className="mr-1.5 tracking-[0.08em]" role="img" aria-label={`${p.stars}-star recruit`}>{starGlyphs(p.stars)}</span> : null}
-              <span className="text-mute">{p.stars && !p.recRank && !p.recYear ? "recruit" : recruitText(p)}</span>
-            </p>
-          )}
-          <p className="mt-2 text-mute tnum">
-            {p.g ?? 0} {p.g === 1 ? "game" : "games"} · {p.gs ?? 0} {p.gs === 1 ? "start" : "starts"} · {fmt(p.min)} minutes per game
-          </p>
-          <div className="mt-5 grid max-w-xl grid-cols-3 gap-4 sm:gap-8">
-            {([["PTS", p.pts, ""], ["REB", p.reb, ""], ["AST", p.ast, ""]] as const).map(([l, v, c]) => (
-              <div key={l}>
-                <div className={`font-display text-[2.25rem] font-black leading-none tnum sm:text-[2.75rem] ${c}`}>{fmt(v)}</div>
-                <div className="mt-1 text-sm font-semibold text-mute">{l === "PTS" ? "Points" : l === "REB" ? "Rebounds" : "Assists"}<span className="hidden sm:inline"> per game</span></div>
+            <div className="mt-4 flex items-center gap-4">
+              <Jersey bio={bio} color={t?.color ?? null} />
+              <div className="min-w-0">
+                <h1 id="player-name" className="font-display text-[2.4rem] font-black leading-[0.95] [text-wrap:balance] sm:text-[3rem]">{p.name}</h1>
+                <p className="mt-1.5 text-[15px] font-semibold">{[p.posN ? POS_WORD[p.posN] : bio?.pos, t?.name].filter(Boolean).join(", ")}</p>
+                {bio && <p className="text-sm text-mute">{[bio.ht, bio.wt ? `${bio.wt} lbs` : null, bio.year ? (YEAR[bio.year] ?? bio.year).toLowerCase() : null].filter(Boolean).join(", ")}</p>}
+                {(bio?.home || recruitText(p)) && (
+                  <p className="text-sm text-mute" title="High-school recruiting ranking (College Basketball Data)">
+                    {[bio?.home, p.stars ? `${p.stars}-star` : null, p.recRank && p.recYear ? `No. ${p.recRank} in ${p.recYear}` : null].filter(Boolean).join(", ")}
+                  </p>
+                )}
               </div>
-            ))}
-          </div>
-          <div className="mt-5 flex flex-wrap gap-x-5 gap-y-1 text-sm tnum">
-            {shoot("FG", p.fgm, p.fga)}
-            {shoot("3P", p.tpm, p.tpa)}
-            {shoot("FT", p.ftm, p.fta)}
-            <span><span className="text-dim">TS</span> <b>{p.ts === null ? "—" : `${fmt(p.ts)}%`}</b></span>
-            <span><span className="text-dim">USG</span> <b>{p.usg === null ? "—" : `${fmt(p.usg)}%`}</b></span>
-            <span><span className="text-dim">STL</span> <b>{fmt(p.stl)}</b></span>
-            <span><span className="text-dim">BLK</span> <b>{fmt(p.blk)}</b></span>
-            <span><span className="text-dim">TOV</span> <b>{fmt(p.tov)}</b></span>
-          </div>
+            </div>
+            <dl className="mt-5 flex overflow-hidden rounded-2xl bg-deck" aria-label="Per-game averages">
+              {([["MIN", p.min, 1], ["PTS", p.pts, 1], ["REB", p.reb, 1], ["AST", p.ast, 1], ["BLK", p.blk, 1], ["TS%", p.ts, 1]] as const).map(([l, v, d], i) => (
+                <div key={l} className={`flex flex-1 flex-col items-center gap-0.5 py-2.5 ${i ? "border-l border-line" : ""}`}>
+                  <dt className="text-[11px] font-bold tracking-[0.04em] text-mute">{l}</dt>
+                  <dd className="font-display text-[22px] font-extrabold leading-none tnum">{fmt(v, d)}</dd>
+                </div>
+              ))}
+            </dl>
+            <div className="mt-3 flex flex-wrap gap-x-5 gap-y-1 text-sm tnum">
+              {shoot("FG", p.fgm, p.fga)}
+              {shoot("3P", p.tpm, p.tpa)}
+              {shoot("FT", p.ftm, p.fta)}
+              <span><span className="text-dim">STL</span> <b>{fmt(p.stl)}</b></span>
+              <span><span className="text-dim">TOV</span> <b>{fmt(p.tov)}</b></span>
+              <span><span className="text-dim">USG</span> <b>{p.usg === null ? "—" : `${fmt(p.usg)}%`}</b></span>
+              <span className="text-mute">{p.g ?? 0} {p.g === 1 ? "game" : "games"}, {p.gs ?? 0} {p.gs === 1 ? "start" : "starts"}</span>
+            </div>
           </div>
           <DprCard p={p} ranked={ranked} />
         </div>
@@ -177,6 +142,8 @@ function Profile({ p, all, detail, teams }: { p: PlayerRow; all: PlayerRow[]; de
           {(p.min ?? 0) < POOL_MIN ? ` He also averages under ${POOL_MIN} minutes, so his percentiles compare a bench role against rotation players.` : ""}
         </p>
       )}
+
+      <Scouting p={p} pool={pool} />
 
       {(() => {
         const avail = detail.data?.availability?.find(a => a.pid === p.id);
@@ -209,24 +176,8 @@ function Profile({ p, all, detail, teams }: { p: PlayerRow; all: PlayerRow[]; de
       <Shots p={p} detail={detail.data} loading={detail.status === "loading"} zoneAvg={zoneAvg} />
 
       <div className="grid items-start gap-5 lg:grid-cols-2">
-        <section className="deck p-5" aria-labelledby="pct-h">
-          <h2 id="pct-h" className="h-section">D-I percentiles</h2>
-          <p className="mt-1 text-sm text-mute">Where he ranks among the {pool.length.toLocaleString("en-US")} players averaging {POOL_MIN}+ minutes. 99th is the best in the country.</p>
-          <div className="mt-3 grid gap-x-8 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
-            <div>
-              <h3 className="mt-2 text-sm font-semibold text-off">Offense</h3>
-              {OFF_STATS.map(s => <PctBar key={s.key} s={s} p={p} pct={pct.get(s.key) ?? null} tone="off" />)}
-            </div>
-            <div>
-              <h3 className="mt-2 text-sm font-semibold text-def">Defense &amp; glass</h3>
-              {DEF_STATS.map(s => <PctBar key={s.key} s={s} p={p} pct={pct.get(s.key) ?? null} tone="def" />)}
-            </div>
-          </div>
-        </section>
-        <div className="grid min-w-0 gap-5">
-          <OnOff p={p} detail={detail.data} />
-          <Similar p={p} list={similar} />
-        </div>
+        <OnOff p={p} detail={detail.data} />
+        <Similar p={p} list={similar} />
       </div>
 
       <div className="grid gap-5 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
@@ -274,28 +225,6 @@ function Shots({ p, detail, loading, zoneAvg }: { p: PlayerRow; detail: TeamDeta
       </div>
       )}
     </section>
-  );
-}
-
-function PctBar({ s, p, pct, tone }: { s: PStat; p: PlayerRow; pct: number | null; tone: "off" | "def" }) {
-  const v = s.get(p);
-  const small = s.ok ? !s.ok(p) : false;
-  const color = tone === "off" ? "var(--off)" : "var(--def)";
-  return (
-    <div className="py-2" title={s.hint}>
-      <div className="flex items-baseline justify-between gap-3">
-        <span className="text-sm text-mute">{s.label}</span>
-        <span className="tnum">
-          <b className="text-[15px]">{fmt(v, s.digits ?? 1)}{v !== null && s.unit ? s.unit : ""}</b>
-          <span className="ml-2 inline-block min-w-[3.2rem] rounded px-1.5 text-right text-xs text-mute" style={{ background: heatPct(pct) }}>
-            {pct !== null ? pctLabel(pct) : small ? "Few att." : "—"}
-          </span>
-        </span>
-      </div>
-      <div className="mt-1.5 h-[3px] bg-line" role="meter" aria-valuemin={0} aria-valuemax={100} aria-valuenow={pct !== null ? Math.round(pct * 100) : undefined} aria-label={`${s.label} percentile`}>
-        {pct !== null && <div className="h-[3px]" style={{ width: `${Math.max(2, pct * 100)}%`, background: color }} />}
-      </div>
-    </div>
   );
 }
 

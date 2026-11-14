@@ -46,7 +46,7 @@ export default function GameLog({ playerId, detail, teams }: { playerId: string;
   return (
     <div>
       <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-        <div className="flex gap-1.5" role="group" aria-label="Chart metric">
+        <div className="no-scrollbar -mx-1 flex max-w-full gap-1.5 overflow-x-auto px-1" role="group" aria-label="Chart metric">
           {(Object.keys(METRICS) as (keyof typeof METRICS)[]).map(k => (
             <button key={k} className="chip" aria-pressed={metric === k} onClick={() => setMetric(k)}>{METRICS[k]}</button>
           ))}
