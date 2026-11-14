@@ -738,3 +738,6 @@ for (const [day, list] of [...byDay.entries()].sort(([a], [b]) => a.localeCompar
 await write("games/index.json", { days: index });
 
 console.log(`[app-data] ${teamSummaries.length} teams, ${conferences.length} conferences, ${players.length} players, ${index.length} game days written to ${OUT}.`);
+
+// Projected NCAA tournament field + bubble watch (reads the files written above).
+await import("./build-bracket.mjs");
