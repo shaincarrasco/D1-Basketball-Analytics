@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import Link from "next/link";
-import PageHeader from "@/components/page-header";
-import { Loading } from "@/components/states";
+import PageHeader from "@sports/ui/page-header";
+import { Loading } from "@sports/ui/states";
 import NilBoard from "./nil-board";
 
 export const metadata: Metadata = {

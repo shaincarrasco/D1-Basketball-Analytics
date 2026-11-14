@@ -85,17 +85,17 @@ export default function SiteShell({ children, updated }: { children: React.React
     <>
       <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-50 focus:rounded focus:bg-ink focus:px-3 focus:py-2 focus:text-night">Skip to content</a>
       <header ref={header} className="sticky top-0 z-40 border-b border-line bg-night/90 pt-[env(safe-area-inset-top)] backdrop-blur-md"
-        onMouseLeave={() => schedule(null, CLOSE_DELAY)}>
+        >
         <div className="mx-auto flex h-14 max-w-[1440px] items-center gap-4 px-4 sm:px-6">
           <Logo />
           <nav aria-label="Primary" className="ml-4 hidden h-full items-stretch lg:flex">
             {HUBS.map(h => {
               const isCur = activeHub?.key === h.key, isOpen = open === h.key;
               const cls = `relative flex items-center gap-1 whitespace-nowrap px-3.5 text-[15px] font-semibold transition-colors hover:text-ink ${isCur || isOpen ? "text-ink" : "text-mute"} ${isCur ? "after:absolute after:inset-x-3.5 after:bottom-0 after:h-[3px] after:rounded-full after:bg-bulb" : ""}`;
-              if (!h.sections.length) return <Link key={h.key} href={h.href} aria-current={isCur ? "page" : undefined} className={cls} onMouseEnter={() => schedule(null, OPEN_DELAY)}>{h.label}</Link>;
+              if (!h.sections.length) return <Link key={h.key} href={h.href} aria-current={isCur ? "page" : undefined} className={cls} >{h.label}</Link>;
               return (
                 <button key={h.key} type="button" data-hub={h.key} className={cls} aria-expanded={isOpen} aria-controls="hub-panel"
-                  onMouseEnter={() => schedule(h.key, open ? 0 : OPEN_DELAY)}
+                  onMouseEnter={() => { if (open) show(h.key); }}
                   onClick={() => (isOpen ? setOpen(null) : show(h.key))}
                   onKeyDown={e => { if (e.key === "ArrowDown") { e.preventDefault(); show(h.key); window.setTimeout(() => document.querySelector<HTMLElement>("#hub-panel a")?.focus(), 0); } }}>
                   {h.label}

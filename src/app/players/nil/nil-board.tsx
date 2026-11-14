@@ -4,16 +4,16 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { Search } from "lucide-react";
-import DataTable, { type Column } from "@/components/data-table";
-import TeamLogo from "@/components/team-logo";
-import { ErrorState, Loading } from "@/components/states";
-import { shortName } from "@/sport-kit/ui/charts";
-import { teamHex } from "@/lib/color";
+import DataTable, { type Column } from "@sports/ui/data-table";
+import TeamLogo from "@sports/ui/team-logo";
+import { ErrorState, Loading } from "@sports/ui/states";
+import { shortName } from "@sports/kit/ui/charts";
+import { teamHex } from "@sports/ui/color";
 import { useBasketball } from "@/sports/basketball/data";
 import { fmtMoney, fmtRange, fmtReported, KIND_WORD, NIL_METHOD_HREF, useNil, type NilData, type NilRow, type NilTeam } from "@/lib/nil";
 import { EstimateTag, ReportedTag, ReportList } from "@/components/nil/reported";
 import { POS_WORD, type Pos, type PlayerRow } from "@/app/players/player-stats";
-import { followRowLink, ROW_LINK_CLASS } from "@/app/players/row-link";
+import { followRowLink, ROW_LINK_CLASS } from "@sports/ui/row-link";
 
 type Item = { p: PlayerRow; n: NilRow; t: NilTeam | null; pos: Pos | null };
 const POSITIONS: Pos[] = ["G", "F", "C"];

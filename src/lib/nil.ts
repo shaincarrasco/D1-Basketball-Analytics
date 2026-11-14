@@ -2,7 +2,7 @@
 // These are model estimates, never reported deals: every place that shows one labels it "Estimate"
 // and links to /methodology/#nil. Reported figures from the calibration set are shown separately.
 import { useMemo } from "react";
-import { useJson } from "./client-data";
+import { useJson } from "@sports/ui/client-data";
 
 export const NIL_METHOD_HREF = "/methodology/#nil";
 
