@@ -28,6 +28,17 @@ export default function SiteShell({ children, updated }: { children: React.React
   const [searchOpen, setSearchOpen] = useState(false);
   const [open, setOpen] = useState<HubKey | null>(null);
   const [seen, setSeen] = useState(false); // load previews only after a panel has opened once
+  // While a text field has focus (phone keyboard up), hide the tab bar: iOS would otherwise
+  // float it above the keyboard, on top of the page.
+  const [typing, setTyping] = useState(false);
+  useEffect(() => {
+    const isText = (t: EventTarget | null) => t instanceof HTMLTextAreaElement || (t instanceof HTMLInputElement && !["checkbox", "radio", "range", "button", "submit", "color", "file"].includes(t.type));
+    const on = (e: FocusEvent) => { if (isText(e.target)) setTyping(true); };
+    const off = (e: FocusEvent) => { if (isText(e.target) && !isText(e.relatedTarget)) setTyping(false); };
+    document.addEventListener("focusin", on);
+    document.addEventListener("focusout", off);
+    return () => { document.removeEventListener("focusin", on); document.removeEventListener("focusout", off); };
+  }, []);
   const header = useRef<HTMLElement>(null);
   const timer = useRef<number | undefined>(undefined);
   const activeHub = hubFor(path);
@@ -170,12 +181,12 @@ export default function SiteShell({ children, updated }: { children: React.React
       <footer className="mx-auto hidden max-w-[1440px] px-6 pb-10 text-xs text-dim lg:block">
         Box scores and schedules from College Basketball Data. Ratings and projections are D1 Hoops originals — see <Link className="underline hover:text-ink" href="/methodology/">methodology</Link>.
       </footer>
-      <nav aria-label="Tabs" className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-night/90 pb-[env(safe-area-inset-bottom)] backdrop-blur-xl lg:hidden">
+      <nav aria-label="Tabs" className={`fixed inset-x-0 bottom-0 z-40 border-t border-line bg-night/90 pb-[env(safe-area-inset-bottom)] backdrop-blur-xl lg:hidden ${typing ? "hidden" : ""}`}>
         <div className="grid grid-cols-5">
           {HUBS.map(h => {
             const Icon = h.icon, active = activeHub?.key === h.key;
             return (
-              <Link key={h.key} href={h.href} aria-current={active ? "page" : undefined} className={`flex flex-col items-center gap-1 pb-1.5 pt-2.5 text-[11px] font-semibold transition-colors ${active ? "text-bulb-ink" : "text-dim"}`}>
+              <Link key={h.key} href={h.href} aria-current={active ? "page" : undefined} className={`tab-item flex flex-col items-center gap-1 pb-1.5 pt-2.5 text-[11px] font-semibold transition-colors ${active ? "text-bulb-ink" : "text-dim"}`}>
                 <Icon size={22} strokeWidth={active ? 2.3 : 1.8} aria-hidden />
                 {h.label}
               </Link>
