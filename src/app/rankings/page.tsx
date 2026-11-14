@@ -9,7 +9,7 @@ export default function RankingsPage() {
   const meta = getMeta(), teams = getTeams();
   return (
     <>
-      <PageHeader title="Rankings">{meta.counts.ratedTeams} teams by adjusted efficiency margin: points per 100 possessions better than an average D-I team on a neutral floor.</PageHeader>
+      <PageHeader title="Rankings">All {meta.counts.ratedTeams} teams. Rating is points per 100 possessions better than an average D-I team, adjusted for opponent and venue.</PageHeader>
       <RankingsTable teams={teams} total={meta.counts.ratedTeams} />
     </>
   );

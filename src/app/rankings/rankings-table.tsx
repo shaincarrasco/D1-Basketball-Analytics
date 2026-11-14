@@ -9,6 +9,7 @@ import { fmt, heat, pctFmt, signed } from "@/lib/format";
 import type { ProfileKey, TeamSummary } from "@/lib/types";
 import { useLiveTeams } from "@/lib/live-ratings";
 import LiveRatingsNote, { RankMove } from "@/components/live-ratings-note";
+import RankList, { type Source } from "./rank-list";
 
 const VIEWS = ["Ratings", "Projections", "Four factors", "Shooting", "Résumé"] as const;
 type View = (typeof VIEWS)[number];
@@ -20,6 +21,7 @@ export default function RankingsTable({ teams: published, total }: { teams: Team
   const [view, setView] = useState<View>("Ratings");
   const [conf, setConf] = useState("all");
   const [q, setQ] = useState("");
+  const [source, setSource] = useState<Source>("dhr");
 
   // Keep view + conference in the URL so a filtered table can be shared.
   useEffect(() => {
@@ -177,6 +179,17 @@ export default function RankingsTable({ teams: published, total }: { teams: Team
         </div>
       </div>
       <LiveRatingsNote live={live} className="mb-2" />
+      {view === "Ratings" && (
+        <div className="lg:hidden">
+          <div className="seg mb-4" role="group" aria-label="Ranking source">
+            {([["dhr", "D1 Hoops"], ["ap", "AP Top 25"], ["coaches", "Coaches"]] as const).map(([k, l]) => (
+              <button key={k} type="button" aria-pressed={source === k} onClick={() => setSource(k)}>{l}</button>
+            ))}
+          </div>
+          <RankList teams={rows} prevRank={prevRank} source={source} />
+        </div>
+      )}
+      <div className={view === "Ratings" ? "hidden lg:block" : ""}>
       {view === "Projections" ? (
         <p className="mb-2 text-xs text-mute">10,000 simulations of the rest of the season using current ratings. The bar shows where 80% of simulated win totals land; early-season ranges are wide on purpose.</p>
       ) : (
@@ -188,6 +201,7 @@ export default function RankingsTable({ teams: published, total }: { teams: Team
       )}
       <DataTable key={view} rows={rows} columns={columns[view]} rowKey={t => t.id} rowHref={t => `/teams/${t.slug}/`} initialSort={view === "Résumé" ? "rec" : view === "Projections" ? "simW" : "rank"} initialDir={view === "Résumé" || view === "Projections" ? "desc" : "asc"} csvName={`d1hoops-${slug(view)}.csv`} caption="Division I power rankings" />
       {rows.length === 0 && <p className="mt-4 text-sm text-mute">No teams match “{q}”. Clear the search or pick another conference.</p>}
+      </div>
     </section>
   );
 }
