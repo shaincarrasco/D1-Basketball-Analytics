@@ -1,6 +1,7 @@
 // Pure helpers for the games hub: filters, sorts, day summaries, labels.
 import { fmt, timeLabel } from "@sports/ui/format";
 import type { LiveGame } from "@/lib/live";
+import { excitement } from "@/lib/moments";
 import type { Game, GameIndex, GameSide } from "@/lib/types";
 
 export const FILTERS = [
@@ -41,6 +42,28 @@ export function sortGames(games: Game[], s: SortId): Game[] {
   else if (s === "close") out.sort((a, b) => (a.pred ? Math.abs(a.pred.margin) : 999) - (b.pred ? Math.abs(b.pred.margin) : 999) || byWatch(a, b));
   else out.sort((a, b) => tipKey(a) - tipKey(b) || byWatch(a, b));
   return out;
+}
+
+// ---------- Live view ----------
+
+/** The Live view: games in progress only, most exciting first (close and late, overtime, upset brewing, big swings), then watchability and tip time. */
+export function liveGames(games: Game[], byGame: Map<string, LiveGame>): Game[] {
+  const score = new Map(games.map(g => [g.id, excitement(g, byGame.get(g.id))]));
+  return games.filter(isLive).sort((a, b) => score.get(b.id)! - score.get(a.id)! || (b.watch ?? -1) - (a.watch ?? -1) || tipKey(a) - tipKey(b));
+}
+
+/** The next game still to tip (scheduled, with a known time, not yet started per the live feed), or null. */
+export function nextTip(games: Game[], byGame: Map<string, LiveGame>, now = Date.now()): Game | null {
+  let best: Game | null = null;
+  for (const g of games) {
+    if (g.status !== "scheduled" || isTBA(g)) continue;
+    const l = byGame.get(g.id);
+    if (l && l.state !== "pre") continue;
+    const t = new Date(g.date).getTime();
+    if (!Number.isFinite(t) || t < now - 15 * 60_000) continue;
+    if (!best || t < new Date(best.date).getTime()) best = g;
+  }
+  return best;
 }
 
 export type Winner = "home" | "away" | null;

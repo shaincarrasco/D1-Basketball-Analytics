@@ -8,13 +8,18 @@ import { useJson } from "@sports/ui/client-data";
 import { useInjuries } from "@/lib/injury-hooks";
 import { keyAbsences } from "@/components/whos-out";
 import { liveDay, useLiveScores, withLive } from "@/lib/live";
-import { dayLabel, etToday, pctFmt } from "@sports/ui/format";
+import { useLiveSummaries, type SummaryTarget } from "@/lib/live-game";
+import { bestMoment, type Moment } from "@/lib/moments";
+import { dayLabel, etToday, pctFmt, timeLabel } from "@sports/ui/format";
 import type { Game, GameDay, GameIndex } from "@/lib/types";
 import DateStrip from "./date-strip";
 import GameCard from "./game-card";
 import GameSheet from "./game-sheet";
 import ProjectionToggle from "@/components/projection-toggle";
-import { FILTERS, SORTS, defaultDay, lineInfo, isDay, matchesFilter, sortGames, summarize, winner, type FilterId, type SortId } from "./game-utils";
+import { FILTERS, SORTS, defaultDay, lineInfo, isDay, isLive, liveGames, matchesFilter, nextTip, sortGames, summarize, winner, type FilterId, type SortId } from "./game-utils";
+
+/** A summary older than this (relative to the last scoreboard update) is too stale to quote. */
+const SUMMARY_STALE_MS = 3 * 60_000;
 
 function setUrl(mutate: (p: URLSearchParams) => void, mode: "push" | "replace") {
   const p = new URLSearchParams(window.location.search);
@@ -32,6 +37,7 @@ export default function GamesHub() {
 
   const dParam = params.get("d");
   const gParam = params.get("g");
+  const liveView = params.get("live") === "1";
   const home = index.data ? defaultDay(index.data, today) : null;
   const day = isDay(dParam) ? dParam : home;
   const listed = index.data && day ? index.data.days.find(d => d.day === day && d.games > 0) : undefined;
@@ -39,7 +45,8 @@ export default function GamesHub() {
   // useJson keeps the previous day's data for one render after the file changes.
   const staticGames = dayData.status === "ready" && dayData.data.day === day ? dayData.data.games : null;
   // Today's slate (and recent days the data hasn't caught up on) gets ESPN's live scores laid over the static data.
-  const live = useLiveScores(liveDay(day, today, staticGames), staticGames);
+  const liveFor = liveDay(day, today, staticGames);
+  const live = useLiveScores(liveFor, staticGames);
   const games = useMemo(() => (staticGames && live.byGame.size ? staticGames.map(g => withLive(g, live.byGame.get(g.id))) : staticGames), [staticGames, live.byGame]);
 
   // One cached fetch for every card; failures just mean no badges.
@@ -54,7 +61,10 @@ export default function GamesHub() {
   const returnFocus = useRef<string | null>(null);
 
   const selectDay = useCallback((d: string) => {
-    setUrl(p => { p.set("d", d); p.delete("g"); }, "replace");
+    setUrl(p => { p.set("d", d); p.delete("g"); p.delete("live"); }, "replace");
+  }, []);
+  const setLiveView = useCallback((on: boolean) => {
+    setUrl(p => { if (on) p.set("live", "1"); else p.delete("live"); }, "replace");
   }, []);
   const openGame = useCallback((id: string) => {
     returnFocus.current = id;
@@ -84,6 +94,32 @@ export default function GamesHub() {
   const counts = useMemo(() => Object.fromEntries(FILTERS.map(f => [f.id, confGames.filter(g => matchesFilter(g, f.id)).length])) as Record<FilterId, number>, [confGames]);
   const shown = useMemo(() => sortGames(confGames.filter(g => matchesFilter(g, filter)), sort), [confGames, filter, sort]);
   const summary = useMemo(() => (games ? summarize(games) : null), [games]);
+
+  // Live view: games in progress, most exciting first. Play-by-play (ESPN summaries) is fetched
+  // only while the Live view is on, for live games only; cards fall back to scoreboard moments.
+  const liveList = useMemo(() => liveGames(confGames, live.byGame), [confGames, live.byGame]);
+  const targets = useMemo<SummaryTarget[]>(() => (liveView ? liveList : []).flatMap(g => {
+    const l = live.byGame.get(g.id);
+    return l?.state === "in" && l.espnId ? [{ id: g.id, espnId: l.espnId, orient: { homeTeamId: l.homeTeamId, awayTeamId: l.awayTeamId, home: l.home, away: l.away } }] : [];
+  }), [liveView, liveList, live.byGame]);
+  const summaries = useLiveSummaries(targets, liveView);
+  const moments = useMemo(() => {
+    const m = new Map<string, Moment | null>();
+    for (const g of games ?? []) {
+      if (!isLive(g)) continue;
+      const e = summaries.get(g.id);
+      const fresh = e && e.data.state === "in" && e.at >= (live.updated ?? 0) - SUMMARY_STALE_MS ? e.data : null;
+      m.set(g.id, bestMoment(g, live.byGame.get(g.id), fresh));
+    }
+    return m;
+  }, [games, summaries, live.byGame, live.updated]);
+  // Give the first scoreboard poll a moment before saying nothing is live.
+  const [waited, setWaited] = useState(false);
+  useEffect(() => {
+    if (!liveView || live.hasData) return;
+    const t = setTimeout(() => setWaited(true), 4000);
+    return () => clearTimeout(t);
+  }, [liveView, live.hasData]);
   const open = gParam && games ? games.find(g => g.id === gParam) ?? null : null;
 
   if (index.status === "loading") return <Loading label="Loading the schedule" />;
@@ -118,14 +154,15 @@ export default function GamesHub() {
         <>
           <div className="mb-4 flex flex-wrap items-center gap-2">
             <div className="no-scrollbar -mx-1 flex max-w-full gap-1.5 overflow-x-auto px-1" role="group" aria-label="Filter games">
+              {(liveFor || liveView) && <LiveToggle on={liveView} count={liveList.length} onChange={setLiveView} />}
               {FILTERS.map(f => (
-                <button key={f.id} className="chip" aria-pressed={filter === f.id} onClick={() => setFilter(f.id)} title={f.title}>
+                <button key={f.id} className="chip" aria-pressed={!liveView && filter === f.id} onClick={() => { setFilter(f.id); if (liveView) setLiveView(false); }} title={f.title}>
                   {f.label}<span className="tnum opacity-60">{counts[f.id]}</span>
                 </button>
               ))}
             </div>
-            <ProjectionToggle className="shrink-0" />
-            <div className="ml-auto flex w-full gap-2 sm:w-auto">
+            {!liveView && <ProjectionToggle className="shrink-0" />}
+            <div className="ml-auto flex w-full items-center gap-2 sm:w-auto">
               <label className="flex-1 sm:flex-none">
                 <span className="sr-only">Conference</span>
                 <select className="field w-full" value={conf} onChange={e => setConf(e.target.value)}>
@@ -134,26 +171,34 @@ export default function GamesHub() {
                   {conf !== "all" && !confs.includes(conf) && <option value={conf}>{conf}</option>}
                 </select>
               </label>
-              <label className="flex flex-1 items-center gap-2 sm:flex-none">
-                <span className="hidden text-sm text-mute sm:inline">Sort</span>
-                <span className="sr-only sm:hidden">Sort by</span>
-                <select className="field w-full" value={sort} onChange={e => setSort(e.target.value as SortId)}>
-                  {SORTS.map(s => <option key={s.id} value={s.id}>{s.label}</option>)}
-                </select>
-              </label>
+              {liveView ? (
+                <span className="flex-1 text-right text-sm text-mute sm:flex-none" title="Close and late games first, then overtime, an underdog ahead, and how far our win chance has moved since tip-off">Most exciting first</span>
+              ) : (
+                <label className="flex flex-1 items-center gap-2 sm:flex-none">
+                  <span className="hidden text-sm text-mute sm:inline">Sort</span>
+                  <span className="sr-only sm:hidden">Sort by</span>
+                  <select className="field w-full" value={sort} onChange={e => setSort(e.target.value as SortId)}>
+                    {SORTS.map(s => <option key={s.id} value={s.id}>{s.label}</option>)}
+                  </select>
+                </label>
+              )}
             </div>
           </div>
 
-          {shown.length === 0 ? (
+          {liveView && liveList.length === 0 ? (
+            liveFor && !live.hasData && !waited ? <Loading label="Checking for live games" /> : (
+              <LiveEmpty day={day} today={today} next={liveFor ? nextTip(games, live.byGame) : null} conf={conf} total={games.length} onAll={() => { setLiveView(false); setFilter("all"); }} onClearConf={() => setConf("all")} />
+            )
+          ) : (liveView ? liveList : shown).length === 0 ? (
             <Empty title="No games match these filters">
               <p>{filter === "upsets" && summary?.finals === 0 ? "Upsets show up once games go final." : "Try a different filter or conference."}</p>
               <button className="btn mt-3" onClick={() => { setFilter("all"); setConf("all"); }}>Show all {games.length} games</button>
             </Empty>
           ) : (
-            <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4" aria-label={`${shown.length} games`}>
-              {shown.map(g => (
+            <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4" aria-label={liveView ? `${liveList.length} live games, most exciting first` : `${shown.length} games`} data-testid="game-list">
+              {(liveView ? liveList : shown).map(g => (
                 <li key={g.id} data-game={g.id} className="flex">
-                  <GameCard g={g} live={live.byGame.get(g.id)} onOpen={openGame} absences={absences} />
+                  <GameCard g={g} live={live.byGame.get(g.id)} onOpen={openGame} absences={absences} moment={moments.get(g.id)} />
                 </li>
               ))}
             </ul>
@@ -166,6 +211,36 @@ export default function GamesHub() {
       )}
 
       {open && <GameSheet key={open.id} g={open} live={live.byGame.get(open.id)} onClose={closeGame} />}
+    </div>
+  );
+}
+
+/** "Live now" chip: pulsing dot and the count of games in progress; on = the Live view (?live=1). */
+function LiveToggle({ on, count, onChange }: { on: boolean; count: number; onChange: (on: boolean) => void }) {
+  return (
+    <button type="button" className={`chip shrink-0 ${on ? "!border-hot !bg-hot !text-[var(--bg)]" : "!border-[rgb(var(--hot-rgb)/0.55)]"}`} aria-pressed={on}
+      onClick={() => onChange(!on)} aria-label={`Live now, ${count} ${count === 1 ? "game" : "games"} in progress`} data-testid="live-toggle"
+      title={on ? "Show all games" : "Show only games in progress, most exciting first"}>
+      {count > 0 ? <span className={`live-dot ${on ? "!bg-[var(--bg)]" : ""}`} aria-hidden /> : <span className="h-[7px] w-[7px] rounded-full bg-dim" aria-hidden />}
+      Live now<span className="tnum opacity-70">{count}</span>
+    </button>
+  );
+}
+
+/** Live view with nothing in progress: when the next game tips, and a way back to every game. */
+function LiveEmpty({ day, today, next, conf, total, onAll, onClearConf }: { day: string; today: string; next: Game | null; conf: string; total: number; onAll: () => void; onClearConf: () => void }) {
+  const isToday = day === today;
+  return (
+    <div className="deck flex flex-col items-start gap-1 p-6" data-testid="live-empty">
+      <p className="font-semibold">{isToday ? "Nothing live right now" : `No games are live on ${dayLabel(day)}`}{conf !== "all" ? ` in the ${conf}` : ""}</p>
+      <p className="text-sm text-mute">
+        {next ? <>Next tip: <b className="text-ink tnum">{timeLabel(next.date)}</b>, {next.away.name} {next.neutral ? "vs" : "at"} {next.home.name}.</>
+          : isToday ? "No more games are scheduled to tip today." : "Live scores are only shown for today's games."}
+      </p>
+      <div className="mt-3 flex flex-wrap gap-2">
+        <button type="button" className="btn btn-primary" onClick={onAll}>Show all {total} games</button>
+        {conf !== "all" && <button type="button" className="btn" onClick={onClearConf}>All conferences</button>}
+      </div>
     </div>
   );
 }
