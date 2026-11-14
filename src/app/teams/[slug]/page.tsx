@@ -170,7 +170,7 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
           )}
 
           {/* Season outlook */}
-          <section id="outlook" className="deck scroll-mt-20 p-5">
+          <section id="outlook" className="deck scroll-mt-32 p-5">
             <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
               <h2 className="h-section">Season outlook</h2>
               <p className="text-xs text-mute">{(meta.sims?.sims ?? 10000).toLocaleString()} simulations of the rest of the schedule, rating uncertainty included</p>
@@ -196,7 +196,7 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
           {note && <p className="note text-[15px] leading-[1.45]">{note}</p>}
 
           {/* Game form */}
-          <section id="form" className="deck scroll-mt-20 p-5">
+          <section id="form" className="deck scroll-mt-32 p-5">
             <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
               <h2 className="h-section">Game by game</h2>
               <p className="text-xs text-mute">Margin per 100 possessions, adjusted for opponent and venue</p>
@@ -205,13 +205,13 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
           </section>
 
           {/* Schedule */}
-          <section id="schedule" className="scroll-mt-20">
+          <section id="schedule" className="scroll-mt-32">
             <h2 className="h-section mb-3">Schedule &amp; results</h2>
             <GameLog games={detail.games} logos={logos} slug={slug} />
           </section>
 
           {/* Roster */}
-          <section id="roster" className="scroll-mt-20">
+          <section id="roster" className="scroll-mt-32">
             <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
               <h2 className="h-section">Roster</h2>
               <p className="text-xs text-mute">DPR = points per 100 possessions vs an average D-I player, ± one standard error</p>
@@ -220,7 +220,7 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
           </section>
 
           {/* Lineups */}
-          <section id="lineups" className="scroll-mt-20">
+          <section id="lineups" className="scroll-mt-32">
             <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
               <h2 className="h-section">Best five-man units</h2>
               <p className="text-xs text-mute">From play-by-play, units with 2+ minutes together</p>
@@ -229,7 +229,7 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
           </section>
 
           {/* Shot profile */}
-          <section id="shots" className="deck scroll-mt-20 p-5">
+          <section id="shots" className="deck scroll-mt-32 p-5">
             <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
               <h2 className="h-section">Shot profile</h2>
               <p className="text-xs text-mute">Tracked field-goal attempts, for and against</p>
@@ -239,7 +239,7 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
           </section>
         </div>
 
-        <aside id="profile" className="scroll-mt-20 space-y-6">
+        <aside id="profile" className="scroll-mt-32 space-y-6">
           <section className="deck p-5" aria-labelledby="avail-h">
             <h2 id="avail-h" className="h-section mb-2">Availability</h2>
             <AvailabilityList items={detail.availability} />

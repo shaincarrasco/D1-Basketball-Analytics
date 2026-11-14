@@ -61,6 +61,7 @@ export function teamNote(t: TeamSummary, total: number): string | null {
     if (!r || v == null) continue;
     if (!worst || r > worst.r) worst = { text: w.say(t.name, fmt(v)), r };
   }
-  if (!worst || worst.r < total * 0.5) return `${lead}, with no stat in the bottom half of Division I.`;
+  // Only call it a flaw when it sits in the bottom third; the check covers shooting, turnovers and rebounding.
+  if (!worst || worst.r < total * 0.67) return `${lead}, with no shooting, turnover or rebounding number in the bottom third of Division I.`;
   return `${lead}, and one real flaw: ${worst.text}, ${ordinal(worst.r)} in Division I.`;
 }

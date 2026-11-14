@@ -151,7 +151,7 @@ h1, h2, .h-section { font-family: var(--font-display); }
 /* Dark plate behind bulbs, like a scoreboard face. */
 .plate { background: var(--scoreboard); border-radius: 12px; }
 
-:focus-visible { outline: 2px solid var(--bulb); outline-offset: 2px; border-radius: 6px; }
+:focus-visible { outline: 2px solid var(--bulb); outline-offset: 2px; }
 
 @layer components {
   .deck { background: var(--deck); border: 1px solid var(--line); border-radius: var(--radius-lg); box-shadow: var(--shadow); }

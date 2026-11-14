@@ -19,7 +19,7 @@ const SKILLS: Skill[] = [
   { key: "ft", name: "Free throws", get: r => r.ftPct, show: r => `${fmt(r.ftPct)}% on ${r.fta ?? 0}`, ok: r => (r.fta ?? 0) >= MIN_ATT.ft },
   { key: "blk", name: "Rim protection", get: r => r.blk, show: r => `${fmt(r.blk)} blocks` },
   { key: "stl", name: "Steals", get: r => r.stl, show: r => `${fmt(r.stl)} per game` },
-  { key: "tov", name: "Ball security", get: r => r.tov, show: r => `${fmt(r.tov)} turnovers`, invert: true },
+  { key: "astTov", name: "Ball security", get: r => r.astTov, show: r => `${fmt(r.astTov, 1)} assists per turnover`, ok: r => r.astTov !== null && (r.ast ?? 0) + (r.tov ?? 0) >= 1 },
   { key: "drtg", name: "Team defense on floor", get: r => r.drtg, show: r => `${fmt(r.drtg, 0)} allowed per 100`, invert: true },
 ];
 
@@ -59,7 +59,7 @@ export default function Scouting({ p, pool }: { p: PlayerRow; pool: PlayerRow[] 
                 <span className="font-display text-[30px] font-black leading-[0.9]" style={{ color: g ? tone(g) : "var(--dim)" }}>{g ?? "—"}</span>
               </div>
               <span className="truncate font-display text-[18px] font-bold leading-tight">{pct === null ? "Few attempts" : s.show(p)}</span>
-              <div className="flex items-center gap-2" role="meter" aria-label={`${s.name} percentile`} aria-valuemin={0} aria-valuemax={100} aria-valuenow={pct === null ? undefined : Math.round(pct * 100)}>
+              <div className="flex items-center gap-2" {...(pct === null ? { "aria-hidden": true } : { role: "meter", "aria-label": `${s.name} percentile`, "aria-valuemin": 0, "aria-valuemax": 100, "aria-valuenow": Math.round(pct * 100) })}>
                 <div className="h-1 flex-1 rounded-full bg-line">{pct !== null && <div className="h-1 rounded-full" style={{ width: `${Math.max(3, pct * 100)}%`, background: tone(g!) }} />}</div>
                 <span className="w-6 text-right text-xs text-mute tnum">{pct === null ? "" : Math.min(99, Math.max(1, Math.round(pct * 100)))}</span>
               </div>

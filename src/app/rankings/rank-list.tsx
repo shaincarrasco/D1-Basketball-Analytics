@@ -81,6 +81,7 @@ function Row({ t, rank, prev, followed, open, setOpen, source }: { t: TeamSummar
   const x = drag ?? (open ? -ACTIONS : 0);
 
   const onDown = (e: React.PointerEvent) => {
+    moved.current = false;
     if (e.pointerType === "mouse") return; // desktop uses the table; mouse users can Tab or click actions
     start.current = { x: e.clientX, y: e.clientY, base: open ? -ACTIONS : 0, axis: null };
     moved.current = false;
@@ -99,6 +100,8 @@ function Row({ t, rank, prev, followed, open, setOpen, source }: { t: TeamSummar
     start.current = null;
     if (drag !== null) { setOpen(drag < -ACTIONS / 2.5); setDrag(null); }
     else if (s?.axis === null && open) { setOpen(false); moved.current = true; }
+    // A swipe usually fires no click; clear the flag after any click this gesture did fire.
+    if (moved.current) requestAnimationFrame(() => requestAnimationFrame(() => { moved.current = false; }));
   };
 
   const sub = source === "dhr" ? (t.ap ? `AP ${t.ap.rank}` : "") : `DHR ${t.rank ?? "—"}`;

@@ -60,6 +60,15 @@ export default function ThemePicker() {
   const active = resolvePalette(choice.palette);
   const accentNow = choice.accent ?? active.accent;
   const close = () => { setOpen(false); btn.current?.focus(); };
+  // Keep Tab inside the open dialog.
+  const trapTab = (e: React.KeyboardEvent) => {
+    if (e.key !== "Tab" || !panel.current) return;
+    const items = [...panel.current.querySelectorAll<HTMLElement>("button, input, a[href]")].filter(el => !el.hasAttribute("disabled"));
+    if (!items.length) return;
+    const first = items[0], last = items[items.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  };
 
   return (
     <>
@@ -69,7 +78,7 @@ export default function ThemePicker() {
       </button>
       {open && createPortal(
         <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 sm:items-start sm:justify-end sm:bg-transparent sm:p-4 sm:pt-16" onClick={close}>
-          <div ref={panel} role="dialog" aria-modal="true" aria-labelledby="theme-h" onClick={e => e.stopPropagation()}
+          <div ref={panel} role="dialog" aria-modal="true" aria-labelledby="theme-h" onClick={e => e.stopPropagation()} onKeyDown={trapTab}
             className="sheet-in w-full max-w-md rounded-t-[22px] border border-line2 bg-deck p-5 pb-[calc(1.25rem+env(safe-area-inset-bottom))] shadow-2xl sm:w-[380px] sm:rounded-[22px] sm:pb-5">
             <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-line2 sm:hidden" aria-hidden />
             <div className="flex items-center justify-between">
