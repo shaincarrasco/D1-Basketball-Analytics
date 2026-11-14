@@ -19,6 +19,8 @@ import SeasonOutlook from "./season-outlook";
 import ShotProfile from "./shot-profile";
 import ZoneTable from "./zone-table";
 import Lineups from "./lineups";
+import TeamTabs from "./team-tabs";
+import { ViewTransition } from "react";
 import { Dots } from "@/components/dots";
 import { playerRows } from "@/lib/players";
 import { teamNote } from "@/lib/notes";
@@ -100,7 +102,7 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-3">
               <span className="hidden shrink-0 sm:block"><TeamLogo src={team.logo} name={team.name} size={44} /></span>
-              <h1 className="truncate font-display text-[3.25rem] font-black leading-[0.9] sm:text-[4rem]">{team.name}</h1>
+              <ViewTransition name={`team-name-${slug}`} share="morph" default="none"><h1 className="truncate font-display text-[3.25rem] font-black leading-[0.9] sm:text-[4rem]">{team.name}</h1></ViewTransition>
             </div>
             <p className="mt-1.5 text-[15px] font-semibold opacity-90">{team.mascot ? `${team.mascot}, ` : ""}<LiveRecord team={team} /> (<LiveRecord team={team} conf /> {team.confName})</p>
             <p className="text-[14px] opacity-75 tnum">
@@ -115,11 +117,7 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
         </div>
       </section>
 
-      <nav aria-label="On this page" className="sticky top-[calc(3.5rem+env(safe-area-inset-top))] z-30 -mx-4 mb-5 flex gap-6 overflow-x-auto border-b border-line bg-night/95 px-4 backdrop-blur no-scrollbar sm:-mx-6 sm:px-6 lg:mx-0 lg:px-1">
-        {NAV.map(([id, label], i) => (
-          <a key={id} href={`#${id}`} className={`whitespace-nowrap border-b-[3px] py-3 text-[15px] font-semibold ${i === 0 ? "border-bulb text-ink" : "border-transparent text-mute hover:text-ink"}`}>{label}</a>
-        ))}
-      </nav>
+      <TeamTabs items={NAV} />
 
       <div id="overview" className="scroll-mt-32">
         <LiveTiles team={team} total={total} />
@@ -184,7 +182,7 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
               <h2 id="leaders-h" className="h-section mb-2.5">Team leaders</h2>
               <div className="grid grid-cols-3 gap-2.5">
                 {leaders.map(({ k, p }) => (
-                  <Link key={k} href={`/player/?id=${p.id}`} className="flex flex-col gap-1 rounded-[18px] bg-deck p-3.5 hover:bg-deck2">
+                  <Link key={k} href={`/player/?id=${p.id}`} className="press flex flex-col gap-1 rounded-[18px] bg-deck p-3.5 hover:bg-deck2">
                     <span className="text-xs font-semibold text-mute">{k === "pts" ? "Points" : k === "reb" ? "Rebounds" : "Assists"}</span>
                     <span className="font-display text-[32px] font-black leading-none tnum">{fmt(p[k])}</span>
                     <span className="truncate text-[13px] font-semibold">{shortName(p.name)}</span>

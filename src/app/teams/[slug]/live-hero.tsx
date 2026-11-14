@@ -21,7 +21,7 @@ export function LiveRank({ team }: { team: TeamSummary }) {
   const { t } = useTeam(team);
   return (
     <span className="flex items-start gap-1">
-      <Dots glow className="text-[56px]">{t.rank ?? "—"}</Dots>
+      <Dots glow ghost className="text-[56px]">{String(t.rank ?? "—")}</Dots>
       <RankMove now={t.rank} before={team.rank} />
     </span>
   );

@@ -44,7 +44,7 @@ export function DprCard({ p, ranked }: { p: PlayerRow; ranked: number }) {
           <div className="mt-2 flex items-center gap-3.5">
             {p.dprRank ? (
               <div className="plate flex shrink-0 flex-col items-center px-3 pb-1.5 pt-2">
-                <Dots glow className="text-[40px]">{p.dprRank}</Dots>
+                <Dots glow ghost className="text-[40px]">{String(p.dprRank)}</Dots>
                 <span className="mt-0.5 text-[10px] font-semibold text-dim">in D-I</span>
               </div>
             ) : null}

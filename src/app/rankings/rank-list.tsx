@@ -3,7 +3,7 @@
 // Follow; the actions are real buttons, so keyboard users reach them with Tab (focusing one
 // slides the row open). Tapping a row opens the team.
 import Link from "next/link";
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState, ViewTransition } from "react";
 import { ArrowLeftRight, Star } from "lucide-react";
 import TeamLogo from "@/components/team-logo";
 import { Dots } from "@/components/dots";
@@ -93,7 +93,10 @@ function Row({ t, rank, prev, followed, open, setOpen, source }: { t: TeamSummar
     if (!s.axis) { if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return; s.axis = Math.abs(dx) > Math.abs(dy) ? "x" : "y"; }
     if (s.axis !== "x") return;
     moved.current = true;
-    setDrag(Math.max(-ACTIONS - 24, Math.min(0, s.base + dx)));
+    const next = Math.max(-ACTIONS - 24, Math.min(0, s.base + dx));
+    // A light tick when the swipe crosses the point where it will stay open (Android; iOS ignores it).
+    if ((next < -ACTIONS / 2.5) !== ((drag ?? s.base) < -ACTIONS / 2.5)) navigator.vibrate?.(8);
+    setDrag(next);
   };
   const onUp = () => {
     const s = start.current;
@@ -126,7 +129,7 @@ function Row({ t, rank, prev, followed, open, setOpen, source }: { t: TeamSummar
         <TeamLogo src={t.logo} name={t.name} size={32} />
         <span className="min-w-0 flex-1">
           <span className="flex items-center gap-1.5">
-            <span className="truncate font-display text-[19px] font-extrabold leading-tight">{t.name}</span>
+            <ViewTransition name={`team-name-${t.slug}`} share="morph" default="none"><span className="truncate font-display text-[19px] font-extrabold leading-tight">{t.name}</span></ViewTransition>
             {followed && <Star size={12} aria-label="Following" className="shrink-0 text-bulb-ink" fill="currentColor" />}
           </span>
           <span className="block truncate text-xs text-mute">{t.confName}, {t.w}-{t.l}</span>

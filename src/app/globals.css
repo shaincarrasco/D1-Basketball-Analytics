@@ -148,6 +148,7 @@ h1, h2, .h-section { font-family: var(--font-display); }
 .dots { font-family: var(--font-dots); font-weight: 900; color: var(--bulb-ink); font-variant-numeric: tabular-nums; letter-spacing: 0.02em; }
 .dots-glow { text-shadow: 0 0 calc(12px * var(--glow)) rgb(var(--bulb-rgb) / calc(0.55 * var(--glow))); }
 .dots-off { color: color-mix(in oklab, var(--bulb-ink) 38%, var(--deck)); text-shadow: none; }
+html[data-theme="light"] .dots-off { color: color-mix(in oklab, var(--bulb-ink) 52%, var(--deck)); }
 /* Dark plate behind bulbs, like a scoreboard face. */
 .plate { background: var(--scoreboard); border-radius: 12px; }
 
@@ -222,6 +223,29 @@ html[data-theme="light"] .team-accent { --accent: color-mix(in oklab, var(--team
   /* Accent used as text: darkened on light palettes for contrast. */
   .text-bulb-ink { color: var(--bulb-ink); }
 }
+.dots.dots-unlit { color: rgb(var(--bulb-rgb) / 0.09); text-shadow: none; animation: none; }
 /* Bulbs on a dark plate stay bright on every palette. */
 .plate .dots { color: var(--bulb); }
+.plate .dots.dots-unlit { color: rgb(var(--bulb-rgb) / 0.1); }
 .plate .dots.dots-off { color: color-mix(in oklab, var(--bulb) 30%, var(--scoreboard)); }
+
+/* ---------- motion ---------- */
+html { scroll-behavior: smooth; }
+/* iOS-style press feedback on tappable cards. */
+.press { transition: transform 0.16s ease-out, background-color 0.16s; }
+.press:active { transform: scale(0.985); }
+/* Scoreboard warm-up: bulbs flicker on once when a plate appears. */
+@keyframes bulb-on {
+  0% { opacity: 0.12; text-shadow: none; }
+  30% { opacity: 0.9; }
+  42% { opacity: 0.35; }
+  60%, 100% { opacity: 1; }
+}
+.plate .dots { animation: bulb-on 0.7s steps(1, end) 0.05s both; }
+.plate .dots + .dots, .plate .dots ~ .dots { animation-delay: 0.14s; }
+/* Shared-element morphs between pages (React <ViewTransition share="morph">). */
+::view-transition-group(.morph) { animation-duration: 380ms; animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1); }
+::view-transition-old(root), ::view-transition-new(root) { animation-duration: 180ms; }
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
+}
