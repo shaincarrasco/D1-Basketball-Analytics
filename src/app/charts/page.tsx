@@ -5,7 +5,7 @@ import { SlidersHorizontal } from "lucide-react";
 import PlayersTabs from "../players/players-tabs";
 import PageHeader from "@/components/page-header";
 import { Loading } from "@/components/states";
-import Gallery from "./gallery";
+import { BasketballGallery as Gallery } from "@/sports/basketball/ui";
 
 export const metadata: Metadata = { title: "Player charts", description: "Scatter plots, leaderboards and swarm charts that show which Division I players stand out: scoring efficiency, shooting, playmaking, defense, rebounding and impact." };
 
