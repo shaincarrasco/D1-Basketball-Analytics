@@ -73,6 +73,9 @@ pub struct AppState {
     pub tx: broadcast::Sender<Arc<str>>,
     /// ESPN team id -> team (from the exported site's teams.json), for alerts.
     pub teams: RwLock<HashMap<String, TeamInfo>>,
+    /// Eastern day -> the exported site's games that day (file mtime, games), for upset alerts
+    /// (pregame win probability) and game deep links. Loaded on demand by alerts.rs.
+    pub site_games: RwLock<alerts::SiteGamesCache>,
 }
 pub type Shared = Arc<AppState>;
 
@@ -118,6 +121,7 @@ async fn main() {
         jwks: auth::Jwks::new(cfg.neon_auth_url.clone()),
         slate: RwLock::new(serde_json::to_string(&relay::Slate::default()).unwrap().into()),
         teams: RwLock::new(HashMap::new()),
+        site_games: RwLock::new(HashMap::new()),
         tx, http, cfg: cfg.clone(),
     });
     load_teams(&state).await;
@@ -141,6 +145,7 @@ async fn main() {
         .route("/api/push/key", get(alerts::public_key))
         .route("/api/push/subscribe", post(alerts::subscribe))
         .route("/api/push/unsubscribe", post(alerts::unsubscribe))
+        .route("/api/push/prefs", post(alerts::get_prefs))
         .fallback_service(site)
         .layer(CompressionLayer::new())
         .layer(CorsLayer::permissive())
