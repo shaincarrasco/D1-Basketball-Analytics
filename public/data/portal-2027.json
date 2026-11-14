@@ -5,7 +5,7 @@
  "seasonLabel": "2026–27",
  "cycle": "Spring 2027 window: players leaving 2026–27 rosters for 2027–28",
  "year": null,
- "fetchedAt": null,
+ "fetchedAt": "2026-11-14T22:31:27.323Z",
  "status": "not-open",
  "window": {
   "opens": "2027-04-06",
@@ -23,7 +23,7 @@
    }
   ]
  },
- "note": "Not fetched yet: the 2027 window has not opened. scripts/fetch-portal.mjs fills this file from CBBD once it does. CBBD publishes no entry or commitment dates; firstSeen / committedSeen will be the dates our daily fetch first saw each entry and its destination.",
+ "note": "CBBD publishes no entry or commitment dates; firstSeen / committedSeen are the dates our daily fetch first saw each entry and its destination.",
  "count": 0,
  "entries": []
 }
