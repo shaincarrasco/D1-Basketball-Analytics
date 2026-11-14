@@ -31,6 +31,8 @@ export type LiveGame = {
   label: string;
   /** Elapsed game seconds (for an in-progress game). */
   elapsed: number | null;
+  /** ESPN team ids in OUR home/away orientation (lets the game sheet orient ESPN's summary feed). */
+  homeTeamId?: string | null; awayTeamId?: string | null;
 };
 
 type EspnCompetitor = { homeAway: "home" | "away"; team: { id: string }; score?: string; linescores?: { value?: number }[] };
@@ -42,7 +44,7 @@ export type EspnEvent = {
 
 const periodName = (p: number) => (p <= 1 ? "1st" : p === 2 ? "2nd" : p === 3 ? "OT" : `${p - 2}OT`);
 
-function labelFor(ev: EspnEvent): string {
+export function labelFor(ev: Pick<EspnEvent, "status">): string {
   const s = ev.status, p = s.period ?? 0;
   const name = s.type.name;
   if (s.type.state === "in") {
@@ -78,6 +80,7 @@ function parse(ev: EspnEvent, swap: boolean): LiveGame | null {
     homePeriods: scored ? lines(h) : null, awayPeriods: scored ? lines(a) : null,
     label: labelFor(ev),
     elapsed: state === "in" && period > 0 ? elapsedFrom(period, clock) : null,
+    homeTeamId: h.team?.id ?? null, awayTeamId: a.team?.id ?? null,
   };
 }
 
@@ -148,7 +151,8 @@ export function liveDay(day: string | null, today: string, games: Game[] | null)
 export function useLiveScores(day: string | null, games: Game[] | null) {
   const [byGame, setByGame] = useState<Map<string, LiveGame>>(new Map());
   const [updated, setUpdated] = useState<number | null>(null);
-  const needTeams = !!day && !!games?.some(g => !g.espnId);
+  // Always load team ids: they also orient home/away when a game matched by ESPN id is listed the other way round (neutral sites).
+  const needTeams = !!day && !!games?.length;
   const teams = useJson<TeamSummary[]>(needTeams ? "teams.json" : null);
   const espnByTeam = useMemo(() => {
     const m = new Map<string, string>();

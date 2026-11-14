@@ -11,6 +11,9 @@ import FavoriteButton from "@/components/favorite-button";
 import ArticleList from "@/components/article-list";
 import TeamAvailability from "./availability";
 import CalendarButton from "./calendar-button";
+import BracketChip from "@/components/bracket-chip";
+import ProgramHistory from "@/components/program-history";
+import TeamTransfers from "@/components/team-transfers";
 import type { PlayerField, TeamSummary } from "@/lib/types";
 import GameLog from "./game-log";
 import { LiveNextGate, LiveRank, LiveRecord, LiveTiles } from "./live-hero";
@@ -26,6 +29,10 @@ import { Dots } from "@/components/dots";
 import { playerRows } from "@/lib/players";
 import { teamNote } from "@/lib/notes";
 import { onTeam, teamHex } from "@/lib/color";
+import TeamFormCard from "@/components/form/team-form-card";
+import IndispensableCard from "@/components/form/indispensable-card";
+import { getAllForms, getForm, getIndispensable, getMovers } from "@/lib/form-server";
+import { teamHistory } from "@/lib/form";
 
 // Older data files predate `rosterFields`; this is the column order they were written with.
 const LEGACY_FIELDS: PlayerField[] = ["id", "name", "teamId", "pos", "g", "gs", "min", "pts", "reb", "orb", "drb", "ast", "stl", "blk", "tov", "pf",
@@ -118,6 +125,7 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
         <div className="relative mt-5 flex flex-wrap gap-2 [&_.btn]:border-transparent [&_.btn]:bg-black/20 [&_.btn]:text-current">
           <FavoriteButton kind="teams" id={slug} name={team.name} />
           <CalendarButton slug={slug} name={team.name} />
+          <BracketChip slug={slug} className="!border-transparent !bg-black/20 !text-current [&_.text-mute]:!text-current [&_.text-mute]:opacity-75" />
           {(team.health?.out ?? 0) > 0 && (
             <a href="#availability" className="btn" title="Jump to the availability report">{(() => { const h = team.health!, known = h.out - (h.missing ?? 0); return known > 0 ? `${known} out${h.missing ? ` · ${h.missing} missing` : ""}` : `${h.missing} missing · reason not reported`; })()}</a>
           )}
@@ -202,6 +210,8 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
           )}
           {note && <p className="note text-[15px] leading-[1.45]">{note}</p>}
 
+          <TeamFormCard name={team.name} form={getAllForms().byId.get(team.id)!} points={teamHistory(getForm(), team.id)} mover={getMovers().rows.find(m => m.id === team.id) ?? null} color={`color-mix(in oklab, ${color} 62%, var(--ink))`} total={total} />
+
           {/* Game form */}
           <section id="form" className="deck scroll-mt-32 p-5">
             <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
@@ -251,6 +261,8 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
             <h2 id="avail-h" className="h-section mb-2">Availability</h2>
             <TeamAvailability slug={slug} health={team.health} items={detail.availability} log={detail.injuryLog} links={reportLinks} />
           </section>
+          <TeamTransfers slug={slug} />
+          <IndispensableCard rows={getIndispensable().filter(p => p.teamId === team.id)} />
           <section className="deck p-5" aria-labelledby="news-h">
             <h2 id="news-h" className="h-section mb-1">Latest news</h2>
             <ArticleList items={detail.news} max={8} empty="No recent coverage found for this team." />
@@ -300,6 +312,7 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
             </table>
             <p className="mt-2 text-xs text-dim">Quadrants use DHR ranks with NET-style cutoffs. They are not the NCAA&apos;s official quadrants.</p>
           </section>
+          <ProgramHistory teamId={team.id} color={color} />
           {similar.length > 0 && (
             <section className="deck p-5">
               <h2 className="h-section mb-3" title="Closest teams by adjusted offense, defense and tempo">Similar teams</h2>

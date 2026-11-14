@@ -87,6 +87,18 @@ jobs:
         env:
           CBBD_API_KEY: ${{ secrets.CBBD_API_KEY }}
           GITHUB_EVENT_NAME: ${{ github.event_name }}
+      - name: Fetch past seasons once (history, cached per season)
+        if: github.event_name != 'schedule' || github.event.schedule == '30 11 * * *'
+        continue-on-error: true
+        run: node scripts/fetch-history.mjs
+        env:
+          CBBD_API_KEY: ${{ secrets.CBBD_API_KEY }}
+      - name: Fetch transfer portal entries (non-fatal)
+        if: github.event_name != 'schedule' || github.event.schedule == '30 11 * * *'
+        continue-on-error: true
+        run: node scripts/fetch-portal.mjs
+        env:
+          CBBD_API_KEY: ${{ secrets.CBBD_API_KEY }}
       - name: Save refreshed current-season data snapshots
         if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' || github.event_name == 'push'
         run: |

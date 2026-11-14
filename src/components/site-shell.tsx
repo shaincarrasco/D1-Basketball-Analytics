@@ -2,27 +2,31 @@
 // App chrome: sticky top bar (desktop nav + search), bottom tab bar on phones.
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
-import { BarChart3, CalendarDays, LayoutGrid, Search, Swords, Users, Layers, BookOpen, Star, Newspaper, ScatterChart, HeartPulse } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { BarChart3, CalendarDays, LayoutGrid, Search, Swords, Users, Layers, BookOpen, Star, Newspaper, ScatterChart, HeartPulse, Trophy, ChevronDown, History, ArrowLeftRight } from "lucide-react";
 import AccountButton from "./account-button";
 import CommandSearch from "./command-search";
 import ThemePicker from "./theme-picker";
 
-const NAV = [
+// `more`: lives in the "More" menu on desktop so the top bar never overflows.
+const NAV: { href: string; label: string; icon: typeof Star; more?: boolean }[] = [
   { href: "/", label: "Today", icon: LayoutGrid },
   { href: "/rankings/", label: "Rankings", icon: BarChart3 },
   { href: "/games/", label: "Games", icon: CalendarDays },
+  { href: "/bracket/", label: "Bracket", icon: Trophy },
   { href: "/injuries/", label: "Injuries", icon: HeartPulse },
-  { href: "/news/", label: "News", icon: Newspaper },
+  { href: "/news/", label: "News", icon: Newspaper , more: true },
   { href: "/players/", label: "Players", icon: Users },
   { href: "/charts/", label: "Charts", icon: ScatterChart },
   { href: "/matchup/", label: "Matchup", icon: Swords },
-  { href: "/conferences/", label: "Conferences", icon: Layers },
-  { href: "/methodology/", label: "Method", icon: BookOpen },
+  { href: "/conferences/", label: "Conferences", icon: Layers , more: true },
+  { href: "/history/", label: "Past seasons", icon: History, more: true },
+  { href: "/transfers/", label: "Transfer portal", icon: ArrowLeftRight, more: true },
+  { href: "/methodology/", label: "Method", icon: BookOpen , more: true },
   { href: "/following/", label: "Following", icon: Star },
 ];
-// Phone tab bar, Apple Sports style: the five things people open most.
-const MOBILE = [NAV[0], NAV[1], NAV[2], { href: "/following/", label: "My teams", icon: Star }, NAV.find(n => n.href === "/players/")!];
+// Phone tab bar, Apple Sports style: the six things people open most.
+const MOBILE = [NAV[0], NAV[1], NAV[2], NAV.find(n => n.href === "/bracket/")!, { href: "/following/", label: "My teams", icon: Star }, NAV.find(n => n.href === "/players/")!];
 
 function isActive(path: string, href: string) {
   if (href === "/") return path === "/";
@@ -33,6 +37,18 @@ function isActive(path: string, href: string) {
 export default function SiteShell({ children, updated }: { children: React.ReactNode; updated: string }) {
   const path = usePathname() ?? "/";
   const [searchOpen, setSearchOpen] = useState(false);
+  // "More" menu: a native <details>, closed on Escape, outside click, focus leaving, or picking a link.
+  const more = useRef<HTMLDetailsElement>(null);
+  useEffect(() => {
+    const close = (refocus = false) => { const d = more.current; if (d?.open) { d.open = false; if (refocus) d.querySelector("summary")?.focus(); } };
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") close(true); };
+    const onDown = (e: PointerEvent) => { if (more.current && !more.current.contains(e.target as Node)) close(); };
+    const onFocus = (e: FocusEvent) => { if (more.current && !more.current.contains(e.target as Node)) close(); };
+    document.addEventListener("keydown", onKey);
+    document.addEventListener("pointerdown", onDown);
+    document.addEventListener("focusin", onFocus);
+    return () => { document.removeEventListener("keydown", onKey); document.removeEventListener("pointerdown", onDown); document.removeEventListener("focusin", onFocus); };
+  }, []);
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if ((e.key === "k" && (e.metaKey || e.ctrlKey)) || (e.key === "/" && !(e.target instanceof HTMLInputElement) && !(e.target instanceof HTMLTextAreaElement) && !(e.target instanceof HTMLSelectElement))) {
@@ -56,19 +72,33 @@ export default function SiteShell({ children, updated }: { children: React.React
             <span className="whitespace-nowrap font-display text-[22px] font-black tracking-[0.01em]">D1 Hoops</span>
           </Link>
           <nav aria-label="Primary" className="ml-2 hidden items-center gap-0.5 lg:flex xl:ml-4 xl:gap-1">
-            {NAV.map(n => (
+            {NAV.filter(n => !n.more).map(n => (
               <Link key={n.href} href={n.href} title={n.href === "/following/" ? "Teams and players you follow" : undefined} aria-current={isActive(path, n.href) ? "page" : undefined}
-                className="relative flex items-center gap-1.5 whitespace-nowrap px-2.5 py-[17px] xl:px-3 text-[14px] font-semibold text-mute hover:text-ink aria-[current=page]:text-ink aria-[current=page]:after:absolute aria-[current=page]:after:inset-x-3 aria-[current=page]:after:bottom-0 aria-[current=page]:after:h-[3px] aria-[current=page]:after:rounded-full aria-[current=page]:after:bg-bulb">
+                className="relative flex items-center gap-1.5 whitespace-nowrap px-2 py-[17px] 2xl:px-3 text-[14px] font-semibold text-mute hover:text-ink aria-[current=page]:text-ink aria-[current=page]:after:absolute aria-[current=page]:after:inset-x-3 aria-[current=page]:after:bottom-0 aria-[current=page]:after:h-[3px] aria-[current=page]:after:rounded-full aria-[current=page]:after:bg-bulb">
                 {n.href === "/following/" ? <><Star size={14} aria-hidden /><span className="sr-only xl:not-sr-only">{n.label}</span></> : n.label}
               </Link>
             ))}
+            <details ref={more} key={path} className="group relative">
+              <summary aria-current={NAV.some(n => n.more && isActive(path, n.href)) ? "page" : undefined}
+                className="relative flex cursor-pointer list-none items-center gap-1 whitespace-nowrap px-2 py-[17px] text-[14px] font-semibold text-mute hover:text-ink aria-[current=page]:text-ink [&::-webkit-details-marker]:hidden">
+                More<ChevronDown size={14} aria-hidden className="transition-transform group-open:rotate-180" />
+              </summary>
+              <div className="absolute right-0 top-full z-50 mt-1 min-w-[200px] rounded-xl border border-line bg-deck p-1.5 shadow-xl">
+                {NAV.filter(n => n.more).map(n => (
+                  <Link key={n.href} href={n.href} aria-current={isActive(path, n.href) ? "page" : undefined} onClick={() => { if (more.current) more.current.open = false; }}
+                    className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-[14px] font-semibold text-mute hover:bg-deck2 hover:text-ink aria-[current=page]:text-ink">
+                    <n.icon size={15} aria-hidden />{n.label}
+                  </Link>
+                ))}
+              </div>
+            </details>
           </nav>
           <div className="ml-auto flex items-center gap-3">
             <span className="hidden whitespace-nowrap text-xs text-dim min-[1400px]:inline">Data {updated}</span>
-            <button onClick={() => setSearchOpen(true)} className="flex h-9 items-center gap-2 rounded-full border border-line bg-deck px-3 text-[14px] text-mute hover:text-ink sm:w-56 lg:w-40 xl:w-56" aria-label="Search teams and players">
+            <button onClick={() => setSearchOpen(true)} className="flex h-9 items-center gap-2 rounded-full border border-line bg-deck px-3 text-[14px] text-mute hover:text-ink sm:w-56 lg:w-9 lg:justify-center lg:px-0 2xl:w-56 2xl:justify-start 2xl:px-3" aria-label="Search teams and players">
               <Search size={15} aria-hidden />
-              <span className="hidden sm:inline">Search</span>
-              <kbd className="ml-auto hidden rounded border border-line2 px-1.5 text-[11px] text-dim md:inline">⌘K</kbd>
+              <span className="hidden sm:inline lg:hidden 2xl:inline">Search</span>
+              <kbd className="ml-auto hidden rounded border border-line2 px-1.5 text-[11px] text-dim md:inline lg:hidden 2xl:inline">⌘K</kbd>
             </button>
             <ThemePicker />
             <AccountButton />
@@ -80,7 +110,7 @@ export default function SiteShell({ children, updated }: { children: React.React
         Box scores and schedules from College Basketball Data. Ratings and projections are D1 Hoops originals — see <Link className="underline hover:text-ink" href="/methodology/">methodology</Link>.
       </footer>
       <nav aria-label="Tabs" className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-night/90 pb-[env(safe-area-inset-bottom)] backdrop-blur-xl lg:hidden">
-        <div className="grid grid-cols-5">
+        <div className="grid grid-cols-6">
           {MOBILE.map(n => {
             const Icon = n.icon, active = isActive(path, n.href);
             return (
