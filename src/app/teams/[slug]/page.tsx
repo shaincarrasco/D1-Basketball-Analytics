@@ -12,6 +12,7 @@ import ArticleList from "@/components/article-list";
 import TeamAvailability from "./availability";
 import CalendarButton from "./calendar-button";
 import BracketChip from "@/components/bracket-chip";
+import ProgramHistory from "@/components/program-history";
 import type { PlayerField, TeamSummary } from "@/lib/types";
 import GameLog from "./game-log";
 import { LiveNextGate, LiveRank, LiveRecord, LiveTiles } from "./live-hero";
@@ -302,6 +303,7 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
             </table>
             <p className="mt-2 text-xs text-dim">Quadrants use DHR ranks with NET-style cutoffs. They are not the NCAA&apos;s official quadrants.</p>
           </section>
+          <ProgramHistory teamId={team.id} color={color} />
           {similar.length > 0 && (
             <section className="deck p-5">
               <h2 className="h-section mb-3" title="Closest teams by adjusted offense, defense and tempo">Similar teams</h2>
