@@ -14,6 +14,7 @@ import type { Meta, PlayerBio, PlayerTable, TeamDetail, TeamSummary } from "@/li
 import GameLog from "./game-log";
 import ArticleList from "@/components/article-list";
 import AvailabilityList from "@/components/availability-list";
+import FrameworkRanks from "./framework-ranks";
 import { derive, MIN_ATT, POS_WORD, recruitText, similarPlayers, type PlayerRow } from "../players/player-stats";
 import { followRowLink, ROW_LINK_CLASS } from "../players/row-link";
 import { DprCard, OnOff, Similar } from "./impact";
@@ -144,6 +145,8 @@ function Profile({ p, all, detail, teams }: { p: PlayerRow; all: PlayerRow[]; de
       )}
 
       <Scouting p={p} pool={pool} />
+
+      <FrameworkRanks p={p} all={all} />
 
       {(() => {
         const avail = detail.data?.availability?.find(a => a.pid === p.id);
