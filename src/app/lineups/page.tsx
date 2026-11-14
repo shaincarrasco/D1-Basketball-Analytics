@@ -1,21 +1,18 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import PageHeader from "@sports/ui/page-header";
-import { Loading } from "@sports/ui/states";
-import LabClient from "./lab-client";
+import LabClient, { LabSkeleton } from "./lab-client";
 
 export const metadata: Metadata = {
   title: "Lineup lab",
-  description: "Grade any five Division I players together: projected offense, defense and net per 100 possessions, how each fit adjustment moved it, balance warnings, and each team's best projected lineups next to what its real units have done.",
+  description: "Put any five Division I players on the floor and see how they'd do: a projected net per 100 possessions graded against every real starting five, a fit check, and each team's best projected lineups next to what its real units have done.",
 };
 
 export default function LineupsPage() {
   return (
     <>
-      <PageHeader title="Lineup lab">
-        Put any five D-I players on the floor, from one team or five. Every number here is <b className="text-ink">projected</b>, and we show how we got it.
-      </PageHeader>
-      <Suspense fallback={<Loading label="Loading the lineup lab" />}>
+      <PageHeader title="Lineup lab">Put any five players on the floor and see how they&apos;d do. Every number here is projected.</PageHeader>
+      <Suspense fallback={<LabSkeleton />}>
         <LabClient />
       </Suspense>
     </>
