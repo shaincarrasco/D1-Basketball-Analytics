@@ -7,6 +7,7 @@ import type { BacktestBlock } from "@/lib/types";
 import { ZONES } from "@/lib/shots";
 import { WP_EPS, WP_SIGMA } from "@/lib/win-prob";
 import CalibrationChart from "./calibration-chart";
+import FormMethodology, { FORM_GLOSSARY, FORM_TOC } from "@/components/form/form-methodology";
 
 export const metadata: Metadata = { title: "Methodology", description: "How the D1 Hoops Power Rating (DHR) is built, how its predictions work, how accurate they have been, and what every metric on the site means." };
 
@@ -28,6 +29,7 @@ const TOC = [
   { id: "dpr", label: "Player rating (DPR)" },
   { id: "shot-zones", label: "Shot zones" },
   { id: "injuries", label: "Injuries and availability" },
+  ...FORM_TOC,
   { id: "glossary", label: "Glossary" },
   { id: "sources", label: "Data sources and limits" },
 ];
@@ -455,8 +457,10 @@ minimise  Σ w · (y − fit)²  +  λ · Σ (rating − prior)²        λ = ${
             <p className="mt-3"><b>Official reports.</b> The Big Ten, SEC, ACC, Big 12 and several other conferences publish availability reports before conference games, and the NCAA does for the tournament. We link to them rather than copy them.</p>
           </Section>
 
+          <FormMethodology />
+
           <Section id="glossary" title="Glossary">
-            {GLOSSARY.map(g => (
+            {[...GLOSSARY, FORM_GLOSSARY].map(g => (
               <div key={g.group}>
                 <h3 className="mb-2 mt-2 font-semibold text-ink">{g.group}</h3>
                 <dl className="divide-y divide-line rounded-xl border border-line">
