@@ -8,7 +8,7 @@ export const NIL_METHOD_HREF = "/methodology/#nil";
 
 export type NilRow = [pid: string, teamId: string, value: number, low: number, high: number, share: number, pos: string | null, mpg: number, dpr: number, recRank: number | null, recYear: number | null];
 export type NilTeam = {
-  budget: number; budgetLow: number; budgetHigh: number; kind: "reported-tier" | "estimated"; tier: number | null; tierLabel: string | null;
+  budget: number; budgetLow: number; budgetHigh: number; kind: "reported-tier" | "reported" | "estimated"; tier: number | null; tierLabel: string | null;
   onCourt: number; players: number; unseen: number; top: { pid: string; name: string; value: number }[];
 };
 export type NilSource = { title: string; publisher: string; author: string | null; date: string | null; dateNote?: string; url: string };

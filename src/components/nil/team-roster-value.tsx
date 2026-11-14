@@ -38,7 +38,7 @@ export default function TeamRosterValue({ teamId, slug, short }: { teamId: strin
           <div className="font-display text-[28px] font-black leading-none tnum">{fmtMoney(t.budget)}</div>
           <div className="mt-1 text-xs text-mute tnum">range {fmtRange(t.budgetLow, t.budgetHigh)} a year</div>
           <div className="mt-1 text-xs text-mute">
-            {t.kind === "reported-tier" ? <>Based on CBS Sports&apos; spending tier ({t.tierLabel}), Oct. 2026</> : <>No public figure: estimated from program strength, so the range is wide</>}
+            {t.kind === "reported-tier" ? <>Based on CBS Sports&apos; spending tier ({t.tierLabel}), Oct. 2026</> : t.kind === "reported" ? <>Based on the program&apos;s reported budget ({t.tierLabel})</> : <>No public 2026–27 figure: estimated from program strength, so the range is wide</>}
           </div>
         </div>
         {t.top.length > 0 && (

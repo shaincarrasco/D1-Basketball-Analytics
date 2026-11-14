@@ -41,11 +41,11 @@ export default function NilMethod() {
           <b>Team budget.</b> For the 80 high-major programs CBS Sports placed in 2026–27 roster-spending tiers (Oct. 2026) we use the tier: the geometric middle of its range. Two tiers are open-ended, so we assume Tier 1 runs $20–25M ($25–30M for Florida, Louisville and Kentucky,
           which CBS says top $25M) and Tier 2 (&ldquo;just under $20M&rdquo;) runs $17.5–20M. For the other {Object.keys(nil.teams).length - 80} programs there is no public list, so we estimate the budget from <b>program strength</b> (this season&apos;s DHR, last season&apos;s rating and ten seasons of history, each
           standardised): a line through the {f.budgetCurve.anchors.length} budgets reported outside the power conferences ({f.budgetCurve.anchors.map(a => `${a.team} ${fmtMoney(a.value)}`).join(", ")}).
-          Those budgets vary a lot for similar programs (Memphis spends about ten times what Wyoming does), so estimated budgets carry a wide range: about ×{Math.exp(1.2816 * f.budgetCurve.estimatedSigma).toFixed(1)} either way.
+          Those budgets vary a lot for similar programs (Memphis spends about ten times what Wyoming does), so estimated budgets carry a wide range: about ×{Math.exp(1.2816 * f.budgetCurve.estimatedSigma).toFixed(1)} either way, capped at $17.5M (the top of Gonzaga&apos;s CBS tier; we assume no other non-power program outspends Gonzaga). Where a program&apos;s own figure has been published we use it instead: Memphis and VCU for 2026–27, and Wyoming (2025–26) and UNC Greensboro (2024–25) grown 44% a season, with a wider band.
         </li>
         <li>
           <b>His share.</b> Each player gets a weight from things coaches pay for that our data has: <b>minutes</b> (his role), <b>DPR</b> (his on-court impact, shrunk toward average until the sample is big), <b>recruiting rank</b> (full weight for freshmen, half for sophomores) and <b>position</b>
-          (centers cost about 61% more than point guards of equal talent, per EvanMiya). His share is his weight divided by the team&apos;s total, including rostered players who haven&apos;t played yet. Fitted weights this build: minutes {k.minutes}, DPR {k.dpr} per point, recruiting {k.recruiting}, usage {k.usage}.
+          (centers cost about 61% more than point guards of equal talent, per EvanMiya). His share is his weight divided by the team&apos;s total, including rostered players who haven&apos;t played yet. Fitted weights this build: minutes {k.minutes}, DPR {k.dpr} per point, recruiting {k.recruiting}. We also offered the fit usage rate (share of plays he finishes); it got weight {k.usage}.
         </li>
         <li>
           <b>Estimate = budget × share</b>, rounded (to $5K under $100K, $25K under $1M, $50K under $5M, $100K above) so it never looks more precise than it is. The <b>range</b> is an intended 80% band: the budget&apos;s own uncertainty combined with how far our estimates missed the reported figures
@@ -53,7 +53,7 @@ export default function NilMethod() {
         </li>
       </ol>
       <p>
-        <b>Fitting.</b> The three share weights are fitted on a log scale to {c.fitted} publicly reported 2026–27 player figures ({c.pointFigures} figures or ranges, {c.floors} &ldquo;at least&rdquo; floors). A range counts as a hit anywhere inside it; a floor only penalises estimates below it.
+        <b>Fitting.</b> The share weights are fitted on a log scale to {c.fitted} publicly reported 2026–27 player figures ({c.pointFigures} figures or ranges, {c.floors} &ldquo;at least&rdquo; floors). A range counts as a hit anywhere inside it; a floor only penalises estimates below it.
         {c.notPlayedYet.length ? ` ${c.notPlayedYet.join(", ")} ha${c.notPlayedYet.length === 1 ? "s" : "ve"}n't played yet, so ${c.notPlayedYet.length === 1 ? "isn't" : "aren't"} in the fit.` : ""} Caleb Holt&apos;s On3 valuation as a recruit is shown but not fitted (it measures marketing value, not school pay).
       </p>
       <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-line bg-line sm:grid-cols-4">
@@ -91,7 +91,7 @@ export default function NilMethod() {
               <tr key={p.team + p.season}>
                 <td className="l font-semibold">{p.slug ? <Link href={`/teams/${p.slug}/`} className="link">{p.team}</Link> : p.team}</td>
                 <td className="l"><span className="tnum">{p.low != null ? fmtReported(p.low, p.high) : "—"}</span> <span className="text-xs text-dim">{p.season}</span></td>
-                <td className="tnum">{p.model ? `${fmtMoney(p.model.mid)}${p.model.kind === "reported-tier" ? " (CBS tier)" : ""}` : "—"}</td>
+                <td className="tnum">{p.model ? `${fmtMoney(p.model.mid)} (${p.model.kind === "reported-tier" ? "CBS tier" : p.model.kind === "reported" ? "uses this figure" : "estimated"})` : "—"}</td>
                 <td className="l text-xs"><SourceLink id={p.source} sources={src} /></td>
               </tr>
             ))}

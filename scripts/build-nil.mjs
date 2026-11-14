@@ -33,6 +33,7 @@ const mean = a => (a.length ? a.reduce((s, x) => s + x, 0) / a.length : 0);
 const sd = a => { const m = mean(a); return Math.sqrt(mean(a.map(x => (x - m) ** 2))); };
 const median = a => { if (!a.length) return null; const s = [...a].sort((x, y) => x - y); const h = s.length >> 1; return s.length % 2 ? s[h] : (s[h - 1] + s[h]) / 2; };
 const Z80 = 1.2816;
+const NON_POWER_CAP = 17.5e6;
 
 /** Round so the number never looks more precise than it is. */
 export function roundMoney(v) {
@@ -144,14 +145,34 @@ async function build() {
   const anchorResid = anchors.map((a, i) => ay[i] - (g0 + g1 * a.x));
   // Uncertainty for an estimated budget: the anchors' residual spread (n − 2 dof), never below 0.6.
   const estSd = Math.max(0.6, anchors.length > 2 ? Math.sqrt(anchorResid.reduce((s, r) => s + r * r, 0) / (anchors.length - 2)) : 1);
+  // Current-season budgets reported for programs outside the CBS list.
+  const reportedBudget = new Map();
+  // Older figures are grown 44% a season (EvanMiya's mid/low-major market change) and get a wider band.
+  const money = v => (v >= 1e6 ? `$${Math.round(v / 1e5) / 10}M` : `$${Math.round(v / 1e3)}K`);
+  for (const r of cal.programs.reported) {
+    const t = teamByName.get(normName(r.team));
+    if (!t || tierOf.has(t.id) || !r.low) continue;
+    const seasonsBack = r.season === "2026–27" ? 0 : r.season === "2025–26" ? 1 : r.season === "2024–25" ? 2 : null;
+    if (seasonsBack === null) continue;
+    const value = r.low * 1.44 ** seasonsBack;
+    const label = seasonsBack ? `${money(r.low)} in ${r.season}, grown to about ${money(value)}` : r.kind === "floor" ? `at least ${money(r.low)}` : `about ${money(r.low)}`;
+    reportedBudget.set(t.id, { value, label, sigma: seasonsBack ? 0.4 : 0.25 });
+  }
   const budget = new Map();
   for (const t of teams) {
     const tier = tierOf.get(t.id);
     if (tier) {
       budget.set(t.id, { mid: Math.sqrt(tier.low * tier.high), low: tier.low, high: tier.high, sigma: Math.log(tier.high / tier.low) / (2 * Z80), kind: "reported-tier", tier: tier.tier, label: tier.label });
+    } else if (reportedBudget.has(t.id)) {
+      // A budget the school or a reporter published (Memphis, VCU; Wyoming and UNCG from earlier
+      // seasons, grown): use it, with a ±25% (1σ) band (±40% for grown figures).
+      const r = reportedBudget.get(t.id);
+      budget.set(t.id, { mid: r.value, low: r.value * Math.exp(-Z80 * r.sigma), high: r.value * Math.exp(Z80 * r.sigma), sigma: r.sigma, kind: "reported", tier: null, label: r.label });
     } else {
-      const mid = Math.exp(g0 + g1 * strength.get(t.id).s);
-      budget.set(t.id, { mid, low: mid * Math.exp(-Z80 * estSd), high: mid * Math.exp(Z80 * estSd), sigma: estSd, kind: "estimated", tier: null, label: null });
+      // Ceiling: no program outside the CBS list is assumed to outspend Gonzaga, the strongest
+      // non-power program, whose CBS tier tops out at $17.5M.
+      const mid = Math.min(NON_POWER_CAP, Math.exp(g0 + g1 * strength.get(t.id).s));
+      budget.set(t.id, { mid, low: mid * Math.exp(-Z80 * estSd), high: Math.min(NON_POWER_CAP, mid * Math.exp(Z80 * estSd)), sigma: estSd, kind: "estimated", tier: null, label: null });
     }
   }
 
@@ -229,29 +250,32 @@ async function build() {
   for (let u = 0; u <= 1.2001; u += 0.15) GRID.u.push(+u.toFixed(2));
   // Small ridge toward a plain minutes-only split keeps the three numbers from chasing one report.
   const ridge = k => 0.002 * (k.b / 0.1) ** 2 + 0.002 * k.c ** 2 + 0.002 * (k.u / 0.3) ** 2;
-  const fit = rows => {
+  // Fast path for the grid: only the calibration teams' rosters matter for the loss.
+  const calTeamIds = [...new Set(fitRows.map(r => r.teamId))];
+  const calTeamRoster = new Map(calTeamIds.map(tid => [tid, rosterOf.get(tid) ?? []]));
+  const calIdx = fitRows.map(r => ({ tid: r.teamId, i: calTeamRoster.get(r.teamId).findIndex(p => `${r.teamId}:${nameKey(p.name)}` === r.key) }));
+  const predictCal = k => {
+    const sums = new Map();
+    for (const [tid, list] of calTeamRoster) { let s = 0; for (const p of list) s += weightOf(p, k); sums.set(tid, s); }
+    return calIdx.map(({ tid, i }) => (budget.get(tid).mid * weightOf(calTeamRoster.get(tid)[i], k)) / (sums.get(tid) || 1));
+  };
+  const fitFast = include => {
     let best = null;
     for (const a of GRID.a) for (const b of GRID.b) for (const c of GRID.c) for (const u of GRID.u) {
       const k = { a, b, c, u };
-      const vals = valuesFor(k);
+      const pred = predictCal(k);
       let loss = ridge(k);
-      for (const r of rows) loss += lossOf(r, vals.get(r.key).value);
-      if (!best || loss < best.loss) best = { k, loss };
+      for (let j = 0; j < fitRows.length; j++) if (include[j]) loss += lossOf(fitRows[j], pred[j]);
+      if (!best || loss < best.loss) best = { k, loss, pred };
     }
-    return best.k;
+    return best;
   };
-  // valuesFor over every roster is ~5K players; the grid is 25×17×25 ≈ 10K fits. Precompute per
-  // team only for teams in the calibration set to keep the build fast.
-  const calTeams = new Set(fitRows.map(r => r.teamId));
-  const fullRoster = rosterOf;
-  const calRoster = new Map([...rosterOf].filter(([tid]) => calTeams.has(tid)));
-  const withRoster = (m, fn) => { const keep = new Map(rosterOf); rosterOf.clear(); for (const [k, v] of m) rosterOf.set(k, v); try { return fn(); } finally { rosterOf.clear(); for (const [k, v] of keep) rosterOf.set(k, v); } };
-  const K = withRoster(calRoster, () => fit(fitRows));
+  const K = fitFast(fitRows.map(() => true)).k;
   // Leave-one-out: refit without each calibration player, then predict him.
-  const loo = withRoster(calRoster, () => fitRows.map(r => {
-    const k = fit(fitRows.filter(x => x !== r));
-    return { name: r.name, value: valuesFor(k).get(r.key).value, k };
-  }));
+  const loo = fitRows.map((r, j) => {
+    const best = fitFast(fitRows.map((_, i) => i !== j));
+    return { name: r.name, value: predictCal(best.k)[j], k: best.k };
+  });
   const target = r => (r.high == null ? null : Math.sqrt(r.low * r.high));
   const looErr = fitRows.map((r, i) => {
     const v = loo[i].value;
@@ -267,7 +291,7 @@ async function build() {
   const rows = [];
   const teamOut = {};
   for (const t of teams) {
-    const list = fullRoster.get(t.id) ?? [];
+    const list = rosterOf.get(t.id) ?? [];
     const b = budget.get(t.id);
     const sigma = Math.sqrt(shareSigma ** 2 + b.sigma ** 2);
     let sumObs = 0;
