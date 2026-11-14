@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { BarChart3, CalendarDays, LayoutGrid, Search, Swords, Users, Layers, BookOpen, Star, Newspaper } from "lucide-react";
+import { BarChart3, CalendarDays, LayoutGrid, Search, Swords, Users, Layers, BookOpen, Star, Newspaper, ScatterChart } from "lucide-react";
 import AccountButton from "./account-button";
 import CommandSearch from "./command-search";
 import ThemePicker from "./theme-picker";
@@ -14,6 +14,7 @@ const NAV = [
   { href: "/games/", label: "Games", icon: CalendarDays },
   { href: "/news/", label: "News", icon: Newspaper },
   { href: "/players/", label: "Players", icon: Users },
+  { href: "/charts/", label: "Charts", icon: ScatterChart },
   { href: "/matchup/", label: "Matchup", icon: Swords },
   { href: "/conferences/", label: "Conferences", icon: Layers },
   { href: "/methodology/", label: "Method", icon: BookOpen },
