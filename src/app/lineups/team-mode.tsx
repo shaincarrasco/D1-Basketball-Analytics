@@ -9,7 +9,7 @@ import TeamLogo from "@/components/team-logo";
 import { Empty, ErrorState, Loading } from "@/components/states";
 import { useJson } from "@/lib/client-data";
 import { fmt, signed } from "@/lib/format";
-import { bestLineups, observedSd, projectLineup, rotationOf, shortName, type LabData, type LabPlayer, type RankedLineup } from "@/lib/lineup-lab";
+import { bestLineups, lastName, observedSd, projectLineup, rotationOf, shortName, type LabData, type LabPlayer, type RankedLineup } from "@/lib/lineup-lab";
 import type { TeamDetail } from "@/lib/types";
 import { DPR_TITLE, Tags } from "./parts";
 
@@ -51,26 +51,26 @@ function TeamLineups({ data, slug }: { data: LabData; slug: string }) {
   if (rotation.length < 5) return <Empty title="Not enough players yet">This team has fewer than five players averaging {data.meta.minMpg}+ minutes with a rating.</Empty>;
 
   const names = (ps: LabPlayer[]) => (
-    <span className="flex min-w-[220px] flex-wrap gap-x-2.5 gap-y-0.5 whitespace-normal sm:min-w-[300px]">
+    <span className="flex min-w-[150px] flex-wrap gap-x-2.5 gap-y-0.5 whitespace-normal sm:min-w-[300px]">
       {ps.map(p => <Link key={p.id} href={`/player/?id=${p.id}`} className="link font-semibold" title={p.n}>{shortName(p.n)}</Link>)}
     </span>
   );
   const columns: Column<RankedLineup>[] = [
     { key: "rank", label: "#", sortable: false, value: () => null, render: (_l, i) => <span className="tabular-nums text-mute">{i + 1}</span> },
     { key: "unit", label: "Lineup", align: "l", sortable: false, csvLabel: "Lineup", value: l => l.players.map(p => p.n).join(" / "), render: l => names(l.players) },
-    { key: "off", label: "Proj off", title: "Projected offense per 100 vs average (DPR offense + offensive fit adjustments)", group: "off", value: l => l.proj.off, render: l => signed(l.proj.off, 1) },
-    { key: "def", label: "Proj def", title: "Projected defense per 100 vs average (positive = fewer points allowed)", group: "def", value: l => l.proj.def, render: l => signed(l.proj.def, 1) },
-    { key: "fit", label: "Fit", title: "Total of the fit adjustments (spacing, ball handling, shot creation, rim protection, rebounding)", value: l => l.proj.fit.total, render: l => <span className={l.proj.fit.total < -0.05 ? "text-loss" : l.proj.fit.total > 0.05 ? "text-win" : "text-mute"}>{signed(l.proj.fit.total, 1)}</span> },
     { key: "net", label: "Proj net", title: "Projected net per 100 possessions vs an average D-I lineup", value: l => l.proj.net, render: l => netCell(l.proj.net) },
-    {
-      key: "flags", label: "Warnings", title: "Balance warnings (open the lineup to read them)", first: "asc",
-      value: l => l.proj.warnings.filter(w => w.level === "high" || w.level === "mid").length,
-      render: l => { const w = l.proj.warnings.filter(x => x.level === "high" || x.level === "mid"); return w.length ? <span className="text-hot" title={w.map(x => x.text).join("\n")}>{w.length}</span> : <span className="text-dim">0</span>; },
-    },
     {
       key: "obs", label: "Real net", title: "Observed net per 100 when this exact five has played (play-by-play, 2+ minutes, not opponent-adjusted)",
       value: l => observed.get(l.key)?.net ?? null,
       render: l => { const u = observed.get(l.key); return u ? <span className={u.poss < SMALL ? "opacity-60" : undefined} title={`${fmt(u.poss, 0)} possessions`}>{signed(u.net, 1)} <span className="text-dim">({fmt(u.poss, 0)})</span></span> : <span className="text-dim">—</span>; },
+    },
+    { key: "off", label: "Proj off", title: "Projected offense per 100 vs average (DPR offense + offensive fit adjustments)", group: "off", value: l => l.proj.off, render: l => signed(l.proj.off, 1) },
+    { key: "def", label: "Proj def", title: "Projected defense per 100 vs average (positive = fewer points allowed)", group: "def", value: l => l.proj.def, render: l => signed(l.proj.def, 1) },
+    { key: "fit", label: "Fit", title: "Total of the fit adjustments (spacing, ball handling, shot creation, rim protection, rebounding)", value: l => l.proj.fit.total, render: l => <span className={l.proj.fit.total < -0.05 ? "text-loss" : l.proj.fit.total > 0.05 ? "text-win" : "text-mute"}>{signed(l.proj.fit.total, 1)}</span> },
+    {
+      key: "flags", label: "Warnings", title: "Balance warnings (open the lineup to read them)", first: "asc",
+      value: l => l.proj.warnings.filter(w => w.level === "high" || w.level === "mid").length,
+      render: l => { const w = l.proj.warnings.filter(x => x.level === "high" || x.level === "mid"); return w.length ? <span className="text-hot" title={w.map(x => x.text).join("\n")}>{w.length}</span> : <span className="text-dim">0</span>; },
     },
     { key: "open", label: "", sortable: false, value: () => null, render: l => <Link href={`/lineups/?p=${l.ids.join(",")}`} className="link whitespace-nowrap text-xs font-semibold underline">Open</Link> },
   ];
@@ -97,7 +97,7 @@ function TeamLineups({ data, slug }: { data: LabData; slug: string }) {
         <div className="mb-3 flex flex-wrap items-end justify-between gap-3">
           <div>
             <h2 className="h-section">Best projected lineups</h2>
-            <p className="text-sm text-mute">Projected per 100 possessions vs an average D-I lineup. {best && <>Top: <b className="text-ink">{best.players.map(p => p.n.split(" ").slice(-1)[0]).join(", ")}</b> at {signed(best.proj.net, 1)}.</>}</p>
+            <p className="text-sm text-mute">Projected per 100 possessions vs an average D-I lineup. {best && <>Top: <b className="text-ink">{best.players.map(p => lastName(p.n)).join(", ")}</b> at {signed(best.proj.net, 1)}.</>}</p>
           </div>
           <div className="relative">
             <Search aria-hidden size={15} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-dim" />
@@ -132,15 +132,15 @@ function Observed({ units, data }: { units: Unit[]; data: LabData }) {
     {
       key: "unit", label: "Lineup", align: "l", sortable: false, csvLabel: "Lineup", value: u => u.players.map(p => p?.n ?? "Unlisted").join(" / "),
       render: u => (
-        <span className="flex min-w-[220px] flex-wrap gap-x-2.5 gap-y-0.5 whitespace-normal sm:min-w-[300px]">
+        <span className="flex min-w-[150px] flex-wrap gap-x-2.5 gap-y-0.5 whitespace-normal sm:min-w-[300px]">
           {u.players.map((p, i) => p ? <Link key={p.id} href={`/player/?id=${p.id}`} className="link font-semibold" title={p.n}>{shortName(p.n)}</Link> : <span key={i} className="text-mute">Unlisted player</span>)}
         </span>
       ),
     },
     { key: "poss", label: "Poss", title: "Possessions together (real)", value: u => u.poss, render: u => dim(u, fmt(u.poss, 0)) },
     { key: "net", label: "Real net", title: "Observed net per 100 possessions (not adjusted for opponent)", value: u => u.net, render: u => dim(u, netCell(u.net)) },
-    { key: "luck", label: "± luck", title: "One standard deviation of a unit's net from the bounce of the ball alone at this many possessions", value: u => observedSd(u.poss), render: u => <span className="text-dim">±{Math.round(observedSd(u.poss) ?? 0)}</span> },
     { key: "proj", label: "Proj net", title: "What the lineup lab projects for this five", value: u => u.proj, render: u => (u.proj === null ? <span className="text-dim" title="A player here averages under the lab's minutes cutoff">—</span> : signed(u.proj, 1)) },
+    { key: "luck", label: "± luck", title: "One standard deviation of a unit's net from the bounce of the ball alone at this many possessions", value: u => observedSd(u.poss), render: u => <span className="text-dim">±{Math.round(observedSd(u.poss) ?? 0)}</span> },
     { key: "open", label: "", sortable: false, value: () => null, render: u => (u.proj === null ? null : <Link href={`/lineups/?p=${u.pids.join(",")}`} className="link text-xs font-semibold underline">Open</Link>) },
   ];
   return (

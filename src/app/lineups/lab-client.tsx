@@ -138,7 +138,7 @@ function Builder({ data, picks, setPicks }: { data: LabData; picks: string[]; se
         </div>
       </section>
 
-      <section aria-label="Projection" className="deck p-4 sm:p-5">
+      <section aria-label="Projection" className={`deck p-4 sm:p-5 ${full ? "order-first lg:order-none" : ""}`}>
         {proj ? (
           <div className="space-y-5">
             <div>
@@ -150,6 +150,7 @@ function Builder({ data, picks, setPicks }: { data: LabData; picks: string[]; se
               <p className="mt-2 text-sm text-mute">
                 vs an average D-I lineup, before opponent and venue. Projected to score <b className="text-ink">{fmt(proj.ptsFor, 1)}</b> and allow <b className="text-ink">{fmt(proj.ptsAgainst, 1)}</b> points per 100 possessions (D-I average {fmt(data.meta.eff, 1)}).
               </p>
+              {Math.abs(proj.net) >= 30 && <p className="mt-2 text-xs text-dim">That is beyond what any real unit sustains over a season: five of the most extreme ratings in the country added up, early in the year when ratings are mostly box-score starting points. Read it as &ldquo;far better (or worse) than average&rdquo;, not as a literal margin.</p>}
             </div>
             {sameTeam && <ObservedFor slug={sameTeam} ids={picks} />}
             <div>
