@@ -13,6 +13,7 @@ import TeamAvailability from "./availability";
 import CalendarButton from "./calendar-button";
 import BracketChip from "@/components/bracket-chip";
 import ProgramHistory from "@/components/program-history";
+import TeamTransfers from "@/components/team-transfers";
 import type { PlayerField, TeamSummary } from "@/lib/types";
 import GameLog from "./game-log";
 import { LiveNextGate, LiveRank, LiveRecord, LiveTiles } from "./live-hero";
@@ -260,6 +261,7 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
             <h2 id="avail-h" className="h-section mb-2">Availability</h2>
             <TeamAvailability slug={slug} health={team.health} items={detail.availability} log={detail.injuryLog} links={reportLinks} />
           </section>
+          <TeamTransfers slug={slug} />
           <IndispensableCard rows={getIndispensable().filter(p => p.teamId === team.id)} />
           <section className="deck p-5" aria-labelledby="news-h">
             <h2 id="news-h" className="h-section mb-1">Latest news</h2>

@@ -7,35 +7,32 @@ import { Search } from "lucide-react";
 import DataTable, { type Column } from "@/components/data-table";
 import TeamLogo from "@/components/team-logo";
 import { ErrorState, Loading } from "@/components/states";
-import { PoolControls } from "@/components/charts/controls";
-import { shortName } from "@/components/charts/player-charts";
+import { PoolControls } from "@/sport-kit/ui/controls";
+import { shortName } from "@/sport-kit/ui/charts";
 import { heatPct } from "@/lib/format";
 import { teamHex } from "@/lib/color";
-import { DEFAULT_POOL, inPool, usePlayers, type PoolFilter } from "@/lib/player-metrics";
+import { inPool, readPool, withDefaults, writePool, type Pool } from "@/sport-kit";
+import { useBasketball } from "@/sports/basketball/data";
+import { basketball } from "@/sports/basketball/pack";
 import { fmtSkill, gradeTone, ownShare, pct99, SKILL_DESC, SKILL_KEYS, SKILL_NAME, skillsOf, useSkills, type SkillCell, type SkillKey, type SkillStatMeta } from "@/lib/skills";
 import type { PlayerRow } from "@/app/players/player-stats";
 import { followRowLink, ROW_LINK_CLASS } from "@/app/players/row-link";
 
 type Ranked = { r: PlayerRow; c: SkillCell; own: number };
-const POOL0: PoolFilter = { ...DEFAULT_POOL, minMin: 10, minG: 1 };
+const POOL0: Pool = withDefaults(basketball, { min: "10", g: "1" });
 
 export default function ProjectionsBoard() {
-  const { rows, confs, ready, error, retry } = usePlayers();
+  const { rows, lists, ready, error, retry } = useBasketball();
   const skills = useSkills();
   const [skill, setSkill] = useState<SkillKey>("pts");
-  const [pool, setPool] = useState<PoolFilter>(POOL0);
+  const [pool, setPool] = useState<Pool>(POOL0);
   const [q, setQ] = useState("");
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
     const p = new URLSearchParams(window.location.search);
     const s = p.get("s"); if (s && (SKILL_KEYS as readonly string[]).includes(s)) setSkill(s as SkillKey);
-    const np: PoolFilter = { ...POOL0 };
-    if (p.get("conf")) np.conf = p.get("conf")!;
-    const pos = p.get("pos"); if (pos === "G" || pos === "F" || pos === "C") np.pos = pos;
-    if (p.has("min")) np.minMin = Number(p.get("min")) || 0;
-    if (p.has("g")) np.minG = Math.max(1, Number(p.get("g")) || 1);
-    const st = p.get("st"); if (st === "4" || st === "3" || st === "none") np.stars = st;
+    const np = readPool(basketball, p, POOL0);
     setPool(np);
     setHydrated(true);
   }, []);
@@ -43,11 +40,8 @@ export default function ProjectionsBoard() {
     if (!hydrated) return;
     const p = new URLSearchParams();
     if (skill !== "pts") p.set("s", skill);
-    if (pool.conf !== POOL0.conf) p.set("conf", pool.conf);
-    if (pool.pos !== "all") p.set("pos", pool.pos);
-    if (pool.minMin !== POOL0.minMin) p.set("min", String(pool.minMin));
-    if (pool.minG !== POOL0.minG) p.set("g", String(pool.minG));
-    if (pool.stars !== "any") p.set("st", pool.stars);
+    writePool(basketball, pool, p);
+    for (const [k, v] of Object.entries(POOL0)) { if (pool[k] === v) p.delete(k); else if (!p.has(k)) p.set(k, pool[k]); }
     const s = p.toString();
     window.history.replaceState(null, "", s ? `?${s}` : window.location.pathname);
   }, [hydrated, skill, pool]);
@@ -58,7 +52,7 @@ export default function ProjectionsBoard() {
     if (!ready || !skills.data || !sm) return [];
     const out: Ranked[] = [];
     for (const r of rows) {
-      if (!inPool(pool, r)) continue;
+      if (!inPool(basketball, pool, r)) continue;
       const c = skillsOf(skills.data, r.id)?.[skill];
       if (c) out.push({ r, c, own: ownShare(c.n, sm.k) });
     }
@@ -142,7 +136,7 @@ export default function ProjectionsBoard() {
               );
             })}
           </div>
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3"><PoolControls pool={pool} set={setPool} confs={confs} /></div>
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3"><PoolControls pack={basketball} pool={pool} set={setPool} lists={lists} /></div>
         </div>
       </div>
 

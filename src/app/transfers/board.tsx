@@ -9,11 +9,12 @@ import TeamLogo from "@/components/team-logo";
 import { TransferLedger } from "@/components/team-transfers";
 import { useJson } from "@/lib/client-data";
 import { fmt, signed } from "@/lib/format";
-import { DEFAULT_POOL, usePlayers } from "@/lib/player-metrics";
+import { rankPool, withDefaults } from "@/sport-kit";
+import { useBasketball } from "@/sports/basketball/data";
+import { basketball, FRAMEWORKS } from "@/sports/basketball/pack";
 import { ELIG_LABEL, IMPACT_SHORT, STATUS_LABEL, allTeamMoves, dateShort, signedImpact, teamMoves, type PortalEntry, type PortalPlace, type TeamMoves } from "@/lib/portal";
 import type { TeamSummary } from "@/lib/types";
 import { grade } from "../player/scouting";
-import { FW, rankPool } from "../players/rankings/frameworks";
 import { POS_WORD, starGlyphs, type Pos } from "../players/player-stats";
 import { followRowLink, ROW_LINK_CLASS } from "../players/row-link";
 
@@ -44,14 +45,15 @@ function Place({ p, logos, muted }: { p: PortalPlace; logos: Record<string, stri
 }
 
 export default function Board({ entries }: { entries: PortalEntry[] }) {
-  const { rows: players } = usePlayers();
+  const { rows: players } = useBasketball();
   const teams = useJson<TeamSummary[]>("teams.json");
   const logos = useMemo(() => Object.fromEntries((teams.data ?? []).map(t => [t.slug, t.logo])) as Record<string, string | null>, [teams.data]);
 
   // Our scouting grade: the Overall ranking lens (players at 10+ mpg, 2+ games), as a letter on the scouting-report scale.
   const standing = useMemo(() => {
     if (!players.length) return null;
-    const list = rankPool(players, { ...DEFAULT_POOL, minMin: 10 }, FW.overall.weights, "all", true);
+    const overall = FRAMEWORKS.find(f => f.key === "overall")!.weights;
+    const list = rankPool(basketball, players, withDefaults(basketball, { min: "10" }), overall, "all", true);
     return new Map(list.map(x => [x.r.id, x.standing]));
   }, [players]);
   const rows = useMemo<Row[]>(() => entries.map(e => {
