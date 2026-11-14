@@ -102,7 +102,7 @@ export function MomentList({ g, live, summary }: { g: Game; live?: LiveGame; sum
       <ul className="overflow-hidden rounded-[14px] border border-line" data-testid="moment-list">
         {list.map((m, i) => (
           <li key={`${m.kind}-${i}`} className="flex min-h-[44px] items-baseline gap-3 border-b border-line px-3.5 py-2.5 last:border-0">
-            <span className="w-[52px] shrink-0 text-[12.5px] font-semibold text-mute tnum">{momentWhen(m)}</span>
+            <span className="w-[66px] shrink-0 whitespace-nowrap text-[12.5px] font-semibold text-mute tnum">{momentWhen(m)}</span>
             <MomentLine m={m} className="min-w-0 flex-1" />
           </li>
         ))}
