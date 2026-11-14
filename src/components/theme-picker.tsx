@@ -112,7 +112,7 @@ export default function ThemePicker() {
             <h3 className="mt-5 text-sm font-semibold text-mute">Accent</h3>
             <p className="text-xs text-dim">Ranks, scores and highlights</p>
             <div className="mt-2 flex flex-wrap gap-2.5">
-              {ACCENTS.map(a => (
+              {ACCENTS.filter(a => a.hex === null || a.hex.toLowerCase() !== active.accent.toLowerCase()).map(a => (
                 <Swatch key={a.name} hex={a.hex ?? active.accent} label={a.hex ? a.name : `${active.name} default`}
                   selected={a.hex === null ? choice.accent === null : choice.accent?.toLowerCase() === a.hex.toLowerCase()}
                   ring={a.hex === null ? "var(--line-2)" : undefined}

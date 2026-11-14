@@ -4,6 +4,7 @@
 // single-game noise. Outputs win-total distributions and conference regular-season title odds.
 import { readFile, writeFile } from "node:fs/promises";
 import { isD1Conference } from "./d1-conferences.mjs";
+import { normalizeGames } from "./lib/game-status.mjs";
 
 const SIMS = Number(process.env.DHR_SIMS ?? 10000);
 const GAME_SIGMA = 10.5, NET_SIGMA = 15.7, PRIOR_GAMES = 3;
@@ -11,6 +12,9 @@ const readJson = async p => JSON.parse(await readFile(p, "utf8"));
 const [teamPayload, gamePayload, model] = await Promise.all([
   readJson("public/data/team-season-2027.json"), readJson("public/data/games-season-2027.json"), readJson("public/data/model-2027.json"),
 ]);
+
+const scorelessFinals = normalizeGames(gamePayload.games);
+if (scorelessFinals) console.log(`[build-simulations] ${scorelessFinals} scoreless "final" game(s) treated as not played (scheduled or cancelled).`);
 
 // Seeded PRNG so a rebuild with the same data gives the same odds.
 let seed = 20262027;

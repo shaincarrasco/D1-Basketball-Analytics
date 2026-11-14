@@ -10,7 +10,7 @@ import TvBadges from "@/components/tv-badges";
 import { Dots } from "@/components/dots";
 import { dayLabel, etToday, fmt, pctFmt, timeLabel } from "@/lib/format";
 import { useJson } from "@/lib/client-data";
-import { useFavorites } from "@/lib/favorites";
+import { toggleFavorite, useFavorites } from "@/lib/favorites";
 import { useLiveScores, withLive, type LiveGame } from "@/lib/live";
 import type { Game, GameDay, GameIndex, GameSide, TeamSummary } from "@/lib/types";
 
@@ -30,7 +30,7 @@ function status(g: Game, live?: LiveGame) {
   if (g.status === "in_progress") return { text: live?.label || "Live", live: true };
   if (g.status === "final") return { text: live?.label || "Final", live: false };
   if (g.status === "scheduled") return { text: timeLabel(g.date), live: false };
-  return { text: g.status.replace("_", " "), live: false };
+  return { text: g.status.replace("_", " ").replace(/^\w/, c => c.toUpperCase()), live: false };
 }
 
 export default function Today() {
@@ -47,7 +47,8 @@ export default function Today() {
     const liveFirst = (g: Game) => (g.status === "in_progress" ? 0 : 1);
     return list.sort((a, b) => liveFirst(a) - liveFirst(b) || (b.watch ?? 0) - (a.watch ?? 0));
   }, [staticGames, live.byGame]);
-  const best = games.find(g => g.pred && g.home.id && g.away.id) ?? games[0];
+  const showable = (g: Game) => g.status === "scheduled" || g.status === "in_progress" || g.status === "final";
+  const best = games.find(g => showable(g) && g.pred && g.home.id && g.away.id) ?? games.find(showable) ?? games[0];
   const rest = games.filter(g => g !== best).slice(0, 6);
   const liveCount = games.filter(g => g.status === "in_progress").length;
   const finals = useMemo(() => {
@@ -84,10 +85,10 @@ export default function Today() {
       ) : !games.length ? (
         <p className="deck p-5 text-sm text-mute">No games on this day. <Link className="underline" href="/games/">Pick another date</Link>.</p>
       ) : (
-        <div className="grid items-start gap-6 lg:grid-cols-2 [&>*]:min-w-0">
+        <div className="grid items-start gap-6 lg:grid-cols-2 lg:grid-rows-[auto_1fr] [&>*]:min-w-0">
           {best && <Scoreboard g={best} day={day!} live={live.byGame.get(best.id)} top={isToday ? "Best game tonight" : "Best game"} />}
           {rest.length > 0 && (
-            <div>
+            <div className="lg:row-span-2">
               <div className="mb-2.5 flex items-baseline justify-between">
                 <h2 className="h-section">Worth your time</h2>
                 <Link href={`/games/?d=${day}`} className="text-sm font-semibold text-bulb-ink">All {games.length}</Link>
@@ -97,18 +98,17 @@ export default function Today() {
               </ul>
             </div>
           )}
-        </div>
-      )}
-
-      {finals.length > 0 && prevDay && (
-        <div>
-          <div className="mb-2.5 flex items-baseline justify-between">
-            <h2 className="h-section">{addDays(prevDay, 1) === day ? "Last night" : dayLabel(prevDay, { weekday: "long" })}</h2>
-            <Link href={`/games/?d=${prevDay}`} className="text-sm font-semibold text-bulb-ink">{dayLabel(prevDay, { weekday: "long" })}</Link>
-          </div>
-          <div className="grid gap-2.5 sm:grid-cols-2 [&>*]:min-w-0">
-            {finals.map(g => <FinalCard key={g.id} g={g} day={prevDay} />)}
-          </div>
+          {finals.length > 0 && prevDay && (
+            <div>
+              <div className="mb-2.5 flex items-baseline justify-between">
+                <h2 className="h-section">{addDays(prevDay, 1) === day ? "Last night" : dayLabel(prevDay, { weekday: "long" })}</h2>
+                <Link href={`/games/?d=${prevDay}`} className="text-sm font-semibold text-bulb-ink">All {dayLabel(prevDay, { weekday: "long" })} games</Link>
+              </div>
+              <div className="grid gap-2.5 sm:grid-cols-2 [&>*]:min-w-0">
+                {finals.map(g => <FinalCard key={g.id} g={g} day={prevDay} />)}
+              </div>
+            </div>
+          )}
         </div>
       )}
     </section>
@@ -135,7 +135,7 @@ function DateStrip({ day, today }: { day: string; today: boolean }) {
 
 function FollowedCircles({ games, day }: { games: Game[]; day: string | null }) {
   const fav = useFavorites();
-  const teams = useJson<TeamSummary[]>(fav.teams.length ? "teams.json" : null);
+  const teams = useJson<TeamSummary[]>("teams.json");
   const list = useMemo(() => {
     const bySlug = new Map((teams.data ?? []).map(t => [t.slug, t]));
     return fav.teams.map(s => bySlug.get(s)).filter((t): t is TeamSummary => !!t);
@@ -145,21 +145,47 @@ function FollowedCircles({ games, day }: { games: Game[]; day: string | null }) 
     for (const g of games) { if (g.home.slug) m.set(g.home.slug, g); if (g.away.slug) m.set(g.away.slug, g); }
     return m;
   }, [games]);
+  // Nobody followed yet: offer the top teams as one-tap follows, Apple Sports style.
+  if (!fav.teams.length) {
+    const top = (teams.data ?? []).filter(t => t.rank).sort((a, b) => a.rank! - b.rank!).slice(0, 10);
+    if (!top.length) return null;
+    return (
+      <div>
+        <div className="mb-2 flex items-baseline justify-between">
+          <h2 className="font-display text-[22px] font-extrabold leading-none">Pick your teams</h2>
+          <Link href="/rankings/" className="text-sm font-semibold text-bulb-ink">All teams</Link>
+        </div>
+        <ul aria-label="Suggested teams to follow" className="no-scrollbar -mx-4 flex gap-4 overflow-x-auto px-4 pb-1 sm:-mx-6 sm:px-6">
+          {top.map(t => (
+            <li key={t.id} className="w-[64px] shrink-0">
+              <button type="button" onClick={() => toggleFavorite("teams", t.slug)} className="group flex w-full flex-col items-center gap-1.5 text-center" aria-label={`Follow ${t.name}`}>
+                <span className="relative grid h-[60px] w-[60px] place-items-center rounded-full bg-deck transition-transform group-active:scale-90" style={{ boxShadow: `inset 0 0 0 2px ${teamTint(t.color)}` }}>
+                  <TeamLogo src={t.logo} name={t.name} size={36} />
+                  <span className="absolute -bottom-0.5 -right-0.5 grid h-5 w-5 place-items-center rounded-full bg-bulb text-scoreboard ring-2 ring-night" aria-hidden><Plus size={12} strokeWidth={3} /></span>
+                </span>
+                <span className="w-full truncate text-[11.5px] font-semibold text-mute">{t.short ?? t.name}</span>
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  }
   return (
     <ul aria-label="Your teams" className="no-scrollbar -mx-4 flex gap-4 overflow-x-auto px-4 pb-1 sm:-mx-6 sm:px-6">
       {list.map(t => {
         const g = bySlug.get(t.slug);
-        const playing = g && g.status !== "final";
+        const playing = g && g.status !== "final" && g.status !== "canceled";
         let label: React.ReactNode;
         if (g && g.status === "in_progress") label = <span className="text-hot">{g.away.score}-{g.home.score}</span>;
         else if (g && g.status === "final") { const mine = g.home.slug === t.slug ? g.home : g.away, opp = mine === g.home ? g.away : g.home; label = <span>{(mine.score ?? 0) > (opp.score ?? 0) ? "W" : "L"} {mine.score}-{opp.score}</span>; }
-        else if (g) label = <span className="text-bulb-ink">{timeLabel(g.date)}</span>;
+        else if (g && g.status === "scheduled") label = <span className="text-bulb-ink">{timeLabel(g.date)}</span>;
         else if (t.next) label = <span>{dayLabel(etDayOf(t.next.date), { weekday: "short" })} {t.next.venue === "A" ? "at" : "vs"} {t.next.opp}</span>;
         else label = <span>Off</span>;
         return (
           <li key={t.id} className="w-[64px] shrink-0">
-            <Link href={g && day ? gameHref(day, g.id) : `/teams/${t.slug}/`} className="flex flex-col items-center gap-1.5 text-center">
-              <span className="grid h-[60px] w-[60px] place-items-center rounded-full bg-deck" style={{ boxShadow: `inset 0 0 0 ${playing ? 2.5 : 2}px ${playing ? "var(--bulb)" : teamTint(t.color)}` }}>
+            <Link href={g && day ? gameHref(day, g.id) : `/teams/${t.slug}/`} className="group flex flex-col items-center gap-1.5 text-center">
+              <span className="grid h-[60px] w-[60px] place-items-center rounded-full bg-deck transition-transform group-active:scale-90" style={{ boxShadow: `inset 0 0 0 ${playing ? 2.5 : 2}px ${playing ? "var(--bulb)" : teamTint(t.color)}` }}>
                 <TeamLogo src={t.logo} name={t.name} size={36} />
               </span>
               <span className="w-full truncate text-[11.5px] font-semibold text-mute">{label}</span>
@@ -194,21 +220,21 @@ function Scoreboard({ g, day, live, top }: { g: Game; day: string; live?: LiveGa
   const score = (k: "home" | "away") => (scheduled ? (g.pred ? Math.round(g.pred[k]) : null) : g[k].score);
   const awayWP = g.pred ? 1 - g.pred.wp : null;
   return (
-    <article className="relative rounded-[22px] border border-line bg-deck p-[18px]">
+    <article className="press relative rounded-[22px] border border-line bg-deck p-[18px]">
       <Link href={gameHref(day, g.id)} className="absolute inset-0 rounded-[22px]" aria-label={`${g.away.name} ${g.neutral ? "vs" : "at"} ${g.home.name}, open game`} />
       <div className="flex items-center justify-between text-[13px]">
         <span className="font-medium text-mute">{top}</span>
-        <span className="flex items-center gap-2 font-semibold">{st.live && <span className="live-dot" aria-hidden />}<span className={st.live ? "text-hot" : ""}>{st.text}</span>{g.tv?.length && g.status !== "final" ? <span className="relative z-[1]"><TvBadges tv={g.tv} max={1} /></span> : null}</span>
+        <span className="flex items-center gap-2 font-semibold">{st.live && <span className="live-dot" aria-hidden />}<span className={st.live ? "text-hot" : ""}>{st.text}</span>{g.tv?.length && (scheduled || g.status === "in_progress") ? <span className="relative z-[1]"><TvBadges tv={g.tv} max={1} /></span> : null}</span>
       </div>
       <div className="mt-4 flex items-center justify-between gap-2">
         <Side s={g.away} />
         <div className="flex flex-col items-center gap-1">
           <div className="plate flex items-center gap-2.5 px-3 py-2">
-            <Dots glow className="text-[40px]">{score("away") ?? "--"}</Dots>
+            <Dots glow ghost className="text-[40px]">{String(score("away") ?? "--")}</Dots>
             <Dots dim className="text-[20px]">:</Dots>
-            <Dots glow className="text-[40px]">{score("home") ?? "--"}</Dots>
+            <Dots glow ghost className="text-[40px]">{String(score("home") ?? "--")}</Dots>
           </div>
-          <span className="text-[11px] font-medium text-mute">{scheduled ? "projected" : g.status === "final" ? "final" : "live"}</span>
+          <span className="text-[11px] font-medium text-mute">{scheduled ? "projected" : g.status === "final" ? "final" : g.status === "in_progress" ? "live" : st.text}</span>
         </div>
         <Side s={g.home} />
       </div>
@@ -244,7 +270,7 @@ function Side({ s }: { s: GameSide }) {
 
 function GameRow({ g, day, live }: { g: Game; day: string; live?: LiveGame }) {
   const st = status(g, live);
-  const played = g.status !== "scheduled";
+  const played = g.status === "final" || g.status === "in_progress";
   const fav = g.pred ? (g.pred.wp >= 0.5 ? g.home : g.away) : null;
   const favWP = g.pred ? Math.max(g.pred.wp, 1 - g.pred.wp) : null;
   const line = (s: GameSide, win: boolean) => (
@@ -258,7 +284,7 @@ function GameRow({ g, day, live }: { g: Game; day: string; live?: LiveGame }) {
   );
   const awayWin = (g.away.score ?? 0) > (g.home.score ?? 0);
   return (
-    <li className="relative flex items-center gap-3 border-b border-line px-4 py-3 last:border-0 hover:bg-deck2">
+    <li className="relative flex items-center gap-3 border-b border-line px-4 py-3 transition-colors last:border-0 hover:bg-deck2 active:bg-deck2">
       <Link href={gameHref(day, g.id)} className="absolute inset-0" aria-label={`${g.away.name} ${g.neutral ? "vs" : "at"} ${g.home.name}, open game`} />
       <div className="min-w-0 flex-1 space-y-1.5">{line(g.away, awayWin)}{line(g.home, !awayWin)}</div>
       {!played ? (
@@ -287,7 +313,7 @@ function FinalCard({ g, day }: { g: Game; day: string }) {
   const wWP = g.pred ? (homeWon ? g.pred.wp : 1 - g.pred.wp) : null;
   const note = g.upset !== null ? `${w.name} had a ${pctFmt(g.upset)} chance` : wWP !== null ? `${w.name} was a ${pctFmt(wWP)} favorite` : null;
   return (
-    <article className="relative flex flex-col gap-2 rounded-[18px] bg-deck px-4 py-3 hover:bg-deck2">
+    <article className="press relative flex flex-col gap-2 rounded-[18px] bg-deck px-4 py-3 hover:bg-deck2">
       <Link href={gameHref(day, g.id)} className="absolute inset-0 rounded-[18px]" aria-label={`${w.name} ${w.score}, ${l.name} ${l.score}. Open game`} />
       <div className="flex items-center justify-between text-xs">
         <span className="font-semibold text-mute">Final</span>

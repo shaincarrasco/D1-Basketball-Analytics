@@ -111,7 +111,7 @@ export default function GameLog({ playerId, detail, teams }: { playerId: string;
           </tfoot>
         </table>
       </div>
-      <p className="mt-2 text-xs text-dim">Game lines from ESPN box scores; they can include a game or two that the season averages above don’t have yet.</p>
+      <p className="mt-2 text-xs text-dim">Game lines from ESPN box scores. Season averages include every game here; usage, ratings and shot zones can trail by a game until the next stats refresh.</p>
     </div>
   );
 }
