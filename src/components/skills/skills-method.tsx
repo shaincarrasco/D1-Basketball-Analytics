@@ -33,7 +33,8 @@ export default function SkillsMethod() {
         This season&apos;s real number is always shown beside the projection.
       </p>
       <pre className="deck-flat overflow-x-auto whitespace-pre px-4 py-3 font-mono text-[13.5px] leading-7 text-ink">{`projected = (his opponent-adjusted count + k × starting point) / (his opportunities + k)
-starting point = position + height + recruiting stars + class year   (3P% also: his FT% above its own starting point)
+starting point = position + height + recruiting stars + class year
+                 (3P% also uses his FT% above its own starting point)
 own-data share = opportunities / (opportunities + k)`}</pre>
       <p>
         <b>Counts and opportunities.</b> Each skill is a count over the chances he had: three-pointers made over attempts, offensive rebounds over the offensive rebounds available while he was on the floor,
@@ -49,7 +50,7 @@ own-data share = opportunities / (opportunities + k)`}</pre>
         <b>k: how fast his own record takes over.</b> k is the number of opportunities after which a player&apos;s own record counts half. It is fitted from the data for each skill
         (game-to-game noise divided by how much players really differ once the starting point is known), so noisy skills with small real differences lean on the starting point much longer.
         {ft && tp ? <> Free throws settle fast (k ≈ {Math.round(ft.k)} attempts); three-point shooting takes about {Math.round(tp.k).toLocaleString("en-US")} attempts.</> : null}
-        {tp?.kSource === "outside" ? <> This season&apos;s three-point data can&apos;t yet separate skill from luck, so k uses an outside figure: KenPom found year-to-year 3P% correlates only .371 for high-volume shooters, which works out to about 390 attempts.</> : null}
+        {tp?.kSource === "outside" ? <> That three-point figure comes from outside this season, because two to five games can&apos;t yet separate shooting skill from luck: <a href="https://kenpom.com/blog/?p=655" className="underline hover:text-ink" rel="noopener" target="_blank">KenPom found</a> a player&apos;s 3P% correlates only .371 from one season to the next among high-volume shooters (about 230 attempts), which works out to k ≈ 390.</> : null}
       </p>
       <p>
         <b>Opponents.</b> Where the opponent matters, each game&apos;s count is divided by how much of that stat the opponent gives up compared with an average D-I team (shrunk toward average with three games&apos; worth of evidence; non-D-I opponents are pooled).

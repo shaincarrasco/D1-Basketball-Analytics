@@ -360,7 +360,7 @@ const meta = {
       validation: validation[s.key],
     };
   }),
-  classGrowth: "Not modelled: the data has one season of player stats, so year-over-year growth can't be measured. Class year enters the prior only as the level difference between this season's freshmen, sophomores, juniors and seniors.",
+  classGrowth: "Not modelled: the data has one season of player stats, so year-over-year growth can't be measured. Class year enters the starting point only as the level difference between this season's freshmen, sophomores, juniors and seniors.",
   validationNote: "Refit on each player's first half of games (and each team's first half for opponent factors), scored on the second half, weighted by second-half opportunities. Players with 2+ games and opportunities in both halves.",
 };
 const skills = { meta };
