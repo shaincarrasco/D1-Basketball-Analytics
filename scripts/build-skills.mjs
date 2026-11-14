@@ -246,22 +246,25 @@ function project(sel, teamGameSel) {
     const X = data.map(r => (extra ? [...featuresOf(r.p), extra(r.p)] : featuresOf(r.p)));
     const y = data.map(r => r.adj / r.d);
     // Iterate: fit prior, measure true-talent spread (tau2) left after the prior, reweight.
-    let tau2 = null, beta = null, k = null, kSource = "data";
+    let tau2 = null, tau2Se = null, beta = null, k = null, kSource = "data";
     let w = data.map(r => r.d);
     for (let it = 0; it < 4; it++) {
       beta = wls(X, y, w);
       const mu = X.map(x => x.reduce((a, v, j) => a + v * beta[j], 0));
       const minD = s.kind === "binom" ? 5 : (totalD / Math.max(1, data.length)) * 0.5;
-      let acc = 0, cnt = 0;
-      data.forEach((r, i) => { if (r.d >= minD) { acc += (y[i] - mu[i]) ** 2 - sigma2 / r.d; cnt++; } });
+      let acc = 0, cnt = 0, noiseSq = 0;
+      data.forEach((r, i) => { if (r.d >= minD) { acc += (y[i] - mu[i]) ** 2 - sigma2 / r.d; noiseSq += (sigma2 / r.d) ** 2; cnt++; } });
       tau2 = cnt ? acc / cnt : 0;
-      const floor = sigma2 / 2000; // spread can't be measured below this; caps k at 2000 opportunities
+      // Rough standard error of tau2 (squared normal noise has variance 2·v²): below two of these
+      // the talent spread can't be told apart from zero yet.
+      tau2Se = cnt ? Math.sqrt(2 * noiseSq) / cnt : Infinity;
+      const floor = sigma2 / 2000; // caps k at 2000 opportunities
       k = sigma2 / Math.max(tau2, floor);
       kSource = "data";
-      if (tau2 <= floor && s.kFallback) { k = s.kFallback; kSource = "outside"; }
+      if (tau2 < 2 * tau2Se && s.kFallback) { k = s.kFallback; kSource = "outside"; }
       w = data.map(r => 1 / (sigma2 / k + sigma2 / r.d));
     }
-    fits[s.key] = { mean, sigma2, tau2, k, kSource, beta, features: extra ? [...FEATURES, "FT% above his prior"] : FEATURES, opp: sc ? { nonD1: sc.nonD1 } : null };
+    fits[s.key] = { mean, sigma2, tau2, tau2Se, k, kSource, beta, features: extra ? [...FEATURES, "FT% above his prior"] : FEATURES, opp: sc ? { nonD1: sc.nonD1 } : null };
     for (const r of rows) {
       const x = extra ? [...featuresOf(r.p), extra(r.p)] : featuresOf(r.p);
       const prior = Math.max(0, x.reduce((a, v, j) => a + v * beta[j], 0));
@@ -351,7 +354,7 @@ const meta = {
     const f = prod.fits[s.key];
     return {
       key: s.key, label: s.label, short: s.short, unit: s.unit, nUnit: s.nUnit, invert: !!s.invert, oppAdjusted: s.opp, seasonOnly: !!s.season,
-      k: round(f.k, 1), kSource: f.kSource, league: round(f.mean * s.scale, 2), talentSd: round(Math.sqrt(Math.max(0, f.tau2)) * s.scale, 2),
+      k: round(f.k, 1), kSource: f.kSource, league: round(f.mean * s.scale, 2), talentSd: round(Math.sqrt(Math.max(0, f.tau2)) * s.scale, 2), talentMeasurable: f.tau2 >= 2 * f.tau2Se,
       prior: Object.fromEntries(f.features.map((name, j) => [name, round(f.beta[j] * (name === "FT% above his prior" ? 1 : s.scale), 3)])),
       nonD1Factor: f.opp?.nonD1 != null ? round(f.opp.nonD1, 3) : null,
       validation: validation[s.key],
@@ -381,5 +384,5 @@ for (const [slug, d] of detail) await writeFile(`${APP}/skills/${slug}.json`, JS
 console.log(`[skills] ${people.length} players projected on ${STATS.length} skills; pool ${poolIds.size} players at ${POOL_MIN}+ mpg.`);
 for (const s of meta.stats) {
   const v = s.validation;
-  console.log(`[skills] ${s.short.padEnd(8)} k=${String(s.k).padStart(7)}  (${s.kSource}) league ${s.league} talent sd ${String(s.talentSd).padStart(5)}  holdout RMSE raw ${v.rmseRaw} -> proj ${v.rmseProj} (shrink only ${v.rmseShrinkOnly}, prior only ${v.rmsePriorOnly}); rotation ${v.rotation.rmseRaw} -> ${v.rotation.rmseProj} (-${Math.round(v.rotation.mseCut * 100)}%); MSE -${Math.round((v.mseCut ?? 0) * 100)}%, reducible -${v.reducibleCut === null ? "n/a" : Math.round(v.reducibleCut * 100) + "%"}; n=${v.players}`);
+  console.log(`[skills] ${s.short.padEnd(8)} k=${String(s.k).padStart(7)}  (${s.kSource}) league ${s.league} talent sd ${String(s.talentSd).padStart(5)}${s.talentMeasurable ? "" : "?"}  holdout RMSE raw ${v.rmseRaw} -> proj ${v.rmseProj} (shrink only ${v.rmseShrinkOnly}, prior only ${v.rmsePriorOnly}); rotation ${v.rotation.rmseRaw} -> ${v.rotation.rmseProj} (-${Math.round(v.rotation.mseCut * 100)}%); MSE -${Math.round((v.mseCut ?? 0) * 100)}%, reducible -${v.reducibleCut === null ? "n/a" : Math.round(v.reducibleCut * 100) + "%"}; n=${v.players}`);
 }

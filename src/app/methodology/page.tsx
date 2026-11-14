@@ -7,6 +7,7 @@ import type { BacktestBlock } from "@/lib/types";
 import { ZONES } from "@/lib/shots";
 import { WP_EPS, WP_SIGMA } from "@/lib/win-prob";
 import CalibrationChart from "./calibration-chart";
+import SkillsMethod from "@/components/skills/skills-method";
 
 export const metadata: Metadata = { title: "Methodology", description: "How the D1 Hoops Power Rating (DHR) is built, how its predictions work, how accurate they have been, and what every metric on the site means." };
 
@@ -26,6 +27,7 @@ const TOC = [
   { id: "win-probability", label: "In-game win probability" },
   { id: "sims", label: "Season simulations" },
   { id: "dpr", label: "Player rating (DPR)" },
+  { id: "skills", label: "Skill projections" },
   { id: "shot-zones", label: "Shot zones" },
   { id: "injuries", label: "Injuries and availability" },
   { id: "glossary", label: "Glossary" },
@@ -398,6 +400,10 @@ minimise  Σ w · (y − fit)²  +  λ · Σ (rating − prior)²        λ = ${
               several points — so two players a point or two apart are not meaningfully different. Ranks only include players with at least 150 on-court possessions; players without play-by-play coverage show their box-score prior alone.
             </p>
             {meta.dpr && <p className="text-sm">This build: {meta.dpr.players.toLocaleString("en-US")} players rated from {meta.dpr.rows.toLocaleString("en-US")} lineup rows. {meta.dpr.method}. See the <Link href="/players/" className="underline hover:text-ink">players page</Link>.</p>}
+          </Section>
+
+          <Section id="skills" title="Skill projections">
+            <SkillsMethod />
           </Section>
 
           <Section id="shot-zones" title="Shot zones">
