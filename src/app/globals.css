@@ -252,3 +252,35 @@ html { scroll-behavior: smooth; }
 @media (prefers-reduced-motion: reduce) {
   ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
 }
+
+/* ---------- Phone feel ----------
+   The page only ever scrolls vertically: nothing can drag it sideways, and swiping a wide
+   table or chip row scrolls that row, not the page. */
+html, body { overflow-x: clip; overscroll-behavior-x: none; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body { -webkit-tap-highlight-color: transparent; }
+.scroll-x, .no-scrollbar, .overflow-x-auto { overscroll-behavior-x: contain; }
+a, button, select, summary, [role="button"] { touch-action: manipulation; }
+
+/* iPhones zoom the whole page into any text field under 16px (then the page can be dragged
+   around). Touch screens get 16px fields; desktop keeps the denser size. */
+@media (pointer: coarse) {
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), select, textarea, .field { font-size: 16px; }
+}
+
+/* Thin scrollbars in the palette's colours instead of the system's grey slabs. */
+* { scrollbar-width: thin; scrollbar-color: var(--line-2) transparent; }
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--line-2); border-radius: 999px; border: 2px solid transparent; background-clip: padding-box; }
+::-webkit-scrollbar-thumb:hover { background-color: var(--mute); }
+.no-scrollbar, .seg { scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar, .seg::-webkit-scrollbar { display: none; }
+
+/* Pressed feedback on touch: controls dip slightly when tapped. */
+@media (hover: none) {
+  .btn, .chip, .seg > *, .tab-item { transition: transform 100ms ease, opacity 100ms ease; }
+  .btn:active, .chip:active, .seg > *:active, .tab-item:active { transform: scale(0.97); opacity: 0.85; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .btn:active, .chip:active, .seg > *:active, .tab-item:active { transform: none; }
+}
