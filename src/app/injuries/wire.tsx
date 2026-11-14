@@ -13,7 +13,9 @@ const KIND_CLASS: Record<WireEvent["kind"], string> = {
   update: "border-line2 bg-deck2 text-mute", cleared: "border-line2 bg-deck2 text-mute",
 };
 type Filter = "all" | "worse" | "returns";
-const day = (t: string) => t.slice(0, 10);
+// Group by Eastern calendar day (games are dated that way); deterministic on server and client.
+const ET = new Intl.DateTimeFormat("en-CA", { timeZone: "America/New_York" });
+const day = (t: string) => ET.format(new Date(t));
 
 export default function Wire({ wire, checked, teams }: { wire: WireEvent[]; checked: string; teams: TeamMetaMap }) {
   const seen = useLastSeen();

@@ -98,3 +98,64 @@ test("a reported reason sticks after the article ages out of the feed", () => {
   assert.equal(row.expected, "4–6 weeks");
   assert.ok(row.eta);
 });
+
+test("review regressions: classifier", () => {
+  const c = s => classify(s);
+  assert.equal(c("X out 4-6 weeks, expected to return in January").state, "out");
+  assert.equal(c("X tears ACL, could return for NCAA tournament").state, "season");
+  assert.equal(c("X still not cleared to return").returning, false);
+  assert.equal(c("X won't be available vs. Duke").returning, false);
+  assert.equal(c("NCAA grants X waiver, eligible immediately").state, null);
+  assert.equal(c("X reinstated after suspension").state, null);
+  assert.equal(c("Head coach: X questionable with illness").body, "Illness");
+  assert.equal(c("X suspended, won't face Kentucky").body, null);
+  assert.equal(c("X returns after missing three games with ankle injury").state, null);
+  assert.equal(c("X back from suspension").returning, true);
+});
+
+function withHeadline(headline, published, extra = {}) {
+  const w = world(extra);
+  w.feeds = { ...w.feeds, articles: { h: { headline, url: "https://example.com/h", published } }, athleteNews: { a1: ["h"], a2: ["h"] } };
+  return w;
+}
+
+test("review regressions: a teammate tagged in the story doesn't inherit the injury", () => {
+  const { rows } = buildInjuries(withHeadline("Ace Guard out 4-6 weeks; Big Man to start", "2026-11-11T02:00:00Z"));
+  assert.equal(rows.find(r => r.name === "Big Man"), undefined);
+  assert.equal(rows.find(r => r.name === "Ace Guard").expected, "4–6 weeks");
+});
+
+test("review regressions: an old headline doesn't come back when a returned player sits once", () => {
+  // Big Man played every game through Nov 10; headline from Nov 1 is stale even if he sits Nov 14.
+  const w = withHeadline("Big Man out 2-3 weeks with ankle sprain", "2026-11-01T15:00:00Z", { now: "2026-11-15T15:00:00Z" });
+  w.teamDaysByEspn = new Map([["150", ["2026-11-03", "2026-11-07", "2026-11-10", "2026-11-14"]]]);
+  const big = buildInjuries(w).rows.find(r => r.name === "Big Man");
+  assert.equal(big.source, "box");
+  assert.equal(big.expected, null);
+});
+
+test("review regressions: an expiring 'hurt in the win' note is cleared, not a return", () => {
+  const first = buildInjuries(withHeadline("Big Man injures shoulder in win over X", "2026-11-10T23:00:00Z"));
+  assert.equal(first.rows.find(r => r.name === "Big Man").state, "monitor");
+  const w = world({ ledger: first.ledger, now: "2026-11-20T15:00:00Z" });
+  w.teamDaysByEspn = new Map([["150", ["2026-11-03", "2026-11-07", "2026-11-10", "2026-11-14"]]]);
+  w.logsBySlug.get("duke").p2.push(["2026-11-14", "X", null, "H", "W", 80, 60, 1, 25]);
+  const ev = buildInjuries(w).ledger.players["duke:a2"].events.at(-1);
+  assert.equal(ev.kind, "cleared");
+});
+
+test("review regressions: a weaker follow-up doesn't downgrade a season-ending report", () => {
+  const w = world();
+  w.feeds = { ...w.feeds, articles: {
+    a: { headline: "Ace Guard tears ACL, out for season", url: "https://e.com/a", published: "2026-11-08T15:00:00Z" },
+    b: { headline: "Ace Guard undergoes surgery", url: "https://e.com/b", published: "2026-11-10T15:00:00Z" },
+  }, athleteNews: { a1: ["b", "a"] } };
+  assert.equal(buildInjuries(w).rows.find(r => r.name === "Ace Guard").state, "season");
+});
+
+test("review regressions: unchanged data leaves the ledger untouched", () => {
+  const first = buildInjuries(world());
+  const again = buildInjuries(world({ ledger: first.ledger, now: "2026-11-11T16:00:00Z" }));
+  assert.equal(again.ledger.updated, first.ledger.updated);
+  assert.ok(first.wire.every(e => e.seed && e.stint));
+});

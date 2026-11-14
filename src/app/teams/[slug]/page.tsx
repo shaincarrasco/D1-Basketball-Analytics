@@ -118,7 +118,7 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
           <FavoriteButton kind="teams" id={slug} name={team.name} />
           <CalendarButton slug={slug} name={team.name} />
           {(team.health?.out ?? 0) > 0 && (
-            <a href="#availability" className="btn" title="Jump to the availability report">{team.health!.out} out · injuries</a>
+            <a href="#availability" className="btn" title="Jump to the availability report">{(() => { const h = team.health!, known = h.out - (h.missing ?? 0); return known > 0 ? `${known} out${h.missing ? ` · ${h.missing} missing` : ""}` : `${h.missing} missing · reason not reported`; })()}</a>
           )}
         </div>
       </section>

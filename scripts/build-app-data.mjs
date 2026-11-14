@@ -585,7 +585,9 @@ const injuries = buildInjuries({
   teamGames: teamLog, feeds,
   curated: await readJson("public/data/injury-reports-2027.json").catch(() => []),
   ledger: await readJson(INJURY_LEDGER).catch(() => null),
-  now: injuryCheck,
+  // Events are stamped with the build's clock (alerts look for changes in the last few hours);
+  // `checked` (when ESPN was last read) is what the site shows as freshness.
+  now: new Date().toISOString(),
 });
 const availabilityBySlug = new Map();
 for (const row of injuries.rows) { if (!availabilityBySlug.has(row.slug)) availabilityBySlug.set(row.slug, []); availabilityBySlug.get(row.slug).push(row); }
@@ -616,7 +618,7 @@ for (const t of teamSummaries) {
   t.ap = pr?.ap ?? null; t.coaches = pr?.coaches ?? null;
   const hl = healthBySlug.get(t.slug);
   t.unavailable = hl?.out ?? 0;
-  t.health = hl ? { out: hl.out, limited: hl.limited, minShare: hl.minShare, netLoss: hl.netLoss } : null;
+  t.health = hl ? { out: hl.out, missing: hl.missing, limited: hl.limited, minShare: hl.minShare, netLoss: hl.netLoss } : null;
   const log = teamLog.get(t.id) ?? [];
   t.ats = [log.filter(x => x.ats === "W").length, log.filter(x => x.ats === "L").length, log.filter(x => x.ats === "P").length];
 }
@@ -642,7 +644,7 @@ const slugOfEspn = id => slugByEspn.get(String(id)) ?? null;
 const pollRows = list => (list ?? []).map(e => { const slug = slugOfEspn(e.team), t = slug ? teamSummaries.find(x => x.slug === slug) : null; return { rank: e.rank, prev: e.previous ?? null, pts: e.points ?? null, fpv: e.firstPlace ?? null, slug, name: t?.name ?? null, dhr: t?.rank ?? null, w: t?.w ?? null, l: t?.l ?? null }; });
 await write("news.json", { fetchedAt: feeds?.fetchedAt ?? null, league: articlesFor(feeds?.league).slice(0, 30), polls: { ap: pollRows(feeds?.polls?.ap), coaches: pollRows(feeds?.polls?.coaches) }, pollDate: feeds?.pollDate ?? null });
 await write("injuries.json", { checked: injuryCheck, rows: injuries.rows, teams: injuries.teamHealth.map(({ keys, ...h }) => h), wire: injuries.wire, links: await readJson("public/data/availability-report-links.json").catch(() => []) });
-await write("injury-wire.json", { checked: injuryCheck, wire: injuries.wire.slice(0, 150).map(({ t, kind, key, name, slug, team, status, from, body, rank, pid, source }) => ({ t, kind, key, name, slug, team, status, from: from ?? null, body: body ?? null, rank, pid, source })) });
+await write("injury-wire.json", { checked: injuryCheck, wire: injuries.wire.slice(0, 150).map(({ t, kind, key, name, slug, team, status, from, body, rank, pid, source, state, stint, seed }) => ({ t, kind, key, name, slug, team, status, from: from ?? null, body: body ?? null, rank, pid, source, state: state ?? null, stint: stint ?? null, seed: !!seed })) });
 
 // Calendar feeds (.ics) per team: subscribe once, updates with every deploy.
 await mkdir(`${OUT}/cal`, { recursive: true });

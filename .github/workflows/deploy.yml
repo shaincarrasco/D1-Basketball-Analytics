@@ -96,7 +96,7 @@ jobs:
           if ! git diff --cached --quiet; then
             git commit -m 'Update 2026-27 basketball data snapshots'
             # main may have moved during the run (a merge or an overlapping refresh): replay on top, ours wins.
-            git push || { git pull --rebase -X theirs && git push; } || echo "::warning::Data snapshot push skipped; the next refresh will retry."
+            git push || { git pull --rebase -X theirs && git push; } || { git rebase --abort 2>/dev/null || true; echo "::warning::Data snapshot push skipped; the next refresh will retry."; }
           fi
       - name: Test the injury engine
         run: node --test scripts/lib/injuries.test.mjs
@@ -116,7 +116,7 @@ jobs:
           git add public/data/injury-ledger-2027.json
           if ! git diff --cached --quiet; then
             git commit -m 'Update injury ledger'
-            git push || { git pull --rebase -X theirs && git push; } || echo "::warning::Injury ledger push skipped; the next refresh will retry."
+            git push || { git pull --rebase -X theirs && git push; } || { git rebase --abort 2>/dev/null || true; echo "::warning::Injury ledger push skipped; the next refresh will retry."; }
           fi
       - name: Configure Pages
         uses: actions/configure-pages@v5

@@ -13,6 +13,7 @@ import { classify, INJURY_WORDS, OUT_STATES, STATE_LABEL, STATES } from "./injur
 const DAY = 864e5;
 const REPLACEMENT_DPR = -2; // a typical end-of-bench player, points per 100 vs average
 const DPR_SHRINK_POSS = 1500;
+const DPR_PRIOR_POSS = 300; // DPR already blends in a box-score prior, worth a few hundred possessions
 const HEADLINE_DAYS = 45; // how long an injury headline can stand on its own
 const MONITOR_DAYS = 4; // "hurt in the win" stays a note only this long
 const EVENTS_PER_PLAYER = 40;
@@ -21,6 +22,10 @@ const WIRE_DAYS = 21;
 export const nameKey = n => String(n ?? "").normalize("NFKD").replace(/[̀-ͯ]/g, "").toLowerCase()
   .replace(/\b(jr|sr|ii|iii|iv|v)\b\.?/g, "").replace(/[^a-z]/g, "");
 const day = iso => (iso ? String(iso).slice(0, 10) : null);
+// Box scores are dated by Eastern calendar day, so article times are too (8 p.m. ET is already tomorrow in UTC).
+const etDay = iso => (iso && Number.isFinite(Date.parse(iso)) ? new Intl.DateTimeFormat("en-CA", { timeZone: "America/New_York" }).format(new Date(iso)) : day(iso));
+const lastName = n => String(n ?? "").normalize("NFKD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/\b(jr|sr|ii|iii|iv|v)\b\.?/g, "").replace(/[^a-z ]/g, " ").trim().split(/\s+/).at(-1) ?? "";
+const PREGAME = new Set(["questionable", "doubtful", "dtd"]);
 const addDays = (d, n) => new Date(Date.parse(`${d}T12:00:00Z`) + n * DAY).toISOString().slice(0, 10);
 const r1 = v => (v == null || !Number.isFinite(v) ? null : Math.round(v * 10) / 10);
 const r3 = v => (v == null || !Number.isFinite(v) ? null : Math.round(v * 1000) / 1000);
@@ -71,6 +76,7 @@ export function buildInjuries(p) {
     // ESPN roster players with no stats line yet (preseason injuries, redshirts, late adds).
     const rosterOnly = (espnId ? rosters?.[espnId] ?? [] : []).filter(a => !knownAids.has(String(a.id)));
     const teamArticles = (espnId ? feeds?.teamNews?.[espnId] ?? [] : []).map(id => [id, art(id)]).filter(([, a]) => a);
+    const rosterLast = new Set([...statPlayers.map(sp => sp.name), ...rosterOnly.map(a => a.name)].map(lastName).filter(l => l.length > 2));
     const candidates = [
       ...statPlayers.map(sp => ({ ...sp, aid: aidByPid.get(sp.pid) ?? null })),
       ...rosterOnly.map(a => ({ pid: null, aid: String(a.id), name: a.name, pos: a.pos ?? null, g: 0, min: null, pts: null, reb: null, ast: null, dpr: null, onPoss: null })),
@@ -91,10 +97,19 @@ export function buildInjuries(p) {
 
       // Headlines: athlete-tagged first, then team news that names him in full.
       const nk = nameKey(c.name);
+      // ESPN tags everyone featured in a story ("Foster out 4-6 weeks; Evans to start"), so the
+      // headline has to name this player, and he has to be the first teammate it names.
+      const ln = lastName(c.name);
+      const isSubject = h => {
+        const words = String(h).normalize("NFKD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z ]/g, " ").split(/\s+/);
+        const mine = words.indexOf(ln);
+        if (mine < 0 || ln.length < 3) return false;
+        return !words.slice(0, mine).some(w => w !== ln && rosterLast.has(w));
+      };
       const tagged = c.aid ? (feeds?.athleteNews?.[c.aid] ?? []).map(id => [id, art(id)]).filter(([, a]) => a) : [];
       const named = nk.length > 6 ? teamArticles.filter(([, a]) => nameKey(a.headline).includes(nk)) : [];
       const heads = [...new Map([...tagged, ...named]).values()]
-        .filter(a => INJURY_WORDS.test(a.headline) && Date.parse(now) - Date.parse(a.published) < HEADLINE_DAYS * DAY)
+        .filter(a => INJURY_WORDS.test(a.headline) && isSubject(a.headline) && Date.parse(now) - Date.parse(a.published) < HEADLINE_DAYS * DAY)
         .sort((a, b) => b.published.localeCompare(a.published));
 
       let s = null; // { state, kind, body, expected, weeks, detail, since, source, url, confidence }
@@ -109,24 +124,37 @@ export function buildInjuries(p) {
         s = { state, kind: cur.kind ?? k.kind, body: cur.body ?? k.body, expected: cur.expected ?? k.expected, weeks: k.weeks, detail: cur.detail ?? null, since: day(cur.reported), source: "manual", url: cur.url ?? null, confidence: "reported", publisher: cur.source ?? null };
       }
       if (!s && heads.length) {
+        // Newest first: a fresh return ends the search. Otherwise take the most serious, most specific
+        // report still standing, so "tears ACL, out for season" isn't downgraded by "undergoes surgery".
+        const standing = [];
         for (const h of heads) {
           const k = classify(h.headline);
-          const hd = day(h.published);
-          if (k.returning) break; // newest relevant headline says he's back
+          const hd = etDay(h.published);
+          // Pregame statuses are about that day's game; "hurt in the game" notes are about a game already played.
+          const stale = PREGAME.has(k.state) ? !!lastPlayed && lastPlayed >= hd : playedSince(hd);
+          if (k.returning && !k.state) break;
           if (!k.state) continue;
-          if (playedSince(hd) && missed === 0) {
-            // He's played since: only a fresh "hurt in the game" note survives.
-            if (k.state === "monitor" && Date.parse(now) - Date.parse(h.published) < MONITOR_DAYS * DAY) s = { ...k, detail: h.headline, since: hd, source: "news", url: h.url, confidence: "reported" };
-            break;
+          if (stale) {
+            if (!standing.length && k.state === "monitor" && missed === 0 && Date.parse(now) - Date.parse(h.published) < MONITOR_DAYS * DAY) standing.push({ k, h, hd });
+            break; // he's played since this report, and older ones are older still
           }
+          standing.push({ k, h, hd });
+        }
+        const best = standing.sort((a, b) => STATES.indexOf(a.k.state) - STATES.indexOf(b.k.state) || (b.k.expected ? 1 : 0) - (a.k.expected ? 1 : 0))[0];
+        if (best) {
+          const { k, h, hd } = best;
           s = { ...k, state: k.state === "monitor" && missed > 0 ? "out" : k.state, detail: h.headline, since: hd, source: "news", url: h.url, confidence: "reported" };
-          break;
         }
       }
       // Sticky reasons: articles age out of the feed after three weeks, but a reported absence
       // stands until he actually plays again (the ledger remembers what was reported).
       const was = p.ledger?.players?.[key]?.open;
-      if (!s && was && was.source !== "box" && !playedSince(was.since)) {
+      // ESPN's list is live: once he's off it, he's off it (no sticky "confirmed").
+      const espnLive = (feeds?.injuries ?? []).length > 0;
+      const sticky = was && was.source !== "box" && !(was.source === "espn" && espnLive) && !playedSince(was.since);
+      // Keep the stronger of an earlier report and a weaker follow-up headline.
+      if (s && s.source === "news" && sticky && STATES.indexOf(was.state) < STATES.indexOf(s.state)) s = null;
+      if (!s && sticky) {
         s = { state: was.state, kind: was.kind ?? classify(was.detail ?? "").kind, body: was.body, expected: was.expected, weeks: was.weeks ?? null, detail: was.detail, since: was.since, source: was.source, url: was.url, publisher: was.publisher ?? null, confidence: was.source === "espn" ? "confirmed" : "reported" };
       }
       if (!s && missed > 0 && gp > 0 && (mpg ?? 0) >= 12 && teamDays.length - missed >= 1) {
@@ -139,7 +167,8 @@ export function buildInjuries(p) {
       const eta = s.weeks && s.since ? [addDays(s.since, s.weeks[0] * 7), addDays(s.since, s.weeks[1] * 7)] : null;
       // DPR swings ±8 on a few hundred possessions, so for the impact estimate pull it toward average
       // until the sample is big (half weight at 1,500 on-court possessions).
-      const dpr = c.dpr != null && c.onPoss ? c.dpr * (c.onPoss / (c.onPoss + DPR_SHRINK_POSS)) : null;
+      const poss = (c.onPoss ?? 0) + DPR_PRIOR_POSS;
+      const dpr = c.dpr != null ? c.dpr * (poss / (poss + DPR_SHRINK_POSS)) : null;
       const out = OUT_STATES.has(s.state);
       const netLoss = mpg != null ? Math.max(0, (mpg / 40) * ((dpr ?? 0) - REPLACEMENT_DPR)) : null;
       // Team record with and without him (ESPN-covered games only).
@@ -177,16 +206,18 @@ export function buildInjuries(p) {
   for (const r of rows) {
     const e = players[r.key] ?? (players[r.key] = { key: r.key, pid: r.pid, aid: r.aid, name: r.name, slug: r.slug, open: null, events: [], stints: [] });
     e.name = r.name; e.pid = r.pid ?? e.pid;
+    // First run: date each flag from when the absence began, and mark it seed so it never pushes.
     const at = firstRun ? `${r.since ?? today}T12:00:00Z` : now;
     if (!e.open) {
-      push(e, { t: at, kind: "new", state: r.state, status: r.status, body: r.body, detail: r.detail, url: r.url, source: r.source });
-      e.stints.push({ from: r.since ?? today, to: null, state: r.state, body: r.body, kind: r.kind, missed: r.missed });
+      const from = r.since ?? today;
+      push(e, { t: at, kind: "new", state: r.state, status: r.status, body: r.body, detail: r.detail, url: r.url, source: r.source, stint: from, ...(firstRun ? { seed: true } : {}) });
+      e.stints.push({ from, to: null, state: r.state, body: r.body, kind: r.kind, missed: r.missed });
     } else {
       const was = e.open;
       const worse = STATES.indexOf(r.state) < STATES.indexOf(was.state);
       const changed = was.state !== r.state || (r.body && was.body !== r.body) || (r.expected && was.expected !== r.expected) || (r.source !== "box" && r.detail && was.detail !== r.detail);
-      if (changed) push(e, { t: now, kind: worse ? "worse" : was.state !== r.state ? "better" : "update", state: r.state, status: r.status, from: was.status, body: r.body, detail: r.detail, url: r.url, source: r.source });
       const st = e.stints.at(-1);
+      if (changed) push(e, { t: now, kind: worse ? "worse" : was.state !== r.state ? "better" : "update", state: r.state, status: r.status, from: was.status, body: r.body, detail: r.detail, url: r.url, source: r.source, stint: st?.from ?? null });
       if (st && st.to == null) { st.state = r.state; st.body = r.body ?? st.body; st.kind = r.kind ?? st.kind; st.missed = Math.max(st.missed ?? 0, r.missed); }
     }
     e.open = snap(r);
@@ -195,12 +226,15 @@ export function buildInjuries(p) {
     if (!e.open || current.has(key)) continue;
     const lp = lastPlayedByKey.get(key) ?? null;
     const st = e.stints.at(-1);
-    const back = lp && st && lp >= st.from;
-    push(e, { t: now, kind: back ? "returned" : "cleared", state: null, status: back ? "Back in the lineup" : "No longer listed", from: e.open.status, body: e.open.body, detail: back ? `Played on ${lp}` : null, url: null, source: e.open.source });
+    // "Back" only after real missed time: a "hurt in the win" note that expires is just cleared.
+    const back = lp && st && lp >= st.from && ((st.missed ?? 0) > 0 || (e.open.missed ?? 0) > 0 || e.open.state !== "monitor");
+    push(e, { t: now, kind: back ? "returned" : "cleared", state: null, status: back ? "Back in the lineup" : "No longer listed", from: e.open.status, body: e.open.body, detail: back ? `Played on ${lp}` : null, url: null, source: e.open.source, stint: st?.from ?? null });
     if (st && st.to == null) st.to = back ? lp : today;
     e.open = null;
   }
-  const ledger = { season: 2027, updated: now, players };
+  // Only move `updated` when something changed, so an unchanged hour doesn't commit a new ledger.
+  const same = JSON.stringify(players) === JSON.stringify(prev);
+  const ledger = { season: 2027, updated: same && p.ledger?.updated ? p.ledger.updated : now, players };
 
   // ---------- wire: the last three weeks of changes ----------
   const teamBySlug = new Map(teams.map(t => [t.slug, t]));
@@ -213,10 +247,11 @@ export function buildInjuries(p) {
 
   // ---------- team health ----------
   const health = new Map();
-  for (const t of teams) health.set(t.slug, { slug: t.slug, team: t.name, conf: t.conf, rank: t.rank, out: 0, limited: 0, minShare: 0, netLoss: 0, ppgLost: 0, keys: [] });
+  for (const t of teams) health.set(t.slug, { slug: t.slug, team: t.name, conf: t.conf, rank: t.rank, out: 0, missing: 0, limited: 0, minShare: 0, netLoss: 0, ppgLost: 0, keys: [] });
   for (const r of rows) {
     const h = health.get(r.slug); if (!h) continue;
     h.keys.push(r.key);
+    if (r.state === "missed") h.missing++;
     if (OUT_STATES.has(r.state)) { h.out++; h.minShare += r.impact.minShare ?? 0; h.netLoss += r.impact.netLoss ?? 0; h.ppgLost += r.impact.ppg ?? 0; }
     else if (r.state !== "monitor") h.limited++;
   }

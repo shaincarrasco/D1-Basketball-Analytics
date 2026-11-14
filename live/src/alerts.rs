@@ -127,6 +127,8 @@ fn injury_alerts(wire: &Value, now: chrono::DateTime<chrono::Utc>) -> Vec<Alert>
         if !matches!(kind.as_str(), "new" | "worse" | "returned") { continue; }
         // Box-score inferences ("missed last game", reason unknown) stay on the site, not in pushes.
         if s(e, "source").as_deref() == Some("box") { continue; }
+        // First-run backfill (dated when each absence began) never pushes.
+        if e.get("seed").and_then(Value::as_bool).unwrap_or(false) { continue; }
         let Ok(at) = chrono::DateTime::parse_from_rfc3339(&t) else { continue };
         let age = (now - at.with_timezone(&chrono::Utc)).num_seconds();
         if !(0..=INJURY_WINDOW_SECS).contains(&age) { continue; }
@@ -144,7 +146,11 @@ fn injury_alerts(wire: &Value, now: chrono::DateTime<chrono::Utc>) -> Vec<Alert>
             };
             (format!("Injury: {name} ({team}) \u{2014} {status}"), detail)
         };
-        out.push(Alert { key: format!("inj:{key}:{kind}:{t}"), kind: "injury", teams: vec![slug], title, body });
+        // Key on the logical change (player, absence, kind, state), not the run time, so a rebuilt
+        // ledger that re-emits the same change at a later time doesn't push twice.
+        let stint = s(e, "stint").unwrap_or_else(|| t.clone());
+        let state = s(e, "state").unwrap_or_default();
+        out.push(Alert { key: format!("inj:{key}:{stint}:{kind}:{state}"), kind: "injury", teams: vec![slug], title, body });
     }
     out
 }
@@ -211,7 +217,7 @@ mod tests {
         let a = injury_alerts(&wire, now);
         assert_eq!(a.len(), 3);
         assert!(a.iter().all(|x| x.kind == "injury" && x.teams == ["duke"]));
-        assert_eq!(a[0].key, "inj:duke:1:new:2026-11-14T12:00:00Z");
+        assert_eq!(a[0].key, "inj:duke:1:2026-11-14T12:00:00Z:new:");
         assert_eq!(a[0].title, "Injury: A B (Duke) \u{2014} Out");
         assert_eq!(a[0].body, "Ankle");
         assert_eq!(a[1].body, "Questionable \u{2192} Out");

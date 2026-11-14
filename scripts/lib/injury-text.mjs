@@ -3,6 +3,7 @@
 // anything the text doesn't say stays null.
 
 const BODY = [
+  [/illness|\bflu\b|\bsick\b|virus/i, "Illness"],
   [/\bacl\b|anterior cruciate/i, "ACL"],
   [/\bmcl\b/i, "MCL"],
   [/menisc/i, "Meniscus"],
@@ -15,7 +16,7 @@ const BODY = [
   [/\bfoot\b|\bfeet\b|plantar|metatarsal|\bheel\b/i, "Foot"],
   [/\btoes?\b/i, "Toe"],
   [/\bhips?\b/i, "Hip"],
-  [/\bback\b|\bspine\b|lumbar/i, "Back"],
+  [/\bback (injury|spasms?|tightness|issue|problem|soreness|surgery)|\bspine\b|lumbar/i, "Back"],
   [/shoulder|labrum/i, "Shoulder"],
   [/elbow/i, "Elbow"],
   [/wrist/i, "Wrist"],
@@ -26,10 +27,9 @@ const BODY = [
   [/\bquad/i, "Quad"],
   [/\bshin\b|tibia|fibula|\blegs?\b/i, "Leg"],
   [/\beyes?\b|orbital/i, "Eye"],
-  [/\bnose\b|\bface\b|facial|\bjaw\b/i, "Face"],
-  [/\bhead\b/i, "Head"],
+  [/\bnose\b|\bface (injury|fracture)|facial|\bjaw\b/i, "Face"],
+  [/\bhead (injury|knock|blow|trauma)/i, "Head"],
   [/\bheart\b|cardiac/i, "Heart"],
-  [/illness|\bflu\b|\bsick\b|virus/i, "Illness"],
 ];
 
 /** States, most to least serious. "monitor" = hurt or in the news but no absence reported yet. */
@@ -64,8 +64,12 @@ export function classify(text) {
     : body || /injur|surgery|hurt|torn|tear|sprain|fracture|broken|strain|bruise|contusion|sidelined|banged|limp/i.test(t) ? "injury"
     : "unknown";
   const weeks = weeksOf(t);
-  const returning = /\b(return(s|ed|ing)? (to|from|for|vs\.?|against|in)|is back|back in (the )?(lineup|action)|cleared to (play|return)|makes? (his |season |collegiate )?debut|made (his |season )?debut|will play|set to return|expected to (play|return)|available (to play|for|vs)|upgraded to available|good to go)\b/i.test(t)
-    && !/\b(won'?t|will not|not expected to|unlikely to|doubtful to)\b.{0,20}\b(return|play)/i.test(t);
+  // Good news: back, debuting, cleared, eligible, reinstated. Phrases about a future or doubtful
+  // return ("expected to return in January", "not cleared", "setback") are not a return.
+  const resolved = /\b(granted|approved|wins? (his |eligibility )?(appeal|waiver)|ruled eligible|deemed eligible|declared eligible|eligible (immediately|to play)|eligibility (restored|granted)|reinstat|suspension (lifted|ends|over)|lifts? suspension)\b/i.test(t);
+  const back = /\b(returns? (to|from|vs\.?|against|after|for (the )?(first|season)|in (a |the )?(win|loss|victory))|returned (to|from|vs\.?|against|after)|returning (tonight|vs\.?|against|from)|is back|back from|back in (the )?(lineup|action)|cleared to (play|return)|makes? (his |season |collegiate |long-awaited )?debut|made (his |season )?debut|debuts|will play (tonight|vs|against|saturday|sunday|monday|tuesday|wednesday|thursday|friday)|upgraded to available|good to go)\b/i.test(t);
+  const doubt = /\b(won'?t|will not|not|still not|yet to be|isn'?t|unlikely to|doubtful to|in doubt|delayed|setback)\b.{0,25}\b(return|play|cleared|available|debut)|\b(return|debut)\b.{0,25}\b(in doubt|delayed|uncertain|on hold)|setback/i.test(t);
+  let returning = (back || resolved) && !doubt;
 
   let state = null, expected = null;
   const seasonRe = /out for (the )?(season|year|20\d\d-?\d*)|season[- ]ending|(miss|out|sidelined) (for )?(the )?(rest of the|remainder of the|entire|whole) (season|year)|miss(es)? (the |his )?(20\d\d-\d\d )?season|will redshirt|to redshirt|medical redshirt/i;
@@ -81,13 +85,15 @@ export function classify(text) {
   else if (/day[- ]to[- ]day/i.test(t)) { state = "dtd"; expected = "Day-to-day"; }
   else if (/week[- ]to[- ]week/i.test(t)) { state = "out"; expected = "Week-to-week"; }
   else if (/\bprobable\b/i.test(t)) state = "monitor";
-  else if (/\bsuspend/i.test(t)) state = "out";
-  else if (kind === "eligibility") state = "out";
+  else if (/\bsuspend/i.test(t) && !resolved) state = "out";
+  else if (kind === "eligibility" && !resolved) state = "out";
   else if (/\b(out|ruled out|will miss|to miss|misses|missed|sidelined|won'?t play|will not play|not expected to play|unavailable|inactive|did not dress|surgery|out vs\.?|out against)\b/i.test(t)) state = "out";
   else if (/injur|hurt|leaves|left the game|exits|helped off|carried off|limp|tweak|banged/i.test(t)) state = "monitor";
-  if (returning && !(state === "season" && /(torn|tear|surgery)/i.test(t))) state = null;
+  // A headline with a stated absence ("out 4-6 weeks, expected back in January") is not a return.
+  if (returning && expected && !resolved) returning = false;
+  if (returning) state = null;
   return { state, kind, body, expected, weeks, returning };
 }
 
 /** Words that make a headline worth reading as an availability note. */
-export const INJURY_WORDS = /injur|surgery|torn|tear\b|sprain|fracture|broken|concussion|out for|out indefinitely|sidelined|suspend|day-to-day|questionable|doubtful|game-time decision|status uncertain|will miss|to miss|misses|ruled out|ineligib|eligibility|waiver|redshirt|illness|return(s|ed)? from|returns to|cleared to|debut|leave of absence|hurt\b|strain|achilles|\bacl\b/i;
+export const INJURY_WORDS = /\bout\b.{0,15}\b(weeks?|months?|indefinitely|vs\.?|against|for)\b|\b(miss|misses|missing) (\d|two|three|four|several|next|the next|his)|\bunavailable\b|injur|surgery|torn|tear\b|sprain|fracture|broken|concussion|out for|out indefinitely|sidelined|suspend|day-to-day|questionable|doubtful|game-time decision|status uncertain|will miss|to miss|misses|ruled out|ineligib|eligibility|waiver|redshirt|illness|return(s|ed)? from|returns to|cleared to|debut|leave of absence|hurt\b|strain|achilles|\bacl\b/i;

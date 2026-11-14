@@ -39,7 +39,7 @@ export type TeamSummary = {
   /** Players currently flagged unavailable (ESPN injury list or missing from recent box scores). */
   unavailable?: number;
   /** Injury load: players out, limited, share of minutes missing, estimated rating lost (points per 100). */
-  health?: { out: number; limited: number; minShare: number; netLoss: number } | null;
+  health?: { out: number; missing: number; limited: number; minShare: number; netLoss: number } | null;
 };
 export type PollSpot = { rank: number; prev: number | null; pts: number | null; fpv: number | null };
 /** A credited link to an outside article (headline, link, time and publisher only). */
@@ -73,8 +73,8 @@ export type InjuryEvent = {
   state: InjuryState | null; status: string; from?: string | null; body: string | null; detail: string | null; url: string | null; source: InjurySource;
 };
 export type WireEvent = InjuryEvent & { key: string; pid: string | null; name: string; slug: string; team: string; conf: string | null; rank: number | null; netLoss: number | null };
-/** Team health: players out (and limited: questionable / day-to-day), share of minutes missing, estimated rating lost per 100, points per game lost. */
-export type TeamHealth = { slug: string; team: string; conf: string; rank: number | null; out: number; limited: number; minShare: number; netLoss: number; ppgLost: number };
+/** Team health: players out (missing = the subset inferred from box scores, reason not reported; limited: questionable / day-to-day), share of minutes missing, estimated rating lost per 100, points per game lost. */
+export type TeamHealth = { slug: string; team: string; conf: string; rank: number | null; out: number; missing: number; limited: number; minShare: number; netLoss: number; ppgLost: number };
 /** Official availability report pages (conference games / NCAA tournament only). */
 export type ReportLink = { conf: string; url: string | null; note: string | null; verified?: boolean };
 export type InjuryFile = { checked: string; rows: InjuryRow[]; teams: TeamHealth[]; wire: WireEvent[]; links: ReportLink[] };
