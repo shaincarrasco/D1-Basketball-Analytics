@@ -87,25 +87,36 @@ jobs:
         env:
           CBBD_API_KEY: ${{ secrets.CBBD_API_KEY }}
           GITHUB_EVENT_NAME: ${{ github.event_name }}
+      - name: Refresh tennis data (Baseline site; cached, only new matches are fetched)
+        run: node apps/tennis/scripts/fetch-tennis.mjs || echo "::warning::Tennis refresh failed; the site keeps the last snapshot."
       - name: Save refreshed current-season data snapshots
         if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' || github.event_name == 'push'
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add package-lock.json public/data/ .cache/
+          git add package-lock.json public/data/ .cache/ apps/tennis/public/data/ apps/tennis/data-cache/
           if ! git diff --cached --quiet; then
             git commit -m 'Update 2026-27 basketball data snapshots'
             # main may have moved during the run (a merge or an overlapping refresh): replay on top, ours wins.
             git push || { git pull --rebase -X theirs && git push; } || echo "::warning::Data snapshot push skipped; the next refresh will retry."
           fi
-      - name: Typecheck
-        run: npm run typecheck
+      - name: Typecheck and test (all sites and shared packages)
+        run: |
+          npm run typecheck
+          npm run typecheck -w @sites/tennis
+          npm test
       - name: Build app data layer and static site
         run: npm run build
         env:
           NEXT_PUBLIC_BASE_PATH: /D1-Basketball-Analytics
           # Optional: URL of the live relay (live/), set as a repository variable LIVE_URL.
           NEXT_PUBLIC_LIVE_URL: ${{ vars.LIVE_URL }}
+      - name: Build the tennis site into /tennis/
+        run: |
+          npm run build -w @sites/tennis
+          rm -rf out/tennis && cp -r apps/tennis/out out/tennis
+        env:
+          SITE_BASE_PATH: /D1-Basketball-Analytics/tennis
       - name: Configure Pages
         uses: actions/configure-pages@v5
         with:
