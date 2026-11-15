@@ -12,6 +12,7 @@ import { fileURLToPath } from "node:url";
 import { getJson } from "./lib/http.mjs";
 import { buildRecord, surfaceOf } from "./lib/model.mjs";
 import { buildOutputs, loadRecords, seasonTotals } from "./lib/aggregate.mjs";
+import { writeSeasonFiles } from "./lib/season-files.mjs";
 
 const APP = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const CACHE = path.join(APP, "data-cache");
@@ -159,6 +160,8 @@ async function main() {
   await writeFile(path.join(OUT, "players.json"), JSON.stringify(out.players));
   await writeFile(path.join(OUT, "rankings.json"), JSON.stringify(out.rankings));
   await writeFile(path.join(OUT, "results.json"), JSON.stringify(out.results));
+  const sf = await writeSeasonFiles(OUT, perTour);
+  log(`wrote ${sf.players} player season files and ${sf.events} events`);
 
   log("");
   for (const tour of TOURS) {
