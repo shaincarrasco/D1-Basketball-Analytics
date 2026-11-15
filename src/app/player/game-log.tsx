@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import TeamLogo from "@sports/ui/team-logo";
 import { fmt } from "@sports/ui/format";
+import { Sparkline, heatTag } from "@/components/heat-check";
 import type { TeamDetail, TeamSummary } from "@/lib/types";
 
 type Line = {
@@ -63,6 +64,22 @@ export default function GameLog({ playerId, detail, teams }: { playerId: string;
           </div>
         ))}
       </div>
+
+      {(() => {
+        const pts = lines.map(l => l.pts ?? 0);
+        const tag = heatTag(pts, avg("pts"));
+        const last8 = pts.slice(-8);
+        const last8Avg = last8.reduce((s, v) => s + v, 0) / last8.length;
+        return (
+          <div className="mb-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-mute">
+            <span className="font-semibold text-ink">Heat check</span>
+            <Sparkline values={pts} avg={avg("pts")} width={96} height={22} className="text-ink" />
+            <span>Last {last8.length}: <b className="text-ink tnum">{fmt(last8Avg, 1)}</b> pts</span>
+            <span>Season: <b className="text-ink tnum">{fmt(avg("pts"), 1)}</b> pts</span>
+            {tag.label && <span className={`text-[10px] font-bold ${tag.tone === "win" ? "text-win" : "text-loss"}`}>{tag.label}</span>}
+          </div>
+        );
+      })()}
 
       <div className="scroll-x rounded-lg border border-line">
         <table className="dt">

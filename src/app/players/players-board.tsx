@@ -2,6 +2,7 @@
 // Player leaderboards: preset column sets, filters, percentile heat, URL state.
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { Search } from "lucide-react";
 import DataTable, { type Column } from "@sports/ui/data-table";
 import TeamLogo from "@sports/ui/team-logo";
@@ -104,6 +105,13 @@ export default function PlayersBoard() {
   const [q, setQ] = useState("");
   const [hydrated, setHydrated] = useState(false);
   const [open, setOpen] = useState(false);
+  // ?sort=<key> from a search link. Only applied when the current view has that column; empty = the view's default.
+  const [sortKey, setSortKey] = useState<string | null>(null);
+  const searchParams = useSearchParams();
+  useEffect(() => {
+    const s = searchParams.get("sort");
+    if (s) setSortKey(s);
+  }, [searchParams]);
 
   // URL state so a filtered board can be shared: ?view=&conf=&pos=&min=&g=
   useEffect(() => {
@@ -158,7 +166,8 @@ export default function PlayersBoard() {
     return !n ? ranked : ranked.filter(r => r.name.toLowerCase().includes(n) || (r.team && (r.team.name.toLowerCase().includes(n) || r.team.short.toLowerCase() === n)));
   }, [ranked, q]);
 
-  const { stats, sort } = VIEW_STATS[view];
+  const { stats } = VIEW_STATS[view];
+  const sort = sortKey && stats.some(s => s.key === sortKey) ? sortKey : VIEW_STATS[view].sort;
   const pools = useMemo(() => {
     const out = new Map<string, ReturnType<typeof makePool>>();
     for (const s of stats) {
@@ -228,7 +237,7 @@ export default function PlayersBoard() {
   return (
     <section aria-label="Player leaderboard">
       <div className="no-scrollbar -mx-1 mb-3 flex gap-1.5 overflow-x-auto px-1" role="group" aria-label="Leaderboard view">
-        {VIEWS.map(v => <button key={v} className="chip" aria-pressed={view === v} onClick={() => setView(v)}>{v}</button>)}
+        {VIEWS.map(v => <button key={v} className="chip" aria-pressed={view === v} onClick={() => { setView(v); setSortKey(null); }}>{v}</button>)}
       </div>
       <div className="mb-3 grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:items-end">
         <label className="relative col-span-2 sm:w-64">
@@ -301,7 +310,7 @@ export default function PlayersBoard() {
         </div>
       ) : (
         <div className={ROW_LINK_CLASS} onClick={followRowLink}>
-        <DataTable key={view} rows={rows} rankRows={ranked} columns={columns} rowKey={r => r.id} initialSort={sort} initialDir={VIEW_STATS[view].stats.find(s => s.key === sort)?.invert ? "asc" : "desc"}
+        <DataTable key={`${view}:${sort}`} rows={rows} rankRows={ranked} columns={columns} rowKey={r => r.id} initialSort={sort} initialDir={stats.find(s => s.key === sort)?.invert ? "asc" : "desc"}
           pageSize={100} csvName={`d1hoops-players-${slugOf(view)}.csv`} caption={`Player leaderboard: ${view}`} maxHeight="78vh" />
         </div>
       )}

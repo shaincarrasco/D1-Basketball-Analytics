@@ -5,6 +5,7 @@ import { fmt, ordinal, signed } from "@sports/ui/format";
 import { useLiveRatings, withLiveTeam } from "@/lib/live-ratings";
 import { RankMove } from "@/components/live-ratings-note";
 import { Dots } from "@/components/dots";
+import Explain from "@/components/explain";
 import type { TeamSummary } from "@/lib/types";
 
 function useTeam(team: TeamSummary) {
@@ -29,17 +30,17 @@ export function LiveRank({ team }: { team: TeamSummary }) {
 
 export function LiveTiles({ team, total }: { team: TeamSummary; total: number }) {
   const { t, live } = useTeam(team);
-  const cells: [string, string, number | null, string][] = [
-    ["Offense", fmt(t.adjO), t.adjORank, "Points per 100 possessions vs an average D-I defense"],
-    ["Defense", fmt(t.adjD), t.adjDRank, "Points allowed per 100 possessions vs an average D-I offense (lower is better)"],
-    ["Tempo", fmt(t.adjT), t.adjTRank, "Adjusted possessions per 40 minutes (style, not quality)"],
+  const cells: [string, string, string, number | null, string][] = [
+    ["adjo", "Offense", fmt(t.adjO), t.adjORank, "Points per 100 possessions vs an average D-I defense"],
+    ["adjd", "Defense", fmt(t.adjD), t.adjDRank, "Points allowed per 100 possessions vs an average D-I offense (lower is better)"],
+    ["tempo", "Tempo", fmt(t.adjT), t.adjTRank, "Adjusted possessions per 40 minutes (style, not quality)"],
   ];
   return (
     <div title={live ? "Includes results since the last full refresh" : undefined}>
       <dl className="grid grid-cols-3 overflow-hidden rounded-[18px] bg-deck">
-        {cells.map(([label, value, rank, hint], i) => (
-          <div key={label} className={`flex flex-col gap-1.5 px-3.5 py-3.5 ${i ? "border-l border-line" : ""}`} title={hint}>
-            <dt className="text-[13px] font-semibold text-mute">{label}</dt>
+        {cells.map(([id, label, value, rank, hint], i) => (
+          <div key={id} className={`flex flex-col gap-1.5 px-3.5 py-3.5 ${i ? "border-l border-line" : ""}`} title={hint}>
+            <dt className="text-[13px] font-semibold text-mute"><Explain id={id}>{label}</Explain></dt>
             <dd className="font-display text-[28px] font-extrabold leading-none tnum">{value}</dd>
             <dd className="flex items-baseline gap-1"><span className="text-xs text-mute">No.</span><Dots className="text-[20px]">{rank ?? "—"}</Dots><span className="text-xs text-dim">of {total}</span></dd>
             <dd className="h-1 rounded-full bg-line" aria-hidden><div className="h-1 rounded-full bg-ink" style={{ width: rank ? `${Math.max(3, (1 - (rank - 1) / total) * 100)}%` : 0 }} /></dd>
@@ -47,7 +48,7 @@ export function LiveTiles({ team, total }: { team: TeamSummary; total: number })
         ))}
       </dl>
       <p className="mt-2 text-[13px] text-mute tnum">
-        DHR rating <b className="text-ink">{signed(t.adjEM, 1)}</b> per 100 possessions{t.rank ? `, ${ordinal(t.rank)} of ${total}` : ""}. Schedule so far <b className="text-ink">{signed(t.sos, 1)}</b>{t.sosRank ? `, ${ordinal(t.sosRank)}` : ""}.{" "}
+<Explain id="dhr">DHR rating</Explain> <b className="text-ink">{signed(t.adjEM, 1)}</b> per 100 possessions{t.rank ? `, ${ordinal(t.rank)} of ${total}` : ""}. Schedule so far <b className="text-ink">{signed(t.sos, 1)}</b>{t.sosRank ? `, ${ordinal(t.sosRank)}` : ""}.{" "}
         <Link href="/methodology/#overview" className="font-semibold text-bulb-ink hover:underline">What&apos;s DHR?</Link>
       </p>
     </div>

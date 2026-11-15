@@ -24,6 +24,13 @@ import ShotProfile from "./shot-profile";
 import ZoneTable from "./zone-table";
 import Lineups from "./lineups";
 import FocusTabs from "@/components/focus-tabs";
+import ShareCard from "@/components/share-card";
+import TeamChanges from "@/components/team-changes";
+import FinalFourPath from "@/components/final-four-path";
+import { teamChanges } from "@/lib/team-changes";
+import { roundOdds } from "@/lib/bracket-path";
+import { project } from "@/lib/predict";
+import { getBracket } from "../../bracket/load";
 import TeamRosterValue from "@/components/nil/team-roster-value";
 import { ViewTransition } from "react";
 import { Dots } from "@/components/dots";
@@ -88,6 +95,11 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
   // Official conference reports exist for these leagues only (conference games); skip links we don't have.
   const REPORT_CONFS = ["Big Ten", "SEC", "ACC", "Big 12", "Big East", "A-10", "MVC"];
   const reportLinks = REPORT_CONFS.includes(team.conf) ? getInjuries().links.filter(l => l.url && (l.conf === team.conf || l.conf === team.confName)) : [];
+  const lastGame = played.at(-1) ?? null;
+  const changes = teamChanges(team.id, lastGame?.day ?? null);
+  const lastResult = lastGame && lastGame.pts != null && lastGame.oppPts != null ? `${lastGame.result} ${lastGame.pts}–${lastGame.oppPts} ${lastGame.venue === "A" ? "at" : "vs"} ${lastGame.opp}` : undefined;
+  const bracket = getBracket();
+  const path = bracket ? roundOdds(bracket, Object.fromEntries(teams.map(t => [t.slug, t])), meta, slug, project) : null;
   const shortName = (n: string) => { const parts = n.split(" "); return parts.length > 1 ? `${parts[0][0]}. ${parts.slice(1).join(" ")}` : n; };
 
   return (
@@ -125,6 +137,8 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
         <div className="relative mt-5 flex flex-wrap gap-2 [&_.btn]:border-transparent [&_.btn]:bg-black/20 [&_.btn]:text-current">
           <FavoriteButton kind="teams" id={slug} name={team.name} />
           <CalendarButton slug={slug} name={team.name} />
+          <ShareCard kind="team" title={team.name} subtitle={`${team.w}–${team.l} · ${team.confName}`} color={team.color ?? null} href={`/teams/${slug}/`} rankLabel={team.rank ? `DHR No. ${team.rank}` : undefined}
+            stats={[{ label: "Offense", value: fmt(team.adjO) }, { label: "Defense", value: fmt(team.adjD) }, { label: "Tempo", value: fmt(team.adjT) }, { label: "Projected", value: `${fmt(team.projW, 0)}-${fmt(team.projL, 0)}` }]} />
           <BracketChip slug={slug} className="!border-transparent !bg-black/20 !text-current [&_.text-mute]:!text-current [&_.text-mute]:opacity-75" />
           {(team.health?.out ?? 0) > 0 && (
             <a href="#availability" className="btn" title="Jump to the availability report">{(() => { const h = team.health!, known = h.out - (h.missing ?? 0); return known > 0 ? `${known} out${h.missing ? ` · ${h.missing} missing` : ""}` : `${h.missing} missing · reason not reported`; })()}</a>
@@ -209,6 +223,8 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
           </section>
 </div>
 <div className="space-y-6">
+          <TeamChanges team={team} changes={changes} lastResult={lastResult} />
+          <FinalFourPath path={path} />
           <section id="availability" className="deck scroll-mt-32 p-5" aria-labelledby="avail-h">
             <h2 id="avail-h" className="h-section mb-2">Availability</h2>
             <TeamAvailability slug={slug} health={team.health} items={detail.availability} log={detail.injuryLog} links={reportLinks} />
@@ -267,7 +283,7 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
               <h2 className="h-section">Roster</h2>
               <p className="text-xs text-mute">DPR = points per 100 possessions vs an average D-I player, ± one standard error</p>
             </div>
-            <Roster slug={slug} rows={detail.roster} fields={fields} onOff={detail.onOff ?? {}} bios={bios} />
+            <Roster slug={slug} rows={detail.roster} fields={fields} onOff={detail.onOff ?? {}} bios={bios} logs={detail.logs} logFields={detail.logFields} />
             <TeamRosterValue teamId={team.id} slug={slug} short={team.short} />
           </section>
           {/* Lineups */}

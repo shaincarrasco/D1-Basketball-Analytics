@@ -294,3 +294,23 @@ a, button, select, summary, [role="button"] { touch-action: manipulation; }
 @media (prefers-reduced-motion: reduce) {
   .btn:active, .chip:active, .seg > *:active, .tab-item:active { transform: none; }
 }
+
+/* ---------- Rigid app frame ----------
+   Real apps don't bounce, don't let you highlight their buttons, and don't jump when you
+   switch tabs. */
+html, body { overscroll-behavior-y: none; }
+header, nav, [role="tablist"], .btn, .chip, .seg, .tab-item, .dt th, .plate, .rank-cell {
+  -webkit-user-select: none; user-select: none; -webkit-touch-callout: none;
+}
+img, svg { -webkit-user-drag: none; }
+/* Switching tabs never collapses the page under your thumb. */
+[data-focus-panel] { min-height: 60vh; }
+/* Linked rows and cards answer a tap instantly. */
+@media (hover: none) {
+  .dt tbody tr[data-href]:active > td { background: rgb(var(--def-rgb) / 0.12) !important; }
+  .press:active, .deck a:active { opacity: 0.85; }
+}
+/* Phones: solid chrome instead of see-through glass, so the frame reads as fixed. */
+@media (max-width: 1023px) {
+  header.sticky, nav[aria-label="Tabs"] { background: var(--bg) !important; -webkit-backdrop-filter: none; backdrop-filter: none; }
+}

@@ -6,6 +6,7 @@ import ArticleList from "@/components/article-list";
 import FocusTabs, { type FocusTab } from "@/components/focus-tabs";
 import { playerRows } from "@/lib/players";
 import Today from "./_home/today";
+import MyTeams from "./_home/my-teams";
 import InjuryWire from "./_home/injury-wire";
 import Top25 from "./_home/top25";
 import FormWatch from "./_home/form-watch";
@@ -217,6 +218,7 @@ export default function Home() {
   return (
     <div className="space-y-10">
       <DhrIntro />
+      <MyTeams />
       <Today />
 
       <InjuryWire />

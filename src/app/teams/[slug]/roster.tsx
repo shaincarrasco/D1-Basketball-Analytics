@@ -3,6 +3,7 @@ import Link from "next/link";
 import DataTable, { type Column } from "@sports/ui/data-table";
 import { fmt, signed } from "@sports/ui/format";
 import { playerRows } from "@/lib/players";
+import { Sparkline, heatTag } from "@/components/heat-check";
 import type { Player, PlayerField, PlayerTable, TeamDetail } from "@/lib/types";
 
 export type RosterBio = { jersey: string | null; ht: string | null; year: string | null; pos: string | null };
@@ -14,8 +15,10 @@ const netCell = (v: number | null, dim = false) => v === null ? "—" : <span cl
 const inches = (ht: string | null) => { const m = ht?.match(/(\d+)'\s*(\d+)/); return m ? Number(m[1]) * 12 + Number(m[2]) : null; };
 const YEARS: Record<string, number> = { FR: 1, RS: 1.5, SO: 2, JR: 3, SR: 4, GR: 5 };
 
-export default function Roster({ slug, rows, fields, onOff, bios }: {
+export default function Roster({ slug, rows, fields, onOff, bios, logs, logFields }: {
   slug: string; rows: PlayerTable["rows"]; fields: PlayerField[]; onOff: NonNullable<TeamDetail["onOff"]>; bios: Record<string, RosterBio>;
+  /** Optional: team detail `logs` and `logFields` (per-game rows, chronological) for the "Last 5" sparkline. */
+  logs?: TeamDetail["logs"]; logFields?: TeamDetail["logFields"];
 }) {
   const players: Row[] = playerRows({ fields }, rows).map(p => {
     const o = onOff[p.id];
@@ -23,6 +26,11 @@ export default function Roster({ slug, rows, fields, onOff, bios }: {
   });
   if (!players.length) return <p className="text-sm text-mute">No player stats have been published for this team yet.</p>;
   const hasDpr = players.some(p => p.dpr != null), hasOnOff = players.some(p => p.on !== null), hasStars = players.some(p => p.stars != null);
+  const ptsIdx = logFields?.indexOf("pts") ?? -1;
+  const pointsOf = (id: string): number[] => {
+    if (ptsIdx < 0) return [];
+    return (logs?.[id] ?? []).map(r => { const v = r[ptsIdx]; return typeof v === "number" ? v : 0; });
+  };
   const columns: Column<Row>[] = [
     {
       key: "name", label: "Player", align: "l", sticky: true, width: 192, first: "asc", value: p => p.name,
@@ -32,6 +40,20 @@ export default function Roster({ slug, rows, fields, onOff, bios }: {
           <span className="truncate">{p.name}</span>
         </Link>
       ),
+    },
+    {
+      key: "last5", label: "Last 5", title: "Points in the last 5 games vs season average, dashed line", sortable: false, width: 76, value: () => null,
+      render: p => {
+        const pts = pointsOf(p.id);
+        if (!pts.length) return <span className="text-dim">—</span>;
+        const tag = heatTag(pts, p.pts ?? null);
+        return (
+          <div className="flex items-center gap-1.5" style={{ width: 76 }}>
+            <Sparkline values={pts.slice(-5)} avg={p.pts ?? null} width={44} height={18} className="text-ink" />
+            {tag.label && <span className={`text-[10px] font-bold ${tag.tone === "win" ? "text-win" : "text-loss"}`}>{tag.label}</span>}
+          </div>
+        );
+      },
     },
     { key: "pos", label: "Pos", align: "l", first: "asc", value: p => p.pos ?? p.bio?.pos ?? null, render: p => <span className="text-mute">{p.pos ?? p.bio?.pos ?? "—"}</span> },
     { key: "yr", label: "Yr", align: "l", title: "Class", value: p => (p.bio?.year ? YEARS[p.bio.year] ?? null : null), render: p => <span className="text-mute">{p.bio?.year ?? "—"}</span> },
