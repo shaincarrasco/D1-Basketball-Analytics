@@ -201,7 +201,7 @@ html[data-theme="light"] .dots-off { color: color-mix(in oklab, var(--bulb-ink) 
   @media (max-width: 640px) {
     .dt { font-size: 12.5px; }
     .dt th { font-size: 10px; padding: 6px 5px; }
-    .dt td { padding: 0 5px; height: 30px; line-height: 30px; }
+    .dt td { padding: 3px 5px; height: 32px; line-height: 1.2; }
     .dt th button { gap: 2px; }
     .dt .sticky-col { min-width: 0; }
     .rank-cell { font-size: 13px; }
