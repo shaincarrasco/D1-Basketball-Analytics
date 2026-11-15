@@ -13,6 +13,7 @@ import { useJson } from "@sports/ui/client-data";
 import { toggleFavorite, useFavorites } from "@/lib/favorites";
 import { useLiveScores, withLive, type LiveGame } from "@/lib/live";
 import { useShowProjections } from "@/lib/show-projections";
+import { watchReason } from "@/lib/watch-reasons";
 import type { Game, GameDay, GameIndex, GameSide, TeamSummary } from "@/lib/types";
 import LiveStrip from "./live-strip";
 
@@ -41,6 +42,8 @@ export default function Today() {
   const slate = useJson<GameDay>(day ? `games/${day}.json` : null);
   const prevDay = useMemo(() => (index.data && day ? index.data.days.filter(d => d.day < day && d.finals > 0).at(-1)?.day ?? null : null), [index.data, day]);
   const prev = useJson<GameDay>(prevDay ? `games/${prevDay}.json` : null);
+  const teamsFile = useJson<TeamSummary[]>("teams.json");
+  const teamMap = useMemo(() => new Map((teamsFile.data ?? []).map(t => [t.slug, t])), [teamsFile.data]);
   const isToday = day === etToday();
   const staticGames = slate.status === "ready" && slate.data.day === day ? slate.data.games : null;
   const live = useLiveScores(isToday ? day : null, staticGames);
@@ -88,7 +91,7 @@ export default function Today() {
         <p className="deck p-5 text-sm text-mute">No games on this day. <Link className="underline" href="/games/">Pick another date</Link>.</p>
       ) : (
         <div className="grid items-start gap-6 lg:grid-cols-2 lg:grid-rows-[auto_1fr] [&>*]:min-w-0">
-          {featured.length > 0 && <Featured list={featured} day={day!} liveBy={live.byGame} />}
+          {featured.length > 0 && <Featured list={featured} day={day!} liveBy={live.byGame} teams={teamMap} />}
           {rest.length > 0 && (
             <div className="lg:row-span-2">
               <div className="mb-2.5 flex items-baseline justify-between">
@@ -96,7 +99,7 @@ export default function Today() {
                 <Link href={`/games/?d=${day}`} className="text-sm font-semibold text-bulb-ink">All {games.length}</Link>
               </div>
               <ul className="overflow-hidden rounded-[18px] bg-deck">
-                {rest.map(g => <GameRow key={g.id} g={g} day={day!} live={live.byGame.get(g.id)} />)}
+                {rest.map(g => <GameRow key={g.id} g={g} day={day!} live={live.byGame.get(g.id)} teams={teamMap} />)}
               </ul>
             </div>
           )}
@@ -254,7 +257,7 @@ function why(g: Game, kind: Kind) {
 }
 
 /** Swipeable featured cards with labelled pills, Apple Sports style. */
-function Featured({ list, day, liveBy }: { list: Feature[]; day: string; liveBy: Map<string, LiveGame> }) {
+function Featured({ list, day, liveBy, teams }: { list: Feature[]; day: string; liveBy: Map<string, LiveGame>; teams: Map<string, TeamSummary> }) {
   const track = useRef<HTMLDivElement>(null);
   const [at, setAt] = useState(0);
   const GAP = 12; // matches gap-3
@@ -274,7 +277,7 @@ function Featured({ list, day, liveBy }: { list: Feature[]; day: string; liveBy:
       <div ref={track} onScroll={onScroll} className="no-scrollbar flex snap-x snap-mandatory gap-3 overflow-x-auto overscroll-x-contain">
         {list.map((f, i) => (
           <div key={f.kind} className="w-full shrink-0 snap-center" aria-roledescription="slide" aria-label={`${i + 1} of ${list.length}: ${KIND_LABEL[f.kind]}`}>
-            <Scoreboard g={f.g} day={day} live={liveBy.get(f.g.id)} kind={f.kind} labelled={list.length > 1} />
+            <Scoreboard g={f.g} day={day} live={liveBy.get(f.g.id)} kind={f.kind} labelled={list.length > 1} teams={teams} />
           </div>
         ))}
       </div>
@@ -287,9 +290,10 @@ function Featured({ list, day, liveBy }: { list: Feature[]; day: string; liveBy:
   );
 }
 
-function Scoreboard({ g, day, live, kind, labelled }: { g: Game; day: string; live?: LiveGame; kind: Kind; labelled: boolean }) {
+function Scoreboard({ g, day, live, kind, labelled, teams }: { g: Game; day: string; live?: LiveGame; kind: Kind; labelled: boolean; teams: Map<string, TeamSummary> }) {
   const st = status(g, live);
   const scheduled = g.status === "scheduled";
+  const reason = scheduled ? watchReason(g, teams) : null;
   // Before tip the plate stays dark ("-- : --") unless the reader opted in to projected scores.
   const showProj = useShowProjections() && scheduled && !!g.pred;
   const score = (k: "home" | "away") => (scheduled ? (showProj ? Math.round(g.pred![k]) : null) : g[k].score);
@@ -326,6 +330,7 @@ function Scoreboard({ g, day, live, kind, labelled }: { g: Game; day: string; li
           </div>
         </div>
       )}
+      {reason && <p className="mt-0.5 truncate text-[12px] text-mute">{reason}</p>}
     </article>
   );
 }
@@ -343,9 +348,10 @@ function Side({ s }: { s: GameSide }) {
     : <div className="flex w-[104px] flex-col items-center text-center">{inner}</div>;
 }
 
-function GameRow({ g, day, live }: { g: Game; day: string; live?: LiveGame }) {
+function GameRow({ g, day, live, teams }: { g: Game; day: string; live?: LiveGame; teams: Map<string, TeamSummary> }) {
   const st = status(g, live);
   const played = g.status === "final" || g.status === "in_progress";
+  const reason = watchReason(g, teams);
   const fav = g.pred ? (g.pred.wp >= 0.5 ? g.home : g.away) : null;
   const favWP = g.pred ? Math.max(g.pred.wp, 1 - g.pred.wp) : null;
   const line = (s: GameSide, win: boolean) => (
@@ -361,7 +367,10 @@ function GameRow({ g, day, live }: { g: Game; day: string; live?: LiveGame }) {
   return (
     <li className="relative flex items-center gap-3 border-b border-line px-4 py-3 transition-colors last:border-0 hover:bg-deck2 active:bg-deck2">
       <Link href={gameHref(day, g.id)} className="absolute inset-0" aria-label={`${g.away.name} ${g.neutral ? "vs" : "at"} ${g.home.name}, open game`} />
-      <div className="min-w-0 flex-1 space-y-1.5">{line(g.away, awayWin)}{line(g.home, !awayWin)}</div>
+      <div className="min-w-0 flex-1 space-y-1.5">
+        {line(g.away, awayWin)}{line(g.home, !awayWin)}
+        {reason && <p className="mt-0.5 truncate text-[12px] text-mute">{reason}</p>}
+      </div>
       {!played ? (
         <>
           <div className="flex shrink-0 flex-col items-end gap-0.5">

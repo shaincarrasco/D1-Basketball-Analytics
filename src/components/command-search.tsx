@@ -1,14 +1,23 @@
 "use client";
-// ⌘K / "/" search across every team, player, conference and page.
-import { useEffect, useMemo, useRef, useState } from "react";
+// ⌘K / "/" search across every team, player, conference and page, plus smart stat and matchup queries.
+import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Search, X } from "lucide-react";
+import { Pin, Search, X } from "lucide-react";
 import { useJson } from "@sports/ui/client-data";
 import { useFavorites } from "@/lib/favorites";
 import type { Conference, PlayerTable, TeamSummary } from "@/lib/types";
+import { parseQuery, type Chip } from "@/lib/smart-search";
 import TeamLogo from "@sports/ui/team-logo";
 
-type Hit = { kind: "Team" | "Player" | "Conference" | "Page" | "Following"; label: string; sub: string; href: string; logo?: string | null };
+type Kind = "Go" | "Team" | "Player" | "Conference" | "Page" | "Following";
+type Hit = { kind: Kind; label: string; sub: string; href: string; logo?: string | null; chips?: Chip[] };
+/** What gets stored for recents and pins. */
+type Saved = { label: string; sub: string; href: string; kind: Kind; logo?: string | null };
+
+const RECENT_KEY = "d1h-recent-search";
+const PIN_KEY = "d1h-pinned";
+const MAX_SAVED = 8;
+
 const PAGES: Hit[] = [
   { kind: "Page", label: "Power rankings", sub: "Every D-I team by DHR", href: "/rankings/" },
   { kind: "Page", label: "Games & predictions", sub: "Scoreboard with win probabilities", href: "/games/" },
@@ -21,11 +30,27 @@ const PAGES: Hit[] = [
   { kind: "Page", label: "Methodology", sub: "How the model works and how it's doing", href: "/methodology/" },
 ];
 const norm = (s: string) => s.toLowerCase().normalize("NFKD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9 ]/g, "");
+const NO_TEAMS: TeamSummary[] = [];
+
+/** localStorage list, read defensively: bad JSON or a blocked store gives an empty list. */
+function readList(key: string): Saved[] {
+  try {
+    const v: unknown = JSON.parse(window.localStorage.getItem(key) ?? "[]");
+    return Array.isArray(v) ? (v.filter(x => x && typeof x.href === "string") as Saved[]).slice(0, MAX_SAVED) : [];
+  } catch { return []; }
+}
+function writeList(key: string, list: Saved[]) {
+  try { window.localStorage.setItem(key, JSON.stringify(list)); } catch { /* storage full or blocked */ }
+}
+
+type Group = { title?: string; items: Hit[] };
 
 export default function CommandSearch({ onClose }: { onClose: () => void }) {
   const router = useRouter();
   const [q, setQ] = useState("");
   const [active, setActive] = useState(0);
+  const [recent, setRecent] = useState<Saved[]>([]);
+  const [pinned, setPinned] = useState<Saved[]>([]);
   const input = useRef<HTMLInputElement>(null);
   const dialog = useRef<HTMLDivElement>(null);
   const teams = useJson<TeamSummary[]>("teams.json");
@@ -33,6 +58,8 @@ export default function CommandSearch({ onClose }: { onClose: () => void }) {
   const confs = useJson<Conference[]>("conferences.json");
   const fav = useFavorites();
   useEffect(() => {
+    setRecent(readList(RECENT_KEY));
+    setPinned(readList(PIN_KEY));
     const opener = document.activeElement as HTMLElement | null;
     input.current?.focus();
     const prev = document.body.style.overflow;
@@ -50,14 +77,23 @@ export default function CommandSearch({ onClose }: { onClose: () => void }) {
     else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
   };
 
-  const hits = useMemo<Hit[]>(() => {
+  const intent = useMemo(() => parseQuery(q, { teams: teams.data ?? NO_TEAMS }), [q, teams.data]);
+
+  const groups = useMemo<Group[]>(() => {
     const n = norm(q.trim());
     if (!n) {
-      // Empty query: followed teams first, then every page.
+      // Empty query: pinned, then followed teams, then recent, then every page.
       const bySlug = new Map((teams.data ?? []).map(t => [t.slug, t]));
       const mine: Hit[] = fav.teams.map(s => bySlug.get(s)).filter((t): t is TeamSummary => !!t).slice(0, 6)
         .map(t => ({ kind: "Following", label: t.name, sub: `${t.rank ? `DHR #${t.rank} · ` : ""}${t.w}–${t.l}${t.next ? ` · next ${t.next.venue === "A" ? "at" : "vs"} ${t.next.opp}` : ""}`, href: `/teams/${t.slug}/`, logo: t.logo }));
-      return [...mine, ...PAGES];
+      const pin: Hit[] = pinned.map(p => ({ ...p }));
+      const rec: Hit[] = recent.map(p => ({ ...p }));
+      return [
+        ...(pin.length ? [{ title: "Pinned", items: pin }] : []),
+        { title: mine.length ? "Following" : undefined, items: mine },
+        ...(rec.length ? [{ title: "Recent", items: rec }] : []),
+        { title: "Pages", items: PAGES },
+      ].filter(g => g.items.length);
     }
     const out: (Hit & { score: number })[] = [];
     const score = (hay: string) => { const h = norm(hay); if (h === n) return 0; if (h.startsWith(n)) return 1; if (h.split(" ").some(w => w.startsWith(n))) return 2; if (h.includes(n)) return 3; return -1; };
@@ -75,18 +111,37 @@ export default function CommandSearch({ onClose }: { onClose: () => void }) {
       }
     }
     for (const p of PAGES) { const a = score(p.label), b = score(p.sub); const s = a >= 0 ? a : b >= 0 ? b + 1 : -1; if (s >= 0) out.push({ ...p, score: s + 1 }); }
-    return out.sort((a, b) => a.score - b.score || a.label.localeCompare(b.label)).slice(0, 12);
-  }, [q, teams.data, players.data, confs.data, fav.teams]);
+    const ranked = out.sort((a, b) => a.score - b.score || a.label.localeCompare(b.label)).slice(0, 12).map(({ score: _s, ...h }) => h);
+    return [{ items: intent ? [{ kind: "Go" as const, ...intent }, ...ranked] : ranked }];
+  }, [q, intent, teams.data, players.data, confs.data, fav.teams, recent, pinned]);
+
+  const hits = useMemo(() => groups.flatMap(g => g.items), [groups]);
 
   useEffect(() => setActive(0), [q]);
-  const go = (h: Hit) => { onClose(); router.push(h.href); };
 
+  const isPinned = (href: string) => pinned.some(p => p.href === href);
+  const toSaved = (h: Hit): Saved => ({ label: h.label, sub: h.sub, href: h.href, kind: h.kind, logo: h.logo ?? null });
+
+  const go = (h: Hit) => {
+    const next = [toSaved(h), ...recent.filter(r => r.href !== h.href)].slice(0, MAX_SAVED);
+    writeList(RECENT_KEY, next);
+    setRecent(next);
+    onClose();
+    router.push(h.href);
+  };
+  const togglePin = (h: Hit) => {
+    const next = isPinned(h.href) ? pinned.filter(p => p.href !== h.href) : [toSaved(h), ...pinned].slice(0, MAX_SAVED);
+    writeList(PIN_KEY, next);
+    setPinned(next);
+  };
+
+  let offset = 0;
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/60 p-3 pt-[10vh] backdrop-blur-sm" onMouseDown={e => e.target === e.currentTarget && onClose()} role="dialog" aria-modal="true" aria-label="Search" onKeyDown={onDialogKey}>
       <div ref={dialog} className="deck sheet-in w-full max-w-xl overflow-hidden !bg-deck shadow-2xl">
         <div className="flex items-center gap-3 border-b border-line px-4">
           <Search size={18} className="text-mute" aria-hidden />
-          <input ref={input} value={q} onChange={e => setQ(e.target.value)} placeholder="Team, player or conference"
+          <input ref={input} value={q} onChange={e => setQ(e.target.value)} placeholder="Team, player, conference or a stat like “3pt SEC guards”"
             className="h-14 w-full bg-transparent text-base outline-none placeholder:text-dim" aria-label="Search" aria-controls="search-results" aria-activedescendant={hits[active] ? `hit-${active}` : undefined}
             onKeyDown={e => {
               if (e.key === "ArrowDown") { e.preventDefault(); setActive(a => Math.min(hits.length - 1, a + 1)); }
@@ -96,19 +151,43 @@ export default function CommandSearch({ onClose }: { onClose: () => void }) {
           <button onClick={onClose} className="text-mute hover:text-ink" aria-label="Close search"><X size={18} /></button>
         </div>
         <ul id="search-results" role="listbox" className="max-h-[60vh] overflow-y-auto p-2">
-          {hits.length === 0 && <li className="px-3 py-6 text-center text-sm text-mute">Nothing matches “{q}”. Try a school name like “Duke” or a player’s last name.</li>}
-          {hits.map((h, i) => (
-            <li key={h.kind + h.href} id={`hit-${i}`} role="option" aria-selected={i === active}>
-              <button onMouseEnter={() => setActive(i)} onClick={() => go(h)} className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left ${i === active ? "bg-deck2" : ""}`}>
-                {h.kind === "Team" || h.kind === "Player" || h.kind === "Following" ? <TeamLogo src={h.logo ?? null} name={h.label} size={26} /> : <span className="grid h-[26px] w-[26px] place-items-center rounded-full border border-line2 text-[10px] text-mute">{h.kind === "Page" ? "↗" : "C"}</span>}
-                <span className="min-w-0 flex-1">
-                  <span className="block truncate font-semibold">{h.label}</span>
-                  <span className="block truncate text-xs text-mute">{h.sub}</span>
-                </span>
-                <span className="text-[11px] text-dim">{h.kind === "Following" ? "Following" : h.kind}</span>
-              </button>
-            </li>
-          ))}
+          {hits.length === 0 && <li className="px-3 py-6 text-center text-sm text-mute">Nothing matches “{q}”. Try a school name like “Duke”, a player’s last name, or “3pt SEC guards”.</li>}
+          {groups.map((g, gi) => {
+            const base = offset;
+            offset += g.items.length;
+            return (
+              <Fragment key={`${gi}-${g.title ?? "results"}`}>
+                {g.title && <li role="presentation" className="text-[11px] font-semibold uppercase text-dim px-3 pt-3">{g.title}</li>}
+                {g.items.map((h, j) => {
+                  const i = base + j;
+                  const pin = isPinned(h.href);
+                  return (
+                    <li key={`${i}-${h.kind}-${h.href}`} id={`hit-${i}`} role="option" aria-selected={i === active}>
+                      <div className={`flex items-center rounded-lg ${i === active ? "bg-deck2" : ""}`}>
+                        <button onMouseEnter={() => setActive(i)} onClick={() => go(h)} className="flex min-w-0 flex-1 items-center gap-3 rounded-lg px-3 py-2.5 text-left">
+                          {h.kind === "Team" || h.kind === "Player" || h.kind === "Following" ? <TeamLogo src={h.logo ?? null} name={h.label} size={26} /> : <span className="grid h-[26px] w-[26px] shrink-0 place-items-center rounded-full border border-line2 text-[10px] text-mute">{h.kind === "Page" || h.kind === "Go" ? "↗" : "C"}</span>}
+                          <span className="min-w-0 flex-1">
+                            <span className="block truncate font-semibold">{h.label}</span>
+                            <span className="block truncate text-xs text-mute">{h.sub}</span>
+                            {h.chips?.length ? (
+                              <span className="mt-1 flex flex-wrap gap-1">
+                                {h.chips.map((c, ci) => <span key={ci} className="chip !py-0.5 text-[11px]">{c.label}</span>)}
+                              </span>
+                            ) : null}
+                          </span>
+                          <span className="text-[11px] text-dim">{h.kind === "Following" ? "Following" : h.kind}</span>
+                        </button>
+                        <button type="button" onClick={e => { e.stopPropagation(); togglePin(h); }} aria-label={pin ? "Unpin" : "Pin"} aria-pressed={pin}
+                          className={`mr-2 grid h-8 w-8 shrink-0 place-items-center rounded-lg ${pin ? "text-ink" : "text-dim hover:text-ink"}`}>
+                          <Pin size={14} fill={pin ? "currentColor" : "none"} aria-hidden />
+                        </button>
+                      </div>
+                    </li>
+                  );
+                })}
+              </Fragment>
+            );
+          })}
         </ul>
       </div>
     </div>

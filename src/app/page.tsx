@@ -3,8 +3,10 @@ import TeamLogo from "@sports/ui/team-logo";
 import { fmt, pctFmt, signed, dayLabel, DHR_RANK_TITLE } from "@sports/ui/format";
 import { getAllGames, getConferences, getMeta, getNews, getPlayers, getTeams } from "@/lib/server-data";
 import ArticleList from "@/components/article-list";
+import FocusTabs, { type FocusTab } from "@/components/focus-tabs";
 import { playerRows } from "@/lib/players";
 import Today from "./_home/today";
+import MyTeams from "./_home/my-teams";
 import InjuryWire from "./_home/injury-wire";
 import Top25 from "./_home/top25";
 import FormWatch from "./_home/form-watch";
@@ -32,33 +34,14 @@ export default function Home() {
   const maxConf = Math.max(...confs.map(c => Math.abs(c.avgEM ?? 0)));
   const notes = homeNotes(teams, playerRows(getPlayers(), getPlayers().rows), meta);
 
-  return (
-    <div className="space-y-10">
-      <DhrIntro />
-      <Today />
-
-      <InjuryWire />
-
-      {notes.length > 0 && (
-        <section aria-labelledby="notes-h">
-          <h2 id="notes-h" className="h-section mb-1">From the box scores</h2>
-          <ul className="grid gap-x-8 md:grid-cols-3">
-            {notes.map(n => (
-              <li key={n.text} className="border-t border-line py-4">
-                <Link href={n.href ?? "#"} className="group flex gap-4">
-                  <span className="dots min-w-[72px] shrink-0 whitespace-nowrap text-[28px]">{n.big}</span>
-                  <span className="text-[15px] leading-[1.45] group-hover:text-bulb-ink">{n.text}</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
-
-      <div className="grid gap-8 xl:grid-cols-[minmax(0,1fr)_380px]">
-        <Top25 teams={teams.filter(t => t.rank && t.rank <= 50)} total={total} />
-
+  const tabs: FocusTab[] = [
+    {
+      id: "top25",
+      label: "Top 25",
+      content: (
         <div className="space-y-8">
+          <Top25 teams={teams.filter(t => t.rank && t.rank <= 50)} total={total} />
+
           {/* Model scorecard */}
           {bt && (
             <section aria-labelledby="model" className="deck p-5">
@@ -75,68 +58,46 @@ export default function Home() {
               <Link href="/methodology/#backtest" className="mt-4 inline-block text-sm font-semibold text-off hover:underline">See calibration and method</Link>
             </section>
           )}
-
-          {/* News */}
-          <section aria-labelledby="home-news" className="deck p-5">
-            <div className="mb-1 flex items-end justify-between">
-              <h2 id="home-news" className="h-section">Latest news</h2>
-              <Link href="/news/" className="text-sm font-semibold text-mute hover:text-ink">More news &amp; polls</Link>
-            </div>
-            <ArticleList items={getNews().league} max={5} />
-          </section>
-
-          {/* Upsets */}
-          <section aria-labelledby="upsets">
-            <h2 id="upsets" className="h-section mb-3">Biggest upsets</h2>
-            {upsets.length ? (
-              <ol className="space-y-2">
-                {upsets.map(g => {
-                  const homeWon = (g.home.score ?? 0) > (g.away.score ?? 0);
-                  const w = homeWon ? g.home : g.away, l = homeWon ? g.away : g.home;
-                  return (
-                    <li key={g.id} className="deck-flat relative flex items-center gap-3 px-3 py-2.5 transition-colors hover:border-line2 focus-within:border-line2">
-                      <span className="w-12 shrink-0 text-right font-display text-xl font-extrabold text-hot tnum">{pctFmt(g.upset)}</span>
-                      <span className="min-w-0 flex-1 text-sm">
-                        <span className="block truncate">
-                          <TeamName side={w} bold /> {w.score}, {l.rank ? <span title={DHR_RANK_TITLE}>#{l.rank} </span> : ""}<TeamName side={l} /> {l.score}
-                        </span>
-                        <Link href={`/games/?d=${g.day}&g=${g.id}`} className={`text-xs text-mute hover:text-ink ${STRETCH}`}>{dayLabel(g.day)} · winner’s pregame chance<span className="sr-only">: {w.name} beat {l.name}, open the game</span></Link>
+        </div>
+      ),
+    },
+    {
+      id: "upsets",
+      label: "Upsets",
+      content: (
+        <section aria-labelledby="upsets">
+          <h2 id="upsets" className="h-section mb-3">Biggest upsets</h2>
+          {upsets.length ? (
+            <ol className="space-y-2">
+              {upsets.map(g => {
+                const homeWon = (g.home.score ?? 0) > (g.away.score ?? 0);
+                const w = homeWon ? g.home : g.away, l = homeWon ? g.away : g.home;
+                return (
+                  <li key={g.id} className="deck-flat relative flex items-center gap-3 px-3 py-2.5 transition-colors hover:border-line2 focus-within:border-line2">
+                    <span className="w-12 shrink-0 text-right font-display text-xl font-extrabold text-hot tnum">{pctFmt(g.upset)}</span>
+                    <span className="min-w-0 flex-1 text-sm">
+                      <span className="block truncate">
+                        <TeamName side={w} bold /> {w.score}, {l.rank ? <span title={DHR_RANK_TITLE}>#{l.rank} </span> : ""}<TeamName side={l} /> {l.score}
                       </span>
-                    </li>
-                  );
-                })}
-              </ol>
-            ) : <p className="text-sm text-mute">No upsets (winner under 35% pregame) yet this season.</p>}
-          </section>
-        </div>
-      </div>
-
-      <FormWatch />
-
-      {/* Leaders */}
-      <section aria-labelledby="leaders">
-        <h2 id="leaders" className="h-section mb-3">Category leaders</h2>
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          {leaders.map(b => (
-            <div key={b.title} className="deck p-4">
-              <h3 className="mb-2 flex items-center gap-2 text-[13.5px] font-semibold" title={b.hint}>{b.tone === "text-off" ? <i className="h-2 w-2 rounded-sm bg-off" aria-hidden /> : b.tone === "text-def" ? <i className="h-2 w-2 rounded-sm bg-def" aria-hidden /> : null}{b.title}<span className="ml-auto text-[11px] font-normal text-dim">{b.unit}</span></h3>
-              <ol>
-                {b.list.map((t, i) => (
-                  <li key={t.id} className="group relative -mx-2 flex items-center gap-2 rounded-md border-b border-line px-2 py-1.5 text-sm last:border-0 hover:bg-deck2 focus-within:bg-deck2">
-                    <span className="w-4 text-xs text-dim">{i + 1}</span>
-                    <TeamLogo src={t.logo} name={t.name} size={18} />
-                    <Link href={`/teams/${t.slug}/`} className={`link flex-1 truncate group-hover:text-off ${STRETCH}`}>{t.name}</Link>
-                    <b className="tnum">{b.key === "sos" ? signed(t[b.key], 1) : fmt(t[b.key])}</b>
+                      <Link href={`/games/?d=${g.day}&g=${g.id}`} className={`text-xs text-mute hover:text-ink ${STRETCH}`}>{dayLabel(g.day)} · winner’s pregame chance<span className="sr-only">: {w.name} beat {l.name}, open the game</span></Link>
+                    </span>
                   </li>
-                ))}
-              </ol>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <div className="grid gap-8 lg:grid-cols-2">
-        {/* Players */}
+                );
+              })}
+            </ol>
+          ) : <p className="text-sm text-mute">No upsets (winner under 35% pregame) yet this season.</p>}
+        </section>
+      ),
+    },
+    {
+      id: "form",
+      label: "Hot & cold",
+      content: <FormWatch />,
+    },
+    {
+      id: "players",
+      label: "Top players",
+      content: (
         <section aria-labelledby="players">
           <div className="mb-3 flex items-end justify-between">
             <h2 id="players" className="h-section">Most valuable so far</h2>
@@ -161,8 +122,38 @@ export default function Home() {
             })}
           </ul>
         </section>
-
-        {/* Conferences */}
+      ),
+    },
+    {
+      id: "leaders",
+      label: "Team leaders",
+      content: (
+        <section aria-labelledby="leaders">
+          <h2 id="leaders" className="h-section mb-3">Category leaders</h2>
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            {leaders.map(b => (
+              <div key={b.title} className="deck p-4">
+                <h3 className="mb-2 flex items-center gap-2 text-[13.5px] font-semibold" title={b.hint}>{b.tone === "text-off" ? <i className="h-2 w-2 rounded-sm bg-off" aria-hidden /> : b.tone === "text-def" ? <i className="h-2 w-2 rounded-sm bg-def" aria-hidden /> : null}{b.title}<span className="ml-auto text-[11px] font-normal text-dim">{b.unit}</span></h3>
+                <ol>
+                  {b.list.map((t, i) => (
+                    <li key={t.id} className="group relative -mx-2 flex items-center gap-2 rounded-md border-b border-line px-2 py-1.5 text-sm last:border-0 hover:bg-deck2 focus-within:bg-deck2">
+                      <span className="w-4 text-xs text-dim">{i + 1}</span>
+                      <TeamLogo src={t.logo} name={t.name} size={18} />
+                      <Link href={`/teams/${t.slug}/`} className={`link flex-1 truncate group-hover:text-off ${STRETCH}`}>{t.name}</Link>
+                      <b className="tnum">{b.key === "sos" ? signed(t[b.key], 1) : fmt(t[b.key])}</b>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            ))}
+          </div>
+        </section>
+      ),
+    },
+    {
+      id: "confs",
+      label: "Conferences",
+      content: (
         <section aria-labelledby="confs">
           <div className="mb-3 flex items-end justify-between">
             <h2 id="confs" className="h-section">Conference strength</h2>
@@ -188,7 +179,51 @@ export default function Home() {
             ))}
           </ol>
         </section>
-      </div>
+      ),
+    },
+    {
+      id: "news",
+      label: "News",
+      content: (
+        <div className="space-y-8">
+          {/* News */}
+          <section aria-labelledby="home-news" className="deck p-5">
+            <div className="mb-1 flex items-end justify-between">
+              <h2 id="home-news" className="h-section">Latest news</h2>
+              <Link href="/news/" className="text-sm font-semibold text-mute hover:text-ink">More news &amp; polls</Link>
+            </div>
+            <ArticleList items={getNews().league} max={5} />
+          </section>
+
+          {notes.length > 0 && (
+            <section aria-labelledby="notes-h">
+              <h2 id="notes-h" className="h-section mb-1">From the box scores</h2>
+              <ul className="grid gap-x-8 md:grid-cols-3">
+                {notes.map(n => (
+                  <li key={n.text} className="border-t border-line py-4">
+                    <Link href={n.href ?? "#"} className="group flex gap-4">
+                      <span className="dots min-w-[72px] shrink-0 whitespace-nowrap text-[28px]">{n.big}</span>
+                      <span className="text-[15px] leading-[1.45] group-hover:text-bulb-ink">{n.text}</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+        </div>
+      ),
+    },
+  ];
+
+  return (
+    <div className="space-y-10">
+      <DhrIntro />
+      <MyTeams />
+      <Today />
+
+      <InjuryWire />
+
+      <FocusTabs sticky={false} param="see" tabs={tabs} />
     </div>
   );
 }

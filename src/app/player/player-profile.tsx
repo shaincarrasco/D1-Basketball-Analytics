@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import FavoriteButton from "@/components/favorite-button";
+import ShareCard from "@/components/share-card";
+import { GitCompare } from "lucide-react";
 import ShotChart from "@/components/shot-chart";
 import TeamLogo from "@sports/ui/team-logo";
 import { Empty, ErrorState, Loading } from "@sports/ui/states";
@@ -107,7 +109,12 @@ function Profile({ p, all, detail, teams }: { p: PlayerRow; all: PlayerRow[]; de
                   <TeamLogo src={t.logo} name={t.name} size={24} /><span className="truncate">{t.name}</span>
                 </Link>
               ) : <span className="font-semibold">Unknown team</span>}
-              <FavoriteButton kind="players" id={p.id} name={p.name} />
+              <div className="flex shrink-0 items-center gap-2">
+                <Link href={`/players/compare/?a=${p.id}`} className="btn !py-1.5 text-sm" aria-label={`Compare ${p.name} with another player`}><GitCompare size={15} aria-hidden /><span className="hidden sm:inline">Compare</span></Link>
+                <ShareCard kind="player" title={p.name} subtitle={t ? t.name : ""} color={t?.color ?? null} href={`/player/?id=${p.id}`}
+                  stats={[{ label: "PTS", value: fmt(p.pts) }, { label: "REB", value: fmt(p.reb) }, { label: "AST", value: fmt(p.ast) }, { label: "TS%", value: fmt(p.ts) }]} />
+                <FavoriteButton kind="players" id={p.id} name={p.name} />
+              </div>
             </div>
             <div className="mt-4 flex items-center gap-4">
               <Jersey bio={bio} color={t?.color ?? null} />

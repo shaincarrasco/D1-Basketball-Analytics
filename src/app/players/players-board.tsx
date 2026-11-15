@@ -2,6 +2,7 @@
 // Player leaderboards: preset column sets, filters, percentile heat, URL state.
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { Search } from "lucide-react";
 import DataTable, { type Column } from "@sports/ui/data-table";
 import TeamLogo from "@sports/ui/team-logo";
@@ -103,6 +104,14 @@ export default function PlayersBoard() {
   const [minG, setMinG] = useState(1);
   const [q, setQ] = useState("");
   const [hydrated, setHydrated] = useState(false);
+  const [open, setOpen] = useState(false);
+  // ?sort=<key> from a search link. Only applied when the current view has that column; empty = the view's default.
+  const [sortKey, setSortKey] = useState<string | null>(null);
+  const searchParams = useSearchParams();
+  useEffect(() => {
+    const s = searchParams.get("sort");
+    if (s) setSortKey(s);
+  }, [searchParams]);
 
   // URL state so a filtered board can be shared: ?view=&conf=&pos=&min=&g=
   useEffect(() => {
@@ -157,7 +166,8 @@ export default function PlayersBoard() {
     return !n ? ranked : ranked.filter(r => r.name.toLowerCase().includes(n) || (r.team && (r.team.name.toLowerCase().includes(n) || r.team.short.toLowerCase() === n)));
   }, [ranked, q]);
 
-  const { stats, sort } = VIEW_STATS[view];
+  const { stats } = VIEW_STATS[view];
+  const sort = sortKey && stats.some(s => s.key === sortKey) ? sortKey : VIEW_STATS[view].sort;
   const pools = useMemo(() => {
     const out = new Map<string, ReturnType<typeof makePool>>();
     for (const s of stats) {
@@ -220,11 +230,14 @@ export default function PlayersBoard() {
   if (!players.data || !teams.data) return <Loading label="Loading players" />;
 
   const reset = () => { setConf("all"); setPos("all"); setMinMin(10); setMinG(1); setQ(""); setMinPoss(DPR_MIN_POSS); setStars("any"); };
+  // Filters only (the name search stays put). Counts only the selects this view shows.
+  const resetFilters = () => { setConf("all"); setPos("all"); setMinMin(10); setMinG(1); setMinPoss(DPR_MIN_POSS); setStars("any"); };
+  const active = [conf !== "all", pos !== "all", !impact && minMin !== 10, minG !== 1, impact && minPoss !== DPR_MIN_POSS, stars !== "any"].filter(Boolean).length;
 
   return (
     <section aria-label="Player leaderboard">
       <div className="no-scrollbar -mx-1 mb-3 flex gap-1.5 overflow-x-auto px-1" role="group" aria-label="Leaderboard view">
-        {VIEWS.map(v => <button key={v} className="chip" aria-pressed={view === v} onClick={() => setView(v)}>{v}</button>)}
+        {VIEWS.map(v => <button key={v} className="chip" aria-pressed={view === v} onClick={() => { setView(v); setSortKey(null); }}>{v}</button>)}
       </div>
       <div className="mb-3 grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:items-end">
         <label className="relative col-span-2 sm:w-64">
@@ -232,6 +245,12 @@ export default function PlayersBoard() {
           <Search size={15} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-dim" aria-hidden />
           <input className="field w-full !pl-9" placeholder="Player or team" value={q} onChange={e => setQ(e.target.value)} />
         </label>
+        <div className="col-span-2 flex items-center gap-3 sm:hidden">
+          <button className="btn !py-1.5 text-sm sm:hidden" aria-expanded={open} aria-controls="player-filters" onClick={() => setOpen(o => !o)}>Filters{active ? ` · ${active}` : ""}</button>
+          {active > 0 && <button type="button" className="text-sm font-semibold text-mute hover:text-ink sm:hidden" onClick={resetFilters}>Reset</button>}
+        </div>
+        {/* Phones: collapsed behind the Filters button; `contents` lets the selects join this grid. Desktop: always shown, same flex row as before. */}
+        <div id="player-filters" className={`${open ? "contents" : "hidden"} sm:contents`}>
         <label className="flex min-w-0 flex-col gap-1">
           <span className="label">Conference</span>
           <select className="field" value={conf} onChange={e => setConf(e.target.value)}>
@@ -273,12 +292,13 @@ export default function PlayersBoard() {
             {STAR_OPTS.map(([k, l]) => <option key={k} value={k}>{k === "any" ? "Any stars" : l}</option>)}
           </select>
         </label>
+        </div>
       </div>
       <div className="mb-2 flex flex-wrap items-baseline gap-x-5 gap-y-1 text-xs text-mute">
         <span aria-live="polite"><b className="font-display text-xl font-extrabold text-ink tnum">{rows.length.toLocaleString("en-US")}</b> players match</span>
         <span><i className="mr-1.5 inline-block h-2 w-3 rounded-sm bg-off align-middle" />Offense</span>
         <span><i className="mr-1.5 inline-block h-2 w-3 rounded-sm bg-def align-middle" />Defense</span>
-        <span>
+        <span className="hidden sm:inline">
           Tint: <span className="text-win">top</span> / <span className="text-loss">bottom</span> of the {pool.length.toLocaleString("en-US")} players with {impact ? (minPoss ? `${minPoss}+ possessions` : "any possessions") : minMin ? `${minMin}+ mpg` : "any minutes"}{minG > 1 ? ` and ${minG}+ games` : ""}. # = rank among the {ranked.length.toLocaleString("en-US")} players who meet the filters; a name search keeps it. Grey values are small samples{impact ? `; DPR is early-season and ± one standard error, so overlapping players are statistically tied. Ranks need ${DPR_MIN_POSS}+ possessions` : ""}.
         </span>
       </div>
@@ -290,7 +310,7 @@ export default function PlayersBoard() {
         </div>
       ) : (
         <div className={ROW_LINK_CLASS} onClick={followRowLink}>
-        <DataTable key={view} rows={rows} rankRows={ranked} columns={columns} rowKey={r => r.id} initialSort={sort} initialDir={VIEW_STATS[view].stats.find(s => s.key === sort)?.invert ? "asc" : "desc"}
+        <DataTable key={`${view}:${sort}`} rows={rows} rankRows={ranked} columns={columns} rowKey={r => r.id} initialSort={sort} initialDir={stats.find(s => s.key === sort)?.invert ? "asc" : "desc"}
           pageSize={100} csvName={`d1hoops-players-${slugOf(view)}.csv`} caption={`Player leaderboard: ${view}`} maxHeight="78vh" />
         </div>
       )}

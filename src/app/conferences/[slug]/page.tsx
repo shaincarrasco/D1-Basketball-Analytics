@@ -3,8 +3,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import PageHeader from "@sports/ui/page-header";
 import { fmt, signed } from "@sports/ui/format";
-import { getConferences, getMeta, getTeams } from "@/lib/server-data";
+import { getConferences, getMeta, getTeamDetail, getTeams } from "@/lib/server-data";
 import StandingsTable, { type StandingRow } from "./standings-table";
+import Race from "./race";
 
 export const dynamicParams = false;
 
@@ -35,6 +36,16 @@ export default async function ConferencePage({ params }: Props) {
   const ordered = [...members].sort((a, b) => wpct(b.cw, b.cl) - wpct(a.cw, a.cl) || b.projCW - a.projCW || (a.rank ?? 999) - (b.rank ?? 999));
   const rows: StandingRow[] = ordered.map((t, i) => ({ ...t, pos: i + 1 }));
   const confPlayed = members.some(t => t.cw + t.cl > 0);
+
+  // League game totals (completed + scheduled conference games) from each team's file; unknown teams are left out.
+  const leagueGames: Record<string, number> = {};
+  for (const t of members) {
+    try {
+      leagueGames[t.id] = getTeamDetail(t.slug).games.filter(g => g.conf).length;
+    } catch {
+      // No team file: the magic number is omitted for this team.
+    }
+  }
 
   const nat = { em: mean(teams.map(t => t.adjEM)), o: mean(teams.map(t => t.adjO)), d: mean(teams.map(t => t.adjD)), t: mean(teams.map(t => t.adjT)) };
   const ranked = members.filter(t => t.rank !== null);
@@ -71,6 +82,8 @@ export default async function ConferencePage({ params }: Props) {
           ))}
         </dl>
       </section>
+
+      <Race rows={rows} leagueGames={leagueGames} />
 
       <section aria-labelledby="standings-h">
         <h2 id="standings-h" className="h-section mb-1">Standings</h2>

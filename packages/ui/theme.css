@@ -197,6 +197,16 @@ html[data-theme="light"] .dots-off { color: color-mix(in oklab, var(--bulb-ink) 
   .dt tbody tr:hover td.sticky-col { background: color-mix(in srgb, var(--def) 5%, var(--bg)); }
   .dt .grp-off { box-shadow: inset 0 -1px 0 var(--off); }
   .dt .grp-def { box-shadow: inset 0 -1px 0 var(--def); }
+  /* Phone: denser, fixed-height rows so more of each list fits on one screen. */
+  @media (max-width: 640px) {
+    .dt { font-size: 12.5px; }
+    .dt th { font-size: 10px; padding: 6px 5px; }
+    .dt td { padding: 3px 5px; height: 32px; line-height: 1.2; }
+    .dt th button { gap: 2px; }
+    .dt .sticky-col { min-width: 0; }
+    .rank-cell { font-size: 13px; }
+    .sub-rank { display: none; }
+  }
   .rank-cell { font-family: var(--font-dots); font-weight: 900; font-size: 16px; color: var(--bulb-ink); }
   .sub-rank { display: inline-block; min-width: 1.6em; margin-left: 5px; font-size: 10.5px; color: var(--dim); text-align: right; vertical-align: 1px; }
 
@@ -283,4 +293,24 @@ a, button, select, summary, [role="button"] { touch-action: manipulation; }
 }
 @media (prefers-reduced-motion: reduce) {
   .btn:active, .chip:active, .seg > *:active, .tab-item:active { transform: none; }
+}
+
+/* ---------- Rigid app frame ----------
+   Real apps don't bounce, don't let you highlight their buttons, and don't jump when you
+   switch tabs. */
+html, body { overscroll-behavior-y: none; }
+header, nav, [role="tablist"], .btn, .chip, .seg, .tab-item, .dt th, .plate, .rank-cell {
+  -webkit-user-select: none; user-select: none; -webkit-touch-callout: none;
+}
+img, svg { -webkit-user-drag: none; }
+/* Switching tabs never collapses the page under your thumb. */
+[data-focus-panel] { min-height: 60vh; }
+/* Linked rows and cards answer a tap instantly. */
+@media (hover: none) {
+  .dt tbody tr[data-href]:active > td { background: rgb(var(--def-rgb) / 0.12) !important; }
+  .press:active, .deck a:active { opacity: 0.85; }
+}
+/* Phones: solid chrome instead of see-through glass, so the frame reads as fixed. */
+@media (max-width: 1023px) {
+  header.sticky, nav[aria-label="Tabs"] { background: var(--bg) !important; -webkit-backdrop-filter: none; backdrop-filter: none; }
 }

@@ -23,7 +23,14 @@ import SeasonOutlook from "./season-outlook";
 import ShotProfile from "./shot-profile";
 import ZoneTable from "./zone-table";
 import Lineups from "./lineups";
-import TeamTabs from "./team-tabs";
+import FocusTabs from "@/components/focus-tabs";
+import ShareCard from "@/components/share-card";
+import TeamChanges from "@/components/team-changes";
+import FinalFourPath from "@/components/final-four-path";
+import { teamChanges } from "@/lib/team-changes";
+import { roundOdds } from "@/lib/bracket-path";
+import { project } from "@/lib/predict";
+import { getBracket } from "../../bracket/load";
 import TeamRosterValue from "@/components/nil/team-roster-value";
 import { ViewTransition } from "react";
 import { Dots } from "@/components/dots";
@@ -40,8 +47,7 @@ const LEGACY_FIELDS: PlayerField[] = ["id", "name", "teamId", "pos", "g", "gs", 
   "usg", "ortg", "drtg", "net", "porpag", "efg", "ts", "fgm", "fga", "tpm", "tpa", "ftm", "fta", "ws", "ws40", "orbPct", "ftr",
   "rimA", "rimM", "midA", "midM", "thrA", "thrM", "astd", "dunks"];
 const etDay = (iso: string) => new Intl.DateTimeFormat("en-CA", { timeZone: "America/New_York" }).format(new Date(iso));
-// Segmented tabs: each jumps to its part of the page (one long scroll, like a team card in Apple Sports).
-const NAV: [string, string][] = [["overview", "Overview"], ["schedule", "Schedule"], ["roster", "Roster"], ["shots", "Shots"], ["profile", "Stats"]];
+// Tabs: one part of the team at a time (Overview, Schedule, Roster, Stats, News & history).
 
 export const dynamicParams = false;
 export function generateStaticParams() {
@@ -89,6 +95,11 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
   // Official conference reports exist for these leagues only (conference games); skip links we don't have.
   const REPORT_CONFS = ["Big Ten", "SEC", "ACC", "Big 12", "Big East", "A-10", "MVC"];
   const reportLinks = REPORT_CONFS.includes(team.conf) ? getInjuries().links.filter(l => l.url && (l.conf === team.conf || l.conf === team.confName)) : [];
+  const lastGame = played.at(-1) ?? null;
+  const changes = teamChanges(team.id, lastGame?.day ?? null);
+  const lastResult = lastGame && lastGame.pts != null && lastGame.oppPts != null ? `${lastGame.result} ${lastGame.pts}–${lastGame.oppPts} ${lastGame.venue === "A" ? "at" : "vs"} ${lastGame.opp}` : undefined;
+  const bracket = getBracket();
+  const path = bracket ? roundOdds(bracket, Object.fromEntries(teams.map(t => [t.slug, t])), meta, slug, project) : null;
   const shortName = (n: string) => { const parts = n.split(" "); return parts.length > 1 ? `${parts[0][0]}. ${parts.slice(1).join(" ")}` : n; };
 
   return (
@@ -126,6 +137,8 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
         <div className="relative mt-5 flex flex-wrap gap-2 [&_.btn]:border-transparent [&_.btn]:bg-black/20 [&_.btn]:text-current">
           <FavoriteButton kind="teams" id={slug} name={team.name} />
           <CalendarButton slug={slug} name={team.name} />
+          <ShareCard kind="team" title={team.name} subtitle={`${team.w}–${team.l} · ${team.confName}`} color={team.color ?? null} href={`/teams/${slug}/`} rankLabel={team.rank ? `DHR No. ${team.rank}` : undefined}
+            stats={[{ label: "Offense", value: fmt(team.adjO) }, { label: "Defense", value: fmt(team.adjD) }, { label: "Tempo", value: fmt(team.adjT) }, { label: "Projected", value: `${fmt(team.projW, 0)}-${fmt(team.projL, 0)}` }]} />
           <BracketChip slug={slug} className="!border-transparent !bg-black/20 !text-current [&_.text-mute]:!text-current [&_.text-mute]:opacity-75" />
           {(team.health?.out ?? 0) > 0 && (
             <a href="#availability" className="btn" title="Jump to the availability report">{(() => { const h = team.health!, known = h.out - (h.missing ?? 0); return known > 0 ? `${known} out${h.missing ? ` · ${h.missing} missing` : ""}` : `${h.missing} missing · reason not reported`; })()}</a>
@@ -133,17 +146,17 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
         </div>
       </section>
 
-      <TeamTabs items={NAV} />
-
-      <div id="overview" className="scroll-mt-32">
+      <FocusTabs tabs={[
+        { id: "overview", label: "Overview", content: (
+<div className="space-y-6">
+<div>
         <LiveTiles team={team} total={total} />
         {team.ratedGames < 5 && (
           <p className="mt-2 text-xs text-mute">Early-season rating from {fmt(team.ratedGames, 0)} rated D-I game{team.ratedGames === 1 ? "" : "s"}. It leans on the {team.confName} average and will move a lot.</p>
         )}
-      </div>
-
-      <div className="mt-6 grid gap-6 xl:grid-cols-[minmax(0,1fr)_360px]">
-        <div className="min-w-0 space-y-6">
+</div>
+<div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_360px]">
+<div className="min-w-0 space-y-6">
           {/* Next game */}
           {team.next && (
             <LiveNextGate nextId={team.next.id} slug={slug} opp={team.next.opp} day={etDay(team.next.date)}>
@@ -184,16 +197,6 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
             </section>
             </LiveNextGate>
           )}
-
-          {/* Season outlook */}
-          <section id="outlook" className="deck scroll-mt-32 p-5">
-            <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
-              <h2 className="h-section">Season outlook</h2>
-              <p className="text-xs text-mute">{(meta.sims?.sims ?? 10000).toLocaleString()} simulations of the rest of the schedule, rating uncertainty included</p>
-            </div>
-            <SeasonOutlook team={team} hist={detail.winHist ?? null} sims={meta.sims?.sims ?? 10000} />
-          </section>
-
           {/* Leaders + note */}
           {leaders.length > 0 && (
             <section aria-labelledby="leaders-h">
@@ -210,9 +213,34 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
             </section>
           )}
           {note && <p className="note text-[15px] leading-[1.45]">{note}</p>}
-
-          <TeamFormCard name={team.name} form={getAllForms().byId.get(team.id)!} points={teamHistory(getForm(), team.id)} mover={getMovers().rows.find(m => m.id === team.id) ?? null} color={`color-mix(in oklab, ${color} 62%, var(--ink))`} total={total} />
-
+          {/* Season outlook */}
+          <section id="outlook" className="deck scroll-mt-32 p-5">
+            <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
+              <h2 className="h-section">Season outlook</h2>
+              <p className="text-xs text-mute">{(meta.sims?.sims ?? 10000).toLocaleString()} simulations of the rest of the schedule, rating uncertainty included</p>
+            </div>
+            <SeasonOutlook team={team} hist={detail.winHist ?? null} sims={meta.sims?.sims ?? 10000} />
+          </section>
+</div>
+<div className="space-y-6">
+          <TeamChanges team={team} changes={changes} lastResult={lastResult} />
+          <FinalFourPath path={path} />
+          <section id="availability" className="deck scroll-mt-32 p-5" aria-labelledby="avail-h">
+            <h2 id="avail-h" className="h-section mb-2">Availability</h2>
+            <TeamAvailability slug={slug} health={team.health} items={detail.availability} log={detail.injuryLog} links={reportLinks} />
+          </section>
+</div>
+</div>
+</div>
+        ) },
+        { id: "schedule", label: "Schedule", badge: detail.games.length || null, content: (
+<div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_360px]">
+<div className="min-w-0 space-y-6">
+          {/* Schedule */}
+          <section id="schedule" className="scroll-mt-32">
+            <h2 className="h-section mb-3">Schedule &amp; results</h2>
+            <GameLog games={detail.games} logos={logos} slug={slug} />
+          </section>
           {/* Game form */}
           <section id="form" className="deck scroll-mt-32 p-5">
             <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
@@ -221,23 +249,43 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
             </div>
             <PerfChart games={played} />
           </section>
-
-          {/* Schedule */}
-          <section id="schedule" className="scroll-mt-32">
-            <h2 className="h-section mb-3">Schedule &amp; results</h2>
-            <GameLog games={detail.games} logos={logos} slug={slug} />
+</div>
+<div className="space-y-6">
+          <TeamFormCard name={team.name} form={getAllForms().byId.get(team.id)!} points={teamHistory(getForm(), team.id)} mover={getMovers().rows.find(m => m.id === team.id) ?? null} color={`color-mix(in oklab, ${color} 62%, var(--ink))`} total={total} />
+          <section className="deck p-5">
+            <h2 className="h-section mb-3">Résumé</h2>
+            <table className="w-full text-sm tnum">
+              <tbody>
+                {team.quads.map(([w, l], i) => (
+                  <tr key={i} className="border-b border-line last:border-0">
+                    <th scope="row" className="py-2 text-left font-normal text-mute" title="Unofficial DHR quadrant using NET-style cutoffs by venue">
+                      <a className="link text-mute hover:text-ink" href={`#schedule-q${i + 1}`}>Quadrant {i + 1}</a>
+                    </th>
+                    <td className="py-2 text-right font-semibold"><a className="link" href={`#schedule-q${i + 1}`} title={`Show quadrant ${i + 1} games`}>{w}–{l}</a></td>
+                  </tr>
+                ))}
+                <tr className="border-b border-line"><th scope="row" className="py-2 text-left font-normal text-mute">Games within 5 pts</th><td className="py-2 text-right font-semibold">{team.close[0]}–{team.close[1]}</td></tr>
+                <tr className="border-b border-line"><th scope="row" className="py-2 text-left font-normal text-mute" title="Against the spread vs the pregame line ESPN showed (DraftKings)">Against the spread</th><td className="py-2 text-right font-semibold">{atsW + atsL + atsP ? atsText : "—"}</td></tr>
+                <tr><th scope="row" className="py-2 text-left font-normal text-mute">Projected conference</th><td className="py-2 text-right font-semibold"><Link className="link" href={`/conferences/${team.confSlug}/#standings-h`}>{fmt(team.projCW, 1)}–{fmt(team.projCL, 1)}</Link></td></tr>
+              </tbody>
+            </table>
+            <p className="mt-2 text-xs text-dim">Quadrants use DHR ranks with NET-style cutoffs. They are not the NCAA&apos;s official quadrants.</p>
           </section>
-
+</div>
+</div>
+        ) },
+        { id: "roster", label: "Roster", content: (
+<div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_360px]">
+<div className="min-w-0 space-y-6">
           {/* Roster */}
           <section id="roster" className="scroll-mt-32">
             <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
               <h2 className="h-section">Roster</h2>
               <p className="text-xs text-mute">DPR = points per 100 possessions vs an average D-I player, ± one standard error</p>
             </div>
-            <Roster slug={slug} rows={detail.roster} fields={fields} onOff={detail.onOff ?? {}} bios={bios} />
+            <Roster slug={slug} rows={detail.roster} fields={fields} onOff={detail.onOff ?? {}} bios={bios} logs={detail.logs} logFields={detail.logFields} />
             <TeamRosterValue teamId={team.id} slug={slug} short={team.short} />
           </section>
-
           {/* Lineups */}
           <section id="lineups" className="scroll-mt-32">
             <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
@@ -246,29 +294,16 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
             </div>
             <Lineups lineups={detail.lineups ?? []} names={names} />
           </section>
-
-          {/* Shot profile */}
-          <section id="shots" className="deck scroll-mt-32 p-5">
-            <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
-              <h2 className="h-section">Shot profile</h2>
-              <p className="text-xs text-mute">Tracked field-goal attempts, for and against</p>
-            </div>
-            <ShotProfile off={shots.off} def={shots.def} league={meta.shotZones} />
-            <ZoneTable off={shots.off} def={shots.def} league={meta.shotZones} />
-          </section>
-        </div>
-
-        <aside id="profile" className="scroll-mt-32 space-y-6">
-          <section id="availability" className="deck scroll-mt-32 p-5" aria-labelledby="avail-h">
-            <h2 id="avail-h" className="h-section mb-2">Availability</h2>
-            <TeamAvailability slug={slug} health={team.health} items={detail.availability} log={detail.injuryLog} links={reportLinks} />
-          </section>
-          <TeamTransfers slug={slug} />
+</div>
+<div className="space-y-6">
           <IndispensableCard rows={getIndispensable().filter(p => p.teamId === team.id)} />
-          <section className="deck p-5" aria-labelledby="news-h">
-            <h2 id="news-h" className="h-section mb-1">Latest news</h2>
-            <ArticleList items={detail.news} max={8} empty="No recent coverage found for this team." />
-          </section>
+          <TeamTransfers slug={slug} />
+</div>
+</div>
+        ) },
+        { id: "stats", label: "Stats", content: (
+<div className="space-y-6">
+<div className="grid gap-6 lg:grid-cols-2">
           <section className="deck p-5">
             <h2 className="h-section mb-1 flex items-center gap-2"><i className="h-2.5 w-2.5 rounded-sm bg-off" aria-hidden />Offense</h2>
             <StatBar label="Points per 100 (raw)" value={o?.eff ?? null} rank={or.eff} total={total} />
@@ -295,26 +330,28 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
             <StatBar tone="def" label="Block rate" value={o?.blkRate ?? null} rank={or.blkRate} total={total} unit="%" />
             <StatBar tone="def" label="Steal rate" value={o?.stlRate ?? null} rank={or.stlRate} total={total} unit="%" />
           </section>
-          <section className="deck p-5">
-            <h2 className="h-section mb-3">Résumé</h2>
-            <table className="w-full text-sm tnum">
-              <tbody>
-                {team.quads.map(([w, l], i) => (
-                  <tr key={i} className="border-b border-line last:border-0">
-                    <th scope="row" className="py-2 text-left font-normal text-mute" title="Unofficial DHR quadrant using NET-style cutoffs by venue">
-                      <a className="link text-mute hover:text-ink" href={`#schedule-q${i + 1}`}>Quadrant {i + 1}</a>
-                    </th>
-                    <td className="py-2 text-right font-semibold"><a className="link" href={`#schedule-q${i + 1}`} title={`Show quadrant ${i + 1} games`}>{w}–{l}</a></td>
-                  </tr>
-                ))}
-                <tr className="border-b border-line"><th scope="row" className="py-2 text-left font-normal text-mute">Games within 5 pts</th><td className="py-2 text-right font-semibold">{team.close[0]}–{team.close[1]}</td></tr>
-                <tr className="border-b border-line"><th scope="row" className="py-2 text-left font-normal text-mute" title="Against the spread vs the pregame line ESPN showed (DraftKings)">Against the spread</th><td className="py-2 text-right font-semibold">{atsW + atsL + atsP ? atsText : "—"}</td></tr>
-                <tr><th scope="row" className="py-2 text-left font-normal text-mute">Projected conference</th><td className="py-2 text-right font-semibold"><Link className="link" href={`/conferences/${team.confSlug}/#standings-h`}>{fmt(team.projCW, 1)}–{fmt(team.projCL, 1)}</Link></td></tr>
-              </tbody>
-            </table>
-            <p className="mt-2 text-xs text-dim">Quadrants use DHR ranks with NET-style cutoffs. They are not the NCAA&apos;s official quadrants.</p>
+</div>
+          {/* Shot profile */}
+          <section id="shots" className="deck scroll-mt-32 p-5">
+            <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
+              <h2 className="h-section">Shot profile</h2>
+              <p className="text-xs text-mute">Tracked field-goal attempts, for and against</p>
+            </div>
+            <ShotProfile off={shots.off} def={shots.def} league={meta.shotZones} />
+            <ZoneTable off={shots.off} def={shots.def} league={meta.shotZones} />
+          </section>
+</div>
+        ) },
+        { id: "more", label: "News & history", content: (
+<div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_360px]">
+<div className="min-w-0 space-y-6">
+          <section className="deck p-5" aria-labelledby="news-h">
+            <h2 id="news-h" className="h-section mb-1">Latest news</h2>
+            <ArticleList items={detail.news} max={8} empty="No recent coverage found for this team." />
           </section>
           <ProgramHistory teamId={team.id} color={color} />
+</div>
+<div className="space-y-6">
           {similar.length > 0 && (
             <section className="deck p-5">
               <h2 className="h-section mb-3" title="Closest teams by adjusted offense, defense and tempo">Similar teams</h2>
@@ -331,8 +368,10 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
               </ul>
             </section>
           )}
-        </aside>
-      </div>
+</div>
+</div>
+        ) },
+      ]} />
     </article>
   );
 }
