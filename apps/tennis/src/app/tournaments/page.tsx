@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import PageHeader from "@sports/ui/page-header";
-import List from "./list";
+import CalendarView from "../calendar/calendar-view";
 
-export const metadata: Metadata = { title: "Tournaments" };
+// Old link: the tournaments list now lives in the calendar.
+export const metadata: Metadata = { title: "Calendar" };
 export default function Page() {
-  return <><PageHeader title="Tournaments">Every main-tour event this season, with its champion.</PageHeader><List /></>;
+  return <><PageHeader title="Calendar">Every tournament this season and the last three, with champions. Open one for its full results.</PageHeader><CalendarView /></>;
 }

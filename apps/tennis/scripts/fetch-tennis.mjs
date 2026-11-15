@@ -13,6 +13,7 @@ import { getJson } from "./lib/http.mjs";
 import { buildRecord, surfaceOf } from "./lib/model.mjs";
 import { buildOutputs, loadRecords, seasonTotals } from "./lib/aggregate.mjs";
 import { writeSeasonFiles } from "./lib/season-files.mjs";
+import { writeCalendar } from "./lib/calendar.mjs";
 import { writeRace } from "./lib/race.mjs";
 
 const APP = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -164,6 +165,8 @@ async function main() {
   const sf = await writeSeasonFiles(OUT, perTour);
   log(`wrote ${sf.players} player season files and ${sf.events} events`);
   const race = await writeRace(OUT, perTour, updated);
+  const cal = await writeCalendar(OUT, updated);
+  log(`calendar: ${Object.entries(cal.tours).map(([t, ss]) => `${t} ${ss.map(x => `${x.year}:${x.events.length}`).join(" ")}`).join("; ")}`);
   log(`race: men #1 ${race.men?.rows[0]?.name} ${race.men?.rows[0]?.points}, women #1 ${race.women?.rows[0]?.name} ${race.women?.rows[0]?.points}`);
 
   log("");
