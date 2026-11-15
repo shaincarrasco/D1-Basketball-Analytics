@@ -10,13 +10,13 @@ export function parseScoreboard(raw: unknown): { week: number | null; games: Gam
   const teams = new Map<string, Pick<Team, "id" | "name" | "short" | "abbr" | "color" | "logo">>();
   const games: Game[] = (r?.events ?? []).map(e => {
     const c = e.competitions[0];
+    const st = c.status?.type?.state;
     const side = (h: "home" | "away") => {
       const x = c.competitors.find(k => k.homeAway === h)!;
       teams.set(x.team.id, { id: x.team.id, name: x.team.displayName, short: x.team.shortDisplayName ?? x.team.displayName, abbr: x.team.abbreviation ?? "", color: x.team.color ?? null, logo: x.team.logo ?? null });
       const rank = x.curatedRank?.current;
-      return { id: x.team.id, score: x.score != null && x.score !== "" ? Number(x.score) : null, rank: rank && rank <= 25 ? rank : null, winner: !!x.winner };
+      return { id: x.team.id, score: st !== "pre" && x.score != null && x.score !== "" ? Number(x.score) : null, rank: rank && rank <= 25 ? rank : null, winner: !!x.winner };
     };
-    const st = c.status?.type?.state;
     return {
       id: e.id, date: e.date, status: st === "in" ? "in" : st === "post" ? "post" : "pre", detail: c.status?.type?.shortDetail ?? "",
       neutral: !!c.neutralSite, venue: c.venue?.fullName ?? null, tv: c.broadcasts?.[0]?.names?.[0] ?? null, home: side("home"), away: side("away"),

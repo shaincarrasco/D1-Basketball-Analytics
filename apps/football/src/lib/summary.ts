@@ -9,7 +9,7 @@ type RawPlay = { type?: { text?: string }; text?: string; period?: { number?: nu
 type RawDrive = { team?: { id?: string }; displayResult?: string; result?: string; yards?: number; plays?: RawPlay[] };
 type Raw = { header?: { competitions?: { competitors?: { id: string; homeAway: string }[] }[] }; drives?: { previous?: RawDrive[]; current?: RawDrive } };
 
-const SKIP = /timeout|end of|end period|end of half|end of game|coin toss/i;
+const SKIP = /timeout|end of|end period|coin toss|kickoff/i;   // kickoffs belong to the other team
 const clamp = (x: number) => Math.max(0, Math.min(100, x));
 
 export function parseSummary(id: string, raw: unknown): GameFile | null {

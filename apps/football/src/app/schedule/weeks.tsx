@@ -33,7 +33,7 @@ export default function Weeks() {
         </select>
       </div>
       <div className="mb-5 flex gap-1.5 overflow-x-auto pb-1" role="group" aria-label="Weeks">
-        {weeks.map(w => <button key={w.week} aria-pressed={w.week === wk.week} onClick={() => setPick(w.week)} className={`chip shrink-0 ${w.week === wk.week ? "!border-bulb !text-ink" : ""}`}>{w.label.replace("Week ", "Wk ")}</button>)}
+        {weeks.map(w => <button key={w.week} aria-pressed={w.week === wk.week} onClick={() => setPick(w.week)} className="chip shrink-0">{w.label.replace("Week ", "Wk ")}</button>)}
       </div>
       {games.length === 0 ? <p className="deck p-5 text-mute">No games for that conference this week.</p> :
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">{games.map(x => <GameCard key={x.id} g={x} team={id => teams.get(id)} />)}</div>}

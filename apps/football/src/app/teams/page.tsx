@@ -4,5 +4,5 @@ import List from "./list";
 
 export const metadata: Metadata = { title: "Teams" };
 export default function Page() {
-  return <><PageHeader title="Teams">All 136 FBS programs by conference standings.</PageHeader><List /></>;
+  return <><PageHeader title="Teams">Every FBS program, by conference standings.</PageHeader><List /></>;
 }

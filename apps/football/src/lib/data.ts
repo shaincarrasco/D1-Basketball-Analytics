@@ -1,6 +1,7 @@
 // Gridiron's data files (see DATA.md) and small helpers.
 export type Team = { id: string; name: string; short: string; abbr: string; color: string | null; altColor: string | null; logo: string | null; confSlug: string; confName: string; wins: number; losses: number; confWins: number; confLosses: number; apRank: number | null; cfpRank: number | null };
-export type Side = { id: string; score: number | null; rank: number | null; winner: boolean };
+/** name/logo are only sent for opponents outside FBS (not in teams.json). */
+export type Side = { id: string; score: number | null; rank: number | null; winner: boolean; name?: string; logo?: string | null };
 export type Game = { id: string; date: string; status: "pre" | "in" | "post"; detail: string; neutral: boolean; venue: string | null; tv: string | null; home: Side; away: Side };
 export type Games = { season: number; currentWeek: number; weeks: { week: number; label: string; start: string; games: Game[] }[] };
 export type Poll = { key: "cfp" | "ap" | "coaches"; name: string; date: string; ranks: { rank: number; teamId: string; record: string; points: number | null; firstPlace: number | null; previous: number | null }[] };

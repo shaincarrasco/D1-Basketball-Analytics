@@ -6,14 +6,15 @@ import { kickoff } from "@/lib/data";
 
 type T = { name: string; short?: string; logo: string | null; abbr?: string } | undefined;
 
-function Row({ s, t, done, live }: { s: Side; t: T; done: boolean; live: boolean }) {
+function Row({ s, t: known, done, live }: { s: Side; t: T; done: boolean; live: boolean }) {
+  const t: T = known ?? (s.name ? { name: s.name, short: s.name, logo: s.logo ?? null } : undefined);
   const lost = done && !s.winner;
   return (
     <div className={`flex items-center gap-2.5 ${lost ? "text-mute" : "text-ink"}`}>
       <TeamLogo src={t?.logo ?? null} name={t?.name ?? "?"} size={24} />
       <span className="min-w-0 flex-1 truncate">
         {s.rank && <span className="mr-1 text-[12px] font-bold text-dim tnum">{s.rank}</span>}
-        <Link href={`/team/?id=${s.id}`} className="font-semibold hover:underline">{t?.short ?? t?.name ?? "TBD"}</Link>
+        {known ? <Link href={`/team/?id=${s.id}`} className="font-semibold hover:underline">{t?.short ?? t?.name}</Link> : <span className="font-semibold">{t?.short ?? "TBD"}</span>}
       </span>
       <span className={`font-display text-[22px] font-extrabold leading-none tnum ${live ? "text-bulb" : ""}`}>{s.score ?? ""}</span>
     </div>

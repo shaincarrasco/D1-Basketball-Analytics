@@ -12,7 +12,7 @@ import DriveChart from "@/components/drive-chart";
 import { hex, kickoff, teamMap, type Game, type GameFile, type Games, type Team } from "@/lib/data";
 import { parseSummary, summaryUrl } from "@/lib/summary";
 
-type Hdr = { header?: { competitions?: { date?: string; status?: { type?: { state?: string; shortDetail?: string } }; competitors?: { id: string; homeAway: string; score?: string; winner?: boolean; curatedRank?: { current?: number }; team: { displayName: string; shortDisplayName?: string; abbreviation?: string; color?: string; logo?: string; logos?: { href: string }[] } }[] }[] } };
+type Hdr = { header?: { competitions?: { date?: string; status?: { type?: { state?: string; shortDetail?: string } }; competitors?: { id: string; homeAway: string; score?: string; winner?: boolean; curatedRank?: { current?: number }; team: { displayName: string; shortDisplayName?: string; location?: string; abbreviation?: string; color?: string; logo?: string; logos?: { href: string }[] } }[] }[] } };
 
 export default function View() {
   const id = useSearchParams().get("id");
@@ -31,7 +31,7 @@ export default function View() {
     const tid = k?.id ?? c?.id ?? gf?.[h] ?? "";
     const t = tm.get(tid);
     return {
-      id: tid, name: t?.name ?? c?.team.displayName ?? "TBD", short: t?.short ?? c?.team.shortDisplayName ?? "TBD", abbr: t?.abbr ?? c?.team.abbreviation ?? "",
+      id: tid, name: t?.name ?? c?.team.displayName ?? "TBD", short: t?.short ?? c?.team.shortDisplayName ?? c?.team.location ?? c?.team.displayName ?? "TBD", abbr: t?.abbr ?? c?.team.abbreviation ?? "",
       color: hex(t?.color ?? c?.team.color) ?? (h === "home" ? "#3a6df0" : "#c2410c"), logo: t?.logo ?? c?.team.logos?.[0]?.href ?? c?.team.logo ?? null,
       score: c?.score != null ? Number(c.score) : k?.score ?? null, rank: k?.rank ?? c?.curatedRank?.current ?? null, winner: c?.winner ?? k?.winner ?? false,
     };

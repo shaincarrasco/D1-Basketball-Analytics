@@ -26,6 +26,7 @@ const LINES: Record<"pass" | "rush" | "rec" | "def", Stat[]> = {
   def: [["Tackles", r => n(r.dTkl)], ["Solo", r => n(r.dSolo)], ["TFL", r => n(r.dTfl)], ["Sacks", r => n(r.dSacks)], ["QB hurries", r => n(r.dHur)], ["Passes defended", r => n(r.dPd)], ["INT", r => n(r.dInt)], ["Def TD", r => n(r.dTd)]],
 };
 const ROLE: Record<FootballRow["pos"], ("pass" | "rush" | "rec" | "def")[]> = { QB: ["pass", "rush"], RB: ["rush", "rec"], WR: ["rec", "rush"], TE: ["rec"], DL: ["def"], LB: ["def"], DB: ["def"] };
+const SHORT = { pass: "Pass", rush: "Rush", rec: "Rec", def: "Def" };
 const LINE_NAME = { pass: "Passing", rush: "Rushing", rec: "Receiving", def: "Defense" };
 const POS_NAME = { QB: "Quarterback", RB: "Running back", WR: "Wide receiver", TE: "Tight end", DL: "Defensive line", LB: "Linebacker", DB: "Defensive back" };
 
@@ -59,9 +60,10 @@ export default function Profile() {
   const weeks = [...new Set((file.data?.touches ?? []).map(t => t.week))].sort((a, b) => a - b);
   const color = hex(p.team.color) ?? "#555";
   const maps: { key: string; title: string; note: string; el: React.ReactNode }[] = [];
-  if (throws.length) maps.push({ key: "throws", title: "Every throw", note: "From the pocket to where the ball was caught or thrown, then yards after the catch.", el: <TouchMap touches={throws} mode="air" label={`${p.name} pass attempts`} /> });
+  if (throws.length >= (p.pos === "QB" ? 1 : 8)) maps.push({ key: "throws", title: "Every throw", note: "From the pocket to where the ball was caught or thrown, then yards after the catch.", el: <TouchMap touches={throws} mode="air" label={`${p.name} pass attempts`} /> });
   if (targets.length) maps.push({ key: "targets", title: "Every target", note: "Where the ball arrived and how far he took it after the catch.", el: <TouchMap touches={targets} mode="air" label={`${p.name} targets`} /> });
-  if (carries.length) maps.push({ key: "carries", title: "Every carry", note: "Lane and distance of each run from the line of scrimmage.", el: <TouchMap touches={carries} mode="run" label={`${p.name} carries`} /> });
+  // A receiver's one jet sweep isn't a map; show carries when running is part of the job.
+  if (carries.length >= (p.pos === "RB" ? 1 : 8)) maps.push({ key: "carries", title: "Every carry", note: "Lane and distance of each run from the line of scrimmage.", el: <TouchMap touches={carries} mode="run" label={`${p.name} carries`} /> });
   return (
     <>
       <header className="relative mb-6 overflow-hidden rounded-2xl border border-line" style={{ background: `linear-gradient(110deg, ${color}66, ${color}11 55%, transparent)` }}>
@@ -112,7 +114,7 @@ export default function Profile() {
             <table className="w-full text-[13.5px] tnum">
               <thead className="bg-deck text-[12px] text-mute"><tr>
                 <th className="px-3 py-2 text-left font-semibold">Wk</th><th className="px-3 py-2 text-left font-semibold">Opponent</th><th className="px-3 py-2 text-left font-semibold">Result</th>
-                {roles.flatMap(k => LINES[k].slice(0, 4)).map(([l], i) => <th key={i} className="px-3 py-2 text-right font-semibold">{l}</th>)}
+                {roles.flatMap(k => LINES[k].slice(0, 4).map(([l]) => (l === "Yards" || l === "TD" ? `${SHORT[k]} ${l.toLowerCase() === "td" ? "TD" : "yds"}` : l))).map((l, i) => <th key={i} className="px-3 py-2 text-right font-semibold">{l}</th>)}
               </tr></thead>
               <tbody>
                 {file.data.games.map(g => {

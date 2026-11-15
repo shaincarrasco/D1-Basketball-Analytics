@@ -19,7 +19,8 @@
 ```
 { "season": 2026, "currentWeek": 12, "weeks": [{ "week": 1, "label": "Week 1", "start": "YYYY-MM-DD", "games": [Game] }] }
 Game = { id, date (ISO), status: "pre"|"in"|"post", detail, neutral, venue, tv,
-         home: { id, score, rank, winner }, away: { id, score, rank, winner } }
+         home: Side, away: Side }
+Side = { id, score, rank, winner, name?, logo? }   // name + logo only for opponents outside FBS (not in teams.json)
 ```
 
 ## rankings.json

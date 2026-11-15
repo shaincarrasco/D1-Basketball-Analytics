@@ -54,8 +54,9 @@ export default function Profile() {
                 <li key={x.id} className="flex items-center gap-3 py-2 text-[14px]">
                   <span className="w-12 text-[12px] text-dim">{w.label.replace("Week ", "Wk ")}</span>
                   <span className="w-5 text-dim">{x.neutral ? "vs" : home ? "vs" : "at"}</span>
-                  <TeamLogo src={opp?.logo ?? null} name={opp?.name ?? "?"} size={22} />
-                  <Link href={`/team/?id=${them.id}`} className="min-w-0 flex-1 truncate font-semibold hover:underline">{them.rank ? <span className="mr-1 text-[12px] text-dim">{them.rank}</span> : null}{opp?.short ?? "TBD"}</Link>
+                  <TeamLogo src={opp?.logo ?? them.logo ?? null} name={opp?.name ?? them.name ?? "?"} size={22} />
+                  {opp ? <Link href={`/team/?id=${them.id}`} className="min-w-0 flex-1 truncate font-semibold hover:underline">{them.rank ? <span className="mr-1 text-[12px] text-dim">{them.rank}</span> : null}{opp.short}</Link>
+                    : <span className="min-w-0 flex-1 truncate font-semibold">{them.name ?? "FCS opponent"} <span className="text-[11.5px] font-normal text-dim">FCS</span></span>}
                   {x.status === "post" ? (
                     <Link href={`/game/?id=${x.id}`} className="font-semibold tnum hover:underline"><span className={us.winner ? "text-win" : "text-loss"}>{us.winner ? "W" : "L"}</span> {us.score}–{them.score}</Link>
                   ) : <span className="text-[12.5px] text-mute">{x.status === "in" ? x.detail : kickoff(x.date)}</span>}

@@ -32,7 +32,8 @@ function build(touches: Touch[], mode: "air" | "run"): Mark[] {
   });
 }
 
-const color = (m: Mark) => (m.t.int ? "rgb(var(--bad-rgb))" : m.t.td ? "rgb(var(--bulb-rgb))" : m.done ? "rgb(var(--ink-rgb))" : "rgb(var(--mute-rgb) / .7)");
+const NEG = "rgb(12 14 18)";                                  // interceptions and lost yardage: dark on turf, unlike TD orange
+const color = (m: Mark) => (m.t.int ? NEG : m.t.td ? "rgb(var(--bulb-rgb))" : m.done ? "rgb(var(--ink-rgb))" : "rgb(var(--mute-rgb) / .7)");
 
 export default function TouchMap({ touches, mode, label }: { touches: Touch[]; mode: "air" | "run"; label: string }) {
   const [run, setRun] = useState(0);                         // bump to replay
@@ -57,8 +58,8 @@ export default function TouchMap({ touches, mode, label }: { touches: Touch[]; m
             const d = { animationDelay: `${i * step}ms` };
             if (mode === "run") return (
               <g key={i} className="tm-item" style={d}>
-                <path d={`M${m.x0} ${m.y0} L${m.x1} ${m.y1}`} pathLength={1} className="tm-draw" stroke={m.t.td ? "rgb(var(--bulb-rgb))" : m.t.yds >= 10 ? "white" : m.t.yds <= 0 ? "rgb(var(--bad-rgb))" : "rgb(255 255 255 / .55)"} strokeWidth={m.t.yds >= 10 ? 3 : 2} fill="none" strokeLinecap="round" style={d} />
-                <circle cx={m.x1} cy={m.y1} r={3.5} fill={m.t.td ? "rgb(var(--bulb-rgb))" : "white"} className="tm-pop" style={d}><title>{m.t.text}</title></circle>
+                <path d={`M${m.x0} ${m.y0} L${m.x1} ${m.y1}`} pathLength={1} className="tm-draw" stroke={m.t.td ? "rgb(var(--bulb-rgb))" : m.t.yds >= 10 ? "white" : m.t.yds <= 0 ? NEG : "rgb(255 255 255 / .55)"} strokeWidth={m.t.yds >= 10 ? 3 : 2} fill="none" strokeLinecap="round" style={d} />
+                <circle cx={m.x1} cy={m.y1} r={3.5} fill={m.t.td ? "rgb(var(--bulb-rgb))" : m.t.yds <= 0 ? NEG : "white"} className="tm-pop" style={d}><title>{m.t.text}</title></circle>
               </g>
             );
             const arc = `M${m.x0} ${m.y0} Q${(m.x0 + m.x1) / 2} ${Math.min(m.y0, m.y1) - 40 - m.air * 2} ${m.x1} ${m.y1}`;
@@ -66,7 +67,7 @@ export default function TouchMap({ touches, mode, label }: { touches: Touch[]; m
               <g key={i} className="tm-item" style={d}>
                 <path d={arc} pathLength={1} className="tm-draw" stroke={color(m)} strokeOpacity={m.done ? 0.55 : 0.35} strokeWidth={1.5} fill="none" strokeDasharray={m.done ? undefined : "0.02 0.02"} style={d} />
                 {m.done && m.y2 !== m.y1 && <path d={`M${m.x1} ${m.y1} L${m.x2} ${m.y2}`} pathLength={1} className="tm-draw tm-late" stroke={color(m)} strokeWidth={2.5} fill="none" strokeLinecap="round" style={d} />}
-                <circle cx={m.x1} cy={m.y1} r={m.t.td ? 6 : 4.5} fill={m.done ? color(m) : "none"} stroke={color(m)} strokeWidth={m.done ? 0 : 2} strokeDasharray={m.guess ? "2 2" : undefined} className="tm-pop" style={d}><title>{m.t.text}</title></circle>
+                <circle cx={m.x1} cy={m.y1} r={m.t.td || m.t.int ? 6 : 4.5} fill={m.done || m.t.int ? color(m) : "none"} stroke={m.t.int ? "white" : color(m)} strokeWidth={m.done && !m.t.int ? 0 : 2} strokeDasharray={m.guess ? "2 2" : undefined} className="tm-pop" style={d}><title>{m.t.text}</title></circle>
               </g>
             );
           })}
@@ -76,10 +77,10 @@ export default function TouchMap({ touches, mode, label }: { touches: Touch[]; m
       <figcaption className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-[12.5px] text-mute">
         {mode === "air" ? <>
           <span><b className="text-ink">●</b> caught (line = yards after catch)</span><span>○ incomplete</span>
-          <span><b className="text-bulb">●</b> touchdown</span>{touches.some(t => t.kind === "throw") && <span><b className="text-loss">●</b> intercepted</span>}
+          <span><b className="text-bulb">●</b> touchdown</span>{touches.some(t => t.kind === "throw") && <span><b className="rounded-full bg-black px-[3px] text-white">●</b> intercepted</span>}
           <span>dashed ring = depth estimated (spot not recorded)</span>
         </> : <>
-          <span><b className="text-ink">│</b> carry (length = yards)</span><span><b className="text-bulb">│</b> touchdown</span><span><b className="text-loss">│</b> no gain or loss</span>
+          <span><b className="text-ink">│</b> carry (length = yards)</span><span><b className="text-bulb">│</b> touchdown</span><span><b className="text-black [text-shadow:0_0_2px_white]">│</b> no gain or loss</span>
         </>}
       </figcaption>
     </figure>

@@ -44,7 +44,7 @@ export default function Board() {
                 <span className="text-[12.5px] text-mute">{tm?.confName ?? ""}</span>
               </span>
               <span className="font-semibold tnum">{x.record}</span>
-              {x.points !== null && <span className="hidden w-24 text-right text-[12.5px] text-mute tnum sm:block">{x.points} pts{x.firstPlace ? ` (${x.firstPlace})` : ""}</span>}
+              {!!x.points && <span className="hidden w-24 text-right text-[12.5px] text-mute tnum sm:block">{x.points} pts{x.firstPlace ? ` (${x.firstPlace})` : ""}</span>}
             </li>
           );
         })}
