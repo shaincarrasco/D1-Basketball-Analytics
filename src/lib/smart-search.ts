@@ -57,7 +57,25 @@ const TABS = new Map<string, { tab: string; label: string }>([
   ["schedule", { tab: "schedule", label: "Schedule" }],
   ["stats", { tab: "stats", label: "Stats" }],
   ["news", { tab: "more", label: "News" }],
+  ["recruits", { tab: "roster", label: "Incoming class" }],
+  ["commits", { tab: "roster", label: "Incoming class" }],
+  ["recruiting", { tab: "roster", label: "Incoming class" }],
 ]);
+
+const PROSPECT_WORDS = new Set(["prospects", "prospect", "recruits", "recruit", "recruiting", "commits", "commitments", "class", "highschool", "hs"]);
+/** "prospects", "top recruits", "2027 recruits", "uncommitted": the prospects page. */
+function prospects(t: string[]): Intent | null {
+  const rest = t.filter(w => !FILLER_PROSPECT.has(w));
+  if (!rest.length || !rest.every(w => PROSPECT_WORDS.has(w) || /^20\d\d$/.test(w) || w === "uncommitted")) return null;
+  if (!rest.some(w => PROSPECT_WORDS.has(w) || w === "uncommitted")) return null;
+  const year = rest.find(w => /^20\d\d$/.test(w));
+  return {
+    label: `${year ? `${year} ` : ""}High-school prospects`, sub: "Prospects · rankings and commitments",
+    href: `/players/prospects/${year ? `?class=${year}` : ""}`,
+    chips: [{ kind: "action", label: "Prospects" }, ...(year ? [{ kind: "stat" as const, label: year }] : [])],
+  };
+}
+const FILLER_PROSPECT = new Set(["best", "top", "the", "of", "in", "high", "school", "show", "me", "all"]);
 
 /** Same slug rule as slugOf in players-board.tsx. */
 const viewSlug = (v: string) => v.toLowerCase().replace(/&/g, "").replace(/\s+/g, "-").replace(/-+/g, "-");
@@ -214,5 +232,5 @@ export function parseQuery(q: string, ctx: { teams: SmartTeam[] }): Intent | nul
   const t = tokenize(q);
   if (!t.length) return null;
   const ix = indexFor(ctx.teams);
-  return matchup(t, ix) ?? teamTab(t, ix) ?? statLeaders(t, ix);
+  return matchup(t, ix) ?? teamTab(t, ix) ?? prospects(t) ?? statLeaders(t, ix);
 }

@@ -14,6 +14,7 @@ import { dayLabel, DHR_RANK_TITLE, fmt, pctFmt, signed, timeLabel } from "@sport
 import { playerRows } from "@/lib/players";
 import type { Meta, PlayerBio, PlayerTable, TeamDetail, TeamSummary } from "@/lib/types";
 import GameLog from "./game-log";
+import Career from "./career";
 import ArticleList from "@/components/article-list";
 import { AvailabilityRow } from "@/components/availability-list";
 import InjuryHistory from "@/components/injury-history";
@@ -27,6 +28,10 @@ import Scouting from "./scouting";
 import SkillProjections from "@/components/skills/skill-projections";
 import NilPlayerCard from "@/components/nil/nil-player-card";
 import { onTeam, teamHex } from "@sports/ui/color";
+
+// Same rule as past seasons in the Career table: a shooting % needs 10 attempts (per-game attempts × games).
+const gate = (pct: number | null | undefined, perGameAtt: number | null | undefined, g: number | null | undefined) =>
+  pct != null && perGameAtt != null && g ? (perGameAtt * g >= 10 ? pct : null) : (pct ?? null);
 
 const POOL_MIN = 10;
 const ET = "America/New_York";
@@ -189,6 +194,10 @@ function Profile({ p, all, detail, teams }: { p: PlayerRow; all: PlayerRow[]; de
           ) : null}
         </div>
       ) : null}
+
+      {detail.data && (
+        <Career detail={detail.data} playerId={p.id} current={{ g: p.g, min: p.min, pts: p.pts, reb: p.reb, ast: p.ast, fgPct: gate(p.fgPct, p.fga, p.g), tpPct: gate(p.tpPct, p.tpa, p.g), ftPct: gate(p.ftPct, p.fta, p.g), ts: p.ts }} />
+      )}
 
       <section className="deck min-w-0 p-5" aria-labelledby="log-h">
         <h2 id="log-h" className="h-section mb-3">Game log</h2>

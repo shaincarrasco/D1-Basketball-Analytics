@@ -11,6 +11,8 @@ import { isD1Conference } from "./d1-conferences.mjs";
 import { boxPossessions, loadPbp, solveRapm } from "./lib/pbp-analytics.mjs";
 import { normalizeGames } from "./lib/game-status.mjs";
 import { buildInjuries } from "./lib/injuries.mjs";
+import { careersFor, CAREER_FIELDS, classRanks, normTeam, openClasses, PROSPECT_FIELDS } from "./lib/careers.mjs";
+import { readGzJson } from "./lib/gz-json.mjs";
 
 const OUT = "public/data/app";
 const readJson = async path => JSON.parse(await readFile(path, "utf8"));
@@ -680,6 +682,45 @@ const { linkPortal } = await import("./fetch-portal.mjs");
 await write("portal.json", linkPortal(await readJson("public/data/portal-2027.json").catch(() => null), { teams: teamSummaries, players: { fields: PLAYER_FIELDS, rows: players } }));
 // ---------- end transfer portal ----------
 
+// ---------- past seasons + high-school prospects (cached; see scripts/lib/careers.mjs) ----------
+const careerSeasons = [];
+const cacheKeys = async dir => [...new Set((await readdir(dir).catch(() => [])).map(f => f.match(/^(\d{4})\.json(\.gz)?$/)?.[1]).filter(Boolean))];
+for (const season of await cacheKeys(".cache/player-seasons")) careerSeasons.push(await readGzJson(`.cache/player-seasons/${season}`));
+const careerById = careersFor(careerSeasons, new Set(players.map(p => String(p[playerIdx.id]))));
+console.log(`[app-data] Past seasons: ${careerSeasons.filter(Boolean).length} cached, ${careerById.size} current players with prior D-I seasons.`);
+const prospectRows = [];
+// Only classes still in high school: once a class enrolls it's on rosters, not a prospect.
+for (const year of openClasses()) {
+  const file = await readGzJson(`.cache/recruiting/${year}`);
+  if (Array.isArray(file?.rows)) prospectRows.push(...file.rows);
+}
+const PF = Object.fromEntries(PROSPECT_FIELDS.map((k, i) => [k, i]));
+const prospectSlug = new Map(teamSummaries.map(t => [String(t.id), t.slug]));
+// A commit whose row has a college name but no id: match the name to a team (exact normalized name only).
+const idByName = new Map(teamSummaries.flatMap(t => [[normTeam(t.name), String(t.id)], [normTeam(t.short), String(t.id)]]).filter(([k]) => k));
+let unmatchedCommits = 0;
+for (const row of prospectRows) {
+  if (!row[PF.teamId] && row[PF.college]) {
+    row[PF.teamId] = idByName.get(normTeam(row[PF.college])) ?? null;
+    if (!row[PF.teamId]) unmatchedCommits++;
+  }
+}
+if (unmatchedCommits) console.warn(`[app-data] Prospects: ${unmatchedCommits} commitment(s) to a college we couldn't match to a D-I team; shown by name only.`);
+const classes = classRanks(prospectRows).map(c => ({ ...c, slug: prospectSlug.get(c.teamId) ?? null }));
+const incomingBySlug = new Map();
+for (const row of prospectRows) {
+  const slug = row[PF.teamId] ? prospectSlug.get(row[PF.teamId]) : null;
+  if (slug) (incomingBySlug.get(slug) ?? incomingBySlug.set(slug, []).get(slug)).push(row);
+}
+// Served only to the prospects page: rank order, compact columns, no per-team duplication.
+await write("prospects.json", {
+  provider: "College Basketball Data /recruiting/players", years: [...new Set(prospectRows.map(r => r[PF.year]))].sort(),
+  fields: PROSPECT_FIELDS, rows: prospectRows.sort((a, b) => a[PF.year] - b[PF.year] || (a[PF.rank] ?? 9999) - (b[PF.rank] ?? 9999)),
+  classes,
+});
+console.log(`[app-data] Prospects: ${prospectRows.length} high-school prospects, ${classes.length} team classes.`);
+// ---------- end past seasons + prospects ----------
+
 // Team detail files: game log + roster.
 for (const t of teamSummaries) {
   const record = teamById.get(t.id);
@@ -690,7 +731,9 @@ for (const t of teamSummaries) {
     logFields: LOG_FIELDS, logs: logsBySlug.get(t.slug) ?? {}, bios: biosBySlug.get(t.slug) ?? {},
     news: newsBySlug.get(t.slug) ?? [], availability: availabilityBySlug.get(t.slug) ?? [], injuryLog: injuries.historyBySlug.get(t.slug) ?? [],
     playerNews: Object.fromEntries(players.filter(p => p[playerIdx.teamId] === t.id).map(p => [p[playerIdx.id], articlesFor(feeds?.athleteNews?.[aidByPid.get(p[playerIdx.id])]).slice(0, 8)]).filter(([, l]) => l.length)),
-    rosterFields: PLAYER_FIELDS, winHist: sims?.teams?.[t.id]?.hist ?? null, shots: shotsBySlug.get(t.slug) ?? null, lineups: lineupsBySlug.get(t.slug) ?? [], onOff: onOffBySlug.get(t.slug) ?? {} });
+    rosterFields: PLAYER_FIELDS, winHist: sims?.teams?.[t.id]?.hist ?? null, shots: shotsBySlug.get(t.slug) ?? null, lineups: lineupsBySlug.get(t.slug) ?? [], onOff: onOffBySlug.get(t.slug) ?? {},
+    careerFields: CAREER_FIELDS, career: Object.fromEntries(roster.map(p => [p[playerIdx.id], careerById.get(String(p[playerIdx.id]))]).filter(([, rows]) => rows?.length)),
+    prospectFields: PROSPECT_FIELDS, incoming: incomingBySlug.get(t.slug) ?? [], classRank: classes.filter(c => c.slug === t.slug) });
 }
 
 // Games by Eastern date.
