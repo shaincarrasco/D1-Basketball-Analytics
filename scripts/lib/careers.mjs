@@ -8,7 +8,20 @@
 // - Prospects (high-school classes not yet in college) are one small columnar file, loaded only by
 //   the prospects page.
 
-export const CAREER_FORMAT = 1;
+export const CAREER_FORMAT = 2;
+
+/**
+ * Season key for a date: the 2026–27 season is 2027. A new season starts in August, so nothing
+ * here needs editing when the calendar turns over.
+ */
+export function seasonFor(date = new Date()) {
+  return date.getUTCMonth() >= 7 ? date.getUTCFullYear() + 1 : date.getUTCFullYear();
+}
+/** Finished seasons we keep for careers: the five before the live one. */
+export const pastSeasons = (cur = seasonFor()) => [cur - 5, cur - 4, cur - 3, cur - 2, cur - 1];
+/** Recruiting classes already in college (settled) vs still in high school (open). Class Y enrolls for season Y+1. */
+export const settledClasses = (cur = seasonFor()) => [cur - 5, cur - 4, cur - 3, cur - 2, cur - 1];
+export const openClasses = (cur = seasonFor()) => [cur, cur + 1];
 
 /** Raw columns kept per player-season (season totals, rounded). */
 export const RAW_FIELDS = ["id", "teamId", "team", "conf", "pos", "g", "gs", "min", "pts", "reb", "ast", "stl", "blk", "tov",
@@ -22,10 +35,15 @@ const r1 = v => (v === null ? null : Math.round(v * 10) / 10);
 const made = o => num(o?.made);
 const att = o => num(o?.attempted);
 
-/** One provider /stats/player/season row → raw compact row (or null if unusable). */
-export function rawRow(row, isD1) {
+/**
+ * One provider /stats/player/season row → raw compact row (or null if unusable). `keep` filters rows;
+ * the fetcher keeps them all, because conference names change over the years (WAC, Independents) and
+ * a dropped season can never come back. Rows are joined to current players by id, so extra rows cost
+ * only cache space.
+ */
+export function rawRow(row, keep = () => true) {
   if (!row || typeof row !== "object" || !Number.isInteger(row.athleteId)) return null;
-  if (typeof row.team !== "string" || !isD1(row.conference)) return null;
+  if (typeof row.team !== "string" || !keep(row.conference)) return null;
   return [
     String(row.athleteId), row.teamId != null ? String(row.teamId) : null, row.team.trim(), row.conference ?? null,
     typeof row.position === "string" ? row.position : null,
@@ -33,21 +51,27 @@ export function rawRow(row, isD1) {
     num(row.steals), num(row.blocks), num(row.turnovers),
     made(row.fieldGoals), att(row.fieldGoals), made(row.threePointFieldGoals), att(row.threePointFieldGoals),
     made(row.freeThrows), att(row.freeThrows),
-    r1(num(row.offensiveRating)), r1(num(row.defensiveRating)), r1(num(row.usage)), r1(num(row.trueShootingPct)),
+    r1(num(row.offensiveRating)), r1(num(row.defensiveRating)), r1(num(row.usage)), num(row.trueShootingPct) === null ? null : Math.round(row.trueShootingPct * 1000) / 10, // provider: 0–1
   ];
 }
 
 /** Provider rows for one season → the cached compact season file. */
-export function compactSeason(rows, season, isD1) {
+export function compactSeason(rows, season, keep) {
   const out = [];
   for (const row of Array.isArray(rows) ? rows : []) {
-    const r = rawRow(row, isD1);
+    const r = rawRow(row, keep);
     if (r) out.push(r);
   }
   return { format: CAREER_FORMAT, season, fields: RAW_FIELDS, rows: out };
 }
 
 const pct = (m, a, minAtt) => (m !== null && a !== null && a >= minAtt ? r1((100 * m) / a) : null);
+/** TS% from totals: PTS / (2 × (FGA + 0.44 × FTA)), 0–100. The provider's own field is often empty. */
+const tsPct = (pts, fga, fta) => {
+  if (pts === null || fga === null) return null;
+  const chances = fga + 0.44 * (fta ?? 0);
+  return chances >= 10 ? r1((100 * pts) / (2 * chances)) : null;
+};
 const per = (v, g) => (v !== null && g ? r1(v / g) : null);
 
 /** A cached raw row → the reader-facing per-game career row. */
@@ -57,7 +81,7 @@ export function careerRow(season, raw, f) {
     season, raw[f.teamId], raw[f.team], g,
     per(raw[f.min], g), per(raw[f.pts], g), per(raw[f.reb], g), per(raw[f.ast], g), per(raw[f.stl], g), per(raw[f.blk], g),
     pct(raw[f.fgm], raw[f.fga], 10), pct(raw[f.tpm], raw[f.tpa], 10), pct(raw[f.ftm], raw[f.fta], 10),
-    raw[f.ts], raw[f.ortg],
+    tsPct(raw[f.pts], raw[f.fga], raw[f.fta]), raw[f.ortg],
   ];
 }
 
@@ -81,6 +105,9 @@ export function careersFor(seasonFiles, wanted) {
 }
 
 /* ------------------------------------------------------------------ prospects */
+
+/** Lowercase, no punctuation, no "university"/"state" spelling noise: for matching a college name to a team. */
+export const normTeam = s => String(s ?? "").toLowerCase().replace(/&/g, " and ").replace(/\bst\.?\b/g, "state").replace(/[^a-z0-9]+/g, " ").trim();
 
 export const PROSPECT_FIELDS = ["year", "rank", "name", "pos", "stars", "rating", "ht", "wt", "hs", "city", "state", "teamId", "college"];
 

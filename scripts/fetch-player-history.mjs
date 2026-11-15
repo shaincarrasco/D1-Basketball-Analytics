@@ -1,22 +1,21 @@
-// Past-season player stats (2021–22 to 2025–26) from College Basketball Data, fetched ONCE per
-// season and cached in .cache/player-seasons/<season>.json (committed to the repo, not served).
+// Past-season player stats (the five finished seasons before the live one) from College Basketball
+// Data, fetched ONCE per season and cached gzipped in .cache/player-seasons/<season>.json.gz
+// (committed to the repo, not served).
 // One /stats/player/season call returns every player for a season, so five seasons cost five calls
 // the first time and zero afterwards (free tier: 1,000 calls a month).
 //
 // Non-fatal: a missing key or a failed call keeps whatever is cached and warns. Nothing is invented;
 // a stat the provider doesn't give stays null.
-import { mkdir, readFile, writeFile } from "node:fs/promises";
-import { isD1Conference } from "./d1-conferences.mjs";
-import { compactSeason, CAREER_FORMAT } from "./lib/careers.mjs";
+import { mkdir } from "node:fs/promises";
+import { compactSeason, CAREER_FORMAT, pastSeasons } from "./lib/careers.mjs";
+import { readGzJson, writeGzJson } from "./lib/gz-json.mjs";
 
-export const SEASONS = [2022, 2023, 2024, 2025, 2026];
+export const SEASONS = pastSeasons();
 const DIR = ".cache/player-seasons";
 
 const cached = async season => {
-  try {
-    const file = JSON.parse(await readFile(`${DIR}/${season}.json`, "utf8"));
-    return file.format === CAREER_FORMAT && Array.isArray(file.rows) && file.rows.length > 1000 ? file : null;
-  } catch { return null; }
+  const file = await readGzJson(`${DIR}/${season}`);
+  return file?.format === CAREER_FORMAT && Array.isArray(file.rows) && file.rows.length > 1000 ? file : null;
 };
 
 const key = process.env.CBBD_API_KEY;
@@ -33,11 +32,11 @@ for (const season of SEASONS) {
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const rows = await res.json();
     if (!Array.isArray(rows)) throw new Error("unexpected payload");
-    const file = compactSeason(rows, season, isD1Conference);
-    if (file.rows.length < 3000) throw new Error(`only ${file.rows.length} D-I rows; not caching a partial season`);
-    await writeFile(`${DIR}/${season}.json`, JSON.stringify(file) + "\n");
+    const file = compactSeason(rows, season); // every row: old conference names must not drop seasons
+    if (file.rows.length < 3000) throw new Error(`only ${file.rows.length} rows; not caching a partial season`);
+    await writeGzJson(`${DIR}/${season}`, file);
     fetched++;
-    console.log(`[player-history] ${season}: cached ${file.rows.length} D-I player rows.`);
+    console.log(`[player-history] ${season}: cached ${file.rows.length} player rows.`);
   } catch (error) {
     console.warn(`[player-history] ${season} failed: ${error instanceof Error ? error.message : error}`);
   }

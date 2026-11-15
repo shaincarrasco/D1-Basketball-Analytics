@@ -8,10 +8,12 @@ const prov = (o = {}) => ({
   athleteId: 1, teamId: 72, team: "Duke", conference: "ACC", position: "G", games: 30, starts: 28, minutes: 900, points: 450,
   rebounds: { total: 120 }, assists: 90, steals: 30, blocks: 6, turnovers: 45,
   fieldGoals: { made: 160, attempted: 340 }, threePointFieldGoals: { made: 60, attempted: 160 }, freeThrows: { made: 70, attempted: 80 },
-  offensiveRating: 118.34, defensiveRating: 101.2, usage: 24.4, trueShootingPct: 58.9, ...o,
+  offensiveRating: 118.34, defensiveRating: 101.2, usage: 24.4, trueShootingPct: 0.589, ...o,
 });
 
-test("compactSeason keeps D-I rows with integer ids only", () => {
+test("compactSeason keeps rows with integer ids (filter optional) and stores TS% on 0–100", () => {
+  assert.equal(compactSeason([prov(), prov({ athleteId: 2, conference: "WAC" })], 2022).rows.length, 2);
+  assert.equal(compactSeason([prov()], 2022).rows[0][23], 58.9);
   const s = compactSeason([prov(), prov({ athleteId: 2, conference: "D2" }), prov({ athleteId: "x" }), null], 2026, isD1);
   assert.equal(s.season, 2026);
   assert.equal(s.rows.length, 1);
@@ -31,6 +33,7 @@ test("careersFor builds per-game rows for wanted players, oldest first, skipping
   assert.equal(rows[0][f.mpg], 30);
   assert.equal(rows[0][f.fgPct], 47.1);
   assert.equal(rows[0][f.tpPct], 37.5);
+  assert.equal(rows[0][f.ts], 60); // 450 / (2 × (340 + 0.44 × 80)) = 59.97
   assert.equal(rows[1][f.team], "Kansas");
   assert.equal(rows[1][f.ppg], 8);
 });
@@ -72,4 +75,26 @@ test("classRanks ranks per year by rating points", () => {
   assert.equal(r.find(s => s.teamId === "2" && s.year === 2027).rank, 2);
   assert.equal(r.find(s => s.year === 2028).rank, 1);
   assert.equal(r.length, 3);
+});
+
+test("season helpers roll over in August", async () => {
+  const { seasonFor, pastSeasons, openClasses, settledClasses } = await import("./careers.mjs");
+  assert.equal(seasonFor(new Date(Date.UTC(2026, 10, 15))), 2027);
+  assert.equal(seasonFor(new Date(Date.UTC(2027, 6, 31))), 2027);
+  assert.equal(seasonFor(new Date(Date.UTC(2027, 7, 1))), 2028);
+  assert.deepEqual(pastSeasons(2027), [2022, 2023, 2024, 2025, 2026]);
+  assert.deepEqual(openClasses(2027), [2027, 2028]);
+  assert.deepEqual(settledClasses(2028).at(-1), 2027);
+});
+
+test("gz cache round-trips and falls back to plain json", async () => {
+  const { mkdtemp, writeFile } = await import("node:fs/promises");
+  const { tmpdir } = await import("node:os");
+  const { readGzJson, writeGzJson } = await import("./gz-json.mjs");
+  const dir = await mkdtemp(`${tmpdir()}/gz-`);
+  await writeGzJson(`${dir}/a`, { x: [1, 2] });
+  assert.deepEqual(await readGzJson(`${dir}/a`), { x: [1, 2] });
+  await writeFile(`${dir}/b.json`, JSON.stringify({ y: 1 }));
+  assert.deepEqual(await readGzJson(`${dir}/b`), { y: 1 });
+  assert.equal(await readGzJson(`${dir}/missing`), null);
 });

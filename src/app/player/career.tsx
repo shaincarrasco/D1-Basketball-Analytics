@@ -7,8 +7,10 @@ import { useJson } from "@sports/ui/client-data";
 import { fmt } from "@sports/ui/format";
 import type { CareerRow, TeamDetail, TeamSummary } from "@/lib/types";
 
-// Season key 2027 is the 2026–27 season (a season is keyed by the year it ends).
-const CURRENT_SEASON = 2027;
+// A season is keyed by the year it ends (2027 = 2026–27). The live season is one after the newest
+// past season on file, so this never needs a yearly edit; with no history it follows the calendar
+// (a new season starts in August).
+const calendarSeason = () => { const d = new Date(); return d.getUTCMonth() >= 7 ? d.getUTCFullYear() + 1 : d.getUTCFullYear(); };
 const seasonLabel = (s: number) => `${s - 1}–${String(s).slice(2)}`;
 
 /** This season's per-game line, taken from the player table on the profile page. */
@@ -45,7 +47,7 @@ export default function Career({ detail, playerId, current }: { detail: TeamDeta
   }, [detail.careerFields, detail.career, playerId]);
 
   const now: Line = {
-    key: "current", season: CURRENT_SEASON, teamId: detail.id, team: byId.get(detail.id)?.name ?? null,
+    key: "current", season: calendarSeason(), teamId: detail.id, team: byId.get(detail.id)?.name ?? null,
     g: current.g, mpg: current.min, ppg: current.pts, rpg: current.reb, apg: current.ast,
     fgPct: current.fgPct, tpPct: current.tpPct, ftPct: current.ftPct, ts: current.ts,
   };
@@ -64,7 +66,7 @@ export default function Career({ detail, playerId, current }: { detail: TeamDeta
   return (
     <section className="deck min-w-0 p-5" aria-labelledby="career-h">
       <h2 id="career-h" className="h-section">Career</h2>
-      <p className="mb-3 mt-1 text-sm text-mute">Per-game lines by season. Earlier seasons are from other D-I programs and this one.</p>
+      <p className="mb-3 mt-1 text-sm text-mute">Per-game lines by season. Earlier seasons are every college season on record, at this school or others. Shooting % needs 10 attempts.</p>
       <div className="scroll-x rounded-xl border border-line">
         <table className="dt">
           <caption className="sr-only">Career stats by season</caption>

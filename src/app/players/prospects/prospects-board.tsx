@@ -17,7 +17,7 @@ const PAGE = 100;
 const EMPTY_MSG = "Prospect data arrives with the next daily refresh.";
 
 type Prospect = {
-  year: number; rank: number; name: string; pos: string; stars: number | null; ht: number | null; wt: number | null;
+  year: number; rank: number | null; name: string; pos: string; stars: number | null; ht: number | null; wt: number | null;
   hs: string; city: string; state: string; teamId: string | null; college: string | null;
 };
 
@@ -38,7 +38,7 @@ function parseRows(file: ProspectFile): Prospect[] {
     const college = str(at(r, "college"));
     return {
       year: num(at(r, "year")) ?? 0,
-      rank: num(at(r, "rank")) ?? 0,
+      rank: num(at(r, "rank")),
       name: str(at(r, "name")),
       pos: str(at(r, "pos")).toUpperCase(),
       stars: num(at(r, "stars")),
@@ -96,14 +96,14 @@ export default function ProspectsBoard() {
   };
 
   const players = useMemo(
-    () => rows.filter(r => r.year === year).sort((a, b) => a.rank - b.rank),
+    () => rows.filter(r => r.year === year).sort((a, b) => (a.rank ?? 1e9) - (b.rank ?? 1e9)),
     [rows, year],
   );
   const needle = q.trim().toLowerCase();
   const filtered = useMemo(
     () => players.filter(p =>
       (pos === "all" || POS_GROUP[p.pos] === pos) &&
-      (!uncommittedOnly || !p.teamId) &&
+      (!uncommittedOnly || !(p.teamId || p.college)) &&
       (!needle || `${p.name} ${p.hs} ${p.city}`.toLowerCase().includes(needle))),
     [players, pos, uncommittedOnly, needle],
   );
@@ -117,6 +117,7 @@ export default function ProspectsBoard() {
   if (file.status === "error" || !file.data || rows.length === 0) return <Empty title="No prospect data yet">{EMPTY_MSG}</Empty>;
 
   const program = (p: Prospect) => {
+    if (!p.teamId && p.college) return <span className="max-w-[7rem] shrink-0 truncate text-[13px] font-semibold">{p.college}</span>;
     if (!p.teamId) return <span className="shrink-0 rounded-full border border-line px-2.5 py-0.5 text-[12px] font-semibold text-mute">Uncommitted</span>;
     const t = teamsById.get(p.teamId);
     const label = t?.short || t?.name || p.college || "Committed";
@@ -156,8 +157,8 @@ export default function ProspectsBoard() {
         <>
           <ul className="deck overflow-hidden px-4">
             {filtered.slice(0, shown).map(p => (
-              <li key={`${p.year}-${p.rank}-${p.name}`} className="flex h-14 items-center gap-3 border-b border-line last:border-b-0">
-                <span className="w-8 shrink-0 text-right font-display text-[17px] tnum">{p.rank}</span>
+              <li key={`${p.year}-${p.name}-${p.hs}`} className="flex h-14 items-center gap-3 border-b border-line last:border-b-0">
+                <span className="w-8 shrink-0 text-right font-display text-[17px] tnum">{p.rank ?? "—"}</span>
                 <span className="w-14 shrink-0 text-[11px] leading-none text-bulb-ink" aria-label={p.stars ? `${p.stars} star` : "Unrated"}>{stars(p.stars)}</span>
                 <div className="min-w-0 flex-1">
                   <p className="truncate font-semibold leading-tight">{p.name}</p>
@@ -184,7 +185,7 @@ export default function ProspectsBoard() {
 
   const classesTab = (
     <div>
-      <p className="mb-3 text-[13.5px] leading-relaxed text-mute">Class points = sum of the commits&apos; composite ratings; our ordering, not 247Sports&apos; official team ranking.</p>
+      <p className="mb-3 text-[13.5px] leading-relaxed text-mute">Class points = sum of the commits&apos; composite ratings; our ordering, not any recruiting service&apos;s official team ranking.</p>
       {classes.length === 0 ? (
         <Empty title={`No team classes for ${year} yet.`} />
       ) : (
@@ -236,7 +237,7 @@ export default function ProspectsBoard() {
         ]}
       />
       <p className="mt-8 text-[13px] leading-relaxed text-mute">
-        Rankings and commitments from College Basketball Data (247Sports composite). Commitments can change until a letter is signed. Offer and visit lists are not available from our data provider.
+        Rankings, ratings and commitments from College Basketball Data. Commitments can change until a letter is signed. Offer and visit lists are not available from our data provider.
       </p>
     </>
   );

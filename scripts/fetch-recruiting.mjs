@@ -8,17 +8,17 @@
 //   served prospects file by build-app-data.
 // Cost: 2 calls a day after the first run (was 5). Non-fatal: a missing key or failed call keeps the cache.
 import { mkdir, readFile, writeFile } from "node:fs/promises";
-import { prospectRow, PROSPECT_FIELDS } from "./lib/careers.mjs";
+import { openClasses, prospectRow, PROSPECT_FIELDS, settledClasses } from "./lib/careers.mjs";
+import { readGzJson, writeGzJson } from "./lib/gz-json.mjs";
 
-export const SETTLED_CLASSES = [2022, 2023, 2024, 2025, 2026];
-export const OPEN_CLASSES = [2027, 2028];
+// Derived from the date, so a new season moves last year's open class into the settled set by itself.
+export const SETTLED_CLASSES = settledClasses();
+export const OPEN_CLASSES = openClasses();
 const DIR = ".cache/recruiting";
 const API = "https://api.collegebasketballdata.com/recruiting/players";
 const num = v => (typeof v === "number" && Number.isFinite(v) ? v : null);
 
-const readCache = async year => {
-  try { return JSON.parse(await readFile(`${DIR}/${year}.json`, "utf8")); } catch { return null; }
-};
+const readCache = year => readGzJson(`${DIR}/${year}`);
 
 async function fetchClass(key, year) {
   const url = new URL(API);
@@ -34,7 +34,7 @@ async function fetchClass(key, year) {
 const settledRow = (r, year) => ({
   year, athleteId: r.athleteId ?? r.athlete_id ?? null, name: r.name ?? null,
   stars: num(r.stars), rating: num(r.rating), ranking: num(r.ranking),
-  position: r.position ?? null, school: r.committedTo?.name ?? r.committedTo ?? r.school ?? null,
+  position: r.position ?? null, school: typeof r.committedTo === "string" ? r.committedTo : r.committedTo?.name ?? r.school ?? null,
   schoolId: r.committedTo?.id ?? r.committedToId ?? null, sourceId: r.sourceId ?? r.id ?? null,
 });
 
@@ -48,16 +48,17 @@ try { old = JSON.parse(await readFile("public/data/recruiting.json", "utf8")); }
 const settled = [];
 for (const year of SETTLED_CLASSES) {
   let file = await readCache(year);
+  // A class cached while it was still open has prospect rows, not settled players: refetch it once.
   if (!file?.players?.length) {
     const seeded = (old?.players ?? []).filter(p => p.year === year);
     if (seeded.length) {
       file = { year, fetchedAt: old.fetchedAt ?? null, players: seeded };
-      await writeFile(`${DIR}/${year}.json`, JSON.stringify(file) + "\n");
+      await writeGzJson(`${DIR}/${year}`, file);
     } else if (key) {
       try {
         const rows = await fetchClass(key, year);
         file = { year, fetchedAt: new Date().toISOString(), players: rows.map(r => settledRow(r, year)) };
-        await writeFile(`${DIR}/${year}.json`, JSON.stringify(file) + "\n");
+        await writeGzJson(`${DIR}/${year}`, file);
         console.log(`[recruiting] ${year}: cached ${rows.length} recruits (settled class, fetched once).`);
       } catch (error) {
         console.warn(`[recruiting] ${year} failed: ${error instanceof Error ? error.message : error}`);
@@ -66,7 +67,9 @@ for (const year of SETTLED_CLASSES) {
   }
   if (file?.players) settled.push(...file.players);
 }
-if (settled.length) {
+// Only rewrite recruiting.json when its content changed (no daily churn commits).
+const sameAsOld = old && JSON.stringify(old.players) === JSON.stringify(settled) && JSON.stringify(old.classes) === JSON.stringify(SETTLED_CLASSES);
+if (settled.length && !sameAsOld) {
   await writeFile("public/data/recruiting.json", JSON.stringify({ provider: "College Basketball Data /recruiting/players", fetchedAt: new Date().toISOString(), classes: SETTLED_CLASSES, players: settled }) + "\n");
   console.log(`[recruiting] recruiting.json: ${settled.length} settled-class recruits.`);
 }
@@ -78,7 +81,7 @@ for (const year of key ? OPEN_CLASSES : []) {
     const rows = await fetchClass(key, year);
     if (rows[0]) console.log(`[recruiting] ${year} sample row:`, JSON.stringify(rows[0]).slice(0, 600));
     const out = rows.map(r => prospectRow(r, year)).filter(Boolean);
-    await writeFile(`${DIR}/${year}.json`, JSON.stringify({ year, fetchedAt: new Date().toISOString(), fields: PROSPECT_FIELDS, rows: out }) + "\n");
+    await writeGzJson(`${DIR}/${year}`, { year, fetchedAt: new Date().toISOString(), fields: PROSPECT_FIELDS, rows: out });
     console.log(`[recruiting] ${year}: ${out.length} prospects (${out.filter(r => r[PROSPECT_FIELDS.indexOf("college")]).length} committed).`);
   } catch (error) {
     console.warn(`[recruiting] ${year} failed: ${error instanceof Error ? error.message : error}`);

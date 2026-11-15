@@ -39,7 +39,7 @@ export default function Incoming({ detail }: { detail: TeamDetail }) {
           </li>
         ))}
       </ul>
-      <p className="mt-4 text-xs text-mute">High-school rankings and commitments: College Basketball Data (247Sports composite). Commitments are not signed letters until signing day.</p>
+      <p className="mt-4 text-xs text-mute">High-school rankings and commitments: College Basketball Data. Commitments are not signed letters until signing day.</p>
     </section>
   );
 }
