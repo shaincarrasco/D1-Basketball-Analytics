@@ -2,7 +2,7 @@
 // Every FBS week of the season. Defaults to the current week; arrows and a strip of week chips.
 import { useMemo, useState } from "react";
 import { useJson } from "@sports/ui/client-data";
-import { ErrorState, Loading } from "@sports/ui/states";
+import { Empty, ErrorState, Loading } from "@sports/ui/states";
 import GameCard from "@/components/game-card";
 import { teamMap, type Games, type Team } from "@/lib/data";
 
@@ -16,6 +16,7 @@ export default function Weeks() {
   if (g.status === "loading") return <Loading label="Loading schedule" />;
   if (g.status === "error") return <ErrorState message={g.error} retry={g.retry} />;
   const weeks = g.data.weeks;
+  if (!weeks.length) return <Empty title="No schedule yet">The season&apos;s games appear here once ESPN publishes them.</Empty>;
   const cur = pick ?? g.data.currentWeek;
   const wk = weeks.find(w => w.week === cur) ?? weeks[weeks.length - 1];
   const idx = weeks.indexOf(wk);

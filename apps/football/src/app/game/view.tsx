@@ -3,7 +3,7 @@
 // Finished games read the pre-built g/{id}.json; anything else reads ESPN's live summary.
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useJson } from "@sports/ui/client-data";
 import { usePolledJson } from "@sports/ui/polling";
 import { Empty, Loading } from "@sports/ui/states";
@@ -21,11 +21,15 @@ export default function View() {
   const built = useJson<GameFile>(id ? `g/${id}.json` : null);
   const known: Game | undefined = useMemo(() => games.data?.weeks.flatMap(w => w.games).find(g => g.id === id), [games.data, id]);
   const needLive = !!id && (built.status === "error" || (known && known.status !== "post"));
-  const live = usePolledJson<Hdr>(needLive ? summaryUrl(id!) : null, 20_000);
+  // Poll while the game can still change; once ESPN calls it final, keep the last answer and stop.
+  const [final, setFinal] = useState<Hdr | null>(null);
+  const live = usePolledJson<Hdr>(needLive && !final ? summaryUrl(id!) : null, 20_000);
+  useEffect(() => { if (live.data?.header?.competitions?.[0]?.status?.type?.state === "post") setFinal(live.data); }, [live.data]);
+  const liveData = final ?? live.data;
   const tm = useMemo(() => teamMap(teams.data ?? null), [teams.data]);
   if (!id) return <Empty title="No game picked">Open one from the <Link className="link" href="/">scoreboard</Link> or the <Link className="link" href="/schedule/">schedule</Link>.</Empty>;
-  const gf: GameFile | null = built.status === "ready" && known?.status !== "in" ? built.data : live.data ? parseSummary(id, live.data) : null;
-  const hc = live.data?.header?.competitions?.[0];
+  const gf: GameFile | null = built.status === "ready" && known?.status !== "in" ? built.data : liveData ? parseSummary(id, liveData) : null;
+  const hc = liveData?.header?.competitions?.[0];
   const side = (h: "home" | "away") => {
     const k = known?.[h], c = hc?.competitors?.find(x => x.homeAway === h);
     const tid = k?.id ?? c?.id ?? gf?.[h] ?? "";
@@ -39,7 +43,7 @@ export default function View() {
   const away = side("away"), home = side("home");
   const detail = hc?.status?.type?.shortDetail ?? known?.detail ?? "";
   const state = hc?.status?.type?.state ?? known?.status;
-  if (!gf && (built.status === "loading" || (needLive && !live.at && !live.error))) return <Loading label="Loading game" />;
+  if (!gf && (built.status === "loading" || (needLive && !liveData && !live.error))) return <Loading label="Loading game" />;
   return (
     <>
       <header className="relative mb-6 overflow-hidden rounded-2xl border border-line" style={{ background: `linear-gradient(90deg, ${away.color}55, transparent 40%, transparent 60%, ${home.color}55)` }}>
@@ -50,7 +54,7 @@ export default function View() {
               {known?.venue && <p className="mt-1 hidden text-[12px] text-dim sm:block">{known.venue}</p>}
             </div>
           ) : (
-            <Link key={s.id || i} href={`/team/?id=${s.id}`} className={`flex items-center gap-3 sm:gap-4 ${i === 2 ? "flex-row-reverse text-right" : ""}`}>
+            <Link key={s.id || i} href={s.id && tm.has(s.id) ? `/team/?id=${s.id}` : "/teams/"} className={`flex items-center gap-3 sm:gap-4 ${i === 2 ? "flex-row-reverse text-right" : ""}`}>
               <TeamLogo src={s.logo} name={s.name} size={64} />
               <span className="min-w-0">
                 <span className="block truncate font-display text-xl font-extrabold uppercase leading-none sm:text-3xl">{s.rank && s.rank <= 25 ? <span className="mr-1 text-[0.6em] text-mute">{s.rank}</span> : null}{s.short}</span>

@@ -23,9 +23,10 @@ const NAMES: Record<string, string> = { TD: "Touchdown", FG: "Field goal", "MISS
 export const resultName = (r: string) => NAMES[r.trim().toUpperCase()] ?? r.charAt(0).toUpperCase() + r.slice(1).toLowerCase();
 const RESULT_TONE = (raw: string) => { const r = resultName(raw); return /^touchdown/i.test(r) ? "td" : /^field goal/i.test(r) ? "fg" : /interception|pick six|fumble|downs|safety|blocked|missed/i.test(r) ? "bad" : "neutral"; };
 
-function Turf({ home, away, children }: { home: TeamBit; away: TeamBit; children?: React.ReactNode }) {
+function Turf({ home, away, label, children }: { home: TeamBit; away: TeamBit; label: string; children?: React.ReactNode }) {
   return (
-    <svg viewBox={`0 0 ${FW} ${FH}`} className="touch-map block h-auto w-full rounded-2xl border border-line">
+    <div className="overflow-x-auto rounded-2xl border border-line">
+    <svg viewBox={`0 0 ${FW} ${FH}`} className="touch-map block h-auto w-full min-w-[720px]" aria-label={label}>
       {Array.from({ length: 20 }, (_, i) => <rect key={i} x={X(i * 5)} y={0} width={50} height={FH} fill={i % 2 ? "var(--turf)" : "var(--turf-2)"} />)}
       <rect x={0} y={0} width={EZ} height={FH} fill={home.color} opacity={0.85} />
       <rect x={FW - EZ} y={0} width={EZ} height={FH} fill={away.color} opacity={0.85} />
@@ -39,6 +40,7 @@ function Turf({ home, away, children }: { home: TeamBit; away: TeamBit; children
       ))}
       {children}
     </svg>
+    </div>
   );
 }
 
@@ -69,13 +71,13 @@ export default function DriveChart({ game, home, away }: { game: GameFile; home:
       {!d ? (
         <figure className="m-0">
           <div className="relative">
-            <Turf home={home} away={away}>
+            <Turf home={home} away={away} label={`All ${drives.length} drives. ${home.short} attacks right, ${away.short} attacks left.`}>
               <g key={run}>
                 {drives.map((dr, i) => {
                   const a = X(abs(dr, dr.start)), b = X(abs(dr, dr.end)), y0 = 16 + i * lane, h = Math.max(4, lane - 3);
                   const tone = RESULT_TONE(dr.result), c = legible(team(dr.team).color);
                   return (
-                    <g key={i} className="tm-pop cursor-pointer" style={{ animationDelay: `${i * 70}ms` }} onClick={() => pick(i)}>
+                    <g key={i} className="tm-pop cursor-pointer" style={{ animationDelay: `${i * 70}ms` }} onClick={() => pick(i)} role="button" tabIndex={0} aria-label={`Watch drive ${i + 1}: ${team(dr.team).short}, ${resultName(dr.result)}`} onKeyDown={e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); pick(i); } }}>
                       <rect x={Math.min(a, b)} y={y0} width={Math.max(3, Math.abs(b - a))} height={h} rx={h / 2} fill={c} stroke="black" strokeOpacity={0.35} strokeWidth={1} />
                       {tone === "td" ? <path d={`M${b} ${y0 + h / 2 - 7} l2.1 4.6 5 .5 -3.8 3.3 1.1 4.9 -4.4 -2.6 -4.4 2.6 1.1 -4.9 -3.8 -3.3 5 -.5z`} fill="rgb(var(--bulb-rgb))" stroke="white" strokeWidth={1} />
                         : tone === "bad" ? <path d={`M${b - 5} ${y0 + h / 2 - 5} l10 10 m0 -10 l-10 10`} stroke="white" strokeWidth={2.5} strokeLinecap="round" />
@@ -95,7 +97,7 @@ export default function DriveChart({ game, home, away }: { game: GameFile; home:
         </figure>
       ) : (
         <figure className="m-0">
-          <Turf home={home} away={away}>
+          <Turf home={home} away={away} label={`Replay of a ${team(d.team).short} drive, ${resultName(d.result).toLowerCase()}`}>
             <line x1={X(abs(d, d.start))} x2={X(abs(d, d.start))} y1={0} y2={FH} stroke="rgb(var(--def-rgb))" strokeWidth={3} strokeDasharray="8 6" />
             {plays.slice(0, step).map((p, i) => {
               const a = X(abs(d, p.start)), b = X(abs(d, p.end)), y0 = 40 + (i % 9) * 22;
@@ -115,7 +117,7 @@ export default function DriveChart({ game, home, away }: { game: GameFile; home:
           </div>
           <div className="deck mt-3 min-h-[76px] p-4" aria-live="polite">
             {cur?.play ? <>
-              <p className="text-[12px] font-semibold text-mute">Q{cur.play.q} {cur.play.clock}{cur.play.down ? `, ${["", "1st", "2nd", "3rd", "4th"][cur.play.down]} & ${cur.play.dist}` : ""}</p>
+              <p className="text-[12px] font-semibold text-mute">Q{cur.play.q} {cur.play.clock}{cur.play.down ? `, ${["", "1st", "2nd", "3rd", "4th"][cur.play.down] ?? `${cur.play.down}th`} & ${cur.play.dist}` : ""}</p>
               <p className={`mt-0.5 ${cur.play.score ? "font-semibold text-bulb" : ""}`}>{cur.play.text}</p>
             </> : <p className="text-mute"><b className="text-ink">{team(d.team).short}</b> takes over at their {d.start <= 50 ? `own ${d.start}` : `opponent's ${100 - d.start}`}. Result: {resultName(d.result).toLowerCase()}.</p>}
           </div>

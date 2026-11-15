@@ -2,3 +2,5 @@
 out/
 next-env.d.ts
 tsconfig.tsbuildinfo
+# Generated at deploy time from data-cache/ by scripts/fetch-cfb.mjs
+public/data/app/

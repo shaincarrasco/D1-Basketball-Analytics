@@ -1,5 +1,6 @@
 "use client";
 // Live FBS scoreboard from ESPN, refreshed every 30 seconds. Ranked and live games first.
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import { usePolledJson } from "@sports/ui/polling";
 import { useJson } from "@sports/ui/client-data";
@@ -20,7 +21,7 @@ export default function Scores() {
   const games = useMemo(() => sb.games
     .filter(g => only === "all" || g.home.rank || g.away.rank)
     .sort((a, b) => ORDER[a.status] - ORDER[b.status] || Math.min(a.home.rank ?? 99, a.away.rank ?? 99) - Math.min(b.home.rank ?? 99, b.away.rank ?? 99) || a.date.localeCompare(b.date)), [sb, only]);
-  if (!live.at) return live.error ? <p className="deck p-5 text-mute">The scoreboard isn&apos;t reachable right now. Try again in a minute, or see the <a className="link" href="schedule/">schedule</a>.</p> : <Loading label="Loading scores" />;
+  if (!live.at) return live.error ? <p className="deck p-5 text-mute">The scoreboard isn&apos;t reachable right now. Try again in a minute, or see the <Link className="link" href="/schedule/">schedule</Link>.</p> : <Loading label="Loading scores" />;
   const n = sb.games.filter(g => g.status === "in").length;
   return (
     <section aria-label="Scores">

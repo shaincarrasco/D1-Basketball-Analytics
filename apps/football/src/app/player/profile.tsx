@@ -12,7 +12,7 @@ import TeamLogo from "@sports/ui/team-logo";
 import type { FootballRow } from "@sports/packs/football/types";
 import TouchMap, { ZoneGrid } from "@/components/touch-map";
 import { pack, SiteFrameworkRanks, useSportData } from "@/site";
-import { hex, teamMap, type PlayerFile, type Team } from "@/lib/data";
+import { hex, teamMap, type Games, type PlayerFile, type Team } from "@/lib/data";
 
 type Stat = [label: string, value: (r: FootballRow) => string | number | null];
 const n = (v: number | null | undefined) => (v == null ? null : v);
@@ -48,6 +48,12 @@ export default function Profile() {
   const data = useSportData(pack);
   const file = useJson<PlayerFile>(id ? `p/${id}.json` : null);
   const teams = useJson<Team[]>("teams.json");
+  const sched = useJson<Games>("games.json");                // opponent names for FCS teams not in teams.json
+  const oppName = useMemo(() => {
+    const m = new Map<string, string>();
+    for (const w of sched.data?.weeks ?? []) for (const g of w.games) for (const sd of [g.home, g.away]) if (sd.name) m.set(sd.id, sd.name);
+    return m;
+  }, [sched.data]);
   const tm = useMemo(() => teamMap(teams.data ?? null), [teams.data]);
   const p = useMemo(() => data.rows.find(r => r.id === id) ?? null, [data.rows, id]);
   const [week, setWeek] = useState<number | "all">("all");
@@ -61,7 +67,7 @@ export default function Profile() {
   const color = hex(p.team.color) ?? "#555";
   const maps: { key: string; title: string; note: string; el: React.ReactNode }[] = [];
   if (throws.length >= (p.pos === "QB" ? 1 : 8)) maps.push({ key: "throws", title: "Every throw", note: "From the pocket to where the ball was caught or thrown, then yards after the catch.", el: <TouchMap touches={throws} mode="air" label={`${p.name} pass attempts`} /> });
-  if (targets.length) maps.push({ key: "targets", title: "Every target", note: "Where the ball arrived and how far he took it after the catch.", el: <TouchMap touches={targets} mode="air" label={`${p.name} targets`} /> });
+  if (targets.length >= (p.pos === "QB" ? 8 : 1)) maps.push({ key: "targets", title: "Every target", note: "Where the ball arrived and how far he took it after the catch.", el: <TouchMap touches={targets} mode="air" label={`${p.name} targets`} /> });
   // A receiver's one jet sweep isn't a map; show carries when running is part of the job.
   if (carries.length >= (p.pos === "RB" ? 1 : 8)) maps.push({ key: "carries", title: "Every carry", note: "Lane and distance of each run from the line of scrimmage.", el: <TouchMap touches={carries} mode="run" label={`${p.name} carries`} /> });
   return (
@@ -84,15 +90,16 @@ export default function Profile() {
       <div className="flex flex-col gap-4">{roles.map(k => <Line key={k} r={p} k={k} />)}</div>
 
       {file.status === "loading" && <Loading label="Loading plays" />}
-      {maps.length > 0 && (
+      {weeks.length > 0 && (
         <section className="mt-8" aria-label="Play maps">
           <div className="mb-3 flex flex-wrap items-center gap-3">
             <h2 className="font-display text-2xl font-extrabold uppercase">Play map</h2>
             <select className="field ml-auto w-auto" value={String(week)} onChange={e => setWeek(e.target.value === "all" ? "all" : Number(e.target.value))} aria-label="Game">
               <option value="all">Whole season</option>
-              {weeks.map(w => { const g = file.data!.games.find(x => x.week === w); return <option key={w} value={w}>Week {w}{g ? ` ${g.home ? "vs" : "at"} ${tm.get(g.opp)?.short ?? ""}` : ""}</option>; })}
+              {weeks.map(w => { const g = file.data!.games.find(x => x.week === w); return <option key={w} value={w}>Week {w}{g ? ` ${g.home ? "vs" : "at"} ${tm.get(g.opp)?.short ?? oppName.get(g.opp) ?? "FCS"}` : ""}</option>; })}
             </select>
           </div>
+          {maps.length === 0 && <p className="deck p-5 text-mute">Not enough plays to map in that game. Pick another, or the whole season.</p>}
           <div className="grid gap-6 lg:grid-cols-2">
             {maps.map(m => (
               <div key={m.key + week}>
@@ -111,7 +118,7 @@ export default function Profile() {
         <section className="mt-8" aria-label="Game log">
           <h2 className="mb-2 font-display text-2xl font-extrabold uppercase">Game log</h2>
           <div className="overflow-x-auto rounded-xl border border-line">
-            <table className="w-full text-[13.5px] tnum">
+            <table className="w-full whitespace-nowrap text-[13.5px] tnum">
               <thead className="bg-deck text-[12px] text-mute"><tr>
                 <th className="px-3 py-2 text-left font-semibold">Wk</th><th className="px-3 py-2 text-left font-semibold">Opponent</th><th className="px-3 py-2 text-left font-semibold">Result</th>
                 {roles.flatMap(k => LINES[k].slice(0, 4).map(([l]) => (l === "Yards" || l === "TD" ? `${SHORT[k]} ${l.toLowerCase() === "td" ? "TD" : "yds"}` : l))).map((l, i) => <th key={i} className="px-3 py-2 text-right font-semibold">{l}</th>)}
@@ -122,7 +129,7 @@ export default function Profile() {
                   return (
                     <tr key={g.gid} className="border-t border-line">
                       <td className="px-3 py-1.5">{g.week}</td>
-                      <td className="px-3 py-1.5"><Link href={`/game/?id=${g.gid}`} className="hover:underline">{g.home ? "vs" : "at"} {tm.get(g.opp)?.short ?? g.opp}</Link></td>
+                      <td className="px-3 py-1.5"><Link href={`/game/?id=${g.gid}`} className="hover:underline">{g.home ? "vs" : "at"} {tm.get(g.opp)?.short ?? oppName.get(g.opp) ?? "FCS opponent"}</Link></td>
                       <td className={`px-3 py-1.5 font-semibold ${g.result.startsWith("W") ? "text-win" : g.result.startsWith("L") ? "text-loss" : ""}`}>{g.result}</td>
                       {roles.flatMap(k => LINES[k].slice(0, 4)).map(([, f], i) => <td key={i} className="px-3 py-1.5 text-right">{f(row) ?? "—"}</td>)}
                     </tr>

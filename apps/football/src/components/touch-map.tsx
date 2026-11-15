@@ -17,6 +17,9 @@ const LANE = { left: W * 0.2, middle: W * 0.5, right: W * 0.8 } as const;
 const jitter = (s: string, span: number) => { let h = 0; for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0; return ((Math.abs(h) % 1000) / 1000 - 0.5) * span; };
 const DEPTH_GUESS = { short: 6, deep: 24 } as const;        // when the spot isn't recorded
 
+/** A completed pass (for receivers: a catch). Shared by the map and the zone grid so they agree. */
+export const isComplete = (t: Touch) => t.kind === "rec" || (t.kind === "throw" && !t.int && /pass complete/i.test(t.text));
+
 type Mark = { t: Touch; x0: number; y0: number; x1: number; y1: number; x2: number; y2: number; air: number; done: boolean; guess: boolean };
 
 function build(touches: Touch[], mode: "air" | "run"): Mark[] {
@@ -26,7 +29,7 @@ function build(touches: Touch[], mode: "air" | "run"): Mark[] {
     if (mode === "run") return { t, x0: xj, y0: LOS, x1: xj, y1: y(t.yds), x2: xj, y2: y(t.yds), air: 0, done: true, guess: false };
     const guess = t.spot === null;
     const air = guess ? (t.depth ? DEPTH_GUESS[t.depth] : 8) : t.spot! - t.los;
-    const done = t.kind === "rec" || (t.kind === "throw" && !t.int && t.end !== null && t.yds !== 0 && !/incomplete/i.test(t.text));
+    const done = isComplete(t);
     const yac = done && t.end !== null && t.spot !== null ? t.end - t.spot : 0;
     return { t, x0: W / 2, y0: y(-6), x1: xj, y1: y(air), x2: xj + jitter(t.text + "y", 30), y2: y(air + yac), air, done, guess };
   });
@@ -44,7 +47,7 @@ export default function TouchMap({ touches, mode, label }: { touches: Touch[]; m
       <div className="relative overflow-hidden rounded-2xl border border-line">
         <svg key={run} viewBox={`0 0 ${W} ${H}`} className="touch-map block h-auto w-full" role="img" aria-label={label}>
           {/* turf stripes every 5 yards, chalk lines every 10 */}
-          {Array.from({ length: (TOP + BOTTOM) / 5 }, (_, i) => <rect key={i} x={0} y={i * 50} width={W} height={50} fill={i % 2 ? "var(--turf)" : "var(--turf-2)"} />)}
+          {Array.from({ length: Math.ceil((TOP + BOTTOM) / 5) }, (_, i) => <rect key={i} x={0} y={i * 50} width={W} height={50} fill={i % 2 ? "var(--turf)" : "var(--turf-2)"} />)}
           {Array.from({ length: Math.floor(TOP / 10) + 2 }, (_, i) => i * 10 - 10).map(d => (
             <g key={d}>
               <line x1={0} x2={W} y1={y(d)} y2={y(d)} stroke="var(--chalk)" strokeOpacity={d === 0 ? 0 : 0.35} strokeWidth={1.5} />
@@ -74,6 +77,9 @@ export default function TouchMap({ touches, mode, label }: { touches: Touch[]; m
         </svg>
         <button className="btn absolute right-3 top-3 !px-3 !py-1.5 text-[13px]" onClick={() => setRun(r => r + 1)}>Replay</button>
       </div>
+      <p className="sr-only">{mode === "run"
+        ? `${touches.length} carries for ${touches.reduce((n, t) => n + t.yds, 0)} yards, ${touches.filter(t => t.td).length} touchdowns: ${touches.filter(t => t.dir === "left").length} left, ${touches.filter(t => t.dir === "middle").length} middle, ${touches.filter(t => t.dir === "right").length} right.`
+        : `${touches.length} passes, ${touches.filter(isComplete).length} completed, ${touches.filter(t => t.td).length} touchdowns${touches.some(t => t.int) ? `, ${touches.filter(t => t.int).length} intercepted` : ""}. The zone table below breaks them down by depth and direction.`}</p>
       <figcaption className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-[12.5px] text-mute">
         {mode === "air" ? <>
           <span><b className="text-ink">●</b> caught (line = yards after catch)</span><span>○ incomplete</span>
@@ -93,7 +99,7 @@ export function ZoneGrid({ touches }: { touches: Touch[] }) {
     depth,
     cells: (["left", "middle", "right"] as const).map(dir => {
       const ts = touches.filter(t => t.depth === depth && t.dir === dir);
-      const caught = ts.filter(t => t.kind === "rec" || (t.kind === "throw" && !t.int && !/incomplete/i.test(t.text)));
+      const caught = ts.filter(isComplete);
       return { dir, n: ts.length, rate: ts.length ? caught.length / ts.length : null, yds: caught.reduce((s, t) => s + t.yds, 0) };
     }),
   }));

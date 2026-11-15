@@ -107,14 +107,14 @@ jobs:
           CBBD_API_KEY: ${{ secrets.CBBD_API_KEY }}
       - name: Refresh tennis data (Baseline site; cached, only new matches are fetched)
         run: node apps/tennis/scripts/fetch-tennis.mjs || echo "::warning::Tennis refresh failed; the site keeps the last snapshot."
-      - name: Refresh college football data (Gridiron site; cached, only new games are fetched)
-        run: node apps/football/scripts/fetch-cfb.mjs || echo "::warning::Football refresh failed; the site keeps the last snapshot."
+      - name: Refresh college football data (Gridiron; only new games are fetched; site files are rebuilt from the committed cache)
+        run: node apps/football/scripts/fetch-cfb.mjs || echo "::warning::Football refresh failed; pages are rebuilt from the committed cache."
       - name: Save refreshed current-season data snapshots
         if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' || github.event_name == 'push'
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add package-lock.json public/data/ .cache/ apps/tennis/public/data/app/ apps/tennis/data-cache/ apps/football/public/data/app/ apps/football/data-cache/
+          git add package-lock.json public/data/ .cache/ apps/tennis/public/data/app/ apps/tennis/data-cache/ apps/football/data-cache/
           if ! git diff --cached --quiet; then
             git commit -m 'Update 2026-27 basketball data snapshots'
             # main may have moved during the run (a merge or an overlapping refresh): replay on top, ours wins.

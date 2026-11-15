@@ -6,7 +6,7 @@ import type { Drive, GameFile, Play } from "./data";
 
 export const summaryUrl = (id: string) => `https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=${id}`;
 type RawPlay = { type?: { text?: string }; text?: string; period?: { number?: number }; clock?: { displayValue?: string }; start?: { down?: number; distance?: number; yardsToEndzone?: number }; end?: { yardsToEndzone?: number }; statYardage?: number; scoringPlay?: boolean };
-type RawDrive = { team?: { id?: string }; displayResult?: string; result?: string; yards?: number; plays?: RawPlay[] };
+type RawDrive = { id?: string; team?: { id?: string }; displayResult?: string; result?: string; yards?: number; plays?: RawPlay[] };
 type Raw = { header?: { competitions?: { competitors?: { id: string; homeAway: string }[] }[] }; drives?: { previous?: RawDrive[]; current?: RawDrive } };
 
 const SKIP = /timeout|end of|end period|coin toss|kickoff/i;   // kickoffs belong to the other team
@@ -18,7 +18,7 @@ export function parseSummary(id: string, raw: unknown): GameFile | null {
   const home = comp.find(c => c.homeAway === "home")?.id, away = comp.find(c => c.homeAway === "away")?.id;
   if (!home || !away) return null;
   const list = [...(r.drives?.previous ?? [])];
-  if (r.drives?.current && !list.some(d => d === r.drives!.current)) list.push({ ...r.drives.current, displayResult: r.drives.current.displayResult || "In progress" });
+  if (r.drives?.current && !list.some(d => d.id && d.id === r.drives!.current!.id)) list.push({ ...r.drives.current, displayResult: r.drives.current.displayResult || "In progress" });
   const drives: Drive[] = list.flatMap(d => {
     const plays: Play[] = (d.plays ?? []).filter(p => !SKIP.test(p.type?.text ?? "") && typeof p.start?.yardsToEndzone === "number").map(p => {
       const start = clamp(100 - p.start!.yardsToEndzone!), yds = p.statYardage ?? 0;

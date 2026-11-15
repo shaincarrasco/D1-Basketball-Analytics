@@ -8,8 +8,9 @@ type Raw = { events?: { id: string; date: string; competitions: { neutralSite?: 
 export function parseScoreboard(raw: unknown): { week: number | null; games: Game[]; teams: Map<string, Pick<Team, "id" | "name" | "short" | "abbr" | "color" | "logo">> } {
   const r = raw as Raw;
   const teams = new Map<string, Pick<Team, "id" | "name" | "short" | "abbr" | "color" | "logo">>();
-  const games: Game[] = (r?.events ?? []).map(e => {
-    const c = e.competitions[0];
+  const games: Game[] = (r?.events ?? []).flatMap(e => {
+    const c = e.competitions?.[0];
+    if (!c || !c.competitors?.some(k => k.homeAway === "home") || !c.competitors.some(k => k.homeAway === "away")) return [];
     const st = c.status?.type?.state;
     const side = (h: "home" | "away") => {
       const x = c.competitors.find(k => k.homeAway === h)!;
@@ -17,10 +18,10 @@ export function parseScoreboard(raw: unknown): { week: number | null; games: Gam
       const rank = x.curatedRank?.current;
       return { id: x.team.id, score: st !== "pre" && x.score != null && x.score !== "" ? Number(x.score) : null, rank: rank && rank <= 25 ? rank : null, winner: !!x.winner };
     };
-    return {
+    return [{
       id: e.id, date: e.date, status: st === "in" ? "in" : st === "post" ? "post" : "pre", detail: c.status?.type?.shortDetail ?? "",
       neutral: !!c.neutralSite, venue: c.venue?.fullName ?? null, tv: c.broadcasts?.[0]?.names?.[0] ?? null, home: side("home"), away: side("away"),
-    } satisfies Game;
+    } satisfies Game];
   });
   return { week: r?.week?.number ?? null, games, teams };
 }
