@@ -14,6 +14,7 @@ import { dayLabel, DHR_RANK_TITLE, fmt, pctFmt, signed, timeLabel } from "@sport
 import { playerRows } from "@/lib/players";
 import type { Meta, PlayerBio, PlayerTable, TeamDetail, TeamSummary } from "@/lib/types";
 import GameLog from "./game-log";
+import Career from "./career";
 import ArticleList from "@/components/article-list";
 import { AvailabilityRow } from "@/components/availability-list";
 import InjuryHistory from "@/components/injury-history";
@@ -189,6 +190,10 @@ function Profile({ p, all, detail, teams }: { p: PlayerRow; all: PlayerRow[]; de
           ) : null}
         </div>
       ) : null}
+
+      {detail.data && (
+        <Career detail={detail.data} playerId={p.id} current={{ g: p.g, min: p.min, pts: p.pts, reb: p.reb, ast: p.ast, fgPct: p.fgPct, tpPct: p.tpPct, ftPct: p.ftPct, ts: p.ts }} />
+      )}
 
       <section className="deck min-w-0 p-5" aria-labelledby="log-h">
         <h2 id="log-h" className="h-section mb-3">Game log</h2>

@@ -25,6 +25,7 @@ import ZoneTable from "./zone-table";
 import Lineups from "./lineups";
 import FocusTabs from "@/components/focus-tabs";
 import ShareCard from "@/components/share-card";
+import Incoming from "./incoming";
 import TeamChanges from "@/components/team-changes";
 import FinalFourPath from "@/components/final-four-path";
 import { teamChanges } from "@/lib/team-changes";
@@ -222,7 +223,7 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
             <SeasonOutlook team={team} hist={detail.winHist ?? null} sims={meta.sims?.sims ?? 10000} />
           </section>
 </div>
-<div className="space-y-6">
+<div className="min-w-0 space-y-6">
           <TeamChanges team={team} changes={changes} lastResult={lastResult} />
           <FinalFourPath path={path} />
           <section id="availability" className="deck scroll-mt-32 p-5" aria-labelledby="avail-h">
@@ -250,7 +251,7 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
             <PerfChart games={played} />
           </section>
 </div>
-<div className="space-y-6">
+<div className="min-w-0 space-y-6">
           <TeamFormCard name={team.name} form={getAllForms().byId.get(team.id)!} points={teamHistory(getForm(), team.id)} mover={getMovers().rows.find(m => m.id === team.id) ?? null} color={`color-mix(in oklab, ${color} 62%, var(--ink))`} total={total} />
           <section className="deck p-5">
             <h2 className="h-section mb-3">Résumé</h2>
@@ -295,7 +296,8 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
             <Lineups lineups={detail.lineups ?? []} names={names} />
           </section>
 </div>
-<div className="space-y-6">
+<div className="min-w-0 space-y-6">
+<Incoming detail={detail} />
           <IndispensableCard rows={getIndispensable().filter(p => p.teamId === team.id)} />
           <TeamTransfers slug={slug} />
 </div>
@@ -351,7 +353,7 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
           </section>
           <ProgramHistory teamId={team.id} color={color} />
 </div>
-<div className="space-y-6">
+<div className="min-w-0 space-y-6">
           {similar.length > 0 && (
             <section className="deck p-5">
               <h2 className="h-section mb-3" title="Closest teams by adjusted offense, defense and tempo">Similar teams</h2>

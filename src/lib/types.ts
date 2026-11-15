@@ -120,8 +120,22 @@ export type Player = {
   dprRank: number | null;
 };
 
+/** One past season for one player (per-game values), columns named by TeamDetail.careerFields. */
+export type CareerRow = (string | number | null)[];
+/** High-school prospect, columns named by ProspectFile.fields / TeamDetail.prospectFields. */
+export type ProspectRow = (string | number | null)[];
+export type TeamClass = { teamId: string; slug: string | null; year: number; commits: number; five: number; four: number; avgRating: number | null; points: number; rank: number };
+export type ProspectFile = { provider: string; years: number[]; fields: string[]; rows: ProspectRow[]; classes: TeamClass[] };
+
 export type TeamDetail = {
   id: string; games: TeamGame[]; roster: PlayerTable["rows"];
+  /** Prior D-I seasons for current roster players (College Basketball Data, cached once per season). */
+  careerFields?: string[];
+  career?: Record<string, CareerRow[]>;
+  /** Committed high-school prospects (open classes) and this program's class rank per year. */
+  prospectFields?: string[];
+  incoming?: ProspectRow[];
+  classRank?: TeamClass[];
   perGame: TeamPerGame | null; oppPerGame: TeamPerGame | null;
   /** Per-player game logs (ESPN box scores) keyed by player id; columns named by logFields. */
   logFields?: string[];

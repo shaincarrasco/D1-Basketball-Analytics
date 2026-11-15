@@ -117,3 +117,13 @@ describe("parseQuery: no match", () => {
     expect(q("Caleb Wilson")).toBeNull();
   });
 });
+
+describe("prospects queries", () => {
+  it("top recruits → prospects page", () => {
+    expect(parseQuery("top recruits", ctx)?.href).toBe("/players/prospects/");
+  });
+  it("2028 prospects → that class", () => {
+    expect(parseQuery("2028 prospects", ctx)?.href).toBe("/players/prospects/?class=2028");
+  });
+});
+
