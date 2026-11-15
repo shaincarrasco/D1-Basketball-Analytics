@@ -1,0 +1,10 @@
+/* Touch-map and drive-chart animations. Lines draw themselves, dots pop in; staggered by
+   inline animation-delay. Reduced motion: everything appears at once. */
+.touch-map .tm-draw { stroke-dasharray: 1; stroke-dashoffset: 1; animation: tm-draw .45s ease-out forwards; }
+.touch-map .tm-late { animation-duration: .35s; animation-delay: inherit; }
+.touch-map .tm-pop { opacity: 0; transform-box: fill-box; transform-origin: center; animation: tm-pop .3s ease-out forwards; }
+@keyframes tm-draw { to { stroke-dashoffset: 0; } }
+@keyframes tm-pop { from { opacity: 0; transform: scale(.2); } to { opacity: 1; transform: scale(1); } }
+@media (prefers-reduced-motion: reduce) {
+  .touch-map .tm-draw, .touch-map .tm-pop { animation: none; stroke-dashoffset: 0; opacity: 1; }
+}
