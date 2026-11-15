@@ -10,7 +10,7 @@
   (function () {
     var parts = location.pathname.split("/"); // ["", repo, first, ...]
     var repo = parts[1], first = parts[2] || "";
-    if (repo && first && first !== "d1-hoops" && first !== "tennis") {
+    if (repo && first && first !== "d1-hoops" && first !== "tennis" && first !== "football") {
       location.replace("/" + repo + "/d1-hoops/" + parts.slice(2).join("/") + location.search + location.hash);
     }
   })();
