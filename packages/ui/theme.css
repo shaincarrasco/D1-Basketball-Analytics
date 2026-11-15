@@ -197,6 +197,16 @@ html[data-theme="light"] .dots-off { color: color-mix(in oklab, var(--bulb-ink) 
   .dt tbody tr:hover td.sticky-col { background: color-mix(in srgb, var(--def) 5%, var(--bg)); }
   .dt .grp-off { box-shadow: inset 0 -1px 0 var(--off); }
   .dt .grp-def { box-shadow: inset 0 -1px 0 var(--def); }
+  /* Phone: denser, fixed-height rows so more of each list fits on one screen. */
+  @media (max-width: 640px) {
+    .dt { font-size: 12.5px; }
+    .dt th { font-size: 10px; padding: 6px 5px; }
+    .dt td { padding: 0 5px; height: 30px; line-height: 30px; }
+    .dt th button { gap: 2px; }
+    .dt .sticky-col { min-width: 0; }
+    .rank-cell { font-size: 13px; }
+    .sub-rank { display: none; }
+  }
   .rank-cell { font-family: var(--font-dots); font-weight: 900; font-size: 16px; color: var(--bulb-ink); }
   .sub-rank { display: inline-block; min-width: 1.6em; margin-left: 5px; font-size: 10.5px; color: var(--dim); text-align: right; vertical-align: 1px; }
 
