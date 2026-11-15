@@ -2,7 +2,7 @@
 // Baseline: brand, nav and the sport pack wiring. This file plus the pack is what makes the
 // site tennis; everything else comes from @sports/ui and @sports/kit.
 import { useMemo } from "react";
-import { BarChart3, LayoutGrid, ListOrdered, ScatterChart, SlidersHorizontal, Trophy } from "lucide-react";
+import { BarChart3, Flag, LayoutGrid, ListOrdered, ScatterChart, SlidersHorizontal, Trophy } from "lucide-react";
 import SiteShell, { type ShellConfig } from "@sports/ui/site-shell";
 import ThemePicker from "@sports/ui/theme-picker";
 import Builder from "@sports/kit/ui/builder";
@@ -22,6 +22,7 @@ export const routes = { builder: "/charts/build/", rankings: "/players/" };
 const NAV: ShellConfig["nav"] = [
   { href: "/", label: "Today", icon: LayoutGrid },
   { href: "/rankings/", label: "Rankings", icon: ListOrdered },
+  { href: "/race/", label: "Race", icon: Flag },
   { href: "/tournaments/", label: "Tournaments", icon: Trophy },
   { href: "/players/", label: "Players", icon: BarChart3, match: ["/player/"] },
   { href: "/charts/", label: "Charts", icon: ScatterChart },
