@@ -33,8 +33,8 @@ const DEFAULTS_BASE = {
   nonD1Weight: 0.5,
   gameSigma: 10.5, // irreducible single-game margin noise in points
   netSigmaPer100: 15.7, // single-game net-efficiency noise used for rating uncertainty
-  maxIterations: 2000,
-  tolerance: 1e-5,
+  maxIterations: 20000,
+  tolerance: 1e-9,
 };
 const DEFAULTS = { ...DEFAULTS_BASE, ...ENV };
 
