@@ -107,12 +107,14 @@ jobs:
           CBBD_API_KEY: ${{ secrets.CBBD_API_KEY }}
       - name: Refresh tennis data (Baseline site; cached, only new matches are fetched)
         run: node apps/tennis/scripts/fetch-tennis.mjs || echo "::warning::Tennis refresh failed; the site keeps the last snapshot."
+      - name: Refresh college football data (Gridiron; only new games are fetched; site files are rebuilt from the committed cache)
+        run: node apps/football/scripts/fetch-cfb.mjs || echo "::warning::Football refresh failed; pages are rebuilt from the committed cache."
       - name: Save refreshed current-season data snapshots
         if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' || github.event_name == 'push'
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add package-lock.json public/data/ .cache/ apps/tennis/public/data/app/ apps/tennis/data-cache/
+          git add package-lock.json public/data/ .cache/ apps/tennis/public/data/app/ apps/tennis/data-cache/ apps/football/data-cache/
           if ! git diff --cached --quiet; then
             git commit -m 'Update 2026-27 basketball data snapshots'
             # main may have moved during the run (a merge or an overlapping refresh): replay on top, ours wins.
@@ -124,6 +126,7 @@ jobs:
         run: |
           npm run typecheck
           npm run typecheck -w @sites/tennis
+          npm run typecheck -w @sites/football
           npm test
       - name: Build app data layer and static site
         run: npm run build
@@ -137,7 +140,11 @@ jobs:
         run: npm run build -w @sites/tennis
         env:
           SITE_BASE_PATH: /${{ github.event.repository.name }}/tennis
-      - name: Assemble the Pages site (hub at /, D1 Hoops at /d1-hoops/, tennis at /tennis/)
+      - name: Build the college football site
+        run: npm run build -w @sites/football
+        env:
+          SITE_BASE_PATH: /${{ github.event.repository.name }}/football
+      - name: Assemble the Pages site (hub at /, D1 Hoops at /d1-hoops/, tennis at /tennis/, football at /football/)
         run: |
           rm -rf pages && mkdir -p pages
           cp -r out pages/d1-hoops
@@ -146,6 +153,7 @@ jobs:
             pages/d1-hoops/data/player-season-2027.json pages/d1-hoops/data/game-team-boxscores-2027.json \
             pages/d1-hoops/data/feeds-2027.json pages/d1-hoops/data/espn-rosters-2027.json
           cp -r apps/tennis/out pages/tennis
+          cp -r apps/football/out pages/football
           cp site-hub/index.html pages/index.html
           cp site-hub/404.html pages/404.html
           touch pages/.nojekyll
