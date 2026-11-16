@@ -40,3 +40,16 @@ LLM number check too loose, cross-site writes to the localhost server.
 - Freeze a written contract (schema + JSON shapes + one shared business rule like the display price) before fanning out;
   the price-picker bug came from that rule being unspecified.
 - Ask the reviewer specifically about look-ahead leakage when a backtest is the selling point.
+
+## 2026-11-16 - moved into Sports-Analytics (Baseline integration)
+
+Deuce now lives in `apps/tennis/deuce/` and is the model behind Baseline's Predictions and Model pages.
+- Compact committed cache `data-cache/matches/{atp|wta}/YYYY-MM.jsonl.gz` (about 2 MB for 38k matches) replaces the raw ESPN
+  cache (425 MB, now local only). `engine.update` rebuilds the database from it and only fetches fixtures and recent results.
+- `engine/sources/`: shared `MatchRecord`/`OddsRecord`/`Source` interface, ESPN as a source, a key-aware registry, per-source
+  quota and backfill state, cross-source dedupe and player identity (`engine/merge.py`). Challenger/ITF sources plug in there.
+- `engine.export_site` writes the site data (no odds, edges or value flags) and links players to Baseline's ids;
+  `engine.paper_bets` writes `docs/tennis-paper-bets.md`.
+- tennis-data.co.uk files are stored as small extracts in `data-cache/odds/`; the download is weekly in CI (the host blocks the
+  build sandbox but not GitHub runners, so this path is covered by mocked tests only until the first CI run).
+- Player ids in the database changed from bare ESPN ids to `espn:<id>`.

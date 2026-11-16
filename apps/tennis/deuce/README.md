@@ -1,50 +1,83 @@
 # Deuce
 
-A free, personal tennis prediction dashboard built from scratch: model win probabilities, value flags against bookmaker
-odds, a Match Brief with each player's upsides and downsides, and an honest backtest. Everything runs on your Mac.
-No subscriptions.
+The tennis prediction engine behind the Baseline site, and a free local dashboard you can run on your Mac: model win
+probabilities, a Match Brief with each player's upsides and downsides, value flags against bookmaker odds, and an honest
+walk-forward backtest. No subscriptions.
 
 For information and paper trading only. Predictions are probabilities, not promises.
 
-## Start
+It lives in the monorepo at `apps/tennis/deuce/`. Run everything from this folder with `python -m ...` (Python 3.11+).
 
-Double-click **Deuce** on your Desktop. It opens iTerm, sets itself up on first run, refreshes data if it's more than
-6 hours old, and opens the dashboard at http://127.0.0.1:8765.
+## How it feeds the site
 
-By hand:
+`.github/workflows/deploy.yml` runs these in CI (all non-fatal; the site keeps the last snapshot on failure):
+
+```
+python -m engine.update            # cache + sources -> tennis.db -> ratings -> model -> predictions
+python -m engine.odds_history --weekly   # tennis-data.co.uk closing odds -> data-cache/odds/
+python -m brief.run --no-llm       # Match Briefs for upcoming matches
+python -m engine.backtest          # walk-forward backtest -> data/backtest.json
+python -m engine.export_site       # -> apps/tennis/public/data/app/{predictions,model}.json, briefs/<id>.json
+python -m engine.paper_bets        # -> docs/tennis-paper-bets.md (simulation, never on the site)
+```
+
+`export_site` links players to Baseline's `players.json` by normalised name and tour (`baseline_id`), keeps a window of
+3 days back to 10 days ahead, removes brief files outside it, and never writes odds, edges or value flags.
+The integration contract is `docs/tennis-deuce.md` at the repo root; the module contract is `CONTRACT.md` here.
+
+## Data
+
+| Path | What | In git |
+| --- | --- | --- |
+| `data-cache/matches/{atp\|wta}/YYYY-MM.jsonl.gz` | Every finished match, one parsed `MatchRecord` per line (`source` says who it came from). About 2 MB for 2023 to now | yes |
+| `data-cache/odds/` | tennis-data.co.uk yearly extracts (`tennis-data/`), OddsPapi records (`records/`), fetch manifest | yes |
+| `data-cache/sources/<name>/state.json` | Per-source quota counters and backfill cursor | yes |
+| `data/` | `tennis.db`, model pickles, raw HTTP caches, weather | no |
+
+`engine.update` rebuilds `tennis.db`'s matches, players and tournaments from the cache on every run and only touches the
+network for fixtures and the last few weeks of results. Fixtures and live matches are never cached. Output files are
+byte-deterministic, so a run that changes nothing leaves git quiet.
+
+### Sources
+
+ESPN (ATP/WTA tour, qualifying, WTA 125; no key) is always on. Live Tennis API, Tennis API and OddsPapi add Challenger
+and ITF coverage when their key is present (`LIVETENNISAPI_KEY`, `RAPIDAPI_KEY`, `ODDSPAPI_KEY`, or `[sources]` in
+`config.toml`). The same player or match from two sources becomes one. See `engine/sources/README.md`.
+
+### Odds
+
+Historical closing odds come free from tennis-data.co.uk (`python -m engine.odds_history`). If that host is
+unreachable, put the yearly `.xlsx` files in `data/odds_import/` and run it again. Live odds: type them into a match's
+Odds tab, or add a free The Odds API key to `config.toml`.
+
+## Run it locally
 
 ```
 ./scripts/setup.sh     # once: Python venv + packages + config.toml
 ./scripts/daily.sh     # refresh results, fixtures, predictions, briefs, backtest
-./scripts/start.sh     # serve and open the dashboard
+./scripts/start.sh     # serve the dashboard at http://127.0.0.1:8765
 ```
 
-## Match Briefs with a local AI (free)
+`python scripts/make_launcher.py` builds a **Deuce** app for the Desktop. It points at
+`$HOME/workspace/Sports-Analytics/apps/tennis/deuce`; pass `--project-dir` or set `DEUCE_DIR` if your checkout is elsewhere.
 
-1. Open LM Studio, download a small instruct model (for example Qwen2.5 7B Instruct), and start the local server
-   (Developer tab, port 1234).
-2. Run `./scripts/daily.sh` again. Briefs are then written by the local model, grounded in the computed numbers.
+With LM Studio running its local server (port 1234), `./scripts/daily.sh` writes briefs with a local model, grounded in the
+computed numbers; without it a built-in rule-based writer is used (also what CI uses).
 
-With no model running, briefs are written by the built-in rule-based writer. Ollama also works: set
-`base_url = "http://localhost:11434/v1"` in `config.toml`.
+## Tests
 
-## Odds
-
-- Historical closing odds for the backtest come free from tennis-data.co.uk (`python -m engine.odds_history`).
-  If the download fails, put the yearly .xlsx files in `data/odds_import/` and run it again.
-- Live odds: add free-tier keys for The Odds API or OddsPapi in `config.toml`, or type odds into a match's Odds tab.
-
-## Data
-
-ATP and WTA tour-level results and fixtures from ESPN's public scoreboard (2023 onward), weather from Open-Meteo.
-Challenger and ITF matches aren't covered yet.
+```
+python -m pytest -q
+```
 
 ## Layout
 
 | Folder | What's in it |
 | --- | --- |
-| `engine/` | Data ingest, Elo ratings, player features, model, predictions, backtest, odds |
+| `engine/` | Sources and ingest, cache, merge, Elo ratings, features, model, predictions, backtest, odds, site export, paper bets |
+| `engine/sources/` | One module per data source plus the shared interface (`base.py`) |
 | `brief/` | Match Brief: facts, verdicts, local-AI narration |
-| `app/` | Web server and dashboard |
+| `app/` | Local dashboard (FastAPI + static frontend) |
 | `scripts/` | Setup, daily refresh, start, launcher builder |
-| `docs/` | Contract between parts, design spec, screenshots |
+| `docs/` | Design spec, project log, a few screenshots of the local dashboard |
+| `tests/` | `engine/`, `brief/`, `app/` |

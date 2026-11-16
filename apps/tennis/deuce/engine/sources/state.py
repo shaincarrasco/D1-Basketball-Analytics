@@ -36,6 +36,8 @@ class SourceState:
             self.data = {}
 
     def save(self) -> None:
+        if not self.data and not self.path.exists():
+            return   # keyless, quota-free sources keep no state
         self.path.parent.mkdir(parents=True, exist_ok=True)
         tmp = self.path.with_suffix(".tmp")
         tmp.write_text(json.dumps(self.data, indent=1, sort_keys=True) + "\n")

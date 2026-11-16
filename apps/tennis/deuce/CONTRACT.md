@@ -1,7 +1,13 @@
-# Tennis Brain Free — shared contract
+# Deuce: shared contract (module contract; the Baseline site contract is docs/tennis-deuce.md at the repo root)
 
-Personal, free, local tennis prediction app. Python 3.11+, SQLite, FastAPI. No paid services required.
-Everything runs on the user's Mac. Default port 8765.
+Free tennis prediction engine plus a local dashboard. Python 3.11+, SQLite, FastAPI. No paid services required.
+Run from `apps/tennis/deuce/`. Default dashboard port 8765.
+
+Ingest change (monorepo): `engine.update` rebuilds `matches`/`players`/`tournaments` from the committed compact cache
+`data-cache/matches/{atp|wta}/YYYY-MM.jsonl.gz` and fetches only fixtures and recent results from the available sources
+(see `engine/sources/README.md`). Player ids are `<source>:<id>` (ESPN: `espn:3301`); match ids are ESPN's id as is, others
+`<source>-<id>`. `match_sources(match_id, source, source_id)` lists every provider id of a deduped match. New commands:
+`python -m engine.export_site`, `python -m engine.paper_bets`, `python -m engine.cache --stats`.
 
 ## Folder ownership (do not edit outside your folder)
 

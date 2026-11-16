@@ -240,6 +240,8 @@ def load_manifest() -> dict:
 
 
 def save_manifest(m: dict) -> None:
+    if not m and not MANIFEST.exists():
+        return
     MANIFEST.parent.mkdir(parents=True, exist_ok=True)
     MANIFEST.write_text(json.dumps(m, indent=1, sort_keys=True) + "\n")
 

@@ -117,3 +117,9 @@ def venue_country(venue: str | None) -> str | None:
     if len(parts) >= 2 and ", ".join(parts[-2:]).lower() in _ALIAS:  # "Hong Kong, China"
         return parts[-1]
     return parts[-1]
+
+
+def code3(value: str | None) -> str | None:
+    """Three-letter country code (IOC-style, as the canonical keys above) or None when unknown."""
+    k = norm_country(value)
+    return k.upper() if k and len(k) == 3 and k.isalpha() else None
