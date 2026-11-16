@@ -8,3 +8,9 @@ out
 coverage
 public/data/app/
 *.tsbuildinfo
+
+# Deuce (tennis engine) runtime data: database, model pickles, raw HTTP caches
+apps/tennis/deuce/data/
+apps/tennis/deuce/dist/
+apps/tennis/deuce/config.toml
+apps/tennis/deuce/.venv/
