@@ -8,7 +8,7 @@ import "@fontsource-variable/doto";
 import "@sports/ui/theme.css";
 import SiteShell from "@/components/site-shell";
 import { getMeta } from "@/lib/server-data";
-import { THEME_SCRIPT } from "@sports/ui/theme";
+import { themeScript } from "@sports/ui/theme";
 import { DHR_INTRO_SCRIPT } from "@/components/dhr-intro-script";
 
 // Metadata URLs are not basePath-aware, so prefix them (GitHub Pages serves D1 Hoops under /<repo>/d1-hoops).
@@ -29,17 +29,17 @@ export const metadata: Metadata = {
     apple: [{ url: `${BASE}/icons/apple-touch-icon.png`, sizes: "180x180" }],
   },
 };
-export const viewport: Viewport = { themeColor: "#0E0F12", width: "device-width", initialScale: 1, viewportFit: "cover" };
+export const viewport: Viewport = { themeColor: "#07080F", width: "device-width", initialScale: 1, viewportFit: "cover" };
 
-// THEME_SCRIPT runs before first paint: saved palette + accent, else the device setting.
+// The theme script runs before first paint: saved palette + accent, else Primetime (dark).
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const meta = getMeta();
   const updated = new Date(meta.updated.teams ?? meta.updated.built).toLocaleString("en-US", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit", timeZone: "America/New_York", timeZoneName: "short" });
   return (
-    <html lang="en" data-theme="dark" data-palette="blacktop" suppressHydrationWarning>
+    <html lang="en" data-theme="dark" data-palette="primetime" suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+        <script dangerouslySetInnerHTML={{ __html: themeScript("primetime") }} />
         <script dangerouslySetInnerHTML={{ __html: DHR_INTRO_SCRIPT }} />
       </head>
       <body>

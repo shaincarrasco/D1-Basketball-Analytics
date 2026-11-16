@@ -53,8 +53,8 @@ describe("projection build-up", () => {
     for (const g of games) {
       const b = gameBuild(m, input, g);
       const d = displayMargin(b, -1);
-      expect(d.margin).toBe(g.pred!.margin);
-      expect(r(d.neutral + d.home)).toBe(d.margin);
+      expect(d.margin + 0).toBe(g.pred!.margin + 0); // +0 folds -0 into 0 (toBe uses Object.is)
+      expect(r(d.neutral + d.home) + 0).toBe(d.margin + 0);
       expect(r(pubOne(b.aPts) + pubOne(b.bPts))).toBe(r(g.pred!.home + g.pred!.away));
       // Neutral site: no home-court line.
       if (g.neutral) expect(d.home).toBe(0);

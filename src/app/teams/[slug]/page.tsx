@@ -107,8 +107,9 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
     <article>
       {/* Hero: full-bleed team colour, rank on a scoreboard plate */}
       <section className="team-accent relative -mx-4 -mt-6 mb-0 overflow-hidden px-4 pb-6 pt-6 sm:-mx-6 sm:px-6 lg:mx-0 lg:mt-0 lg:rounded-[22px] lg:px-8 lg:pt-8"
-        style={{ background: color, color: ink, "--team": team.color ?? undefined } as React.CSSProperties}>
-        <svg className="pointer-events-none absolute -right-20 top-6 h-[300px] w-[300px] opacity-[0.13]" viewBox="0 0 300 300" fill="none" stroke="currentColor" strokeWidth="3" aria-hidden>
+        style={{ background: `radial-gradient(ellipse 70% 120% at 0% 0%, rgb(255 255 255 / 0.16), transparent 60%), linear-gradient(180deg, transparent 35%, rgb(0 0 0 / 0.38)), ${color}`, color: ink, "--team": team.color ?? undefined } as React.CSSProperties}>
+        <span className="pointer-events-none absolute -right-10 -top-10 hidden opacity-[0.14] mix-blend-luminosity md:block" aria-hidden><TeamLogo src={team.logo} name="" size={340} /></span>
+        <svg className="pointer-events-none absolute -right-20 top-6 h-[300px] w-[300px] opacity-[0.13] md:hidden" viewBox="0 0 300 300" fill="none" stroke="currentColor" strokeWidth="3" aria-hidden>
           <circle cx="150" cy="150" r="60" /><circle cx="150" cy="150" r="140" /><path d="M150 0v300" />
         </svg>
         <div className="relative flex items-center justify-between gap-3 text-[15px] font-semibold">
@@ -126,7 +127,7 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-3">
               <span className="hidden shrink-0 sm:block"><TeamLogo src={team.logo} name={team.name} size={44} /></span>
-              <ViewTransition name={`team-name-${slug}`} share="morph" default="none"><h1 className="truncate font-display text-[3.25rem] font-black leading-[0.9] sm:text-[4rem]">{team.name}</h1></ViewTransition>
+              <ViewTransition name={`team-name-${slug}`} share="morph" default="none"><h1 className="hero-title truncate py-1 text-[3.5rem] sm:text-[5rem]">{team.name}</h1></ViewTransition>
             </div>
             <p className="mt-1.5 text-[15px] font-semibold opacity-90">{team.mascot ? `${team.mascot}, ` : ""}<LiveRecord team={team} /> (<LiveRecord team={team} conf /> {team.confName})</p>
             <p className="text-[14px] opacity-75 tnum">

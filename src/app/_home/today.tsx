@@ -67,10 +67,10 @@ export default function Today() {
     <section aria-labelledby="today-h" className="space-y-6">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h1 id="today-h" className="font-display text-[2.75rem] font-black leading-[0.95] sm:text-[3.25rem]">
+          <h1 id="today-h" className="hero-title text-[3.75rem] sm:text-[5.5rem]">
             {day ? dayLabel(day, { weekday: "long" }) : "Today"}
           </h1>
-          <p className="mt-1.5 text-[15px] font-medium text-mute">
+          <p className="mt-2 text-[16px] font-medium text-mute">
             {day ? dayLabel(day, { month: "long", day: "numeric" }) : "Loading the slate"}
             {staticGames ? <>, {games.length} games</> : null}
             {liveCount ? <span className="font-semibold text-hot">, {liveCount} live</span> : null}
@@ -128,7 +128,7 @@ function DateStrip({ day, today }: { day: string; today: boolean }) {
         const cur = d === day;
         return (
           <Link key={d} href={cur ? "/" : `/games/?d=${d}`} aria-current={cur ? "date" : undefined}
-            className={`flex min-w-[52px] flex-1 flex-col items-center rounded-xl py-2 transition-colors sm:max-w-[96px] ${cur ? "bg-ink text-night" : "text-mute hover:bg-deck"}`}>
+            className={`flex min-w-[52px] flex-1 flex-col items-center rounded-xl py-2 transition-colors sm:max-w-[96px] ${cur ? "bg-bulb text-scoreboard shadow-[0_10px_26px_-10px_rgb(var(--bulb-rgb)/0.9)]" : "text-mute hover:bg-deck"}`}>
             <span className="text-xs font-semibold">{cur && today ? "Today" : dayLabel(d, { weekday: "short" })}</span>
             <span className={`font-display text-xl font-bold leading-tight ${cur ? "" : d > day ? "text-ink" : ""}`}>{Number(d.slice(8))}</span>
           </Link>

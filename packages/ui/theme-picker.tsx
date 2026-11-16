@@ -5,7 +5,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Check, Palette as PaletteIcon, X } from "lucide-react";
-import { ACCENTS, AUTO, PALETTES, readChoice, resolvePalette, saveChoice, type ThemeChoice } from "./theme";
+import { ACCENTS, AUTO, PALETTES, readChoice, resolvePalette, saveChoice, siteDefault, type ThemeChoice } from "./theme";
 
 /** A colour the site offers as an accent (e.g. the viewer's followed teams). */
 export type AccentSwatch = { key: string; label: string; color: string };
@@ -136,7 +136,7 @@ export default function ThemePicker({ useSwatches = noSwatches, swatchesTitle = 
             )}
             <div className="mt-5 flex items-center justify-between border-t border-line pt-4">
               <span className="flex items-center gap-2 text-sm text-mute">Preview <span className="dots dots-glow text-xl leading-none">88</span></span>
-              <button type="button" className="text-sm font-semibold text-mute hover:text-ink" onClick={() => update({ palette: AUTO, accent: null })}>Reset to default</button>
+              <button type="button" className="text-sm font-semibold text-mute hover:text-ink" onClick={() => update({ palette: siteDefault(), accent: null })}>Reset to default</button>
             </div>
           </div>
         </div>,
