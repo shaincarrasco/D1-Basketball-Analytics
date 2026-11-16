@@ -72,6 +72,7 @@ export default function GameSheet({ g: gIn, live: liveIn, onClose }: { g: Game; 
 
   const final = isFinal(g), isLiveNow = isLive(g);
   const played = final || isLiveNow;
+  const showProj = useShowProjections();
   const titleId = `game-${g.id}-title`;
   const matchup = matchupHref(g);
   const place = [g.city, g.state].filter(Boolean).join(", ");
@@ -101,7 +102,7 @@ export default function GameSheet({ g: gIn, live: liveIn, onClose }: { g: Game; 
             {g.neutral && <span className="chip !px-2 !py-0.5 !text-[11.5px]">Neutral site</span>}
             {g.confGame && <span className="chip !px-2 !py-0.5 !text-[11.5px]">Conference game</span>}
             {g.tournament && <span className="chip !px-2 !py-0.5 !text-[11.5px]">{g.tournament}</span>}
-            {final && g.upset != null && <span className="rounded-full bg-[rgb(var(--hot-rgb)/0.15)] px-2 py-0.5 text-[11.5px] font-bold text-hot">Upset · winner had a {pctFmt(g.upset)} pregame chance</span>}
+            {final && g.upset != null && <span className="rounded-full bg-[rgb(var(--hot-rgb)/0.15)] px-2 py-0.5 text-[11.5px] font-bold text-hot">Upset{showProj ? <> · winner had a {pctFmt(g.upset)} pregame chance</> : null}</span>}
           </div>
 
           {played && <LineScore g={g} />}
@@ -111,7 +112,7 @@ export default function GameSheet({ g: gIn, live: liveIn, onClose }: { g: Game; 
           {played && <LiveDetail g={g} d={detail} mode={mode} espnId={espnId} onLoad={() => setWantDetail(true)} />}
           {!final && <Availability g={g} />}
           <Projection g={g} />
-          <GameBreakdown g={g} />
+          {showProj && <GameBreakdown g={g} />}
           <BoxCompare g={g} summary={detail.data} />
 
           <div className="mt-6 flex flex-wrap gap-2">
@@ -315,14 +316,14 @@ function LineRow({ g }: { g: Game }) {
   return (
     <div className="deck-flat mb-3 flex flex-wrap items-center gap-x-3 gap-y-1 px-3 py-2 text-[13px] text-mute tnum">
       <span title={li.provider ? `Pregame spread from ${li.provider}, as shown by ESPN` : "Pregame spread as shown by ESPN"}>Line: <b className="text-ink">{li.market}</b></span>
-      {li.model && <span title="DHR projected margin written as a spread">· DHR: <b className="text-ink">{li.model}</b></span>}
+      {li.model && <span title="Projected margin written as a spread">· Projected: <b className="text-ink">{li.model}</b></span>}
       {li.total != null && <span>· Total {li.total}</span>}
       {li.pick ? (
-        <span className="ml-auto" title="DHR's side against the line (counts when the model and line differ by at least half a point)">
-          DHR pick <b className="text-ink">{li.pick.text}</b>
+        <span className="ml-auto" title="The projection's side of the line (counts when the two differ by at least half a point)">
+          Pick <b className="text-ink">{li.pick.text}</b>
           {res && <b className={`ml-1.5 ${res === "W" ? "text-win" : res === "L" ? "text-loss" : "text-mute"}`}>{res === "W" ? "✓ covered" : res === "L" ? "✗ didn't cover" : "push"}</b>}
         </span>
-      ) : li.model ? <span className="ml-auto text-dim">No DHR pick (within half a point of the line)</span> : null}
+      ) : li.model ? <span className="ml-auto text-dim">No pick (within half a point of the line)</span> : null}
     </div>
   );
 }
@@ -333,22 +334,41 @@ function Projection({ g }: { g: Game }) {
   const fw = favoriteWon(g);
   const showProj = useShowProjections();
   const poss = g.box?.home?.poss != null && g.box?.away?.poss != null ? (g.box.home.poss + g.box.away.poss) / 2 : g.box?.home?.poss ?? g.box?.away?.poss ?? null;
+  // Where to watch and the write-ups are facts about the game, so they never wait on the projection switch.
+  const coverage = (
+    <>
+      {g.tv?.length ? <div className="mb-3 flex flex-wrap items-center gap-2 text-[13px] text-mute">Where to watch <TvBadges tv={g.tv} max={6} size="md" /></div> : null}
+      {g.articles?.length ? (
+        <section className="mb-4" aria-label="Previews and recaps">
+          <h3 className="mb-1 text-[13px] font-semibold text-mute">Previews &amp; recaps</h3>
+          <ArticleList items={g.articles} max={4} />
+        </section>
+      ) : null}
+    </>
+  );
+  if (!showProj || !p) {
+    return (
+      <section className="mt-7" aria-label="Coverage and projection">
+        {coverage}
+        {p && (
+          <button type="button" className="btn w-full justify-center" onClick={() => setShowProjections(true)} data-testid="show-projection">
+            Show {final ? "the pregame projection" : "projection"}
+          </button>
+        )}
+      </section>
+    );
+  }
   return (
     <section className="mt-7" aria-labelledby={`pj-${g.id}`}>
+      {coverage}
       <div className="mb-2 flex flex-wrap items-baseline gap-x-3">
         <h3 id={`pj-${g.id}`} className="h-section !text-xl">{final ? "Projection vs result" : "Pregame projection"}</h3>
         {fw != null && <span className={`text-sm font-semibold ${fw ? "text-win" : "text-loss"}`}>{fw ? "✓ Favorite won" : "✗ Favorite lost"}</span>}
+        <button type="button" className="ml-auto text-[13px] font-semibold text-mute hover:text-ink" onClick={() => setShowProjections(false)}>Hide projections</button>
       </div>
-      {!p ? <p className="text-sm text-mute">No projection was made for this game.</p> : (
+      {(
         <>
-          {g.tv?.length ? <div className="mb-3 flex flex-wrap items-center gap-2 text-[13px] text-mute">Where to watch <TvBadges tv={g.tv} max={6} size="md" /></div> : null}
           <LineRow g={g} />
-          {g.articles?.length ? (
-            <section className="mb-4" aria-label="Previews and recaps">
-              <h3 className="mb-1 text-[13px] font-semibold text-mute">Previews &amp; recaps</h3>
-              <ArticleList items={g.articles} max={4} />
-            </section>
-          ) : null}
           <div className="deck-flat mb-3 p-3">
             <div className="mb-1 flex justify-between text-xs text-mute"><span>{g.away.name}</span><span>Pregame win probability</span><span>{g.home.name}</span></div>
             <WinProb awayName={g.away.name} homeName={g.home.name} homeWP={p.wp} />
@@ -357,19 +377,16 @@ function Projection({ g }: { g: Game }) {
             <table className="dt [&_td]:!whitespace-normal [&_th]:!whitespace-normal">
               <thead><tr><th className="l" scope="col">Measure</th><th scope="col">Projected</th>{final && <th scope="col">Actual</th>}</tr></thead>
               <tbody>
-                {showProj && <tr><th scope="row" className={ROW_TH}>Score ({g.away.short ?? g.away.name}–{g.home.short ?? g.home.name})</th><td>{fmt(p.away)}–{fmt(p.home)}</td>{final && <td className="font-semibold">{g.away.score ?? "—"}–{g.home.score ?? "—"}</td>}</tr>}
+                {<tr><th scope="row" className={ROW_TH}>Score ({g.away.short ?? g.away.name}–{g.home.short ?? g.home.name})</th><td>{fmt(p.away)}–{fmt(p.home)}</td>{final && <td className="font-semibold">{g.away.score ?? "—"}–{g.home.score ?? "—"}</td>}</tr>}
                 <tr><th scope="row" className={ROW_TH}>Margin</th><td>{marginText(g)}</td>{final && <td className="font-semibold">{actualMarginText(g)}</td>}</tr>
                 {g.line && (
                   <tr><th scope="row" className={ROW_TH}>Market spread</th><td>{lineInfo(g)?.market ?? "—"}</td>{final && <td className="font-semibold">{(() => { const c = lineInfo(g)?.covered; return c ? `${g[c].short ?? g[c].name} covered` : g.home.score != null ? "Push" : "—"; })()}</td>}</tr>
                 )}
-                {showProj && <tr><th scope="row" className={ROW_TH}>Total points</th><td>{fmt(p.away + p.home)}</td>{final && <td className="font-semibold">{g.home.score != null && g.away.score != null ? g.home.score + g.away.score : "—"}</td>}</tr>}
+                {<tr><th scope="row" className={ROW_TH}>Total points</th><td>{fmt(p.away + p.home)}</td>{final && <td className="font-semibold">{g.home.score != null && g.away.score != null ? g.home.score + g.away.score : "—"}</td>}</tr>}
                 <tr><th scope="row" className={ROW_TH}>Tempo (possessions)</th><td>{fmt(p.tempo)}</td>{final && <td className="font-semibold">{fmt(poss)}</td>}</tr>
               </tbody>
             </table>
           </div>
-          <button type="button" className="mt-2 text-[13px] font-semibold text-bulb-ink hover:underline" onClick={() => setShowProjections(!showProj)}>
-            {showProj ? "Hide projected scores" : "Show projected score"}
-          </button>
         </>
       )}
     </section>

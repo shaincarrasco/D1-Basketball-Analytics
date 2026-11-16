@@ -36,11 +36,11 @@ export default function InjuriesPage() {
 
   const out = rows.filter(r => OUT_STATES.has(r.state));
   const stats: [string, number][] = [
-    ["Players out", out.length],
-    ["Out for season", rows.filter(r => r.state === "season").length],
-    ["Questionable / day-to-day", rows.filter(r => r.state === "questionable" || r.state === "dtd").length],
-    ["Changes in 24h", wire.filter(e => Date.parse(checked) - Date.parse(e.t) <= 864e5).length],
-    ["DHR top-25 teams affected", new Set(rows.filter(r => (r.rank ?? 999) <= 25).map(r => r.slug)).size],
+    ["players out", out.length],
+    ["out for season", rows.filter(r => r.state === "season").length],
+    ["questionable or day-to-day", rows.filter(r => r.state === "questionable" || r.state === "dtd").length],
+    ["changes in 24 hours", wire.filter(e => Date.parse(checked) - Date.parse(e.t) <= 864e5).length],
+    ["top-25 teams affected", new Set(rows.filter(r => (r.rank ?? 999) <= 25).map(r => r.slug)).size],
   ];
 
   // Biggest absences: reported or confirmed absences lead (we know why he's out), then the most costly
@@ -53,17 +53,18 @@ export default function InjuriesPage() {
 
   return (
     <>
-      <PageHeader title="Injuries">Every absence in D-I men&apos;s basketball, with how we know it and what it costs the team. Credited to the source, never guessed.</PageHeader>
+      <PageHeader title="Injuries">Every reported absence in D-I men&apos;s basketball, credited to its source.</PageHeader>
       <div className="-mt-3 mb-4"><Freshness checked={checked} /></div>
 
-      <ul className="mb-8 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5" aria-label="Summary">
+      {/* One line, not a wall of tiles: the counts are context for the list below, not the content. */}
+      <dl className="mb-8 flex flex-wrap gap-x-6 gap-y-1 border-y border-line py-3 text-sm" aria-label="Summary">
         {stats.map(([l, v]) => (
-          <li key={l} className="deck px-4 py-3">
-            <div className="font-display text-[2.4rem] font-black leading-none">{v}</div>
-            <div className="mt-1 text-[12.5px] font-semibold text-mute">{l}</div>
-          </li>
+          <div key={l} className="flex items-baseline gap-1.5">
+            <dd className="font-display text-xl font-extrabold leading-none tnum">{v}</dd>
+            <dt className="text-mute">{l}</dt>
+          </div>
         ))}
-      </ul>
+      </dl>
 
       <section id="biggest" className="mb-10 scroll-mt-20" aria-labelledby="big-h">
         <h2 id="big-h" className="h-section mb-3">Biggest absences</h2>

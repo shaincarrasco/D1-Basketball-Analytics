@@ -76,7 +76,7 @@ export default function BuildTable({ b, A, B, sign, injury, asOf, verified, poin
 
   return (
     <div className="space-y-4 text-sm" data-testid="build-up">
-      <p className="text-[13px] text-mute">{asOf} Every line is the model&apos;s own arithmetic. Ratings already adjust for every opponent each team has played, so opponent strength is inside each team&apos;s offense and defense numbers.</p>
+      <p className="text-[13px] text-mute">{asOf} Every line is the projection&apos;s own arithmetic. Ratings already adjust for every opponent each team has played, so opponent strength is inside each team&apos;s offense and defense numbers.</p>
 
       <div>
         <h4 className="mb-1 text-[13px] font-semibold">1 · How many possessions</h4>
@@ -153,8 +153,8 @@ export default function BuildTable({ b, A, B, sign, injury, asOf, verified, poin
       <p className="text-[12px] text-dim">
         {verified === true && <><span className="font-semibold text-win">✓ Matches the published projection to the decimal.</span> </>}
         {verified === false && <><span className="font-semibold text-hot">These lines differ slightly from the published projection</span> (the ratings were refreshed after it was made); the published numbers are the official ones. </>}
-        Lines are rounded to one decimal; the model keeps full precision, so a product can differ by 0.1.
-        {injury && <> The injury line is points per 100 each team is estimated to lose with its absent players (minutes × player rating), × possessions ÷ 100. It is a rough what-if, not part of the model.</>}{" "}
+        Lines are rounded to one decimal; the calculation keeps full precision, so a product can differ by 0.1.
+        {injury && <> The injury line is points per 100 each team is estimated to lose with its absent players (minutes × player rating), × possessions ÷ 100. It is a rough what-if, not part of the projection.</>}{" "}
         <Link href="/methodology/#predictions" className="underline hover:text-ink">Methodology</Link>
       </p>
     </div>

@@ -42,7 +42,7 @@ export default function GameLog({ games: published, logos, slug }: { games: Team
 
   const upcoming = (g: (typeof games)[number]) => !g.result && g.status !== "canceled" && g.status !== "cancelled" && g.status !== "postponed";
   const list = games.filter(g => (show === "all" || (show === "results" ? g.result : upcoming(g))) && (!quad || g.quad === quad));
-  const hasLines = games.some(g => g.line !== undefined);
+  const hasLines = showProj && games.some(g => g.line !== undefined);
   const qGames = quad ? games.filter(g => g.quad === quad && g.result) : [];
 
   return (
@@ -67,7 +67,7 @@ export default function GameLog({ games: published, logos, slug }: { games: Team
           <thead>
             <tr>
               <th className="l">Date</th><th className="l">Opponent</th><th className="l">Result</th>
-              <th title="Pregame win chance from DHR (uses only games before that date)">Pregame win %</th>
+              {showProj && <th title="Pregame win chance, from games played before that date">Pregame win %</th>}
               {showProj && <th title="Pregame projected score">Projected</th>}
               {hasLines && <th title="Pregame spread ESPN showed (DraftKings), this team's side: negative = favored">Line</th>}
               {hasLines && <th title="Result against the spread">ATS</th>}
@@ -112,7 +112,7 @@ export default function GameLog({ games: published, logos, slug }: { games: Team
                       </Link>
                     ) : g.status === "postponed" || g.status === "cancelled" || g.status === "canceled" ? <span className="text-mute capitalize">{g.status}</span> : g.status === "in_progress" ? <Link href={gameHref(g)} className="flex items-center gap-2 text-hot"><span className="live-dot" />In progress</Link> : <span className="flex items-center gap-2 text-dim">{timeLabel(g.date)}{g.tv?.length ? <TvBadges tv={g.tv} max={2} /> : null}</span>}
                   </td>
-                  <td style={{ color: g.wp === null ? undefined : g.wp >= 0.5 ? "var(--ink)" : "var(--mute)" }}>{pctFmt(g.wp)}</td>
+                  {showProj && <td style={{ color: g.wp === null ? undefined : g.wp >= 0.5 ? "var(--ink)" : "var(--mute)" }}>{pctFmt(g.wp)}</td>}
                   {showProj && <td className="text-mute">{g.projPts !== null ? `${fmt(g.projPts, 0)}–${fmt(g.projOppPts, 0)}` : "—"}</td>}
                   {hasLines && <td className="text-mute">{g.line !== undefined ? lineText(g.line) : "—"}</td>}
                   {hasLines && (

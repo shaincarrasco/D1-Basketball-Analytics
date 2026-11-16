@@ -101,7 +101,6 @@ export default function RankingsTable({ teams: published, total, form = {}, form
       { key: "adjT", label: "Tempo", title: "Adjusted possessions per 40 minutes (style, not quality)", value: t => t.adjT, render: t => <span>{fmt(t.adjT)}<span className="sub-rank">{t.adjTRank}</span></span> },
       { key: "sos", label: "SOS", title: "Average AdjEM of opponents played", value: t => t.sos, render: t => rankCell(t.sos, t.sosRank, 1) },
       { key: "perf", label: "Game form", title: "Adjusted efficiency margin in each game (opponent + venue adjusted)", sortable: false, value: t => t.perf.length ? t.perf.reduce((a, b) => a + b, 0) / t.perf.length : null, render: t => <PerfBars values={t.perf} /> },
-      { key: "proj", label: "Proj W–L", title: "Current record plus expected wins in remaining games", value: t => t.projW, render: t => <span>{fmt(t.projW, 1)}–{fmt(t.projL, 1)}</span> },
       { key: "sample", label: "Sample", title: "Rated D-I games; early ratings lean on conference priors", value: t => t.ratedGames, render: t => <span className={t.ratedGames < 4 ? "text-dim" : "text-mute"}>{fmt(t.ratedGames, 0)} g</span> },
     ],
     Form: [
@@ -169,8 +168,6 @@ export default function RankingsTable({ teams: published, total, form = {}, form
       { key: "close", label: "≤5 pts", title: "Record in games decided by five points or fewer", value: t => t.close[0] - t.close[1], render: t => `${t.close[0]}–${t.close[1]}` },
       { key: "sos", label: "SOS", title: "Average DHR rating of opponents played", value: t => t.sos, render: t => rankCell(t.sos, t.sosRank) },
       { key: "streak", label: "Streak", value: t => t.streak, render: t => <span className={t.streak?.startsWith("W") ? "text-win" : "text-loss"}>{t.streak ?? "—"}</span> },
-      { key: "proj", label: "Proj W–L", title: "Projected final record: current record plus expected wins in remaining games", value: t => t.projW, render: t => `${fmt(t.projW, 1)}–${fmt(t.projL, 1)}` },
-      { key: "projc", label: "Proj conf", title: "Projected final conference record", value: t => t.projCW, render: t => `${fmt(t.projCW, 1)}–${fmt(t.projCL, 1)}` },
     ],
   };
 

@@ -61,7 +61,7 @@ function SignInForm() {
       </form>
       <ul className="grid content-start gap-3 text-[14px] leading-relaxed text-mute">
         <li><span className="font-semibold text-ink">Your follows everywhere.</span> Teams and players you star on this device sync to every device you sign in on.</li>
-        <li><span className="font-semibold text-ink">Pick&apos;em.</span> Pick winners from any game&apos;s details before tip-off, then see how you did next to the model.</li>
+        <li><span className="font-semibold text-ink">Pick&apos;em.</span> Pick winners from any game&apos;s details before tip-off, then see how you did.</li>
         <li><span className="font-semibold text-ink">Pro alerts.</span> Tip-off, close-game, overtime, upset and final alerts for your teams, plus injury news. <Link href="/pro/" className="underline hover:text-ink">See Pro</Link></li>
       </ul>
     </div>
@@ -120,7 +120,7 @@ const ALERT_KINDS: { key: keyof AlertPrefs; label: string; hint: string }[] = [
   { key: "halftime", label: "Halftime score", hint: "The score at the break." },
   { key: "close", label: "Close game", hint: "Within 5 points in the final 4 minutes." },
   { key: "overtime", label: "Overtime", hint: "When the game is headed to overtime." },
-  { key: "upsets", label: "Upset brewing", hint: "The underdog leads by 5 or more in the second half or overtime. Underdog means under a 25% chance to win before tip-off, in our model." },
+  { key: "upsets", label: "Upset brewing", hint: "The underdog leads by 5 or more in the second half or overtime. Underdog means under a 25% chance to win before tip-off." },
   { key: "final", label: "Final score", hint: "When the game ends." },
   { key: "injury", label: "Injury news", hint: "New injuries and players returning." },
 ];

@@ -12,7 +12,7 @@ export default function ChartsPage() {
   return (
     <>
       <PageHeader title="Charts" actions={<Link href="/charts/build/" className="btn btn-primary"><SlidersHorizontal size={15} aria-hidden /> Make your own</Link>}>
-        Who stands out, drawn every way we could think of. Filter every chart at once, tap a dot to open the player, and remix any chart in the builder.
+        Who stands out, in 21 charts. Tap a dot to open the player.
       </PageHeader>
       <Suspense fallback={<Loading label="Loading charts" />}>
         <Gallery />

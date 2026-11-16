@@ -11,7 +11,7 @@ export default function PlayersPage() {
   const meta = getMeta();
   return (
     <>
-      <PageHeader title="Players">{meta.counts.players.toLocaleString("en-US")} Division I players. Impact ranks them by DPR, our lineup-based rating. Shading compares each player with others who meet the filters.</PageHeader>
+      <PageHeader title="Players">{meta.counts.players.toLocaleString("en-US")} Division I players, sortable by any stat.</PageHeader>
       <Suspense fallback={<Loading label="Loading players" />}>
         <PlayersBoard />
       </Suspense>

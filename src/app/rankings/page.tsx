@@ -13,7 +13,7 @@ export default function RankingsPage() {
   return (
     <>
       <PageHeader title="Rankings">
-        All {meta.counts.ratedTeams} teams, ranked by DHR, our rating: points per 100 possessions better than an average D-I team, adjusted for opponent and venue.{" "}
+        All {meta.counts.ratedTeams} teams, ranked by DHR.{" "}
         <Link href="/methodology/#overview" className="font-semibold text-bulb-ink hover:underline">What&apos;s DHR?</Link>
       </PageHeader>
       <RankingsTable teams={teams} total={meta.counts.ratedTeams} form={formRows(getAllForms().byId, getMovers().rows, getPreseasonMovers().rows)} formSince={getMovers().since} />

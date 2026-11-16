@@ -33,7 +33,7 @@ export default function ConferencesPage() {
 
   return (
     <>
-      <PageHeader title="Conferences">Ranked by the average DHR rating (AdjEM) of their members.</PageHeader>
+      <PageHeader title="Conferences">Ranked by the average rating of their members.</PageHeader>
 
       <section aria-labelledby="strength-h" className="mb-10">
         <h2 id="strength-h" className="h-section mb-4">Strength ranking</h2>

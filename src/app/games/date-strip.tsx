@@ -51,7 +51,7 @@ export default function DateStrip({ index, day, today, home, onSelect }: Props) 
             const sel = d.day === day, isToday = d.day === today;
             return (
               <button key={d.day} data-day={d.day} onClick={() => onSelect(d.day)} aria-pressed={sel} aria-label={`${dayLabel(d.day, { weekday: "long", month: "long", day: "numeric" })}${isToday ? " (today)" : ""}, ${d.games} games`}
-                className={`flex w-[68px] shrink-0 flex-col items-center rounded-xl border px-1 py-1.5 leading-none transition-colors ${sel ? "border-bulb bg-bulb text-scoreboard shadow-[0_10px_26px_-12px_rgb(var(--bulb-rgb)/0.9)]" : "border-line bg-deck text-mute hover:border-line2 hover:text-ink"}`}>
+                className={`flex w-[68px] shrink-0 flex-col items-center rounded-xl border px-1 py-1.5 leading-none transition-colors ${sel ? "border-bulb bg-bulb text-scoreboard" : "border-line bg-deck text-mute hover:border-line2 hover:text-ink"}`}>
                 <span className={`text-[11px] font-semibold ${isToday && !sel ? "text-off" : ""}`}>{isToday ? "Today" : dayLabel(d.day, { weekday: "short" })}</span>
                 <span className={`mt-1 font-display text-[1.2rem] font-extrabold ${sel ? "" : "text-ink"}`}>{dayLabel(d.day, { month: "short", day: "numeric" })}</span>
                 <span className="mt-1 text-[11px] tnum">{d.games} {d.games === 1 ? "game" : "games"}</span>
@@ -64,7 +64,7 @@ export default function DateStrip({ index, day, today, home, onSelect }: Props) 
         </button>
       </div>
       <div className="mt-2.5 flex flex-wrap items-center gap-2">
-        <button className="btn !py-1.5 disabled:opacity-40" onClick={() => onSelect(home)} disabled={day === home} title={todayListed ? undefined : "No games today, so this jumps to the nearest game day"}>Today</button>
+        {day !== home && <button className="btn !py-1.5" onClick={() => onSelect(home)} title={todayListed ? undefined : "No games today, so this jumps to the nearest game day"}>{todayListed ? "Today" : "Nearest game day"}</button>}
         <label className="flex items-center gap-2 text-sm text-mute">
           <span className="sr-only">Go to date</span>
           <input type="date" className="field !py-1.5" value={day} min={days[0]?.day} max={days[days.length - 1]?.day}

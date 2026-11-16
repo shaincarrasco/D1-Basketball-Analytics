@@ -9,7 +9,7 @@ export const metadata: Metadata = { title: "Prospects", description: "High-schoo
 export default function ProspectsPage() {
   return (
     <>
-      <PageHeader title="Prospects">High-school classes not yet in college: national rank, commitments and the programs building the best classes.</PageHeader>
+      <PageHeader title="Prospects">High-school classes, commitments and the best team classes.</PageHeader>
       <Suspense fallback={<Loading label="Loading prospects" />}>
         <ProspectsBoard />
       </Suspense>

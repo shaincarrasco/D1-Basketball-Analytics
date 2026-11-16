@@ -11,7 +11,7 @@ export default function IndispensablePage() {
   return (
     <>
       <PageHeader title="Most indispensable">
-        How much a team&apos;s DHR rating would drop if a player sat and a typical end-of-bench player took his minutes. Big minutes and a strong DPR both count.{" "}
+        How far each team&apos;s rating would fall without him.{" "}
         <Link href="/methodology/#indispensable" className="font-semibold text-bulb-ink hover:underline">How it&apos;s figured</Link>
       </PageHeader>
       <Suspense fallback={<Loading label="Loading players" />}>

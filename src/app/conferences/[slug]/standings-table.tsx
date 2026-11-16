@@ -5,10 +5,15 @@ import PerfBars from "@/components/perf-bars";
 import TeamLogo from "@sports/ui/team-logo";
 import { fmt, heat, pctFmt, signed } from "@sports/ui/format";
 import type { TeamSummary } from "@/lib/types";
+import ProjectionToggle from "@/components/projection-toggle";
+import { useShowProjections } from "@/lib/show-projections";
 
 export type StandingRow = TeamSummary & { pos: number };
 
 export default function StandingsTable({ rows, total, csvName }: { rows: StandingRow[]; total: number; csvName: string }) {
+  // Projected records and title odds are extra columns the reader adds with the projections switch.
+  const showProj = useShowProjections();
+  const PROJECTED = new Set(["projc", "simConfW", "simTitle", "proj"]);
   const cell = (v: number | null, rank: number | null) => (
     <span className="inline-block min-w-[3.4rem] rounded px-1.5 py-0.5" style={{ background: heat(rank, total) }}>{fmt(v)}<span className="sub-rank">{rank ?? ""}</span></span>
   );
@@ -45,8 +50,11 @@ export default function StandingsTable({ rows, total, csvName }: { rows: Standin
   ];
   return (
     <>
-      <DataTable rows={rows} columns={columns} rowKey={r => r.id} initialSort="pos" initialDir="asc" csvName={csvName} rowHref={r => `/teams/${r.slug}/`} caption="Conference standings" />
-      <p className="mt-2 text-xs text-mute"># = place in the league standings. DHR and the small numbers = national rank of {total}. Proj and Exp. columns are model projections.</p>
+      <DataTable rows={rows} columns={showProj ? columns : columns.filter(c => !PROJECTED.has(c.key))} rowKey={r => r.id} initialSort="pos" initialDir="asc" csvName={csvName} rowHref={r => `/teams/${r.slug}/`} caption="Conference standings" />
+      <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
+        <p className="text-xs text-mute"># = place in the league standings. DHR and the small numbers = national rank of {total}.{showProj ? " Projected records add the win chance of every remaining league game; title odds come from 10,000 simulated seasons." : ""}</p>
+        <ProjectionToggle />
+      </div>
     </>
   );
 }

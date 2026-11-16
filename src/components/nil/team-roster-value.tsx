@@ -58,7 +58,7 @@ export default function TeamRosterValue({ teamId, slug, short }: { teamId: strin
         </p>
       ))}
       <p className="mt-2 text-xs text-dim">
-        {short}&apos;s total split by minutes, DPR, recruiting and position. Model estimates, not reported deals. <Link href="/players/nil/" className="font-semibold text-bulb-ink hover:underline">Every player</Link>
+        {short}&apos;s total split by minutes, DPR, recruiting and position. Our estimates, not reported deals. <Link href="/players/nil/" className="font-semibold text-bulb-ink hover:underline">Every player</Link>
       </p>
     </section>
   );

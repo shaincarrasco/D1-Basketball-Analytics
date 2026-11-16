@@ -20,7 +20,7 @@ export default function TransfersPage() {
   return (
     <>
       <PageHeader title="Transfer portal">
-        Every D-I men&apos;s player in the 2027 portal: where he came from, where he committed, and what he was worth to his 2026–27 team. Linked to our stats and scouting grades.
+        Every D-I player in the 2027 portal: where he came from, where he committed, and what he was worth.
       </PageHeader>
 
       <section className="deck mb-6 p-5" aria-labelledby="window-h">

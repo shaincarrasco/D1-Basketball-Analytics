@@ -18,7 +18,7 @@ export default function HistoryPage() {
   return (
     <>
       <PageHeader title="Past seasons">
-        Final ratings, records and postseason runs for the last ten completed seasons. Ratings here are College Basketball Data&apos;s final adjusted efficiency, not D1 Hoops&apos; own DHR.
+        Final ratings, records and postseason runs for the last ten seasons. Ratings are College Basketball Data&apos;s, not DHR.
       </PageHeader>
       {seasons.length === 0 ? (
         <Empty title="Past seasons aren't here yet">

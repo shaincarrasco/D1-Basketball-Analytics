@@ -11,6 +11,7 @@ import InjuryWire from "./_home/injury-wire";
 import Top25 from "./_home/top25";
 import FormWatch from "./_home/form-watch";
 import DhrIntro from "@/components/dhr-intro";
+import { IfProjections } from "@/components/projection-toggle";
 import { homeNotes } from "@/lib/notes";
 
 /** Stretched-link pattern: the primary link covers its `relative` card; other links sit above it. */
@@ -21,7 +22,6 @@ export default function Home() {
   const total = meta.counts.ratedTeams;
   const games = getAllGames();
   const upsets = games.filter(g => g.upset !== null && g.home.id && g.away.id).sort((a, b) => a.upset! - b.upset!).slice(0, 5);
-  const bt = meta.model.backtest.all;
   const byId = new Map(teams.map(t => [t.id, t]));
   const players = playerRows(getPlayers(), getPlayers().rows).filter(p => (p.min ?? 0) >= 20 && (p.g ?? 0) >= 2);
   const topPlayers = [...players].sort((a, b) => (b.porpag ?? -9) - (a.porpag ?? -9)).slice(0, 6);
@@ -39,26 +39,7 @@ export default function Home() {
       id: "top25",
       label: "Top 25",
       content: (
-        <div className="space-y-8">
-          <Top25 teams={teams.filter(t => t.rank && t.rank <= 50)} total={total} />
-
-          {/* Model scorecard */}
-          {bt && (
-            <section aria-labelledby="model" className="deck p-5">
-              <h2 id="model" className="h-section">Model record</h2>
-              <p className="mt-0.5 text-xs text-mute">Picks made before tip-off, D-I vs D-I</p>
-              <div className="mt-4 flex items-end gap-4">
-                <div className="font-display text-5xl font-black leading-none tnum">{(bt.accuracy * 100).toFixed(1)}<span className="text-3xl text-mute">%</span></div>
-                <div className="pb-1 text-sm text-mute">
-                  <div><b className="text-ink">{bt.correct}–{bt.games - bt.correct}</b> picking winners</div>
-                  <div>±<b className="text-ink">{fmt(bt.marginMAE, 1)}</b> pts average miss</div>
-                  <div title="Brier score: how far the win probabilities were from what happened. Lower is better; a coin flip scores 0.250.">Brier <b className="text-ink">{bt.brier.toFixed(3)}</b> <span className="text-dim">(lower is better)</span></div>
-                </div>
-              </div>
-              <Link href="/methodology/#backtest" className="mt-4 inline-block text-sm font-semibold text-off hover:underline">See calibration and method</Link>
-            </section>
-          )}
-        </div>
+        <Top25 teams={teams.filter(t => t.rank && t.rank <= 50)} total={total} />
       ),
     },
     {
@@ -74,18 +55,18 @@ export default function Home() {
                 const w = homeWon ? g.home : g.away, l = homeWon ? g.away : g.home;
                 return (
                   <li key={g.id} className="deck-flat relative flex items-center gap-3 px-3 py-2.5 transition-colors hover:border-line2 focus-within:border-line2">
-                    <span className="w-12 shrink-0 text-right font-display text-xl font-extrabold text-hot tnum">{pctFmt(g.upset)}</span>
+                    <IfProjections><span className="w-12 shrink-0 text-right font-display text-xl font-extrabold text-hot tnum" title="The winner's pregame win chance">{pctFmt(g.upset)}</span></IfProjections>
                     <span className="min-w-0 flex-1 text-sm">
                       <span className="block truncate">
                         <TeamName side={w} bold /> {w.score}, {l.rank ? <span title={DHR_RANK_TITLE}>#{l.rank} </span> : ""}<TeamName side={l} /> {l.score}
                       </span>
-                      <Link href={`/games/?d=${g.day}&g=${g.id}`} className={`text-xs text-mute hover:text-ink ${STRETCH}`}>{dayLabel(g.day)} · winner’s pregame chance<span className="sr-only">: {w.name} beat {l.name}, open the game</span></Link>
+                      <Link href={`/games/?d=${g.day}&g=${g.id}`} className={`text-xs text-mute hover:text-ink ${STRETCH}`}>{dayLabel(g.day)}<span className="sr-only">: {w.name} beat {l.name}, open the game</span></Link>
                     </span>
                   </li>
                 );
               })}
             </ol>
-          ) : <p className="text-sm text-mute">No upsets (winner under 35% pregame) yet this season.</p>}
+          ) : <p className="text-sm text-mute">No upsets yet this season.</p>}
         </section>
       ),
     },

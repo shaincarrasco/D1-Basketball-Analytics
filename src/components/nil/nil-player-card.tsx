@@ -33,7 +33,7 @@ export default function NilPlayerCard({ playerId, name }: { playerId: string; na
             <div className="mt-1 text-sm text-mute tnum">likely range {fmtRange(row[3], row[4])} a year</div>
           </div>
           <p className="text-[13.5px] leading-snug text-mute">
-            A model estimate of his 2026–27 market value, not a reported deal: about <b className="text-ink">{row[5] < 0.1 ? "<0.1" : row[5]}%</b> of
+            Our estimate of his 2026–27 market value, not a reported deal: about <b className="text-ink">{row[5] < 0.1 ? "<0.1" : row[5]}%</b> of
             {team.kind === "reported-tier" ? <> a team budget CBS Sports puts at <b className="text-ink">{team.tierLabel}</b></> : team.kind === "reported" ? <> a team budget reported at <b className="text-ink">{team.tierLabel}</b></> : <> a team budget we estimate at <b className="text-ink">{fmtMoney(team.budget)}</b> (no public figure)</>},
             split by minutes, DPR, recruiting rank and position.
           </p>

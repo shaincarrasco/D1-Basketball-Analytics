@@ -16,10 +16,11 @@ import { useShowProjections } from "@/lib/show-projections";
 import { favoriteWon, isFinal, isLive, lineInfo, marginText, statusLabel, teamHref, winner } from "./game-utils";
 
 export function WatchBadge({ value }: { value: number | null }) {
-  if (value == null) return null;
+  // A low score on every card is noise: only games worth flagging get the badge.
+  if (value == null || value < 50) return null;
   const tone = value >= 80 ? "border-[rgb(var(--off-rgb)/0.6)] text-off" : value >= 60 ? "border-line2 text-ink" : "border-line text-mute";
   return (
-    <span title="Watchability, 0–100: half team quality, half how close the projection is" className={`inline-flex items-baseline gap-1 rounded-md border px-1.5 py-0.5 ${tone}`}>
+    <span title="Watchability, 0–100: how good the teams are and how even the matchup is" className={`inline-flex items-baseline gap-1 rounded-md border px-1.5 py-0.5 ${tone}`}>
       <span className="text-[10.5px] font-semibold text-mute">Interest</span>
       <span className="font-display text-[15px] font-extrabold leading-none tnum">{value}</span>
     </span>
@@ -80,12 +81,10 @@ function Row({ g, side, which, absence }: { g: Game; side: GameSide; which: "hom
   );
 }
 
-const MODEL_TITLE = "Uses DHR's model: the pregame win probability set before tip-off";
-
 /** One live moment in plain words: a short coloured lead ("12–0 run") and the sentence. */
 export function MomentLine({ m, className = "" }: { m: Moment; className?: string }) {
   return (
-    <p data-testid="moment" data-kind={m.kind} className={`text-[13.5px] leading-snug text-ink ${className}`} title={m.model ? MODEL_TITLE : undefined}>
+    <p data-testid="moment" data-kind={m.kind} className={`text-[13.5px] leading-snug text-ink ${className}`}>
       {m.lead && <span className="font-semibold text-hot">{m.lead}: </span>}
       {m.body}
     </p>
@@ -94,7 +93,8 @@ export function MomentLine({ m, className = "" }: { m: Moment; className?: strin
 
 /** The game sheet's "Moments" list for a live game: the best few candidates, newest context first. */
 export function MomentList({ g, live, summary }: { g: Game; live?: LiveGame; summary: LiveSummary | null }) {
-  const list = useMemo(() => gameMoments(g, live, summary && summary.state === "in" ? summary : null).slice(0, 5), [g, live, summary]);
+  const projections = useShowProjections();
+  const list = useMemo(() => gameMoments(g, live, summary && summary.state === "in" ? summary : null, { projections }).slice(0, 5), [g, live, summary, projections]);
   if (!list.length) return null;
   return (
     <section className="mt-7" aria-labelledby={`mo-${g.id}`}>
@@ -107,7 +107,7 @@ export function MomentList({ g, live, summary }: { g: Game; live?: LiveGame; sum
           </li>
         ))}
       </ul>
-      {list.some(m => m.model) && <p className="mt-1.5 text-[12px] text-dim">&ldquo;Our pregame chance&rdquo; and &ldquo;our model&rdquo; are DHR&apos;s win probabilities, not betting odds.</p>}
+      {list.some(m => m.model) && <p className="mt-1.5 text-[12px] text-dim">Win chances are projections, not betting odds.</p>}
     </section>
   );
 }
@@ -117,6 +117,8 @@ export default function GameCard({ g, live: lg, onOpen, absences, moment }: { g:
   const fw = favoriteWon(g);
   const status = statusLabel(g, lg);
   const li = lineInfo(g);
+  // Win chances, margins and picks are projections: nothing below the teams until the reader asks.
+  const showProj = useShowProjections();
   // Only unplayed games: for finals we don't store who was available at the time.
   const abs = (side: GameSide) => (!final && side.slug ? absences?.get(side.slug) : undefined);
   const label = `${g.away.name} ${g.neutral ? "vs" : "at"} ${g.home.name}: ${status}${final || live ? `, ${g.away.score ?? "—"} to ${g.home.score ?? "—"}` : ""}.${live && moment ? ` ${moment.text}.` : ""} Open game details`;
@@ -140,15 +142,15 @@ export default function GameCard({ g, live: lg, onOpen, absences, moment }: { g:
       </div>
       {live && moment && <MomentLine m={moment} className="-mt-0.5" />}
       {g.tv?.length && !final ? <div className="-mt-1"><TvBadges tv={g.tv} /></div> : null}
-      {g.pred && (
+      {showProj && g.pred && (
         <div className="mt-auto">
           <WinProb awayName={g.away.name} homeName={g.home.name} homeWP={g.pred.wp} compact />
           <div className="mt-1.5 flex items-center gap-2 text-[12px] text-mute tnum">
-            <span className="truncate" title="DHR's projected margin, set before tip-off">Proj: <span className="font-semibold text-ink">{marginText(g)}</span></span>
+            <span className="truncate" title="Projected margin, set before tip-off">Proj: <span className="font-semibold text-ink">{marginText(g)}</span></span>
             <span className="shrink-0 text-dim" title="The favorite's pregame win chance">{pctFmt(Math.max(g.pred.wp, 1 - g.pred.wp))}</span>
             {fw != null && (
               <span className={`ml-auto shrink-0 font-semibold ${fw ? "text-win" : "text-loss"}`} title={fw ? "Pregame favorite won" : "Pregame favorite lost"}>
-                <span aria-hidden>{fw ? "✓" : "✗"}</span><span className="sr-only">{fw ? "Model pick correct" : "Model pick wrong"}</span>
+                <span aria-hidden>{fw ? "✓" : "✗"}</span><span className="sr-only">{fw ? "Favorite won" : "Favorite lost"}</span>
               </span>
             )}
             {g.upset != null && final && <span className={`${fw == null ? "ml-auto" : ""} shrink-0 text-hot`} title="The winner's pregame win chance">{pctFmt(g.upset)} winner</span>}

@@ -5,7 +5,7 @@ import Link from "next/link";
 import TeamLogo from "@sports/ui/team-logo";
 import { Dots } from "@/components/dots";
 import { useJson } from "@sports/ui/client-data";
-import { signed, timeLabel, pctFmt } from "@sports/ui/format";
+import { signed, timeLabel } from "@sports/ui/format";
 import type { HubKey } from "@/lib/nav";
 
 type T = { name: string; short: string; slug: string; logo: string | null; color: string | null; rank: number | null };
@@ -32,7 +32,7 @@ function Frame({ title, href, cta, children }: { title: string; href: string; ct
 function GamesPreview({ d }: { d: NavPreview }) {
   const g = d.game;
   return (
-    <Frame title={g ? "Marquee game" : "Projected 1 seeds"} href={g ? `/games/?d=${g.day}&g=${g.id}` : "/bracket/"} cta={g ? "Open the game" : "See the bracket"}>
+    <Frame title={g ? "Marquee game" : "Bracket watch"} href={g ? `/games/?d=${g.day}&g=${g.id}` : "/bracket/"} cta={g ? "Open the game" : "See the bracket"}>
       {g && (
         <div className="flex items-center justify-between gap-3">
           {[g.away, g.home].map((s, i) => (
@@ -48,18 +48,9 @@ function GamesPreview({ d }: { d: NavPreview }) {
           </div>
         </div>
       )}
-      {g?.wp != null && (
-        <div className="mt-4">
-          <div className="flex h-1.5 gap-0.5 overflow-hidden rounded-full" aria-label={`Pregame win chance: ${g.away.name} ${pctFmt(1 - g.wp)}, ${g.home.name} ${pctFmt(g.wp)}`}>
-            <div style={{ width: `${(1 - g.wp) * 100}%`, background: tint(g.away.color) }} />
-            <div className="flex-1" style={{ background: tint(g.home.color) }} />
-          </div>
-          <div className="mt-1 flex justify-between text-[12px] text-mute tnum"><span>{pctFmt(1 - g.wp)}</span><span>Pregame win chance</span><span>{pctFmt(g.wp)}</span></div>
-        </div>
-      )}
       {d.seeds.length > 0 && (
         <div className={g ? "mt-5 border-t border-line pt-4" : ""}>
-          {g && <p className="mb-2 text-[12.5px] font-semibold text-mute">Projected 1 seeds</p>}
+          {g && <p className="mb-2 text-[12.5px] font-semibold text-mute">Bracket watch: 1 seeds</p>}
           <div className="flex gap-3">
             {d.seeds.map(s => (
               <Link key={s.slug} href={`/teams/${s.slug}/`} className="flex flex-col items-center gap-1 text-center hover:opacity-90" title={`${s.name}, projected 1 seed${s.region ? ` in the ${s.region}` : ""}`}>

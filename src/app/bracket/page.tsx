@@ -38,7 +38,7 @@ export default function BracketPage() {
   return (
     <>
       <PageHeader title="Bracket">
-        Who would make the 2027 NCAA men&apos;s tournament if the season ends the way our ratings expect, and where they&apos;d be seeded.
+        The 2027 NCAA tournament field if the season ended on current ratings.
       </PageHeader>
       <p className="mb-4 inline-flex flex-wrap items-center gap-2 rounded-full border border-line2 bg-deck px-3.5 py-1.5 text-[13.5px] font-semibold">
         <i className="h-2 w-2 rounded-full bg-bulb" aria-hidden />

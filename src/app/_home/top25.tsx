@@ -1,6 +1,7 @@
 "use client";
 // Home-page top 25, with live post-game ratings applied as soon as results are final.
 import Link from "next/link";
+import { IfProjections } from "@/components/projection-toggle";
 import TeamLogo from "@sports/ui/team-logo";
 import PerfBars from "@/components/perf-bars";
 import { LinkRow } from "@sports/ui/data-table";
@@ -47,7 +48,7 @@ export default function Top25({ teams: published, total }: { teams: TeamSummary[
                   <span>
                     {t.next.venue === "A" ? "at " : "vs "}
                     {t.next.oppSlug ? <Link className="link" href={`/teams/${t.next.oppSlug}/`}>{t.next.opp}</Link> : t.next.opp}
-                    {t.next.wp !== null && <Link href={`/games/?d=${etDay(t.next.date)}&g=${t.next.id}`} className="ml-1.5 font-bold text-ink hover:underline" title={`${t.name}'s pregame win probability — open the game`}>{pctFmt(t.next.wp)}</Link>}
+                    {t.next.wp !== null && <IfProjections><Link href={`/games/?d=${etDay(t.next.date)}&g=${t.next.id}`} className="ml-1.5 font-bold text-ink hover:underline" title={`${t.name}'s pregame win probability, open the game`}>{pctFmt(t.next.wp)}</Link></IfProjections>}
                   </span>
                 ) : "—"}
               </td>

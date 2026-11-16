@@ -13,6 +13,7 @@ import { useJson } from "@sports/ui/client-data";
 import { toggleFavorite, useFavorites } from "@/lib/favorites";
 import { useLiveScores, withLive, type LiveGame } from "@/lib/live";
 import { useShowProjections } from "@/lib/show-projections";
+import ProjectionToggle from "@/components/projection-toggle";
 import { watchReason } from "@/lib/watch-reasons";
 import type { Game, GameDay, GameIndex, GameSide, TeamSummary } from "@/lib/types";
 import LiveStrip from "./live-strip";
@@ -52,7 +53,9 @@ export default function Today() {
     const liveFirst = (g: Game) => (g.status === "in_progress" ? 0 : 1);
     return list.sort((a, b) => liveFirst(a) - liveFirst(b) || (b.watch ?? 0) - (a.watch ?? 0));
   }, [staticGames, live.byGame]);
-  const featured = useMemo(() => pickFeatured(games), [games]);
+  // "Closest game" and "Upset watch" are projections, so they only join the carousel once the reader asks for them.
+  const showProj = useShowProjections();
+  const featured = useMemo(() => pickFeatured(games).filter(f => showProj || f.kind === "best"), [games, showProj]);
   const rest = games.filter(g => !featured.some(f => f.g === g)).slice(0, 6);
   const liveCount = games.filter(g => g.status === "in_progress").length;
   const finals = useMemo(() => {
@@ -71,7 +74,7 @@ export default function Today() {
             {day ? dayLabel(day, { weekday: "long" }) : "Today"}
           </h1>
           <p className="mt-2 text-[16px] font-medium text-mute">
-            {day ? dayLabel(day, { month: "long", day: "numeric" }) : "Loading the slate"}
+            {day ? dayLabel(day, { month: "long", day: "numeric" }) : failed ? "Schedule unavailable" : "\u00a0"}
             {staticGames ? <>, {games.length} games</> : null}
             {liveCount ? <span className="font-semibold text-hot">, {liveCount} live</span> : null}
           </p>
@@ -116,6 +119,7 @@ export default function Today() {
           )}
         </div>
       )}
+      {staticGames && games.some(g => g.pred) && <div className="flex justify-end"><ProjectionToggle /></div>}
     </section>
   );
 }
@@ -128,7 +132,7 @@ function DateStrip({ day, today }: { day: string; today: boolean }) {
         const cur = d === day;
         return (
           <Link key={d} href={cur ? "/" : `/games/?d=${d}`} aria-current={cur ? "date" : undefined}
-            className={`flex min-w-[52px] flex-1 flex-col items-center rounded-xl py-2 transition-colors sm:max-w-[96px] ${cur ? "bg-bulb text-scoreboard shadow-[0_10px_26px_-10px_rgb(var(--bulb-rgb)/0.9)]" : "text-mute hover:bg-deck"}`}>
+            className={`flex min-w-[52px] flex-1 flex-col items-center rounded-xl py-2 transition-colors sm:max-w-[96px] ${cur ? "bg-bulb text-scoreboard" : "text-mute hover:bg-deck"}`}>
             <span className="text-xs font-semibold">{cur && today ? "Today" : dayLabel(d, { weekday: "short" })}</span>
             <span className={`font-display text-xl font-bold leading-tight ${cur ? "" : d > day ? "text-ink" : ""}`}>{Number(d.slice(8))}</span>
           </Link>
@@ -248,7 +252,7 @@ function why(g: Game, kind: Kind) {
   const m = Math.abs(g.pred.margin);
   const fav = g.pred.wp >= 0.5 ? g.home : g.away, dog = fav === g.home ? g.away : g.home;
   if (kind === "closest") return `Proj margin: ${fmt(m, 1)} points`;
-  if (kind === "upset") return `Model gives ${dog.name} a ${pctFmt(Math.min(g.pred.wp, 1 - g.pred.wp))} chance`;
+  if (kind === "upset") return `${dog.name} has a ${pctFmt(Math.min(g.pred.wp, 1 - g.pred.wp))} chance`;
   const unbeaten = (s: GameSide) => !!s.record && /^\d+-0$/.test(s.record) && s.record !== "0-0";
   const top25 = (s: GameSide) => (s.rank ?? 999) <= 25;
   if (top25(g.home) && top25(g.away)) return `Two top-25 teams · Proj: ${fav.name} by ${fmt(m, 1)}`;
@@ -293,9 +297,10 @@ function Featured({ list, day, liveBy, teams }: { list: Feature[]; day: string; 
 function Scoreboard({ g, day, live, kind, labelled, teams }: { g: Game; day: string; live?: LiveGame; kind: Kind; labelled: boolean; teams: Map<string, TeamSummary> }) {
   const st = status(g, live);
   const scheduled = g.status === "scheduled";
-  const reason = scheduled ? watchReason(g, teams) : null;
-  // Before tip the plate stays dark ("-- : --") unless the reader opted in to projected scores.
-  const showProj = useShowProjections() && scheduled && !!g.pred;
+  // Before tip the plate stays dark ("-- : --") and nothing is forecast unless the reader opted in to projections.
+  const projections = useShowProjections();
+  const reason = scheduled ? watchReason(g, teams, { projections }) : null;
+  const showProj = projections && scheduled && !!g.pred;
   const score = (k: "home" | "away") => (scheduled ? (showProj ? Math.round(g.pred![k]) : null) : g[k].score);
   const awayWP = g.pred ? 1 - g.pred.wp : null;
   return (
@@ -317,7 +322,7 @@ function Scoreboard({ g, day, live, kind, labelled, teams }: { g: Game; day: str
         </div>
         <Side s={g.home} />
       </div>
-      {g.pred && awayWP !== null && (
+      {projections && g.pred && awayWP !== null && (
         <div className="mt-3">
           <div className="flex h-1.5 gap-0.5 overflow-hidden rounded-full" aria-label={`Win probability: ${g.away.name} ${pctFmt(awayWP)}, ${g.home.name} ${pctFmt(g.pred.wp)}`}>
             <div style={{ width: `${awayWP * 100}%`, background: teamTint(g.away.color) }} />
@@ -351,7 +356,8 @@ function Side({ s }: { s: GameSide }) {
 function GameRow({ g, day, live, teams }: { g: Game; day: string; live?: LiveGame; teams: Map<string, TeamSummary> }) {
   const st = status(g, live);
   const played = g.status === "final" || g.status === "in_progress";
-  const reason = watchReason(g, teams);
+  const projections = useShowProjections();
+  const reason = watchReason(g, teams, { projections });
   const fav = g.pred ? (g.pred.wp >= 0.5 ? g.home : g.away) : null;
   const favWP = g.pred ? Math.max(g.pred.wp, 1 - g.pred.wp) : null;
   const line = (s: GameSide, win: boolean) => (
@@ -377,8 +383,8 @@ function GameRow({ g, day, live, teams }: { g: Game; day: string; live?: LiveGam
             <span className="text-sm font-bold tnum">{st.text}</span>
             <span className="max-w-[78px] truncate text-xs text-mute">{g.tv?.[0]?.name ?? "No TV listed"}</span>
           </div>
-          {fav && favWP !== null && (
-            <div className="flex w-[50px] shrink-0 flex-col items-end" title={`${fav.name}'s pregame win chance (DHR model)`}>
+          {projections && fav && favWP !== null && (
+            <div className="flex w-[50px] shrink-0 flex-col items-end" title={`${fav.name}'s pregame win chance`}>
               <span className="font-display text-xl font-extrabold tnum">{Math.round(favWP * 100)}%</span>
               <span className="text-[11px] text-mute">{fav.short ?? ""}</span>
             </div>
@@ -394,8 +400,9 @@ function GameRow({ g, day, live, teams }: { g: Game; day: string; live?: LiveGam
 function FinalCard({ g, day }: { g: Game; day: string }) {
   const homeWon = (g.home.score ?? 0) > (g.away.score ?? 0);
   const w = homeWon ? g.home : g.away, l = homeWon ? g.away : g.home;
+  const projections = useShowProjections();
   const wWP = g.pred ? (homeWon ? g.pred.wp : 1 - g.pred.wp) : null;
-  const note = g.upset !== null ? `${w.name} had a ${pctFmt(g.upset)} pregame chance`
+  const note = !projections ? null : g.upset !== null ? `${w.name} had a ${pctFmt(g.upset)} pregame chance`
     : wWP !== null ? (wWP >= 0.5 ? `${w.name} was a ${pctFmt(wWP)} pregame favorite` : `${w.name} had a ${pctFmt(wWP)} pregame chance`) : null;
   return (
     <article className="press relative flex flex-col gap-2 rounded-[18px] bg-deck px-4 py-3 hover:bg-deck2">

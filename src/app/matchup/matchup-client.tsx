@@ -107,9 +107,9 @@ export default function MatchupClient() {
 
 
       <p className="text-sm text-mute">
-        The main projection uses each team&apos;s current DHR rating only — no injuries, lineups or rest. The injury-adjusted line above is a rough what-if, not part of the model. Early in the season ratings rest on a handful of games
+        The main projection uses each team&apos;s current DHR rating only — no injuries, lineups or rest. The injury-adjusted line above is a rough what-if, not part of the projection. Early in the season ratings rest on a handful of games
         ({a.name}: {fmt(a.ratedGames, 1)}, {b.name}: {fmt(b.ratedGames, 1)} rated) and lean on conference priors, so expect them to move and treat the margin range as the honest answer.
-        See the <Link href="/methodology/" className="underline hover:text-ink">methodology</Link> for how the model is built and how well it has predicted games so far.
+        See the <Link href="/methodology/" className="underline hover:text-ink">methodology</Link> for how projections are built and how well they have done so far.
       </p>
     </div>
   );
@@ -182,7 +182,7 @@ function Availability({ a, b, proj, file }: { a: TeamSummary; b: TeamSummary; pr
         <p className="deck-flat mt-3 px-4 py-3 text-sm text-mute">
           <b className="text-ink">Injury-adjusted view (estimate):</b> {fmtM(adj)}
           {Math.abs(shift) >= 0.05 ? <> — the projected margin of {fmtM(proj.margin)} shifted {shift > 0 ? "toward" : "against"} {a.name} by {Math.abs(shift).toFixed(1)} (est. rating lost: {a.short} {lossText(ha)}, {b.short} {lossText(hb)} per 100 × {fmt(tempo, 0)} possessions ÷ 100)</> : <> — neither team has an estimated rating loss, so it matches the projection</>}.
-          A rough what-if that is not in the main model; absences from box scores have no stated reason and may be short-term.
+          A rough what-if that is not in the main projection; absences from box scores have no stated reason and may be short-term.
         </p>
       )}
     </section>

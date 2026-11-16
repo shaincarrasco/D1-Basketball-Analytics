@@ -33,7 +33,7 @@ export default function NilMethod() {
     <>
       <p>
         <b>What it is:</b> our estimate of what each D-I men&apos;s basketball player is worth a year in 2026–27, counting revenue-sharing money and NIL (collective and brand) money together.
-        It is a <b>model estimate</b>, labelled &ldquo;Estimate&rdquo; everywhere, never a reported deal. Deals are private; where an outlet has reported a figure we show it separately with its source. On3&apos;s NIL Valuation is a proprietary black box; ours is
+        It is <b>our estimate</b>, labelled &ldquo;Estimate&rdquo; everywhere, never a reported deal. Deals are private; where an outlet has reported a figure we show it separately with its source. On3&apos;s NIL Valuation is a proprietary black box; ours is
         three steps you can check.
       </p>
       <ol className="list-decimal space-y-2 pl-5">
@@ -63,7 +63,7 @@ export default function NilMethod() {
         <div className="bg-deck px-4 py-3"><dt className="label">Players est. $3.9M+</dt><dd className="font-display text-2xl font-extrabold text-ink tnum">{f.over39}</dd></div>
       </dl>
       <p>
-        <b>Honest read:</b> in aggregate the model lines up with reporting (we estimate {f.over39} players at $3.9M or more; The Athletic reported at least 18), and team totals match reported budgets by construction. But for <i>which</i> player on a team gets the
+        <b>Honest read:</b> in aggregate the estimate lines up with reporting (we estimate {f.over39} players at $3.9M or more; The Athletic reported at least 18), and team totals match reported budgets by construction. But for <i>which</i> player on a team gets the
         most, it is often wrong: the stars who made headlines are usually worth more than we estimate ({c.looFloorsMet} of {c.floors} &ldquo;at least $3.9M&rdquo; players reach the floor in leave-one-out). Our point estimates miss reported figures by about {pct(c.looMedianAbsPctErr)} in a typical case, though our range
         overlaps the report for {c.rangeOverlapsReported} of {c.fitted}.
       </p>
@@ -84,7 +84,7 @@ export default function NilMethod() {
       <h3 className="pt-2 font-semibold text-ink">Program budgets: reported vs ours</h3>
       <div className="scroll-x rounded-xl border border-line">
         <table className="dt">
-          <caption className="sr-only">Reported program budgets compared with the model</caption>
+          <caption className="sr-only">Reported program budgets compared with our estimate</caption>
           <thead><tr><th scope="col" className="l">Program</th><th scope="col" className="l">Reported</th><th scope="col">Ours (estimate)</th><th scope="col" className="l">Source</th></tr></thead>
           <tbody>
             {nil.calibration.programs.map(p => (

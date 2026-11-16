@@ -79,6 +79,9 @@ jobs:
         run: node scripts/merge-espn-finals.mjs
       - name: Calculate DHR v2 ratings, walk-forward predictions and backtest
         run: node scripts/build-power-ratings.mjs
+      - name: Paper-bet tracker (private simulation; model picks vs real lines)
+        continue-on-error: true
+        run: node scripts/paper-bets.mjs
       - name: Simulate the rest of the season
         run: node scripts/build-simulations.mjs
       - name: Fetch player shooting profiles weekly
@@ -114,7 +117,7 @@ jobs:
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add package-lock.json public/data/ .cache/ apps/tennis/public/data/app/ apps/tennis/data-cache/ apps/football/data-cache/
+          git add package-lock.json public/data/ .cache/ apps/tennis/public/data/app/ apps/tennis/data-cache/ apps/football/data-cache/ docs/paper-bets.md
           if ! git diff --cached --quiet; then
             git commit -m 'Update 2026-27 basketball data snapshots'
             # main may have moved during the run (a merge or an overlapping refresh): replay on top, ours wins.
