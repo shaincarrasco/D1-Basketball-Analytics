@@ -40,10 +40,11 @@ export function Legend({ items }: { items: { label: string; dashed?: boolean; do
 }
 
 /** Share of the last 100 matches picked right, over time, with the walk-forward splits marked. */
-export function RollingChart({ rolling, splits }: { rolling: Model["rolling"]; splits: Model["splits"] }) {
+export function RollingChart({ rolling, splits: allSplits }: { rolling: NonNullable<Model["rolling"]>; splits: NonNullable<Model["splits"]> }) {
   const [ref, W] = useWidth<HTMLDivElement>();
   const [hover, setHover] = useState<number | null>(null);
-  const pts = rolling.filter(r => r.accuracy_100 != null).map(r => ({ t: Date.parse(`${r.date}T12:00:00Z`), d: r.date, v: r.accuracy_100 as number }));
+  const splits = allSplits.filter(s => s && s.start && s.end);
+  const pts = rolling.filter(r => r && r.date && r.accuracy_100 != null).map(r => ({ t: Date.parse(`${r.date}T12:00:00Z`), d: r.date, v: r.accuracy_100 as number }));
   const H = W < 560 ? 240 : 300, L = 40, R = 12, T = 34, B = 26;
   if (!pts.length) return <div ref={ref}><p className="text-mute">No rolling accuracy yet.</p></div>;
   const t0 = Math.min(pts[0].t, ...splits.map(s => Date.parse(`${s.start}T00:00:00Z`)));
@@ -119,7 +120,7 @@ export function RollingChart({ rolling, splits }: { rolling: Model["rolling"]; s
 }
 
 /** Calibration: when the model gave its favourite X%, how often did the favourite win? */
-export function CalibrationChart({ bins }: { bins: Model["calibration"] }) {
+export function CalibrationChart({ bins }: { bins: NonNullable<Model["calibration"]> }) {
   const [ref, W] = useWidth<HTMLDivElement>();
   const [hover, setHover] = useState<number | null>(null);
   const S = Math.min(W, 440), L = 44, R = 14, T = 12, B = 40;

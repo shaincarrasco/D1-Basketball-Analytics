@@ -1,5 +1,5 @@
 "use client";
-// The Match Brief: how far the four factors back the model's pick (agreement), the factors laid
+// The Match Brief: how far the factors back the model's pick (agreement), the factors laid
 // across a court with the net in the middle, each player's upsides and downsides on their own
 // side, the bottom line, and every factor's reasoning and numbers underneath.
 import { useEffect, useState } from "react";
@@ -28,7 +28,7 @@ function Agreement({ a, pickName }: { a: Brief["agreement"]; pickName: string })
       </div>
       <div className="min-w-0">
         <p className="font-display text-2xl font-extrabold leading-tight">{a?.label ?? "Agreement unknown"}</p>
-        <p className="text-[13.5px] text-mute">How far the four factors below back the pick, {pickName}. 50 means they cancel out.</p>
+        <p className="text-[13.5px] text-mute">How far the factors below back the pick, {pickName}. 50 means they cancel out.</p>
       </div>
     </div>
   );
@@ -38,10 +38,10 @@ function Court({ brief, nm, pick, surface }: { brief: Brief; nm: Record<Side, st
   // Pucks start on the net and slide out once (CSS transition; off under reduced motion).
   const [out, setOut] = useState(false);
   useEffect(() => { const r = requestAnimationFrame(() => requestAnimationFrame(() => setOut(true))); return () => cancelAnimationFrame(r); }, []);
-  const buckets = (brief.buckets ?? []).slice(0, 4);
+  const buckets = brief.buckets ?? []; // one court row per factor present (three or four)
   const tag = (s: Side) => (pick === s ? <span className="rounded-full border border-line2 px-1.5 py-px text-[10.5px] font-semibold text-mute">pick</span> : null);
   return (
-    <figure className="m-0" aria-label="The four factors, laid across a court">
+    <figure className="m-0" aria-label="The factors, laid across a court">
       <div className="mb-1.5 flex items-end justify-between gap-2 sm:pl-[10.5rem]">
         <span className="flex min-w-0 items-center gap-1.5"><span aria-hidden className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: P1 }} /><b className="truncate font-display text-lg">{lastName(nm.p1)}</b>{tag("p1")}</span>
         <span className="flex min-w-0 items-center gap-1.5">{tag("p2")}<b className="truncate font-display text-lg">{lastName(nm.p2)}</b><span aria-hidden className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: P2 }} /></span>
@@ -149,10 +149,10 @@ export default function MatchBrief({ brief, names, pick, surface }: { brief: Bri
     <div className="flex flex-col gap-6">
       <Agreement a={brief.agreement} pickName={lastName(nm[briefPick])} />
       {stale && <p className="note text-[13.5px] text-mute">This brief was written when the model leaned the other way. It updates with the next data refresh.</p>}
-      <Court brief={brief} nm={nm} pick={pick ?? briefPick} surface={surface} />
+      {(brief.buckets ?? []).length > 0 && <Court brief={brief} nm={nm} pick={pick ?? briefPick} surface={surface} />}
       <section aria-label="Upsides and downsides"><Sides brief={brief} nm={nm} /></section>
       {brief.bottom_line && <p className="text-[16px] leading-relaxed"><b className="font-display text-lg font-extrabold">Bottom line. </b>{brief.bottom_line}</p>}
-      <section aria-label="The four factors in detail" className="divide-y divide-line border-y border-line">
+      <section aria-label="The factors in detail" className="divide-y divide-line border-y border-line">
         {(brief.buckets ?? []).map((b, i) => {
           const f = favoured(b);
           return (

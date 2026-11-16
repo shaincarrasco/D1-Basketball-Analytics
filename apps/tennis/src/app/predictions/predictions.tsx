@@ -125,7 +125,7 @@ export default function Predictions() {
         </div>
         <span className="text-xs text-dim">Updated {relativeTime(q.data.generated_at)}. Times in your time zone.</span>
       </div>
-      {days.length === 0 ? <Empty title="No predictions right now">The model covers main-tour singles from three days ago to ten days ahead. Check back when the next event starts.</Empty> : <>
+      {days.length === 0 ? <Empty title="No predictions right now">The model covers singles matches from three days ago to ten days ahead. Challenger and ITF events appear once their data sources are connected. Check back when the next event starts.</Empty> : <>
         <div ref={strip} className="no-scrollbar relative -mx-1 mb-4 flex gap-1.5 overflow-x-auto px-1 pb-1" role="group" aria-label="Day">
           {days.map(d => {
             const sel = d === active;

@@ -25,15 +25,16 @@ export type Brief = {
 export type Metrics = { accuracy: number | null; brier: number | null; log_loss: number | null; n: number };
 export type Split = Metrics & { name: string; start: string; end: string; baseline_elo_accuracy: number | null; baseline_elo_brier: number | null };
 export type Model = {
-  generated_at: string;
-  overall: Metrics & { baseline_elo_accuracy: number | null; baseline_elo_brier: number | null; baseline_elo_log_loss?: number | null; baseline_coin_brier?: number | null };
-  splits: Split[];
-  calibration: { bin: string; pred: number; actual: number; n: number }[];
-  rolling: { date: string; accuracy_100: number | null; brier_100: number | null }[];
-  by_tour: Record<string, Metrics & { baseline_elo_brier?: number | null }>;
-  by_level: Record<string, Metrics & { baseline_elo_brier?: number | null }>;
-  set_score_check: { n: number; favourite_straight_sets_pred: number | null; favourite_straight_sets_actual: number | null } | null;
-  notes: string[];
+  generated_at: string | null;
+  overall: (Metrics & { baseline_elo_accuracy: number | null; baseline_elo_brier: number | null; baseline_elo_log_loss?: number | null; baseline_coin_brier?: number | null }) | null;
+  // The exporter writes null for anything it doesn't have; the page renders whatever is present.
+  splits: Split[] | null;
+  calibration: { bin: string; pred: number; actual: number; n: number }[] | null;
+  rolling: { date: string; accuracy_100: number | null; brier_100: number | null }[] | null;
+  by_tour: Record<string, Metrics & { baseline_elo_brier?: number | null }> | null;
+  by_level: Record<string, Metrics & { baseline_elo_brier?: number | null }> | null;
+  set_score_check: { n: number | null; favourite_straight_sets_pred: number | null; favourite_straight_sets_actual: number | null } | null;
+  notes: string[] | null;
 };
 
 const num = (v: unknown): v is number => typeof v === "number" && Number.isFinite(v);
