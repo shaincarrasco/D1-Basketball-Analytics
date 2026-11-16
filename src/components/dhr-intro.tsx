@@ -1,5 +1,5 @@
 "use client";
-// First-visit explainer on the home page: what DHR means and what "projected" means here.
+// First-visit explainer on the home page: what DHR means and where projections live.
 // The card is in the static HTML; DHR_INTRO_SCRIPT (in <head>) hides it before first paint once
 // dismissed, so it never flashes for returning readers and never shifts the page for new ones.
 import Link from "next/link";
@@ -22,7 +22,7 @@ export default function DhrIntro() {
         <b className="text-ink">DHR</b> is our team rating: how many points per 100 possessions a team is better than an average D-I team, adjusted for opponent and venue. Rankings and the small number beside a team come from it, not the AP poll.
       </p>
       <p className="mt-1 text-mute">
-        <b className="text-ink">Projected</b> or <b className="text-ink">pregame</b> means the model&apos;s guess before tip-off, never a result. Real scores appear once a game starts.{" "}
+        Scores here are always real. Projections stay hidden until you turn them on.{" "}
         <Link href="/methodology/#overview" className="font-semibold text-bulb-ink hover:underline">How it works</Link>
       </p>
       <button type="button" onClick={dismiss} className="absolute right-2 top-2 grid h-9 w-9 place-items-center rounded-full text-mute hover:bg-deck2 hover:text-ink" aria-label="Dismiss the DHR explainer">

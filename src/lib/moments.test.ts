@@ -106,15 +106,15 @@ describe("timePhrase", () => {
 // ---- scoreboard moments --------------------------------------------------------------------
 
 describe("upset brewing", () => {
-  it("away underdog leading in the second half, labelled as our pregame chance", () => {
+  it("away underdog leading in the second half, labelled as a pregame chance", () => {
     const m = find(scoreboardMoments(game(0.86), clock(2, 581, 50, 56)), "upset")!;
-    expect(m.text).toBe("Upset brewing: Southern Utah (14% our pregame chance) leads by 6 with 9 minutes left");
+    expect(m.text).toBe("Upset brewing: Southern Utah (14% pregame chance) leads by 6 with 9 minutes left");
     expect(m.side).toBe("away");
     expect(m.model).toBe(true);
   });
   it("home underdog leading (the other orientation)", () => {
     const m = find(scoreboardMoments(game(0.2, -9), clock(2, 300, 61, 55)), "upset")!;
-    expect(m.body).toBe("Wake Forest (20% our pregame chance) leads by 6 with 5 minutes left");
+    expect(m.body).toBe("Wake Forest (20% pregame chance) leads by 6 with 5 minutes left");
     expect(m.side).toBe("home");
   });
   it("not when the favourite leads, the dog was over 40%, or it's the first five minutes", () => {
@@ -189,7 +189,7 @@ describe("blowout", () => {
 describe("win-chance swing vs pregame", () => {
   it("away side's chance up from 45% before tip", () => {
     const m = find(scoreboardMoments(game(0.55, 2), clock(2, 600, 45, 60)), "swing")!;
-    expect(m.body).toMatch(/^Our model has Southern Utah at 9\d% to win, up from 45% before tip$/);
+    expect(m.body).toMatch(/^Southern Utah is now 9\d% to win, up from 45% before tip$/);
     expect(m.model).toBe(true);
   });
   it("home side, and nothing for a small move", () => {
@@ -218,7 +218,7 @@ describe("scoreboard input from ESPN in either orientation", () => {
     for (const swap of [false, true]) {
       const live = matchEvents([game(0.86)], [ev(swap)], ids).get("g1") as LiveGame;
       expect(live.home).toBe(50);
-      expect(find(scoreboardMoments(game(0.86), live), "upset")!.body).toBe("Southern Utah (14% our pregame chance) leads by 6 with 9 minutes left");
+      expect(find(scoreboardMoments(game(0.86), live), "upset")!.body).toBe("Southern Utah (14% pregame chance) leads by 6 with 9 minutes left");
     }
   });
 });
@@ -385,9 +385,9 @@ describe("ranking", () => {
   it("every live game with a projection gets at least our live win chance", () => {
     const ms = scoreboardMoments(game(0.86), clock(2, 680, 52, 44));
     expect(ms).toHaveLength(1);
-    expect(ms[0].text).toMatch(/^Our model gives Wake Forest a 9\d% chance to win from here$/);
+    expect(ms[0].text).toMatch(/^Wake Forest has a 9\d% chance to win from here$/);
     expect(ms[0].model).toBe(true);
-    expect(scoreboardMoments(game(0.4, -2), clock(1, 600, 20, 26))[0].body).toMatch(/^Our model gives Southern Utah an? \d+% chance to win from here$/);
+    expect(scoreboardMoments(game(0.4, -2), clock(1, 600, 20, 26))[0].body).toMatch(/^Southern Utah has an? \d+% chance to win from here$/);
     // Dropped once play-by-play has something real to say.
     const [s] = bothWays([], { period: 2, clock: 680, homePlayers: [{ name: "Hunter Sallis", pts: 22 }] });
     expect(kinds(gameMoments(game(0.86), clock(2, 680, 52, 44), s))).toEqual(["player"]);
@@ -406,5 +406,18 @@ describe("ranking", () => {
     expect(upset).toBeGreaterThan(early);
     expect(early).toBeGreaterThan(blowout);
     expect(excitement(game(), { ...clock(2, 0, 70, 60), state: "post" })).toBe(0);
+  });
+});
+
+describe("readers who haven't asked for projections", () => {
+  it("keeps the upset line but drops the win chance", () => {
+    const [m] = gameMoments(game(0.86), clock(2, 581, 50, 56), null, { projections: false }).filter(x => x.kind === "upset");
+    expect(m.text).toBe("Upset brewing: Southern Utah leads by 6 with 9 minutes left");
+    expect(m.model).toBe(false);
+  });
+  it("drops lines that are nothing but a win chance", () => {
+    const all = gameMoments(game(0.4, -2), clock(1, 600, 20, 26), null, { projections: false });
+    expect(all.some(x => x.kind === "chance" || x.kind === "swing")).toBe(false);
+    expect(all.every(x => !/\d+%/.test(x.text))).toBe(true);
   });
 });

@@ -9,7 +9,8 @@ const shortOf = (s: GameSide) => s.short ?? s.name;
 const rankOf = (s: GameSide, teams: Map<string, TeamSummary>) => s.rank ?? (s.slug ? teams.get(s.slug)?.rank ?? null : null);
 const isTop = (r: number | null, n: number) => r !== null && r <= n;
 
-export function watchReason(g: Game, teams: Map<string, TeamSummary>): string | null {
+/** `projections: false` skips the reasons that quote a win chance (upset watch, coin flip), for readers who haven't asked for projections. */
+export function watchReason(g: Game, teams: Map<string, TeamSummary>, opts: { projections?: boolean } = {}): string | null {
   if (g.status !== "scheduled") return null;
   const hr = rankOf(g.home, teams), ar = rankOf(g.away, teams);
 
@@ -19,7 +20,7 @@ export function watchReason(g: Game, teams: Map<string, TeamSummary>): string | 
     return `Top-25 clash: No. ${lo} vs No. ${hi}`;
   }
 
-  const wp = g.pred?.wp ?? null; // home win probability
+  const wp = opts.projections === false ? null : g.pred?.wp ?? null; // home win probability
   if (wp !== null) {
     // 2. Upset watch: a ranked side is the underdog, or a top-25 favourite is below 62%.
     const underdog = wp < 0.5 ? g.home : wp > 0.5 ? g.away : null;

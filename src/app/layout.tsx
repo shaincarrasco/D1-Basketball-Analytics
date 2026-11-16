@@ -3,6 +3,7 @@ import "@fontsource/barlow/400.css";
 import "@fontsource/barlow/500.css";
 import "@fontsource/barlow/600.css";
 import "@fontsource/barlow/700.css";
+import "@fontsource-variable/inter";
 import "@fontsource-variable/big-shoulders-display";
 import "@fontsource-variable/doto";
 import "@sports/ui/theme.css";

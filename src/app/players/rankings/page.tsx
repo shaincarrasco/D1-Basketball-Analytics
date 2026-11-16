@@ -9,7 +9,7 @@ export const metadata: Metadata = { title: "Player rankings", description: "Rank
 export default function PlayerRankingsPage() {
   return (
     <>
-      <PageHeader title="Player rankings">Pick a lens, or build your own formula. Every ranking shows what went into it.</PageHeader>
+      <PageHeader title="Player rankings">Pick a lens, or build your own formula.</PageHeader>
       <Suspense fallback={<Loading label="Loading rankings" />}>
         <RankingsBoard />
       </Suspense>

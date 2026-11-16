@@ -280,7 +280,7 @@ function Bubble({ data }: { data: Data }) {
     <section aria-labelledby="bubble-h">
       <h2 id="bubble-h" className="sr-only">Bubble watch</h2>
       <p className="mb-4 max-w-3xl text-sm text-mute">
-        The cut line for at-large bids. <b className="text-ink">In field</b> is the share of {data.config.sims.toLocaleString("en-US")} simulated seasons in which the team makes our projected field (a model estimate).
+        The cut line for at-large bids. <b className="text-ink">In field</b> is the share of {data.config.sims.toLocaleString("en-US")} simulated seasons in which the team makes our projected field.
         Quadrant records are unofficial (DHR rank, NET cutoffs).
       </p>
       <div className="grid gap-5 lg:grid-cols-2">

@@ -9,7 +9,7 @@ export const metadata: Metadata = { title: "Player skill projections", descripti
 export default function PlayerProjectionsPage() {
   return (
     <>
-      <PageHeader title="Skill projections">What each player&apos;s skills most likely are, with this season&apos;s real number beside every projection and how much of it is his own data.</PageHeader>
+      <PageHeader title="Skill projections">Each player&apos;s projected skills, beside this season&apos;s real numbers.</PageHeader>
       <Suspense fallback={<Loading label="Loading projections" />}>
         <ProjectionsBoard />
       </Suspense>

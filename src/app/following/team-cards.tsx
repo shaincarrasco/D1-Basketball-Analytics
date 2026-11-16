@@ -2,6 +2,7 @@
 // Followed-team cards: full card for /following/, compact card for the home strip.
 import Link from "next/link";
 import FavoriteButton from "@/components/favorite-button";
+import { IfProjections } from "@/components/projection-toggle";
 import TeamLogo from "@sports/ui/team-logo";
 import { dayLabel, DHR_RANK_TITLE, fmt, pctFmt, timeLabel } from "@sports/ui/format";
 import type { TeamSummary } from "@/lib/types";
@@ -23,7 +24,7 @@ function NextGame({ t, compact }: { t: TeamSummary; compact?: boolean }) {
         {n.oppSlug ? <Link href={`/teams/${n.oppSlug}/`} className="font-medium text-ink hover:text-off">{n.opp}</Link> : <span className="text-ink">{n.opp}</span>}
         {n.venue === "N" ? <span className="text-dim"> (neutral)</span> : null}
       </span>
-      {n.wp !== null && <Link href={gameHref(n.date, n.id)} className="font-semibold text-ink tnum hover:underline" title={`${t.name}'s pregame win chance (DHR)`}>{pctFmt(n.wp)}</Link>}
+      {n.wp !== null && <IfProjections><Link href={gameHref(n.date, n.id)} className="font-semibold text-ink tnum hover:underline" title={`${t.name}'s pregame win chance`}>{pctFmt(n.wp)}</Link></IfProjections>}
     </p>
   );
 }
@@ -60,11 +61,13 @@ export function TeamCard({ t }: { t: TeamSummary }) {
       <NextGame t={t} />
       <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-t border-line pt-3 text-xs text-mute">
         <Form t={t} />
+        <IfProjections>
         {t.sim ? (
           <span title="10,000 season simulations: expected wins (10th–90th percentile) and conference title share">
             <b className="text-ink tnum">{fmt(t.sim.wins, 1)}</b> exp. wins <span className="tnum">({t.sim.p10}–{t.sim.p90})</span> · <b className="text-ink tnum">{pctFmt(t.sim.title)}</b> title
           </span>
         ) : <span title="Projected final record">Proj {fmt(t.projW)}–{fmt(t.projL)}</span>}
+        </IfProjections>
       </div>
     </article>
   );

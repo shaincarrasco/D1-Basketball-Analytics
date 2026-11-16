@@ -9,7 +9,7 @@ export const metadata: Metadata = { title: "Compare players", description: "Head
 export default function ComparePage() {
   return (
     <>
-      <PageHeader title="Compare players">Two players, fourteen stats, percentiles against D-I players with 10+ minutes a game.</PageHeader>
+      <PageHeader title="Compare players">Two players, fourteen stats, head to head.</PageHeader>
       <Suspense fallback={<Loading label="Loading players" />}>
         <CompareClient />
       </Suspense>

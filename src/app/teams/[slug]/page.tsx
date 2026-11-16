@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { getInjuries, getMeta, getTeam, getTeamDetail, getTeams } from "@/lib/server-data";
 import TeamLogo from "@sports/ui/team-logo";
 import TvBadges from "@/components/tv-badges";
-import { IfProjections } from "@/components/projection-toggle";
+import ProjectionToggle, { IfProjections } from "@/components/projection-toggle";
 import StatBar from "@/components/stat-bar";
 import { DHR_RANK_TITLE, fmt, pctFmt, signed } from "@sports/ui/format";
 import FavoriteButton from "@/components/favorite-button";
@@ -56,7 +56,7 @@ export function generateStaticParams() {
 }
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const t = getTeam((await params).slug);
-  return t ? { title: `${t.name} ${t.mascot ?? ""}`.trim(), description: `${t.name} 2026–27: DHR rank ${t.rank ?? "—"}, ${t.w}–${t.l}, adjusted offense ${fmt(t.adjO)} and defense ${fmt(t.adjD)}, game log, projections and roster.` } : {};
+  return t ? { title: `${t.name} ${t.mascot ?? ""}`.trim(), description: `${t.name} 2026–27: DHR rank ${t.rank ?? "—"}, ${t.w}–${t.l}, adjusted offense ${fmt(t.adjO)} and defense ${fmt(t.adjD)}, game log and roster.` } : {};
 }
 
 // Teams closest in adjusted offense, defense and tempo (tempo weighted lower).
@@ -105,11 +105,11 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
 
   return (
     <article>
-      {/* Hero: full-bleed team colour, rank on a scoreboard plate */}
+      {/* Hero: a quiet wash of the team colour over the page background, so the logo carries the identity. */}
       <section className="team-accent relative -mx-4 -mt-6 mb-0 overflow-hidden px-4 pb-6 pt-6 sm:-mx-6 sm:px-6 lg:mx-0 lg:mt-0 lg:rounded-[22px] lg:px-8 lg:pt-8"
-        style={{ background: `radial-gradient(ellipse 70% 120% at 0% 0%, rgb(255 255 255 / 0.16), transparent 60%), linear-gradient(180deg, transparent 35%, rgb(0 0 0 / 0.38)), ${color}`, color: ink, "--team": team.color ?? undefined } as React.CSSProperties}>
-        <span className="pointer-events-none absolute -right-10 -top-10 hidden opacity-[0.14] mix-blend-luminosity md:block" aria-hidden><TeamLogo src={team.logo} name="" size={340} /></span>
-        <svg className="pointer-events-none absolute -right-20 top-6 h-[300px] w-[300px] opacity-[0.13] md:hidden" viewBox="0 0 300 300" fill="none" stroke="currentColor" strokeWidth="3" aria-hidden>
+        style={{ background: `color-mix(in oklab, ${color} 24%, var(--bg))`, color: "var(--ink)", "--team": team.color ?? undefined } as React.CSSProperties}>
+        <span className="pointer-events-none absolute -right-10 -top-10 hidden opacity-[0.07] mix-blend-luminosity md:block" aria-hidden><TeamLogo src={team.logo} name="" size={340} /></span>
+        <svg className="pointer-events-none absolute -right-20 top-6 hidden h-[300px] w-[300px] opacity-[0.13]" viewBox="0 0 300 300" fill="none" stroke="currentColor" strokeWidth="3" aria-hidden>
           <circle cx="150" cy="150" r="60" /><circle cx="150" cy="150" r="140" /><path d="M150 0v300" />
         </svg>
         <div className="relative flex items-center justify-between gap-3 text-[15px] font-semibold">
@@ -131,8 +131,9 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
             </div>
             <p className="mt-1.5 text-[15px] font-semibold opacity-90">{team.mascot ? `${team.mascot}, ` : ""}<LiveRecord team={team} /> (<LiveRecord team={team} conf /> {team.confName})</p>
             <p className="text-[14px] opacity-75 tnum">
-              {team.streak && Number(team.streak.slice(1)) >= 2 && <>{team.streak.startsWith("W") ? "Won" : "Lost"} {team.streak.slice(1)} straight. </>}Projected <a href="#outlook" className="underline decoration-current/40 underline-offset-4">{fmt(team.projW, 0)}-{fmt(team.projL, 0)}</a>
-              {atsW + atsL + atsP > 0 && <span title="Against the spread vs the pregame line ESPN showed (DraftKings): wins–losses–pushes">, ATS {atsText}</span>}
+              {team.streak && Number(team.streak.slice(1)) >= 2 && <>{team.streak.startsWith("W") ? "Won" : "Lost"} {team.streak.slice(1)} straight. </>}
+              <IfProjections>Projected <a href="#outlook" className="underline decoration-current/40 underline-offset-4">{fmt(team.projW, 0)}-{fmt(team.projL, 0)}</a>
+              {atsW + atsL + atsP > 0 && <span title="Against the spread vs the pregame line ESPN showed (DraftKings): wins–losses–pushes">, ATS {atsText}</span>}</IfProjections>
             </p>
           </div>
         </div>
@@ -140,8 +141,8 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
           <FavoriteButton kind="teams" id={slug} name={team.name} />
           <CalendarButton slug={slug} name={team.name} />
           <ShareCard kind="team" title={team.name} subtitle={`${team.w}–${team.l} · ${team.confName}`} color={team.color ?? null} href={`/teams/${slug}/`} rankLabel={team.rank ? `DHR No. ${team.rank}` : undefined}
-            stats={[{ label: "Offense", value: fmt(team.adjO) }, { label: "Defense", value: fmt(team.adjD) }, { label: "Tempo", value: fmt(team.adjT) }, { label: "Projected", value: `${fmt(team.projW, 0)}-${fmt(team.projL, 0)}` }]} />
-          <BracketChip slug={slug} className="!border-transparent !bg-black/20 !text-current [&_.text-mute]:!text-current [&_.text-mute]:opacity-75" />
+            stats={[{ label: "Offense", value: fmt(team.adjO) }, { label: "Defense", value: fmt(team.adjD) }, { label: "Tempo", value: fmt(team.adjT) }, { label: "Record", value: `${team.w}-${team.l}` }]} />
+          <IfProjections><BracketChip slug={slug} className="!border-transparent !bg-black/20 !text-current [&_.text-mute]:!text-current [&_.text-mute]:opacity-75" /></IfProjections>
           {(team.health?.out ?? 0) > 0 && (
             <a href="#availability" className="btn" title="Jump to the availability report">{(() => { const h = team.health!, known = h.out - (h.missing ?? 0); return known > 0 ? `${known} out${h.missing ? ` · ${h.missing} missing` : ""}` : `${h.missing} missing · reason not reported`; })()}</a>
           )}
@@ -185,6 +186,7 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
                 )}
               </div>
               {team.next.wp !== null && (
+                <IfProjections>
                 <div className="mt-3.5">
                   <div className="flex h-1.5 gap-0.5 overflow-hidden rounded-full" aria-hidden>
                     <div style={{ width: `${team.next.wp * 100}%`, background: `color-mix(in oklab, ${color} 78%, white)` }} />
@@ -192,6 +194,7 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
                   </div>
                   <div className="mt-1.5 flex justify-between gap-2 text-[13px] font-bold tnum"><span>{team.short ?? team.name} {pctFmt(team.next.wp)}</span><span className="truncate font-medium text-mute">Pregame win chance</span><span className="text-mute">{pctFmt(1 - team.next.wp)}</span></div>
                 </div>
+                </IfProjections>
               )}
               {team.next.oppSlug && (
                 <Link className="mt-3 inline-block text-sm font-semibold text-bulb-ink" href={`/matchup/?a=${team.slug}&b=${team.next.oppSlug}&site=${team.next.venue === "H" ? "a" : team.next.venue === "A" ? "b" : "n"}`}>Open in the matchup simulator</Link>
@@ -215,7 +218,8 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
             </section>
           )}
           {note && <p className="note text-[15px] leading-[1.45]">{note}</p>}
-          {/* Season outlook */}
+          {/* Season outlook: simulated, so it waits for the projections switch like every other forecast. */}
+          <IfProjections fallback={<div className="flex flex-wrap items-center justify-between gap-3 rounded-[14px] border border-line px-4 py-3"><p className="text-sm text-mute">Season outlook, tournament odds and win chances are projections.</p><ProjectionToggle /></div>}>
           <section id="outlook" className="deck scroll-mt-32 p-5">
             <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
               <h2 className="h-section">Season outlook</h2>
@@ -223,10 +227,11 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
             </div>
             <SeasonOutlook team={team} hist={detail.winHist ?? null} sims={meta.sims?.sims ?? 10000} />
           </section>
+          </IfProjections>
 </div>
 <div className="min-w-0 space-y-6">
           <TeamChanges team={team} changes={changes} lastResult={lastResult} />
-          <FinalFourPath path={path} />
+          <IfProjections><FinalFourPath path={path} /></IfProjections>
           <section id="availability" className="deck scroll-mt-32 p-5" aria-labelledby="avail-h">
             <h2 id="avail-h" className="h-section mb-2">Availability</h2>
             <TeamAvailability slug={slug} health={team.health} items={detail.availability} log={detail.injuryLog} links={reportLinks} />
@@ -266,9 +271,11 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
                     <td className="py-2 text-right font-semibold"><a className="link" href={`#schedule-q${i + 1}`} title={`Show quadrant ${i + 1} games`}>{w}–{l}</a></td>
                   </tr>
                 ))}
-                <tr className="border-b border-line"><th scope="row" className="py-2 text-left font-normal text-mute">Games within 5 pts</th><td className="py-2 text-right font-semibold">{team.close[0]}–{team.close[1]}</td></tr>
-                <tr className="border-b border-line"><th scope="row" className="py-2 text-left font-normal text-mute" title="Against the spread vs the pregame line ESPN showed (DraftKings)">Against the spread</th><td className="py-2 text-right font-semibold">{atsW + atsL + atsP ? atsText : "—"}</td></tr>
+                <tr><th scope="row" className="py-2 text-left font-normal text-mute">Games within 5 pts</th><td className="py-2 text-right font-semibold">{team.close[0]}–{team.close[1]}</td></tr>
+                <IfProjections>
+                <tr className="border-y border-line"><th scope="row" className="py-2 text-left font-normal text-mute" title="Against the spread vs the pregame line ESPN showed (DraftKings)">Against the spread</th><td className="py-2 text-right font-semibold">{atsW + atsL + atsP ? atsText : "—"}</td></tr>
                 <tr><th scope="row" className="py-2 text-left font-normal text-mute">Projected conference</th><td className="py-2 text-right font-semibold"><Link className="link" href={`/conferences/${team.confSlug}/#standings-h`}>{fmt(team.projCW, 1)}–{fmt(team.projCL, 1)}</Link></td></tr>
+                </IfProjections>
               </tbody>
             </table>
             <p className="mt-2 text-xs text-dim">Quadrants use DHR ranks with NET-style cutoffs. They are not the NCAA&apos;s official quadrants.</p>

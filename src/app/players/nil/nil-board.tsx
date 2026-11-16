@@ -80,7 +80,7 @@ export default function NilBoard() {
         </div>
       ),
     },
-    { key: "value", label: "Estimate", csvLabel: "Estimated value (USD)", title: "D1 Hoops model estimate of annual value, 2026–27. Not a reported deal.", value: x => x.n[2], first: "desc",
+    { key: "value", label: "Estimate", csvLabel: "Estimated value (USD)", title: "D1 Hoops estimate of annual value, 2026–27. Not a reported deal.", value: x => x.n[2], first: "desc",
       render: x => <b className="font-display text-[17px] font-extrabold tnum">{fmtMoney(x.n[2])}</b> },
     { key: "range", label: "Likely range", csvLabel: "Range low (USD)", title: "Intended 80% range: budget uncertainty plus how far our estimates missed reported figures", value: x => x.n[3], first: "desc",
       render: x => <span className="whitespace-nowrap text-mute tnum">{fmtRange(x.n[3], x.n[4])}</span> },
@@ -155,7 +155,7 @@ export default function NilBoard() {
       ) : (
         <div className={ROW_LINK_CLASS} onClick={followRowLink}>
           <DataTable rows={shown} rankRows={pool} columns={columns} rowKey={x => x.p.id} initialSort="rk" initialDir="asc"
-            pageSize={100} csvName="d1hoops-nil-estimates.csv" caption="Estimated NIL value (model estimates, not reported deals)" maxHeight="78vh" />
+            pageSize={100} csvName="d1hoops-nil-estimates.csv" caption="Estimated NIL value (estimates, not reported deals)" maxHeight="78vh" />
         </div>
       )}
 
@@ -169,7 +169,7 @@ function FitCard({ nil }: { nil: NilData }) {
   const pct = (v: number | null) => (v === null ? "—" : `${Math.round(v * 100)}%`);
   return (
     <div className="deck p-4">
-      <div className="flex items-center gap-2"><h2 className="font-display text-2xl font-extrabold">How accurate is it?</h2><EstimateTag>Model</EstimateTag></div>
+      <div className="flex items-center gap-2"><h2 className="font-display text-2xl font-extrabold">How accurate is it?</h2><EstimateTag>Estimate</EstimateTag></div>
       <p className="mt-1 text-[14px] leading-snug text-mute">
         Estimate = <b className="text-ink">team roster budget</b> × <b className="text-ink">his share</b>. Budgets come from CBS Sports&apos; spending tiers for 80 high-major programs and from program strength elsewhere; shares come from minutes, DPR, recruiting rank and position, fitted to {c.fitted} publicly reported 2026–27 figures.
       </p>
@@ -196,7 +196,7 @@ function Reported({ nil }: { nil: NilData }) {
         <ReportedTag />
       </div>
       <p className="mb-3 mt-1 max-w-3xl text-sm text-mute">
-        What outlets have reported for 2026–27, next to our estimate. These are reports, mostly unconfirmed: schools rarely disclose deals and many skip the clearinghouse. We fit the model to them but never copy them into our estimates.
+        What outlets have reported for 2026–27, next to our estimate. These are reports, mostly unconfirmed: schools rarely disclose deals and many skip the clearinghouse. We calibrate to them but never copy them into our estimates.
       </p>
       <ul className="grid gap-3 md:grid-cols-2">
         {list.map(c => (

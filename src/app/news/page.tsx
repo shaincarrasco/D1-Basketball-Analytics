@@ -15,7 +15,7 @@ export default function NewsPage() {
   const ap = news.polls.ap ?? [];
   return (
     <>
-      <PageHeader title="News">Headlines link to the original publisher. Polls sit next to our ratings, and the injury wire shows the latest changes.</PageHeader>
+      <PageHeader title="News">Headlines, polls and the latest injury changes.</PageHeader>
       <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_420px]">
         <div className="min-w-0 space-y-6">
           <section className="deck p-5" aria-labelledby="head-h">

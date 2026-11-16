@@ -134,7 +134,7 @@ export default function MethodologyPage() {
 
   return (
     <>
-      <PageHeader title="Methodology">How DHR {m.version} works, how accurate it has been, and what each stat means.</PageHeader>
+      <PageHeader title="The model">How DHR {m.version} works, how accurate it has been, and what each stat means.</PageHeader>
 
       <div className="lg:grid lg:grid-cols-[220px_minmax(0,1fr)] lg:gap-10">
         <aside className="mb-6 lg:mb-0">

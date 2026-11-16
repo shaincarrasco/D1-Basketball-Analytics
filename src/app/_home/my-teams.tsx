@@ -9,6 +9,7 @@ import TeamLogo from "@sports/ui/team-logo";
 import { DHR_RANK_TITLE, dayLabel, pctFmt, record, venueWord } from "@sports/ui/format";
 import { useJson } from "@sports/ui/client-data";
 import { useFavorites } from "@/lib/favorites";
+import { IfProjections } from "@/components/projection-toggle";
 import type { TeamSummary } from "@/lib/types";
 
 const MAX_TEAMS = 8;
@@ -64,7 +65,7 @@ function TeamCard({ t }: { t: TeamSummary }) {
         {t.next && (
           <>
             {dayLabel(etDayOf(t.next.date), { weekday: "short" })} {venueWord(t.next.venue)} {t.next.opp}
-            {t.next.wp !== null && <> · <b className="font-bold text-ink tnum">{pctFmt(t.next.wp)}</b></>}
+            {t.next.wp !== null && <IfProjections> · <b className="font-bold text-ink tnum">{pctFmt(t.next.wp)}</b></IfProjections>}
           </>
         )}
       </div>

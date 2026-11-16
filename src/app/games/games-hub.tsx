@@ -15,8 +15,10 @@ import type { Game, GameDay, GameIndex } from "@/lib/types";
 import DateStrip from "./date-strip";
 import GameCard from "./game-card";
 import GameSheet from "./game-sheet";
+import Link from "next/link";
 import ProjectionToggle from "@/components/projection-toggle";
-import { FILTERS, SORTS, defaultDay, lineInfo, isDay, isLive, liveGames, matchesFilter, nextTip, sortGames, summarize, winner, type FilterId, type SortId } from "./game-utils";
+import { useShowProjections } from "@/lib/show-projections";
+import { FILTERS, SORTS, defaultDay, isDay, isLive, liveGames, matchesFilter, nextTip, sortGames, summarize, winner, type FilterId, type SortId } from "./game-utils";
 
 /** A summary older than this (relative to the last scoreboard update) is too stale to quote. */
 const SUMMARY_STALE_MS = 3 * 60_000;
@@ -53,8 +55,12 @@ export default function GamesHub() {
   const injuries = useInjuries();
   const absences = useMemo(() => keyAbsences(injuries.data), [injuries.data]);
 
-  const [filter, setFilter] = useState<FilterId>("all");
-  const [sort, setSort] = useState<SortId>("time");
+  // "Projected close" and "Closest projection" only exist once the reader has asked for projections.
+  const showProj = useShowProjections();
+  const [filterState, setFilter] = useState<FilterId>("all");
+  const [sortState, setSort] = useState<SortId>("time");
+  const filter: FilterId = !showProj && filterState === "close" ? "all" : filterState;
+  const sort: SortId = !showProj && sortState === "close" ? "time" : sortState;
   const [conf, setConf] = useState("all");
 
   const pushed = useRef(false);
@@ -109,10 +115,10 @@ export default function GamesHub() {
       if (!isLive(g)) continue;
       const e = summaries.get(g.id);
       const fresh = e && e.data.state === "in" && e.at >= (live.updated ?? 0) - SUMMARY_STALE_MS ? e.data : null;
-      m.set(g.id, bestMoment(g, live.byGame.get(g.id), fresh));
+      m.set(g.id, bestMoment(g, live.byGame.get(g.id), fresh, { projections: showProj }));
     }
     return m;
-  }, [games, summaries, live.byGame, live.updated]);
+  }, [games, summaries, live.byGame, live.updated, showProj]);
   // Give the first scoreboard poll a moment before saying nothing is live.
   const [waited, setWaited] = useState(false);
   useEffect(() => {
@@ -134,8 +140,8 @@ export default function GamesHub() {
       <DateStrip index={index.data} day={day} today={today} home={home} onSelect={selectDay} />
 
       <div className="mb-4 flex flex-wrap items-baseline gap-x-4 gap-y-1">
-        <h2 className="h-section">{dayLabel(day, { weekday: "long", month: "long", day: "numeric" })}{day === today ? <span className="ml-2 text-off">Today</span> : null}</h2>
-        {summary && games && <DaySummaryLine s={summary} games={games} onOpen={openGame} liveData={live.hasData} updated={live.updated} />}
+        <h2 className="h-section">{dayLabel(day, { weekday: "long", month: "long", day: "numeric" })}</h2>
+        {summary && games && <DaySummaryLine s={summary} projections={showProj} onOpen={openGame} liveData={live.hasData} updated={live.updated} />}
       </div>
 
       {!listed ? (
@@ -154,8 +160,9 @@ export default function GamesHub() {
         <>
           <div className="mb-4 flex flex-wrap items-center gap-2">
             <div className="no-scrollbar -mx-1 flex max-w-full gap-1.5 overflow-x-auto px-1" role="group" aria-label="Filter games">
-              {(liveFor || liveView) && <LiveToggle on={liveView} count={liveList.length} onChange={setLiveView} />}
-              {FILTERS.map(f => (
+              {/* No games in progress and the Live view off: a "Live now 0" chip would only be noise. */}
+              {((liveFor && liveList.length > 0) || liveView) && <LiveToggle on={liveView} count={liveList.length} onChange={setLiveView} />}
+              {FILTERS.filter(f => showProj || f.id !== "close").map(f => (
                 <button key={f.id} className="chip" aria-pressed={!liveView && filter === f.id} onClick={() => { setFilter(f.id); if (liveView) setLiveView(false); }} title={f.title}>
                   {f.label}<span className="tnum opacity-60">{counts[f.id]}</span>
                 </button>
@@ -172,13 +179,13 @@ export default function GamesHub() {
                 </select>
               </label>
               {liveView ? (
-                <span className="flex-1 text-right text-sm text-mute sm:flex-none" title="Close and late games first, then overtime, an underdog ahead, and how far our win chance has moved since tip-off">Most exciting first</span>
+                <span className="flex-1 text-right text-sm text-mute sm:flex-none" title="Close and late games first, then overtime and underdogs in front">Most exciting first</span>
               ) : (
                 <label className="flex flex-1 items-center gap-2 sm:flex-none">
                   <span className="hidden text-sm text-mute sm:inline">Sort</span>
                   <span className="sr-only sm:hidden">Sort by</span>
                   <select className="field w-full" value={sort} onChange={e => setSort(e.target.value as SortId)}>
-                    {SORTS.map(s => <option key={s.id} value={s.id}>{s.label}</option>)}
+                    {SORTS.filter(s => showProj || s.id !== "close").map(s => <option key={s.id} value={s.id}>{s.label}</option>)}
                   </select>
                 </label>
               )}
@@ -195,18 +202,19 @@ export default function GamesHub() {
               <button className="btn mt-3" onClick={() => { setFilter("all"); setConf("all"); }}>Show all {games.length} games</button>
             </Empty>
           ) : (
-            <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4" aria-label={liveView ? `${liveList.length} live games, most exciting first` : `${shown.length} games`} data-testid="game-list">
+            <ul className="grid grid-cols-1 overflow-hidden rounded-2xl bg-deck sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4" aria-label={liveView ? `${liveList.length} live games, most exciting first` : `${shown.length} games`} data-testid="game-list">
               {(liveView ? liveList : shown).map(g => (
-                <li key={g.id} data-game={g.id} className="flex">
+                <li key={g.id} data-game={g.id} className="flex border-b border-r border-line">
                   <GameCard g={g} live={live.byGame.get(g.id)} onOpen={openGame} absences={absences} moment={moments.get(g.id)} />
                 </li>
               ))}
             </ul>
           )}
-          <p className="mt-4 text-xs text-dim">
-            Bar = pregame win probability (<span className="text-def">away</span> / <span className="text-off">home</span>). Proj = DHR&apos;s margin set before tip-off, with the favorite&apos;s win chance beside it. Projected scores are hidden until you turn them on; when on, they show in gray on unplayed games.
-            ✓/✗ marks whether the pregame favorite won. Line = the pregame spread ESPN shows; ATS ✓/✗ = whether DHR&apos;s pick against it covered. Small numeral before a team = DHR national rank (not the AP poll).
-          </p>
+          {showProj && !liveView && (
+            <p className="mt-4 max-w-[70ch] text-xs text-dim">
+              Bar: pregame win probability (<span className="text-def">away</span> / <span className="text-off">home</span>). Proj: the projected margin, set before tip-off. ✓ or ✗: whether the favorite won. Line: the spread ESPN lists. <Link className="underline hover:text-mute" href="/methodology/">How projections are made</Link>
+            </p>
+          )}
         </>
       )}
 
@@ -245,10 +253,8 @@ function LiveEmpty({ day, today, next, conf, total, onAll, onClearConf }: { day:
   );
 }
 
-function DaySummaryLine({ s, games, onOpen, liveData, updated }: { s: ReturnType<typeof summarize>; games: Game[]; onOpen: (id: string) => void; liveData: boolean; updated: number | null }) {
+function DaySummaryLine({ s, projections, onOpen, liveData, updated }: { s: ReturnType<typeof summarize>; projections: boolean; onOpen: (id: string) => void; liveData: boolean; updated: number | null }) {
   const b: Game | null = s.biggest;
-  const ats = { w: 0, l: 0, p: 0 };
-  for (const g of games) { const r = lineInfo(g)?.result; if (r === "W") ats.w++; else if (r === "L") ats.l++; else if (r === "P") ats.p++; }
   const w = b ? winner(b) : null;
   return (
     <p className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-mute tnum">
@@ -260,18 +266,12 @@ function DaySummaryLine({ s, games, onOpen, liveData, updated }: { s: ReturnType
         </span>
       ) : s.live > 0 && <span className="flex items-center gap-1.5" title="Status as of the last data refresh"><span className="live-dot" aria-hidden /><b className="text-hot">{s.live}</b> in progress at last refresh</span>}
       <span><b className="text-ink">{s.finals}</b> final</span>
-      {s.graded > 0 && (
-        <span title="Finals where the pregame favorite won">Model <b className="text-ink">{s.correct}–{s.graded - s.correct}</b> ({Math.round((s.correct / s.graded) * 100)}%)</span>
-      )}
-      {ats.w + ats.l > 0 && (
-        <span title="DHR picks against the pregame spread on today's finals (only where the model and line differ by at least half a point)">ATS <b className="text-ink">{ats.w}–{ats.l}{ats.p ? `–${ats.p}` : ""}</b></span>
-      )}
       {b && w && (
         <span>
           Biggest upset:{" "}
           <button className="font-semibold text-hot underline-offset-2 hover:underline" onClick={() => onOpen(b.id)}>
             {b[w].name} over {b[w === "home" ? "away" : "home"].name}
-          </button>{" "}({pctFmt(b.upset)} pregame chance)
+          </button>{projections ? <> ({pctFmt(b.upset)} pregame chance)</> : null}
         </span>
       )}
     </p>

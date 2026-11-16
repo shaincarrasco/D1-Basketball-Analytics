@@ -1,16 +1,18 @@
 "use client";
-// Pick a winner before tip-off; after the final, show how the pick (and the model) did.
+// Pick a winner before tip-off; after the final, show how the pick did.
 import Link from "next/link";
 import { useState } from "react";
 import { Check, X } from "lucide-react";
 import type { Game } from "@/lib/types";
 import { usePicks, makePick } from "@/lib/picks";
+import { useShowProjections } from "@/lib/show-projections";
 import { isFinal, winner } from "./game-utils";
 
 export default function PickEm({ g, started }: { g: Game; started: boolean }) {
   const picks = usePicks();
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const showProj = useShowProjections();
   if (!g.espnId || picks === undefined) return null;
   if (picks === null) {
     if (started) return null;
@@ -25,7 +27,7 @@ export default function PickEm({ g, started }: { g: Game; started: boolean }) {
     return (
       <div className="mt-5 flex flex-wrap justify-center gap-x-5 gap-y-1 text-[13px]">
         {mine && <span className="flex items-center gap-1">{mine === w ? <Check size={15} className="text-win" aria-label="Correct" /> : <X size={15} className="text-loss" aria-label="Wrong" />} You picked {nameOf(mine)}</span>}
-        {modelPick && <span className="flex items-center gap-1 text-mute">{modelPick === w ? <Check size={15} className="text-win" aria-label="Correct" /> : <X size={15} className="text-loss" aria-label="Wrong" />} Model picked {nameOf(modelPick)}</span>}
+        {showProj && modelPick && <span className="flex items-center gap-1 text-mute">{modelPick === w ? <Check size={15} className="text-win" aria-label="Correct" /> : <X size={15} className="text-loss" aria-label="Wrong" />} Projection had {nameOf(modelPick)}</span>}
       </div>
     );
   }

@@ -39,7 +39,7 @@ export default function TeamHealthBars({ teams, meta }: { teams: TeamHealth[]; m
           ))}
         </ol>
       )}
-      <p className="mt-2 text-xs text-dim">Est. rating lost is a model estimate of points per 100 possessions, based on each player&apos;s minutes and production.</p>
+      <p className="mt-2 text-xs text-dim">Est. rating lost is our estimate of points per 100 possessions, based on each player&apos;s minutes and production.</p>
     </div>
   );
 }

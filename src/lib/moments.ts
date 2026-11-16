@@ -31,8 +31,10 @@ export type Moment = {
   text: string;
   /** Team the moment is about, in our orientation. */
   side: "home" | "away" | null;
-  /** True when the line uses our model (pregame or live win probability). */
+  /** True when the line quotes a win probability (pregame or live). */
   model: boolean;
+  /** The same sentence with the win probability left out, for readers who haven't asked for projections. Absent when nothing is left to say. */
+  plain?: string;
   /** Elapsed game seconds when it happened; null = the current state of the game. */
   t: number | null;
   source: "scoreboard" | "plays";
@@ -126,7 +128,7 @@ export function scoreboardMoments(g: Game, live: MomentClock | null | undefined)
     if (p0 <= 0.4 && dogLead >= 1) {
       upsetSide = dog;
       const score = 35 + 40 * ((0.4 - p0) / 0.4) + 20 * progress + Math.min(dogLead, 10);
-      out.push(make("upset", score, "Upset brewing", `${nameOf(g, dog)} (${pctText(p0)} our pregame chance) leads by ${dogLead} ${when}`, { side: dog, model: true }));
+      out.push(make("upset", score, "Upset brewing", `${nameOf(g, dog)} (${pctText(p0)} pregame chance) leads by ${dogLead} ${when}`, { side: dog, model: true, plain: `${nameOf(g, dog)} leads by ${dogLead} ${when}` }));
     }
   }
 
@@ -177,14 +179,14 @@ export function scoreboardMoments(g: Game, live: MomentClock | null | undefined)
       const before = s === "home" ? pre.wp : 1 - pre.wp, now = s === "home" ? liveHome : 1 - liveHome;
       const flipped = before < 0.5 && now >= 0.5;
       out.push(make("swing", 20 + 60 * ((Math.abs(d) - 0.25) / 0.75) + (flipped ? 15 : 0), "Big swing",
-        `Our model has ${nameOf(g, s)} at ${pctText(now)} to win, up from ${pctText(before)} before tip`, { side: s, model: true }));
+        `${nameOf(g, s)} is now ${pctText(now)} to win, up from ${pctText(before)} before tip`, { side: s, model: true }));
     }
   }
   // Fallback so every live card says something: our live win chance from here (ranks below everything).
   if (pre && liveHome != null && !out.length) {
     const s: Side = liveHome >= 0.5 ? "home" : "away";
     const p = s === "home" ? liveHome : 1 - liveHome;
-    out.push(make("chance", 3, null, `Our model gives ${nameOf(g, s)} ${aPct(p)} chance to win from here`, { side: s, model: true }));
+    out.push(make("chance", 3, null, `${nameOf(g, s)} has ${aPct(p)} chance to win from here`, { side: s, model: true }));
   }
   return out;
 }
@@ -432,9 +434,9 @@ const KIND_ORDER: MomentKind[] = ["overtime", "buzzer", "close", "upset", "comeb
  * All candidates for a live game, best first. Play-by-play candidates join when a summary is
  * given; one moment per kind except players, runs and buzzer-beaters (one per player / the best run).
  */
-export function gameMoments(g: Game, live: MomentClock | null | undefined, summary?: LiveSummary | null): Moment[] {
+export function gameMoments(g: Game, live: MomentClock | null | undefined, summary?: LiveSummary | null, opts: { projections?: boolean } = {}): Moment[] {
   const plays = summary ? playMoments(g, summary, live) : [];
-  const all = [...scoreboardMoments(g, live).filter(m => m.kind !== "chance" || !plays.length), ...plays];
+  const all = [...scoreboardMoments(g, live).filter(m => m.kind !== "chance" || !plays.length), ...plays].flatMap(m => (opts.projections === false ? withoutProjection(m) : [m]));
   const byKind = new Map<string, Moment>();
   for (const mo of all) {
     const key = mo.kind === "player" ? `player:${mo.body.split(" has ")[0]}` : mo.kind === "buzzer" ? `buzzer:${mo.t}` : mo.kind;
@@ -445,9 +447,16 @@ export function gameMoments(g: Game, live: MomentClock | null | undefined, summa
   return [...byKind.values()].sort((x, y) => y.score - x.score || KIND_ORDER.indexOf(x.kind) - KIND_ORDER.indexOf(y.kind) || (y.t ?? 1e9) - (x.t ?? 1e9));
 }
 
+/** A moment as shown to a reader who hasn't asked for projections: the win probability is dropped, and so is a line that says nothing else. */
+function withoutProjection(m: Moment): Moment[] {
+  if (!m.model) return [m];
+  if (!m.plain) return [];
+  return [{ ...m, body: m.plain, text: m.lead ? `${m.lead}: ${m.plain}` : m.plain, model: false }];
+}
+
 /** The single best moment so far, or null. */
-export function bestMoment(g: Game, live: MomentClock | null | undefined, summary?: LiveSummary | null): Moment | null {
-  return gameMoments(g, live, summary)[0] ?? null;
+export function bestMoment(g: Game, live: MomentClock | null | undefined, summary?: LiveSummary | null, opts: { projections?: boolean } = {}): Moment | null {
+  return gameMoments(g, live, summary, opts)[0] ?? null;
 }
 
 /** "2nd 8:41" for a moment with a time, "Now" for the current state. */

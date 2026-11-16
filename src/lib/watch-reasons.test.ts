@@ -76,3 +76,12 @@ describe("watchReason", () => {
     for (const status of ["in_progress", "final", "postponed"]) expect(watchReason({ ...base, status }, none)).toBeNull();
   });
 });
+
+describe("watchReason without projections", () => {
+  it("never quotes a win chance, and falls through to the next reason the data supports", () => {
+    const upset = game(side("home", "Home U", "HOME", 90), side("away", "Ranked State", "RSU", 8), 0.59);
+    expect(watchReason(upset, none, { projections: false })).toBe("No. 8 Ranked State on the floor");
+    const flip = game(side("home", "Home U", "HOME", 90), side("away", "Away U", "AWAY", 95), 0.5);
+    expect(watchReason(flip, none, { projections: false })).toBeNull();
+  });
+});

@@ -1,5 +1,6 @@
 "use client";
 // Player profile: hero line + DPR, shots, on/off, D-I percentiles, similar players, teammates, team context.
+import { IfProjections } from "@/components/projection-toggle";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
@@ -347,7 +348,7 @@ function TeamContext({ t, detail, rated }: { t: TeamSummary; detail: TeamDetail 
         <Link href={`/games/?d=${etDay(n.date)}&g=${n.id}`} className="link mt-1.5 block rounded-lg border border-line p-3 hover:border-line2">
           <span className="block text-xs text-mute">{dayLabel(etDay(n.date))} · {timeLabel(n.date)}{n.venue === "N" ? " · Neutral site" : ""}</span>
           <span className="mt-0.5 block font-semibold">{n.venue === "A" ? "at" : "vs"} {n.oppRank ? <span className="text-mute" title={DHR_RANK_TITLE}>#{n.oppRank} </span> : null}{n.opp}</span>
-          {n.wp !== null && <span className="mt-0.5 block text-sm text-mute tnum">{pctFmt(n.wp)} pregame win chance (DHR)</span>}
+          {n.wp !== null && <IfProjections><span className="mt-0.5 block text-sm text-mute tnum">{pctFmt(n.wp)} pregame win chance</span></IfProjections>}
         </Link>
       ) : <p className="mt-1 text-sm text-mute">No upcoming game on the schedule.</p>}
 

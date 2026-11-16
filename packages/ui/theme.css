@@ -11,26 +11,28 @@
   own meanings: off, def, win/good, loss/bad, hot.
 */
 html[data-palette="primetime"] {
+  /* Neutral black, like the sports apps people already use: no tint in the surfaces, white for
+     scores and the current choice, team colours for teams. Orange is the brand and links only. */
   color-scheme: dark;
-  --bg-rgb: 7 8 15;
-  --deck-rgb: 18 21 36;
-  --deck-2-rgb: 26 30 50;
-  --line-rgb: 36 41 66;
-  --line-2-rgb: 56 62 94;
-  --ink-rgb: 245 246 250;
-  --mute-rgb: 168 174 198;
-  --dim-rgb: 118 125 152;
-  --bulb-rgb: 255 122 26;
-  --off-rgb: 255 196 77;
-  --def-rgb: 92 168 255;
-  --hot-rgb: 255 61 138;
-  --win-rgb: 52 236 160;
-  --loss-rgb: 255 86 112;
-  --good-rgb: 52 236 160;
-  --bad-rgb: 255 86 112;
-  --scoreboard-rgb: 4 5 10;
+  --bg-rgb: 0 0 0;
+  --deck-rgb: 21 21 23;
+  --deck-2-rgb: 32 32 35;
+  --line-rgb: 42 42 46;
+  --line-2-rgb: 68 68 74;
+  --ink-rgb: 255 255 255;
+  --mute-rgb: 162 162 170;
+  --dim-rgb: 112 112 120;
+  --bulb-rgb: 255 138 58;
+  --off-rgb: 235 190 96;
+  --def-rgb: 104 166 240;
+  --hot-rgb: 255 82 72;
+  --win-rgb: 60 204 110;
+  --loss-rgb: 255 110 100;
+  --good-rgb: 60 204 110;
+  --bad-rgb: 255 110 100;
+  --scoreboard-rgb: 0 0 0;
   --heat-k: 0.9;
-  --glow: 1.25;
+  --glow: 0;
   --shadow: none;
 }
 html[data-palette="arena"] {
@@ -340,19 +342,12 @@ img, svg { -webkit-user-drag: none; }
 
 
 /* ==========================================================================
-   Primetime polish: the arena with the house lights down. One overhead light
-   over the court, surfaces lit from above, and the scoreboard as the one loud
-   thing on every screen. Applies to every dark palette; the atmosphere layer
-   is Primetime only.
+   Primetime polish: the arena with the house lights down. The scoreboard is
+   the one object that glows. Everything else is flat: solid surfaces, hairline
+   edges, colour only where it carries meaning (the accent marks the current
+   choice, team colours mark teams). No background haze, no glow on controls:
+   those read as decoration and compete with the scores.
    ========================================================================== */
-html[data-palette="primetime"] body {
-  background:
-    radial-gradient(ellipse 70% 460px at 50% -160px, rgb(var(--bulb-rgb) / 0.14), transparent 72%),
-    radial-gradient(ellipse 55% 520px at 105% 0%, rgb(92 74 255 / 0.10), transparent 70%),
-    radial-gradient(ellipse 45% 420px at -5% 30%, rgb(var(--def-rgb) / 0.05), transparent 70%),
-    var(--bg);
-  background-attachment: fixed;
-}
 
 html[data-theme="dark"] {
   --edge: rgb(255 255 255 / 0.065);
@@ -360,24 +355,23 @@ html[data-theme="dark"] {
 }
 @layer components {
   html[data-theme="dark"] .deck {
-    background: linear-gradient(180deg, rgb(255 255 255 / 0.03), rgb(255 255 255 / 0) 42%), var(--deck);
     border-color: var(--edge);
-    box-shadow: var(--lift);
+    box-shadow: none;
   }
-  html[data-theme="dark"] .deck-flat { border-color: var(--edge); box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.04); }
-  html[data-theme="dark"] .bg-deck:is(ul), html[data-theme="dark"] .bg-deck.rounded-\[18px\]:is(div) { box-shadow: var(--lift); outline: 1px solid var(--edge); outline-offset: -1px; }
+  html[data-theme="dark"] .deck-flat { border-color: var(--edge); }
+  html[data-theme="dark"] .bg-deck:is(ul), html[data-theme="dark"] .bg-deck.rounded-\[18px\]:is(div) { outline: 1px solid var(--edge); outline-offset: -1px; }
 
   .h-section { font-weight: 900; font-size: 1.6rem; line-height: 1.05; letter-spacing: 0.002em; }
   @media (min-width: 640px) { .h-section { font-size: 1.85rem; } }
 
-  html[data-theme="dark"] .btn { background: linear-gradient(180deg, rgb(255 255 255 / 0.06), rgb(255 255 255 / 0.015)), var(--deck); border-color: var(--edge); box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.06); }
-  html[data-theme="dark"] .btn:hover { border-color: rgb(var(--bulb-rgb) / 0.55); }
-  .btn-primary, html[data-theme="dark"] .btn-primary { background: var(--bulb); border-color: var(--bulb); color: var(--scoreboard); box-shadow: 0 10px 28px -10px rgb(var(--bulb-rgb) / 0.75), inset 0 1px 0 rgb(255 255 255 / 0.35); }
-  html[data-theme="dark"] .chip { border-color: var(--edge); background: rgb(255 255 255 / 0.025); }
-  html[data-theme="dark"] .chip:hover { border-color: rgb(var(--bulb-rgb) / 0.45); }
-  html[data-theme="dark"] .chip[aria-pressed="true"], html[data-theme="dark"] .chip[aria-current="page"] { background: var(--bulb); border-color: var(--bulb); color: var(--scoreboard); box-shadow: 0 6px 18px -8px rgb(var(--bulb-rgb) / 0.8); }
+  html[data-theme="dark"] .btn { background: var(--deck-2); border-color: var(--edge); }
+  html[data-theme="dark"] .btn:hover { border-color: var(--line-2); background: color-mix(in srgb, var(--deck-2) 88%, white); }
+  .btn-primary, html[data-theme="dark"] .btn-primary { background: var(--bulb); border-color: var(--bulb); color: var(--scoreboard); box-shadow: none; }
+  html[data-theme="dark"] .chip { border-color: var(--line); background: transparent; }
+  html[data-theme="dark"] .chip:hover { border-color: var(--line-2); background: rgb(255 255 255 / 0.04); }
+  html[data-theme="dark"] .chip[aria-pressed="true"], html[data-theme="dark"] .chip[aria-current="page"] { background: var(--ink); border-color: var(--ink); color: var(--bg); }
   html[data-theme="dark"] .seg { background: rgb(0 0 0 / 0.35); box-shadow: inset 0 0 0 1px var(--edge); }
-  html[data-theme="dark"] .seg > [aria-pressed="true"], html[data-theme="dark"] .seg > [aria-current="page"] { background: linear-gradient(180deg, rgb(255 255 255 / 0.09), rgb(255 255 255 / 0.03)), var(--deck-2); box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.08), 0 4px 12px -4px rgb(0 0 0 / 0.7); }
+  html[data-theme="dark"] .seg > [aria-pressed="true"], html[data-theme="dark"] .seg > [aria-current="page"] { background: var(--deck-2); box-shadow: inset 0 0 0 1px var(--edge); }
   html[data-theme="dark"] .field { background: rgb(0 0 0 / 0.3); border-color: var(--edge); }
   html[data-theme="dark"] .field:focus { border-color: rgb(var(--bulb-rgb) / 0.7); box-shadow: 0 0 0 3px rgb(var(--bulb-rgb) / 0.18); outline: none; }
 
@@ -388,27 +382,71 @@ html[data-theme="dark"] {
   html[data-theme="dark"] .dt tbody tr:hover td.sticky-col { background: color-mix(in srgb, var(--bulb) 6%, var(--bg)); }
 }
 
-/* The scoreboard: an LED panel, the one loud object on the page. */
-html[data-theme="dark"] .plate {
-  background:
-    radial-gradient(circle, rgb(255 255 255 / 0.05) 0.9px, transparent 1.3px) 0 0 / 5px 5px,
-    linear-gradient(180deg, color-mix(in srgb, var(--scoreboard) 70%, #1a1d2e), var(--scoreboard));
-  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.07), inset 0 12px 28px rgb(0 0 0 / 0.65), 0 14px 32px -16px rgb(0 0 0 / 0.9);
-}
-html[data-theme="dark"] .plate .dots:not(.dots-unlit):not(.dots-off) {
-  text-shadow: 0 0 6px rgb(var(--bulb-rgb) / 0.85), 0 0 22px rgb(var(--bulb-rgb) / 0.45), 0 0 44px rgb(var(--bulb-rgb) / 0.2);
-}
-html[data-theme="dark"] .dots-glow { text-shadow: 0 0 10px rgb(var(--bulb-rgb) / 0.6), 0 0 26px rgb(var(--bulb-rgb) / 0.25); }
+/* Scores: plain white numerals in the display face. No LED panel, no dot-matrix, no glow:
+   a score is the content, so it is set like content. */
+html[data-theme="dark"] .dots { font-family: var(--font-display); font-weight: 800; color: var(--ink); letter-spacing: 0; text-shadow: none; animation: none; }
+html[data-theme="dark"] .dots.dots-off { color: var(--mute); }
+html[data-theme="dark"] .dots.dots-unlit { display: none; }
+html[data-theme="dark"] .plate { background: none; box-shadow: none; }
+html[data-theme="dark"] .plate .dots { color: var(--ink); animation: none; }
+html[data-theme="dark"] .plate .dots.dots-off { color: var(--dim); }
+html[data-theme="dark"] .rank-cell { font-family: var(--font-display); font-weight: 700; color: var(--mute); }
 
-/* Chrome: the header carries a thin line of court light; the active hub glows. */
-html[data-theme="dark"] header.sticky { border-bottom-color: transparent; }
-html[data-theme="dark"] header.sticky::after {
-  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; pointer-events: none;
-  background: linear-gradient(90deg, transparent, rgb(var(--bulb-rgb) / 0.5) 30%, rgb(var(--bulb-rgb) / 0.5) 70%, transparent), var(--edge);
-}
-html[data-theme="dark"] header nav [aria-current="page"]::after { box-shadow: 0 0 14px rgb(var(--bulb-rgb) / 0.9), 0 0 4px rgb(var(--bulb-rgb)); }
+/* Chrome: one hairline under the header and over the tab bar. The current hub is marked by colour alone. */
+html[data-theme="dark"] header.sticky { border-bottom-color: var(--edge); }
 html[data-theme="dark"] nav[aria-label="Tabs"] { border-top-color: var(--edge); }
-html[data-theme="dark"] nav[aria-label="Tabs"] [aria-current="page"] svg { filter: drop-shadow(0 0 6px rgb(var(--bulb-rgb) / 0.75)); }
 
 /* Big titles: tight and heavy, like a broadcast lower-third. */
 .hero-title { font-family: var(--font-display); font-weight: 900; line-height: 0.86; letter-spacing: -0.012em; }
+
+
+/* ==========================================================================
+   Primetime, quiet. One typeface (Inter), soft grey surfaces with no outlines,
+   off-white text on black, and no accent colour: selection is a lighter grey,
+   links are white. Colour comes only from team logos, live (red) and results
+   (green). Everything here is scoped to the Primetime palette.
+   ========================================================================== */
+html[data-palette="primetime"] {
+  --bg-rgb: 0 0 0;
+  --deck-rgb: 24 24 26;
+  --deck-2-rgb: 40 40 43;
+  --line-rgb: 38 38 41;
+  --line-2-rgb: 60 60 64;
+  --ink-rgb: 242 242 245;
+  --mute-rgb: 150 150 158;
+  --dim-rgb: 104 104 111;
+  --bulb-rgb: 242 242 245;
+  --off-rgb: 200 200 206;
+  --def-rgb: 122 162 220;
+  --hot-rgb: 255 90 80;
+  --win-rgb: 74 196 120;
+  --loss-rgb: 236 112 104;
+  --good-rgb: 74 196 120;
+  --bad-rgb: 236 112 104;
+  --font-display: "Inter Variable", system-ui, -apple-system, sans-serif;
+  --radius-lg: 16px;
+  --radius-sm: 12px;
+}
+html[data-palette="primetime"] body { font-family: "Inter Variable", system-ui, -apple-system, sans-serif; font-size: 14.5px; letter-spacing: -0.008em; font-feature-settings: "cv11", "ss01", "calt"; }
+html[data-palette="primetime"] .font-display,
+html[data-palette="primetime"] h1, html[data-palette="primetime"] h2, html[data-palette="primetime"] .h-section { font-family: var(--font-display); letter-spacing: -0.022em; }
+/* Sizes and weights were tuned for a condensed face; Inter is wider and reads heavy above 700. */
+html[data-palette="primetime"] .font-display.font-extrabold, html[data-palette="primetime"] .font-display.font-black,
+html[data-palette="primetime"] .font-extrabold, html[data-palette="primetime"] .font-black { font-weight: 650; }
+html[data-palette="primetime"] .h-section { font-size: 1.125rem; font-weight: 650; line-height: 1.25; }
+html[data-palette="primetime"] .hero-title { font-family: var(--font-display); font-size: clamp(1.625rem, 3.4vw, 2.125rem) !important; font-weight: 700; line-height: 1.1; letter-spacing: -0.03em; text-transform: none; }
+html[data-palette="primetime"] .dots, html[data-palette="primetime"] .plate .dots { font-family: var(--font-display); font-weight: 600; letter-spacing: -0.02em; }
+html[data-palette="primetime"] .rank-cell { font-family: var(--font-display); font-weight: 500; font-size: 13.5px; color: var(--mute); }
+
+/* Surfaces: filled, not outlined. */
+html[data-palette="primetime"] .deck, html[data-palette="primetime"] .deck-flat { border-color: transparent; box-shadow: none; }
+html[data-palette="primetime"] .chip { border-color: transparent; background: var(--deck); color: var(--mute); font-weight: 550; font-size: 13px; padding: 7px 13px; }
+html[data-palette="primetime"] .chip:hover { border-color: transparent; background: var(--deck-2); color: var(--ink); }
+html[data-palette="primetime"] .chip[aria-pressed="true"], html[data-palette="primetime"] .chip[aria-current="page"] { background: var(--deck-2); border-color: transparent; color: var(--ink); box-shadow: none; }
+html[data-palette="primetime"] .btn { border-color: transparent; background: var(--deck-2); font-weight: 550; font-size: 13.5px; }
+html[data-palette="primetime"] .btn:hover { border-color: transparent; background: rgb(var(--line-2-rgb)); }
+html[data-palette="primetime"] .btn-primary { background: var(--ink); color: var(--bg); }
+html[data-palette="primetime"] .field { border-color: transparent; background: var(--deck); font-size: 14px; }
+html[data-palette="primetime"] .seg > [aria-pressed="true"], html[data-palette="primetime"] .seg > [aria-current="page"] { box-shadow: none; }
+html[data-palette="primetime"] .dt th { font-weight: 500; border-bottom-color: var(--line); }
+html[data-palette="primetime"] header.sticky, html[data-palette="primetime"] nav[aria-label="Tabs"] { border-color: var(--line); }

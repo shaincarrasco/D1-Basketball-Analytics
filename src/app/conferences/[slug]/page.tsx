@@ -6,6 +6,7 @@ import { fmt, signed } from "@sports/ui/format";
 import { getConferences, getMeta, getTeamDetail, getTeams } from "@/lib/server-data";
 import StandingsTable, { type StandingRow } from "./standings-table";
 import Race from "./race";
+import { IfProjections } from "@/components/projection-toggle";
 
 export const dynamicParams = false;
 
@@ -83,14 +84,11 @@ export default async function ConferencePage({ params }: Props) {
         </dl>
       </section>
 
-      <Race rows={rows} leagueGames={leagueGames} />
+      <IfProjections><Race rows={rows} leagueGames={leagueGames} /></IfProjections>
 
       <section aria-labelledby="standings-h">
         <h2 id="standings-h" className="h-section mb-1">Standings</h2>
-        <p className="mb-4 text-sm text-mute">
-          {confPlayed ? "" : "No conference games have been played yet, so the order follows projected conference wins. "}
-          Projected conference record = wins so far plus the summed win probability of every remaining league game. Title odds and expected conference wins come from 10,000 simulations of the rest of the season; shared titles count.
-        </p>
+        {!confPlayed && <p className="mb-4 text-sm text-mute">No conference games have been played yet, so teams are listed in expected order of finish.</p>}
         <StandingsTable rows={rows} total={meta.counts.ratedTeams} csvName={`d1hoops-${conf.slug}-standings.csv`} />
       </section>
     </>

@@ -51,9 +51,15 @@ export default function FocusTabs({ tabs, param = "tab", sticky = true, classNam
     if (top <= headerH + 1 && bar.current) window.scrollTo({ top: window.scrollY + bar.current.getBoundingClientRect().top - headerH, behavior: "instant" as ScrollBehavior });
   };
 
-  // Keep the active tab visible when the bar scrolls sideways on narrow phones.
+  // Keep the active tab visible when the bar scrolls sideways on narrow phones. Only the bar moves:
+  // scrollIntoView also scrolls the page, which opened the home page a screen down on phones.
   useEffect(() => {
-    bar.current?.querySelector<HTMLElement>(`[data-tab="${active}"]`)?.scrollIntoView({ block: "nearest", inline: "nearest" });
+    const strip = bar.current, tab = strip?.querySelector<HTMLElement>(`[data-tab="${active}"]`);
+    if (!strip || !tab) return;
+    const scroller = tab.closest<HTMLElement>("[role='tablist']") ?? strip;
+    const box = scroller.getBoundingClientRect(), t = tab.getBoundingClientRect();
+    if (t.left < box.left) scroller.scrollLeft -= box.left - t.left + 12;
+    else if (t.right > box.right) scroller.scrollLeft += t.right - box.right + 12;
   }, [active]);
 
   return (

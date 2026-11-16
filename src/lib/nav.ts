@@ -19,7 +19,7 @@ export const HUBS: Hub[] = [
     quickLabel: "Jump to",
     quick: [{ href: "/bracket/?tab=bubble", label: "Bubble watch" }, { href: "/bracket/?tab=seeds", label: "Seed list" }, { href: "/injuries/", label: "Biggest absences" }, { href: "/games/", label: "Today's games" }],
     sections: [
-      { href: "/games/", label: "Scoreboard", desc: "Every D-I game by day, live scores and pregame odds", icon: CalendarDays },
+      { href: "/games/", label: "Scoreboard", desc: "Every D-I game by day, with live scores", icon: CalendarDays },
       { href: "/bracket/", label: "Bracket", desc: "Our projected 76-team field and the bubble", icon: Trophy },
       { href: "/injuries/", label: "Injury report", desc: "Who's out, how sure we are and what it costs", icon: HeartPulse },
       { href: "/news/", label: "News", desc: "Previews, recaps and headlines by team", icon: Newspaper },
@@ -60,8 +60,8 @@ export const HUBS: Hub[] = [
       { href: "/matchup/", label: "Matchup simulator", desc: "Any two teams, any site, with injuries", icon: Swords },
       { href: "/lineups/", label: "Lineup lab", desc: "Put any five players on the floor and grade the fit", icon: UsersRound },
       { href: "/charts/build/", label: "Make a chart", desc: "Build, share and download your own chart", icon: PenTool },
-      { href: "/receipts/", label: "Receipts", desc: "Our track record, game by game, graded after the buzzer", icon: Receipt },
-      { href: "/methodology/", label: "How it works", desc: "Every rating and projection, explained", icon: BookOpen },
+      { href: "/receipts/", label: "Receipts", desc: "The track record, game by game, graded after the buzzer", icon: Receipt },
+      { href: "/methodology/", label: "The model", desc: "How the ratings and projections work", icon: BookOpen },
     ],
   },
 ];

@@ -10,9 +10,10 @@ import TvBadges from "@/components/tv-badges";
 import { Dots } from "@/components/dots";
 import { dayLabel, DHR_RANK_TITLE, etToday, fmt, pctFmt, timeLabel } from "@sports/ui/format";
 import { useJson } from "@sports/ui/client-data";
-import { toggleFavorite, useFavorites } from "@/lib/favorites";
+import { useFavorites } from "@/lib/favorites";
 import { useLiveScores, withLive, type LiveGame } from "@/lib/live";
 import { useShowProjections } from "@/lib/show-projections";
+import ProjectionToggle from "@/components/projection-toggle";
 import { watchReason } from "@/lib/watch-reasons";
 import type { Game, GameDay, GameIndex, GameSide, TeamSummary } from "@/lib/types";
 import LiveStrip from "./live-strip";
@@ -52,26 +53,29 @@ export default function Today() {
     const liveFirst = (g: Game) => (g.status === "in_progress" ? 0 : 1);
     return list.sort((a, b) => liveFirst(a) - liveFirst(b) || (b.watch ?? 0) - (a.watch ?? 0));
   }, [staticGames, live.byGame]);
-  const featured = useMemo(() => pickFeatured(games), [games]);
-  const rest = games.filter(g => !featured.some(f => f.g === g)).slice(0, 6);
+  // "Closest game" and "Upset watch" are projections, so they only join the carousel once the reader asks for them.
+  const showProj = useShowProjections();
+  const featured = useMemo(() => pickFeatured(games).filter(f => showProj || f.kind === "best"), [games, showProj]);
+  // Page one carries the slate itself, not a teaser of it.
+  const rest = games.filter(g => !featured.some(f => f.g === g)).slice(0, 16);
   const liveCount = games.filter(g => g.status === "in_progress").length;
   const finals = useMemo(() => {
     const list = (prev.data?.games ?? []).filter(g => g.status === "final" && g.home.score !== null && g.away.score !== null && g.home.id && g.away.id);
     const upsets = list.filter(g => g.upset !== null).sort((a, b) => a.upset! - b.upset!);
     const top = [...list].sort((a, b) => (b.watch ?? 0) - (a.watch ?? 0));
-    return [...new Set([...upsets.slice(0, 1), ...top])].slice(0, 2);
+    return [...new Set([...upsets.slice(0, 1), ...top])].slice(0, 6);
   }, [prev.data]);
   const failed = index.status === "error" || slate.status === "error";
 
   return (
-    <section aria-labelledby="today-h" className="space-y-6">
+    <section aria-labelledby="today-h" className="space-y-5">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h1 id="today-h" className="hero-title text-[3.75rem] sm:text-[5.5rem]">
+          <h1 id="today-h" className="hero-title text-[2.5rem] sm:text-[3.25rem]">
             {day ? dayLabel(day, { weekday: "long" }) : "Today"}
           </h1>
-          <p className="mt-2 text-[16px] font-medium text-mute">
-            {day ? dayLabel(day, { month: "long", day: "numeric" }) : "Loading the slate"}
+          <p className="mt-1.5 text-[15px] font-medium text-mute">
+            {day ? dayLabel(day, { month: "long", day: "numeric" }) : failed ? "Schedule unavailable" : "\u00a0"}
             {staticGames ? <>, {games.length} games</> : null}
             {liveCount ? <span className="font-semibold text-hot">, {liveCount} live</span> : null}
           </p>
@@ -95,7 +99,7 @@ export default function Today() {
           {rest.length > 0 && (
             <div className="lg:row-span-2">
               <div className="mb-2.5 flex items-baseline justify-between">
-                <h2 className="h-section">Worth your time</h2>
+                <h2 className="h-section">{isToday ? "Today" : "Games"}</h2>
                 <Link href={`/games/?d=${day}`} className="text-sm font-semibold text-bulb-ink">All {games.length}</Link>
               </div>
               <ul className="overflow-hidden rounded-[18px] bg-deck">
@@ -116,6 +120,7 @@ export default function Today() {
           )}
         </div>
       )}
+      {staticGames && games.some(g => g.pred) && <div className="flex justify-end"><ProjectionToggle /></div>}
     </section>
   );
 }
@@ -128,7 +133,7 @@ function DateStrip({ day, today }: { day: string; today: boolean }) {
         const cur = d === day;
         return (
           <Link key={d} href={cur ? "/" : `/games/?d=${d}`} aria-current={cur ? "date" : undefined}
-            className={`flex min-w-[52px] flex-1 flex-col items-center rounded-xl py-2 transition-colors sm:max-w-[96px] ${cur ? "bg-bulb text-scoreboard shadow-[0_10px_26px_-10px_rgb(var(--bulb-rgb)/0.9)]" : "text-mute hover:bg-deck"}`}>
+            className={`flex min-w-[52px] flex-1 flex-col items-center rounded-xl py-2 transition-colors sm:max-w-[96px] ${cur ? "bg-deck2 text-ink" : "text-mute hover:bg-deck"}`}>
             <span className="text-xs font-semibold">{cur && today ? "Today" : dayLabel(d, { weekday: "short" })}</span>
             <span className={`font-display text-xl font-bold leading-tight ${cur ? "" : d > day ? "text-ink" : ""}`}>{Number(d.slice(8))}</span>
           </Link>
@@ -148,32 +153,8 @@ function FollowedCircles({ games, day }: { games: Game[]; day: string | null }) 
     for (const g of games) { if (g.home.slug) m.set(g.home.slug, g); if (g.away.slug) m.set(g.away.slug, g); }
     return m;
   }, [games]);
-  // Nobody followed yet: offer the top teams as one-tap follows, Apple Sports style.
-  if (!fav.teams.length) {
-    const top = (teams.data ?? []).filter(t => t.rank).sort((a, b) => a.rank! - b.rank!).slice(0, 10);
-    if (!top.length) return null;
-    return (
-      <div>
-        <div className="mb-2 flex items-baseline justify-between">
-          <h2 className="font-display text-[22px] font-extrabold leading-none">Pick your teams</h2>
-          <Link href="/rankings/" className="text-sm font-semibold text-bulb-ink">All teams</Link>
-        </div>
-        <ul aria-label="Suggested teams to follow" className="no-scrollbar -mx-4 flex gap-4 overflow-x-auto px-4 pb-1 sm:-mx-6 sm:px-6">
-          {top.map(t => (
-            <li key={t.id} className="w-[64px] shrink-0">
-              <button type="button" onClick={() => toggleFavorite("teams", t.slug)} className="group flex w-full flex-col items-center gap-1.5 text-center" aria-label={`Follow ${t.name}`}>
-                <span className="relative grid h-[60px] w-[60px] place-items-center rounded-full bg-deck transition-transform group-active:scale-90" style={{ boxShadow: `inset 0 0 0 2px ${teamTint(t.color)}` }}>
-                  <TeamLogo src={t.logo} name={t.name} size={36} />
-                  <span className="absolute -bottom-0.5 -right-0.5 grid h-5 w-5 place-items-center rounded-full bg-bulb text-scoreboard ring-2 ring-night" aria-hidden><Plus size={12} strokeWidth={3} /></span>
-                </span>
-                <span className="w-full truncate text-[11.5px] font-semibold text-mute">{t.short ?? t.name}</span>
-              </button>
-            </li>
-          ))}
-        </ul>
-      </div>
-    );
-  }
+  // Nobody followed yet: no prompt in the way. The slate comes first; following lives on team pages.
+  if (!fav.teams.length) return null;
   return (
     <ul aria-label="Your teams" className="no-scrollbar -mx-4 flex gap-4 overflow-x-auto px-4 pb-1 sm:-mx-6 sm:px-6">
       {list.map(t => {
@@ -248,7 +229,7 @@ function why(g: Game, kind: Kind) {
   const m = Math.abs(g.pred.margin);
   const fav = g.pred.wp >= 0.5 ? g.home : g.away, dog = fav === g.home ? g.away : g.home;
   if (kind === "closest") return `Proj margin: ${fmt(m, 1)} points`;
-  if (kind === "upset") return `Model gives ${dog.name} a ${pctFmt(Math.min(g.pred.wp, 1 - g.pred.wp))} chance`;
+  if (kind === "upset") return `${dog.name} has a ${pctFmt(Math.min(g.pred.wp, 1 - g.pred.wp))} chance`;
   const unbeaten = (s: GameSide) => !!s.record && /^\d+-0$/.test(s.record) && s.record !== "0-0";
   const top25 = (s: GameSide) => (s.rank ?? 999) <= 25;
   if (top25(g.home) && top25(g.away)) return `Two top-25 teams · Proj: ${fav.name} by ${fmt(m, 1)}`;
@@ -293,9 +274,10 @@ function Featured({ list, day, liveBy, teams }: { list: Feature[]; day: string; 
 function Scoreboard({ g, day, live, kind, labelled, teams }: { g: Game; day: string; live?: LiveGame; kind: Kind; labelled: boolean; teams: Map<string, TeamSummary> }) {
   const st = status(g, live);
   const scheduled = g.status === "scheduled";
-  const reason = scheduled ? watchReason(g, teams) : null;
-  // Before tip the plate stays dark ("-- : --") unless the reader opted in to projected scores.
-  const showProj = useShowProjections() && scheduled && !!g.pred;
+  // Before tip the plate stays dark ("-- : --") and nothing is forecast unless the reader opted in to projections.
+  const projections = useShowProjections();
+  const reason = scheduled ? watchReason(g, teams, { projections }) : null;
+  const showProj = projections && scheduled && !!g.pred;
   const score = (k: "home" | "away") => (scheduled ? (showProj ? Math.round(g.pred![k]) : null) : g[k].score);
   const awayWP = g.pred ? 1 - g.pred.wp : null;
   return (
@@ -317,7 +299,7 @@ function Scoreboard({ g, day, live, kind, labelled, teams }: { g: Game; day: str
         </div>
         <Side s={g.home} />
       </div>
-      {g.pred && awayWP !== null && (
+      {projections && g.pred && awayWP !== null && (
         <div className="mt-3">
           <div className="flex h-1.5 gap-0.5 overflow-hidden rounded-full" aria-label={`Win probability: ${g.away.name} ${pctFmt(awayWP)}, ${g.home.name} ${pctFmt(g.pred.wp)}`}>
             <div style={{ width: `${awayWP * 100}%`, background: teamTint(g.away.color) }} />
@@ -339,7 +321,7 @@ function Side({ s }: { s: GameSide }) {
   const inner = (
     <>
       <TeamLogo src={s.logo} name={s.name} size={52} />
-      <span className="mt-1.5 max-w-[104px] truncate font-display text-[19px] font-extrabold leading-tight">{s.name}</span>
+      <span className="mt-2 line-clamp-2 max-w-[104px] text-[15px] font-semibold leading-tight">{s.name}</span>
       <span className="text-xs text-mute" title={s.rank ? DHR_RANK_TITLE : undefined}>{[s.rank ? `DHR No. ${s.rank}` : null, s.record].filter(Boolean).map((t, i) => <span key={i} className="whitespace-nowrap">{i ? ", " : ""}{t}</span>)}</span>
     </>
   );
@@ -351,14 +333,15 @@ function Side({ s }: { s: GameSide }) {
 function GameRow({ g, day, live, teams }: { g: Game; day: string; live?: LiveGame; teams: Map<string, TeamSummary> }) {
   const st = status(g, live);
   const played = g.status === "final" || g.status === "in_progress";
-  const reason = watchReason(g, teams);
+  const projections = useShowProjections();
+  const reason = watchReason(g, teams, { projections });
   const fav = g.pred ? (g.pred.wp >= 0.5 ? g.home : g.away) : null;
   const favWP = g.pred ? Math.max(g.pred.wp, 1 - g.pred.wp) : null;
   const line = (s: GameSide, win: boolean) => (
     <div className="flex items-center gap-2">
-      <i className="h-[18px] w-1 shrink-0 rounded-full" style={{ background: teamTint(s.color) }} aria-hidden />
+      <TeamLogo src={s.logo} name={s.name} size={22} />
       <span className="w-6 text-right text-[11px] font-semibold text-dim tnum" title={s.rank ? DHR_RANK_TITLE : undefined}>{s.rank ?? ""}</span>
-      <span className={`truncate font-display text-[19px] font-extrabold leading-tight ${played && !win ? "text-mute" : ""}`}>{s.name}</span>
+      <span className={`truncate text-[15.5px] font-semibold leading-tight ${played && !win ? "text-mute" : ""}`}>{s.name}</span>
       <span className="shrink-0 text-xs text-dim">{s.record}</span>
       {played && <Dots dim={!win} className="ml-auto text-[19px]">{s.score ?? ""}</Dots>}
     </div>
@@ -377,8 +360,8 @@ function GameRow({ g, day, live, teams }: { g: Game; day: string; live?: LiveGam
             <span className="text-sm font-bold tnum">{st.text}</span>
             <span className="max-w-[78px] truncate text-xs text-mute">{g.tv?.[0]?.name ?? "No TV listed"}</span>
           </div>
-          {fav && favWP !== null && (
-            <div className="flex w-[50px] shrink-0 flex-col items-end" title={`${fav.name}'s pregame win chance (DHR model)`}>
+          {projections && fav && favWP !== null && (
+            <div className="flex w-[50px] shrink-0 flex-col items-end" title={`${fav.name}'s pregame win chance`}>
               <span className="font-display text-xl font-extrabold tnum">{Math.round(favWP * 100)}%</span>
               <span className="text-[11px] text-mute">{fav.short ?? ""}</span>
             </div>
@@ -394,8 +377,9 @@ function GameRow({ g, day, live, teams }: { g: Game; day: string; live?: LiveGam
 function FinalCard({ g, day }: { g: Game; day: string }) {
   const homeWon = (g.home.score ?? 0) > (g.away.score ?? 0);
   const w = homeWon ? g.home : g.away, l = homeWon ? g.away : g.home;
+  const projections = useShowProjections();
   const wWP = g.pred ? (homeWon ? g.pred.wp : 1 - g.pred.wp) : null;
-  const note = g.upset !== null ? `${w.name} had a ${pctFmt(g.upset)} pregame chance`
+  const note = !projections ? null : g.upset !== null ? `${w.name} had a ${pctFmt(g.upset)} pregame chance`
     : wWP !== null ? (wWP >= 0.5 ? `${w.name} was a ${pctFmt(wWP)} pregame favorite` : `${w.name} had a ${pctFmt(wWP)} pregame chance`) : null;
   return (
     <article className="press relative flex flex-col gap-2 rounded-[18px] bg-deck px-4 py-3 hover:bg-deck2">
