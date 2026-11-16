@@ -1,0 +1,126 @@
+{
+ "data": [
+  {
+   "id": 910001,
+   "matchId": 910001,
+   "matchKey": "k910001",
+   "date": "2026-11-15T07:00:00.000Z",
+   "result": "6-3 6-4",
+   "result_type": "completed",
+   "match_winner": 5101,
+   "best_of": 3,
+   "player1": {
+    "id": 5101,
+    "name": "Aryna Sabalenka",
+    "countryAcr": "BLR"
+   },
+   "player2": {
+    "id": 5102,
+    "name": "Elena Rybakina",
+    "countryAcr": "KAZ"
+   },
+   "player1Id": 5101,
+   "player2Id": 5102,
+   "tournamentId": 7101,
+   "roundId": 12,
+   "tournament": {
+    "id": 7101,
+    "name": "Australian Open",
+    "courtId": 1,
+    "date": "2026-11-15T00:00:00.000Z",
+    "rankId": 4,
+    "countryAcr": "AUS"
+   },
+   "odd1": "1.55",
+   "odd2": "2.40",
+   "oddsAvailable": true,
+   "links": {
+    "match": "/tennis/v2/matches/910001",
+    "stats": "/tennis/v2/matches/910001/stats"
+   }
+  },
+  {
+   "id": 910002,
+   "matchId": 910002,
+   "matchKey": "k910002",
+   "date": "2026-11-15T05:00:00.000Z",
+   "result": "7-5 6-7(4) 6-3",
+   "result_type": "completed",
+   "match_winner": 5201,
+   "best_of": 3,
+   "player1": {
+    "id": 5201,
+    "name": "Lucia Bronzetti",
+    "countryAcr": "ITA"
+   },
+   "player2": {
+    "id": 5202,
+    "name": "Elina Avanesyan",
+    "countryAcr": "ARM"
+   },
+   "player1Id": 5201,
+   "player2Id": 5202,
+   "tournamentId": 7102,
+   "roundId": 5,
+   "tournament": {
+    "id": 7102,
+    "name": "Bergamo 125",
+    "courtId": 2,
+    "date": "2026-11-15T00:00:00.000Z",
+    "rankId": 1,
+    "countryAcr": "ITA"
+   },
+   "odd1": "1.55",
+   "odd2": "2.40",
+   "oddsAvailable": true,
+   "links": {
+    "match": "/tennis/v2/matches/910002",
+    "stats": "/tennis/v2/matches/910002/stats"
+   }
+  },
+  {
+   "id": 910003,
+   "matchId": 910003,
+   "matchKey": "k910003",
+   "date": "2026-11-15T01:00:00.000Z",
+   "result": "6-0 6-1",
+   "result_type": "completed",
+   "match_winner": 5301,
+   "best_of": 3,
+   "player1": {
+    "id": 5301,
+    "name": "Haruna Arakawa",
+    "countryAcr": "JPN"
+   },
+   "player2": {
+    "id": 5302,
+    "name": "Hiromi Abe",
+    "countryAcr": "JPN"
+   },
+   "player1Id": 5301,
+   "player2Id": 5302,
+   "tournamentId": 7103,
+   "roundId": 1,
+   "tournament": {
+    "id": 7103,
+    "name": "W35 Nanao",
+    "courtId": 1,
+    "date": "2026-11-15T00:00:00.000Z",
+    "rankId": 1,
+    "countryAcr": "JPN"
+   },
+   "odd1": "1.55",
+   "odd2": "2.40",
+   "oddsAvailable": true,
+   "links": {
+    "match": "/tennis/v2/matches/910003",
+    "stats": "/tennis/v2/matches/910003/stats"
+   }
+  }
+ ],
+ "pageNo": 1,
+ "page": 1,
+ "pageSize": 500,
+ "limit": 500,
+ "hasNextPage": false
+}

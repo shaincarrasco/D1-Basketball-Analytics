@@ -1,0 +1,299 @@
+{
+ "data": [
+  {
+   "id": 900001,
+   "matchId": 900001,
+   "matchKey": "k900001",
+   "date": "2026-11-15T13:30:00.000Z",
+   "result": "6-3 7-6(5)",
+   "result_type": "completed",
+   "match_winner": 3301,
+   "best_of": 3,
+   "player1": {
+    "id": 3301,
+    "name": "Arthur Fils",
+    "countryAcr": "FRA"
+   },
+   "player2": {
+    "id": 3302,
+    "name": "Alex de Minaur",
+    "countryAcr": "AUS"
+   },
+   "player1Id": 3301,
+   "player2Id": 3302,
+   "tournamentId": 7001,
+   "roundId": 10,
+   "tournament": {
+    "id": 7001,
+    "name": "Nitto ATP Finals",
+    "courtId": 3,
+    "date": "2026-11-15T00:00:00.000Z",
+    "rankId": 7,
+    "countryAcr": "ITA"
+   },
+   "odd1": "1.55",
+   "odd2": "2.40",
+   "oddsAvailable": true,
+   "links": {
+    "match": "/tennis/v2/matches/900001",
+    "stats": "/tennis/v2/matches/900001/stats"
+   }
+  },
+  {
+   "id": 900002,
+   "matchId": 900002,
+   "matchKey": "k900002",
+   "date": "2026-11-15T09:00:00.000Z",
+   "result": "6-4 3-6 7-6(11-9)",
+   "result_type": "completed",
+   "match_winner": 4001,
+   "best_of": 5,
+   "player1": {
+    "id": 4001,
+    "name": "Jannik Sinner",
+    "countryAcr": "ITA"
+   },
+   "player2": {
+    "id": 4002,
+    "name": "Marcos Giron",
+    "countryAcr": "USA"
+   },
+   "player1Id": 4001,
+   "player2Id": 4002,
+   "tournamentId": 7002,
+   "roundId": 4,
+   "tournament": {
+    "id": 7002,
+    "name": "Australian Open",
+    "courtId": 1,
+    "date": "2026-11-15T00:00:00.000Z",
+    "rankId": 4,
+    "countryAcr": "AUS"
+   },
+   "odd1": "1.55",
+   "odd2": "2.40",
+   "oddsAvailable": true,
+   "links": {
+    "match": "/tennis/v2/matches/900002",
+    "stats": "/tennis/v2/matches/900002/stats"
+   }
+  },
+  {
+   "id": 900003,
+   "matchId": 900003,
+   "matchKey": "k900003",
+   "date": "2026-11-15T03:00:00.000Z",
+   "result": "6-3 2-1",
+   "result_type": "retired",
+   "match_winner": 4101,
+   "best_of": null,
+   "player1": {
+    "id": 4101,
+    "name": "Yuta Shimizu",
+    "countryAcr": "JPN"
+   },
+   "player2": {
+    "id": 4102,
+    "name": "Kaichi Uchida",
+    "countryAcr": "JPN"
+   },
+   "player1Id": 4101,
+   "player2Id": 4102,
+   "tournamentId": 7003,
+   "roundId": 5,
+   "tournament": {
+    "id": 7003,
+    "name": "Hangzhou Challenger",
+    "courtId": 1,
+    "date": "2026-11-15T00:00:00.000Z",
+    "rankId": 1,
+    "countryAcr": "CHN"
+   },
+   "odd1": "1.55",
+   "odd2": "2.40",
+   "oddsAvailable": true,
+   "links": {
+    "match": "/tennis/v2/matches/900003",
+    "stats": "/tennis/v2/matches/900003/stats"
+   }
+  },
+  {
+   "id": 900004,
+   "matchId": 900004,
+   "matchKey": "k900004",
+   "date": "2026-11-15T04:00:00.000Z",
+   "result": "w/o",
+   "result_type": "walkover",
+   "match_winner": 4201,
+   "best_of": null,
+   "player1": {
+    "id": 4201,
+    "name": "Pol Martin Tiffon",
+    "countryAcr": "ESP"
+   },
+   "player2": {
+    "id": 4202,
+    "name": "Daniel Rincon",
+    "countryAcr": "ESP"
+   },
+   "player1Id": 4201,
+   "player2Id": 4202,
+   "tournamentId": 7004,
+   "roundId": 6,
+   "tournament": {
+    "id": 7004,
+    "name": "Mallorca Challenger",
+    "courtId": 2,
+    "date": "2026-11-15T00:00:00.000Z",
+    "rankId": 1,
+    "countryAcr": "ESP"
+   },
+   "odd1": "1.55",
+   "odd2": "2.40",
+   "oddsAvailable": true,
+   "links": {
+    "match": "/tennis/v2/matches/900004",
+    "stats": "/tennis/v2/matches/900004/stats"
+   }
+  },
+  {
+   "id": 900005,
+   "matchId": 900005,
+   "matchKey": "k900005",
+   "date": "2026-11-15T02:00:00.000Z",
+   "result": "6-2 6-1",
+   "result_type": "completed",
+   "match_winner": 4301,
+   "best_of": 3,
+   "player1": {
+    "id": 4301,
+    "name": "Luca Preti",
+    "countryAcr": "ITA"
+   },
+   "player2": {
+    "id": 4302,
+    "name": "Mark Hubert",
+    "countryAcr": "GER"
+   },
+   "player1Id": 4301,
+   "player2Id": 4302,
+   "tournamentId": 7005,
+   "roundId": 1,
+   "tournament": {
+    "id": 7005,
+    "name": "M15 Monastir",
+    "courtId": 1,
+    "date": "2026-11-15T00:00:00.000Z",
+    "rankId": 0,
+    "countryAcr": "TUN"
+   },
+   "odd1": "1.55",
+   "odd2": "2.40",
+   "oddsAvailable": true,
+   "links": {
+    "match": "/tennis/v2/matches/900005",
+    "stats": "/tennis/v2/matches/900005/stats"
+   }
+  },
+  {
+   "id": 900006,
+   "matchId": 900006,
+   "matchKey": "k900006",
+   "date": "2026-11-15T11:00:00.000Z",
+   "result": "6-4 6-4",
+   "result_type": "completed",
+   "match_winner": 4401,
+   "best_of": 3,
+   "player1": {
+    "id": 4401,
+    "name": "Jan-Lennard Struff",
+    "countryAcr": "GER"
+   },
+   "player2": {
+    "id": 4402,
+    "name": "Stan Wawrinka",
+    "countryAcr": "SUI"
+   },
+   "player1Id": 4401,
+   "player2Id": 4402,
+   "tournamentId": 7006,
+   "roundId": 9,
+   "tournament": {
+    "id": 7006,
+    "name": "Dubai Tennis Championships",
+    "courtId": 1,
+    "date": "2026-11-15T00:00:00.000Z",
+    "rankId": 2,
+    "countryAcr": "UAE"
+   },
+   "odd1": "1.55",
+   "odd2": "2.40",
+   "oddsAvailable": true,
+   "links": {
+    "match": "/tennis/v2/matches/900006",
+    "stats": "/tennis/v2/matches/900006/stats"
+   }
+  },
+  {
+   "id": 900007,
+   "matchId": 900007,
+   "matchKey": "k900007",
+   "date": "2026-11-15T12:00:00.000Z",
+   "result": "6-1 6-2",
+   "result_type": "completed",
+   "match_winner": 5001,
+   "best_of": 3,
+   "player1": {
+    "id": 5001,
+    "name": "Harri Heliovaara / Henry Patten",
+    "countryAcr": null,
+    "members": [
+     {
+      "id": 1,
+      "name": "Harri Heliovaara"
+     },
+     {
+      "id": 2,
+      "name": "Henry Patten"
+     }
+    ]
+   },
+   "player2": {
+    "id": 5002,
+    "name": "A B",
+    "countryAcr": "USA"
+   },
+   "player1Id": 5001,
+   "player2Id": 5002,
+   "tournamentId": 7001,
+   "roundId": 10,
+   "tournament": {
+    "id": 7001,
+    "name": "Nitto ATP Finals",
+    "courtId": 3,
+    "date": "2026-11-15T00:00:00.000Z",
+    "rankId": 7,
+    "countryAcr": "ITA"
+   },
+   "odd1": "1.55",
+   "odd2": "2.40",
+   "oddsAvailable": true,
+   "links": {
+    "match": "/tennis/v2/matches/900007",
+    "stats": "/tennis/v2/matches/900007/stats"
+   }
+  },
+  {
+   "id": 900008,
+   "date": "2026-11-15T12:00:00.000Z",
+   "result": "6-1 6-2",
+   "player1": null
+  },
+  "not-a-row"
+ ],
+ "pageNo": 1,
+ "page": 1,
+ "pageSize": 500,
+ "limit": 500,
+ "hasNextPage": false
+}

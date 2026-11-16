@@ -1,0 +1,6 @@
+{
+ "error": "plan_restricted",
+ "message": "Your current plan does not include access to this data. Please upgrade via RapidAPI.",
+ "requiredPlan": "MEGA",
+ "upgradeUrl": "https://rapidapi.com/jjrm365-kIFr3Nx_odV/api/tennis-api-atp-wta-itf"
+}

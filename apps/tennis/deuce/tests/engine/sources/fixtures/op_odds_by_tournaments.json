@@ -1,0 +1,440 @@
+[
+ {
+  "fixtureId": "id1200000000000001",
+  "participant1Id": 1,
+  "participant2Id": 2,
+  "sportId": 12,
+  "tournamentId": 101,
+  "seasonId": null,
+  "statusId": 0,
+  "hasOdds": true,
+  "startTime": "2026-11-17T13:00:00.000Z",
+  "trueStartTime": null,
+  "trueEndTime": null,
+  "updatedAt": "2026-11-16T10:00:00.000Z",
+  "bookmakerOdds": {
+   "pinnacle": {
+    "bookmakerIsActive": true,
+    "bookmakerFixtureId": "1",
+    "fixturePath": "https://www.pinnacle.com/",
+    "suspended": false,
+    "markets": {
+     "121": {
+      "bookmakerMarketId": "x",
+      "marketActive": true,
+      "outcomes": {
+       "121": {
+        "players": {
+         "0": {
+          "active": true,
+          "betslip": null,
+          "bookmakerOutcomeId": "home",
+          "changedAt": "2026-11-16T10:00:00+00:00",
+          "limit": 500,
+          "playerName": null,
+          "price": 1.769,
+          "priceAmerican": "+100",
+          "mainLine": false,
+          "exchangeMeta": null
+         }
+        }
+       },
+       "122": {
+        "players": {
+         "0": {
+          "active": true,
+          "betslip": null,
+          "bookmakerOutcomeId": "away",
+          "changedAt": "2026-11-16T10:00:00+00:00",
+          "limit": 500,
+          "playerName": null,
+          "price": 2.15,
+          "priceAmerican": "+100",
+          "mainLine": false,
+          "exchangeMeta": null
+         }
+        }
+       }
+      }
+     }
+    }
+   }
+  }
+ },
+ {
+  "fixtureId": "id1200000000000002",
+  "participant1Id": 1,
+  "participant2Id": 2,
+  "sportId": 12,
+  "tournamentId": 102,
+  "seasonId": null,
+  "statusId": 0,
+  "hasOdds": true,
+  "startTime": "2026-11-17T15:00:00.000Z",
+  "trueStartTime": null,
+  "trueEndTime": null,
+  "updatedAt": "2026-11-16T10:00:00.000Z",
+  "bookmakerOdds": {
+   "pinnacle": {
+    "bookmakerIsActive": true,
+    "bookmakerFixtureId": "1",
+    "fixturePath": "https://www.pinnacle.com/",
+    "suspended": false,
+    "markets": {
+     "121": {
+      "bookmakerMarketId": "x",
+      "marketActive": true,
+      "outcomes": {
+       "121": {
+        "players": {
+         "0": {
+          "active": true,
+          "betslip": null,
+          "bookmakerOutcomeId": "home",
+          "changedAt": "2026-11-16T10:00:00+00:00",
+          "limit": 500,
+          "playerName": null,
+          "price": 1.5,
+          "priceAmerican": "+100",
+          "mainLine": false,
+          "exchangeMeta": null
+         }
+        }
+       },
+       "122": {
+        "players": {
+         "0": {
+          "active": true,
+          "betslip": null,
+          "bookmakerOutcomeId": "away",
+          "changedAt": "2026-11-16T10:00:00+00:00",
+          "limit": 500,
+          "playerName": null,
+          "price": 2.65,
+          "priceAmerican": "+100",
+          "mainLine": false,
+          "exchangeMeta": null
+         }
+        }
+       }
+      }
+     }
+    }
+   }
+  }
+ },
+ {
+  "fixtureId": "id1200000000000003",
+  "participant1Id": 1,
+  "participant2Id": 2,
+  "sportId": 12,
+  "tournamentId": 103,
+  "seasonId": null,
+  "statusId": 0,
+  "hasOdds": true,
+  "startTime": "2026-11-17T05:00:00.000Z",
+  "trueStartTime": null,
+  "trueEndTime": null,
+  "updatedAt": "2026-11-16T10:00:00.000Z",
+  "bookmakerOdds": {
+   "pinnacle": {
+    "bookmakerIsActive": true,
+    "bookmakerFixtureId": "1",
+    "fixturePath": "https://www.pinnacle.com/",
+    "suspended": false,
+    "markets": {
+     "121": {
+      "bookmakerMarketId": "x",
+      "marketActive": true,
+      "outcomes": {
+       "121": {
+        "players": {
+         "0": {
+          "active": true,
+          "betslip": null,
+          "bookmakerOutcomeId": "home",
+          "changedAt": "2026-11-16T10:00:00+00:00",
+          "limit": 500,
+          "playerName": null,
+          "price": 1.07,
+          "priceAmerican": "+100",
+          "mainLine": false,
+          "exchangeMeta": null
+         }
+        }
+       },
+       "122": {
+        "players": {
+         "0": {
+          "active": true,
+          "betslip": null,
+          "bookmakerOutcomeId": "away",
+          "changedAt": "2026-11-16T10:00:00+00:00",
+          "limit": 500,
+          "playerName": null,
+          "price": 7.0,
+          "priceAmerican": "+100",
+          "mainLine": false,
+          "exchangeMeta": null
+         }
+        }
+       }
+      }
+     }
+    }
+   }
+  }
+ },
+ {
+  "fixtureId": "pn1200000000000004",
+  "participant1Id": 1,
+  "participant2Id": 2,
+  "sportId": 12,
+  "tournamentId": 104,
+  "seasonId": null,
+  "statusId": 0,
+  "hasOdds": true,
+  "startTime": "2026-11-17T01:00:00.000Z",
+  "trueStartTime": null,
+  "trueEndTime": null,
+  "updatedAt": "2026-11-16T10:00:00.000Z",
+  "bookmakerOdds": {
+   "pinnacle": {
+    "bookmakerIsActive": true,
+    "bookmakerFixtureId": "1",
+    "fixturePath": "https://www.pinnacle.com/",
+    "suspended": false,
+    "markets": {
+     "121": {
+      "bookmakerMarketId": "x",
+      "marketActive": true,
+      "outcomes": {
+       "121": {
+        "players": {
+         "0": {
+          "active": true,
+          "betslip": null,
+          "bookmakerOutcomeId": "home",
+          "changedAt": "2026-11-16T10:00:00+00:00",
+          "limit": 500,
+          "playerName": null,
+          "price": 1.0,
+          "priceAmerican": "+100",
+          "mainLine": false,
+          "exchangeMeta": null
+         }
+        }
+       },
+       "122": {
+        "players": {
+         "0": {
+          "active": true,
+          "betslip": null,
+          "bookmakerOutcomeId": "away",
+          "changedAt": "2026-11-16T10:00:00+00:00",
+          "limit": 500,
+          "playerName": null,
+          "price": 7.0,
+          "priceAmerican": "+100",
+          "mainLine": false,
+          "exchangeMeta": null
+         }
+        }
+       }
+      }
+     }
+    }
+   }
+  }
+ },
+ {
+  "fixtureId": "pn1200000000000005",
+  "participant1Id": 1,
+  "participant2Id": 2,
+  "sportId": 12,
+  "tournamentId": 105,
+  "seasonId": null,
+  "statusId": 0,
+  "hasOdds": true,
+  "startTime": "2026-11-17T09:00:00.000Z",
+  "trueStartTime": null,
+  "trueEndTime": null,
+  "updatedAt": "2026-11-16T10:00:00.000Z",
+  "bookmakerOdds": {
+   "pinnacle": {
+    "bookmakerIsActive": true,
+    "bookmakerFixtureId": "1",
+    "fixturePath": "https://www.pinnacle.com/",
+    "suspended": true,
+    "markets": {
+     "121": {
+      "bookmakerMarketId": "x",
+      "marketActive": true,
+      "outcomes": {
+       "121": {
+        "players": {
+         "0": {
+          "active": true,
+          "betslip": null,
+          "bookmakerOutcomeId": "home",
+          "changedAt": "2026-11-16T10:00:00+00:00",
+          "limit": 500,
+          "playerName": null,
+          "price": 2.3,
+          "priceAmerican": "+100",
+          "mainLine": false,
+          "exchangeMeta": null
+         }
+        }
+       },
+       "122": {
+        "players": {
+         "0": {
+          "active": true,
+          "betslip": null,
+          "bookmakerOutcomeId": "away",
+          "changedAt": "2026-11-16T10:00:00+00:00",
+          "limit": 500,
+          "playerName": null,
+          "price": 1.62,
+          "priceAmerican": "+100",
+          "mainLine": false,
+          "exchangeMeta": null
+         }
+        }
+       }
+      }
+     }
+    }
+   }
+  }
+ },
+ {
+  "fixtureId": "id1200000000000009",
+  "participant1Id": 1,
+  "participant2Id": 2,
+  "sportId": 12,
+  "tournamentId": 101,
+  "seasonId": null,
+  "statusId": 0,
+  "hasOdds": true,
+  "startTime": "2026-11-16T09:00:00.000Z",
+  "trueStartTime": null,
+  "trueEndTime": null,
+  "updatedAt": "2026-11-16T10:00:00.000Z",
+  "bookmakerOdds": {
+   "pinnacle": {
+    "bookmakerIsActive": true,
+    "bookmakerFixtureId": "1",
+    "fixturePath": "https://www.pinnacle.com/",
+    "suspended": false,
+    "markets": {
+     "121": {
+      "bookmakerMarketId": "x",
+      "marketActive": true,
+      "outcomes": {
+       "121": {
+        "players": {
+         "0": {
+          "active": true,
+          "betslip": null,
+          "bookmakerOutcomeId": "home",
+          "changedAt": "2026-11-16T10:00:00+00:00",
+          "limit": 500,
+          "playerName": null,
+          "price": 1.9,
+          "priceAmerican": "+100",
+          "mainLine": false,
+          "exchangeMeta": null
+         }
+        }
+       },
+       "122": {
+        "players": {
+         "0": {
+          "active": true,
+          "betslip": null,
+          "bookmakerOutcomeId": "away",
+          "changedAt": "2026-11-16T10:00:00+00:00",
+          "limit": 500,
+          "playerName": null,
+          "price": 1.9,
+          "priceAmerican": "+100",
+          "mainLine": false,
+          "exchangeMeta": null
+         }
+        }
+       }
+      }
+     }
+    }
+   }
+  }
+ },
+ {
+  "fixtureId": "id1200000000000099",
+  "participant1Id": 1,
+  "participant2Id": 2,
+  "sportId": 12,
+  "tournamentId": 101,
+  "seasonId": null,
+  "statusId": 0,
+  "hasOdds": true,
+  "startTime": "2026-11-17T09:00:00.000Z",
+  "trueStartTime": null,
+  "trueEndTime": null,
+  "updatedAt": "2026-11-16T10:00:00.000Z",
+  "bookmakerOdds": {
+   "pinnacle": {
+    "bookmakerIsActive": true,
+    "bookmakerFixtureId": "1",
+    "fixturePath": "https://www.pinnacle.com/",
+    "suspended": false,
+    "markets": {
+     "121": {
+      "bookmakerMarketId": "x",
+      "marketActive": true,
+      "outcomes": {
+       "121": {
+        "players": {
+         "0": {
+          "active": true,
+          "betslip": null,
+          "bookmakerOutcomeId": "home",
+          "changedAt": "2026-11-16T10:00:00+00:00",
+          "limit": 500,
+          "playerName": null,
+          "price": 1.9,
+          "priceAmerican": "+100",
+          "mainLine": false,
+          "exchangeMeta": null
+         }
+        }
+       },
+       "122": {
+        "players": {
+         "0": {
+          "active": true,
+          "betslip": null,
+          "bookmakerOutcomeId": "away",
+          "changedAt": "2026-11-16T10:00:00+00:00",
+          "limit": 500,
+          "playerName": null,
+          "price": 1.9,
+          "priceAmerican": "+100",
+          "mainLine": false,
+          "exchangeMeta": null
+         }
+        }
+       }
+      }
+     }
+    }
+   }
+  }
+ },
+ {
+  "fixtureId": "id1200000000000002x",
+  "bookmakerOdds": "garbage"
+ }
+]

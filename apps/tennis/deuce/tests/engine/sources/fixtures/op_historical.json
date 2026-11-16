@@ -1,0 +1,81 @@
+{
+ "fixtureId": "pn1200000000000004",
+ "bookmakers": {
+  "pinnacle": {
+   "markets": {
+    "121": {
+     "outcomes": {
+      "121": {
+       "players": {
+        "0": [
+         {
+          "createdAt": "2026-11-17T05:00:00.000000+00:00",
+          "price": 1.5,
+          "limit": 225,
+          "active": true,
+          "exchangeMeta": null
+         },
+         {
+          "createdAt": "2026-11-17T00:40:00.000000+00:00",
+          "price": 6.39,
+          "limit": 225,
+          "active": true,
+          "exchangeMeta": null
+         },
+         {
+          "createdAt": "2026-11-16T20:00:00.000000+00:00",
+          "price": 6.0,
+          "limit": 225,
+          "active": true,
+          "exchangeMeta": null
+         },
+         {
+          "createdAt": "2026-11-17T00:59:00.000000+00:00",
+          "price": 6.1,
+          "limit": 225,
+          "active": false,
+          "exchangeMeta": null
+         },
+         {
+          "createdAt": "2026-11-17T01:05:00.000000+00:00",
+          "price": 9.0,
+          "limit": 225,
+          "active": true,
+          "exchangeMeta": null
+         }
+        ]
+       }
+      },
+      "122": {
+       "players": {
+        "0": [
+         {
+          "createdAt": "2026-11-17T00:40:00.000000+00:00",
+          "price": 1.125,
+          "limit": 225,
+          "active": true,
+          "exchangeMeta": null
+         },
+         {
+          "createdAt": "2026-11-16T20:00:00.000000+00:00",
+          "price": 1.13,
+          "limit": 225,
+          "active": true,
+          "exchangeMeta": null
+         },
+         {
+          "createdAt": "2026-11-17T05:00:00.000000+00:00",
+          "price": 1.9,
+          "limit": 225,
+          "active": true,
+          "exchangeMeta": null
+         }
+        ]
+       }
+      }
+     }
+    }
+   }
+  }
+ }
+}

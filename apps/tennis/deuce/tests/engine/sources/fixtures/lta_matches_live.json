@@ -1,0 +1,412 @@
+{
+ "data": [
+  {
+   "id": 20201,
+   "tournament": "Nitto ATP Finals",
+   "tournament_id": "1301",
+   "tour": "atp",
+   "tier": "atp_finals",
+   "tier_source": "calendar",
+   "surface": "hard",
+   "indoor": true,
+   "format": "BO3",
+   "round": "Round Robin",
+   "round_code": "RR",
+   "is_qualifying": false,
+   "qualifying": false,
+   "status": "completed",
+   "event_status": "Finished",
+   "event_status_updated_at": null,
+   "is_doubles": false,
+   "draw": "singles",
+   "gender": "men",
+   "scheduled_time": "2026-11-16T13:00:00Z",
+   "live_at": null,
+   "result_restated_at": null,
+   "result_version": 1,
+   "players": {
+    "p1": {
+     "id": 101,
+     "name": "Taylor Fritz",
+     "tour": "atp",
+     "country": "usa",
+     "ranking": 6,
+     "ranking_points": null
+    },
+    "p2": {
+     "id": 102,
+     "name": "Alexander Zverev",
+     "tour": "atp",
+     "country": "ger",
+     "ranking": 3,
+     "ranking_points": null
+    }
+   },
+   "score": {
+    "sets": [
+     0,
+     2
+    ],
+    "games": [
+     [
+      4,
+      6
+     ],
+     [
+      6,
+      7
+     ]
+    ],
+    "points": [
+     "0",
+     "0"
+    ],
+    "server": null,
+    "is_tiebreak": false
+   },
+   "winner": 2,
+   "outcome": "completed",
+   "withdrew": null,
+   "has_analysis": false,
+   "has_market": false
+  },
+  {
+   "id": 20202,
+   "tournament": "Hangzhou Challenger",
+   "tournament_id": "5521",
+   "tour": "challenger",
+   "tier": "challenger_100",
+   "tier_source": "calendar",
+   "surface": "hard",
+   "indoor": false,
+   "format": "BO3",
+   "round": "Round of 16",
+   "round_code": "R16",
+   "is_qualifying": false,
+   "qualifying": false,
+   "status": "completed",
+   "event_status": "Retired",
+   "event_status_updated_at": null,
+   "is_doubles": false,
+   "draw": "singles",
+   "gender": "men",
+   "scheduled_time": "2026-11-16T03:00:00Z",
+   "live_at": null,
+   "result_restated_at": null,
+   "result_version": 1,
+   "players": {
+    "p1": {
+     "id": 31,
+     "name": "Yuta Shimizu",
+     "tour": "atp",
+     "country": "jpn",
+     "ranking": 210,
+     "ranking_points": null
+    },
+    "p2": {
+     "id": 33,
+     "name": "Kaichi Uchida",
+     "tour": "atp",
+     "country": "jpn",
+     "ranking": 250,
+     "ranking_points": null
+    }
+   },
+   "score": {
+    "sets": [
+     1,
+     0
+    ],
+    "games": [
+     [
+      6,
+      3
+     ],
+     [
+      2,
+      1
+     ]
+    ],
+    "points": [
+     "0",
+     "0"
+    ],
+    "server": null,
+    "is_tiebreak": false
+   },
+   "winner": 1,
+   "outcome": "retired",
+   "withdrew": 2,
+   "has_analysis": false,
+   "has_market": false
+  },
+  {
+   "id": 20203,
+   "tournament": "Nanao W35",
+   "tournament_id": "7788",
+   "tour": "itf",
+   "tier": "itf_w35",
+   "tier_source": "calendar",
+   "surface": "hard",
+   "indoor": false,
+   "format": "BO3",
+   "round": "Round of 32",
+   "round_code": "R32",
+   "is_qualifying": false,
+   "qualifying": false,
+   "status": "completed",
+   "event_status": "Walk Over",
+   "event_status_updated_at": null,
+   "is_doubles": false,
+   "draw": "singles",
+   "gender": "women",
+   "scheduled_time": "2026-11-16T01:00:00Z",
+   "live_at": null,
+   "result_restated_at": null,
+   "result_version": 1,
+   "players": {
+    "p1": {
+     "id": 43,
+     "name": "Kisa Yoshioka",
+     "tour": "wta",
+     "country": "jpn",
+     "ranking": null,
+     "ranking_points": null
+    },
+    "p2": {
+     "id": 44,
+     "name": "Hikaru Sato",
+     "tour": "wta",
+     "country": "jpn",
+     "ranking": null,
+     "ranking_points": null
+    }
+   },
+   "score": null,
+   "winner": 2,
+   "outcome": "walkover",
+   "withdrew": 1,
+   "has_analysis": false,
+   "has_market": false
+  },
+  {
+   "id": 20204,
+   "tournament": "Nanao W35",
+   "tournament_id": "7788",
+   "tour": "itf",
+   "tier": "itf_w35",
+   "tier_source": "calendar",
+   "surface": "hard",
+   "indoor": false,
+   "format": "BO3",
+   "round": "Round of 32",
+   "round_code": "R32",
+   "is_qualifying": false,
+   "qualifying": false,
+   "status": "completed",
+   "event_status": "Cancelled",
+   "event_status_updated_at": null,
+   "is_doubles": false,
+   "draw": "singles",
+   "gender": "women",
+   "scheduled_time": "2026-11-16T02:00:00Z",
+   "live_at": null,
+   "result_restated_at": null,
+   "result_version": 1,
+   "players": {
+    "p1": {
+     "id": 45,
+     "name": "Jiangxue Han",
+     "tour": "wta",
+     "country": "chn",
+     "ranking": null,
+     "ranking_points": null
+    },
+    "p2": {
+     "id": 46,
+     "name": "Kurumi Tamura",
+     "tour": "wta",
+     "country": "jpn",
+     "ranking": null,
+     "ranking_points": null
+    }
+   },
+   "score": {
+    "sets": [
+     1,
+     0
+    ],
+    "games": [
+     [
+      6,
+      4
+     ],
+     [
+      3,
+      3
+     ]
+    ],
+    "points": [
+     "0",
+     "0"
+    ],
+    "server": null,
+    "is_tiebreak": false
+   },
+   "winner": null,
+   "outcome": "abandoned",
+   "withdrew": null,
+   "has_analysis": false,
+   "has_market": false
+  },
+  {
+   "id": 20205,
+   "tournament": "Nitto ATP Finals",
+   "tournament_id": "1301",
+   "tour": "atp",
+   "tier": "atp_finals",
+   "tier_source": "calendar",
+   "surface": "hard",
+   "indoor": true,
+   "format": "BO3",
+   "round": "Round Robin",
+   "round_code": "RR",
+   "is_qualifying": false,
+   "qualifying": false,
+   "status": "live",
+   "event_status": null,
+   "event_status_updated_at": null,
+   "is_doubles": false,
+   "draw": "singles",
+   "gender": "men",
+   "scheduled_time": "2026-11-16T18:00:00Z",
+   "live_at": null,
+   "result_restated_at": null,
+   "result_version": 1,
+   "players": {
+    "p1": {
+     "id": 103,
+     "name": "Carlos Alcaraz",
+     "tour": "atp",
+     "country": "esp",
+     "ranking": 2,
+     "ranking_points": null
+    },
+    "p2": {
+     "id": 104,
+     "name": "Ben Shelton",
+     "tour": "atp",
+     "country": "usa",
+     "ranking": 7,
+     "ranking_points": null
+    }
+   },
+   "score": {
+    "sets": [
+     1,
+     0
+    ],
+    "games": [
+     [
+      7,
+      6
+     ],
+     [
+      2,
+      1
+     ]
+    ],
+    "points": [
+     "30",
+     "15"
+    ],
+    "server": null,
+    "is_tiebreak": false
+   },
+   "winner": null,
+   "outcome": null,
+   "withdrew": null,
+   "has_analysis": false,
+   "has_market": false
+  },
+  {
+   "id": 20206,
+   "tournament": "Mallorca Challenger",
+   "tournament_id": "5530",
+   "tour": "challenger",
+   "tier": "challenger_75",
+   "tier_source": "calendar",
+   "surface": "clay",
+   "indoor": false,
+   "format": "BO3",
+   "round": "Final",
+   "round_code": "F",
+   "is_qualifying": false,
+   "qualifying": false,
+   "status": "completed",
+   "event_status": "Finished",
+   "event_status_updated_at": null,
+   "is_doubles": false,
+   "draw": "singles",
+   "gender": "men",
+   "scheduled_time": "2026-11-16T10:00:00Z",
+   "live_at": null,
+   "result_restated_at": null,
+   "result_version": 1,
+   "players": {
+    "p1": {
+     "id": 81,
+     "name": "Pol Martin Tiffon",
+     "tour": "atp",
+     "country": "esp",
+     "ranking": null,
+     "ranking_points": null
+    },
+    "p2": {
+     "id": 82,
+     "name": "Daniel Rincon",
+     "tour": "atp",
+     "country": "esp",
+     "ranking": null,
+     "ranking_points": null
+    }
+   },
+   "score": {
+    "sets": [
+     2,
+     1
+    ],
+    "games": [
+     [
+      6,
+      4,
+      6
+     ],
+     [
+      3,
+      6,
+      2
+     ]
+    ],
+    "points": [
+     "0",
+     "0"
+    ],
+    "server": null,
+    "is_tiebreak": false
+   },
+   "winner": null,
+   "outcome": "completed",
+   "withdrew": null,
+   "has_analysis": false,
+   "has_market": false
+  }
+ ],
+ "meta": {
+  "limit": 200,
+  "offset": 0,
+  "count": 6,
+  "total": null,
+  "has_more": false
+ }
+}
