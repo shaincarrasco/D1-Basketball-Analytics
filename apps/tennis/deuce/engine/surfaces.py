@@ -134,9 +134,13 @@ def guess_surface(name: str | None, tour: str | None = None, year: int | None = 
 
 
 def guess_level(name: str | None, tour: str | None = None, major: bool = False, year: int | None = None) -> str:
-    """Grand Slam / 1000 / 500 / 250 / 125 / Finals / Other."""
+    """Grand Slam / Finals / 1000 / 500 / 250 / 125 / Challenger / ITF / Other."""
     n = _norm(name)
     t = (tour or "").upper()
+    if re.search(r"\bchallenger\b", n):   # also "Challenger 125": that is the ATP Challenger tier, not the WTA 125
+        return "Challenger"
+    if re.search(r"\bitf\b|\b[mw](?:15|25|35|40|50|60|75|80|100)\b", n):
+        return "ITF"
     if any(k in n for k in _SLAMS) and "next gen" not in n:
         return "Grand Slam"
     if any(k in n for k in _FINALS):

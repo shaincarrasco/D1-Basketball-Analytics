@@ -8,12 +8,12 @@ from __future__ import annotations
 import argparse
 import json
 import pickle
-from datetime import date, datetime, timezone
+from datetime import datetime, timezone
 
 import numpy as np
 import pandas as pd
 
-from . import espn, features, model, odds
+from . import features, ingest, model, odds, odds_history
 from .db import connect, data_dir, load_config
 
 
@@ -56,13 +56,16 @@ def write_player_ratings(conn, fs: features.FeatureSet, rankings: dict[str, int]
 
 def run(since: str = "2023-01-01", retrain: bool = False, do_ingest: bool = True, do_odds: bool = True,
         verbose: bool = True) -> dict:
+    """`since` is the backfill floor. `do_ingest=False` skips the network and keeps the database as it is
+    (it is rebuilt from the compact cache only when empty)."""
     cfg = load_config()
     conn = connect(cfg=cfg)
     summary: dict = {}
-    if do_ingest:
+    if do_ingest or not conn.execute("SELECT COUNT(*) FROM matches").fetchone()[0]:
         if verbose:
-            print("ingesting ESPN ...")
-        summary["ingest"] = espn.ingest(conn, date.fromisoformat(since), verbose=verbose)
+            print("ingesting from the compact cache and every available source ...")
+        summary["ingest"] = ingest.run(conn, cfg, fetch=do_ingest, floor=since, verbose=verbose)
+    summary["cached_odds"] = odds_history.apply_cached(conn)
     rankings = get_rankings(conn)
     df = features.load_matches(conn)
     if verbose:

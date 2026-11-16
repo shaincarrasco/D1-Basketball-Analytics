@@ -13,6 +13,10 @@ DEFAULT_CONFIG: dict[str, Any] = {
     "model": {"edge_threshold": 0.02},
     "llm": {"enabled": True, "base_url": "http://localhost:1234/v1", "model": "", "timeout_s": 60},
     "odds": {"the_odds_api_key": "", "oddspapi_key": ""},
+    # Keys for the data sources: env LIVETENNISAPI_KEY / RAPIDAPI_KEY / ODDSPAPI_KEY win; or set
+    # `[sources] livetennisapi_key = "..."` (see engine/sources/README.md). Absent key = source skipped.
+    "sources": {},
+    "ingest": {"fixture_days": 10, "max_seconds": 150, "floor": "2023-01-01"},
 }
 
 SCHEMA = """
@@ -32,6 +36,8 @@ CREATE TABLE IF NOT EXISTS player_ratings(player_id TEXT PRIMARY KEY, name TEXT,
     elo REAL, hard_elo REAL, clay_elo REAL, grass_elo REAL, matches INTEGER, matches_1y INTEGER,
     win_rate_1y REAL, form_10 REAL, rank INTEGER, last_match_date TEXT, updated_at TEXT);
 CREATE TABLE IF NOT EXISTS meta(key TEXT PRIMARY KEY, value TEXT);
+-- Every provider id a (deduped) match was seen under: (match_id, source, source_id).
+CREATE TABLE IF NOT EXISTS match_sources(match_id TEXT, source TEXT, source_id TEXT, PRIMARY KEY(match_id, source));
 
 CREATE INDEX IF NOT EXISTS idx_matches_date ON matches(date);
 CREATE INDEX IF NOT EXISTS idx_matches_status ON matches(status);
