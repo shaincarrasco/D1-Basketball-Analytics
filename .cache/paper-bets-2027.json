@@ -1932,7 +1932,19 @@
     "sigma": 11.86,
     "modelUpdatedAt": "2026-11-15T17:56:24.900Z"
    },
-   "closing": null,
+   "closing": {
+    "source": "closing-summary",
+    "capturedAt": "2026-11-16T21:12:53.896Z",
+    "book": "Draft Kings",
+    "spread": -20.5,
+    "total": 142.5,
+    "homeML": -4000,
+    "awayML": 1600,
+    "homeSpreadOdds": -108,
+    "awaySpreadOdds": -112,
+    "overOdds": -112,
+    "underOdds": -108
+   },
    "bets": [
     {
      "market": "moneyline",
@@ -1945,7 +1957,10 @@
      "edge": -0.0287,
      "role": "favorite",
      "spreadBucket": "15+",
-     "pick": "UTEP"
+     "pick": "UTEP",
+     "result": "win",
+     "profit": 0.025,
+     "clv": 0
     },
     {
      "market": "spread",
@@ -1958,7 +1973,10 @@
      "edge": 0.1043,
      "role": "underdog",
      "spreadBucket": "15+",
-     "pick": "Florida A&M"
+     "pick": "Florida A&M",
+     "result": "loss",
+     "profit": -1,
+     "clv": -1
     },
     {
      "market": "total",
@@ -1971,11 +1989,18 @@
      "edge": 0.094,
      "role": null,
      "spreadBucket": "15+",
-     "pick": "Over"
+     "pick": "Over",
+     "result": "loss",
+     "profit": -1,
+     "clv": 1
     }
    ],
-   "status": "open",
-   "result": null
+   "status": "settled",
+   "result": {
+    "homeScore": 79,
+    "awayScore": 46
+   },
+   "settledAt": "2026-11-16T21:12:53.896Z"
   },
   "378035": {
    "gameId": "378035",
@@ -2200,7 +2225,7 @@
    "away": "Ferrum",
    "reason": "no-line",
    "espnEventId": "401911211",
-   "tries": 1
+   "tries": 2
   },
   "375033": {
    "day": "2026-11-16",
@@ -2208,7 +2233,7 @@
    "away": "Miami (OH)-Hamilton",
    "reason": "no-line",
    "espnEventId": "401920962",
-   "tries": 1
+   "tries": 2
   },
   "378037": {
    "day": "2026-11-16",
@@ -2216,20 +2241,20 @@
    "away": "Fisk",
    "reason": "no-line",
    "espnEventId": "401929371",
-   "tries": 1
+   "tries": 2
   }
  },
  "since": "2026-11-16",
  "stats": {
   "gamesInWindow": 100,
-  "finals": 3,
+  "finals": 4,
   "entries": 30,
   "liveCaptured": 30,
   "backfilled": 0,
-  "settled": 0,
-  "open": 30,
+  "settled": 1,
+  "open": 29,
   "void": 0,
-  "withClosing": 0,
+  "withClosing": 1,
   "noLine": 3,
   "unmatched": 0,
   "noPrediction": 0,
@@ -2239,19 +2264,25 @@
  "summary": {
   "live": {
    "overall": {
-    "bets": 0,
-    "wins": 0,
-    "losses": 0,
+    "bets": 3,
+    "wins": 1,
+    "losses": 2,
     "pushes": 0,
-    "open": 83,
+    "open": 80,
     "void": 0,
-    "units": 0,
-    "roi": null,
-    "roiCI": null,
-    "winPct": null,
-    "winPctCI": null,
-    "breakEvenPct": null,
-    "avgEdge": null,
+    "units": -1.975,
+    "roi": -0.6583,
+    "roiCI": [
+     -1.328,
+     0.0113
+    ],
+    "winPct": 0.3333,
+    "winPctCI": [
+     0.0615,
+     0.7923
+    ],
+    "breakEvenPct": 0.6744,
+    "avgEdge": 0.0565,
     "sample": "too few to read"
    },
    "markets": {
@@ -2260,19 +2291,22 @@
       {
        "key": "all",
        "label": "All bets",
-       "bets": 0,
-       "wins": 0,
+       "bets": 1,
+       "wins": 1,
        "losses": 0,
        "pushes": 0,
-       "open": 23,
+       "open": 22,
        "void": 0,
-       "units": 0,
-       "roi": null,
+       "units": 0.025,
+       "roi": 0.025,
        "roiCI": null,
-       "winPct": null,
-       "winPctCI": null,
-       "breakEvenPct": null,
-       "avgEdge": null,
+       "winPct": 1,
+       "winPctCI": [
+        0.2065,
+        1
+       ],
+       "breakEvenPct": 0.9756,
+       "avgEdge": -0.0287,
        "sample": "too few to read"
       },
       {
@@ -2332,19 +2366,22 @@
       {
        "key": "favorite",
        "label": "Picked the favorite",
-       "bets": 0,
-       "wins": 0,
+       "bets": 1,
+       "wins": 1,
        "losses": 0,
        "pushes": 0,
-       "open": 20,
+       "open": 19,
        "void": 0,
-       "units": 0,
-       "roi": null,
+       "units": 0.025,
+       "roi": 0.025,
        "roiCI": null,
-       "winPct": null,
-       "winPctCI": null,
-       "breakEvenPct": null,
-       "avgEdge": null,
+       "winPct": 1,
+       "winPctCI": [
+        0.2065,
+        1
+       ],
+       "breakEvenPct": 0.9756,
+       "avgEdge": -0.0287,
        "sample": "too few to read"
       },
       {
@@ -2422,26 +2459,29 @@
       {
        "key": "spread:15+",
        "label": "Spread 15+",
-       "bets": 0,
-       "wins": 0,
+       "bets": 1,
+       "wins": 1,
        "losses": 0,
        "pushes": 0,
-       "open": 9,
+       "open": 8,
        "void": 0,
-       "units": 0,
-       "roi": null,
+       "units": 0.025,
+       "roi": 0.025,
        "roiCI": null,
-       "winPct": null,
-       "winPctCI": null,
-       "breakEvenPct": null,
-       "avgEdge": null,
+       "winPct": 1,
+       "winPctCI": [
+        0.2065,
+        1
+       ],
+       "breakEvenPct": 0.9756,
+       "avgEdge": -0.0287,
        "sample": "too few to read"
       }
      ],
      "clv": {
-      "bets": 0,
-      "avg": null,
-      "beatPct": null
+      "bets": 1,
+      "avg": 0,
+      "beatPct": 0
      }
     },
     "spread": {
@@ -2449,73 +2489,85 @@
       {
        "key": "all",
        "label": "All bets",
-       "bets": 0,
+       "bets": 1,
        "wins": 0,
-       "losses": 0,
+       "losses": 1,
        "pushes": 0,
-       "open": 30,
+       "open": 29,
        "void": 0,
-       "units": 0,
-       "roi": null,
+       "units": -1,
+       "roi": -1,
        "roiCI": null,
-       "winPct": null,
-       "winPctCI": null,
-       "breakEvenPct": null,
-       "avgEdge": null,
+       "winPct": 0,
+       "winPctCI": [
+        0,
+        0.7935
+       ],
+       "breakEvenPct": 0.5283,
+       "avgEdge": 0.1043,
        "sample": "too few to read"
       },
       {
        "key": "edge2",
        "label": "Edge ≥ 2 pts",
-       "bets": 0,
+       "bets": 1,
        "wins": 0,
-       "losses": 0,
+       "losses": 1,
        "pushes": 0,
-       "open": 27,
+       "open": 26,
        "void": 0,
-       "units": 0,
-       "roi": null,
+       "units": -1,
+       "roi": -1,
        "roiCI": null,
-       "winPct": null,
-       "winPctCI": null,
-       "breakEvenPct": null,
-       "avgEdge": null,
+       "winPct": 0,
+       "winPctCI": [
+        0,
+        0.7935
+       ],
+       "breakEvenPct": 0.5283,
+       "avgEdge": 0.1043,
        "sample": "too few to read"
       },
       {
        "key": "edge5",
        "label": "Edge ≥ 5 pts",
-       "bets": 0,
+       "bets": 1,
        "wins": 0,
-       "losses": 0,
+       "losses": 1,
        "pushes": 0,
-       "open": 25,
+       "open": 24,
        "void": 0,
-       "units": 0,
-       "roi": null,
+       "units": -1,
+       "roi": -1,
        "roiCI": null,
-       "winPct": null,
-       "winPctCI": null,
-       "breakEvenPct": null,
-       "avgEdge": null,
+       "winPct": 0,
+       "winPctCI": [
+        0,
+        0.7935
+       ],
+       "breakEvenPct": 0.5283,
+       "avgEdge": 0.1043,
        "sample": "too few to read"
       },
       {
        "key": "edge10",
        "label": "Edge ≥ 10 pts",
-       "bets": 0,
+       "bets": 1,
        "wins": 0,
-       "losses": 0,
+       "losses": 1,
        "pushes": 0,
-       "open": 17,
+       "open": 16,
        "void": 0,
-       "units": 0,
-       "roi": null,
+       "units": -1,
+       "roi": -1,
        "roiCI": null,
-       "winPct": null,
-       "winPctCI": null,
-       "breakEvenPct": null,
-       "avgEdge": null,
+       "winPct": 0,
+       "winPctCI": [
+        0,
+        0.7935
+       ],
+       "breakEvenPct": 0.5283,
+       "avgEdge": 0.1043,
        "sample": "too few to read"
       },
       {
@@ -2539,19 +2591,22 @@
       {
        "key": "underdog",
        "label": "Picked the underdog",
-       "bets": 0,
+       "bets": 1,
        "wins": 0,
-       "losses": 0,
+       "losses": 1,
        "pushes": 0,
-       "open": 28,
+       "open": 27,
        "void": 0,
-       "units": 0,
-       "roi": null,
+       "units": -1,
+       "roi": -1,
        "roiCI": null,
-       "winPct": null,
-       "winPctCI": null,
-       "breakEvenPct": null,
-       "avgEdge": null,
+       "winPct": 0,
+       "winPctCI": [
+        0,
+        0.7935
+       ],
+       "breakEvenPct": 0.5283,
+       "avgEdge": 0.1043,
        "sample": "too few to read"
       },
       {
@@ -2611,26 +2666,29 @@
       {
        "key": "spread:15+",
        "label": "Spread 15+",
-       "bets": 0,
+       "bets": 1,
        "wins": 0,
-       "losses": 0,
+       "losses": 1,
        "pushes": 0,
-       "open": 16,
+       "open": 15,
        "void": 0,
-       "units": 0,
-       "roi": null,
+       "units": -1,
+       "roi": -1,
        "roiCI": null,
-       "winPct": null,
-       "winPctCI": null,
-       "breakEvenPct": null,
-       "avgEdge": null,
+       "winPct": 0,
+       "winPctCI": [
+        0,
+        0.7935
+       ],
+       "breakEvenPct": 0.5283,
+       "avgEdge": 0.1043,
        "sample": "too few to read"
       }
      ],
      "clv": {
-      "bets": 0,
-      "avg": null,
-      "beatPct": null
+      "bets": 1,
+      "avg": -1,
+      "beatPct": 0
      }
     },
     "total": {
@@ -2638,55 +2696,64 @@
       {
        "key": "all",
        "label": "All bets",
-       "bets": 0,
+       "bets": 1,
        "wins": 0,
-       "losses": 0,
+       "losses": 1,
        "pushes": 0,
-       "open": 30,
+       "open": 29,
        "void": 0,
-       "units": 0,
-       "roi": null,
+       "units": -1,
+       "roi": -1,
        "roiCI": null,
-       "winPct": null,
-       "winPctCI": null,
-       "breakEvenPct": null,
-       "avgEdge": null,
+       "winPct": 0,
+       "winPctCI": [
+        0,
+        0.7935
+       ],
+       "breakEvenPct": 0.5192,
+       "avgEdge": 0.094,
        "sample": "too few to read"
       },
       {
        "key": "edge2",
        "label": "Edge ≥ 2 pts",
-       "bets": 0,
+       "bets": 1,
        "wins": 0,
-       "losses": 0,
+       "losses": 1,
        "pushes": 0,
-       "open": 26,
+       "open": 25,
        "void": 0,
-       "units": 0,
-       "roi": null,
+       "units": -1,
+       "roi": -1,
        "roiCI": null,
-       "winPct": null,
-       "winPctCI": null,
-       "breakEvenPct": null,
-       "avgEdge": null,
+       "winPct": 0,
+       "winPctCI": [
+        0,
+        0.7935
+       ],
+       "breakEvenPct": 0.5192,
+       "avgEdge": 0.094,
        "sample": "too few to read"
       },
       {
        "key": "edge5",
        "label": "Edge ≥ 5 pts",
-       "bets": 0,
+       "bets": 1,
        "wins": 0,
-       "losses": 0,
+       "losses": 1,
        "pushes": 0,
-       "open": 21,
+       "open": 20,
        "void": 0,
-       "units": 0,
-       "roi": null,
+       "units": -1,
+       "roi": -1,
        "roiCI": null,
-       "winPct": null,
-       "winPctCI": null,
-       "breakEvenPct": null,
-       "avgEdge": null,
+       "winPct": 0,
+       "winPctCI": [
+        0,
+        0.7935
+       ],
+       "breakEvenPct": 0.5192,
+       "avgEdge": 0.094,
        "sample": "too few to read"
       },
       {
@@ -2710,19 +2777,22 @@
       {
        "key": "over",
        "label": "Over",
-       "bets": 0,
+       "bets": 1,
        "wins": 0,
-       "losses": 0,
+       "losses": 1,
        "pushes": 0,
-       "open": 18,
+       "open": 17,
        "void": 0,
-       "units": 0,
-       "roi": null,
+       "units": -1,
+       "roi": -1,
        "roiCI": null,
-       "winPct": null,
-       "winPctCI": null,
-       "breakEvenPct": null,
-       "avgEdge": null,
+       "winPct": 0,
+       "winPctCI": [
+        0,
+        0.7935
+       ],
+       "breakEvenPct": 0.5192,
+       "avgEdge": 0.094,
        "sample": "too few to read"
       },
       {
@@ -2800,26 +2870,29 @@
       {
        "key": "spread:15+",
        "label": "Spread 15+",
-       "bets": 0,
+       "bets": 1,
        "wins": 0,
-       "losses": 0,
+       "losses": 1,
        "pushes": 0,
-       "open": 16,
+       "open": 15,
        "void": 0,
-       "units": 0,
-       "roi": null,
+       "units": -1,
+       "roi": -1,
        "roiCI": null,
-       "winPct": null,
-       "winPctCI": null,
-       "breakEvenPct": null,
-       "avgEdge": null,
+       "winPct": 0,
+       "winPctCI": [
+        0,
+        0.7935
+       ],
+       "breakEvenPct": 0.5192,
+       "avgEdge": 0.094,
        "sample": "too few to read"
       }
      ],
      "clv": {
-      "bets": 0,
-      "avg": null,
-      "beatPct": null
+      "bets": 1,
+      "avg": 1,
+      "beatPct": 1
      }
     }
    }
@@ -3412,5 +3485,5 @@
    }
   }
  },
- "updatedAt": "2026-11-16T19:28:30.748Z"
+ "updatedAt": "2026-11-16T21:12:53.896Z"
 }
