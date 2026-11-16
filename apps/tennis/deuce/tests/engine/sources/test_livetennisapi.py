@@ -207,7 +207,9 @@ def test_retry_on_429_then_success_and_daily_cap_stops():
     src._sleep = sleeps.append
     b = FakeBudget(10)
     res = list(src.fetch_results(datetime.now(timezone.utc).date(), b))
-    assert {r.source_id for r in res} == {"20201", "20202", "20203", "20206"}   # finals only, live row excluded
+    done = {r.source_id for r in res if r.status in ("final", "retired", "walkover")}
+    assert done == {"20201", "20202", "20203", "20206"}                         # finals, plus the in-progress rows
+    assert {r.status for r in res} - {"final", "retired", "walkover"} == {"live"}
     assert b.taken == 3 and sleeps                                              # each attempt is budgeted
 
     def day_cap(req):

@@ -44,13 +44,25 @@ def iso_z(s: str) -> str:
     return parse_date(s).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
+def flip_stats(stats):
+    """Swap per-player stats with the players: keys `p1`/`p2` and any `p1_*`/`p2_*` change sides, others stay."""
+    if not isinstance(stats, dict):
+        return stats
+    swap = {"p1": "p2", "p2": "p1"}
+    out = {}
+    for k, v in stats.items():
+        head, sep, rest = str(k).partition("_")
+        out[swap[head] + sep + rest if head in swap else k] = v
+    return out
+
+
 def flip(r: MatchRecord) -> MatchRecord:
     """The same match with p1 and p2 swapped (winner and set columns follow)."""
     w = {1: 2, 2: 1}.get(r.winner)
     sets = [[s[1], s[0], s[3] if len(s) > 3 else None, s[2] if len(s) > 2 else None] for s in (r.sets or [])]
     return replace(r, p1_name=r.p2_name, p2_name=r.p1_name, p1_country=r.p2_country, p2_country=r.p1_country,
                    p1_source_id=r.p2_source_id, p2_source_id=r.p1_source_id, p1_rank=r.p2_rank, p2_rank=r.p1_rank,
-                   winner=w, sets=sets)
+                   winner=w, sets=sets, stats=flip_stats(r.stats))
 
 
 def completeness(r: MatchRecord) -> tuple:

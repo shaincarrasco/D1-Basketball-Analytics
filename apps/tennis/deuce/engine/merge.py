@@ -11,17 +11,18 @@ from __future__ import annotations
 import json
 import re
 from dataclasses import dataclass, field, replace
+from datetime import date, timedelta
 from typing import Iterable, Optional
 
 from . import surfaces
 from .countries import norm_country, venue_country
 from .espn import format_score
-from .names import name_key, pair_key
-from .records import completeness, day_of, flip, iso_z
+from .names import name_key, norm_name, pair_key
+from .records import completeness, day_of, flip, is_final, iso_z
 from .sources.base import LEVELS, MatchRecord
 
 # Lower is preferred when two records are equally complete, and decides which source names a player first.
-SOURCE_PRIORITY = {"espn": 0, "tennisapi": 1, "livetennisapi": 2}
+SOURCE_PRIORITY = {"espn": 0, "livetennisapi": 1, "tennisapi": 2}
 _FILL = ("round", "location", "court", "p1_rank", "p2_rank", "p1_country", "p2_country", "tournament_id",
          "tournament_start", "tournament_end", "stats")
 
@@ -152,8 +153,18 @@ class Resolved:
     stats: dict
 
 
-def resolve(records: Iterable[MatchRecord]) -> Resolved:
-    clusters = dedupe(records)
+TOURNAMENT_GAP_DAYS = 10
+
+
+def _anchor(c: Cluster) -> MatchRecord:
+    """The member that names the match: fixed source priority, so ids don't change when a final arrives elsewhere."""
+    return min(c.members, key=lambda m: (_prio(m.source), m.source, m.source_id))
+
+
+def resolve(records: Iterable[MatchRecord], stale_before: Optional[str] = None) -> Resolved:
+    """`stale_before` (ISO): drop matches that are still not final and started before it."""
+    clusters = [c for c in dedupe(records)
+                if not (stale_before and not is_final(c.best) and iso_z(c.best.date) < stale_before)]
     ident = Identity()
     # Players are named by the highest-priority source first, so ids don't depend on processing order.
     for c in sorted(clusters, key=lambda c: (_prio(c.best.source), iso_z(c.best.date), c.best.source_id)):
@@ -162,34 +173,49 @@ def resolve(records: Iterable[MatchRecord]) -> Resolved:
             ident.resolve(b.tour, m.p1_name, m.p1_country, m.source, m.p1_source_id)
             ident.resolve(b.tour, m.p2_name, m.p2_country, m.source, m.p2_source_id)
     tournaments: dict[str, dict] = {}
+    groups: dict[tuple, list[dict]] = {}     # (tour, normalised name) -> [{id, lo, hi}]: one event, several source ids
     matches, ranks, srcs = [], [], []
-    for c in clusters:
+    ordered = sorted(clusters, key=lambda c: (_prio(_anchor(c).source), iso_z(c.best.date), c.best.source_id))
+    for c in ordered:
         b = c.best
+        anchor = _anchor(c)
         p1 = ident.resolve(b.tour, b.p1_name, b.p1_country, b.source, b.p1_source_id)
         p2 = ident.resolve(b.tour, b.p2_name, b.p2_country, b.source, b.p2_source_id)
         if p1.id == p2.id:
             continue
-        mid, tid = match_id_for(b), _tournament_id(b)
+        mid = match_id_for(anchor)
         start = iso_z(b.date)
         year = int(start[:4])
+        day = date.fromisoformat(start[:10])
+        lo = date.fromisoformat(b.tournament_start) if b.tournament_start else day
+        hi = date.fromisoformat(b.tournament_end) if b.tournament_end else day
         level = b.level if b.level in LEVELS else surfaces.guess_level(b.tournament, b.tour, year=year)
         if b.surface:
             surface, inferred = b.surface, bool(b.surface_inferred)
         else:
             surface, inferred = surfaces.guess_surface(b.tournament, b.tour, year, b.location)
-        t = tournaments.get(tid)
-        if t is None:
-            t = tournaments[tid] = {
-                "id": tid, "name": b.tournament, "tour": b.tour, "start_date": b.tournament_start or start[:10],
-                "end_date": b.tournament_end or start[:10], "location": b.location,
-                "country": venue_country(b.location), "surface": surface, "surface_inferred": int(inferred),
-                "level": level}
+        gkey = (b.tour, norm_name(b.tournament))
+        grp = next((g for g in groups.get(gkey, [])
+                    if g["lo"] - timedelta(days=TOURNAMENT_GAP_DAYS) <= day <= g["hi"] + timedelta(days=TOURNAMENT_GAP_DAYS)), None)
+        if grp is None:
+            tid = _tournament_id(anchor)
+            while tid in tournaments:
+                tid += "x"
+            grp = {"id": tid, "lo": lo, "hi": hi}
+            groups.setdefault(gkey, []).append(grp)
+            tournaments[tid] = {
+                "id": tid, "name": b.tournament, "tour": b.tour, "start_date": lo.isoformat(), "end_date": hi.isoformat(),
+                "location": b.location, "country": venue_country(b.location), "surface": surface,
+                "surface_inferred": int(inferred), "level": level}
         else:
-            if not b.tournament_start:
-                t["start_date"] = min(t["start_date"], start[:10])
-                t["end_date"] = max(t["end_date"], start[:10])
+            grp["lo"], grp["hi"] = min(grp["lo"], lo), max(grp["hi"], hi)
+            t = tournaments[grp["id"]]
+            t["start_date"], t["end_date"] = grp["lo"].isoformat(), grp["hi"].isoformat()
             if t["surface_inferred"] and not inferred:
                 t["surface"], t["surface_inferred"] = surface, 0
+            if not t["location"] and b.location:
+                t["location"], t["country"] = b.location, venue_country(b.location)
+        tid = grp["id"]
         winner = p1.id if b.winner == 1 else p2.id if b.winner == 2 else None
         if b.status in ("final", "retired", "walkover") and winner is None:
             continue
@@ -208,4 +234,4 @@ def resolve(records: Iterable[MatchRecord]) -> Resolved:
     n_merged = sum(1 for c in clusters if len(c.members) > 1)
     return Resolved(players, list(tournaments.values()), matches, ranks, srcs,
                     {"records": sum(len(c.members) for c in clusters), "matches": len(matches),
-                     "merged_across_sources": n_merged})
+                     "merged_across_sources": n_merged, "tournaments": len(tournaments)})

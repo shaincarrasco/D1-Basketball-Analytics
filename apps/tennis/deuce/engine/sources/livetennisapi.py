@@ -296,7 +296,8 @@ class LiveTennisApiSource:
     daily_quota = 100
     per_minute = 30
     supports_backfill = False
-    results_lookback_days = 0   # only today's matches can be seen; older days return [] without spending quota
+    results_lookback_days = 1   # today only: the live listing also carries what just finished (older days are empty)
+    hourly_max_fixture_pages = 4  # hourly runs read today + tomorrow, 4 pages at most; full runs the whole window
 
     max_fixture_pages = 30       # 200 matches per page; leaves most of the 100/day for live polls
     max_result_pages = 10
@@ -433,7 +434,8 @@ class LiveTennisApiSource:
             today = datetime.now(timezone.utc).date()
             params = {"status": "upcoming", "draw": "singles", "from": today.isoformat(),
                       "to": (today + timedelta(days=max(0, int(days)))).isoformat()}
-            self._paged(params, budget, self.max_fixture_pages, out)
+            hourly = getattr(self, "run_mode", "full") == "hourly"
+            self._paged(params, budget, self.hourly_max_fixture_pages if hourly else self.max_fixture_pages, out)
         except _Stop as exc:
             self.last_error = str(exc)
             log.info("livetennisapi fixtures stopped: %s", exc)
@@ -461,7 +463,8 @@ class LiveTennisApiSource:
         except Exception as exc:  # noqa: BLE001
             self.last_error = str(exc)
             log.warning("livetennisapi results failed: %s", exc)
-        return [r for r in raw if r.status in ("final", "retired", "walkover")]
+        # Finished matches go to the cache; in-progress ones come back too so the site can show them live.
+        return [r for r in raw if r.status in ("final", "retired", "walkover", "live")]
 
     def fetch_odds(self, budget: Budget) -> Iterable[OddsRecord]:
         return []  # market prices are PRO+ only

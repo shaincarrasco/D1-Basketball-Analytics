@@ -20,11 +20,15 @@ log = logging.getLogger("deuce.sources")
 MODULES = ("espn", "tennisapi", "livetennisapi", "oddspapi")
 
 # Default quotas. Override per source in config.toml:  [sources.tennisapi]  daily_quota = 50
+# Run-mode knobs (all optional): `hourly_gap_min` = an hourly run skips the source if it was fetched more recently than
+# this; `backfill_cap_full` / `backfill_cap_hourly` = backfill days per run; `backfill_reserve` = requests that must stay
+# available for the rest of the day, so backfill never starves the recent-day fetches.
 QUOTAS: dict[str, dict[str, Any]] = {
     "espn": {},
-    "livetennisapi": {"daily": 100, "per_minute": 30},
-    "tennisapi": {"daily": 50, "backfill": True},
-    "oddspapi": {"monthly": 250},
+    "livetennisapi": {"daily": 100, "per_minute": 30, "hourly_gap_min": 90},
+    "tennisapi": {"daily": 50, "backfill": True, "hourly_gap_min": 180, "backfill_cap_full": 6,
+                  "backfill_cap_hourly": 1, "backfill_reserve": 20},
+    "oddspapi": {"monthly": 250, "daily": 8},
 }
 BACKFILL_FLOOR = "2023-01-01"
 # How many past days of results the ingest asks a source for each run (default 2: yesterday and today).
@@ -99,6 +103,9 @@ def quota_for(src: Source, cfg: dict) -> dict[str, Any]:
             q[key] = getattr(src, attr)
     sub = ((cfg or {}).get("sources") or {}).get(src.name)
     if isinstance(sub, dict):
+        for k in ("hourly_gap_min", "backfill_cap_full", "backfill_cap_hourly", "backfill_reserve"):
+            if k in sub:
+                q[k] = sub[k]
         for key, ck in (("daily", "daily_quota"), ("monthly", "monthly_quota"), ("per_minute", "per_minute"),
                         ("backfill", "backfill"), ("lookback", "lookback_days")):
             if ck in sub:

@@ -228,6 +228,7 @@ class OddsPapiSource:
     name = "oddspapi"
     key_env: Optional[str] = "ODDSPAPI_KEY"
     monthly_quota = 250
+    daily_quota = 8              # ~250/month spread evenly; odds are fetched in the daily full run only
     supports_backfill = False
 
     max_requests_per_run = 6     # 1 fixtures + up to 5 odds calls (25 tournaments); ~8/day is the monthly pace

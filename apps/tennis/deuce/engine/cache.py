@@ -13,15 +13,20 @@ import argparse
 import gzip
 import io
 import json
+import os
 import sqlite3
 from collections import defaultdict
 from pathlib import Path
 from typing import Iterable
 
+import logging
+
 from .db import ROOT
+from .fsutil import atomic_write_bytes
 from .records import from_json, is_final, iso_z, to_json
 from .sources.base import MatchRecord
 
+log = logging.getLogger("deuce.cache")
 CACHE_DIR = ROOT / "data-cache" / "matches"
 Key = tuple[str, str]
 
@@ -38,8 +43,7 @@ def _write_gz(path: Path, lines: list[str]) -> bool:
     data = buf.getvalue()
     if path.exists() and path.read_bytes() == data:
         return False
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_bytes(data)
+    atomic_write_bytes(path, data)
     return True
 
 
@@ -51,12 +55,31 @@ class MatchCache:
         self._load()
 
     def _load(self) -> None:
+        self.quarantined: list[str] = []
         for f in sorted(self.root.glob("*/*.jsonl.gz")):
-            with gzip.open(f, "rt", encoding="utf-8") as fh:
-                for line in fh:
-                    if line.strip():
-                        r = from_json(json.loads(line))
-                        self.records[(r.source, r.source_id)] = r
+            recs, bad = [], 0
+            try:
+                with gzip.open(f, "rt", encoding="utf-8") as fh:
+                    for line in fh:
+                        if not line.strip():
+                            continue
+                        try:
+                            recs.append(from_json(json.loads(line)))
+                        except (ValueError, TypeError):
+                            bad += 1
+            except (OSError, EOFError, UnicodeDecodeError) as exc:   # truncated or corrupt gzip: set it aside
+                dest = f.with_name(f.name + ".bad")
+                log.warning("unreadable cache file %s (%s); moved to %s", f, exc, dest.name)
+                try:
+                    os.replace(f, dest)
+                except OSError:
+                    pass
+                self.quarantined.append(f.name)
+                continue
+            if bad:
+                log.warning("%s: skipped %d unreadable line(s)", f, bad)
+            for r in recs:
+                self.records[(r.source, r.source_id)] = r
 
     def __len__(self) -> int:
         return len(self.records)

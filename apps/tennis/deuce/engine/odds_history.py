@@ -33,6 +33,7 @@ import numpy as np
 import pandas as pd
 
 from .db import ROOT, connect
+from .fsutil import atomic_write_bytes, atomic_write_text
 from .names import pair_key
 from .odds import _ascii
 
@@ -228,7 +229,7 @@ def write_extract(df: pd.DataFrame, tour: str, year: int, extract_dir: Path | No
     path = extract_dir / f"{tour.lower()}-{year}.csv.gz"
     data = _gz_bytes(d.to_csv(index=False))
     if not path.exists() or path.read_bytes() != data:
-        path.write_bytes(data)
+        atomic_write_bytes(path, data)
     return path
 
 
@@ -242,8 +243,7 @@ def load_manifest() -> dict:
 def save_manifest(m: dict) -> None:
     if not m and not MANIFEST.exists():
         return
-    MANIFEST.parent.mkdir(parents=True, exist_ok=True)
-    MANIFEST.write_text(json.dumps(m, indent=1, sort_keys=True) + "\n")
+    atomic_write_text(MANIFEST, json.dumps(m, indent=1, sort_keys=True) + "\n")
 
 
 # ------------------------------------------------------------------ download
@@ -390,9 +390,8 @@ def store_odds_records(source: str, recs: list, root: Path | None = None) -> int
         rows[(d["date"], d["tour"], d["p1_name"], d["p2_name"], d["book"], d["fetched_at"])] = d
     lines = [json.dumps(rows[k], ensure_ascii=False, separators=(",", ":")) for k in sorted(rows)]
     data = _gz_bytes("\n".join(lines) + "\n")
-    root.mkdir(parents=True, exist_ok=True)
     if not path.exists() or path.read_bytes() != data:
-        path.write_bytes(data)
+        atomic_write_bytes(path, data)
     return len(rows) - before
 
 

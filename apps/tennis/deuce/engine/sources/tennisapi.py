@@ -272,6 +272,7 @@ class TennisApiSource:
     name = "tennisapi"
     key_env: Optional[str] = "RAPIDAPI_KEY"
     daily_quota = 50
+    per_minute = 150            # one request per 0.4 s: stays under the 4/s burst limit that returns 429s
     supports_backfill = True
     results_lookback_days = 2   # yesterday + today; deeper history is the registry's resumable backfill
 
