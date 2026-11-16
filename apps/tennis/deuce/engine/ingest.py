@@ -101,7 +101,7 @@ def run(conn, cfg: dict, sources: Optional[list[Source]] = None, cache: Optional
     icfg = {**(cfg.get("ingest") or {})}
     floor_day = date.fromisoformat(floor or icfg.get("floor", "2023-01-01"))
     max_s = max_seconds if max_seconds is not None else float(icfg.get("max_seconds", 150))
-    fixture_days = HOURLY_FIXTURE_DAYS if hourly else int(icfg.get("fixture_days", 10))
+    full_fixture_days = int(icfg.get("fixture_days", 10))
     today = today or datetime.now(timezone.utc).date()
     say = print if verbose else (lambda *a, **k: None)
     cache = cache if cache is not None else MatchCache()
@@ -118,7 +118,7 @@ def run(conn, cfg: dict, sources: Optional[list[Source]] = None, cache: Optional
         s = summary["sources"].setdefault(src.name, {"fixtures": 0, "results": 0, "new_final": 0, "backfill_days": 0})
         state = SourceState(src.name, state_root)
         fx_now = datetime.now(timezone.utc)
-        persisted = fixtures_mod.load(src.name, fixtures_root)
+        persisted = fixtures_mod.load(src.name, fixtures_root)   # empty for keyless sources
         if not fetch:
             live.update({(r.source, r.source_id): r for r in persisted})
             continue
@@ -134,6 +134,9 @@ def run(conn, cfg: dict, sources: Optional[list[Source]] = None, cache: Optional
             src.run_mode = mode
         except Exception:  # noqa: BLE001
             pass
+        # Quota-limited sources read only today and tomorrow in hourly runs (their snapshot covers the rest);
+        # keyless ones are cheap, so they always read the whole window.
+        fixture_days = HOURLY_FIXTURE_DAYS if (hourly and hasattr(budget, "state")) else full_fixture_days
         say(f"[{src.name}] {mode}: fixtures + results ...")
         try:
             _reset(src)
@@ -210,9 +213,15 @@ def run(conn, cfg: dict, sources: Optional[list[Source]] = None, cache: Optional
                 state.data["auth_error"] = {"date": today.isoformat(), "error": s["auth_error"]}
             else:
                 state.data.pop("auth_error", None)
-            state.data["last_fetch"] = fx_now.strftime("%Y-%m-%dT%H:%M:%SZ")
             window_end = today + timedelta(days=fixture_days)
-            kept = fixtures_mod.store(src.name, fresh, window_end, fixtures_root)
+            if gap:
+                state.data["last_fetch"] = fx_now.strftime("%Y-%m-%dT%H:%M:%SZ")
+            if hasattr(budget, "state"):
+                # Quota-limited sources keep committed state and a fixture snapshot, so a spent quota loses nothing.
+                # Keyless ones (ESPN) are cheap to re-read every run and would only churn git.
+                kept = fixtures_mod.store(src.name, fresh, window_end, fixtures_root)
+            else:
+                kept = fresh
             live.update({(r.source, r.source_id): r for r in kept})
         finally:
             cache.save()                                     # cache first, then the state that refers to it

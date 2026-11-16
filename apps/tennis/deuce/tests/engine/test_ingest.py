@@ -229,14 +229,14 @@ def test_fixtures_survive_a_spent_quota_and_hourly_window_merges(tmp_path):
     near = (datetime.now(timezone.utc) + timedelta(hours=3)).strftime("%Y-%m-%d")
     full_src = Fx("fx", [mk("fx", "far", far, status="scheduled", p1="Far A", p2="Far B"),
                          mk("fx", "near", near, status="scheduled", p1="Near A", p2="Near B")])
-    run_ing(tmp_path, full_src, cfg_for("fx"), today=datetime.now(timezone.utc).date(), mode="full")
+    run_ing(tmp_path, full_src, cfg_for("fx", daily_quota=100), today=datetime.now(timezone.utc).date(), mode="full")
     assert {r.source_id for r in fx_mod.load("fx", tmp_path / "fx")} == {"far", "near"}
     # hourly run: only today..tomorrow fetched; the 5-day-out fixture is kept from the snapshot
     hourly_src = Fx("fx", [mk("fx", "near", near, status="scheduled", p1="Near A", p2="Near B")])
-    s, conn, _ = run_ing(tmp_path, hourly_src, cfg_for("fx"), today=datetime.now(timezone.utc).date(), mode="hourly")
+    s, conn, _ = run_ing(tmp_path, hourly_src, cfg_for("fx", daily_quota=100), today=datetime.now(timezone.utc).date(), mode="hourly")
     assert conn.execute("SELECT COUNT(*) FROM matches WHERE status='scheduled'").fetchone()[0] == 2
     # quota spent / source down: nothing fetched, snapshot still used
-    s, conn, _ = run_ing(tmp_path, Fx("fx", []), cfg_for("fx"), today=datetime.now(timezone.utc).date(), mode="full")
+    s, conn, _ = run_ing(tmp_path, Fx("fx", []), cfg_for("fx", daily_quota=100), today=datetime.now(timezone.utc).date(), mode="full")
     assert conn.execute("SELECT COUNT(*) FROM matches WHERE status='scheduled'").fetchone()[0] == 2
 
 
@@ -258,3 +258,8 @@ def test_corrupt_cache_file_is_quarantined_not_fatal(tmp_path):
     c2 = cache_mod.MatchCache(tmp_path)
     assert len(c2) == 1 and c2.quarantined == ["2026-10.jsonl.gz"] and (tmp_path / "atp" / "2026-10.jsonl.gz.bad").exists()
     assert not list(tmp_path.glob("**/*.tmp"))                      # atomic writes leave no temp files
+
+
+def test_keyless_source_leaves_no_state_or_snapshot_files(tmp_path):
+    run_ing(tmp_path, Fake("free"), cfg_for("free"), mode="hourly")
+    assert not (tmp_path / "st").exists() and not (tmp_path / "fx").exists()
