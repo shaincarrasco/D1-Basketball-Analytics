@@ -98,3 +98,25 @@ test("gz cache round-trips and falls back to plain json", async () => {
   assert.deepEqual(await readGzJson(`${dir}/b`), { y: 1 });
   assert.equal(await readGzJson(`${dir}/missing`), null);
 });
+
+test("hand-kept prospects: parse, validate, merge over the feed", async () => {
+  const { manualProspectRow, mergeProspects, heightInches, prospectRow, PROSPECT_FIELDS: F } = await import("./careers.mjs");
+  const f = Object.fromEntries(F.map((k, i) => [k, i]));
+  assert.equal(heightInches("6-10"), 82);
+  assert.equal(heightInches(`6'7"`), 79);
+  assert.equal(heightInches(80.4), 80);
+  assert.equal(heightInches("tall"), null);
+  assert.equal(manualProspectRow({ name: "X" }).row, null);
+  assert.match(manualProspectRow({ name: "X" }).why, /class year/);
+  const m = manualProspectRow({ year: 2027, name: "Jay Doe", rank: 4, stars: 5, height: "6-9", committedTo: "Duke", city: "Austin", state: "TX" }).row;
+  assert.equal(m[f.college], "Duke");
+  assert.equal(m[f.ht], 81);
+  const feed = [prospectRow({ name: "Jay Doe", ranking: 6, stars: 5, school: "Dynamic Prep", committedTo: null }, 2027), prospectRow({ name: "Other Kid", ranking: 9 }, 2027)];
+  const out = mergeProspects(feed, [m, manualProspectRow({ year: 2027, name: "New Name", rank: 50 }).row]);
+  assert.equal(out.length, 3);
+  const jay = out.find(r => r[f.name] === "Jay Doe");
+  assert.equal(jay[f.rank], 4);
+  assert.equal(jay[f.college], "Duke");
+  assert.equal(jay[f.hs], "Dynamic Prep"); // kept from the feed where the hand entry is empty
+  assert.equal(feed[0][f.rank], 6); // input not mutated
+});

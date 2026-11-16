@@ -157,14 +157,14 @@ jobs:
           cp site-hub/index.html pages/index.html
           cp site-hub/404.html pages/404.html
           touch pages/.nojekyll
-      - name: Save the injury ledger (status changes and returns since the last check)
+      - name: Save the injury ledger and the daily DPR snapshot (both written by the build)
         if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' || github.event_name == 'push'
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add public/data/injury-ledger-2027.json
+          git add public/data/injury-ledger-2027.json .cache/dpr-history.json.gz
           if ! git diff --cached --quiet; then
-            git commit -m 'Update injury ledger'
+            git commit -m 'Update injury ledger and DPR history'
             git push || { git pull --rebase -X theirs && git push; } || { git rebase --abort 2>/dev/null || true; echo "::warning::Injury ledger push skipped; the next refresh will retry."; }
           fi
       - name: Configure Pages

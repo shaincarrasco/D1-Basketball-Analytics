@@ -112,7 +112,7 @@ function buildSvg(p: Props, url: string): string {
   <text x="80" y="300" font-family="${esc(FONT)}" font-weight="900" font-size="${titleSize}" fill="${ink}">${esc(p.title)}</text>
   <text x="80" y="362" font-family="${esc(BODY_FONT)}" font-weight="500" font-size="36" fill="${ink}" fill-opacity="0.85">${esc(p.subtitle)}</text>
   ${statEls}
-  <text x="80" y="590" font-family="${esc(BODY_FONT)}" font-weight="500" font-size="22" fill="${ink}" fill-opacity="0.7">${esc(`Sports Analytics · ${host}${p.href}`)}</text>
+  <text x="80" y="590" font-family="${esc(BODY_FONT)}" font-weight="500" font-size="22" fill="${ink}" fill-opacity="0.7">${esc(`D1 Hoops · ${host}${p.href}`)}</text>
 </svg>`;
 }
 

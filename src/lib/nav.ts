@@ -3,7 +3,7 @@
 // so a new page is added in one place.
 import type { LucideIcon } from "lucide-react";
 import {
-  ArrowLeftRight, BadgeDollarSign, GitCompare, GraduationCap, BarChart3, BookOpen, CalendarDays, HeartPulse, History, Layers, LayoutGrid,
+  ArrowLeftRight, BadgeDollarSign, GitCompare, GraduationCap, TrendingUp, Receipt, BarChart3, BookOpen, CalendarDays, HeartPulse, History, Layers, LayoutGrid,
   LineChart, Newspaper, PenTool, ScatterChart, ShieldAlert, Sparkles, Swords, Trophy, Users, UsersRound,
 } from "lucide-react";
 
@@ -44,6 +44,7 @@ export const HUBS: Hub[] = [
       { href: "/players/", label: "Leaderboards", desc: "Every D-I player, sortable by any stat", icon: Users },
       { href: "/players/rankings/", label: "Rankings", desc: "Ten ways to rank players, or set your own weights", icon: Sparkles },
       { href: "/players/projections/", label: "Skill projections", desc: "Projected shooting, passing and defense with grades", icon: LineChart },
+      { href: "/players/risers/", label: "Risers", desc: "Biggest DPR moves over the last 30 days", icon: TrendingUp },
       { href: "/players/indispensable/", label: "Most indispensable", desc: "How far each team would fall without him", icon: ShieldAlert },
       { href: "/players/nil/", label: "NIL value", desc: "Our estimated market value for every player, with reported figures", icon: BadgeDollarSign },
       { href: "/players/prospects/", label: "Prospects", desc: "High-school classes, commitments and team classes", icon: GraduationCap },
@@ -59,6 +60,7 @@ export const HUBS: Hub[] = [
       { href: "/matchup/", label: "Matchup simulator", desc: "Any two teams, any site, with injuries", icon: Swords },
       { href: "/lineups/", label: "Lineup lab", desc: "Put any five players on the floor and grade the fit", icon: UsersRound },
       { href: "/charts/build/", label: "Make a chart", desc: "Build, share and download your own chart", icon: PenTool },
+      { href: "/receipts/", label: "Receipts", desc: "Every pick made before tip-off, graded after", icon: Receipt },
       { href: "/methodology/", label: "How it works", desc: "Every rating and projection, explained", icon: BookOpen },
     ],
   },

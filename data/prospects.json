@@ -1,0 +1,4 @@
+{
+  "_readme": "Hand-kept high-school prospects (no free data feed has classes still in high school). Add one object per player to `prospects`. Required: year (class, e.g. 2027) and name. Optional: rank (your national rank), pos, stars (3-5), rating (0-1), height (\"6-10\" or inches), weight, highSchool, city, state, committedTo (the school's name as it appears on the site, e.g. \"Duke\", \"North Carolina\"; leave out if uncommitted). Entries with the same name and year as the data feed override it. Commit the change and the next refresh shows it.",
+  "prospects": []
+}

@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import FavoriteButton from "@/components/favorite-button";
 import ShareCard from "@/components/share-card";
+import Explain from "@/components/explain";
 import { GitCompare } from "lucide-react";
 import ShotChart from "@/components/shot-chart";
 import TeamLogo from "@sports/ui/team-logo";
@@ -23,6 +24,7 @@ import { BasketballFrameworkRanks as FrameworkRanks } from "@/sports/basketball/
 import { derive, MIN_ATT, POS_WORD, recruitText, similarPlayers, type PlayerRow } from "../players/player-stats";
 import { followRowLink, ROW_LINK_CLASS } from "@sports/ui/row-link";
 import { DprCard, OnOff, Similar } from "./impact";
+import DprBreakdown from "./dpr-breakdown";
 import ShotDiet, { type ZoneAvg } from "./shot-diet";
 import Scouting from "./scouting";
 import SkillProjections from "@/components/skills/skill-projections";
@@ -135,9 +137,9 @@ function Profile({ p, all, detail, teams }: { p: PlayerRow; all: PlayerRow[]; de
               </div>
             </div>
             <dl className="mt-5 flex overflow-hidden rounded-2xl bg-deck" aria-label="Season averages">
-              {([["MIN", p.min, 1], ["PTS", p.pts, 1], ["REB", p.reb, 1], ["AST", p.ast, 1], ["BLK", p.blk, 1], ["TS%", p.ts, 1]] as const).map(([l, v, d], i) => (
+              {([["MIN", "min", p.min, 1], ["PTS", "pts", p.pts, 1], ["REB", "reb", p.reb, 1], ["AST", "ast-pg", p.ast, 1], ["BLK", "blk-pg", p.blk, 1], ["TS%", "ts", p.ts, 1]] as const).map(([l, gid, v, d], i) => (
                 <div key={l} className={`flex flex-1 flex-col items-center gap-0.5 py-2.5 ${i ? "border-l border-line" : ""}`}>
-                  <dt className="text-[11px] font-bold tracking-[0.04em] text-mute">{l}</dt>
+                  <dt className="text-[11px] font-bold tracking-[0.04em] text-mute"><Explain id={gid}>{l}</Explain></dt>
                   <dd className="font-display text-[22px] font-extrabold leading-none tnum">{fmt(v, d)}</dd>
                 </div>
               ))}
@@ -146,9 +148,9 @@ function Profile({ p, all, detail, teams }: { p: PlayerRow; all: PlayerRow[]; de
               {shoot("FG", p.fgm, p.fga)}
               {shoot("3P", p.tpm, p.tpa)}
               {shoot("FT", p.ftm, p.fta)}
-              <span><span className="text-dim">STL</span> <b>{fmt(p.stl)}</b></span>
-              <span><span className="text-dim">TOV</span> <b>{fmt(p.tov)}</b></span>
-              <span><span className="text-dim">USG</span> <b>{p.usg === null ? "—" : `${fmt(p.usg)}%`}</b></span>
+              <span><span className="text-dim"><Explain id="stl-pg">STL</Explain></span> <b>{fmt(p.stl)}</b></span>
+              <span><span className="text-dim"><Explain id="tov-pg">TOV</Explain></span> <b>{fmt(p.tov)}</b></span>
+              <span><span className="text-dim"><Explain id="usage">USG</Explain></span> <b>{p.usg === null ? "—" : `${fmt(p.usg)}%`}</b></span>
               <span className="text-mute">{p.g ?? 0} {p.g === 1 ? "game" : "games"}, {p.gs ?? 0} {p.gs === 1 ? "start" : "starts"}</span>
             </div>
           </div>
@@ -208,6 +210,7 @@ function Profile({ p, all, detail, teams }: { p: PlayerRow; all: PlayerRow[]; de
       <Shots p={p} detail={detail.data} loading={detail.status === "loading"} zoneAvg={zoneAvg} />
 
       <div className="grid items-start gap-5 lg:grid-cols-2">
+        <DprBreakdown row={p} onOff={detail.data?.onOff?.[p.id] ?? null} />
         <OnOff p={p} detail={detail.data} />
         <Similar p={p} list={similar} />
       </div>

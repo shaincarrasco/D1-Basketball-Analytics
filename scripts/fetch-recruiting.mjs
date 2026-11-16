@@ -8,7 +8,7 @@
 //   served prospects file by build-app-data.
 // Cost: 2 calls a day after the first run (was 5). Non-fatal: a missing key or failed call keeps the cache.
 import { mkdir, readFile, writeFile } from "node:fs/promises";
-import { openClasses, prospectRow, PROSPECT_FIELDS, settledClasses } from "./lib/careers.mjs";
+import { manualProspectRow, mergeProspects, openClasses, prospectRow, PROSPECT_FIELDS, settledClasses } from "./lib/careers.mjs";
 import { readGzJson, writeGzJson } from "./lib/gz-json.mjs";
 
 // Derived from the date, so a new season moves last year's open class into the settled set by itself.
@@ -74,16 +74,32 @@ if (settled.length && !sameAsOld) {
   console.log(`[recruiting] recruiting.json: ${settled.length} settled-class recruits.`);
 }
 
-// Open classes: every full refresh.
-if (!key) console.warn("[recruiting] CBBD_API_KEY missing; keeping cached prospect classes.");
-for (const year of key ? OPEN_CLASSES : []) {
-  try {
-    const rows = await fetchClass(key, year);
-    if (rows[0]) console.log(`[recruiting] ${year} sample row:`, JSON.stringify(rows[0]).slice(0, 600));
-    const out = rows.map(r => prospectRow(r, year)).filter(Boolean);
-    await writeGzJson(`${DIR}/${year}`, { year, fetchedAt: new Date().toISOString(), fields: PROSPECT_FIELDS, rows: out });
-    console.log(`[recruiting] ${year}: ${out.length} prospects (${out.filter(r => r[PROSPECT_FIELDS.indexOf("college")]).length} committed).`);
-  } catch (error) {
-    console.warn(`[recruiting] ${year} failed: ${error instanceof Error ? error.message : error}`);
+// Open classes: every full refresh, then merged with the hand-kept list in data/prospects.json
+// (no free feed covers classes still in high school, so that file is the main source for now).
+let manual = [];
+try {
+  const file = JSON.parse(await readFile("data/prospects.json", "utf8"));
+  for (const e of file.prospects ?? []) {
+    const { row, why } = manualProspectRow(e);
+    if (row) manual.push(row); else console.warn(`[recruiting] data/prospects.json: skipped entry (${why}).`);
   }
+} catch (error) {
+  if (error?.code !== "ENOENT") console.warn(`[recruiting] data/prospects.json unreadable: ${error instanceof Error ? error.message : error}`);
+}
+if (!key) console.warn("[recruiting] CBBD_API_KEY missing; using cached provider rows for open classes.");
+for (const year of OPEN_CLASSES) {
+  let provider = (await readCache(year))?.providerRows ?? [];
+  if (key) {
+    try {
+      const rows = await fetchClass(key, year);
+      if (rows[0]) console.log(`[recruiting] ${year} sample row:`, JSON.stringify(rows[0]).slice(0, 600));
+      provider = rows.map(r => prospectRow(r, year)).filter(Boolean);
+    } catch (error) {
+      console.warn(`[recruiting] ${year} failed: ${error instanceof Error ? error.message : error}`);
+    }
+  }
+  const merged = mergeProspects(provider, manual.filter(r => r[0] === year));
+  await writeGzJson(`${DIR}/${year}`, { year, fetchedAt: new Date().toISOString(), fields: PROSPECT_FIELDS, providerRows: provider, rows: merged });
+  const committed = merged.filter(r => r[PROSPECT_FIELDS.indexOf("college")]).length;
+  console.log(`[recruiting] ${year}: ${provider.length} from the feed + ${manual.filter(r => r[0] === year).length} hand-kept = ${merged.length} prospects (${committed} committed).`);
 }

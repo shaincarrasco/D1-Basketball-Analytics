@@ -6,6 +6,7 @@ import TeamLogo from "@sports/ui/team-logo";
 import { useJson } from "@sports/ui/client-data";
 import { fmt } from "@sports/ui/format";
 import type { CareerRow, TeamDetail, TeamSummary } from "@/lib/types";
+import CareerChart from "./career-chart";
 
 // A season is keyed by the year it ends (2027 = 2026–27). The live season is one after the newest
 // past season on file, so this never needs a yearly edit; with no history it follows the calendar
@@ -67,6 +68,7 @@ export default function Career({ detail, playerId, current }: { detail: TeamDeta
     <section className="deck min-w-0 p-5" aria-labelledby="career-h">
       <h2 id="career-h" className="h-section">Career</h2>
       <p className="mb-3 mt-1 text-sm text-mute">Per-game lines by season. Earlier seasons are every college season on record, at this school or others. Shooting % needs 10 attempts.</p>
+      <CareerChart seasons={[...prior, now].map(l => ({ season: l.season, ppg: l.ppg, rpg: l.rpg, apg: l.apg, ts: l.ts, current: l.key === "current" }))} />
       <div className="scroll-x rounded-xl border border-line">
         <table className="dt">
           <caption className="sr-only">Career stats by season</caption>

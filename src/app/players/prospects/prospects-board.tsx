@@ -14,7 +14,7 @@ type Group = "Guards" | "Wings" | "Bigs";
 const GROUPS: Group[] = ["Guards", "Wings", "Bigs"];
 const POS_GROUP: Record<string, Group> = { PG: "Guards", SG: "Guards", CG: "Guards", WG: "Wings", SF: "Wings", PF: "Bigs", C: "Bigs", G: "Guards", F: "Wings", W: "Wings", FC: "Bigs", CF: "Bigs" };
 const PAGE = 100;
-const EMPTY_MSG = "Prospect data arrives with the next daily refresh.";
+const EMPTY_MSG = "No prospects listed yet. Upcoming high-school classes are added by hand as commitments come in.";
 
 type Prospect = {
   year: number; rank: number | null; name: string; pos: string; stars: number | null; ht: number | null; wt: number | null;

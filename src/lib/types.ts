@@ -118,7 +118,13 @@ export type Player = {
   /** High-school recruiting: stars (2–5), national rank, class year. */
   stars: number | null; recRank: number | null; recYear: number | null;
   dprRank: number | null;
+  /** Box-score-only prior for DPR offence / defence (positive = good), the part of DPR not backed by on-court evidence. Null if no box prior. */
+  boxO?: number | null; boxD?: number | null;
+  /** DPR change over ~30 days (1 decimal) and the snapshot date it is measured from (the oldest snapshot if history is shorter). Null with <2 snapshots or <150 on-court possessions. */
+  dpr30?: number | null; dpr30Since?: string | null;
 };
+/** public/data/app/risers.json: top DPR risers and fallers; rows are [id, name, team slug, dpr, dpr30, onPoss] per `fields`. */
+export type RisersFile = { since: string | null; fields: string[]; risers: (string | number | null)[][]; fallers: (string | number | null)[][] };
 
 /** One past season for one player (per-game values), columns named by TeamDetail.careerFields. */
 export type CareerRow = (string | number | null)[];
@@ -155,8 +161,8 @@ export type TeamDetail = {
   shots?: { off: [number, number, number, number][]; def: [number, number, number, number][]; byPid: Record<string, [number, number, number, number, string, number, string][]> } | null;
   /** Five-man units by minutes (≥2 min): provider player ids, minutes, points for/against, possessions, net per 100. */
   lineups?: { pids: string[]; min: number; pf: number; pa: number; poss: number; net: number }[];
-  /** On/off per player: minutes on, net per 100 on and off the floor, possessions on. */
-  onOff?: Record<string, { min: number; onNet: number; offNet: number | null; poss: number }>;
+  /** On/off per player: minutes on, net per 100 on and off the floor, possessions on. onO / onD (points scored / allowed per 100 possessions with him on) and pm (points for minus against) are RAW, not opponent-adjusted. */
+  onOff?: Record<string, { min: number; onNet: number; offNet: number | null; poss: number; onO?: number | null; onD?: number | null; pm?: number }>;
 };
 export type PlayerBio = { jersey: string | null; pos: string | null; ht: string | null; wt: number | null; year: string | null; home: string | null };
 export type TeamPerGame = { pts: number | null; reb: number | null; ast: number | null; tov: number | null; stl: number | null; blk: number | null; paint: number | null; fastBreak: number | null };

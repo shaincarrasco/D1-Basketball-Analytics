@@ -187,6 +187,43 @@ function teamTab(t: string[], ix: Index): Intent | null {
   return null;
 }
 
+/**
+ * Sort keys on the team roster table (src/app/teams/[slug]/roster.tsx columns), keyed by the
+ * lexicon's StatDef.sort. Only "3p" is a roster key for 3P%; a null means the roster has no such column.
+ */
+const ROSTER_SORT: Record<string, string | null> = {
+  tpPct: "3p", pts: "pts", ftPct: null, ts: "ts", ortg: "ortg", usg: "usg",
+  dpr: "dpr", ast: "ast", reb: "reb", stl: "stl", blk: "blk", dunks: null,
+};
+
+/** "duke 3pt", "kansas rebounds", "unc best shooters": one team plus one stat, opens that team's roster sorted by it. */
+function teamStat(t: string[], ix: Index): Intent | null {
+  const used = t.map(w => FILLER.has(w));
+  let team: SmartTeam | null = null;
+  // Longest team phrase first, anywhere in the query.
+  outer: for (let len = Math.min(t.length, ix.maxLen); len >= 1; len--) {
+    for (let s = 0; s + len <= t.length; s++) {
+      const hit = ix.byPhrase.get(t.slice(s, s + len).join(" "));
+      if (!hit) continue;
+      team = hit;
+      for (let k = 0; k < len; k++) used[s + k] = true;
+      break outer;
+    }
+  }
+  if (!team) return null;
+  const stats = takeAll(t, used, STAT_PHRASES, s => s.label);
+  if (used.some(u => !u) || stats.size !== 1) return null;
+  const stat = [...stats.values()][0];
+  const key = ROSTER_SORT[stat.sort];
+  if (!key) return null;
+  return {
+    label: `${team.name} ${stat.label} leaders`,
+    sub: `Team roster · sorted by ${stat.label}`,
+    href: `/teams/${team.slug}/?tab=roster&sort=${key}`,
+    chips: [{ kind: "team", label: team.name }, { kind: "stat", label: stat.label }, { kind: "action", label: "Roster" }],
+  };
+}
+
 /** Consumes every phrase it finds, longest first, and returns the distinct values. */
 function takeAll<T>(t: string[], used: boolean[], phrases: Phrase<T>[], key: (v: T) => string): Map<string, T> {
   const found = new Map<string, T>();
@@ -232,5 +269,5 @@ export function parseQuery(q: string, ctx: { teams: SmartTeam[] }): Intent | nul
   const t = tokenize(q);
   if (!t.length) return null;
   const ix = indexFor(ctx.teams);
-  return matchup(t, ix) ?? teamTab(t, ix) ?? prospects(t) ?? statLeaders(t, ix);
+  return matchup(t, ix) ?? teamTab(t, ix) ?? teamStat(t, ix) ?? prospects(t) ?? statLeaders(t, ix);
 }
