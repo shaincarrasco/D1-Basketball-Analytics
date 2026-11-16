@@ -60,7 +60,7 @@ function Row({ g, side, which, absence }: { g: Game; side: GameSide; which: "hom
         : <TeamLogo src={side.logo} name={side.name} size={24} />}
       <div className="flex min-w-0 flex-1 items-baseline gap-1.5">
         {side.rank ? <span className="shrink-0 text-[11.5px] font-semibold text-dim tnum" title={DHR_RANK_TITLE} aria-label={`DHR rank ${side.rank}`}>{side.rank}</span> : null}
-        <TeamName side={side} className={`text-[15.5px] font-semibold ${lost ? "!text-mute" : ""}`} />
+        <TeamName side={side} className={`text-[14.5px] font-semibold ${lost ? "!text-mute" : ""}`} />
         <span className="shrink-0 text-[12px] text-dim tnum">{side.id ? side.record ?? "" : ""}</span>
         {absence && <AbsenceChip a={absence} />}
       </div>
@@ -126,7 +126,7 @@ export default function GameCard({ g, live: lg, onOpen, absences, moment }: { g:
           <Row g={g} side={g.away} which="away" absence={abs(g.away)} />
           <Row g={g} side={g.home} which="home" absence={abs(g.home)} />
         </div>
-        <div className="flex w-[74px] shrink-0 flex-col items-end justify-center gap-0.5 border-l border-line pl-3 text-right text-[12px] leading-tight text-mute">
+        <div className="flex w-[72px] shrink-0 flex-col whitespace-nowrap items-end justify-center gap-0.5 border-l border-line pl-3 text-right text-[12px] leading-tight text-mute">
           <span className={`flex items-center gap-1.5 font-semibold tnum ${live ? "text-hot" : final ? "text-ink" : "text-ink"}`}>{live && <span className="live-dot" aria-hidden />}{status}</span>
           {g.upset != null && final ? <span className="font-semibold text-hot">Upset</span>
             : !final && g.tv?.length ? <span className="max-w-full truncate text-dim">{g.tv[0].name}</span>

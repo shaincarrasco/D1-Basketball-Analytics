@@ -202,7 +202,7 @@ export default function GamesHub() {
               <button className="btn mt-3" onClick={() => { setFilter("all"); setConf("all"); }}>Show all {games.length} games</button>
             </Empty>
           ) : (
-            <ul className="grid grid-cols-1 overflow-hidden rounded-[14px] border-l border-t border-line bg-deck sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4" aria-label={liveView ? `${liveList.length} live games, most exciting first` : `${shown.length} games`} data-testid="game-list">
+            <ul className="grid grid-cols-1 overflow-hidden rounded-2xl bg-deck sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4" aria-label={liveView ? `${liveList.length} live games, most exciting first` : `${shown.length} games`} data-testid="game-list">
               {(liveView ? liveList : shown).map(g => (
                 <li key={g.id} data-game={g.id} className="flex border-b border-r border-line">
                   <GameCard g={g} live={live.byGame.get(g.id)} onOpen={openGame} absences={absences} moment={moments.get(g.id)} />

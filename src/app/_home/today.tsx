@@ -133,7 +133,7 @@ function DateStrip({ day, today }: { day: string; today: boolean }) {
         const cur = d === day;
         return (
           <Link key={d} href={cur ? "/" : `/games/?d=${d}`} aria-current={cur ? "date" : undefined}
-            className={`flex min-w-[52px] flex-1 flex-col items-center rounded-xl py-2 transition-colors sm:max-w-[96px] ${cur ? "bg-ink text-night" : "text-mute hover:bg-deck"}`}>
+            className={`flex min-w-[52px] flex-1 flex-col items-center rounded-xl py-2 transition-colors sm:max-w-[96px] ${cur ? "bg-deck2 text-ink" : "text-mute hover:bg-deck"}`}>
             <span className="text-xs font-semibold">{cur && today ? "Today" : dayLabel(d, { weekday: "short" })}</span>
             <span className={`font-display text-xl font-bold leading-tight ${cur ? "" : d > day ? "text-ink" : ""}`}>{Number(d.slice(8))}</span>
           </Link>
@@ -321,7 +321,7 @@ function Side({ s }: { s: GameSide }) {
   const inner = (
     <>
       <TeamLogo src={s.logo} name={s.name} size={52} />
-      <span className="mt-1.5 max-w-[104px] truncate font-display text-[19px] font-extrabold leading-tight">{s.name}</span>
+      <span className="mt-2 line-clamp-2 max-w-[104px] text-[15px] font-semibold leading-tight">{s.name}</span>
       <span className="text-xs text-mute" title={s.rank ? DHR_RANK_TITLE : undefined}>{[s.rank ? `DHR No. ${s.rank}` : null, s.record].filter(Boolean).map((t, i) => <span key={i} className="whitespace-nowrap">{i ? ", " : ""}{t}</span>)}</span>
     </>
   );

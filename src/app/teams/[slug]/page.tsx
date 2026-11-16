@@ -105,11 +105,11 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
 
   return (
     <article>
-      {/* Hero: full-bleed team colour, rank on a scoreboard plate */}
+      {/* Hero: a quiet wash of the team colour over the page background, so the logo carries the identity. */}
       <section className="team-accent relative -mx-4 -mt-6 mb-0 overflow-hidden px-4 pb-6 pt-6 sm:-mx-6 sm:px-6 lg:mx-0 lg:mt-0 lg:rounded-[22px] lg:px-8 lg:pt-8"
-        style={{ background: `radial-gradient(ellipse 70% 120% at 0% 0%, rgb(255 255 255 / 0.16), transparent 60%), linear-gradient(180deg, transparent 35%, rgb(0 0 0 / 0.38)), ${color}`, color: ink, "--team": team.color ?? undefined } as React.CSSProperties}>
-        <span className="pointer-events-none absolute -right-10 -top-10 hidden opacity-[0.14] mix-blend-luminosity md:block" aria-hidden><TeamLogo src={team.logo} name="" size={340} /></span>
-        <svg className="pointer-events-none absolute -right-20 top-6 h-[300px] w-[300px] opacity-[0.13] md:hidden" viewBox="0 0 300 300" fill="none" stroke="currentColor" strokeWidth="3" aria-hidden>
+        style={{ background: `color-mix(in oklab, ${color} 24%, var(--bg))`, color: "var(--ink)", "--team": team.color ?? undefined } as React.CSSProperties}>
+        <span className="pointer-events-none absolute -right-10 -top-10 hidden opacity-[0.07] mix-blend-luminosity md:block" aria-hidden><TeamLogo src={team.logo} name="" size={340} /></span>
+        <svg className="pointer-events-none absolute -right-20 top-6 hidden h-[300px] w-[300px] opacity-[0.13]" viewBox="0 0 300 300" fill="none" stroke="currentColor" strokeWidth="3" aria-hidden>
           <circle cx="150" cy="150" r="60" /><circle cx="150" cy="150" r="140" /><path d="M150 0v300" />
         </svg>
         <div className="relative flex items-center justify-between gap-3 text-[15px] font-semibold">
