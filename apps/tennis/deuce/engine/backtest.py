@@ -15,6 +15,7 @@ import numpy as np
 import pandas as pd
 
 from . import features, model
+from .fsutil import atomic_write_text
 from .db import connect, data_dir, load_config
 from .update import get_rankings
 
@@ -23,6 +24,18 @@ ROLLING_STEP = 25
 
 
 LOW_DATA_MATCHES = 15
+
+
+def coverage_note(levels, n: int) -> str:
+    """What the test sets actually contain, from the data (not from which sources are configured)."""
+    counts = {str(k): int(v) for k, v in pd.Series(levels).value_counts().items()}
+    low = {k: counts[k] for k in ("Challenger", "ITF") if counts.get(k)}
+    base = "ATP/WTA main draws, qualifying and WTA 125 events"
+    if low:
+        extra = " and ".join(f"{v:,} {k}" for k, v in low.items())
+        return f"Test sets ({n:,} matches) include {base}, plus {extra} matches."
+    return (f"Test sets ({n:,} matches) cover {base}. They have no Challenger or ITF matches yet: those tiers need the "
+            "Tennis API and Live Tennis API keys to be set.")
 
 
 def _clean(o: Any) -> Any:
@@ -296,7 +309,7 @@ def run(verbose: bool = True) -> dict[str, Any]:
     notes += [
         f"Walk-forward: each split trains only on finished matches before its start (burn-in from {model.BURN_IN}); "
         "features use prior matches only; Elo blend weight, model family and calibration are chosen on training data only.",
-        "Test sets include ATP/WTA main draws and qualifying plus WTA 125 events (ESPN has no Challenger/ITF).",
+        coverage_note(oos["level"], int(len(oos))),
         "baseline_elo = pure overall Elo (no surface blend); baseline_rank_accuracy uses ESPN seed/ranking where both known.",
     ]
     thr = float(cfg["model"]["edge_threshold"])
@@ -321,7 +334,7 @@ def run(verbose: bool = True) -> dict[str, Any]:
     ]
     result["notes"] = notes
     out = data_dir() / "backtest.json"
-    out.write_text(json.dumps(_clean(result), indent=1))
+    atomic_write_text(out, json.dumps(_clean(result), indent=1))
     if verbose:
         print(f"wrote {out}")
         print(json.dumps(_clean({"overall": overall, "splits": [{k: s[k] for k in ('name', 'n', 'accuracy', 'brier', 'log_loss', 'baseline_elo_brier', 'baseline_elo_accuracy')} for s in splits]}), indent=1))
