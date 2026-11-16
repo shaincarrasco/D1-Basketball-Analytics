@@ -111,7 +111,18 @@ jobs:
       - name: Refresh tennis data (Baseline site; cached, only new matches are fetched)
         run: node apps/tennis/scripts/fetch-tennis.mjs || echo "::warning::Tennis refresh failed; the site keeps the last snapshot."
       # --- Deuce: the tennis prediction engine (apps/tennis/deuce). Every step is non-fatal: on failure the site keeps
-      # the last committed snapshot of predictions.json, model.json and briefs/. Budget: under 5 minutes.
+      # the last committed snapshot of predictions.json, model.json and briefs/. Two run modes (DEUCE_RUN):
+      #   full   = the daily 11:30 UTC schedule, pushes and manual runs: 10-day fixtures, odds, backfill, backtest, weather
+      #   hourly = every other scheduled run: today and tomorrow only, no odds, no backtest, no weather lookups
+      # Budget: hourly about 2 minutes, full under 6. Timeouts are tight so a hang cannot hold up the other sites.
+      - name: Deuce run mode
+        id: deuce_run
+        run: |
+          if [ "${{ github.event_name }}" = "schedule" ] && [ "${{ github.event.schedule }}" != "30 11 * * *" ]; then
+            echo "mode=hourly" >> "$GITHUB_OUTPUT"
+          else
+            echo "mode=full" >> "$GITHUB_OUTPUT"
+          fi
       - name: Set up Python for Deuce
         id: deuce_python
         continue-on-error: true
@@ -119,11 +130,11 @@ jobs:
         with:
           python-version: "3.12"
           cache: pip
-          cache-dependency-path: apps/tennis/deuce/requirements.txt
-      - name: Install Deuce dependencies
+          cache-dependency-path: apps/tennis/deuce/requirements-ci.txt
+      - name: Install Deuce dependencies (pinned)
         continue-on-error: true
-        timeout-minutes: 5
-        run: pip install -r apps/tennis/deuce/requirements.txt || echo "::warning::Deuce dependencies failed to install; predictions keep the last snapshot."
+        timeout-minutes: 3
+        run: pip install -r apps/tennis/deuce/requirements-ci.txt || echo "::warning::Deuce dependencies failed to install; predictions keep the last snapshot."
       - name: Deuce model week
         id: deuce_week
         run: echo "week=$(date -u +%G-%V)" >> "$GITHUB_OUTPUT"
@@ -134,40 +145,48 @@ jobs:
           path: |
             apps/tennis/deuce/data/model.pkl
             apps/tennis/deuce/data/oos_preds.pkl
-          key: deuce-model-${{ hashFiles('apps/tennis/deuce/engine/**/*.py', 'apps/tennis/deuce/requirements.txt') }}-${{ steps.deuce_week.outputs.week }}
+          key: deuce-model-${{ hashFiles('apps/tennis/deuce/engine/**/*.py', 'apps/tennis/deuce/requirements-ci.txt') }}-${{ steps.deuce_week.outputs.week }}
+          # An older model keeps serving (and is retrained in place) when the key changes.
+          restore-keys: |
+            deuce-model-
       - name: Deuce update (compact cache + ESPN, Live Tennis API, Tennis API; ratings, model, predictions)
         continue-on-error: true
-        timeout-minutes: 8
+        timeout-minutes: ${{ (github.event_name != 'schedule' || github.event.schedule == '30 11 * * *') && 6 || 3 }}
         working-directory: apps/tennis/deuce
         run: python -m engine.update || echo "::warning::Deuce update failed; predictions keep the last snapshot."
         env:
+          DEUCE_RUN: ${{ steps.deuce_run.outputs.mode }}
           # Optional keys: a source without its key is skipped silently.
           LIVETENNISAPI_KEY: ${{ secrets.LIVETENNISAPI_KEY }}
           RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
           ODDSPAPI_KEY: ${{ secrets.ODDSPAPI_KEY }}
       - name: Deuce historical odds (tennis-data.co.uk, weekly; stored compactly in data-cache/odds)
-        if: github.event_name != 'schedule' || github.event.schedule == '30 11 * * *'
-        continue-on-error: true
-        timeout-minutes: 4
-        working-directory: apps/tennis/deuce
-        run: python -m engine.odds_history --weekly || echo "::warning::Deuce odds import failed; the stored extracts are used."
-      - name: Deuce Match Briefs (rules text, no local LLM in CI)
-        continue-on-error: true
-        timeout-minutes: 5
-        working-directory: apps/tennis/deuce
-        run: python -m brief.run --no-llm || echo "::warning::Deuce briefs failed; the site keeps the last briefs."
-      - name: Deuce walk-forward backtest
-        continue-on-error: true
-        timeout-minutes: 5
-        working-directory: apps/tennis/deuce
-        run: python -m engine.backtest || echo "::warning::Deuce backtest failed; the site keeps the last model page data."
-      - name: Deuce site data (predictions.json, model.json, briefs/) and paper-bets report
+        if: steps.deuce_run.outputs.mode == 'full'
         continue-on-error: true
         timeout-minutes: 3
         working-directory: apps/tennis/deuce
+        run: python -m engine.odds_history --weekly || echo "::warning::Deuce odds import failed; the stored extracts are used."
+      - name: Deuce walk-forward backtest (full runs only)
+        if: steps.deuce_run.outputs.mode == 'full'
+        continue-on-error: true
+        timeout-minutes: 3
+        working-directory: apps/tennis/deuce
+        run: python -m engine.backtest || echo "::warning::Deuce backtest failed; the site keeps the last model page data."
+      - name: Deuce site data (predictions.json, briefs/, and model.json after a backtest)
+        continue-on-error: true
+        timeout-minutes: ${{ (github.event_name != 'schedule' || github.event.schedule == '30 11 * * *') && 4 || 2 }}
+        working-directory: apps/tennis/deuce
+        # Site briefs are written here by rules (three buckets, no prices). Weather lookups only in full runs; hourly
+        # runs carry the weather already in each brief file over.
         run: |
-          python -m engine.export_site || echo "::warning::Deuce site export failed; the site keeps the last snapshot."
-          python -m engine.paper_bets || echo "::warning::Deuce paper-bets report failed."
+          if [ "${{ steps.deuce_run.outputs.mode }}" = "full" ]; then WEATHER="--weather"; else WEATHER=""; fi
+          python -m engine.export_site $WEATHER || echo "::warning::Deuce site export failed; the site keeps the last snapshot."
+      - name: Deuce paper-bets report (full runs only)
+        if: steps.deuce_run.outputs.mode == 'full'
+        continue-on-error: true
+        timeout-minutes: 2
+        working-directory: apps/tennis/deuce
+        run: python -m engine.paper_bets || echo "::warning::Deuce paper-bets report failed."
       - name: Refresh college football data (Gridiron; only new games are fetched; site files are rebuilt from the committed cache)
         run: node apps/football/scripts/fetch-cfb.mjs || echo "::warning::Football refresh failed; pages are rebuilt from the committed cache."
       - name: Save refreshed current-season data snapshots
