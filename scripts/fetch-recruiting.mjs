@@ -88,7 +88,8 @@ try {
 }
 if (!key) console.warn("[recruiting] CBBD_API_KEY missing; using cached provider rows for open classes.");
 for (const year of OPEN_CLASSES) {
-  let provider = (await readCache(year))?.providerRows ?? [];
+  const cached = await readCache(year);
+  let provider = cached?.providerRows ?? cached?.rows ?? [];
   if (key) {
     try {
       const rows = await fetchClass(key, year);

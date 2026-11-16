@@ -44,8 +44,13 @@ export function lastLines(t) {
   return out;
 }
 /** Picks the grid value with the lowest error; ties and no-gain go to 0 (no last season). errs: {d: sse}. */
+/**
+ * Best discount on the grid, but only if it beats "no last season" by at least MIN_GAIN (relative
+ * squared error). d is chosen on the same holdout it's scored on, so tiny wins are noise: they don't count.
+ */
+export const MIN_GAIN = 0.01;
 export function pickD(errs) {
   let best = 0;
   for (const d of D_GRID) if (errs[d] < errs[best] - 1e-12) best = d;
-  return best;
+  return best !== 0 && errs[best] <= errs[0] * (1 - MIN_GAIN) ? best : 0;
 }

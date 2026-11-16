@@ -11,7 +11,7 @@ export default function ReceiptsPage() {
   return (
     <>
       <PageHeader title="Receipts">
-        Every pick, made before tip-off, graded after the buzzer.
+        Every game predicted using only the games before it, then graded after the buzzer.
       </PageHeader>
       <ReceiptsView />
     </>

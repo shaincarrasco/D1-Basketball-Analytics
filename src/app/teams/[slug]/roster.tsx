@@ -89,7 +89,7 @@ export default function Roster({ slug, rows, fields, onOff, bios, logs, logField
   columns.push(
     n("stl", "Stl"), n("blk", "Blk"), n("tov", "TO"),
     { key: "fg", label: "FG", value: p => (p.fga ? p.fgm! / p.fga : null), render: p => <span className="text-mute">{p.fgm ?? 0}-{p.fga ?? 0}</span> },
-    { key: "3p", label: "3P", value: p => (p.tpa ? p.tpm! / p.tpa : null), render: p => <span className="text-mute">{p.tpm ?? 0}-{p.tpa ?? 0}</span> },
+    { key: "3p", label: "3P", value: p => (p.tpa && p.tpa >= 10 ? p.tpm! / p.tpa : null), title: "3-point makes-attempts; sorted by 3P%, 10+ attempts to rank", render: p => <span className="text-mute">{p.tpm ?? 0}-{p.tpa ?? 0}</span> },
     n("ts", "TS%", "True shooting %"), n("usg", "Usg%", "Share of team possessions used while on the floor"), n("ortg", "ORtg", "Points produced per 100 possessions used"),
     n("porpag", "PORPAG", "Points over replacement per adjusted game", 2), n("ws", "WS", "Win shares", 2),
   );

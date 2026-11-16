@@ -32,3 +32,9 @@ test("pickD falls back to 0 unless a discount really lowers error", () => {
   assert.equal(pickD({ 0: 1, 0.25: 1.1, 0.5: 1.2, 0.75: 1.3, 1: 1.4 }), 0);
   assert.equal(pickD({ 0: 1, 0.25: 0.9, 0.5: 0.8, 0.75: 0.85, 1: 0.95 }), 0.5);
 });
+
+test("pickD ignores noise-sized gains", () => {
+  assert.equal(pickD({ 0: 1, 0.25: 0.999, 0.5: 0.998, 0.75: 1, 1: 1 }), 0);
+  assert.equal(pickD({ 0: 1, 0.25: 0.97, 0.5: 0.95, 0.75: 0.96, 1: 0.99 }), 0.5);
+});
+

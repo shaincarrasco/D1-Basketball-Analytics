@@ -8,6 +8,8 @@ export function emptyHistory() { return { fields: ["d", "o", "x"], dates: [], pl
 
 /** entries: [{ id, dpr, dprO, dprD }]. Returns a new history (input is not mutated). */
 export function appendSnapshot(history, dateISO, entries) {
+  // Never rewrite a past day with today's numbers (a rebuild from older cached data): only the newest day or a new one.
+  if (history?.dates?.length && dateISO < history.dates[history.dates.length - 1]) return history;
   const h = history && Array.isArray(history.dates) ? structuredClone(history) : emptyHistory();
   h.fields = ["d", "o", "x"];
   let i = h.dates.indexOf(dateISO);

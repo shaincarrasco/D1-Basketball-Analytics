@@ -414,7 +414,7 @@ minimise  Σ w · (y − fit)²  +  λ · Σ (rating − prior)²        λ = ${
               Players with no prior season are unchanged.
             </p>
             <p>
-              The discount d (0, ¼, ½, ¾ or 1) is chosen per stat by the same first-half to second-half check, and a stat only uses last season if that check shows lower error; the with and without comparison is in the skills data build output.
+              The discount d (0, ¼, ½, ¾ or 1) is chosen per stat by the same first-half to second-half check, and a stat only uses last season if that check shows at least 1% lower error (the discount is picked on the same check it is scored on, so smaller wins are treated as noise). Right now that is free throws, scoring rate and turnovers; three- and two-point shooting are too noisy year to year to clear the bar; the with and without comparison is in the skills data build output.
             </p>
           </Section>
 

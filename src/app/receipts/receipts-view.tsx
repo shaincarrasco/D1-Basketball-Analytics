@@ -212,7 +212,8 @@ function LinePanel({ market }: { market: Market | null }) {
   }
   const decided = market.atsW + market.atsL;
   const atsPct = decided ? market.atsW / decided : null;
-  const behind = atsPct !== null && atsPct < 0.5;
+  // The line is "ahead" if it is more accurate OR the model hasn't beaten it against the spread over a real sample.
+  const behind = market.lineMAE < market.modelMAE || atsPct === null || decided < 100 || atsPct < 0.5;
   return (
     <div className="space-y-8">
       <section aria-labelledby="line-h">
@@ -239,7 +240,7 @@ function LinePanel({ market }: { market: Market | null }) {
         <p className="mt-3 text-[15px] leading-relaxed">
           {behind
             ? "The betting line has been more accurate than the model so far; we show this anyway."
-            : "Where the model and the line disagreed by at least half a point, the model has picked the side that covered more often than not."}
+            : "Where the model and the line disagreed by at least half a point, the model has picked the side that covered slightly more often, and its margins have been closer than the line's. Small edges like this can vanish."}
         </p>
         <p className="mt-2 text-sm text-mute">{market.note} Not betting advice.</p>
       </section>

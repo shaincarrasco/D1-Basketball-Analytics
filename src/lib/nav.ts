@@ -60,7 +60,7 @@ export const HUBS: Hub[] = [
       { href: "/matchup/", label: "Matchup simulator", desc: "Any two teams, any site, with injuries", icon: Swords },
       { href: "/lineups/", label: "Lineup lab", desc: "Put any five players on the floor and grade the fit", icon: UsersRound },
       { href: "/charts/build/", label: "Make a chart", desc: "Build, share and download your own chart", icon: PenTool },
-      { href: "/receipts/", label: "Receipts", desc: "Every pick made before tip-off, graded after", icon: Receipt },
+      { href: "/receipts/", label: "Receipts", desc: "Our track record, game by game, graded after the buzzer", icon: Receipt },
       { href: "/methodology/", label: "How it works", desc: "Every rating and projection, explained", icon: BookOpen },
     ],
   },
