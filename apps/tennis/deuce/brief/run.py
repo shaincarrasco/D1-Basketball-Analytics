@@ -9,7 +9,7 @@ import argparse
 import json
 import sqlite3
 import sys
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Optional
 
@@ -95,7 +95,7 @@ def _stale_reason(conn: sqlite3.Connection, mid: str, brief_json: str, brief_at:
 
 
 def select_matches(conn: sqlite3.Connection, match_id: Optional[str], force: bool,
-                   limit: Optional[int]) -> list[str]:
+                   limit: Optional[int], days: Optional[float] = None) -> list[str]:
     if match_id:
         return [str(match_id)]
     has_odds = "odds" in _tables(conn)
@@ -103,6 +103,10 @@ def select_matches(conn: sqlite3.Connection, match_id: Optional[str], force: boo
         "SELECT m.id, b.brief_json, b.created_at, p.created_at, p.p1_prob, p.p2_prob "
         "FROM matches m JOIN predictions p ON p.match_id = m.id LEFT JOIN briefs b ON b.match_id = m.id "
         "WHERE m.status IN ('scheduled','live') ORDER BY m.date ASC").fetchall()
+    if days is not None:   # only matches that start within the next `days` days (the site window)
+        end = (datetime.now(timezone.utc) + timedelta(days=days)).strftime("%Y-%m-%dT%H:%M:%SZ")
+        due = {r[0] for r in conn.execute("SELECT id FROM matches WHERE date <= ?", (end,))}
+        rows = [r for r in rows if r[0] in due]
     ids = []
     for mid, bj, bat, pat, p1, p2 in rows:
         if force or bj is None or _stale_reason(conn, mid, bj, bat, pat, p1, p2, has_odds):
@@ -112,7 +116,7 @@ def select_matches(conn: sqlite3.Connection, match_id: Optional[str], force: boo
 
 def run(db_path: Path, match_id: Optional[str] = None, force: bool = False, use_llm: bool = True,
         with_weather: bool = True, limit: Optional[int] = None, cfg: Optional[dict] = None,
-        out=print, transport=None) -> int:
+        out=print, transport=None, days: Optional[float] = None) -> int:
     cfg = cfg if cfg is not None else load_config()
     if not Path(db_path).exists():
         out(f"No database at {db_path}. Run `python -m engine.update` first to ingest matches and predictions.")
@@ -127,7 +131,7 @@ def run(db_path: Path, match_id: Optional[str] = None, force: bool = False, use_
             return 0
         conn.execute(BRIEFS_DDL)
         conn.commit()
-        ids = select_matches(conn, match_id, force, limit)
+        ids = select_matches(conn, match_id, force, limit, days)
         if not ids:
             out("Nothing to do: no scheduled/live matches with predictions are missing a brief "
                 "(use --force to rebuild, or --match ID).")
@@ -164,12 +168,13 @@ def main(argv: Optional[list[str]] = None) -> int:
     ap.add_argument("--no-llm", action="store_true", help="rules text only")
     ap.add_argument("--no-weather", action="store_true", help="skip Open-Meteo lookups")
     ap.add_argument("--limit", type=int, help="max matches to process")
+    ap.add_argument("--days", type=float, help="only matches starting within this many days (the site window is 10)")
     ap.add_argument("--db", help="database path (default from config)")
     ap.add_argument("--config", help="config.toml path")
     a = ap.parse_args(argv)
     cfg = load_config(a.config)
     db = Path(a.db) if a.db else resolve_db_path(cfg)
-    run(db, a.match, a.force or bool(a.match), not a.no_llm, not a.no_weather, a.limit, cfg)
+    run(db, a.match, a.force or bool(a.match), not a.no_llm, not a.no_weather, a.limit, cfg, days=a.days)
     return 0
 
 

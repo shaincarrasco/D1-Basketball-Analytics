@@ -126,7 +126,8 @@ def agreement_label(score: int) -> str:
 
 def compute_agreement(model_pick: str, buckets: list[dict]) -> dict:
     """Contract: +w if a bucket favours the pick, -w if against, 0 if level.
-    score = round(50 + 50 * sum / 12) clamped 0-100."""
+    score = round(50 + 50 * sum / max) clamped 0-100, where max = 3 per bucket (12 with four buckets, 9 with the
+    three buckets of the site view, which has no market)."""
     total = 0
     for b in buckets:
         w = STRENGTH_WEIGHT.get(b.get("strength") or "", 0)
@@ -134,7 +135,8 @@ def compute_agreement(model_pick: str, buckets: list[dict]) -> dict:
         if fav == "level" or not w:
             continue
         total += w if fav == model_pick else -w
-    score = int(clamp(round(50 + 50 * total / 12), 0, 100))
+    top = 3 * max(1, len(buckets))
+    score = int(clamp(round(50 + 50 * total / top), 0, 100))
     return {"score": score, "label": agreement_label(score)}
 
 
@@ -1106,12 +1108,16 @@ def analyze(raw: dict, config: dict | None = None) -> dict:
         top = sorted([x for x in comps if x.headline and x.fav and x.fav == favours], key=lambda x: -x.weight)
         headlines[key] = top[0].headline if top else ""
         all_comps.extend(comps)
-    m = market_state(c)
-    value = value_block(c, m)
-    mb, mcomps, mhead = market_bucket(c, m, value)
-    buckets.append(mb)
-    headlines["market"] = mhead
-    all_comps.extend(mcomps)
+    site = bool(raw.get("site_mode"))   # the public site view: three buckets, no market, no prices anywhere
+    if site:
+        m, value = None, None
+    else:
+        m = market_state(c)
+        value = value_block(c, m)
+        mb, mcomps, mhead = market_bucket(c, m, value)
+        buckets.append(mb)
+        headlines["market"] = mhead
+        all_comps.extend(mcomps)
     sig = signal_comps(c)
     if any(x.key in ("wind", "indoor_tb") for x in all_comps):
         sig = [x for x in sig if x.key != "tiebreak"]
@@ -1119,7 +1125,7 @@ def analyze(raw: dict, config: dict | None = None) -> dict:
 
     agreement = compute_agreement(c.pick, buckets)
     players = _players(c, all_comps, m)
-    bottom = rules_bottom_line(c, buckets, agreement, value, m, headlines, all_comps)
+    bottom = rules_bottom_line(c, buckets, agreement, value, m, headlines, all_comps, site=site)
     return {
         "model_pick": c.pick,
         "model_prob": round(c.p[c.pick], 3),
@@ -1201,13 +1207,14 @@ def _players(c: Ctx, comps: list[Comp], m: Optional[dict]) -> dict:
 
 def rules_bottom_line(c: Ctx, buckets: list[dict], agreement: dict, value: Optional[dict],
                       m: Optional[dict], headlines: dict[str, str],
-                      comps: Optional[list] = None) -> str:
+                      comps: Optional[list] = None, site: bool = False) -> str:
     pick = c.pick
+    nsig = "three" if site else "four"
     P, O = c.name[pick], c.name[other(pick)]
     prob = pct(c.p[pick])
     label = agreement["label"].lower()
     s1 = c.choose("bl1", [
-        f"The model leans {P} at {prob}; agreement across the four signals is {agreement['score']}/100 ({label}).",
+        f"The model leans {P} at {prob}; agreement across the {nsig} signals is {agreement['score']}/100 ({label}).",
         f"{P} is the model's pick at {prob}, and the agreement meter reads {agreement['score']}/100 ({label}).",
     ])
     against = [b for b in buckets if b["favours"] not in ("level", pick)]
@@ -1233,6 +1240,8 @@ def rules_bottom_line(c: Ctx, buckets: list[dict], agreement: dict, value: Optio
             s2 = f"The main risk: {txt}."
         else:
             s2 = f"The main risk is simply the {pct(1 - c.p[pick])} the model leaves for {O}."
+    if site:
+        return " ".join([s1, s2])
     if not m:
         s3 = "There is no market price yet, so value cannot be assessed."
     elif m.get("thin"):

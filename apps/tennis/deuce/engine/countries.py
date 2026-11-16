@@ -53,7 +53,7 @@ _GROUPS: dict[str, list[str]] = {
     "est": ["est", "estonia"],
     "svk": ["svk", "slovakia"],
     "slo": ["slo", "slovenia", "svn"],
-    "bih": ["bih", "bosnia and herzegovina", "bosnia & herzegovina"],
+    "bih": ["bih", "bos", "bosnia and herzegovina", "bosnia & herzegovina"],
     "mne": ["mne", "montenegro"],
     "mkd": ["mkd", "north macedonia", "macedonia"],
     "geo": ["geo", "georgia"],
