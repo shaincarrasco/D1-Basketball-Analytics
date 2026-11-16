@@ -6,7 +6,7 @@ export default function PlayerName({ p, won, className = "" }: { p: DPlayer; won
   return (
     <span className={`min-w-0 truncate ${className}`}>
       {p.baseline_id ? <Link href={`/player/?id=${p.baseline_id}`} className="link relative z-10">{p.name}</Link> : p.name}
-      {p.rank != null && <span className="ml-1 text-[12.5px] font-normal text-dim">#{p.rank}</span>}
+      {p.rank != null && <span className="ml-1 text-[12.5px] font-normal text-dim"><span className="sr-only">world ranking </span>#{p.rank}</span>}
       {won && <span className="sr-only"> (winner)</span>}
     </span>
   );

@@ -166,7 +166,9 @@ def export(conn: sqlite3.Connection, out_dir: Path, baseline_path: Path, now: Op
                 "country": ((hit or {}).get("country") or {}).get("short") or code3(country),
                 "baseline_id": str(hit["id"]) if hit else None,
                 "elo": None if f.get("elo") is None else round(f["elo"]),
-                "rank": f.get("rank")}
+                # World ranking from Baseline's own rankings (theScore) when matched. Deuce's per-match "rank" is the
+                # tournament seed from ESPN, which must not be shown as a ranking.
+                "rank": (hit or {}).get("rank")}
             seen_players[pid] = bool(hit)
         mid = str(r["id"])
         stored = json.loads(r["brief_json"]) if r["brief_json"] else None
