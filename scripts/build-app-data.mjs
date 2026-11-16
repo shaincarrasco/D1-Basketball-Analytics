@@ -12,7 +12,8 @@ import { boxPossessions, loadPbp, solveRapm } from "./lib/pbp-analytics.mjs";
 import { normalizeGames } from "./lib/game-status.mjs";
 import { buildInjuries } from "./lib/injuries.mjs";
 import { careersFor, CAREER_FIELDS, classRanks, normTeam, openClasses, PROSPECT_FIELDS } from "./lib/careers.mjs";
-import { readGzJson } from "./lib/gz-json.mjs";
+import { readGzJson, writeGzJson } from "./lib/gz-json.mjs";
+import { appendSnapshot, change as dprChange } from "./lib/dpr-history.mjs";
 
 const OUT = "public/data/app";
 const readJson = async path => JSON.parse(await readFile(path, "utf8"));
@@ -427,9 +428,11 @@ const dprOf = pid => {
 };
 for (const row of players) {
   const d = dprOf(row[playerIdx.id]);
-  row.push(d ? r(d.net, 2) : null, d ? r(d.O, 2) : null, d ? r(-d.D, 2) : null, d?.se != null ? r(d.se, 2) : null, d ? Math.round(d.poss) : null);
+  const bx = prior.get(aidByPid.get(row[playerIdx.id]));
+  row.push(d ? r(d.net, 2) : null, d ? r(d.O, 2) : null, d ? r(-d.D, 2) : null, d?.se != null ? r(d.se, 2) : null, d ? Math.round(d.poss) : null,
+    bx ? r(bx.O, 1) : null, bx ? r(-bx.D, 1) : null);
 }
-PLAYER_FIELDS.push("dpr", "dprO", "dprD", "dprSE", "onPoss");
+PLAYER_FIELDS.push("dpr", "dprO", "dprD", "dprSE", "onPoss", "boxO", "boxD");
 playerIdx.dpr = PLAYER_FIELDS.indexOf("dpr");
 // Recruiting stars (College Basketball Data, high-school classes 2022–2026), joined on athlete id
 // with a name + college fallback.
@@ -450,11 +453,39 @@ playerIdx.dpr = PLAYER_FIELDS.indexOf("dpr");
   console.log(`[app-data] Recruiting: ${hits} current players matched to a high-school ranking.`);
 }
 // DPR rank among players with real on-court samples.
+const DPR_MIN_POSS = 150;
 {
-  const ranked = players.filter(p => (p[PLAYER_FIELDS.indexOf("onPoss")] ?? 0) >= 150 && p[playerIdx.dpr] !== null).sort((a, b) => b[playerIdx.dpr] - a[playerIdx.dpr]);
+  const ranked = players.filter(p => (p[PLAYER_FIELDS.indexOf("onPoss")] ?? 0) >= DPR_MIN_POSS && p[playerIdx.dpr] !== null).sort((a, b) => b[playerIdx.dpr] - a[playerIdx.dpr]);
   PLAYER_FIELDS.push("dprRank");
   const rankMap = new Map(ranked.map((p, i) => [p[playerIdx.id], i + 1]));
   for (const row of players) row.push(rankMap.get(row[playerIdx.id]) ?? null);
+}
+// Daily DPR snapshots -> 30-day change (scripts/lib/dpr-history.mjs). Dated by the data's fetch date (Eastern), not the wall clock.
+const dprRisers = { since: null, rows: [], fields: ["id", "name", "team", "dpr", "dpr30", "onPoss"] };
+{
+  const snapDate = etDate(playerPayload.fetchedAt ?? new Date().toISOString());
+  const oi = PLAYER_FIELDS.indexOf("onPoss");
+  const qualified = players.filter(p => (p[oi] ?? 0) >= DPR_MIN_POSS && p[playerIdx.dpr] !== null);
+  const histPath = ".cache/dpr-history";
+  const history = appendSnapshot(await readGzJson(histPath), snapDate,
+    qualified.map(p => ({ id: p[playerIdx.id], dpr: p[playerIdx.dpr], dprO: p[PLAYER_FIELDS.indexOf("dprO")], dprD: p[PLAYER_FIELDS.indexOf("dprD")] })));
+  await mkdir(".cache", { recursive: true });
+  await writeGzJson(histPath, history);
+  PLAYER_FIELDS.push("dpr30", "dpr30Since");
+  const moves = [];
+  for (const row of players) {
+    const c = (row[oi] ?? 0) >= DPR_MIN_POSS ? dprChange(history, row[playerIdx.id], 30) : null;
+    row.push(c ? c.delta : null, c ? c.since : null);
+    if (c) moves.push({ row, delta: c.delta, since: c.since });
+  }
+  const slugOfTeam = row => summaryById.get(row[playerIdx.teamId])?.slug ?? null;
+  const mk = m => [m.row[playerIdx.id], m.row[playerIdx.name], slugOfTeam(m.row), m.row[playerIdx.dpr], m.delta, m.row[oi]];
+  const up = moves.filter(m => m.delta > 0).sort((a, b) => b.delta - a.delta).slice(0, 50);
+  const down = moves.filter(m => m.delta < 0).sort((a, b) => a.delta - b.delta).slice(0, 50);
+  dprRisers.since = moves.length ? moves.map(m => m.since).sort()[0] : null;
+  dprRisers.risers = up.map(mk); dprRisers.fallers = down.map(mk);
+  dprRisers.rows = undefined;
+  console.log(`[app-data] DPR history: ${history.dates.length} snapshot(s), ${moves.length} players with a change.`);
 }
 
 // Lineups + on/off per team.
@@ -475,7 +506,7 @@ for (const [slug, list] of lineupStints) {
   const onOff = {};
   for (const [pid, o] of on) {
     const offPoss = tPoss - o.poss;
-    onOff[pid] = { min: r(o.sec / 60), onNet: r(((o.pf - o.pa) / Math.max(1, o.poss)) * 100), offNet: offPoss > 5 ? r((((tPf - o.pf) - (tPa - o.pa)) / offPoss) * 100) : null, poss: r(o.poss) };
+    onOff[pid] = { min: r(o.sec / 60), onNet: r(((o.pf - o.pa) / Math.max(1, o.poss)) * 100), onO: o.poss > 0 ? r((o.pf / o.poss) * 100) : null, onD: o.poss > 0 ? r((o.pa / o.poss) * 100) : null, pm: o.pf - o.pa, offNet: offPoss > 5 ? r((((tPf - o.pf) - (tPa - o.pa)) / offPoss) * 100) : null, poss: r(o.poss) };
   }
   onOffBySlug.set(slug, onOff);
 }
@@ -676,6 +707,7 @@ for (const t of teamSummaries) {
 }
 await write("conferences.json", conferences);
 await write("players.json", { fields: PLAYER_FIELDS, rows: players });
+await write("risers.json", { since: dprRisers.since, fields: dprRisers.fields, risers: dprRisers.risers, fallers: dprRisers.fallers });
 
 // ---------- transfer portal (joins public/data/portal-2027.json to teams + players; see scripts/fetch-portal.mjs) ----------
 const { linkPortal } = await import("./fetch-portal.mjs");

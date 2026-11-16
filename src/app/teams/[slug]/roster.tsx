@@ -1,4 +1,5 @@
 "use client";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import DataTable, { type Column } from "@sports/ui/data-table";
 import { fmt, signed } from "@sports/ui/format";
@@ -88,9 +89,24 @@ export default function Roster({ slug, rows, fields, onOff, bios, logs, logField
   columns.push(
     n("stl", "Stl"), n("blk", "Blk"), n("tov", "TO"),
     { key: "fg", label: "FG", value: p => (p.fga ? p.fgm! / p.fga : null), render: p => <span className="text-mute">{p.fgm ?? 0}-{p.fga ?? 0}</span> },
-    { key: "3p", label: "3P", value: p => (p.tpa ? p.tpm! / p.tpa : null), render: p => <span className="text-mute">{p.tpm ?? 0}-{p.tpa ?? 0}</span> },
+    { key: "3p", label: "3P", value: p => (p.tpa && p.tpa >= 10 ? p.tpm! / p.tpa : null), title: "3-point makes-attempts; sorted by 3P%, 10+ attempts to rank", render: p => <span className="text-mute">{p.tpm ?? 0}-{p.tpa ?? 0}</span> },
     n("ts", "TS%", "True shooting %"), n("usg", "Usg%", "Share of team possessions used while on the floor"), n("ortg", "ORtg", "Points produced per 100 possessions used"),
     n("porpag", "PORPAG", "Points over replacement per adjusted game", 2), n("ws", "WS", "Win shares", 2),
   );
-  return <DataTable rows={players} columns={columns} rowKey={p => p.id} initialSort="min" caption="Roster statistics" csvName={`${slug}-roster.csv`} />;
+  return <RosterTable players={players} columns={columns} slug={slug} />;
+}
+
+// ?sort=<column> (from search, e.g. "duke 3pt") picks the starting sort; anything unknown falls back to minutes.
+function RosterTable({ players, columns, slug }: { players: Row[]; columns: Column<Row>[]; slug: string }) {
+  const [sort, setSort] = useState("min");
+  useEffect(() => {
+    const read = () => {
+      const want = new URLSearchParams(window.location.search).get("sort");
+      setSort(want && columns.some(c => c.key === want) ? want : "min");
+    };
+    read();
+    window.addEventListener("popstate", read);
+    return () => window.removeEventListener("popstate", read);
+  }, [columns]);
+  return <DataTable key={sort} rows={players} columns={columns} rowKey={p => p.id} initialSort={sort} caption="Roster statistics" csvName={`${slug}-roster.csv`} />;
 }

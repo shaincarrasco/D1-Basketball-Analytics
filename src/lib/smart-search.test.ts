@@ -12,6 +12,7 @@ const teams: SmartTeam[] = [
   T("michigan-state", "Michigan State", "Michigan St.", "big-ten", "Big Ten Conference"),
   T("uconn", "UConn", "UConn", "big-east", "Big East Conference"),
   T("byu", "BYU", "BYU", "mwc", "Mountain West Conference"),
+  T("kansas", "Kansas", "Kansas", "big-12", "Big 12 Conference"),
 ];
 const ctx = { teams };
 const q = (s: string) => parseQuery(s, ctx);
@@ -66,7 +67,39 @@ describe("parseQuery: team tabs", () => {
   });
   it("returns null for a bare team name or a team with an unknown word", () => {
     expect(q("Duke")).toBeNull();
-    expect(q("Duke points")).toBeNull();
+    expect(q("Duke vibes")).toBeNull();
+  });
+});
+
+describe("parseQuery: team + stat", () => {
+  it("sends 'duke 3pt' to the roster sorted by 3P%", () => {
+    const r = q("duke 3pt");
+    expect(r?.href).toBe("/teams/duke/?tab=roster&sort=3p");
+    expect(r?.label).toBe("Duke 3P% leaders");
+    expect(r?.chips).toEqual([
+      { kind: "team", label: "Duke" },
+      { kind: "stat", label: "3P%" },
+      { kind: "action", label: "Roster" },
+    ]);
+  });
+  it("accepts a stat in either word order, with a filler word and an alias", () => {
+    expect(q("kansas rebounds")?.href).toBe("/teams/kansas/?tab=roster&sort=reb");
+    expect(q("rebounds kansas")?.href).toBe("/teams/kansas/?tab=roster&sort=reb");
+    expect(q("unc best shooters")?.href).toBe("/teams/north-carolina/?tab=roster&sort=3p");
+  });
+  it("maps each stat to its roster column key", () => {
+    expect(q("ohio state points")?.href).toBe("/teams/ohio-state/?tab=roster&sort=pts");
+    expect(q("byu steals")?.href).toBe("/teams/byu/?tab=roster&sort=stl");
+    expect(q("duke efficiency")?.href).toBe("/teams/duke/?tab=roster&sort=ortg");
+    expect(q("duke impact")?.href).toBe("/teams/duke/?tab=roster&sort=dpr");
+  });
+  it("returns null when the stat has no roster column or two stats are named", () => {
+    expect(q("duke free throws")).toBeNull();
+    expect(q("duke dunks")).toBeNull();
+    expect(q("duke points rebounds")).toBeNull();
+  });
+  it("leaves conference and position queries to the leaderboard", () => {
+    expect(q("best 3pt shooters in the SEC")?.href).toBe("/players/?view=scoring&sort=tpPct&conf=sec");
   });
 });
 

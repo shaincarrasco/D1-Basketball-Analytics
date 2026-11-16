@@ -136,6 +136,21 @@ export const GLOSSARY: Record<string, GlossaryEntry> = {
     term: "PORPAG",
     short: "Points over replacement per adjusted game: offensive value above a replacement-level player.",
   },
+  // Per-game player stats. Ids are explicit ("ast-pg", not "ast"): bare AST/BLK/STL/TOV labels
+  // already resolve to the team-level rate entries above, which mean something different.
+  min: { term: "Minutes per game (MIN)", short: "Minutes played per game this season." },
+  pts: { term: "Points per game (PTS)", short: "Points scored per game." },
+  reb: { term: "Rebounds per game (REB)", short: "Offensive and defensive rebounds per game, combined." },
+  "ast-pg": { term: "Assists per game (AST)", short: "Assists per game." },
+  "blk-pg": { term: "Blocks per game (BLK)", short: "Blocked shots per game." },
+  "stl-pg": { term: "Steals per game (STL)", short: "Steals per game." },
+  "tov-pg": { term: "Turnovers per game (TOV)", short: "Turnovers per game. Lower is better." },
+  "pts40": { term: "Points per 40 (PTS/40)", short: "Points per game divided by minutes per game, times 40. Pace-neutral scoring for uneven minutes." },
+  "ast40": { term: "Assists per 40 (AST/40)", short: "Assists per game divided by minutes per game, times 40." },
+  "reb40": { term: "Rebounds per 40 (REB/40)", short: "Rebounds per game divided by minutes per game, times 40." },
+  "stocks40": { term: "Stocks per 40 (STK/40)", short: "Steals plus blocks per game divided by minutes per game, times 40." },
+  "ast-tov": { term: "Assists per turnover (AST/TOV)", short: "Assists per game divided by turnovers per game. Higher means cleaner ball handling." },
+  net: { term: "Net rating (ORtg − DRtg)", short: "Offensive rating minus defensive rating, both per 100 possessions. Higher is better." },
   ws: {
     term: "Win shares (WS)",
     short: "An estimate of how many team wins a player's offense and defense produced so far, from box-score stats (provider-supplied).",

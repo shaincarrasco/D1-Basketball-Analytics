@@ -159,3 +159,45 @@ export function classRanks(rows) {
   }
   return out;
 }
+
+/* ------------------------------------------------------------------ hand-kept prospects */
+
+/** "6-10", "6'10\"", "6 10" or 82 → inches. */
+export function heightInches(v) {
+  if (typeof v === "number" && Number.isFinite(v)) return Math.round(v);
+  const m = String(v ?? "").match(/^\s*(\d)\s*['\-\s]\s*(\d{1,2})/);
+  return m ? Number(m[1]) * 12 + Number(m[2]) : null;
+}
+
+/**
+ * One entry from data/prospects.json → prospect row. The college goes in by name; build-app-data
+ * matches it to a team. Returns null (with a reason) for an entry it can't use.
+ */
+export function manualProspectRow(e) {
+  if (!e || typeof e !== "object") return { row: null, why: "not an object" };
+  if (typeof e.name !== "string" || !e.name.trim()) return { row: null, why: "missing name" };
+  if (!Number.isInteger(e.year)) return { row: null, why: `${e.name}: missing class year` };
+  const n = v => (typeof v === "number" && Number.isFinite(v) ? v : null);
+  const s = v => (typeof v === "string" && v.trim() ? v.trim() : null);
+  return { row: [e.year, n(e.rank), e.name.trim(), s(e.pos), n(e.stars), n(e.rating), heightInches(e.height), n(e.weight),
+    s(e.highSchool), s(e.city), s(e.state), null, s(e.committedTo)], why: null };
+}
+
+const nameKey = (year, name) => `${year}|${String(name).toLowerCase().replace(/[^a-z]/g, "")}`;
+
+/**
+ * Provider rows + hand-kept rows for one class. A hand-kept entry with the same name and year
+ * overrides the provider's non-empty fields (so a fresh commitment can be entered before the feed
+ * catches up); new names are added.
+ */
+export function mergeProspects(providerRows, manualRows) {
+  const out = providerRows.map(r => [...r]);
+  const at = new Map(out.map((r, i) => [nameKey(r[0], r[2]), i]));
+  for (const m of manualRows) {
+    const i = at.get(nameKey(m[0], m[2]));
+    if (i === undefined) { at.set(nameKey(m[0], m[2]), out.length); out.push([...m]); continue; }
+    m.forEach((v, j) => { if (v !== null) out[i][j] = v; });
+    if (m[12] !== null) out[i][11] = null; // new college by name: let the build re-match the team
+  }
+  return out;
+}

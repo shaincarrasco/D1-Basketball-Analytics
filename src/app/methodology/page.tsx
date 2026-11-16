@@ -408,6 +408,14 @@ minimise  Σ w · (y − fit)²  +  λ · Σ (rating − prior)²        λ = ${
 
           <Section id="skills" title="Skill projections">
             <SkillsMethod />
+            <p>
+              Returning players start from their own track record, not only from players like them. Last season&apos;s totals (free-throw, three-point and two-point shooting, points per minute and turnover rate, the stats
+              we can rebuild exactly from season totals) are added to this season&apos;s evidence at a discount: projection = (count + d × last season&apos;s count + k × prior) / (opportunities + d × last season&apos;s opportunities + k).
+              Players with no prior season are unchanged.
+            </p>
+            <p>
+              The discount d (0, ¼, ½, ¾ or 1) is chosen per stat by the same first-half to second-half check, and a stat only uses last season if that check shows at least 1% lower error (the discount is picked on the same check it is scored on, so smaller wins are treated as noise). Right now that is free throws, scoring rate and turnovers; three- and two-point shooting are too noisy year to year to clear the bar; the with and without comparison is in the skills data build output.
+            </p>
           </Section>
 
           <Section id="nil" title="Estimated NIL value">

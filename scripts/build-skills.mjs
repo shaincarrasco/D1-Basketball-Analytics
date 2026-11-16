@@ -16,6 +16,11 @@
 //      So 3P% (noisy, small real spread) leans on the prior for hundreds of attempts, while
 //      usage settles in a couple of games.
 //   5. Percentiles vs D-I players averaging 10+ minutes; letter grades on the scouting scale.
+//   5b. Returning players: last season's totals (.cache/player-seasons, most recent prior season) enter
+//      as discounted observations, Marcel-style: (count + d·lastCount + k·prior) / (opps + d·lastOpps + k).
+//      Only stats that map honestly from season totals: FT%, 3P%, 2P%, points per minute, turnover rate.
+//      d (0, .25, .5, .75, 1) is fitted per stat on the first-half -> second-half holdout; d = 0 (no
+//      last season) wins whenever it doesn't lower the holdout error. Last season is not opponent-adjusted.
 //   6. Validation: refit everything on each player's first half of games, predict the second
 //      half, and compare with simply using his first-half average.
 //
@@ -23,6 +28,9 @@
 //   public/data/app/skills.json          { meta, "<playerId>": { "<stat>": { proj, pct, grade, n, raw } } }
 //   public/data/app/skills/<slug>.json   per-team detail for the player page (prior, weight, opponent factor)
 import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { readGzJson } from "./lib/gz-json.mjs";
+import { seasonFor } from "./lib/careers.mjs";
+import { D_GRID, blend, evidenceWeight, totalsById, lastLines, pickD } from "./lib/skills-prior.mjs";
 
 const APP = "public/data/app";
 const readJson = async path => JSON.parse(await readFile(path, "utf8"));
@@ -151,6 +159,11 @@ for (const row of players.rows) {
     season: { rim: [row[F.rimM], row[F.rimA]], mid: [row[F.midM], row[F.midA]] },
   });
 }
+// Last season's totals for returning players (summed over two team rows).
+const lastSeasonKey = seasonFor() - 1;
+const lastTotals = totalsById(await readGzJson(`.cache/player-seasons/${lastSeasonKey}`));
+for (const p of people) p.last = lastLines(lastTotals.get(String(p.id)));
+const LAST_KEYS = new Set(["ft", "tp", "two", "pts", "tov"]);
 // Position mean height fills a missing height.
 const htByPos = {};
 for (const p of ["G", "F", "C", null]) { const v = people.filter(x => x.pos === p && x.ht).map(x => x.ht); htByPos[p] = v.length ? v.reduce((a, b) => a + b, 0) / v.length : 77; }
@@ -202,7 +215,7 @@ const featuresOf = p => {
 // ---------- the projection engine ----------
 // sel(p) -> the games that count (all of them, or the first half for validation). Returns per-stat fits
 // and per-player { n, rawN, adjN, prior, proj, w, sched } for that game set.
-function project(sel, teamGameSel) {
+function project(sel, teamGameSel, D = {}) {
   const opp = opponentFactors(teamGameSel);
   const fits = {}, out = new Map(people.map(p => [p.id, {}]));
   for (const s of STATS) {
@@ -268,29 +281,13 @@ function project(sel, teamGameSel) {
     for (const r of rows) {
       const x = extra ? [...featuresOf(r.p), extra(r.p)] : featuresOf(r.p);
       const prior = Math.max(0, x.reduce((a, v, j) => a + v * beta[j], 0));
-      const proj = (r.adj + k * prior) / (r.d + k);
-      out.get(r.p.id)[s.key] = { n: r.d, rawN: r.n, adjN: r.adj, prior, proj, w: r.d / (r.d + k), games: r.games };
+      const last = LAST_KEYS.has(s.key) ? r.p.last[s.key] ?? null : null, dd = last ? D[s.key] ?? 0 : 0;
+      const proj = blend({ count: r.adj, opps: r.d, lastCount: last?.n, lastOpps: last?.d, prior, k, d: dd });
+      out.get(r.p.id)[s.key] = { n: r.d, rawN: r.n, adjN: r.adj, prior, proj, k, last, d: dd, w: evidenceWeight({ opps: r.d, lastOpps: last?.d, k, d: dd }), games: r.games };
     }
   }
   return { fits, out, opp };
 }
-
-// ---------- production run ----------
-const allSel = p => p.logs; allSel.all = true;
-const allTeamGames = [...teamGames.values()].flat();
-const prod = project(allSel, allTeamGames);
-
-// Percentiles vs D-I players averaging 10+ minutes; grades on the scouting-report scale
-// (src/app/player/scouting.tsx `grade`).
-const grade = pc => { const n = pc * 100; return n >= 97 ? "A+" : n >= 93 ? "A" : n >= 90 ? "A-" : n >= 85 ? "B+" : n >= 80 ? "B" : n >= 75 ? "B-" : n >= 65 ? "C+" : n >= 50 ? "C" : n >= 35 ? "C-" : n >= 25 ? "D+" : n >= 10 ? "D" : "D-"; };
-const poolIds = new Set(people.filter(p => p.mpg >= POOL_MIN).map(p => p.id));
-const pools = {};
-for (const s of STATS) pools[s.key] = people.filter(p => poolIds.has(p.id)).map(p => prod.out.get(p.id)[s.key].proj).sort((a, b) => a - b);
-const pctOf = (s, v) => {
-  const a = pools[s.key]; let lo = 0, hi = a.length;
-  if (s.invert) { while (lo < hi) { const m = (lo + hi) >> 1; if (a[m] <= v) lo = m + 1; else hi = m; } return (a.length - lo) / a.length; }
-  while (lo < hi) { const m = (lo + hi) >> 1; if (a[m] < v) lo = m + 1; else hi = m; } return lo / a.length;
-};
 
 // ---------- validation: first half of each player's games -> second half ----------
 const half = p => p.logs.slice(0, Math.floor(p.logs.length / 2));
@@ -298,7 +295,10 @@ const second = p => p.logs.slice(Math.floor(p.logs.length / 2));
 const trainTeamGames = [...teamGames.values()].flatMap(list => list.slice(0, Math.floor(list.length / 2)));
 const val = project(half, trainTeamGames);
 const validation = {};
+const lastSeason = { season: lastSeasonKey, players: people.filter(p => Object.keys(p.last).length).length, stats: {} };
+const Dfit = {};
 for (const s of STATS) {
+  const lg = { n: 0, w: 0, err: Object.fromEntries(D_GRID.map(d => [d, 0])) };
   let wsum = 0, seRaw = 0, seShr = 0, seOpp = 0, seRawAbs = 0, seShrAbs = 0, seOppAbs = 0, sePrior = 0, noise = 0, players = 0;
   const rot = { w: 0, raw: 0, proj: 0, players: 0 };
   for (const p of people) {
@@ -322,9 +322,23 @@ for (const s of STATS) {
     players++; wsum += d2;
     seRaw += d2 * (raw - truth) ** 2; seShr += d2 * (shrunkNoOpp - truth) ** 2; seOpp += d2 * (withOpp - truth) ** 2;
     seRawAbs += d2 * Math.abs(raw - truth); seShrAbs += d2 * Math.abs(shrunkNoOpp - truth); seOppAbs += d2 * Math.abs(withOpp - truth);
+    const lastP = LAST_KEYS.has(s.key) ? p.last[s.key] : null;
+    if (lastP && lastP.d > 0) {
+      lg.n++; lg.w += d2;
+      for (const dd of D_GRID) {
+        const pr = blend({ count: tr.adjN, opps: tr.n, lastCount: lastP.n, lastOpps: lastP.d, prior: tr.prior, k: val.fits[s.key].k, d: dd });
+        lg.err[dd] += d2 * (pr * (s.opp ? sched : 1) - truth) ** 2;
+      }
+    }
     sePrior += d2 * (tr.prior * (s.opp ? sched : 1) - truth) ** 2;
     if (p.mpg >= POOL_MIN) { rot.players++; rot.w += d2; rot.raw += d2 * (raw - truth) ** 2; rot.proj += d2 * ((s.opp ? withOpp : shrunkNoOpp) - truth) ** 2; }
     noise += val.fits[s.key].sigma2; // d2 × (sigma2 / d2): the part of the error nothing can remove
+  }
+  if (LAST_KEYS.has(s.key)) {
+    const d = lg.n ? pickD(lg.err) : 0;
+    Dfit[s.key] = d;
+    const sc = Math.sqrt(1 / Math.max(1e-9, lg.w)) * s.scale;
+    lastSeason.stats[s.key] = { players: lg.n, without: round(sc * Math.sqrt(lg.err[0]), 3), withLast: round(sc * Math.sqrt(lg.err[d]), 3), d, used: d > 0, byD: Object.fromEntries(D_GRID.map(x => [x, round(sc * Math.sqrt(lg.err[x]), 3)])) };
   }
   const best = s.opp ? seOpp : seShr;
   validation[s.key] = {
@@ -343,6 +357,23 @@ for (const s of STATS) {
   };
 }
 
+// ---------- production run ----------
+const allSel = p => p.logs; allSel.all = true;
+const allTeamGames = [...teamGames.values()].flat();
+const prod = project(allSel, allTeamGames, Dfit);
+
+// Percentiles vs D-I players averaging 10+ minutes; grades on the scouting-report scale
+// (src/app/player/scouting.tsx `grade`).
+const grade = pc => { const n = pc * 100; return n >= 97 ? "A+" : n >= 93 ? "A" : n >= 90 ? "A-" : n >= 85 ? "B+" : n >= 80 ? "B" : n >= 75 ? "B-" : n >= 65 ? "C+" : n >= 50 ? "C" : n >= 35 ? "C-" : n >= 25 ? "D+" : n >= 10 ? "D" : "D-"; };
+const poolIds = new Set(people.filter(p => p.mpg >= POOL_MIN).map(p => p.id));
+const pools = {};
+for (const s of STATS) pools[s.key] = people.filter(p => poolIds.has(p.id)).map(p => prod.out.get(p.id)[s.key].proj).sort((a, b) => a - b);
+const pctOf = (s, v) => {
+  const a = pools[s.key]; let lo = 0, hi = a.length;
+  if (s.invert) { while (lo < hi) { const m = (lo + hi) >> 1; if (a[m] <= v) lo = m + 1; else hi = m; } return (a.length - lo) / a.length; }
+  while (lo < hi) { const m = (lo + hi) >> 1; if (a[m] < v) lo = m + 1; else hi = m; } return lo / a.length;
+};
+
 // ---------- write ----------
 const meta = {
   built: new Date().toISOString(),
@@ -360,6 +391,8 @@ const meta = {
       validation: validation[s.key],
     };
   }),
+  lastSeason,
+  lastSeasonNote: `Returning players also carry last season's totals (${lastSeasonKey}) at a discount d per stat (0 = not used because it did not lower holdout error). Errors are RMSE in display units on returning players, with vs without last season.`,
   classGrowth: "Not modelled: the data has one season of player stats, so year-over-year growth can't be measured. Class year enters the starting point only as the level difference between this season's freshmen, sophomores, juniors and seniors.",
   validationNote: "Refit on each player's first half of games (and each team's first half for opponent factors), scored on the second half, weighted by second-half opportunities. Players with 2+ games and opportunities in both halves.",
 };
@@ -371,7 +404,7 @@ for (const p of people) {
     const x = o[s.key];
     const pc = pctOf(s, x.proj);
     entry[s.key] = { proj: round(x.proj * s.scale, 1), pct: round(pc, 2), grade: grade(pc), n: round(x.n, 0), raw: x.n > 0 ? round((x.rawN / x.n) * s.scale, 1) : null };
-    det[s.key] = { prior: round(x.prior * s.scale, 1), w: round(x.w, 3), opp: x.n > 0 && s.opp ? round(x.rawN / Math.max(1e-9, x.adjN), 3) : null, made: s.kind === "binom" ? round(x.rawN, 0) : null };
+    det[s.key] = { last: x.last && x.d > 0 ? { n: round(x.last.d, 0), rate: round((x.last.n / x.last.d) * s.scale, 1), d: x.d } : null, prior: round(x.prior * s.scale, 1), w: round(x.w, 3), opp: x.n > 0 && s.opp ? round(x.rawN / Math.max(1e-9, x.adjN), 3) : null, made: s.kind === "binom" ? round(x.rawN, 0) : null };
   }
   skills[p.id] = entry;
   if (!detail.has(p.slug)) detail.set(p.slug, {});
@@ -386,3 +419,5 @@ for (const s of meta.stats) {
   const v = s.validation;
   console.log(`[skills] ${s.short.padEnd(8)} k=${String(s.k).padStart(7)}  (${s.kSource}) league ${s.league} talent sd ${String(s.talentSd).padStart(5)}${s.talentMeasurable ? "" : "?"}  holdout RMSE raw ${v.rmseRaw} -> proj ${v.rmseProj} (shrink only ${v.rmseShrinkOnly}, prior only ${v.rmsePriorOnly}); rotation ${v.rotation.rmseRaw} -> ${v.rotation.rmseProj} (-${Math.round(v.rotation.mseCut * 100)}%); MSE -${Math.round((v.mseCut ?? 0) * 100)}%, reducible -${v.reducibleCut === null ? "n/a" : Math.round(v.reducibleCut * 100) + "%"}; n=${v.players}`);
 }
+console.log(`[skills] last season ${lastSeason.season}: ${lastSeason.players} players carry it. Holdout RMSE on returning players (display units):`);
+for (const [key, v] of Object.entries(lastSeason.stats)) console.log(`[skills]   ${key.padEnd(4)} without ${v.without}  with last ${v.withLast}  d=${v.d}${v.used ? "" : " (not used)"}  n=${v.players}  byD ${JSON.stringify(v.byD)}`);

@@ -6,6 +6,7 @@ import TeamLogo from "@sports/ui/team-logo";
 import { useJson } from "@sports/ui/client-data";
 import { fmt } from "@sports/ui/format";
 import type { CareerRow, TeamDetail, TeamSummary } from "@/lib/types";
+import CareerChart from "./career-chart";
 
 // A season is keyed by the year it ends (2027 = 2026–27). The live season is one after the newest
 // past season on file, so this never needs a yearly edit; with no history it follows the calendar
@@ -67,6 +68,7 @@ export default function Career({ detail, playerId, current }: { detail: TeamDeta
     <section className="deck min-w-0 p-5" aria-labelledby="career-h">
       <h2 id="career-h" className="h-section">Career</h2>
       <p className="mb-3 mt-1 text-sm text-mute">Per-game lines by season. Earlier seasons are every college season on record, at this school or others. Shooting % needs 10 attempts.</p>
+      <CareerChart seasons={bySeason([...prior, now])} />
       <div className="scroll-x rounded-xl border border-line">
         <table className="dt">
           <caption className="sr-only">Career stats by season</caption>
@@ -120,3 +122,23 @@ function CareerLine({ l, label, team, teamName, cell, current = false }: {
     </tr>
   );
 }
+
+/** One point per season for the chart: a mid-season transfer's two team rows become one games-weighted line. */
+function bySeason(lines: { season: number; g: number | null; ppg: number | null; rpg: number | null; apg: number | null; ts: number | null; key?: string }[]) {
+  const out = new Map<number, { season: number; ppg: number | null; rpg: number | null; apg: number | null; ts: number | null; current: boolean; w: { [k: string]: [number, number] } }>();
+  for (const l of lines) {
+    const e = out.get(l.season) ?? { season: l.season, ppg: null, rpg: null, apg: null, ts: null, current: false, w: {} };
+    const g = l.g ?? 1;
+    for (const k of ["ppg", "rpg", "apg", "ts"] as const) {
+      const v = l[k];
+      if (v == null) continue;
+      const [sum, n] = e.w[k] ?? [0, 0];
+      e.w[k] = [sum + v * g, n + g];
+      e[k] = Math.round(((sum + v * g) / (n + g)) * 10) / 10;
+    }
+    e.current = e.current || l.key === "current";
+    out.set(l.season, e);
+  }
+  return [...out.values()].sort((a, b) => a.season - b.season).map(({ w: _w, ...rest }) => rest);
+}
+
