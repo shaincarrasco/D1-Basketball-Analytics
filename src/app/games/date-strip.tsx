@@ -51,7 +51,7 @@ export default function DateStrip({ index, day, today, home, onSelect }: Props) 
             const sel = d.day === day, isToday = d.day === today;
             return (
               <button key={d.day} data-day={d.day} onClick={() => onSelect(d.day)} aria-pressed={sel} aria-label={`${dayLabel(d.day, { weekday: "long", month: "long", day: "numeric" })}${isToday ? " (today)" : ""}, ${d.games} games`}
-                className={`flex w-[68px] shrink-0 flex-col items-center rounded-xl border px-1 py-1.5 leading-none transition-colors ${sel ? "border-bulb bg-bulb text-scoreboard" : "border-line bg-deck text-mute hover:border-line2 hover:text-ink"}`}>
+                className={`flex w-[68px] shrink-0 flex-col items-center rounded-xl border px-1 py-1.5 leading-none transition-colors ${sel ? "border-ink bg-ink text-scoreboard" : "border-line bg-deck text-mute hover:border-line2 hover:text-ink"}`}>
                 <span className={`text-[11px] font-semibold ${isToday && !sel ? "text-off" : ""}`}>{isToday ? "Today" : dayLabel(d.day, { weekday: "short" })}</span>
                 <span className={`mt-1 font-display text-[1.2rem] font-extrabold ${sel ? "" : "text-ink"}`}>{dayLabel(d.day, { month: "short", day: "numeric" })}</span>
                 <span className="mt-1 text-[11px] tnum">{d.games} {d.games === 1 ? "game" : "games"}</span>

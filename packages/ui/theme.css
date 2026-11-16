@@ -11,26 +11,28 @@
   own meanings: off, def, win/good, loss/bad, hot.
 */
 html[data-palette="primetime"] {
+  /* Neutral black, like the sports apps people already use: no tint in the surfaces, white for
+     scores and the current choice, team colours for teams. Orange is the brand and links only. */
   color-scheme: dark;
-  --bg-rgb: 7 8 15;
-  --deck-rgb: 18 21 36;
-  --deck-2-rgb: 26 30 50;
-  --line-rgb: 36 41 66;
-  --line-2-rgb: 56 62 94;
-  --ink-rgb: 245 246 250;
-  --mute-rgb: 168 174 198;
-  --dim-rgb: 118 125 152;
-  --bulb-rgb: 255 122 26;
-  --off-rgb: 255 196 77;
-  --def-rgb: 92 168 255;
-  --hot-rgb: 255 61 138;
-  --win-rgb: 52 236 160;
-  --loss-rgb: 255 86 112;
-  --good-rgb: 52 236 160;
-  --bad-rgb: 255 86 112;
-  --scoreboard-rgb: 4 5 10;
+  --bg-rgb: 0 0 0;
+  --deck-rgb: 21 21 23;
+  --deck-2-rgb: 32 32 35;
+  --line-rgb: 42 42 46;
+  --line-2-rgb: 68 68 74;
+  --ink-rgb: 255 255 255;
+  --mute-rgb: 162 162 170;
+  --dim-rgb: 112 112 120;
+  --bulb-rgb: 255 138 58;
+  --off-rgb: 235 190 96;
+  --def-rgb: 104 166 240;
+  --hot-rgb: 255 82 72;
+  --win-rgb: 60 204 110;
+  --loss-rgb: 255 110 100;
+  --good-rgb: 60 204 110;
+  --bad-rgb: 255 110 100;
+  --scoreboard-rgb: 0 0 0;
   --heat-k: 0.9;
-  --glow: 1.25;
+  --glow: 0;
   --shadow: none;
 }
 html[data-palette="arena"] {
@@ -367,7 +369,7 @@ html[data-theme="dark"] {
   .btn-primary, html[data-theme="dark"] .btn-primary { background: var(--bulb); border-color: var(--bulb); color: var(--scoreboard); box-shadow: none; }
   html[data-theme="dark"] .chip { border-color: var(--line); background: transparent; }
   html[data-theme="dark"] .chip:hover { border-color: var(--line-2); background: rgb(255 255 255 / 0.04); }
-  html[data-theme="dark"] .chip[aria-pressed="true"], html[data-theme="dark"] .chip[aria-current="page"] { background: var(--bulb); border-color: var(--bulb); color: var(--scoreboard); }
+  html[data-theme="dark"] .chip[aria-pressed="true"], html[data-theme="dark"] .chip[aria-current="page"] { background: var(--ink); border-color: var(--ink); color: var(--bg); }
   html[data-theme="dark"] .seg { background: rgb(0 0 0 / 0.35); box-shadow: inset 0 0 0 1px var(--edge); }
   html[data-theme="dark"] .seg > [aria-pressed="true"], html[data-theme="dark"] .seg > [aria-current="page"] { background: var(--deck-2); box-shadow: inset 0 0 0 1px var(--edge); }
   html[data-theme="dark"] .field { background: rgb(0 0 0 / 0.3); border-color: var(--edge); }
@@ -380,17 +382,15 @@ html[data-theme="dark"] {
   html[data-theme="dark"] .dt tbody tr:hover td.sticky-col { background: color-mix(in srgb, var(--bulb) 6%, var(--bg)); }
 }
 
-/* The scoreboard: an LED panel, the one loud object on the page. */
-html[data-theme="dark"] .plate {
-  background:
-    radial-gradient(circle, rgb(255 255 255 / 0.05) 0.9px, transparent 1.3px) 0 0 / 5px 5px,
-    linear-gradient(180deg, color-mix(in srgb, var(--scoreboard) 70%, #1a1d2e), var(--scoreboard));
-  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.07), inset 0 12px 28px rgb(0 0 0 / 0.65), 0 14px 32px -16px rgb(0 0 0 / 0.9);
-}
-html[data-theme="dark"] .plate .dots:not(.dots-unlit):not(.dots-off) {
-  text-shadow: 0 0 6px rgb(var(--bulb-rgb) / 0.85), 0 0 22px rgb(var(--bulb-rgb) / 0.45), 0 0 44px rgb(var(--bulb-rgb) / 0.2);
-}
-html[data-theme="dark"] .dots-glow { text-shadow: 0 0 10px rgb(var(--bulb-rgb) / 0.6), 0 0 26px rgb(var(--bulb-rgb) / 0.25); }
+/* Scores: plain white numerals in the display face. No LED panel, no dot-matrix, no glow:
+   a score is the content, so it is set like content. */
+html[data-theme="dark"] .dots { font-family: var(--font-display); font-weight: 800; color: var(--ink); letter-spacing: 0; text-shadow: none; animation: none; }
+html[data-theme="dark"] .dots.dots-off { color: var(--mute); }
+html[data-theme="dark"] .dots.dots-unlit { display: none; }
+html[data-theme="dark"] .plate { background: none; box-shadow: none; }
+html[data-theme="dark"] .plate .dots { color: var(--ink); animation: none; }
+html[data-theme="dark"] .plate .dots.dots-off { color: var(--dim); }
+html[data-theme="dark"] .rank-cell { font-family: var(--font-display); font-weight: 700; color: var(--mute); }
 
 /* Chrome: one hairline under the header and over the tab bar. The current hub is marked by colour alone. */
 html[data-theme="dark"] header.sticky { border-bottom-color: var(--edge); }

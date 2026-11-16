@@ -8,7 +8,7 @@ export type Mode = "dark" | "light";
 export type Palette = { id: string; name: string; note: string; mode: Mode; bg: string; deck: string; ink: string; accent: string; themeColor: string };
 
 export const PALETTES: Palette[] = [
-  { id: "primetime", name: "Primetime", note: "Arena lights down, ball-orange neon", mode: "dark", bg: "#07080F", deck: "#121524", ink: "#F5F6FA", accent: "#FF7A1A", themeColor: "#07080F" },
+  { id: "primetime", name: "Primetime", note: "Neutral black, white scores, team colours", mode: "dark", bg: "#000000", deck: "#151517", ink: "#FFFFFF", accent: "#FF8A3A", themeColor: "#000000" },
   { id: "blacktop", name: "Blacktop", note: "Night court, electric blue", mode: "dark", bg: "#0E0F12", deck: "#191B20", ink: "#F2F3F5", accent: "#3DA9FF", themeColor: "#0E0F12" },
   { id: "arena", name: "Arena", note: "Scoreboard navy, amber bulbs", mode: "dark", bg: "#0F1B2E", deck: "#16263D", ink: "#EEF2F7", accent: "#FFB31F", themeColor: "#0F1B2E" },
   { id: "hardwood", name: "Hardwood", note: "Maple floor, painted lines", mode: "light", bg: "#F3EADB", deck: "#FCF8F1", ink: "#221A12", accent: "#C2560E", themeColor: "#F3EADB" },

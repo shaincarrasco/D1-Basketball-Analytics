@@ -140,7 +140,7 @@ export default function GamesHub() {
       <DateStrip index={index.data} day={day} today={today} home={home} onSelect={selectDay} />
 
       <div className="mb-4 flex flex-wrap items-baseline gap-x-4 gap-y-1">
-        <h2 className="h-section">{dayLabel(day, { weekday: "long", month: "long", day: "numeric" })}{day === today ? <span className="ml-2 text-off">Today</span> : null}</h2>
+        <h2 className="h-section">{dayLabel(day, { weekday: "long", month: "long", day: "numeric" })}</h2>
         {summary && games && <DaySummaryLine s={summary} projections={showProj} onOpen={openGame} liveData={live.hasData} updated={live.updated} />}
       </div>
 
@@ -202,9 +202,9 @@ export default function GamesHub() {
               <button className="btn mt-3" onClick={() => { setFilter("all"); setConf("all"); }}>Show all {games.length} games</button>
             </Empty>
           ) : (
-            <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4" aria-label={liveView ? `${liveList.length} live games, most exciting first` : `${shown.length} games`} data-testid="game-list">
+            <ul className="grid grid-cols-1 overflow-hidden rounded-[14px] border-l border-t border-line bg-deck sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4" aria-label={liveView ? `${liveList.length} live games, most exciting first` : `${shown.length} games`} data-testid="game-list">
               {(liveView ? liveList : shown).map(g => (
-                <li key={g.id} data-game={g.id} className="flex">
+                <li key={g.id} data-game={g.id} className="flex border-b border-r border-line">
                   <GameCard g={g} live={live.byGame.get(g.id)} onOpen={openGame} absences={absences} moment={moments.get(g.id)} />
                 </li>
               ))}
