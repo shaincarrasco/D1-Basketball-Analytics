@@ -124,6 +124,17 @@ jobs:
         continue-on-error: true
         timeout-minutes: 5
         run: pip install -r apps/tennis/deuce/requirements.txt || echo "::warning::Deuce dependencies failed to install; predictions keep the last snapshot."
+      - name: Deuce model week
+        id: deuce_week
+        run: echo "week=$(date -u +%G-%V)" >> "$GITHUB_OUTPUT"
+      - name: Cache the Deuce model (retrained weekly or when the engine code changes, not every hourly run)
+        continue-on-error: true
+        uses: actions/cache@v4
+        with:
+          path: |
+            apps/tennis/deuce/data/model.pkl
+            apps/tennis/deuce/data/oos_preds.pkl
+          key: deuce-model-${{ hashFiles('apps/tennis/deuce/engine/**/*.py', 'apps/tennis/deuce/requirements.txt') }}-${{ steps.deuce_week.outputs.week }}
       - name: Deuce update (compact cache + ESPN, Live Tennis API, Tennis API; ratings, model, predictions)
         continue-on-error: true
         timeout-minutes: 8
