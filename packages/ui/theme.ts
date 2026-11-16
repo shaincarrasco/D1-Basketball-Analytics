@@ -8,6 +8,7 @@ export type Mode = "dark" | "light";
 export type Palette = { id: string; name: string; note: string; mode: Mode; bg: string; deck: string; ink: string; accent: string; themeColor: string };
 
 export const PALETTES: Palette[] = [
+  { id: "primetime", name: "Primetime", note: "Arena lights down, ball-orange neon", mode: "dark", bg: "#07080F", deck: "#121524", ink: "#F5F6FA", accent: "#FF7A1A", themeColor: "#07080F" },
   { id: "blacktop", name: "Blacktop", note: "Night court, electric blue", mode: "dark", bg: "#0E0F12", deck: "#191B20", ink: "#F2F3F5", accent: "#3DA9FF", themeColor: "#0E0F12" },
   { id: "arena", name: "Arena", note: "Scoreboard navy, amber bulbs", mode: "dark", bg: "#0F1B2E", deck: "#16263D", ink: "#EEF2F7", accent: "#FFB31F", themeColor: "#0F1B2E" },
   { id: "hardwood", name: "Hardwood", note: "Maple floor, painted lines", mode: "light", bg: "#F3EADB", deck: "#FCF8F1", ink: "#221A12", accent: "#C2560E", themeColor: "#F3EADB" },
@@ -27,7 +28,14 @@ export const ACCENTS: { name: string; hex: string | null }[] = [
 ];
 
 export const DEFAULT_PALETTE = "blacktop";
-export const AUTO = "auto"; // follow the device: Blacktop when dark, Day game when light
+export const AUTO = "auto"; // follow the device: the site's dark default when dark, Day game when light
+
+/** The site's own default palette (set on <html> by the theme script), else DEFAULT_PALETTE. */
+export function siteDefault(): string {
+  if (typeof document === "undefined") return DEFAULT_PALETTE;
+  const d = document.documentElement.dataset.defaultPalette;
+  return d && PALETTES.some(p => p.id === d) ? d : DEFAULT_PALETTE;
+}
 const K_PALETTE = "d1h-palette", K_ACCENT = "d1h-accent", K_LEGACY = "d1h-theme";
 const HEX = /^#[0-9a-f]{6}$/i;
 
@@ -41,16 +49,16 @@ export function hexToChannels(hex: string) {
 export function readChoice(): ThemeChoice {
   try {
     let palette = localStorage.getItem(K_PALETTE);
-    if (!palette) { const legacy = localStorage.getItem(K_LEGACY); palette = legacy === "light" ? "daygame" : legacy === "dark" ? DEFAULT_PALETTE : AUTO; }
+    if (!palette) { const legacy = localStorage.getItem(K_LEGACY); palette = legacy === "light" ? "daygame" : siteDefault(); }
     const accent = localStorage.getItem(K_ACCENT);
     return { palette: palette === AUTO || PALETTES.some(p => p.id === palette) ? palette : AUTO, accent: accent && HEX.test(accent) ? accent : null };
-  } catch { return { palette: AUTO, accent: null }; }
+  } catch { return { palette: siteDefault(), accent: null }; }
 }
 
 export function resolvePalette(id: string): Palette {
   if (id === AUTO) {
     const light = typeof matchMedia !== "undefined" && matchMedia("(prefers-color-scheme: light)").matches;
-    return PALETTES.find(p => p.id === (light ? "daygame" : DEFAULT_PALETTE))!;
+    return PALETTES.find(p => p.id === (light ? "daygame" : siteDefault()))!;
   }
   return PALETTES.find(p => p.id === id) ?? PALETTES[0];
 }
@@ -74,5 +82,9 @@ export function saveChoice(c: ThemeChoice) {
   window.dispatchEvent(new Event("d1h-theme-change"));
 }
 
-/** Inline script for <head>: applies the saved theme before first paint (no flash). */
-export const THEME_SCRIPT = `(function(){try{var P=${JSON.stringify(PALETTES.map(p => [p.id, p.mode, p.themeColor]))};var s=localStorage,id=s.getItem("${K_PALETTE}");if(!id){var l=s.getItem("${K_LEGACY}");id=l==="light"?"daygame":l==="dark"?"${DEFAULT_PALETTE}":"auto"}if(id==="auto")id=matchMedia("(prefers-color-scheme: light)").matches?"daygame":"${DEFAULT_PALETTE}";var p=P.filter(function(x){return x[0]===id})[0]||P[0];var e=document.documentElement;e.dataset.palette=p[0];e.dataset.theme=p[1];var a=s.getItem("${K_ACCENT}");if(a&&/^#[0-9a-f]{6}$/i.test(a)){var n=parseInt(a.slice(1),16);e.style.setProperty("--bulb-rgb",(n>>16&255)+" "+(n>>8&255)+" "+(n&255))}var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute("content",p[2])}catch(x){document.documentElement.dataset.palette="${DEFAULT_PALETTE}";document.documentElement.dataset.theme="dark"}})()`;
+/** Inline script for <head>: applies the saved theme before first paint (no flash). A first
+ *  visit gets the site's default palette (dark), not the device setting. */
+export function themeScript(def: string = DEFAULT_PALETTE) {
+  return `(function(){var D=${JSON.stringify(def)};var e=document.documentElement;e.dataset.defaultPalette=D;try{var P=${JSON.stringify(PALETTES.map(p => [p.id, p.mode, p.themeColor]))};var s=localStorage,id=s.getItem("${K_PALETTE}");if(!id){var l=s.getItem("${K_LEGACY}");id=l==="light"?"daygame":D}if(id==="auto")id=matchMedia("(prefers-color-scheme: light)").matches?"daygame":D;var p=P.filter(function(x){return x[0]===id})[0]||P.filter(function(x){return x[0]===D})[0]||P[0];e.dataset.palette=p[0];e.dataset.theme=p[1];var a=s.getItem("${K_ACCENT}");if(a&&/^#[0-9a-f]{6}$/i.test(a)){var n=parseInt(a.slice(1),16);e.style.setProperty("--bulb-rgb",(n>>16&255)+" "+(n>>8&255)+" "+(n&255))}var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute("content",p[2])}catch(x){e.dataset.palette=D;e.dataset.theme="dark"}})()`;
+}
+export const THEME_SCRIPT = themeScript();

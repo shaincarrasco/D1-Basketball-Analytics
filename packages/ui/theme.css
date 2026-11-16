@@ -10,6 +10,29 @@
   viewers can override from the picker. Offence/defence, good/bad and live keep their
   own meanings: off, def, win/good, loss/bad, hot.
 */
+html[data-palette="primetime"] {
+  color-scheme: dark;
+  --bg-rgb: 7 8 15;
+  --deck-rgb: 18 21 36;
+  --deck-2-rgb: 26 30 50;
+  --line-rgb: 36 41 66;
+  --line-2-rgb: 56 62 94;
+  --ink-rgb: 245 246 250;
+  --mute-rgb: 168 174 198;
+  --dim-rgb: 118 125 152;
+  --bulb-rgb: 255 122 26;
+  --off-rgb: 255 196 77;
+  --def-rgb: 92 168 255;
+  --hot-rgb: 255 61 138;
+  --win-rgb: 52 236 160;
+  --loss-rgb: 255 86 112;
+  --good-rgb: 52 236 160;
+  --bad-rgb: 255 86 112;
+  --scoreboard-rgb: 4 5 10;
+  --heat-k: 0.9;
+  --glow: 1.25;
+  --shadow: none;
+}
 html[data-palette="arena"] {
   color-scheme: dark;
   --bg-rgb: 15 27 46;
@@ -314,3 +337,78 @@ img, svg { -webkit-user-drag: none; }
 @media (max-width: 1023px) {
   header.sticky, nav[aria-label="Tabs"] { background: var(--bg) !important; -webkit-backdrop-filter: none; backdrop-filter: none; }
 }
+
+
+/* ==========================================================================
+   Primetime polish: the arena with the house lights down. One overhead light
+   over the court, surfaces lit from above, and the scoreboard as the one loud
+   thing on every screen. Applies to every dark palette; the atmosphere layer
+   is Primetime only.
+   ========================================================================== */
+html[data-palette="primetime"] body {
+  background:
+    radial-gradient(ellipse 70% 460px at 50% -160px, rgb(var(--bulb-rgb) / 0.14), transparent 72%),
+    radial-gradient(ellipse 55% 520px at 105% 0%, rgb(92 74 255 / 0.10), transparent 70%),
+    radial-gradient(ellipse 45% 420px at -5% 30%, rgb(var(--def-rgb) / 0.05), transparent 70%),
+    var(--bg);
+  background-attachment: fixed;
+}
+
+html[data-theme="dark"] {
+  --edge: rgb(255 255 255 / 0.065);
+  --lift: inset 0 1px 0 rgb(255 255 255 / 0.055), 0 24px 48px -28px rgb(0 0 0 / 0.85);
+}
+@layer components {
+  html[data-theme="dark"] .deck {
+    background: linear-gradient(180deg, rgb(255 255 255 / 0.03), rgb(255 255 255 / 0) 42%), var(--deck);
+    border-color: var(--edge);
+    box-shadow: var(--lift);
+  }
+  html[data-theme="dark"] .deck-flat { border-color: var(--edge); box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.04); }
+  html[data-theme="dark"] ul.bg-deck, html[data-theme="dark"] div.bg-deck.rounded-\[18px\] { box-shadow: var(--lift); outline: 1px solid var(--edge); outline-offset: -1px; }
+
+  .h-section { font-weight: 900; font-size: 1.6rem; line-height: 1.05; letter-spacing: 0.002em; }
+  @media (min-width: 640px) { .h-section { font-size: 1.85rem; } }
+
+  html[data-theme="dark"] .btn { background: linear-gradient(180deg, rgb(255 255 255 / 0.06), rgb(255 255 255 / 0.015)), var(--deck); border-color: var(--edge); box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.06); }
+  html[data-theme="dark"] .btn:hover { border-color: rgb(var(--bulb-rgb) / 0.55); }
+  .btn-primary, html[data-theme="dark"] .btn-primary { background: var(--bulb); border-color: var(--bulb); color: var(--scoreboard); box-shadow: 0 10px 28px -10px rgb(var(--bulb-rgb) / 0.75), inset 0 1px 0 rgb(255 255 255 / 0.35); }
+  html[data-theme="dark"] .chip { border-color: var(--edge); background: rgb(255 255 255 / 0.025); }
+  html[data-theme="dark"] .chip:hover { border-color: rgb(var(--bulb-rgb) / 0.45); }
+  html[data-theme="dark"] .chip[aria-pressed="true"], html[data-theme="dark"] .chip[aria-current="page"] { background: var(--bulb); border-color: var(--bulb); color: var(--scoreboard); box-shadow: 0 6px 18px -8px rgb(var(--bulb-rgb) / 0.8); }
+  html[data-theme="dark"] .seg { background: rgb(0 0 0 / 0.35); box-shadow: inset 0 0 0 1px var(--edge); }
+  html[data-theme="dark"] .seg > [aria-pressed="true"], html[data-theme="dark"] .seg > [aria-current="page"] { background: linear-gradient(180deg, rgb(255 255 255 / 0.09), rgb(255 255 255 / 0.03)), var(--deck-2); box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.08), 0 4px 12px -4px rgb(0 0 0 / 0.7); }
+  html[data-theme="dark"] .field { background: rgb(0 0 0 / 0.3); border-color: var(--edge); }
+  html[data-theme="dark"] .field:focus { border-color: rgb(var(--bulb-rgb) / 0.7); box-shadow: 0 0 0 3px rgb(var(--bulb-rgb) / 0.18); outline: none; }
+
+  /* Tables: quieter rules, a lit header, rows that answer the pointer in the accent. */
+  html[data-theme="dark"] .dt th { background: color-mix(in srgb, var(--deck) 88%, black); color: var(--dim); letter-spacing: 0.01em; border-bottom-color: var(--edge); }
+  html[data-theme="dark"] .dt td { border-bottom-color: rgb(255 255 255 / 0.045); }
+  html[data-theme="dark"] .dt tbody tr:hover td { background: rgb(var(--bulb-rgb) / 0.06); }
+  html[data-theme="dark"] .dt tbody tr:hover td.sticky-col { background: color-mix(in srgb, var(--bulb) 6%, var(--bg)); }
+}
+
+/* The scoreboard: an LED panel, the one loud object on the page. */
+html[data-theme="dark"] .plate {
+  background:
+    radial-gradient(circle, rgb(255 255 255 / 0.05) 0.9px, transparent 1.3px) 0 0 / 5px 5px,
+    linear-gradient(180deg, color-mix(in srgb, var(--scoreboard) 70%, #1a1d2e), var(--scoreboard));
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.07), inset 0 12px 28px rgb(0 0 0 / 0.65), 0 14px 32px -16px rgb(0 0 0 / 0.9);
+}
+html[data-theme="dark"] .plate .dots:not(.dots-unlit):not(.dots-off) {
+  text-shadow: 0 0 6px rgb(var(--bulb-rgb) / 0.85), 0 0 22px rgb(var(--bulb-rgb) / 0.45), 0 0 44px rgb(var(--bulb-rgb) / 0.2);
+}
+html[data-theme="dark"] .dots-glow { text-shadow: 0 0 10px rgb(var(--bulb-rgb) / 0.6), 0 0 26px rgb(var(--bulb-rgb) / 0.25); }
+
+/* Chrome: the header carries a thin line of court light; the active hub glows. */
+html[data-theme="dark"] header.sticky { border-bottom-color: transparent; }
+html[data-theme="dark"] header.sticky::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgb(var(--bulb-rgb) / 0.5) 30%, rgb(var(--bulb-rgb) / 0.5) 70%, transparent), var(--edge);
+}
+html[data-theme="dark"] header nav [aria-current="page"]::after { box-shadow: 0 0 14px rgb(var(--bulb-rgb) / 0.9), 0 0 4px rgb(var(--bulb-rgb)); }
+html[data-theme="dark"] nav[aria-label="Tabs"] { border-top-color: var(--edge); }
+html[data-theme="dark"] nav[aria-label="Tabs"] [aria-current="page"] svg { filter: drop-shadow(0 0 6px rgb(var(--bulb-rgb) / 0.75)); }
+
+/* Big titles: tight and heavy, like a broadcast lower-third. */
+.hero-title { font-family: var(--font-display); font-weight: 900; line-height: 0.86; letter-spacing: -0.012em; }
