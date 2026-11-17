@@ -29,7 +29,10 @@ const DEFAULTS_BASE = {
   homeEdgePrior: 4.7, // net points per 100 possessions (≈3.2 points per game)
   homeEdgeWeight: 1000, // games of prior weight on the home edge (early-season buy games bias it upward)
   seasonPriorWeight: 5, // games of weight on a regressed previous-season rating, when supplied
-  seasonRegression: 0.6, // fraction of last season's margin carried forward
+  // Fraction of last season's margin carried forward. 0.6 squeezed early-season margins to about 60% of the
+  // sportsbook's; 0.8 cut the walk-forward margin miss from 10.9 to 10.45 points through Nov 15, 2026 with the same
+  // pick accuracy and Brier score. 0.9 and above cost accuracy and calibration.
+  seasonRegression: 0.8,
   nonD1Weight: 0.5,
   gameSigma: 10.5, // irreducible single-game margin noise in points
   netSigmaPer100: 15.7, // single-game net-efficiency noise used for rating uncertainty

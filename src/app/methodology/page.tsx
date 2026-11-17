@@ -14,7 +14,7 @@ import FormMethodology, { FORM_GLOSSARY, FORM_TOC } from "@/components/form/form
 export const metadata: Metadata = { title: "Methodology", description: "How the D1 Hoops Power Rating (DHR) is built, how its predictions work, how accurate they have been, and what every metric on the site means." };
 
 // Constants from scripts/lib/rating-model.mjs that meta.json does not carry.
-const GAME_SIGMA = 10.5, NET_SIGMA = 15.7, SEASON_PRIOR_WEIGHT = 5, SEASON_REGRESSION = 0.6, FALLBACK_POSS = 69;
+const GAME_SIGMA = 10.5, NET_SIGMA = 15.7, SEASON_PRIOR_WEIGHT = 5, SEASON_REGRESSION = 0.8, FALLBACK_POSS = 69;
 
 const TOC = [
   { id: "overview", label: "Overview" },
