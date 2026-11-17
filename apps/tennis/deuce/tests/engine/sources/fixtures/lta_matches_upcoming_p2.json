@@ -1,0 +1,271 @@
+{
+ "data": [
+  {
+   "id": 20109,
+   "tournament": "Basel",
+   "tournament_id": "902",
+   "tour": "atp",
+   "tier": "atp_500",
+   "tier_source": "calendar",
+   "surface": "hard",
+   "indoor": true,
+   "format": "BO3",
+   "round": "Quarter-finals",
+   "round_code": "QF",
+   "is_qualifying": false,
+   "qualifying": false,
+   "status": "upcoming",
+   "event_status": null,
+   "event_status_updated_at": null,
+   "is_doubles": false,
+   "draw": "singles",
+   "gender": "men",
+   "scheduled_time": "2026-11-17T15:00:00Z",
+   "live_at": null,
+   "result_restated_at": null,
+   "result_version": 1,
+   "players": {
+    "p1": {
+     "id": 71,
+     "name": "Joao Fonseca",
+     "tour": "atp",
+     "country": "bra",
+     "ranking": 25,
+     "ranking_points": null
+    },
+    "p2": {
+     "id": 72,
+     "name": "Casper Ruud",
+     "tour": "atp",
+     "country": "nor",
+     "ranking": 12,
+     "ranking_points": null
+    }
+   },
+   "score": null,
+   "winner": null,
+   "outcome": null,
+   "withdrew": null,
+   "has_analysis": false,
+   "has_market": false
+  },
+  {
+   "id": 20110,
+   "tournament": "Mallorca Challenger",
+   "tournament_id": "5530",
+   "tour": "challenger",
+   "tier": null,
+   "tier_source": "calendar",
+   "surface": null,
+   "indoor": null,
+   "format": null,
+   "round": null,
+   "round_code": null,
+   "is_qualifying": false,
+   "qualifying": false,
+   "status": "upcoming",
+   "event_status": null,
+   "event_status_updated_at": null,
+   "is_doubles": false,
+   "draw": "singles",
+   "gender": null,
+   "scheduled_time": "2026-11-17T08:00:00Z",
+   "live_at": null,
+   "result_restated_at": null,
+   "result_version": 1,
+   "players": {
+    "p1": {
+     "id": 81,
+     "name": "Pol Martin Tiffon",
+     "tour": "atp",
+     "country": "esp",
+     "ranking": null,
+     "ranking_points": null
+    },
+    "p2": {
+     "id": 82,
+     "name": "Daniel Rincon",
+     "tour": "atp",
+     "country": "esp",
+     "ranking": null,
+     "ranking_points": null
+    }
+   },
+   "score": null,
+   "winner": null,
+   "outcome": null,
+   "withdrew": null,
+   "has_analysis": false,
+   "has_market": false
+  },
+  {
+   "id": 20111,
+   "tournament": "Nitto ATP Finals",
+   "tournament_id": "1301",
+   "tour": "atp",
+   "tier": "atp_finals",
+   "tier_source": "calendar",
+   "surface": "hard",
+   "indoor": true,
+   "format": "BO3",
+   "round": "Round Robin",
+   "round_code": "RR",
+   "is_qualifying": false,
+   "qualifying": false,
+   "status": "upcoming",
+   "event_status": null,
+   "event_status_updated_at": null,
+   "is_doubles": true,
+   "draw": "doubles",
+   "gender": "men",
+   "scheduled_time": "2026-11-17T18:00:00Z",
+   "live_at": null,
+   "result_restated_at": null,
+   "result_version": 1,
+   "players": {
+    "p1": {
+     "id": 91,
+     "name": "Harri Heliovaara",
+     "tour": "atp",
+     "country": "fin",
+     "ranking": null,
+     "ranking_points": null
+    },
+    "p2": {
+     "id": 92,
+     "name": "Henry Patten",
+     "tour": "atp",
+     "country": "gbr",
+     "ranking": null,
+     "ranking_points": null
+    }
+   },
+   "score": null,
+   "winner": null,
+   "outcome": null,
+   "withdrew": null,
+   "has_analysis": false,
+   "has_market": false
+  },
+  {
+   "id": 20112,
+   "tournament": "Junior Slam",
+   "tournament_id": "1218",
+   "tour": "juniors",
+   "tier": "juniors",
+   "tier_source": "calendar",
+   "surface": "hard",
+   "indoor": false,
+   "format": "BO3",
+   "round": "R1",
+   "round_code": "R128",
+   "is_qualifying": false,
+   "qualifying": false,
+   "status": "upcoming",
+   "event_status": null,
+   "event_status_updated_at": null,
+   "is_doubles": false,
+   "draw": "singles",
+   "gender": "men",
+   "scheduled_time": "2026-11-17T04:00:00Z",
+   "live_at": null,
+   "result_restated_at": null,
+   "result_version": 1,
+   "players": {
+    "p1": {
+     "id": 93,
+     "name": "A Junior",
+     "tour": "atp",
+     "country": "usa",
+     "ranking": null,
+     "ranking_points": null
+    },
+    "p2": {
+     "id": 94,
+     "name": "B Junior",
+     "tour": "atp",
+     "country": "can",
+     "ranking": null,
+     "ranking_points": null
+    }
+   },
+   "score": null,
+   "winner": null,
+   "outcome": null,
+   "withdrew": null,
+   "has_analysis": false,
+   "has_market": false
+  },
+  {
+   "id": 20113,
+   "tournament": "Broken",
+   "status": "upcoming",
+   "players": {
+    "p1": {
+     "id": 1
+    },
+    "p2": null
+   },
+   "tier": "atp_250"
+  },
+  {
+   "id": 20114,
+   "tournament": "No Start",
+   "tournament_id": "1",
+   "tour": "atp",
+   "tier": "atp_250",
+   "tier_source": "calendar",
+   "surface": "hard",
+   "indoor": false,
+   "format": "BO3",
+   "round": "R1",
+   "round_code": "R32",
+   "is_qualifying": false,
+   "qualifying": false,
+   "status": "upcoming",
+   "event_status": null,
+   "event_status_updated_at": null,
+   "is_doubles": false,
+   "draw": "singles",
+   "gender": "men",
+   "scheduled_time": null,
+   "live_at": null,
+   "result_restated_at": null,
+   "result_version": 1,
+   "players": {
+    "p1": {
+     "id": 95,
+     "name": "No Time",
+     "tour": "atp",
+     "country": "usa",
+     "ranking": null,
+     "ranking_points": null
+    },
+    "p2": {
+     "id": 96,
+     "name": "Also No Time",
+     "tour": "atp",
+     "country": "usa",
+     "ranking": null,
+     "ranking_points": null
+    }
+   },
+   "score": null,
+   "winner": null,
+   "outcome": null,
+   "withdrew": null,
+   "has_analysis": false,
+   "has_market": false
+  },
+  "garbage-row"
+ ],
+ "meta": {
+  "limit": 200,
+  "offset": 200,
+  "count": 7,
+  "total": null,
+  "has_more": false,
+  "next_cursor": null,
+  "watermark": null
+ }
+}

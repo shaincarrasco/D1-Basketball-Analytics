@@ -1,0 +1,36 @@
+# Copy to config.toml. Every setting is optional.
+
+[paths]
+db = "data/tennis.db"
+
+[model]
+edge_threshold = 0.02
+
+[llm]
+# Any OpenAI-compatible server. LM Studio: start its local server (default port 1234).
+# Ollama: base_url = "http://localhost:11434/v1"
+enabled = true
+base_url = "http://localhost:1234/v1"
+model = ""
+timeout_s = 60
+
+[odds]
+# Optional free-tier keys. Without them, type odds into the dashboard by hand.
+the_odds_api_key = ""
+oddspapi_key = ""
+
+[sources]
+# Free API keys for Challenger and ITF coverage. The environment variables LIVETENNISAPI_KEY, RAPIDAPI_KEY and
+# ODDSPAPI_KEY win; a source with no key is skipped silently. ESPN needs no key.
+# livetennisapi_key = ""     # Live Tennis API: fixtures for every tier (100 requests/day)
+# tennisapi_key = ""         # Tennis API on RapidAPI: results by date, resumable backfill (50 requests/day)
+# oddspapi_key = ""          # OddsPapi: pre-match and closing odds (250 requests/month)
+#
+# Quotas default to those plans; override per source if yours differs:
+# [sources.tennisapi]
+# daily_quota = 50
+
+[ingest]
+fixture_days = 10     # days ahead to fetch fixtures
+max_seconds = 150     # time box for the backfill loop per run
+floor = "2023-01-01"  # backfill never goes earlier than this

@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0B1030">
+  <meta name="color-scheme" content="dark">
+  <title>Deuce</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="fonts/big-shoulders-display-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/big-shoulders-display-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/schibsted-grotesk-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="css/fonts.css">
+  <link rel="stylesheet" href="css/deuce.css">
+  <script type="module" src="js/main.js"></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="top">
+    <div class="top-inner">
+      <a class="wordmark" href="#/">Deuce</a>
+      <nav class="nav" aria-label="Views">
+        <a href="#/" data-view="matches">Matches</a>
+        <a href="#/proof" data-view="proof">Proof</a>
+        <a href="#/players" data-view="players">Players</a>
+      </nav>
+    </div>
+  </header>
+  <main id="main" tabindex="-1"></main>
+  <nav class="tabbar" aria-label="Views">
+    <a href="#/" data-view="matches">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M4.6 6.6c3.6 2.2 4.6 8.4 0 10.8M19.4 6.6c-3.6 2.2-4.6 8.4 0 10.8"/></svg>
+      <span>Matches</span>
+    </a>
+    <a href="#/proof" data-view="proof">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 20h18"/><path d="M4 16l5-5 4 3 7-8"/></svg>
+      <span>Proof</span>
+    </a>
+    <a href="#/players" data-view="players">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 20h18M5 20v-6h4v6M10 20V8h4v12M15 20v-9h4v9"/></svg>
+      <span>Players</span>
+    </a>
+  </nav>
+  <div class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

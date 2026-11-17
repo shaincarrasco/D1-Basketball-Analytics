@@ -1,0 +1,388 @@
+[
+  {
+    "match_id": "fx-montevideo-1",
+    "tournament": "Montevideo Open",
+    "surface": "Clay",
+    "model_pick": "p1",
+    "model_prob": 0.61,
+    "agreement": {
+      "score": 25,
+      "label": "Conflicting signals"
+    },
+    "buckets": [
+      {
+        "key": "fitness",
+        "title": "Fitness & Fatigue",
+        "favours": "p2",
+        "strength": "moderate",
+        "text": "Freshness points fairly clearly to Alvarez. Alvarez has 71 games on the legs over 14 days (3 matches) against 158 for Keller (7). Over the last 7 days it is 5 matches for Keller against 2 for Alvarez.",
+        "facts": [
+          {
+            "label": "Matches, last 7 days",
+            "p1": 5,
+            "p2": 2
+          },
+          {
+            "label": "Matches, last 14 days",
+            "p1": 7,
+            "p2": 3
+          },
+          {
+            "label": "Sets, last 14 days",
+            "p1": 17,
+            "p2": 7
+          },
+          {
+            "label": "Games, last 14 days",
+            "p1": 158,
+            "p2": 71
+          },
+          {
+            "label": "Days since last match",
+            "p1": 1,
+            "p2": 3
+          },
+          {
+            "label": "Retired last match",
+            "p1": "No",
+            "p2": "No"
+          }
+        ]
+      },
+      {
+        "key": "motivation",
+        "title": "Motivation & Pressure",
+        "favours": "p2",
+        "strength": "slight",
+        "text": "Alvarez gets a slim nod on motivation and pressure. Alvarez is playing at home in Montevideo, Uruguay, and the crowd should help with the big points. Deciding-set record under pressure: Alvarez 66%, Keller 50%. Offsetting that, Keller is on the way up (+35 Elo over 90 days) while Alvarez has been sliding (-12).",
+        "facts": [
+          {
+            "label": "Home player",
+            "p1": "No",
+            "p2": "Yes"
+          },
+          {
+            "label": "Elo trend, 90 days",
+            "p1": 35.1,
+            "p2": -12.4
+          },
+          {
+            "label": "Head-to-head wins",
+            "p1": 1,
+            "p2": 2
+          },
+          {
+            "label": "Deciding-set win % (1y)",
+            "p1": 50.0,
+            "p2": 66.0
+          },
+          {
+            "label": "Comeback rate %",
+            "p1": 21.0,
+            "p2": 28.0
+          },
+          {
+            "label": "Experience (matches)",
+            "p1": 412,
+            "p2": 301
+          }
+        ]
+      },
+      {
+        "key": "conditions",
+        "title": "Conditions",
+        "favours": "p2",
+        "strength": "moderate",
+        "text": "Alvarez holds a clear advantage on conditions. Alvarez is the more proven player on Clay: 64% wins in 12 months against 48% for Keller. Surface Elo versus overall Elo: Alvarez +14, Keller -60, so Alvarez is the better fit for Clay. Forecast for the match window: 19°C, 82% humidity, 28 km/h wind.",
+        "facts": [
+          {
+            "label": "Clay win % (1y)",
+            "p1": 48.0,
+            "p2": 64.0
+          },
+          {
+            "label": "Matches on surface (1y)",
+            "p1": 21,
+            "p2": 33
+          },
+          {
+            "label": "Surface Elo",
+            "p1": 1790,
+            "p2": 1802
+          },
+          {
+            "label": "Matches on Clay, 90 days",
+            "p1": 2,
+            "p2": 11
+          },
+          {
+            "label": "Tiebreak win % (1y)",
+            "p1": 58.0,
+            "p2": 47.0
+          },
+          {
+            "label": "Games won % (1y)",
+            "p1": 53.0,
+            "p2": 52.0
+          },
+          {
+            "label": "Surface Elo minus overall Elo",
+            "p1": -60,
+            "p2": 14
+          }
+        ]
+      },
+      {
+        "key": "market",
+        "title": "Market",
+        "favours": "p2",
+        "strength": "slight",
+        "text": "Stripping out the vig, the books rate Alvarez at 54% and Keller at 46%. The model is 15 points higher on Keller (61% against the market's 46%); that gap is either value or information the model does not have. The price has moved toward Alvarez, from 51% to 54% since the first quote. At 2.10 the model sees a 28% edge on Keller (fair price 1.64).",
+        "facts": [
+          {
+            "label": "Model win %",
+            "p1": 61.0,
+            "p2": 39.0
+          },
+          {
+            "label": "Market win % (no vig)",
+            "p1": 45.9,
+            "p2": 54.1
+          },
+          {
+            "label": "Opening market win %",
+            "p1": 49.4,
+            "p2": 50.6
+          },
+          {
+            "label": "Decimal odds used",
+            "p1": 2.1,
+            "p2": 1.78
+          },
+          {
+            "label": "Value edge %",
+            "p1": 28.1,
+            "p2": -30.6
+          }
+        ]
+      }
+    ],
+    "players": {
+      "p1": {
+        "name": "Jonas Keller",
+        "upsides": [
+          "Model value edge of 28% at 2.10",
+          "Elo trend +35 over 90 days (opponent -12)",
+          "Elo 1850 vs 1788 (+62)",
+          "70% wins in the last 10 matches vs 60%"
+        ],
+        "downsides": [
+          "Heavier recent workload: 158 games in 14 days vs 71",
+          "Played 5 matches in 7 days vs 2",
+          "Wins only 48% on Clay over 12 months (21 matches)",
+          "Surface Elo is -60 vs overall Elo on Clay"
+        ]
+      },
+      "p2": {
+        "name": "Mateo Alvarez",
+        "upsides": [
+          "Lighter recent workload: 71 games in 14 days vs 158",
+          "Played 2 matches in 7 days vs 5",
+          "Wins 64% on Clay over 12 months (33 matches)",
+          "Surface Elo is +14 vs overall Elo on Clay"
+        ],
+        "downsides": [
+          "Market prices at 54% but the model only 39%",
+          "Elo trend -12 over 90 days vs +35 for Keller",
+          "Elo 1788 vs 1850, 62 points adrift",
+          "60% wins in the last 10 matches vs 70%"
+        ]
+      }
+    },
+    "value": {
+      "side": "p1",
+      "edge": 0.281,
+      "fair_odds": 1.64,
+      "market_odds": 2.1
+    },
+    "weather": {
+      "temp_c": 19.0,
+      "humidity": 82,
+      "wind_kph": 28,
+      "precip_mm": 0.4,
+      "summary": "Damp and windy"
+    },
+    "bottom_line": "Keller is the model's pick at 61%, and the agreement meter reads 25/100 (conflicting signals). The biggest risk is fitness & fatigue: Alvarez is fresher (71 vs 158 games in 14 days). On value, Keller at 2.10 carries a 28% edge on the model's numbers.",
+    "engine": "rules",
+    "generated_at": "2026-11-16T21:00:00Z"
+  },
+  {
+    "match_id": "fx-indoor-2",
+    "tournament": "Linz Indoor Open",
+    "surface": "Indoor Hard",
+    "model_pick": "p1",
+    "model_prob": 0.54,
+    "agreement": {
+      "score": 54,
+      "label": "Mixed signals"
+    },
+    "buckets": [
+      {
+        "key": "fitness",
+        "title": "Fitness & Fatigue",
+        "favours": "level",
+        "strength": null,
+        "text": "Neither player has a fatigue edge. Workloads are close, 92 games for Markovic against 97 for Lindqvist over 14 days, and neither shows a rest or rhythm problem. They last played 2 and 2 days ago respectively.",
+        "facts": [
+          {
+            "label": "Matches, last 7 days",
+            "p1": 2,
+            "p2": 2
+          },
+          {
+            "label": "Matches, last 14 days",
+            "p1": 4,
+            "p2": 4
+          },
+          {
+            "label": "Sets, last 14 days",
+            "p1": 9,
+            "p2": 10
+          },
+          {
+            "label": "Games, last 14 days",
+            "p1": 92,
+            "p2": 97
+          },
+          {
+            "label": "Days since last match",
+            "p1": 2,
+            "p2": 2
+          },
+          {
+            "label": "Retired last match",
+            "p1": "No",
+            "p2": "No"
+          }
+        ]
+      },
+      {
+        "key": "motivation",
+        "title": "Motivation & Pressure",
+        "favours": "level",
+        "strength": null,
+        "text": "No clear edge on motivation and pressure. Their 90-day Elo trends are close (+8 for Markovic, +3 for Lindqvist). They have not met before.",
+        "facts": [
+          {
+            "label": "Elo trend, 90 days",
+            "p1": 8.0,
+            "p2": 3.0
+          },
+          {
+            "label": "Head-to-head wins",
+            "p1": 0,
+            "p2": 0
+          },
+          {
+            "label": "Deciding-set win % (1y)",
+            "p1": 58.0,
+            "p2": 55.0
+          },
+          {
+            "label": "Comeback rate %",
+            "p1": 24.0,
+            "p2": 22.0
+          },
+          {
+            "label": "Experience (matches)",
+            "p1": 240,
+            "p2": 222
+          }
+        ]
+      },
+      {
+        "key": "conditions",
+        "title": "Conditions",
+        "favours": "p1",
+        "strength": "slight",
+        "text": "Markovic gets a slim nod on conditions. Markovic rates +13 Elo points better on Indoor Hard than overall; for Lindqvist it is -12. On Indoor Hard, Markovic has won 61% over the past year (18 matches) to Lindqvist's 54% (14). Played indoors, so weather is not a factor.",
+        "facts": [
+          {
+            "label": "Indoor Hard win % (1y)",
+            "p1": 61.0,
+            "p2": 54.0
+          },
+          {
+            "label": "Matches on surface (1y)",
+            "p1": 18,
+            "p2": 14
+          },
+          {
+            "label": "Surface Elo",
+            "p1": 1715,
+            "p2": 1676
+          },
+          {
+            "label": "Matches on Indoor Hard, 90 days",
+            "p1": 5,
+            "p2": 4
+          },
+          {
+            "label": "Tiebreak win % (1y)",
+            "p1": 55.0,
+            "p2": 51.0
+          },
+          {
+            "label": "Games won % (1y)",
+            "p1": 52.0,
+            "p2": 51.0
+          },
+          {
+            "label": "Surface Elo minus overall Elo",
+            "p1": 13,
+            "p2": -12
+          }
+        ]
+      },
+      {
+        "key": "market",
+        "title": "Market",
+        "favours": "level",
+        "strength": null,
+        "text": "No market price is available for this match yet, so there is nothing to benchmark the model against. Type odds into the dashboard to see where the model and the market disagree.",
+        "facts": []
+      }
+    ],
+    "players": {
+      "p1": {
+        "name": "Elena Markovic",
+        "upsides": [
+          "Surface Elo is +13 vs overall Elo on Indoor Hard",
+          "60% wins in the last 10 matches vs 50%",
+          "Wins 61% on Indoor Hard over 12 months (18 matches)",
+          "Indoor Hard Elo 1715 vs 1676 (+39)"
+        ],
+        "downsides": [
+          "Model still leaves a 46% chance of losing"
+        ]
+      },
+      "p2": {
+        "name": "Sofia Lindqvist",
+        "upsides": [
+          "Model still gives a 46% chance"
+        ],
+        "downsides": [
+          "Surface Elo is -12 vs overall Elo on Indoor Hard",
+          "50% wins in the last 10 matches vs 60%",
+          "54% win rate on Indoor Hard (1y) vs 61% for Markovic",
+          "Indoor Hard Elo 1676 vs 1715, 39 points adrift"
+        ]
+      }
+    },
+    "value": null,
+    "weather": null,
+    "bottom_line": "Markovic is the model's pick at 54%, and the agreement meter reads 54/100 (mixed signals). The main risk is simply the 46% the model leaves for Lindqvist. There is no market price yet, so value cannot be assessed.",
+    "engine": "rules",
+    "generated_at": "2026-11-16T21:00:00Z"
+  }
+]

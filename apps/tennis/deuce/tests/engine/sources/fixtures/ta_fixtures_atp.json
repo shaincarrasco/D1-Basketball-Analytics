@@ -1,0 +1,105 @@
+{
+ "data": [
+  {
+   "id": 800001,
+   "matchId": 800001,
+   "date": "2026-11-17T10:00:00.000Z",
+   "startTime": "2026-11-17T10:00:00.000Z",
+   "timeGame": null,
+   "player1Id": 6001,
+   "player2Id": 6002,
+   "tournamentId": 7201,
+   "roundId": 9,
+   "seed1": null,
+   "seed2": null,
+   "live": false,
+   "player1": {
+    "id": 6001,
+    "name": "Ugo Humbert",
+    "countryAcr": "FRA"
+   },
+   "player2": {
+    "id": 6002,
+    "name": "Lorenzo Musetti",
+    "countryAcr": "ITA"
+   },
+   "tournament": {
+    "id": 7201,
+    "name": "Paris Masters",
+    "date": "2026-11-17T10:00:00.000Z",
+    "courtId": 3,
+    "rankId": 3,
+    "countryAcr": "FRA",
+    "court": {
+     "id": 3,
+     "name": "I.hard"
+    },
+    "rank": {
+     "id": 3,
+     "name": "Main tour"
+    },
+    "country": {
+     "name": "France",
+     "acronym": "FRA"
+    }
+   },
+   "round": {
+    "id": 9,
+    "name": "1/4"
+   }
+  },
+  {
+   "id": 800002,
+   "matchId": 800002,
+   "date": "2026-11-17T12:00:00.000Z",
+   "startTime": "2026-11-17T12:00:00.000Z",
+   "timeGame": null,
+   "player1Id": 6003,
+   "player2Id": 6004,
+   "tournamentId": 7201,
+   "roundId": 9,
+   "seed1": null,
+   "seed2": null,
+   "live": true,
+   "player1": {
+    "id": 6003,
+    "name": "Valentin Royer",
+    "countryAcr": "FRA"
+   },
+   "player2": {
+    "id": 6004,
+    "name": "Alexandre Muller",
+    "countryAcr": "FRA"
+   },
+   "tournament": {
+    "id": 7201,
+    "name": "Paris Masters",
+    "date": "2026-11-17T12:00:00.000Z",
+    "courtId": 3,
+    "rankId": 3,
+    "countryAcr": "FRA",
+    "court": {
+     "id": 3,
+     "name": "I.hard"
+    },
+    "rank": {
+     "id": 3,
+     "name": "Main tour"
+    },
+    "country": {
+     "name": "France",
+     "acronym": "FRA"
+    }
+   },
+   "round": {
+    "id": 9,
+    "name": "1/4"
+   }
+  }
+ ],
+ "pageNo": 1,
+ "page": 1,
+ "pageSize": 500,
+ "limit": 500,
+ "hasNextPage": false
+}

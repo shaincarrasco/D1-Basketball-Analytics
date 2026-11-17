@@ -1,0 +1,221 @@
+{
+  "match_id": "fx-montevideo-1",
+  "date": "2026-11-17T16:00:00Z",
+  "round": "Quarterfinal",
+  "best_of": 3,
+  "status": "scheduled",
+  "tournament": {
+    "name": "Montevideo Open",
+    "surface": "Clay",
+    "level": "ATP 250",
+    "location": "Montevideo, Uruguay",
+    "country": "Uruguay",
+    "surface_inferred": 0
+  },
+  "p1": {
+    "id": "9001",
+    "name": "Jonas Keller",
+    "country": "GER"
+  },
+  "p2": {
+    "id": "9002",
+    "name": "Mateo Alvarez",
+    "country": "URU"
+  },
+  "p1_prob": 0.61,
+  "p2_prob": 0.39,
+  "features": {
+    "as_of": "2026-11-17T16:00:00Z",
+    "p1": {
+      "elo": 1850.2,
+      "surface_elo": 1790.4,
+      "elo_trend_90d": 35.1,
+      "rank": 23,
+      "win_rate_1y": 0.62,
+      "form_10": 0.7,
+      "momentum": 0.08,
+      "surface_win_rate_1y": 0.48,
+      "surface_matches_1y": 21,
+      "games_won_pct_1y": 0.53,
+      "tiebreak_win_pct_1y": 0.58,
+      "deciding_set_win_pct_1y": 0.5,
+      "experience": 412,
+      "common_opp_win_rate": 0.6,
+      "quality_form_30d": 0.44,
+      "comeback_rate": 0.21,
+      "matches_7d": 5,
+      "matches_14d": 7,
+      "sets_14d": 17,
+      "games_14d": 158,
+      "days_since_last": 1,
+      "last_match_retired": false,
+      "matches_on_surface_90d": 2,
+      "home": false,
+      "last5": [
+        {
+          "date": "2026-11-16",
+          "opponent": "T. Brandt",
+          "result": "W",
+          "score": "7-6 6-7 7-5",
+          "tournament": "Montevideo Open"
+        },
+        {
+          "date": "2026-11-15",
+          "opponent": "L. Ortega",
+          "result": "W",
+          "score": "6-4 3-6 6-4",
+          "tournament": "Montevideo Open"
+        },
+        {
+          "date": "2026-11-12",
+          "opponent": "P. Duval",
+          "result": "W",
+          "score": "6-3 6-4",
+          "tournament": "Rennes Challenger"
+        },
+        {
+          "date": "2026-11-10",
+          "opponent": "S. Mori",
+          "result": "L",
+          "score": "4-6 6-7",
+          "tournament": "Rennes Challenger"
+        },
+        {
+          "date": "2026-11-08",
+          "opponent": "A. Novak",
+          "result": "W",
+          "score": "6-2 6-3",
+          "tournament": "Rennes Challenger"
+        }
+      ]
+    },
+    "p2": {
+      "elo": 1788.0,
+      "surface_elo": 1801.5,
+      "elo_trend_90d": -12.4,
+      "rank": 41,
+      "win_rate_1y": 0.57,
+      "form_10": 0.6,
+      "momentum": 0.02,
+      "surface_win_rate_1y": 0.64,
+      "surface_matches_1y": 33,
+      "games_won_pct_1y": 0.52,
+      "tiebreak_win_pct_1y": 0.47,
+      "deciding_set_win_pct_1y": 0.66,
+      "experience": 301,
+      "common_opp_win_rate": 0.55,
+      "quality_form_30d": 0.38,
+      "comeback_rate": 0.28,
+      "matches_7d": 2,
+      "matches_14d": 3,
+      "sets_14d": 7,
+      "games_14d": 71,
+      "days_since_last": 3,
+      "last_match_retired": false,
+      "matches_on_surface_90d": 11,
+      "home": true,
+      "last5": [
+        {
+          "date": "2026-11-14",
+          "opponent": "R. Pena",
+          "result": "W",
+          "score": "6-2 6-4",
+          "tournament": "Montevideo Open"
+        },
+        {
+          "date": "2026-11-12",
+          "opponent": "G. Silva",
+          "result": "W",
+          "score": "6-4 6-4",
+          "tournament": "Montevideo Open"
+        },
+        {
+          "date": "2026-11-02",
+          "opponent": "D. Cruz",
+          "result": "L",
+          "score": "3-6 4-6",
+          "tournament": "Buenos Aires Challenger"
+        },
+        {
+          "date": "2026-10-28",
+          "opponent": "F. Lopez",
+          "result": "W",
+          "score": "7-5 6-3",
+          "tournament": "Buenos Aires Challenger"
+        },
+        {
+          "date": "2026-10-25",
+          "opponent": "M. Diaz",
+          "result": "W",
+          "score": "6-1 6-2",
+          "tournament": "Buenos Aires Challenger"
+        }
+      ]
+    },
+    "h2h": {
+      "p1_wins": 1,
+      "p2_wins": 2,
+      "last": [
+        {
+          "date": "2025-04-20",
+          "winner": "p2",
+          "score": "6-4 6-3",
+          "tournament": "Estoril",
+          "surface": "Clay"
+        }
+      ]
+    },
+    "common_opponents": 7,
+    "radar": {
+      "p1": {
+        "Win Rate": 72,
+        "Form": 80,
+        "Momentum": 60,
+        "Surface": 40,
+        "Games Won": 61,
+        "Tiebreaks": 58,
+        "Experience": 90,
+        "Common Opponents": 64,
+        "Quality Form": 47,
+        "Comeback": 33
+      },
+      "p2": {
+        "Win Rate": 60,
+        "Form": 66,
+        "Momentum": 50,
+        "Surface": 75,
+        "Games Won": 55,
+        "Tiebreaks": 40,
+        "Experience": 70,
+        "Common Opponents": 58,
+        "Quality Form": 40,
+        "Comeback": 55
+      }
+    }
+  },
+  "odds": [
+    {
+      "source": "manual",
+      "book": "Bet365",
+      "p1_odds": 1.95,
+      "p2_odds": 1.9,
+      "fetched_at": "2026-11-16T08:00:00Z"
+    },
+    {
+      "source": "manual",
+      "book": "Bet365",
+      "p1_odds": 2.1,
+      "p2_odds": 1.78,
+      "fetched_at": "2026-11-16T18:00:00Z"
+    }
+  ],
+  "weather": {
+    "temp_c": 19.0,
+    "humidity": 82,
+    "wind_kph": 28,
+    "precip_mm": 0.4,
+    "summary": "Damp and windy"
+  },
+  "edge_threshold": 0.02,
+  "now": "2026-11-16T21:00:00Z"
+}

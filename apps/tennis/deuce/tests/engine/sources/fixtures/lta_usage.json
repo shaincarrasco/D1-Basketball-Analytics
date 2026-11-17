@@ -1,0 +1,24 @@
+{
+ "principal": "key_ab12",
+ "tier": "free",
+ "base_tier": "free",
+ "tier_expires_at": null,
+ "channel": "rest",
+ "limits": {
+  "per_minute": 30,
+  "per_day": 100
+ },
+ "today": {
+  "calls": 37,
+  "errors": 2,
+  "remaining_day": 63
+ },
+ "history": [
+  {
+   "day": "2026-11-15",
+   "calls": 88,
+   "errors": 0
+  }
+ ],
+ "as_of": "2026-11-16T12:00:00Z"
+}
