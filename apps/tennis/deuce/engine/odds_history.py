@@ -264,20 +264,25 @@ def fetch_excel(tour: str, year: int, client: httpx.Client | None = None, retrie
     (the site rejects some default client strings). Returns (bytes, suffix) or None when unreachable."""
     own = client is None
     client = client or httpx.Client(timeout=45, follow_redirects=True, headers={"User-Agent": BROWSER_UA})
+    tried: list[str] = []   # what each URL returned, printed when nothing usable came back
     try:
         for url in url_candidates(tour, year):
             for u in (url, url.replace("http://", "https://")):
                 for attempt in range(retries):
                     try:
                         r = client.get(u)
-                    except httpx.HTTPError:
+                    except httpx.HTTPError as err:
+                        tried.append(f"{u} -> {type(err).__name__}")
                         time.sleep(1.5 * (attempt + 1))
                         continue
                     if r.status_code == 200 and len(r.content) > 2000 and _looks_like_excel(r.content):
                         return r.content, Path(url).suffix
+                    tried.append(f"{u} -> HTTP {r.status_code}, {r.headers.get('content-type', '?')}, {len(r.content)} bytes")
                     if r.status_code in (403, 404):
                         break   # won't change on retry; try the next URL
                     time.sleep(1.5 * (attempt + 1))
+        for line in dict.fromkeys(tried):   # de-duplicated, in order
+            print(f"    {tour} {year}: {line}")
         return None
     finally:
         if own:
