@@ -612,8 +612,8 @@
       "eloRating": 1415,
       "sosRating": -12.133333333333335,
       "powerRatings": {
-        "adjO": 100.743,
-        "adjD": 110.223,
+        "adjO": 100.74,
+        "adjD": 110.22,
         "adjEM": -9.479,
         "tempo": 70.192,
         "sos": 1.918,
@@ -625,7 +625,7 @@
         "rank": 289,
         "adjORank": 289,
         "adjDRank": 273,
-        "tempoRank": 216,
+        "tempoRank": 217,
         "sosRank": 59
       }
     },
@@ -1498,8 +1498,8 @@
       "eloRating": 1565,
       "sosRating": 2.6750000000000007,
       "powerRatings": {
-        "adjO": 102.591,
-        "adjD": 113.751,
+        "adjO": 102.588,
+        "adjD": 113.748,
         "adjEM": -11.16,
         "tempo": 75.603,
         "sos": -8.116,
@@ -1512,7 +1512,7 @@
         "adjORank": 255,
         "adjDRank": 336,
         "tempoRank": 8,
-        "sosRank": 210
+        "sosRank": 211
       }
     },
     {
@@ -2096,8 +2096,8 @@
       "eloRating": 1752,
       "sosRating": -14.5,
       "powerRatings": {
-        "adjO": 105.987,
-        "adjD": 102.111,
+        "adjO": 105.983,
+        "adjD": 102.108,
         "adjEM": 3.876,
         "tempo": 69.184,
         "sos": -21.25,
@@ -2986,11 +2986,11 @@
       "eloRating": 1643,
       "sosRating": -15.966666666666667,
       "powerRatings": {
-        "adjO": 97.817,
-        "adjD": 109.606,
+        "adjO": 97.814,
+        "adjD": 109.602,
         "adjEM": -11.789,
-        "tempo": 70.718,
-        "sos": -20.663,
+        "tempo": 70.717,
+        "sos": -20.662,
         "games": 4,
         "rawGames": 5,
         "reliability": 0.571,
@@ -2999,7 +2999,7 @@
         "rank": 309,
         "adjORank": 320,
         "adjDRank": 262,
-        "tempoRank": 178,
+        "tempoRank": 177,
         "sosRank": 331
       }
     },
@@ -3728,11 +3728,11 @@
       "eloRating": 1718,
       "sosRating": -1.775,
       "powerRatings": {
-        "adjO": 120.552,
-        "adjD": 101.639,
+        "adjO": 120.549,
+        "adjD": 101.635,
         "adjEM": 18.913,
-        "tempo": 75.837,
-        "sos": 0.78,
+        "tempo": 75.847,
+        "sos": 0.779,
         "games": 5,
         "rawGames": 4,
         "reliability": 0.625,
@@ -4470,11 +4470,11 @@
       "eloRating": 1389,
       "sosRating": 22.15,
       "powerRatings": {
-        "adjO": 98.861,
-        "adjD": 112.639,
-        "adjEM": -13.778,
-        "tempo": 69.676,
-        "sos": -19.08,
+        "adjO": 98.857,
+        "adjD": 112.636,
+        "adjEM": -13.779,
+        "tempo": 69.671,
+        "sos": -19.081,
         "games": 4,
         "rawGames": 4,
         "reliability": 0.571,
@@ -5212,10 +5212,10 @@
       "eloRating": 1250,
       "sosRating": 8.5,
       "powerRatings": {
-        "adjO": 96.418,
-        "adjD": 119.183,
+        "adjO": 96.416,
+        "adjD": 119.181,
         "adjEM": -22.765,
-        "tempo": 72.46,
+        "tempo": 72.455,
         "sos": 6.251,
         "games": 5,
         "rawGames": 4,
@@ -5226,7 +5226,7 @@
         "adjORank": 339,
         "adjDRank": 363,
         "tempoRank": 67,
-        "sosRank": 23
+        "sosRank": 25
       }
     },
     {
@@ -5954,11 +5954,11 @@
       "eloRating": 1439,
       "sosRating": -3.8,
       "powerRatings": {
-        "adjO": 105.177,
-        "adjD": 108.653,
-        "adjEM": -3.476,
-        "tempo": 68.102,
-        "sos": 3.544,
+        "adjO": 105.174,
+        "adjD": 108.65,
+        "adjEM": -3.475,
+        "tempo": 68.1,
+        "sos": 3.546,
         "games": 4,
         "rawGames": 4,
         "reliability": 0.571,
@@ -6696,11 +6696,11 @@
       "eloRating": 1729,
       "sosRating": 5.933333333333333,
       "powerRatings": {
-        "adjO": 105.286,
-        "adjD": 101.952,
-        "adjEM": 3.334,
-        "tempo": 66.111,
-        "sos": -10.072,
+        "adjO": 105.268,
+        "adjD": 102.024,
+        "adjEM": 3.244,
+        "tempo": 66.069,
+        "sos": -10.264,
         "games": 3.5,
         "rawGames": 4,
         "reliability": 0.538,
@@ -6710,7 +6710,7 @@
         "adjORank": 186,
         "adjDRank": 86,
         "tempoRank": 363,
-        "sosRank": 237
+        "sosRank": 244
       }
     },
     {
@@ -7438,21 +7438,21 @@
       "eloRating": 1830,
       "sosRating": -2.5999999999999996,
       "powerRatings": {
-        "adjO": 115.871,
-        "adjD": 102.197,
+        "adjO": 115.868,
+        "adjD": 102.194,
         "adjEM": 13.674,
-        "tempo": 69.608,
-        "sos": -4.666,
+        "tempo": 69.615,
+        "sos": -4.667,
         "games": 4,
         "rawGames": 4,
         "reliability": 0.571,
         "sample": "Developing",
         "model": "D1 Hoops Power Rating v2",
         "rank": 53,
-        "adjORank": 38,
+        "adjORank": 37,
         "adjDRank": 89,
         "tempoRank": 252,
-        "sosRank": 151
+        "sosRank": 152
       }
     },
     {
@@ -8180,11 +8180,11 @@
       "eloRating": 1731,
       "sosRating": 6.625,
       "powerRatings": {
-        "adjO": 118.188,
-        "adjD": 94.794,
-        "adjEM": 23.395,
-        "tempo": 72.347,
-        "sos": 6.701,
+        "adjO": 118.171,
+        "adjD": 94.863,
+        "adjEM": 23.308,
+        "tempo": 72.316,
+        "sos": 6.507,
         "games": 4,
         "rawGames": 4,
         "reliability": 0.571,
@@ -8192,9 +8192,9 @@
         "model": "D1 Hoops Power Rating v2",
         "rank": 12,
         "adjORank": 16,
-        "adjDRank": 23,
+        "adjDRank": 24,
         "tempoRank": 74,
-        "sosRank": 19
+        "sosRank": 20
       }
     },
     {
@@ -8922,10 +8922,10 @@
       "eloRating": 1702,
       "sosRating": -3.575,
       "powerRatings": {
-        "adjO": 116.254,
-        "adjD": 102.322,
+        "adjO": 116.251,
+        "adjD": 102.319,
         "adjEM": 13.932,
-        "tempo": 70.032,
+        "tempo": 70.042,
         "sos": 0.296,
         "games": 5,
         "rawGames": 4,
@@ -8933,9 +8933,9 @@
         "sample": "Developing",
         "model": "D1 Hoops Power Rating v2",
         "rank": 52,
-        "adjORank": 35,
+        "adjORank": 34,
         "adjDRank": 90,
-        "tempoRank": 224,
+        "tempoRank": 223,
         "sosRank": 81
       }
     },
@@ -9664,10 +9664,10 @@
       "eloRating": 1537,
       "sosRating": 11.800000000000002,
       "powerRatings": {
-        "adjO": 102.367,
-        "adjD": 105.647,
+        "adjO": 102.364,
+        "adjD": 105.644,
         "adjEM": -3.28,
-        "tempo": 73.301,
+        "tempo": 73.297,
         "sos": -7.282,
         "games": 3.5,
         "rawGames": 4,
@@ -9678,7 +9678,7 @@
         "adjORank": 261,
         "adjDRank": 162,
         "tempoRank": 36,
-        "sosRank": 193
+        "sosRank": 194
       }
     },
     {
@@ -10550,11 +10550,11 @@
       "eloRating": 753,
       "sosRating": 6.639999999999999,
       "powerRatings": {
-        "adjO": 89.977,
-        "adjD": 119.943,
+        "adjO": 89.973,
+        "adjD": 119.941,
         "adjEM": -29.967,
-        "tempo": 73.183,
-        "sos": 12.328,
+        "tempo": 73.179,
+        "sos": 12.325,
         "games": 5,
         "rawGames": 5,
         "reliability": 0.625,
@@ -11292,8 +11292,8 @@
       "eloRating": 1657,
       "sosRating": 7.066666666666666,
       "powerRatings": {
-        "adjO": 103.338,
-        "adjD": 112.467,
+        "adjO": 103.335,
+        "adjD": 112.463,
         "adjEM": -9.128,
         "tempo": 67.28,
         "sos": -8.107,
@@ -11306,7 +11306,7 @@
         "adjORank": 241,
         "adjDRank": 316,
         "tempoRank": 354,
-        "sosRank": 209
+        "sosRank": 210
       }
     },
     {
@@ -11890,21 +11890,21 @@
       "eloRating": 1670,
       "sosRating": 6.766666666666667,
       "powerRatings": {
-        "adjO": 116.439,
-        "adjD": 100.724,
-        "adjEM": 15.716,
-        "tempo": 70.118,
-        "sos": 4.91,
-        "games": 3,
+        "adjO": 115.808,
+        "adjD": 100.842,
+        "adjEM": 14.966,
+        "tempo": 70.362,
+        "sos": 8.033,
+        "games": 4,
         "rawGames": 3,
-        "reliability": 0.5,
-        "sample": "Early sample",
+        "reliability": 0.571,
+        "sample": "Developing",
         "model": "D1 Hoops Power Rating v2",
-        "rank": 45,
-        "adjORank": 30,
-        "adjDRank": 61,
-        "tempoRank": 217,
-        "sosRank": 31
+        "rank": 48,
+        "adjORank": 39,
+        "adjDRank": 63,
+        "tempoRank": 207,
+        "sosRank": 15
       }
     },
     {
@@ -12632,10 +12632,10 @@
       "eloRating": 1687,
       "sosRating": 2.45,
       "powerRatings": {
-        "adjO": 100.278,
-        "adjD": 104.269,
+        "adjO": 100.274,
+        "adjD": 104.265,
         "adjEM": -3.991,
-        "tempo": 71.149,
+        "tempo": 71.148,
         "sos": -29.557,
         "games": 3.3,
         "rawGames": 4,
@@ -13374,11 +13374,11 @@
       "eloRating": 1703,
       "sosRating": -3.0500000000000003,
       "powerRatings": {
-        "adjO": 121.478,
-        "adjD": 102.843,
+        "adjO": 121.474,
+        "adjD": 102.84,
         "adjEM": 18.635,
-        "tempo": 71.901,
-        "sos": -0.325,
+        "tempo": 71.907,
+        "sos": -0.326,
         "games": 4,
         "rawGames": 4,
         "reliability": 0.571,
@@ -14116,11 +14116,11 @@
       "eloRating": 1504,
       "sosRating": -3.1333333333333333,
       "powerRatings": {
-        "adjO": 97.393,
-        "adjD": 108.058,
-        "adjEM": -10.665,
+        "adjO": 97.39,
+        "adjD": 108.055,
+        "adjEM": -10.664,
         "tempo": 68.633,
-        "sos": -7.794,
+        "sos": -7.793,
         "games": 4.5,
         "rawGames": 4,
         "reliability": 0.6,
@@ -14130,7 +14130,7 @@
         "adjORank": 324,
         "adjDRank": 224,
         "tempoRank": 309,
-        "sosRank": 203
+        "sosRank": 204
       }
     },
     {
@@ -14858,10 +14858,10 @@
       "eloRating": 1832,
       "sosRating": -1.6499999999999995,
       "powerRatings": {
-        "adjO": 114.672,
-        "adjD": 97.985,
+        "adjO": 114.668,
+        "adjD": 97.982,
         "adjEM": 16.686,
-        "tempo": 73.266,
+        "tempo": 73.272,
         "sos": -4.898,
         "games": 4,
         "rawGames": 4,
@@ -14872,7 +14872,7 @@
         "adjORank": 51,
         "adjDRank": 37,
         "tempoRank": 38,
-        "sosRank": 156
+        "sosRank": 157
       }
     },
     {
@@ -15744,10 +15744,10 @@
       "eloRating": 1397,
       "sosRating": 16.225,
       "powerRatings": {
-        "adjO": 105.247,
-        "adjD": 118.225,
+        "adjO": 105.244,
+        "adjD": 118.221,
         "adjEM": -12.977,
-        "tempo": 68.548,
+        "tempo": 68.544,
         "sos": -0.758,
         "games": 5.5,
         "rawGames": 5,
@@ -16486,11 +16486,11 @@
       "eloRating": 1647,
       "sosRating": 3.033333333333333,
       "powerRatings": {
-        "adjO": 107.272,
-        "adjD": 102.724,
+        "adjO": 107.269,
+        "adjD": 102.721,
         "adjEM": 4.548,
         "tempo": 69.726,
-        "sos": -15.029,
+        "sos": -15.028,
         "games": 3.5,
         "rawGames": 4,
         "reliability": 0.538,
@@ -17228,10 +17228,10 @@
       "eloRating": 1415,
       "sosRating": 18.900000000000002,
       "powerRatings": {
-        "adjO": 105.305,
-        "adjD": 110.874,
+        "adjO": 105.302,
+        "adjD": 110.87,
         "adjEM": -5.568,
-        "tempo": 70.734,
+        "tempo": 70.732,
         "sos": -0.055,
         "games": 4.5,
         "rawGames": 5,
@@ -17241,7 +17241,7 @@
         "rank": 244,
         "adjORank": 183,
         "adjDRank": 284,
-        "tempoRank": 172,
+        "tempoRank": 175,
         "sosRank": 89
       }
     },
@@ -18114,10 +18114,10 @@
       "eloRating": 1536,
       "sosRating": -16.1,
       "powerRatings": {
-        "adjO": 99.779,
-        "adjD": 115.56,
+        "adjO": 99.776,
+        "adjD": 115.557,
         "adjEM": -15.781,
-        "tempo": 67.069,
+        "tempo": 67.07,
         "sos": -18.207,
         "games": 4.5,
         "rawGames": 5,
@@ -18856,11 +18856,11 @@
       "eloRating": 1856,
       "sosRating": 14.266666666666666,
       "powerRatings": {
-        "adjO": 116.662,
-        "adjD": 104.072,
+        "adjO": 116.659,
+        "adjD": 104.069,
         "adjEM": 12.59,
-        "tempo": 75.748,
-        "sos": -6.098,
+        "tempo": 75.747,
+        "sos": -6.097,
         "games": 3.5,
         "rawGames": 4,
         "reliability": 0.538,
@@ -18870,7 +18870,7 @@
         "adjORank": 28,
         "adjDRank": 121,
         "tempoRank": 7,
-        "sosRank": 173
+        "sosRank": 174
       }
     },
     {
@@ -19598,9 +19598,9 @@
       "eloRating": 1740,
       "sosRating": -5.15,
       "powerRatings": {
-        "adjO": 108.791,
-        "adjD": 100.068,
-        "adjEM": 8.723,
+        "adjO": 108.787,
+        "adjD": 100.065,
+        "adjEM": 8.722,
         "tempo": 66.567,
         "sos": -10.074,
         "games": 4,
@@ -20484,11 +20484,11 @@
       "eloRating": 1659,
       "sosRating": -7.55,
       "powerRatings": {
-        "adjO": 108.474,
-        "adjD": 112.615,
+        "adjO": 108.471,
+        "adjD": 112.611,
         "adjEM": -4.141,
         "tempo": 69.972,
-        "sos": -13.512,
+        "sos": -13.511,
         "games": 4.5,
         "rawGames": 5,
         "reliability": 0.6,
@@ -21082,21 +21082,21 @@
       "eloRating": 1534,
       "sosRating": -15.066666666666665,
       "powerRatings": {
-        "adjO": 108.968,
-        "adjD": 107.395,
-        "adjEM": 1.573,
-        "tempo": 70.4,
-        "sos": -8.579,
+        "adjO": 108.967,
+        "adjD": 107.384,
+        "adjEM": 1.583,
+        "tempo": 70.406,
+        "sos": -8.557,
         "games": 4,
         "rawGames": 3,
         "reliability": 0.571,
         "sample": "Developing",
         "model": "D1 Hoops Power Rating v2",
-        "rank": 144,
+        "rank": 143,
         "adjORank": 112,
         "adjDRank": 206,
-        "tempoRank": 203,
-        "sosRank": 215
+        "tempoRank": 202,
+        "sosRank": 216
       }
     },
     {
@@ -21968,11 +21968,11 @@
       "eloRating": 1573,
       "sosRating": 6.225,
       "powerRatings": {
-        "adjO": 99.031,
-        "adjD": 100.852,
-        "adjEM": -1.822,
+        "adjO": 99.028,
+        "adjD": 100.849,
+        "adjEM": -1.821,
         "tempo": 67.578,
-        "sos": -9.93,
+        "sos": -9.928,
         "games": 4.5,
         "rawGames": 5,
         "reliability": 0.6,
@@ -21982,7 +21982,7 @@
         "adjORank": 307,
         "adjDRank": 64,
         "tempoRank": 347,
-        "sosRank": 233
+        "sosRank": 234
       }
     },
     {
@@ -22854,8 +22854,8 @@
       "eloRating": 1488,
       "sosRating": -12.620000000000001,
       "powerRatings": {
-        "adjO": 97.658,
-        "adjD": 106.48,
+        "adjO": 97.656,
+        "adjD": 106.477,
         "adjEM": -8.821,
         "tempo": 68.98,
         "sos": -6.894,
@@ -22867,8 +22867,8 @@
         "rank": 279,
         "adjORank": 322,
         "adjDRank": 184,
-        "tempoRank": 286,
-        "sosRank": 183
+        "tempoRank": 287,
+        "sosRank": 184
       }
     },
     {
@@ -23740,10 +23740,10 @@
       "eloRating": 1340,
       "sosRating": 2.54,
       "powerRatings": {
-        "adjO": 93.737,
-        "adjD": 106.479,
+        "adjO": 93.734,
+        "adjD": 106.476,
         "adjEM": -12.743,
-        "tempo": 71.367,
+        "tempo": 71.368,
         "sos": 0.064,
         "games": 6,
         "rawGames": 5,
@@ -24482,8 +24482,8 @@
       "eloRating": 1250,
       "sosRating": 1.9750000000000005,
       "powerRatings": {
-        "adjO": 95.857,
-        "adjD": 112.005,
+        "adjO": 95.854,
+        "adjD": 112.002,
         "adjEM": -16.148,
         "tempo": 68.445,
         "sos": 8.205,
@@ -25224,8 +25224,8 @@
       "eloRating": 1654,
       "sosRating": -4.466666666666667,
       "powerRatings": {
-        "adjO": 104.145,
-        "adjD": 108.209,
+        "adjO": 104.142,
+        "adjD": 108.205,
         "adjEM": -4.063,
         "tempo": 71.567,
         "sos": -13.66,
@@ -25237,7 +25237,7 @@
         "rank": 223,
         "adjORank": 223,
         "adjDRank": 229,
-        "tempoRank": 117,
+        "tempoRank": 116,
         "sosRank": 278
       }
     },
@@ -25966,8 +25966,8 @@
       "eloRating": 1585,
       "sosRating": 7.775,
       "powerRatings": {
-        "adjO": 112.631,
-        "adjD": 102.397,
+        "adjO": 112.628,
+        "adjD": 102.394,
         "adjEM": 10.235,
         "tempo": 72.639,
         "sos": -0.823,
@@ -26852,11 +26852,11 @@
       "eloRating": 1401,
       "sosRating": 5.2,
       "powerRatings": {
-        "adjO": 102.821,
-        "adjD": 108.784,
-        "adjEM": -5.962,
-        "tempo": 74.609,
-        "sos": -2.818,
+        "adjO": 102.81,
+        "adjD": 108.782,
+        "adjEM": -5.972,
+        "tempo": 74.613,
+        "sos": -2.835,
         "games": 4.5,
         "rawGames": 5,
         "reliability": 0.6,
@@ -26866,7 +26866,7 @@
         "adjORank": 250,
         "adjDRank": 243,
         "tempoRank": 16,
-        "sosRank": 125
+        "sosRank": 126
       }
     },
     {
@@ -27594,10 +27594,10 @@
       "eloRating": 1691,
       "sosRating": -5.766666666666667,
       "powerRatings": {
-        "adjO": 105.238,
-        "adjD": 110.904,
+        "adjO": 105.235,
+        "adjD": 110.9,
         "adjEM": -5.665,
-        "tempo": 72.609,
+        "tempo": 72.608,
         "sos": -21.268,
         "games": 3.5,
         "rawGames": 4,
@@ -28192,10 +28192,10 @@
       "eloRating": 1481,
       "sosRating": 1.0499999999999998,
       "powerRatings": {
-        "adjO": 104.149,
-        "adjD": 108.458,
+        "adjO": 104.145,
+        "adjD": 108.454,
         "adjEM": -4.309,
-        "tempo": 76.533,
+        "tempo": 76.532,
         "sos": -17.608,
         "games": 2.5,
         "rawGames": 3,
@@ -28790,10 +28790,10 @@
       "eloRating": 1534,
       "sosRating": 18.4,
       "powerRatings": {
-        "adjO": 104.478,
-        "adjD": 107.439,
+        "adjO": 104.475,
+        "adjD": 107.436,
         "adjEM": -2.961,
-        "tempo": 74.898,
+        "tempo": 74.896,
         "sos": -9.183,
         "games": 3.5,
         "rawGames": 3,
@@ -28804,7 +28804,7 @@
         "adjORank": 213,
         "adjDRank": 208,
         "tempoRank": 11,
-        "sosRank": 222
+        "sosRank": 224
       }
     },
     {
@@ -29532,10 +29532,10 @@
       "eloRating": 1244,
       "sosRating": -8.925,
       "powerRatings": {
-        "adjO": 97.749,
-        "adjD": 113.351,
+        "adjO": 97.746,
+        "adjD": 113.348,
         "adjEM": -15.602,
-        "tempo": 68.515,
+        "tempo": 68.516,
         "sos": -10.217,
         "games": 5,
         "rawGames": 4,
@@ -30418,8 +30418,8 @@
       "eloRating": 1495,
       "sosRating": 7.675000000000001,
       "powerRatings": {
-        "adjO": 108.806,
-        "adjD": 106.179,
+        "adjO": 108.803,
+        "adjD": 106.176,
         "adjEM": 2.627,
         "tempo": 70.415,
         "sos": -3.511,
@@ -30432,7 +30432,7 @@
         "adjORank": 115,
         "adjDRank": 176,
         "tempoRank": 200,
-        "sosRank": 138
+        "sosRank": 139
       }
     },
     {
@@ -31160,9 +31160,9 @@
       "eloRating": 1484,
       "sosRating": 2.1749999999999994,
       "powerRatings": {
-        "adjO": 108.745,
-        "adjD": 113.135,
-        "adjEM": -4.391,
+        "adjO": 108.741,
+        "adjD": 113.132,
+        "adjEM": -4.39,
         "tempo": 68.407,
         "sos": 2.751,
         "games": 4,
@@ -31172,7 +31172,7 @@
         "model": "D1 Hoops Power Rating v2",
         "rank": 228,
         "adjORank": 118,
-        "adjDRank": 329,
+        "adjDRank": 328,
         "tempoRank": 325,
         "sosRank": 50
       }
@@ -32046,10 +32046,10 @@
       "eloRating": 1422,
       "sosRating": -7.4,
       "powerRatings": {
-        "adjO": 95.946,
-        "adjD": 115.443,
+        "adjO": 95.943,
+        "adjD": 115.44,
         "adjEM": -19.497,
-        "tempo": 70.048,
+        "tempo": 70.046,
         "sos": -9.856,
         "games": 4.5,
         "rawGames": 5,
@@ -32059,8 +32059,8 @@
         "rank": 358,
         "adjORank": 341,
         "adjDRank": 345,
-        "tempoRank": 220,
-        "sosRank": 230
+        "tempoRank": 222,
+        "sosRank": 231
       }
     },
     {
@@ -32788,11 +32788,11 @@
       "eloRating": 1757,
       "sosRating": 5.866666666666667,
       "powerRatings": {
-        "adjO": 106.153,
-        "adjD": 105.096,
-        "adjEM": 1.057,
-        "tempo": 72.355,
-        "sos": -1.641,
+        "adjO": 106.149,
+        "adjD": 105.094,
+        "adjEM": 1.056,
+        "tempo": 72.35,
+        "sos": -1.643,
         "games": 4.5,
         "rawGames": 4,
         "reliability": 0.6,
@@ -32802,7 +32802,7 @@
         "adjORank": 172,
         "adjDRank": 148,
         "tempoRank": 73,
-        "sosRank": 108
+        "sosRank": 109
       }
     },
     {
@@ -33676,11 +33676,11 @@
       "eloRating": 1444,
       "sosRating": 0.019999999999999706,
       "powerRatings": {
-        "adjO": 102.618,
-        "adjD": 112.332,
+        "adjO": 102.616,
+        "adjD": 112.329,
         "adjEM": -9.714,
         "tempo": 66.753,
-        "sos": -10.044,
+        "sos": -10.043,
         "games": 5.5,
         "rawGames": 5,
         "reliability": 0.647,
@@ -33690,7 +33690,7 @@
         "adjORank": 254,
         "adjDRank": 314,
         "tempoRank": 359,
-        "sosRank": 235
+        "sosRank": 236
       }
     },
     {
@@ -34418,11 +34418,11 @@
       "eloRating": 1683,
       "sosRating": 1.7000000000000004,
       "powerRatings": {
-        "adjO": 104.327,
-        "adjD": 108.069,
+        "adjO": 104.324,
+        "adjD": 108.066,
         "adjEM": -3.742,
-        "tempo": 69.775,
-        "sos": -15.102,
+        "tempo": 69.776,
+        "sos": -15.103,
         "games": 4.5,
         "rawGames": 4,
         "reliability": 0.6,
@@ -35160,10 +35160,10 @@
       "eloRating": 1906,
       "sosRating": -2.3,
       "powerRatings": {
-        "adjO": 110.64,
-        "adjD": 106.462,
+        "adjO": 110.637,
+        "adjD": 106.458,
         "adjEM": 4.178,
-        "tempo": 71.87,
+        "tempo": 71.868,
         "sos": -30.411,
         "games": 3,
         "rawGames": 4,
@@ -35171,9 +35171,9 @@
         "sample": "Early sample",
         "model": "D1 Hoops Power Rating v2",
         "rank": 116,
-        "adjORank": 89,
+        "adjORank": 90,
         "adjDRank": 182,
-        "tempoRank": 94,
+        "tempoRank": 95,
         "sosRank": 361
       }
     },
@@ -35902,10 +35902,10 @@
       "eloRating": 1564,
       "sosRating": -2.766666666666666,
       "powerRatings": {
-        "adjO": 103.163,
-        "adjD": 107.143,
+        "adjO": 103.16,
+        "adjD": 107.14,
         "adjEM": -3.98,
-        "tempo": 72.829,
+        "tempo": 72.828,
         "sos": -10.657,
         "games": 3.5,
         "rawGames": 4,
@@ -35916,7 +35916,7 @@
         "adjORank": 246,
         "adjDRank": 202,
         "tempoRank": 51,
-        "sosRank": 247
+        "sosRank": 248
       }
     },
     {
@@ -36644,11 +36644,11 @@
       "eloRating": 1527,
       "sosRating": -4.625,
       "powerRatings": {
-        "adjO": 109.105,
-        "adjD": 106.517,
-        "adjEM": 2.588,
-        "tempo": 69.116,
-        "sos": 2.175,
+        "adjO": 109.095,
+        "adjD": 106.515,
+        "adjEM": 2.58,
+        "tempo": 69.122,
+        "sos": 2.159,
         "games": 5,
         "rawGames": 4,
         "reliability": 0.625,
@@ -36657,7 +36657,7 @@
         "rank": 135,
         "adjORank": 108,
         "adjDRank": 186,
-        "tempoRank": 279,
+        "tempoRank": 278,
         "sosRank": 57
       }
     },
@@ -37386,10 +37386,10 @@
       "eloRating": 1642,
       "sosRating": 8.133333333333333,
       "powerRatings": {
-        "adjO": 108.212,
-        "adjD": 110.521,
+        "adjO": 108.209,
+        "adjD": 110.518,
         "adjEM": -2.309,
-        "tempo": 71.611,
+        "tempo": 71.608,
         "sos": -7.581,
         "games": 3.5,
         "rawGames": 4,
@@ -37400,7 +37400,7 @@
         "adjORank": 133,
         "adjDRank": 278,
         "tempoRank": 113,
-        "sosRank": 198
+        "sosRank": 199
       }
     },
     {
@@ -38416,10 +38416,10 @@
       "eloRating": 1301,
       "sosRating": -5.7,
       "powerRatings": {
-        "adjO": 99.218,
-        "adjD": 116.897,
+        "adjO": 99.215,
+        "adjD": 116.894,
         "adjEM": -17.679,
-        "tempo": 67.729,
+        "tempo": 67.728,
         "sos": -4.026,
         "games": 6,
         "rawGames": 6,
@@ -39158,20 +39158,20 @@
       "eloRating": 1766,
       "sosRating": -0.5999999999999996,
       "powerRatings": {
-        "adjO": 110.57,
-        "adjD": 94.877,
+        "adjO": 110.567,
+        "adjD": 94.873,
         "adjEM": 15.693,
-        "tempo": 70.668,
+        "tempo": 70.674,
         "sos": 2.632,
         "games": 4,
         "rawGames": 4,
         "reliability": 0.571,
         "sample": "Developing",
         "model": "D1 Hoops Power Rating v2",
-        "rank": 46,
-        "adjORank": 90,
+        "rank": 45,
+        "adjORank": 91,
         "adjDRank": 25,
-        "tempoRank": 184,
+        "tempoRank": 183,
         "sosRank": 52
       }
     },
@@ -39900,11 +39900,11 @@
       "eloRating": 1514,
       "sosRating": -9.05,
       "powerRatings": {
-        "adjO": 115.089,
-        "adjD": 105.933,
-        "adjEM": 9.157,
-        "tempo": 69.262,
-        "sos": -6.491,
+        "adjO": 115.088,
+        "adjD": 105.923,
+        "adjEM": 9.165,
+        "tempo": 69.266,
+        "sos": -6.474,
         "games": 5,
         "rawGames": 4,
         "reliability": 0.625,
@@ -39914,7 +39914,7 @@
         "adjORank": 47,
         "adjDRank": 168,
         "tempoRank": 273,
-        "sosRank": 179
+        "sosRank": 180
       }
     },
     {
@@ -40788,11 +40788,11 @@
       "eloRating": 1427,
       "sosRating": -12.725,
       "powerRatings": {
-        "adjO": 106.246,
-        "adjD": 118.953,
-        "adjEM": -12.707,
-        "tempo": 67.437,
-        "sos": -4.714,
+        "adjO": 106.244,
+        "adjD": 118.949,
+        "adjEM": -12.705,
+        "tempo": 67.435,
+        "sos": -4.712,
         "games": 5.5,
         "rawGames": 5,
         "reliability": 0.647,
@@ -40802,7 +40802,7 @@
         "adjORank": 169,
         "adjDRank": 362,
         "tempoRank": 352,
-        "sosRank": 152
+        "sosRank": 153
       }
     },
     {
@@ -41674,10 +41674,10 @@
       "eloRating": 1422,
       "sosRating": 7.175,
       "powerRatings": {
-        "adjO": 100.231,
-        "adjD": 107.583,
+        "adjO": 100.228,
+        "adjD": 107.58,
         "adjEM": -7.352,
-        "tempo": 71.43,
+        "tempo": 71.427,
         "sos": -4.997,
         "games": 4.5,
         "rawGames": 5,
@@ -41688,7 +41688,7 @@
         "adjORank": 292,
         "adjDRank": 213,
         "tempoRank": 128,
-        "sosRank": 157
+        "sosRank": 158
       }
     },
     {
@@ -42416,10 +42416,10 @@
       "eloRating": 1408,
       "sosRating": -0.14999999999999947,
       "powerRatings": {
-        "adjO": 104.502,
-        "adjD": 110.147,
+        "adjO": 104.499,
+        "adjD": 110.144,
         "adjEM": -5.645,
-        "tempo": 69.699,
+        "tempo": 69.698,
         "sos": 4.849,
         "games": 4,
         "rawGames": 4,
@@ -43158,10 +43158,10 @@
       "eloRating": 1565,
       "sosRating": 0.47499999999999964,
       "powerRatings": {
-        "adjO": 108.4,
-        "adjD": 101.359,
+        "adjO": 108.397,
+        "adjD": 101.356,
         "adjEM": 7.041,
-        "tempo": 71.708,
+        "tempo": 71.714,
         "sos": 2.661,
         "games": 4,
         "rawGames": 4,
@@ -43900,11 +43900,11 @@
       "eloRating": 1531,
       "sosRating": -10.45,
       "powerRatings": {
-        "adjO": 108.278,
-        "adjD": 104.165,
-        "adjEM": 4.113,
-        "tempo": 72.675,
-        "sos": 1.024,
+        "adjO": 108.274,
+        "adjD": 104.162,
+        "adjEM": 4.112,
+        "tempo": 72.676,
+        "sos": 1.023,
         "games": 4,
         "rawGames": 4,
         "reliability": 0.571,
@@ -44642,8 +44642,8 @@
       "eloRating": 1731,
       "sosRating": -12.4,
       "powerRatings": {
-        "adjO": 108.48,
-        "adjD": 104.103,
+        "adjO": 108.477,
+        "adjD": 104.1,
         "adjEM": 4.378,
         "tempo": 69.736,
         "sos": -17.016,
@@ -45528,11 +45528,11 @@
       "eloRating": 1480,
       "sosRating": 9.599999999999998,
       "powerRatings": {
-        "adjO": 93.359,
-        "adjD": 107.561,
-        "adjEM": -14.201,
-        "tempo": 68.651,
-        "sos": -4.286,
+        "adjO": 93.357,
+        "adjD": 107.557,
+        "adjEM": -14.2,
+        "tempo": 68.65,
+        "sos": -4.284,
         "games": 4.5,
         "rawGames": 5,
         "reliability": 0.6,
@@ -46270,11 +46270,11 @@
       "eloRating": 1557,
       "sosRating": -9.1,
       "powerRatings": {
-        "adjO": 107.269,
-        "adjD": 111.027,
+        "adjO": 107.266,
+        "adjD": 111.024,
         "adjEM": -3.758,
         "tempo": 71.625,
-        "sos": -12.375,
+        "sos": -12.374,
         "games": 3.5,
         "rawGames": 4,
         "reliability": 0.538,
@@ -47012,10 +47012,10 @@
       "eloRating": 1601,
       "sosRating": 9.375,
       "powerRatings": {
-        "adjO": 109.794,
-        "adjD": 100.418,
+        "adjO": 109.791,
+        "adjD": 100.415,
         "adjEM": 9.376,
-        "tempo": 71.378,
+        "tempo": 71.377,
         "sos": 1.244,
         "games": 4,
         "rawGames": 4,
@@ -47900,10 +47900,10 @@
       "eloRating": 1615,
       "sosRating": -8.075,
       "powerRatings": {
-        "adjO": 106.441,
-        "adjD": 111.012,
+        "adjO": 106.437,
+        "adjD": 111.008,
         "adjEM": -4.571,
-        "tempo": 69.786,
+        "tempo": 69.785,
         "sos": -22.839,
         "games": 5,
         "rawGames": 5,
@@ -48642,11 +48642,11 @@
       "eloRating": 1604,
       "sosRating": -4.424999999999999,
       "powerRatings": {
-        "adjO": 104.673,
-        "adjD": 100.899,
-        "adjEM": 3.774,
-        "tempo": 68.927,
-        "sos": -1.145,
+        "adjO": 104.672,
+        "adjD": 100.89,
+        "adjEM": 3.782,
+        "tempo": 68.928,
+        "sos": -1.128,
         "games": 5,
         "rawGames": 4,
         "reliability": 0.625,
@@ -49386,10 +49386,10 @@
       "eloRating": 1407,
       "sosRating": -5.975,
       "powerRatings": {
-        "adjO": 108.584,
-        "adjD": 106.747,
+        "adjO": 108.581,
+        "adjD": 106.744,
         "adjEM": 1.837,
-        "tempo": 71.591,
+        "tempo": 71.59,
         "sos": -2.878,
         "games": 5,
         "rawGames": 4,
@@ -50128,21 +50128,21 @@
       "eloRating": 1868,
       "sosRating": -11.6,
       "powerRatings": {
-        "adjO": 109.811,
-        "adjD": 94.46,
+        "adjO": 109.808,
+        "adjD": 94.457,
         "adjEM": 15.351,
-        "tempo": 68.912,
+        "tempo": 68.911,
         "sos": -5.502,
         "games": 5,
         "rawGames": 4,
         "reliability": 0.625,
         "sample": "Developing",
         "model": "D1 Hoops Power Rating v2",
-        "rank": 48,
+        "rank": 47,
         "adjORank": 101,
         "adjDRank": 19,
         "tempoRank": 294,
-        "sosRank": 162
+        "sosRank": 163
       }
     },
     {
@@ -50870,8 +50870,8 @@
       "eloRating": 1584,
       "sosRating": 3.633333333333333,
       "powerRatings": {
-        "adjO": 101.102,
-        "adjD": 105.837,
+        "adjO": 101.098,
+        "adjD": 105.833,
         "adjEM": -4.735,
         "tempo": 68.112,
         "sos": -19.8,
@@ -51612,9 +51612,9 @@
       "eloRating": 1486,
       "sosRating": -1.0666666666666667,
       "powerRatings": {
-        "adjO": 94.034,
-        "adjD": 109.661,
-        "adjEM": -15.628,
+        "adjO": 94.03,
+        "adjD": 109.658,
+        "adjEM": -15.627,
         "tempo": 68.769,
         "sos": -21.135,
         "games": 4,
@@ -52210,8 +52210,8 @@
       "eloRating": 1423,
       "sosRating": 15.333333333333334,
       "powerRatings": {
-        "adjO": 105.323,
-        "adjD": 110.99,
+        "adjO": 105.319,
+        "adjD": 110.987,
         "adjEM": -5.667,
         "tempo": 68.104,
         "sos": -8.098,
@@ -52224,7 +52224,7 @@
         "adjORank": 182,
         "adjDRank": 289,
         "tempoRank": 334,
-        "sosRank": 207
+        "sosRank": 208
       }
     },
     {
@@ -52808,8 +52808,8 @@
       "eloRating": 1136,
       "sosRating": 13.399999999999999,
       "powerRatings": {
-        "adjO": 96.718,
-        "adjD": 114.242,
+        "adjO": 96.715,
+        "adjD": 114.238,
         "adjEM": -17.524,
         "tempo": 71.507,
         "sos": 11.202,
@@ -53406,11 +53406,11 @@
       "eloRating": 1673,
       "sosRating": -11.95,
       "powerRatings": {
-        "adjO": 104.718,
-        "adjD": 108.42,
+        "adjO": 104.714,
+        "adjD": 108.416,
         "adjEM": -3.702,
-        "tempo": 70.823,
-        "sos": -21.355,
+        "tempo": 70.822,
+        "sos": -21.354,
         "games": 3.5,
         "rawGames": 3,
         "reliability": 0.538,
@@ -53419,7 +53419,7 @@
         "rank": 210,
         "adjORank": 205,
         "adjDRank": 235,
-        "tempoRank": 169,
+        "tempoRank": 170,
         "sosRank": 336
       }
     },
@@ -54148,9 +54148,9 @@
       "eloRating": 1393,
       "sosRating": -3.7249999999999996,
       "powerRatings": {
-        "adjO": 101.235,
-        "adjD": 106.553,
-        "adjEM": -5.319,
+        "adjO": 101.232,
+        "adjD": 106.55,
+        "adjEM": -5.318,
         "tempo": 69.445,
         "sos": 0.253,
         "games": 4,
@@ -54890,11 +54890,11 @@
       "eloRating": 1976,
       "sosRating": 4.3,
       "powerRatings": {
-        "adjO": 117.222,
-        "adjD": 89.176,
+        "adjO": 117.219,
+        "adjD": 89.173,
         "adjEM": 28.046,
-        "tempo": 74.034,
-        "sos": 6.291,
+        "tempo": 74.035,
+        "sos": 6.292,
         "games": 5,
         "rawGames": 4,
         "reliability": 0.625,
@@ -54904,7 +54904,7 @@
         "adjORank": 22,
         "adjDRank": 1,
         "tempoRank": 24,
-        "sosRank": 22
+        "sosRank": 24
       }
     },
     {
@@ -55632,11 +55632,11 @@
       "eloRating": 1538,
       "sosRating": -16.433333333333334,
       "powerRatings": {
-        "adjO": 103.805,
-        "adjD": 106.604,
+        "adjO": 103.802,
+        "adjD": 106.601,
         "adjEM": -2.799,
-        "tempo": 68.315,
-        "sos": -19.71,
+        "tempo": 68.314,
+        "sos": -19.709,
         "games": 3.5,
         "rawGames": 4,
         "reliability": 0.538,
@@ -56374,8 +56374,8 @@
       "eloRating": 1624,
       "sosRating": -1.7000000000000002,
       "powerRatings": {
-        "adjO": 101.499,
-        "adjD": 103.751,
+        "adjO": 101.496,
+        "adjD": 103.748,
         "adjEM": -2.252,
         "tempo": 71.636,
         "sos": -7.095,
@@ -56387,8 +56387,8 @@
         "rank": 181,
         "adjORank": 272,
         "adjDRank": 114,
-        "tempoRank": 109,
-        "sosRank": 188
+        "tempoRank": 110,
+        "sosRank": 189
       }
     },
     {
@@ -56972,10 +56972,10 @@
       "eloRating": 1497,
       "sosRating": 5.6000000000000005,
       "powerRatings": {
-        "adjO": 105.133,
-        "adjD": 103.237,
+        "adjO": 105.13,
+        "adjD": 103.233,
         "adjEM": 1.897,
-        "tempo": 67.08,
+        "tempo": 67.077,
         "sos": 7.256,
         "games": 4,
         "rawGames": 3,
@@ -56986,7 +56986,7 @@
         "adjORank": 194,
         "adjDRank": 103,
         "tempoRank": 355,
-        "sosRank": 15
+        "sosRank": 16
       }
     },
     {
@@ -57720,10 +57720,10 @@
       "eloRating": 1580,
       "sosRating": -6.699999999999999,
       "powerRatings": {
-        "adjO": 101.723,
-        "adjD": 108.59,
+        "adjO": 101.719,
+        "adjD": 108.586,
         "adjEM": -6.867,
-        "tempo": 69.33,
+        "tempo": 69.326,
         "sos": -1.612,
         "games": 5,
         "rawGames": 4,
@@ -57733,7 +57733,7 @@
         "rank": 263,
         "adjORank": 268,
         "adjDRank": 239,
-        "tempoRank": 269,
+        "tempoRank": 270,
         "sosRank": 107
       }
     },
@@ -58606,10 +58606,10 @@
       "eloRating": 1442,
       "sosRating": 11.85,
       "powerRatings": {
-        "adjO": 97.298,
-        "adjD": 115.603,
+        "adjO": 97.295,
+        "adjD": 115.6,
         "adjEM": -18.305,
-        "tempo": 69.438,
+        "tempo": 69.436,
         "sos": 2.12,
         "games": 5.5,
         "rawGames": 5,
@@ -59348,10 +59348,10 @@
       "eloRating": 1870,
       "sosRating": 11.6,
       "powerRatings": {
-        "adjO": 101.791,
-        "adjD": 105.485,
+        "adjO": 101.788,
+        "adjD": 105.482,
         "adjEM": -3.694,
-        "tempo": 73.642,
+        "tempo": 73.641,
         "sos": -32.682,
         "games": 3.5,
         "rawGames": 4,
@@ -59946,10 +59946,10 @@
       "eloRating": 1747,
       "sosRating": 5.6499999999999995,
       "powerRatings": {
-        "adjO": 102.694,
-        "adjD": 104.984,
+        "adjO": 102.691,
+        "adjD": 104.981,
         "adjEM": -2.29,
-        "tempo": 68.496,
+        "tempo": 68.497,
         "sos": -15.263,
         "games": 2.5,
         "rawGames": 3,
@@ -60688,10 +60688,10 @@
       "eloRating": 1579,
       "sosRating": 9.433333333333334,
       "powerRatings": {
-        "adjO": 108.414,
-        "adjD": 110.063,
+        "adjO": 108.411,
+        "adjD": 110.06,
         "adjEM": -1.649,
-        "tempo": 70.668,
+        "tempo": 70.666,
         "sos": -4.452,
         "games": 4.5,
         "rawGames": 4,
@@ -60702,7 +60702,7 @@
         "adjORank": 124,
         "adjDRank": 270,
         "tempoRank": 185,
-        "sosRank": 146
+        "sosRank": 147
       }
     },
     {
@@ -61430,10 +61430,10 @@
       "eloRating": 1533,
       "sosRating": 3.875,
       "powerRatings": {
-        "adjO": 105.171,
-        "adjD": 106.796,
+        "adjO": 105.168,
+        "adjD": 106.793,
         "adjEM": -1.624,
-        "tempo": 68.984,
+        "tempo": 68.985,
         "sos": 2.239,
         "games": 4,
         "rawGames": 4,
@@ -62174,8 +62174,8 @@
       "eloRating": 1480,
       "sosRating": 1.2666666666666664,
       "powerRatings": {
-        "adjO": 101.498,
-        "adjD": 110.535,
+        "adjO": 101.495,
+        "adjD": 110.531,
         "adjEM": -9.036,
         "tempo": 69.387,
         "sos": -13.915,
@@ -62916,10 +62916,10 @@
       "eloRating": 1280,
       "sosRating": -5.550000000000001,
       "powerRatings": {
-        "adjO": 95.923,
-        "adjD": 108.327,
+        "adjO": 95.92,
+        "adjD": 108.324,
         "adjEM": -12.404,
-        "tempo": 70.372,
+        "tempo": 70.37,
         "sos": -5.739,
         "games": 4,
         "rawGames": 4,
@@ -62930,7 +62930,7 @@
         "adjORank": 342,
         "adjDRank": 232,
         "tempoRank": 206,
-        "sosRank": 167
+        "sosRank": 168
       }
     },
     {
@@ -63804,10 +63804,10 @@
       "eloRating": 1379,
       "sosRating": 12.225,
       "powerRatings": {
-        "adjO": 99.216,
-        "adjD": 116.501,
+        "adjO": 99.213,
+        "adjD": 116.498,
         "adjEM": -17.285,
-        "tempo": 67.483,
+        "tempo": 67.481,
         "sos": -2.226,
         "games": 4.5,
         "rawGames": 5,
@@ -64690,10 +64690,10 @@
       "eloRating": 1081,
       "sosRating": 1.1750000000000003,
       "powerRatings": {
-        "adjO": 90.18,
-        "adjD": 116.031,
+        "adjO": 90.177,
+        "adjD": 116.028,
         "adjEM": -25.851,
-        "tempo": 72.592,
+        "tempo": 72.59,
         "sos": -11.291,
         "games": 4.5,
         "rawGames": 5,
@@ -64702,7 +64702,7 @@
         "model": "D1 Hoops Power Rating v2",
         "rank": 364,
         "adjORank": 364,
-        "adjDRank": 351,
+        "adjDRank": 352,
         "tempoRank": 65,
         "sosRank": 253
       }
@@ -65432,11 +65432,11 @@
       "eloRating": 1527,
       "sosRating": 7.866666666666667,
       "powerRatings": {
-        "adjO": 105.448,
-        "adjD": 107.843,
+        "adjO": 105.444,
+        "adjD": 107.839,
         "adjEM": -2.395,
         "tempo": 71.66,
-        "sos": -12.494,
+        "sos": -12.493,
         "games": 3.5,
         "rawGames": 4,
         "reliability": 0.538,
@@ -66174,11 +66174,11 @@
       "eloRating": 1822,
       "sosRating": 8.975,
       "powerRatings": {
-        "adjO": 119.941,
-        "adjD": 94.082,
-        "adjEM": 25.859,
-        "tempo": 69.576,
-        "sos": 5.585,
+        "adjO": 119.937,
+        "adjD": 94.079,
+        "adjEM": 25.858,
+        "tempo": 69.585,
+        "sos": 5.582,
         "games": 5,
         "rawGames": 4,
         "reliability": 0.625,
@@ -66188,7 +66188,7 @@
         "adjORank": 12,
         "adjDRank": 16,
         "tempoRank": 254,
-        "sosRank": 26
+        "sosRank": 27
       }
     },
     {
@@ -67062,11 +67062,11 @@
       "eloRating": 1817,
       "sosRating": -9.166666666666666,
       "powerRatings": {
-        "adjO": 108.412,
-        "adjD": 109.494,
+        "adjO": 108.409,
+        "adjD": 109.49,
         "adjEM": -1.081,
-        "tempo": 69.155,
-        "sos": -16.547,
+        "tempo": 69.15,
+        "sos": -16.546,
         "games": 4,
         "rawGames": 5,
         "reliability": 0.571,
@@ -67660,11 +67660,11 @@
       "eloRating": 1756,
       "sosRating": -16.25,
       "powerRatings": {
-        "adjO": 106.549,
-        "adjD": 106.077,
-        "adjEM": 0.472,
+        "adjO": 106.546,
+        "adjD": 106.073,
+        "adjEM": 0.473,
         "tempo": 74.151,
-        "sos": -13.566,
+        "sos": -13.565,
         "games": 3.5,
         "rawGames": 3,
         "reliability": 0.538,
@@ -68402,8 +68402,8 @@
       "eloRating": 1765,
       "sosRating": -4.7250000000000005,
       "powerRatings": {
-        "adjO": 116.048,
-        "adjD": 103.392,
+        "adjO": 116.044,
+        "adjD": 103.389,
         "adjEM": 12.655,
         "tempo": 72.698,
         "sos": -3.489,
@@ -68413,10 +68413,10 @@
         "sample": "Developing",
         "model": "D1 Hoops Power Rating v2",
         "rank": 60,
-        "adjORank": 36,
+        "adjORank": 35,
         "adjDRank": 104,
         "tempoRank": 56,
-        "sosRank": 136
+        "sosRank": 137
       }
     },
     {
@@ -69144,10 +69144,10 @@
       "eloRating": 1544,
       "sosRating": -3.175,
       "powerRatings": {
-        "adjO": 106.746,
-        "adjD": 103.674,
+        "adjO": 106.743,
+        "adjD": 103.67,
         "adjEM": 3.072,
-        "tempo": 71.075,
+        "tempo": 71.074,
         "sos": -4.17,
         "games": 5,
         "rawGames": 4,
@@ -69888,8 +69888,8 @@
       "eloRating": 1551,
       "sosRating": 1.9666666666666675,
       "powerRatings": {
-        "adjO": 105.482,
-        "adjD": 110.044,
+        "adjO": 105.479,
+        "adjD": 110.04,
         "adjEM": -4.561,
         "tempo": 71.677,
         "sos": -15.494,
@@ -70774,10 +70774,10 @@
       "eloRating": 1763,
       "sosRating": 0.95,
       "powerRatings": {
-        "adjO": 109.008,
-        "adjD": 105.275,
+        "adjO": 109.004,
+        "adjD": 105.271,
         "adjEM": 3.733,
-        "tempo": 70.662,
+        "tempo": 70.66,
         "sos": -14.439,
         "games": 4.5,
         "rawGames": 5,
@@ -71516,11 +71516,11 @@
       "eloRating": 1305,
       "sosRating": 18.366666666666667,
       "powerRatings": {
-        "adjO": 94.928,
-        "adjD": 114.431,
-        "adjEM": -19.504,
-        "tempo": 70.695,
-        "sos": 1.31,
+        "adjO": 94.925,
+        "adjD": 114.428,
+        "adjEM": -19.502,
+        "tempo": 70.69,
+        "sos": 1.313,
         "games": 3.5,
         "rawGames": 4,
         "reliability": 0.538,
@@ -72258,11 +72258,11 @@
       "eloRating": 1625,
       "sosRating": -2.8499999999999996,
       "powerRatings": {
-        "adjO": 107.184,
-        "adjD": 101.658,
+        "adjO": 107.181,
+        "adjD": 101.654,
         "adjEM": 5.527,
         "tempo": 68.709,
-        "sos": -9.188,
+        "sos": -9.187,
         "games": 4,
         "rawGames": 4,
         "reliability": 0.571,
@@ -72272,7 +72272,7 @@
         "adjORank": 148,
         "adjDRank": 81,
         "tempoRank": 305,
-        "sosRank": 224
+        "sosRank": 225
       }
     },
     {
@@ -73144,10 +73144,10 @@
       "eloRating": 1934,
       "sosRating": -1.325,
       "powerRatings": {
-        "adjO": 113.234,
-        "adjD": 97.239,
+        "adjO": 113.231,
+        "adjD": 97.236,
         "adjEM": 15.995,
-        "tempo": 69.839,
+        "tempo": 69.838,
         "sos": -14.907,
         "games": 4.5,
         "rawGames": 5,
@@ -73886,18 +73886,18 @@
       "eloRating": 1642,
       "sosRating": -7.025,
       "powerRatings": {
-        "adjO": 115.841,
-        "adjD": 107.642,
-        "adjEM": 8.199,
-        "tempo": 68.531,
-        "sos": -3.06,
+        "adjO": 115.839,
+        "adjD": 107.639,
+        "adjEM": 8.2,
+        "tempo": 68.53,
+        "sos": -3.058,
         "games": 4,
         "rawGames": 4,
         "reliability": 0.571,
         "sample": "Developing",
         "model": "D1 Hoops Power Rating v2",
         "rank": 91,
-        "adjORank": 39,
+        "adjORank": 38,
         "adjDRank": 214,
         "tempoRank": 315,
         "sosRank": 130
@@ -74628,10 +74628,10 @@
       "eloRating": 1642,
       "sosRating": -3.05,
       "powerRatings": {
-        "adjO": 117.194,
-        "adjD": 101.256,
+        "adjO": 117.191,
+        "adjD": 101.253,
         "adjEM": 15.938,
-        "tempo": 71.332,
+        "tempo": 71.342,
         "sos": -3.195,
         "games": 5,
         "rawGames": 4,
@@ -74641,7 +74641,7 @@
         "rank": 42,
         "adjORank": 23,
         "adjDRank": 72,
-        "tempoRank": 133,
+        "tempoRank": 132,
         "sosRank": 133
       }
     },
@@ -75372,11 +75372,11 @@
       "eloRating": 1445,
       "sosRating": -0.7250000000000001,
       "powerRatings": {
-        "adjO": 103.711,
-        "adjD": 110.518,
-        "adjEM": -6.807,
-        "tempo": 72.022,
-        "sos": -1.75,
+        "adjO": 103.709,
+        "adjD": 110.508,
+        "adjEM": -6.799,
+        "tempo": 72.023,
+        "sos": -1.733,
         "games": 5,
         "rawGames": 4,
         "reliability": 0.625,
@@ -76260,10 +76260,10 @@
       "eloRating": 1727,
       "sosRating": -9.9,
       "powerRatings": {
-        "adjO": 105.148,
-        "adjD": 108.976,
+        "adjO": 105.146,
+        "adjD": 108.974,
         "adjEM": -3.828,
-        "tempo": 68.595,
+        "tempo": 68.591,
         "sos": -14.465,
         "games": 4.5,
         "rawGames": 5,
@@ -76273,7 +76273,7 @@
         "rank": 218,
         "adjORank": 193,
         "adjDRank": 249,
-        "tempoRank": 310,
+        "tempoRank": 311,
         "sosRank": 285
       }
     },
@@ -77002,11 +77002,11 @@
       "eloRating": 1655,
       "sosRating": -1.6,
       "powerRatings": {
-        "adjO": 105.287,
-        "adjD": 104.555,
-        "adjEM": 0.732,
+        "adjO": 105.285,
+        "adjD": 104.552,
+        "adjEM": 0.733,
         "tempo": 73.984,
-        "sos": -9.027,
+        "sos": -9.025,
         "games": 5,
         "rawGames": 4,
         "reliability": 0.625,
@@ -77015,8 +77015,8 @@
         "rank": 153,
         "adjORank": 185,
         "adjDRank": 137,
-        "tempoRank": 26,
-        "sosRank": 218
+        "tempoRank": 27,
+        "sosRank": 219
       }
     },
     {
@@ -77600,11 +77600,11 @@
       "eloRating": 1693,
       "sosRating": 13.633333333333333,
       "powerRatings": {
-        "adjO": 118.105,
-        "adjD": 96.422,
+        "adjO": 118.102,
+        "adjD": 96.418,
         "adjEM": 21.684,
-        "tempo": 71.727,
-        "sos": 9.036,
+        "tempo": 71.726,
+        "sos": 9.035,
         "games": 4,
         "rawGames": 3,
         "reliability": 0.571,
@@ -77613,7 +77613,7 @@
         "rank": 18,
         "adjORank": 17,
         "adjDRank": 28,
-        "tempoRank": 102,
+        "tempoRank": 103,
         "sosRank": 8
       }
     },
@@ -78054,10 +78054,10 @@
       "eloRating": 1446,
       "sosRating": 7.15,
       "powerRatings": {
-        "adjO": 99.76,
-        "adjD": 109.59,
+        "adjO": 99.756,
+        "adjD": 109.587,
         "adjEM": -9.83,
-        "tempo": 72.658,
+        "tempo": 72.653,
         "sos": 8.644,
         "games": 3,
         "rawGames": 2,
@@ -78796,11 +78796,11 @@
       "eloRating": 1803,
       "sosRating": 2.125,
       "powerRatings": {
-        "adjO": 112.88,
-        "adjD": 99.444,
-        "adjEM": 13.436,
-        "tempo": 73.075,
-        "sos": -9.575,
+        "adjO": 112.877,
+        "adjD": 99.442,
+        "adjEM": 13.435,
+        "tempo": 73.076,
+        "sos": -9.578,
         "games": 4,
         "rawGames": 4,
         "reliability": 0.571,
@@ -78810,7 +78810,7 @@
         "adjORank": 68,
         "adjDRank": 48,
         "tempoRank": 43,
-        "sosRank": 227
+        "sosRank": 228
       }
     },
     {
@@ -79682,11 +79682,11 @@
       "eloRating": 1615,
       "sosRating": 5.733333333333333,
       "powerRatings": {
-        "adjO": 106.076,
-        "adjD": 110.233,
+        "adjO": 106.073,
+        "adjD": 110.23,
         "adjEM": -4.157,
-        "tempo": 68.577,
-        "sos": -15.001,
+        "tempo": 68.576,
+        "sos": -15,
         "games": 5,
         "rawGames": 5,
         "reliability": 0.625,
@@ -80424,10 +80424,10 @@
       "eloRating": 1487,
       "sosRating": 9.200000000000001,
       "powerRatings": {
-        "adjO": 96.666,
-        "adjD": 105.132,
+        "adjO": 96.663,
+        "adjD": 105.129,
         "adjEM": -8.466,
-        "tempo": 68.826,
+        "tempo": 68.825,
         "sos": -10.59,
         "games": 3.5,
         "rawGames": 4,
@@ -80438,7 +80438,7 @@
         "adjORank": 336,
         "adjDRank": 151,
         "tempoRank": 301,
-        "sosRank": 246
+        "sosRank": 247
       }
     },
     {
@@ -81312,8 +81312,8 @@
       "eloRating": 1546,
       "sosRating": 0.36666666666666714,
       "powerRatings": {
-        "adjO": 100.825,
-        "adjD": 106.18,
+        "adjO": 100.822,
+        "adjD": 106.176,
         "adjEM": -5.355,
         "tempo": 65.913,
         "sos": -19.407,
@@ -82054,10 +82054,10 @@
       "eloRating": 1734,
       "sosRating": -20.2,
       "powerRatings": {
-        "adjO": 103.964,
-        "adjD": 101.245,
+        "adjO": 103.96,
+        "adjD": 101.242,
         "adjEM": 2.719,
-        "tempo": 70.728,
+        "tempo": 70.727,
         "sos": -12.634,
         "games": 3.5,
         "rawGames": 4,
@@ -82940,11 +82940,11 @@
       "eloRating": 1870,
       "sosRating": -7.580000000000001,
       "powerRatings": {
-        "adjO": 109.092,
-        "adjD": 95.599,
+        "adjO": 109.089,
+        "adjD": 95.596,
         "adjEM": 13.493,
         "tempo": 69.83,
-        "sos": -0.671,
+        "sos": -0.67,
         "games": 5,
         "rawGames": 5,
         "reliability": 0.625,
@@ -82953,7 +82953,7 @@
         "rank": 55,
         "adjORank": 109,
         "adjDRank": 26,
-        "tempoRank": 240,
+        "tempoRank": 239,
         "sosRank": 97
       }
     },
@@ -83684,10 +83684,10 @@
       "eloRating": 1588,
       "sosRating": -2.133333333333333,
       "powerRatings": {
-        "adjO": 103.006,
-        "adjD": 103.686,
+        "adjO": 103.003,
+        "adjD": 103.683,
         "adjEM": -0.68,
-        "tempo": 68.421,
+        "tempo": 68.419,
         "sos": -7.332,
         "games": 4.5,
         "rawGames": 4,
@@ -83698,7 +83698,7 @@
         "adjORank": 247,
         "adjDRank": 113,
         "tempoRank": 324,
-        "sosRank": 195
+        "sosRank": 196
       }
     },
     {
@@ -84426,11 +84426,11 @@
       "eloRating": 1255,
       "sosRating": 6.449999999999999,
       "powerRatings": {
-        "adjO": 94.631,
-        "adjD": 113.197,
+        "adjO": 94.628,
+        "adjD": 113.193,
         "adjEM": -18.566,
         "tempo": 72.085,
-        "sos": 1.707,
+        "sos": 1.706,
         "games": 4,
         "rawGames": 4,
         "reliability": 0.571,
@@ -85168,10 +85168,10 @@
       "eloRating": 1823,
       "sosRating": -8.4,
       "powerRatings": {
-        "adjO": 103.448,
-        "adjD": 107.337,
+        "adjO": 103.444,
+        "adjD": 107.333,
         "adjEM": -3.889,
-        "tempo": 71.998,
+        "tempo": 71.994,
         "sos": -34.075,
         "games": 3,
         "rawGames": 4,
@@ -85766,10 +85766,10 @@
       "eloRating": 1938,
       "sosRating": -0.2666666666666666,
       "powerRatings": {
-        "adjO": 118.77,
-        "adjD": 90.676,
+        "adjO": 118.767,
+        "adjD": 90.673,
         "adjEM": 28.095,
-        "tempo": 71.633,
+        "tempo": 71.639,
         "sos": -0.594,
         "games": 4,
         "rawGames": 3,
@@ -85779,7 +85779,7 @@
         "rank": 2,
         "adjORank": 14,
         "adjDRank": 4,
-        "tempoRank": 110,
+        "tempoRank": 108,
         "sosRank": 96
       }
     },
@@ -86652,21 +86652,21 @@
       "eloRating": 1528,
       "sosRating": -5.48,
       "powerRatings": {
-        "adjO": 104.15,
-        "adjD": 105.152,
-        "adjEM": -1.003,
-        "tempo": 68.955,
-        "sos": -7.009,
+        "adjO": 104.149,
+        "adjD": 105.142,
+        "adjEM": -0.993,
+        "tempo": 68.96,
+        "sos": -6.991,
         "games": 5,
         "rawGames": 5,
         "reliability": 0.625,
         "sample": "Developing",
         "model": "D1 Hoops Power Rating v2",
         "rank": 167,
-        "adjORank": 220,
+        "adjORank": 219,
         "adjDRank": 152,
         "tempoRank": 289,
-        "sosRank": 184
+        "sosRank": 185
       }
     },
     {
@@ -87394,10 +87394,10 @@
       "eloRating": 1624,
       "sosRating": -3.8333333333333335,
       "powerRatings": {
-        "adjO": 104.084,
-        "adjD": 113.408,
+        "adjO": 104.08,
+        "adjD": 113.405,
         "adjEM": -9.325,
-        "tempo": 70.669,
+        "tempo": 70.668,
         "sos": -18.521,
         "games": 3.5,
         "rawGames": 4,
@@ -87407,7 +87407,7 @@
         "rank": 287,
         "adjORank": 225,
         "adjDRank": 335,
-        "tempoRank": 183,
+        "tempoRank": 184,
         "sosRank": 318
       }
     },
@@ -88136,10 +88136,10 @@
       "eloRating": 1335,
       "sosRating": 0.8250000000000002,
       "powerRatings": {
-        "adjO": 103.318,
-        "adjD": 113.157,
+        "adjO": 103.314,
+        "adjD": 113.153,
         "adjEM": -9.839,
-        "tempo": 70.679,
+        "tempo": 70.678,
         "sos": 5.766,
         "games": 4,
         "rawGames": 4,
@@ -88150,7 +88150,7 @@
         "adjORank": 242,
         "adjDRank": 330,
         "tempoRank": 181,
-        "sosRank": 25
+        "sosRank": 26
       }
     },
     {
@@ -88878,11 +88878,11 @@
       "eloRating": 1607,
       "sosRating": -4,
       "powerRatings": {
-        "adjO": 104.197,
-        "adjD": 108.034,
-        "adjEM": -3.837,
-        "tempo": 70.248,
-        "sos": -26.73,
+        "adjO": 104.193,
+        "adjD": 108.031,
+        "adjEM": -3.838,
+        "tempo": 70.246,
+        "sos": -26.732,
         "games": 3,
         "rawGames": 4,
         "reliability": 0.5,
@@ -88891,7 +88891,7 @@
         "rank": 219,
         "adjORank": 218,
         "adjDRank": 223,
-        "tempoRank": 211,
+        "tempoRank": 212,
         "sosRank": 353
       }
     },
@@ -89620,10 +89620,10 @@
       "eloRating": 1907,
       "sosRating": 5.15,
       "powerRatings": {
-        "adjO": 127.067,
-        "adjD": 93.786,
+        "adjO": 127.064,
+        "adjD": 93.783,
         "adjEM": 33.282,
-        "tempo": 76.295,
+        "tempo": 76.294,
         "sos": 7.168,
         "games": 5,
         "rawGames": 4,
@@ -89634,7 +89634,7 @@
         "adjORank": 1,
         "adjDRank": 15,
         "tempoRank": 3,
-        "sosRank": 16
+        "sosRank": 17
       }
     },
     {
@@ -90366,8 +90366,8 @@
       "eloRating": 1591,
       "sosRating": 8.766666666666664,
       "powerRatings": {
-        "adjO": 109.861,
-        "adjD": 104.246,
+        "adjO": 109.858,
+        "adjD": 104.242,
         "adjEM": 5.615,
         "tempo": 66.93,
         "sos": -7.297,
@@ -90380,7 +90380,7 @@
         "adjORank": 100,
         "adjDRank": 127,
         "tempoRank": 357,
-        "sosRank": 194
+        "sosRank": 195
       }
     },
     {
@@ -91108,10 +91108,10 @@
       "eloRating": 1272,
       "sosRating": -3.5749999999999997,
       "powerRatings": {
-        "adjO": 96.789,
-        "adjD": 111.293,
+        "adjO": 96.785,
+        "adjD": 111.289,
         "adjEM": -14.504,
-        "tempo": 71.988,
+        "tempo": 71.984,
         "sos": -2.844,
         "games": 4,
         "rawGames": 4,
@@ -91121,7 +91121,7 @@
         "rank": 337,
         "adjORank": 333,
         "adjDRank": 295,
-        "tempoRank": 85,
+        "tempoRank": 86,
         "sosRank": 127
       }
     },
@@ -91850,10 +91850,10 @@
       "eloRating": 1761,
       "sosRating": 7.775,
       "powerRatings": {
-        "adjO": 116.975,
-        "adjD": 101.059,
+        "adjO": 116.972,
+        "adjD": 101.056,
         "adjEM": 15.917,
-        "tempo": 70.406,
+        "tempo": 70.405,
         "sos": -1.788,
         "games": 5,
         "rawGames": 4,
@@ -91863,7 +91863,7 @@
         "rank": 43,
         "adjORank": 25,
         "adjDRank": 67,
-        "tempoRank": 202,
+        "tempoRank": 203,
         "sosRank": 112
       }
     },
@@ -92592,11 +92592,11 @@
       "eloRating": 1770,
       "sosRating": -7.300000000000001,
       "powerRatings": {
-        "adjO": 103.684,
-        "adjD": 106.288,
+        "adjO": 103.68,
+        "adjD": 106.286,
         "adjEM": -2.605,
-        "tempo": 70.455,
-        "sos": -15.826,
+        "tempo": 70.454,
+        "sos": -15.827,
         "games": 3.5,
         "rawGames": 4,
         "reliability": 0.538,
@@ -93480,10 +93480,10 @@
       "eloRating": 1425,
       "sosRating": -4.76,
       "powerRatings": {
-        "adjO": 99.593,
-        "adjD": 104.855,
-        "adjEM": -5.262,
-        "tempo": 68.806,
+        "adjO": 99.59,
+        "adjD": 104.852,
+        "adjEM": -5.261,
+        "tempo": 68.805,
         "sos": -0.983,
         "games": 6,
         "rawGames": 5,
@@ -94224,18 +94224,18 @@
       "eloRating": 1707,
       "sosRating": 10.375,
       "powerRatings": {
-        "adjO": 116.435,
-        "adjD": 98.664,
-        "adjEM": 17.771,
+        "adjO": 116.433,
+        "adjD": 98.661,
+        "adjEM": 17.772,
         "tempo": 68.324,
-        "sos": 1.578,
+        "sos": 1.58,
         "games": 4,
         "rawGames": 4,
         "reliability": 0.571,
         "sample": "Developing",
         "model": "D1 Hoops Power Rating v2",
         "rank": 31,
-        "adjORank": 31,
+        "adjORank": 30,
         "adjDRank": 40,
         "tempoRank": 327,
         "sosRank": 65
@@ -94966,11 +94966,11 @@
       "eloRating": 1725,
       "sosRating": -5.45,
       "powerRatings": {
-        "adjO": 109.964,
-        "adjD": 91.607,
-        "adjEM": 18.357,
-        "tempo": 71.057,
-        "sos": -7.172,
+        "adjO": 109.963,
+        "adjD": 91.596,
+        "adjEM": 18.367,
+        "tempo": 71.068,
+        "sos": -7.15,
         "games": 4,
         "rawGames": 4,
         "reliability": 0.571,
@@ -95854,11 +95854,11 @@
       "eloRating": 1346,
       "sosRating": 6.360000000000001,
       "powerRatings": {
-        "adjO": 97.225,
-        "adjD": 109.37,
+        "adjO": 97.222,
+        "adjD": 109.367,
         "adjEM": -12.146,
-        "tempo": 72.605,
-        "sos": 3.693,
+        "tempo": 72.602,
+        "sos": 3.694,
         "games": 5,
         "rawGames": 5,
         "reliability": 0.625,
@@ -96452,10 +96452,10 @@
       "eloRating": 1586,
       "sosRating": 17.05,
       "powerRatings": {
-        "adjO": 103.388,
-        "adjD": 113.371,
+        "adjO": 103.384,
+        "adjD": 113.367,
         "adjEM": -9.983,
-        "tempo": 69.559,
+        "tempo": 69.554,
         "sos": -5.96,
         "games": 3.5,
         "rawGames": 3,
@@ -96466,7 +96466,7 @@
         "adjORank": 239,
         "adjDRank": 334,
         "tempoRank": 255,
-        "sosRank": 172
+        "sosRank": 173
       }
     },
     {
@@ -97198,10 +97198,10 @@
       "eloRating": 1549,
       "sosRating": 5.733333333333334,
       "powerRatings": {
-        "adjO": 102.527,
-        "adjD": 107.049,
-        "adjEM": -4.523,
-        "tempo": 68.855,
+        "adjO": 102.523,
+        "adjD": 107.046,
+        "adjEM": -4.522,
+        "tempo": 68.854,
         "sos": -5.65,
         "games": 4.5,
         "rawGames": 4,
@@ -97212,7 +97212,7 @@
         "adjORank": 257,
         "adjDRank": 197,
         "tempoRank": 297,
-        "sosRank": 165
+        "sosRank": 166
       }
     },
     {
@@ -97940,10 +97940,10 @@
       "eloRating": 1561,
       "sosRating": 5.075,
       "powerRatings": {
-        "adjO": 108.387,
-        "adjD": 109.466,
+        "adjO": 108.384,
+        "adjD": 109.463,
         "adjEM": -1.079,
-        "tempo": 70.55,
+        "tempo": 70.547,
         "sos": -0.043,
         "games": 4,
         "rawGames": 4,
@@ -98826,10 +98826,10 @@
       "eloRating": 1491,
       "sosRating": 5.42,
       "powerRatings": {
-        "adjO": 100.018,
-        "adjD": 113.122,
+        "adjO": 100.015,
+        "adjD": 113.119,
         "adjEM": -13.104,
-        "tempo": 69.774,
+        "tempo": 69.775,
         "sos": -12.13,
         "games": 5.5,
         "rawGames": 5,
@@ -98838,7 +98838,7 @@
         "model": "D1 Hoops Power Rating v2",
         "rank": 323,
         "adjORank": 293,
-        "adjDRank": 328,
+        "adjDRank": 327,
         "tempoRank": 243,
         "sosRank": 259
       }
@@ -99424,18 +99424,18 @@
       "eloRating": 1870,
       "sosRating": 0.40000000000000036,
       "powerRatings": {
-        "adjO": 115.895,
-        "adjD": 89.758,
+        "adjO": 115.892,
+        "adjD": 89.754,
         "adjEM": 26.138,
-        "tempo": 73.984,
-        "sos": 3.593,
+        "tempo": 73.989,
+        "sos": 3.592,
         "games": 4,
         "rawGames": 3,
         "reliability": 0.571,
         "sample": "Developing",
         "model": "D1 Hoops Power Rating v2",
         "rank": 6,
-        "adjORank": 37,
+        "adjORank": 36,
         "adjDRank": 2,
         "tempoRank": 25,
         "sosRank": 44
@@ -100022,10 +100022,10 @@
       "eloRating": 1555,
       "sosRating": 16.633333333333333,
       "powerRatings": {
-        "adjO": 111.732,
-        "adjD": 101.328,
+        "adjO": 111.729,
+        "adjD": 101.325,
         "adjEM": 10.404,
-        "tempo": 72.087,
+        "tempo": 72.093,
         "sos": 1.882,
         "games": 4,
         "rawGames": 3,
@@ -100035,7 +100035,7 @@
         "rank": 73,
         "adjORank": 77,
         "adjDRank": 75,
-        "tempoRank": 81,
+        "tempoRank": 79,
         "sosRank": 61
       }
     },
@@ -100764,10 +100764,10 @@
       "eloRating": 1853,
       "sosRating": -13.399999999999999,
       "powerRatings": {
-        "adjO": 105.735,
-        "adjD": 104.92,
+        "adjO": 105.731,
+        "adjD": 104.917,
         "adjEM": 0.814,
-        "tempo": 74.718,
+        "tempo": 74.716,
         "sos": -19.246,
         "games": 4,
         "rawGames": 4,
@@ -101362,10 +101362,10 @@
       "eloRating": 1638,
       "sosRating": 3.3,
       "powerRatings": {
-        "adjO": 103.683,
-        "adjD": 110.224,
+        "adjO": 103.679,
+        "adjD": 110.22,
         "adjEM": -6.541,
-        "tempo": 69.723,
+        "tempo": 69.724,
         "sos": -13.516,
         "games": 3.5,
         "rawGames": 3,
@@ -102104,11 +102104,11 @@
       "eloRating": 1533,
       "sosRating": 2.55,
       "powerRatings": {
-        "adjO": 114.324,
-        "adjD": 103.973,
-        "adjEM": 10.351,
-        "tempo": 70.023,
-        "sos": -2.165,
+        "adjO": 114.321,
+        "adjD": 103.971,
+        "adjEM": 10.35,
+        "tempo": 70.032,
+        "sos": -2.167,
         "games": 5,
         "rawGames": 4,
         "reliability": 0.625,
@@ -102117,7 +102117,7 @@
         "rank": 74,
         "adjORank": 52,
         "adjDRank": 119,
-        "tempoRank": 227,
+        "tempoRank": 226,
         "sosRank": 118
       }
     },
@@ -102846,10 +102846,10 @@
       "eloRating": 1958,
       "sosRating": 5.775,
       "powerRatings": {
-        "adjO": 115.347,
-        "adjD": 94.479,
+        "adjO": 115.344,
+        "adjD": 94.476,
         "adjEM": 20.868,
-        "tempo": 72.769,
+        "tempo": 72.78,
         "sos": -0.81,
         "games": 4,
         "rawGames": 4,
@@ -102859,7 +102859,7 @@
         "rank": 20,
         "adjORank": 44,
         "adjDRank": 20,
-        "tempoRank": 54,
+        "tempoRank": 53,
         "sosRank": 100
       }
     },
@@ -103588,10 +103588,10 @@
       "eloRating": 1280,
       "sosRating": 6.95,
       "powerRatings": {
-        "adjO": 102.046,
-        "adjD": 111.37,
+        "adjO": 102.043,
+        "adjD": 111.366,
         "adjEM": -9.324,
-        "tempo": 71.139,
+        "tempo": 71.137,
         "sos": 6.909,
         "games": 4,
         "rawGames": 4,
@@ -103602,7 +103602,7 @@
         "adjORank": 265,
         "adjDRank": 297,
         "tempoRank": 149,
-        "sosRank": 17
+        "sosRank": 18
       }
     },
     {
@@ -104476,11 +104476,11 @@
       "eloRating": 1696,
       "sosRating": 8.533333333333333,
       "powerRatings": {
-        "adjO": 97.093,
-        "adjD": 108.808,
+        "adjO": 97.089,
+        "adjD": 108.805,
         "adjEM": -11.715,
         "tempo": 69.398,
-        "sos": -16.609,
+        "sos": -16.608,
         "games": 4,
         "rawGames": 5,
         "reliability": 0.571,
@@ -105074,10 +105074,10 @@
       "eloRating": 1986,
       "sosRating": -25.8,
       "powerRatings": {
-        "adjO": 107.372,
-        "adjD": 104.935,
+        "adjO": 107.368,
+        "adjD": 104.931,
         "adjEM": 2.437,
-        "tempo": 75.439,
+        "tempo": 75.435,
         "sos": -32.6,
         "games": 3,
         "rawGames": 3,
@@ -105816,8 +105816,8 @@
       "eloRating": 1619,
       "sosRating": 8.299999999999999,
       "powerRatings": {
-        "adjO": 99.764,
-        "adjD": 109.859,
+        "adjO": 99.761,
+        "adjD": 109.855,
         "adjEM": -10.095,
         "tempo": 70.456,
         "sos": -8.448,
@@ -105830,7 +105830,7 @@
         "adjORank": 299,
         "adjDRank": 265,
         "tempoRank": 196,
-        "sosRank": 214
+        "sosRank": 215
       }
     },
     {
@@ -106558,8 +106558,8 @@
       "eloRating": 1383,
       "sosRating": -5.7250000000000005,
       "powerRatings": {
-        "adjO": 102.676,
-        "adjD": 106.411,
+        "adjO": 102.673,
+        "adjD": 106.407,
         "adjEM": -3.735,
         "tempo": 68.998,
         "sos": -2.334,
@@ -107156,8 +107156,8 @@
       "eloRating": 1680,
       "sosRating": -5.75,
       "powerRatings": {
-        "adjO": 112.182,
-        "adjD": 108.823,
+        "adjO": 112.179,
+        "adjD": 108.819,
         "adjEM": 3.359,
         "tempo": 68.974,
         "sos": -12.23,
@@ -108042,10 +108042,10 @@
       "eloRating": 1576,
       "sosRating": 6.279999999999999,
       "powerRatings": {
-        "adjO": 106.34,
-        "adjD": 106.916,
+        "adjO": 106.337,
+        "adjD": 106.913,
         "adjEM": -0.576,
-        "tempo": 71.948,
+        "tempo": 71.947,
         "sos": 4.303,
         "games": 6,
         "rawGames": 5,
@@ -108786,11 +108786,11 @@
       "eloRating": 1404,
       "sosRating": 4.45,
       "powerRatings": {
-        "adjO": 106.571,
-        "adjD": 116.867,
-        "adjEM": -10.295,
-        "tempo": 68.591,
-        "sos": 1.295,
+        "adjO": 106.56,
+        "adjD": 116.865,
+        "adjEM": -10.305,
+        "tempo": 68.598,
+        "sos": 1.272,
         "games": 4,
         "rawGames": 4,
         "reliability": 0.571,
@@ -108799,7 +108799,7 @@
         "rank": 299,
         "adjORank": 161,
         "adjDRank": 356,
-        "tempoRank": 311,
+        "tempoRank": 310,
         "sosRank": 69
       }
     },
@@ -109384,11 +109384,11 @@
       "eloRating": 1494,
       "sosRating": 2.4333333333333336,
       "powerRatings": {
-        "adjO": 103.493,
-        "adjD": 107.919,
-        "adjEM": -4.426,
-        "tempo": 70.763,
-        "sos": 10.774,
+        "adjO": 103.49,
+        "adjD": 107.917,
+        "adjEM": -4.427,
+        "tempo": 70.761,
+        "sos": 10.771,
         "games": 4,
         "rawGames": 3,
         "reliability": 0.571,
@@ -109397,7 +109397,7 @@
         "rank": 229,
         "adjORank": 236,
         "adjDRank": 220,
-        "tempoRank": 171,
+        "tempoRank": 172,
         "sosRank": 7
       }
     },
@@ -110270,8 +110270,8 @@
       "eloRating": 1310,
       "sosRating": -0.3999999999999999,
       "powerRatings": {
-        "adjO": 96.872,
-        "adjD": 105.204,
+        "adjO": 96.869,
+        "adjD": 105.201,
         "adjEM": -8.332,
         "tempo": 71.014,
         "sos": 1.16,
@@ -111158,10 +111158,10 @@
       "eloRating": 1860,
       "sosRating": -2,
       "powerRatings": {
-        "adjO": 103.377,
-        "adjD": 107.127,
+        "adjO": 103.373,
+        "adjD": 107.123,
         "adjEM": -3.75,
-        "tempo": 73.275,
+        "tempo": 73.274,
         "sos": -22.236,
         "games": 4,
         "rawGames": 5,
@@ -111756,10 +111756,10 @@
       "eloRating": 1462,
       "sosRating": -15.100000000000001,
       "powerRatings": {
-        "adjO": 94.236,
-        "adjD": 108.468,
+        "adjO": 94.233,
+        "adjD": 108.465,
         "adjEM": -14.232,
-        "tempo": 68.953,
+        "tempo": 68.951,
         "sos": -17.28,
         "games": 2.5,
         "rawGames": 3,
@@ -112498,10 +112498,10 @@
       "eloRating": 1615,
       "sosRating": 5.133333333333334,
       "powerRatings": {
-        "adjO": 101.215,
-        "adjD": 104.151,
+        "adjO": 101.212,
+        "adjD": 104.148,
         "adjEM": -2.936,
-        "tempo": 68.64,
+        "tempo": 68.637,
         "sos": -9.911,
         "games": 4.5,
         "rawGames": 4,
@@ -112512,7 +112512,7 @@
         "adjORank": 275,
         "adjDRank": 124,
         "tempoRank": 308,
-        "sosRank": 231
+        "sosRank": 232
       }
     },
     {
@@ -113096,11 +113096,11 @@
       "eloRating": 1639,
       "sosRating": 0.5333333333333327,
       "powerRatings": {
-        "adjO": 116.742,
-        "adjD": 100.339,
+        "adjO": 116.739,
+        "adjD": 100.335,
         "adjEM": 16.403,
-        "tempo": 71.293,
-        "sos": -2.225,
+        "tempo": 71.294,
+        "sos": -2.224,
         "games": 3,
         "rawGames": 3,
         "reliability": 0.5,
@@ -113838,8 +113838,8 @@
       "eloRating": 1695,
       "sosRating": -12.95,
       "powerRatings": {
-        "adjO": 105.23,
-        "adjD": 103.651,
+        "adjO": 105.227,
+        "adjD": 103.648,
         "adjEM": 1.579,
         "tempo": 70.517,
         "sos": -8.212,
@@ -113848,11 +113848,11 @@
         "reliability": 0.571,
         "sample": "Developing",
         "model": "D1 Hoops Power Rating v2",
-        "rank": 143,
+        "rank": 144,
         "adjORank": 189,
         "adjDRank": 110,
         "tempoRank": 195,
-        "sosRank": 211
+        "sosRank": 212
       }
     },
     {
@@ -114726,11 +114726,11 @@
       "eloRating": 1444,
       "sosRating": -5.300000000000001,
       "powerRatings": {
-        "adjO": 96.094,
-        "adjD": 111.053,
-        "adjEM": -14.959,
+        "adjO": 96.092,
+        "adjD": 111.049,
+        "adjEM": -14.958,
         "tempo": 69.193,
-        "sos": -13.427,
+        "sos": -13.425,
         "games": 4.5,
         "rawGames": 5,
         "reliability": 0.6,
@@ -115614,10 +115614,10 @@
       "eloRating": 1739,
       "sosRating": -7.875,
       "powerRatings": {
-        "adjO": 107.694,
-        "adjD": 106.883,
+        "adjO": 107.691,
+        "adjD": 106.879,
         "adjEM": 0.811,
-        "tempo": 68.98,
+        "tempo": 68.981,
         "sos": -15.879,
         "games": 4.5,
         "rawGames": 5,
@@ -115627,7 +115627,7 @@
         "rank": 151,
         "adjORank": 140,
         "adjDRank": 194,
-        "tempoRank": 287,
+        "tempoRank": 286,
         "sosRank": 300
       }
     },
@@ -116500,17 +116500,17 @@
       "eloRating": 1416,
       "sosRating": -2.18,
       "powerRatings": {
-        "adjO": 93.615,
-        "adjD": 105.692,
+        "adjO": 93.612,
+        "adjD": 105.689,
         "adjEM": -12.077,
-        "tempo": 70.677,
+        "tempo": 70.678,
         "sos": -2.157,
         "games": 5,
         "rawGames": 5,
         "reliability": 0.625,
         "sample": "Developing",
         "model": "D1 Hoops Power Rating v2",
-        "rank": 312,
+        "rank": 311,
         "adjORank": 357,
         "adjDRank": 163,
         "tempoRank": 182,
@@ -117242,10 +117242,10 @@
       "eloRating": 1418,
       "sosRating": -4.65,
       "powerRatings": {
-        "adjO": 96.8,
-        "adjD": 112.567,
+        "adjO": 96.797,
+        "adjD": 112.564,
         "adjEM": -15.767,
-        "tempo": 69.925,
+        "tempo": 69.922,
         "sos": -4.745,
         "games": 5,
         "rawGames": 4,
@@ -117256,7 +117256,7 @@
         "adjORank": 332,
         "adjDRank": 318,
         "tempoRank": 234,
-        "sosRank": 153
+        "sosRank": 155
       }
     },
     {
@@ -117984,10 +117984,10 @@
       "eloRating": 1473,
       "sosRating": -6.875,
       "powerRatings": {
-        "adjO": 99.986,
-        "adjD": 103.119,
+        "adjO": 99.983,
+        "adjD": 103.116,
         "adjEM": -3.133,
-        "tempo": 69.319,
+        "tempo": 69.318,
         "sos": -5.755,
         "games": 5,
         "rawGames": 4,
@@ -117998,7 +117998,7 @@
         "adjORank": 294,
         "adjDRank": 101,
         "tempoRank": 271,
-        "sosRank": 168
+        "sosRank": 169
       }
     },
     {
@@ -118726,17 +118726,17 @@
       "eloRating": 1775,
       "sosRating": 3.1750000000000007,
       "powerRatings": {
-        "adjO": 109.464,
-        "adjD": 91.914,
+        "adjO": 109.461,
+        "adjD": 91.911,
         "adjEM": 17.55,
-        "tempo": 69.729,
+        "tempo": 69.727,
         "sos": 4.116,
         "games": 4,
         "rawGames": 4,
         "reliability": 0.571,
         "sample": "Developing",
         "model": "D1 Hoops Power Rating v2",
-        "rank": 32,
+        "rank": 33,
         "adjORank": 104,
         "adjDRank": 8,
         "tempoRank": 245,
@@ -119468,10 +119468,10 @@
       "eloRating": 1532,
       "sosRating": 2.0250000000000004,
       "powerRatings": {
-        "adjO": 104.868,
-        "adjD": 101.863,
+        "adjO": 104.865,
+        "adjD": 101.86,
         "adjEM": 3.006,
-        "tempo": 73.094,
+        "tempo": 73.092,
         "sos": 2.361,
         "games": 5,
         "rawGames": 4,
@@ -120354,8 +120354,8 @@
       "eloRating": 1394,
       "sosRating": 9.25,
       "powerRatings": {
-        "adjO": 91.399,
-        "adjD": 109.073,
+        "adjO": 91.396,
+        "adjD": 109.07,
         "adjEM": -17.674,
         "tempo": 68.434,
         "sos": 0.487,
@@ -120952,10 +120952,10 @@
       "eloRating": 1582,
       "sosRating": -2.1333333333333333,
       "powerRatings": {
-        "adjO": 113.411,
-        "adjD": 104.221,
+        "adjO": 113.408,
+        "adjD": 104.218,
         "adjEM": 9.19,
-        "tempo": 72.533,
+        "tempo": 72.534,
         "sos": -2.126,
         "games": 4,
         "rawGames": 3,
@@ -121550,10 +121550,10 @@
       "eloRating": 1562,
       "sosRating": 2.9999999999999996,
       "powerRatings": {
-        "adjO": 102.421,
-        "adjD": 105.38,
+        "adjO": 102.418,
+        "adjD": 105.377,
         "adjEM": -2.959,
-        "tempo": 71.753,
+        "tempo": 71.754,
         "sos": -2.835,
         "games": 4,
         "rawGames": 3,
@@ -121564,7 +121564,7 @@
         "adjORank": 260,
         "adjDRank": 157,
         "tempoRank": 101,
-        "sosRank": 126
+        "sosRank": 125
       }
     },
     {
@@ -122148,11 +122148,11 @@
       "eloRating": 1795,
       "sosRating": 6.5,
       "powerRatings": {
-        "adjO": 115.243,
-        "adjD": 106.813,
+        "adjO": 115.239,
+        "adjD": 106.81,
         "adjEM": 8.429,
-        "tempo": 71.082,
-        "sos": -16.044,
+        "tempo": 71.078,
+        "sos": -16.043,
         "games": 2.5,
         "rawGames": 3,
         "reliability": 0.455,
@@ -122890,20 +122890,20 @@
       "eloRating": 1594,
       "sosRating": 16.975,
       "powerRatings": {
-        "adjO": 116.381,
-        "adjD": 107.401,
-        "adjEM": 8.98,
-        "tempo": 71.465,
-        "sos": 18.318,
+        "adjO": 116.378,
+        "adjD": 107.398,
+        "adjEM": 8.981,
+        "tempo": 71.462,
+        "sos": 18.32,
         "games": 4,
         "rawGames": 4,
         "reliability": 0.571,
         "sample": "Developing",
         "model": "D1 Hoops Power Rating v2",
         "rank": 86,
-        "adjORank": 33,
+        "adjORank": 32,
         "adjDRank": 207,
-        "tempoRank": 124,
+        "tempoRank": 125,
         "sosRank": 1
       }
     },
@@ -123778,21 +123778,21 @@
       "eloRating": 1553,
       "sosRating": 11.950000000000001,
       "powerRatings": {
-        "adjO": 108.08,
-        "adjD": 110.8,
-        "adjEM": -2.72,
-        "tempo": 70.734,
-        "sos": -4.565,
+        "adjO": 108.142,
+        "adjD": 110.781,
+        "adjEM": -2.639,
+        "tempo": 70.707,
+        "sos": -4.412,
         "games": 4.5,
         "rawGames": 5,
         "reliability": 0.6,
         "sample": "Developing",
         "model": "D1 Hoops Power Rating v2",
-        "rank": 190,
+        "rank": 189,
         "adjORank": 136,
         "adjDRank": 283,
-        "tempoRank": 173,
-        "sosRank": 147
+        "tempoRank": 179,
+        "sosRank": 146
       }
     },
     {
@@ -124664,8 +124664,8 @@
       "eloRating": 1467,
       "sosRating": 11.45,
       "powerRatings": {
-        "adjO": 96.683,
-        "adjD": 108.281,
+        "adjO": 96.679,
+        "adjD": 108.277,
         "adjEM": -11.598,
         "tempo": 67.566,
         "sos": -3.27,
@@ -125406,11 +125406,11 @@
       "eloRating": 1456,
       "sosRating": 6.6,
       "powerRatings": {
-        "adjO": 101.685,
-        "adjD": 107.743,
-        "adjEM": -6.059,
-        "tempo": 66.679,
-        "sos": 2.625,
+        "adjO": 101.673,
+        "adjD": 107.742,
+        "adjEM": -6.069,
+        "tempo": 66.682,
+        "sos": 2.602,
         "games": 4,
         "rawGames": 4,
         "reliability": 0.571,
@@ -126004,11 +126004,11 @@
       "eloRating": 1571,
       "sosRating": 2.6333333333333333,
       "powerRatings": {
-        "adjO": 111.545,
-        "adjD": 105.733,
+        "adjO": 111.541,
+        "adjD": 105.729,
         "adjEM": 5.812,
-        "tempo": 71.726,
-        "sos": -7.698,
+        "tempo": 71.727,
+        "sos": -7.697,
         "games": 3,
         "rawGames": 3,
         "reliability": 0.5,
@@ -126017,8 +126017,8 @@
         "rank": 102,
         "adjORank": 81,
         "adjDRank": 164,
-        "tempoRank": 103,
-        "sosRank": 201
+        "tempoRank": 102,
+        "sosRank": 202
       }
     },
     {
@@ -126746,8 +126746,8 @@
       "eloRating": 1815,
       "sosRating": 1.9500000000000002,
       "powerRatings": {
-        "adjO": 111.626,
-        "adjD": 92.6,
+        "adjO": 111.623,
+        "adjD": 92.597,
         "adjEM": 19.026,
         "tempo": 73.057,
         "sos": -7.231,
@@ -126760,7 +126760,7 @@
         "adjORank": 79,
         "adjDRank": 9,
         "tempoRank": 45,
-        "sosRank": 192
+        "sosRank": 193
       }
     },
     {
@@ -127488,10 +127488,10 @@
       "eloRating": 1898,
       "sosRating": 9.9,
       "powerRatings": {
-        "adjO": 117.496,
-        "adjD": 93.52,
+        "adjO": 117.493,
+        "adjD": 93.517,
         "adjEM": 23.976,
-        "tempo": 70.667,
+        "tempo": 70.665,
         "sos": 8.767,
         "games": 5,
         "rawGames": 4,
@@ -127500,7 +127500,7 @@
         "model": "D1 Hoops Power Rating v2",
         "rank": 11,
         "adjORank": 21,
-        "adjDRank": 13,
+        "adjDRank": 14,
         "tempoRank": 186,
         "sosRank": 9
       }
@@ -128230,11 +128230,11 @@
       "eloRating": 1831,
       "sosRating": 11.65,
       "powerRatings": {
-        "adjO": 119.144,
-        "adjD": 94.816,
+        "adjO": 119.14,
+        "adjD": 94.813,
         "adjEM": 24.328,
-        "tempo": 74.885,
-        "sos": 8.56,
+        "tempo": 74.886,
+        "sos": 8.561,
         "games": 4,
         "rawGames": 4,
         "reliability": 0.571,
@@ -128242,7 +128242,7 @@
         "model": "D1 Hoops Power Rating v2",
         "rank": 10,
         "adjORank": 13,
-        "adjDRank": 24,
+        "adjDRank": 23,
         "tempoRank": 12,
         "sosRank": 12
       }
@@ -128972,11 +128972,11 @@
       "eloRating": 1541,
       "sosRating": 7.166666666666665,
       "powerRatings": {
-        "adjO": 106.929,
-        "adjD": 108.952,
-        "adjEM": -2.023,
-        "tempo": 69.984,
-        "sos": -8.964,
+        "adjO": 106.927,
+        "adjD": 108.949,
+        "adjEM": -2.022,
+        "tempo": 69.983,
+        "sos": -8.962,
         "games": 4.5,
         "rawGames": 4,
         "reliability": 0.6,
@@ -128986,7 +128986,7 @@
         "adjORank": 153,
         "adjDRank": 248,
         "tempoRank": 231,
-        "sosRank": 217
+        "sosRank": 218
       }
     },
     {
@@ -129858,20 +129858,20 @@
       "eloRating": 1618,
       "sosRating": 11.874999999999998,
       "powerRatings": {
-        "adjO": 103.61,
-        "adjD": 106.301,
+        "adjO": 103.607,
+        "adjD": 106.298,
         "adjEM": -2.691,
-        "tempo": 72.399,
+        "tempo": 72.397,
         "sos": -1.512,
         "games": 4.5,
         "rawGames": 5,
         "reliability": 0.6,
         "sample": "Developing",
         "model": "D1 Hoops Power Rating v2",
-        "rank": 189,
+        "rank": 190,
         "adjORank": 233,
         "adjDRank": 180,
-        "tempoRank": 69,
+        "tempoRank": 70,
         "sosRank": 106
       }
     },
@@ -130600,9 +130600,9 @@
       "eloRating": 1712,
       "sosRating": -3.5500000000000003,
       "powerRatings": {
-        "adjO": 112.934,
-        "adjD": 96.611,
-        "adjEM": 16.323,
+        "adjO": 112.931,
+        "adjD": 96.607,
+        "adjEM": 16.324,
         "tempo": 68.873,
         "sos": -5.125,
         "games": 5,
@@ -130614,7 +130614,7 @@
         "adjORank": 65,
         "adjDRank": 29,
         "tempoRank": 296,
-        "sosRank": 159
+        "sosRank": 160
       }
     },
     {
@@ -131342,10 +131342,10 @@
       "eloRating": 1726,
       "sosRating": 5.175,
       "powerRatings": {
-        "adjO": 113.431,
-        "adjD": 101.499,
+        "adjO": 113.427,
+        "adjD": 101.496,
         "adjEM": 11.931,
-        "tempo": 71.026,
+        "tempo": 71.036,
         "sos": -1.701,
         "games": 5,
         "rawGames": 4,
@@ -132084,10 +132084,10 @@
       "eloRating": 1319,
       "sosRating": 3.2750000000000004,
       "powerRatings": {
-        "adjO": 94.471,
-        "adjD": 114.738,
+        "adjO": 94.468,
+        "adjD": 114.735,
         "adjEM": -20.267,
-        "tempo": 70.596,
+        "tempo": 70.592,
         "sos": 8.087,
         "games": 4,
         "rawGames": 4,
@@ -132666,10 +132666,10 @@
       "eloRating": 1720,
       "sosRating": null,
       "powerRatings": {
-        "adjO": 102.425,
-        "adjD": 108.645,
+        "adjO": 102.421,
+        "adjD": 108.641,
         "adjEM": -6.22,
-        "tempo": 69.663,
+        "tempo": 69.662,
         "sos": -41.77,
         "games": 2.5,
         "rawGames": 3,
@@ -133408,11 +133408,11 @@
       "eloRating": 1891,
       "sosRating": 3.7,
       "powerRatings": {
-        "adjO": 120.214,
-        "adjD": 98.956,
+        "adjO": 120.211,
+        "adjD": 98.952,
         "adjEM": 21.259,
-        "tempo": 70.729,
-        "sos": 3.761,
+        "tempo": 70.74,
+        "sos": 3.762,
         "games": 4,
         "rawGames": 4,
         "reliability": 0.571,
@@ -133421,7 +133421,7 @@
         "rank": 19,
         "adjORank": 9,
         "adjDRank": 42,
-        "tempoRank": 175,
+        "tempoRank": 173,
         "sosRank": 41
       }
     },
@@ -134006,8 +134006,8 @@
       "eloRating": 1442,
       "sosRating": 8.666666666666666,
       "powerRatings": {
-        "adjO": 104.913,
-        "adjD": 104.407,
+        "adjO": 104.909,
+        "adjD": 104.404,
         "adjEM": 0.506,
         "tempo": 71.076,
         "sos": 8.765,
@@ -134748,10 +134748,10 @@
       "eloRating": 1716,
       "sosRating": 1.5,
       "powerRatings": {
-        "adjO": 101.054,
-        "adjD": 105.303,
+        "adjO": 101.051,
+        "adjD": 105.3,
         "adjEM": -4.249,
-        "tempo": 69.123,
+        "tempo": 69.121,
         "sos": -8.25,
         "games": 4.5,
         "rawGames": 4,
@@ -134761,8 +134761,8 @@
         "rank": 226,
         "adjORank": 283,
         "adjDRank": 155,
-        "tempoRank": 278,
-        "sosRank": 212
+        "tempoRank": 279,
+        "sosRank": 213
       }
     },
     {
@@ -135490,11 +135490,11 @@
       "eloRating": 1599,
       "sosRating": 1.0749999999999997,
       "powerRatings": {
-        "adjO": 108.241,
-        "adjD": 102.789,
-        "adjEM": 5.453,
-        "tempo": 68.881,
-        "sos": 6.809,
+        "adjO": 108.238,
+        "adjD": 102.786,
+        "adjEM": 5.451,
+        "tempo": 68.879,
+        "sos": 6.806,
         "games": 5,
         "rawGames": 4,
         "reliability": 0.625,
@@ -135504,7 +135504,7 @@
         "adjORank": 132,
         "adjDRank": 95,
         "tempoRank": 295,
-        "sosRank": 18
+        "sosRank": 19
       }
     },
     {
@@ -136376,11 +136376,11 @@
       "eloRating": 1572,
       "sosRating": 7.7,
       "powerRatings": {
-        "adjO": 103.412,
-        "adjD": 116.757,
+        "adjO": 103.409,
+        "adjD": 116.753,
         "adjEM": -13.345,
-        "tempo": 69.898,
-        "sos": -19.345,
+        "tempo": 69.897,
+        "sos": -19.344,
         "games": 4,
         "rawGames": 5,
         "reliability": 0.571,
@@ -137264,11 +137264,11 @@
       "eloRating": 1688,
       "sosRating": -15.033333333333333,
       "powerRatings": {
-        "adjO": 95.851,
-        "adjD": 108.248,
-        "adjEM": -12.397,
-        "tempo": 71.935,
-        "sos": -28.779,
+        "adjO": 95.85,
+        "adjD": 108.237,
+        "adjEM": -12.387,
+        "tempo": 71.94,
+        "sos": -28.761,
         "games": 4,
         "rawGames": 5,
         "reliability": 0.571,
@@ -137862,11 +137862,11 @@
       "eloRating": 1359,
       "sosRating": 8.399999999999999,
       "powerRatings": {
-        "adjO": 94.743,
-        "adjD": 110.222,
-        "adjEM": -15.479,
-        "tempo": 71.614,
-        "sos": 2.805,
+        "adjO": 94.741,
+        "adjD": 110.218,
+        "adjEM": -15.477,
+        "tempo": 71.612,
+        "sos": 2.807,
         "games": 4,
         "rawGames": 3,
         "reliability": 0.571,
@@ -138604,10 +138604,10 @@
       "eloRating": 1742,
       "sosRating": -7.574999999999999,
       "powerRatings": {
-        "adjO": 111.348,
-        "adjD": 100.422,
+        "adjO": 111.345,
+        "adjD": 100.419,
         "adjEM": 10.926,
-        "tempo": 73.982,
+        "tempo": 73.984,
         "sos": -9.943,
         "games": 5,
         "rawGames": 4,
@@ -138617,8 +138617,8 @@
         "rank": 71,
         "adjORank": 85,
         "adjDRank": 59,
-        "tempoRank": 27,
-        "sosRank": 234
+        "tempoRank": 26,
+        "sosRank": 235
       }
     },
     {
@@ -139346,10 +139346,10 @@
       "eloRating": 1713,
       "sosRating": -6.6,
       "powerRatings": {
-        "adjO": 117.088,
-        "adjD": 100.354,
+        "adjO": 117.085,
+        "adjD": 100.351,
         "adjEM": 16.734,
-        "tempo": 69.985,
+        "tempo": 69.986,
         "sos": -3.719,
         "games": 4,
         "rawGames": 4,
@@ -140376,10 +140376,10 @@
       "eloRating": 1137,
       "sosRating": -5.55,
       "powerRatings": {
-        "adjO": 90.993,
-        "adjD": 111.688,
+        "adjO": 90.99,
+        "adjD": 111.685,
         "adjEM": -20.695,
-        "tempo": 69.339,
+        "tempo": 69.341,
         "sos": -1.812,
         "games": 6,
         "rawGames": 6,
@@ -141262,8 +141262,8 @@
       "eloRating": 1573,
       "sosRating": 4.475,
       "powerRatings": {
-        "adjO": 99.675,
-        "adjD": 106.229,
+        "adjO": 99.672,
+        "adjD": 106.226,
         "adjEM": -6.554,
         "tempo": 68.642,
         "sos": -12.49,
@@ -142004,8 +142004,8 @@
       "eloRating": 1879,
       "sosRating": 5.8999999999999995,
       "powerRatings": {
-        "adjO": 118.606,
-        "adjD": 92.887,
+        "adjO": 118.603,
+        "adjD": 92.884,
         "adjEM": 25.719,
         "tempo": 71.454,
         "sos": 1.914,
@@ -142748,8 +142748,8 @@
       "eloRating": 1609,
       "sosRating": 3.1000000000000005,
       "powerRatings": {
-        "adjO": 109.163,
-        "adjD": 99.685,
+        "adjO": 109.16,
+        "adjD": 99.681,
         "adjEM": 9.479,
         "tempo": 71.224,
         "sos": 5.321,
@@ -142762,7 +142762,7 @@
         "adjORank": 107,
         "adjDRank": 49,
         "tempoRank": 141,
-        "sosRank": 29
+        "sosRank": 30
       }
     },
     {
@@ -143636,10 +143636,10 @@
       "eloRating": 1799,
       "sosRating": -9.250000000000002,
       "powerRatings": {
-        "adjO": 96.489,
-        "adjD": 104.335,
+        "adjO": 96.486,
+        "adjD": 104.332,
         "adjEM": -7.846,
-        "tempo": 69.049,
+        "tempo": 69.05,
         "sos": -16.789,
         "games": 4.5,
         "rawGames": 5,
@@ -144378,20 +144378,20 @@
       "eloRating": 1768,
       "sosRating": -2.825,
       "powerRatings": {
-        "adjO": 116.664,
-        "adjD": 99.408,
-        "adjEM": 17.256,
-        "tempo": 72.093,
-        "sos": -3.222,
+        "adjO": 116.661,
+        "adjD": 99.407,
+        "adjEM": 17.254,
+        "tempo": 72.092,
+        "sos": -3.227,
         "games": 4,
         "rawGames": 4,
         "reliability": 0.571,
         "sample": "Developing",
         "model": "D1 Hoops Power Rating v2",
-        "rank": 34,
+        "rank": 35,
         "adjORank": 27,
         "adjDRank": 47,
-        "tempoRank": 79,
+        "tempoRank": 80,
         "sosRank": 134
       }
     },
@@ -145120,10 +145120,10 @@
       "eloRating": 1353,
       "sosRating": 10.233333333333334,
       "powerRatings": {
-        "adjO": 103.746,
-        "adjD": 111.415,
+        "adjO": 103.743,
+        "adjD": 111.412,
         "adjEM": -7.669,
-        "tempo": 67.938,
+        "tempo": 67.937,
         "sos": -5.6,
         "games": 3.5,
         "rawGames": 4,
@@ -145132,9 +145132,9 @@
         "model": "D1 Hoops Power Rating v2",
         "rank": 269,
         "adjORank": 228,
-        "adjDRank": 299,
+        "adjDRank": 300,
         "tempoRank": 337,
-        "sosRank": 164
+        "sosRank": 165
       }
     },
     {
@@ -145718,11 +145718,11 @@
       "eloRating": 1492,
       "sosRating": 29.8,
       "powerRatings": {
-        "adjO": 101.522,
-        "adjD": 111.176,
+        "adjO": 101.518,
+        "adjD": 111.172,
         "adjEM": -9.653,
-        "tempo": 72.869,
-        "sos": -28.067,
+        "tempo": 72.862,
+        "sos": -28.066,
         "games": 2,
         "rawGames": 3,
         "reliability": 0.4,
@@ -146460,21 +146460,21 @@
       "eloRating": 1339,
       "sosRating": 2.2249999999999996,
       "powerRatings": {
-        "adjO": 95.184,
-        "adjD": 111.425,
-        "adjEM": -16.242,
-        "tempo": 70.244,
-        "sos": 6.115,
+        "adjO": 95.25,
+        "adjD": 111.406,
+        "adjEM": -16.156,
+        "tempo": 70.213,
+        "sos": 6.307,
         "games": 4,
         "rawGames": 4,
         "reliability": 0.571,
         "sample": "Developing",
         "model": "D1 Hoops Power Rating v2",
         "rank": 348,
-        "adjORank": 348,
-        "adjDRank": 300,
-        "tempoRank": 212,
-        "sosRank": 24
+        "adjORank": 347,
+        "adjDRank": 299,
+        "tempoRank": 214,
+        "sosRank": 23
       }
     },
     {
@@ -147202,11 +147202,11 @@
       "eloRating": 1597,
       "sosRating": -0.8999999999999999,
       "powerRatings": {
-        "adjO": 97.562,
-        "adjD": 104.385,
-        "adjEM": -6.824,
-        "tempo": 71.571,
-        "sos": -7.591,
+        "adjO": 97.558,
+        "adjD": 104.383,
+        "adjEM": -6.825,
+        "tempo": 71.566,
+        "sos": -7.593,
         "games": 4.5,
         "rawGames": 4,
         "reliability": 0.6,
@@ -147215,8 +147215,8 @@
         "rank": 261,
         "adjORank": 323,
         "adjDRank": 131,
-        "tempoRank": 116,
-        "sosRank": 200
+        "tempoRank": 117,
+        "sosRank": 201
       }
     },
     {
@@ -148088,8 +148088,8 @@
       "eloRating": 1385,
       "sosRating": 0.033333333333333805,
       "powerRatings": {
-        "adjO": 98.045,
-        "adjD": 117.438,
+        "adjO": 98.041,
+        "adjD": 117.434,
         "adjEM": -19.393,
         "tempo": 67.852,
         "sos": -18.055,
@@ -148974,10 +148974,10 @@
       "eloRating": 1497,
       "sosRating": 1.366666666666666,
       "powerRatings": {
-        "adjO": 98.8,
-        "adjD": 111.428,
+        "adjO": 98.796,
+        "adjD": 111.425,
         "adjEM": -12.629,
-        "tempo": 71.536,
+        "tempo": 71.534,
         "sos": -17.521,
         "games": 4,
         "rawGames": 5,
@@ -149572,11 +149572,11 @@
       "eloRating": 1524,
       "sosRating": 3.15,
       "powerRatings": {
-        "adjO": 102.719,
-        "adjD": 109.574,
+        "adjO": 102.715,
+        "adjD": 109.571,
         "adjEM": -6.855,
-        "tempo": 71.023,
-        "sos": -26.912,
+        "tempo": 71.022,
+        "sos": -26.911,
         "games": 2.8,
         "rawGames": 4,
         "reliability": 0.478,
@@ -150316,10 +150316,10 @@
       "eloRating": 1471,
       "sosRating": -6.8,
       "powerRatings": {
-        "adjO": 98.903,
-        "adjD": 109.469,
+        "adjO": 98.9,
+        "adjD": 109.466,
         "adjEM": -10.566,
-        "tempo": 68.762,
+        "tempo": 68.761,
         "sos": -10.127,
         "games": 4.5,
         "rawGames": 4,
@@ -151058,10 +151058,10 @@
       "eloRating": 1634,
       "sosRating": 1.2750000000000001,
       "powerRatings": {
-        "adjO": 112.912,
-        "adjD": 98.48,
+        "adjO": 112.909,
+        "adjD": 98.477,
         "adjEM": 14.432,
-        "tempo": 71.848,
+        "tempo": 71.847,
         "sos": 3.797,
         "games": 4,
         "rawGames": 4,
@@ -151800,11 +151800,11 @@
       "eloRating": 1368,
       "sosRating": -1.2749999999999995,
       "powerRatings": {
-        "adjO": 104.951,
-        "adjD": 114.618,
-        "adjEM": -9.667,
-        "tempo": 71.11,
-        "sos": 1.165,
+        "adjO": 104.949,
+        "adjD": 114.615,
+        "adjEM": -9.666,
+        "tempo": 71.109,
+        "sos": 1.167,
         "games": 5,
         "rawGames": 4,
         "reliability": 0.625,
@@ -152832,8 +152832,8 @@
       "eloRating": 1447,
       "sosRating": 7.119999999999999,
       "powerRatings": {
-        "adjO": 106.062,
-        "adjD": 112.943,
+        "adjO": 106.06,
+        "adjD": 112.94,
         "adjEM": -6.88,
         "tempo": 68.456,
         "sos": -6.793,
@@ -152846,7 +152846,7 @@
         "adjORank": 174,
         "adjDRank": 326,
         "tempoRank": 320,
-        "sosRank": 182
+        "sosRank": 183
       }
     },
     {
@@ -153574,11 +153574,11 @@
       "eloRating": 1210,
       "sosRating": -4.500000000000001,
       "powerRatings": {
-        "adjO": 97.355,
-        "adjD": 111.727,
-        "adjEM": -14.372,
-        "tempo": 74.606,
-        "sos": -7.018,
+        "adjO": 97.351,
+        "adjD": 111.725,
+        "adjEM": -14.373,
+        "tempo": 74.603,
+        "sos": -7.02,
         "games": 4.5,
         "rawGames": 4,
         "reliability": 0.6,
@@ -153588,7 +153588,7 @@
         "adjORank": 325,
         "adjDRank": 305,
         "tempoRank": 17,
-        "sosRank": 185
+        "sosRank": 186
       }
     },
     {
@@ -154316,10 +154316,10 @@
       "eloRating": 1738,
       "sosRating": 9.700000000000001,
       "powerRatings": {
-        "adjO": 105.443,
-        "adjD": 101.281,
+        "adjO": 105.44,
+        "adjD": 101.277,
         "adjEM": 4.162,
-        "tempo": 68.846,
+        "tempo": 68.847,
         "sos": -8.071,
         "games": 3.5,
         "rawGames": 4,
@@ -154330,7 +154330,7 @@
         "adjORank": 181,
         "adjDRank": 73,
         "tempoRank": 299,
-        "sosRank": 206
+        "sosRank": 207
       }
     },
     {
@@ -155060,9 +155060,9 @@
       "eloRating": 1465,
       "sosRating": -3.2249999999999996,
       "powerRatings": {
-        "adjO": 107.043,
-        "adjD": 111.528,
-        "adjEM": -4.486,
+        "adjO": 107.04,
+        "adjD": 111.525,
+        "adjEM": -4.485,
         "tempo": 71.313,
         "sos": 3.167,
         "games": 4,
@@ -155802,11 +155802,11 @@
       "eloRating": 1317,
       "sosRating": 7.775,
       "powerRatings": {
-        "adjO": 107.085,
-        "adjD": 117.372,
-        "adjEM": -10.287,
-        "tempo": 66.272,
-        "sos": 0.287,
+        "adjO": 107.074,
+        "adjD": 117.37,
+        "adjEM": -10.296,
+        "tempo": 66.275,
+        "sos": 0.269,
         "games": 4.5,
         "rawGames": 4,
         "reliability": 0.6,
@@ -155816,7 +155816,7 @@
         "adjORank": 150,
         "adjDRank": 358,
         "tempoRank": 362,
-        "sosRank": 82
+        "sosRank": 83
       }
     },
     {
@@ -156544,10 +156544,10 @@
       "eloRating": 1607,
       "sosRating": 18.45,
       "powerRatings": {
-        "adjO": 102.896,
-        "adjD": 108.343,
+        "adjO": 102.893,
+        "adjD": 108.34,
         "adjEM": -5.447,
-        "tempo": 70.828,
+        "tempo": 70.826,
         "sos": -21.508,
         "games": 3,
         "rawGames": 4,
@@ -156557,7 +156557,7 @@
         "rank": 243,
         "adjORank": 248,
         "adjDRank": 233,
-        "tempoRank": 168,
+        "tempoRank": 169,
         "sosRank": 337
       }
     },
@@ -157432,10 +157432,10 @@
       "eloRating": 1686,
       "sosRating": -2.4000000000000004,
       "powerRatings": {
-        "adjO": 105.304,
-        "adjD": 111.7,
+        "adjO": 105.301,
+        "adjD": 111.696,
         "adjEM": -6.395,
-        "tempo": 67.453,
+        "tempo": 67.454,
         "sos": -13.087,
         "games": 4.5,
         "rawGames": 5,
@@ -158318,10 +158318,10 @@
       "eloRating": 1521,
       "sosRating": 11.674999999999999,
       "powerRatings": {
-        "adjO": 109.481,
-        "adjD": 109.556,
-        "adjEM": -0.075,
-        "tempo": 71.984,
+        "adjO": 109.478,
+        "adjD": 109.552,
+        "adjEM": -0.074,
+        "tempo": 71.985,
         "sos": -7.16,
         "games": 5.5,
         "rawGames": 5,
@@ -158331,8 +158331,8 @@
         "rank": 160,
         "adjORank": 103,
         "adjDRank": 259,
-        "tempoRank": 86,
-        "sosRank": 189
+        "tempoRank": 85,
+        "sosRank": 191
       }
     },
     {
@@ -159204,11 +159204,11 @@
       "eloRating": 1222,
       "sosRating": 8.2,
       "powerRatings": {
-        "adjO": 103.721,
-        "adjD": 112.555,
-        "adjEM": -8.834,
-        "tempo": 73.546,
-        "sos": 3.77,
+        "adjO": 103.718,
+        "adjD": 112.553,
+        "adjEM": -8.835,
+        "tempo": 73.544,
+        "sos": 3.768,
         "games": 5,
         "rawGames": 5,
         "reliability": 0.625,
@@ -160092,11 +160092,11 @@
       "eloRating": 1433,
       "sosRating": 12.924999999999999,
       "powerRatings": {
-        "adjO": 100.795,
-        "adjD": 112.351,
-        "adjEM": -11.556,
-        "tempo": 68.008,
-        "sos": -4.657,
+        "adjO": 100.792,
+        "adjD": 112.348,
+        "adjEM": -11.557,
+        "tempo": 68.001,
+        "sos": -4.659,
         "games": 4.5,
         "rawGames": 5,
         "reliability": 0.6,
@@ -160106,7 +160106,7 @@
         "adjORank": 288,
         "adjDRank": 315,
         "tempoRank": 336,
-        "sosRank": 150
+        "sosRank": 151
       }
     },
     {
@@ -160834,8 +160834,8 @@
       "eloRating": 1580,
       "sosRating": -10.225,
       "powerRatings": {
-        "adjO": 106.414,
-        "adjD": 103.56,
+        "adjO": 106.411,
+        "adjD": 103.557,
         "adjEM": 2.854,
         "tempo": 67.856,
         "sos": -0.791,
@@ -161576,10 +161576,10 @@
       "eloRating": 1789,
       "sosRating": 0.7749999999999997,
       "powerRatings": {
-        "adjO": 115.395,
-        "adjD": 103.111,
+        "adjO": 115.391,
+        "adjD": 103.108,
         "adjEM": 12.283,
-        "tempo": 70.852,
+        "tempo": 70.851,
         "sos": -1.306,
         "games": 5,
         "rawGames": 4,
@@ -161589,7 +161589,7 @@
         "rank": 63,
         "adjORank": 43,
         "adjDRank": 100,
-        "tempoRank": 166,
+        "tempoRank": 167,
         "sosRank": 104
       }
     },
@@ -162606,10 +162606,10 @@
       "eloRating": 1257,
       "sosRating": 17.400000000000002,
       "powerRatings": {
-        "adjO": 108.826,
-        "adjD": 116.636,
+        "adjO": 108.823,
+        "adjD": 116.633,
         "adjEM": -7.81,
-        "tempo": 68.174,
+        "tempo": 68.172,
         "sos": 11.523,
         "games": 6,
         "rawGames": 6,
@@ -163204,10 +163204,10 @@
       "eloRating": 1504,
       "sosRating": 3.7999999999999994,
       "powerRatings": {
-        "adjO": 108.172,
-        "adjD": 108.499,
+        "adjO": 108.169,
+        "adjD": 108.495,
         "adjEM": -0.326,
-        "tempo": 70.33,
+        "tempo": 70.331,
         "sos": 3.174,
         "games": 3,
         "rawGames": 3,
@@ -163217,7 +163217,7 @@
         "rank": 161,
         "adjORank": 135,
         "adjDRank": 238,
-        "tempoRank": 207,
+        "tempoRank": 208,
         "sosRank": 46
       }
     },
@@ -163946,8 +163946,8 @@
       "eloRating": 1580,
       "sosRating": 11.3,
       "powerRatings": {
-        "adjO": 117.545,
-        "adjD": 103.984,
+        "adjO": 117.542,
+        "adjD": 103.981,
         "adjEM": 13.561,
         "tempo": 70.047,
         "sos": 6.431,
@@ -163960,7 +163960,7 @@
         "adjORank": 20,
         "adjDRank": 120,
         "tempoRank": 221,
-        "sosRank": 20
+        "sosRank": 21
       }
     },
     {
@@ -164688,10 +164688,10 @@
       "eloRating": 1604,
       "sosRating": -6.175000000000001,
       "powerRatings": {
-        "adjO": 110.176,
-        "adjD": 105.422,
+        "adjO": 110.173,
+        "adjD": 105.419,
         "adjEM": 4.754,
-        "tempo": 69.038,
+        "tempo": 69.05,
         "sos": -14.262,
         "games": 4,
         "rawGames": 4,
@@ -165286,11 +165286,11 @@
       "eloRating": 1774,
       "sosRating": 0.7666666666666657,
       "powerRatings": {
-        "adjO": 115.464,
-        "adjD": 99.126,
-        "adjEM": 16.338,
-        "tempo": 72.771,
-        "sos": 0.333,
+        "adjO": 115.46,
+        "adjD": 99.123,
+        "adjEM": 16.337,
+        "tempo": 72.776,
+        "sos": 0.33,
         "games": 4,
         "rawGames": 3,
         "reliability": 0.571,
@@ -165299,7 +165299,7 @@
         "rank": 39,
         "adjORank": 42,
         "adjDRank": 43,
-        "tempoRank": 53,
+        "tempoRank": 54,
         "sosRank": 80
       }
     },
@@ -166172,10 +166172,10 @@
       "eloRating": 1783,
       "sosRating": -10.125,
       "powerRatings": {
-        "adjO": 105.956,
-        "adjD": 104.585,
+        "adjO": 105.954,
+        "adjD": 104.582,
         "adjEM": 1.372,
-        "tempo": 67.562,
+        "tempo": 67.56,
         "sos": -11.041,
         "games": 5.5,
         "rawGames": 5,
@@ -166186,7 +166186,7 @@
         "adjORank": 177,
         "adjDRank": 138,
         "tempoRank": 349,
-        "sosRank": 250
+        "sosRank": 251
       }
     },
     {
@@ -166770,11 +166770,11 @@
       "eloRating": 1883,
       "sosRating": -2.333333333333333,
       "powerRatings": {
-        "adjO": 112.16,
-        "adjD": 92.797,
-        "adjEM": 19.363,
-        "tempo": 71.459,
-        "sos": -10.133,
+        "adjO": 112.148,
+        "adjD": 92.795,
+        "adjEM": 19.353,
+        "tempo": 71.477,
+        "sos": -10.155,
         "games": 4,
         "rawGames": 3,
         "reliability": 0.571,
@@ -166783,7 +166783,7 @@
         "rank": 22,
         "adjORank": 72,
         "adjDRank": 10,
-        "tempoRank": 125,
+        "tempoRank": 123,
         "sosRank": 240
       }
     },
@@ -167656,10 +167656,10 @@
       "eloRating": 1432,
       "sosRating": 5.300000000000001,
       "powerRatings": {
-        "adjO": 96.916,
-        "adjD": 112.768,
+        "adjO": 96.913,
+        "adjD": 112.765,
         "adjEM": -15.852,
-        "tempo": 70.215,
+        "tempo": 70.214,
         "sos": -11.349,
         "games": 5,
         "rawGames": 5,
@@ -168398,8 +168398,8 @@
       "eloRating": 1796,
       "sosRating": 2.9,
       "powerRatings": {
-        "adjO": 101.191,
-        "adjD": 106.494,
+        "adjO": 101.187,
+        "adjD": 106.491,
         "adjEM": -5.304,
         "tempo": 68.267,
         "sos": -17.125,
@@ -168996,10 +168996,10 @@
       "eloRating": 1738,
       "sosRating": -6,
       "powerRatings": {
-        "adjO": 116.428,
-        "adjD": 104.958,
+        "adjO": 116.425,
+        "adjD": 104.955,
         "adjEM": 11.471,
-        "tempo": 70.432,
+        "tempo": 70.434,
         "sos": -8.722,
         "games": 3,
         "rawGames": 3,
@@ -169007,10 +169007,10 @@
         "sample": "Early sample",
         "model": "D1 Hoops Power Rating v2",
         "rank": 68,
-        "adjORank": 32,
+        "adjORank": 31,
         "adjDRank": 145,
         "tempoRank": 198,
-        "sosRank": 216
+        "sosRank": 217
       }
     },
     {
@@ -169738,10 +169738,10 @@
       "eloRating": 1684,
       "sosRating": -16.375,
       "powerRatings": {
-        "adjO": 113.453,
-        "adjD": 104.441,
+        "adjO": 113.45,
+        "adjD": 104.438,
         "adjEM": 9.012,
-        "tempo": 74.083,
+        "tempo": 74.084,
         "sos": -11.035,
         "games": 5,
         "rawGames": 4,
@@ -169752,7 +169752,7 @@
         "adjORank": 54,
         "adjDRank": 134,
         "tempoRank": 23,
-        "sosRank": 249
+        "sosRank": 250
       }
     },
     {
@@ -170480,8 +170480,8 @@
       "eloRating": 1832,
       "sosRating": -2.6999999999999997,
       "powerRatings": {
-        "adjO": 107.104,
-        "adjD": 99.32,
+        "adjO": 107.1,
+        "adjD": 99.316,
         "adjEM": 7.784,
         "tempo": 68.511,
         "sos": -24.495,
@@ -171366,8 +171366,8 @@
       "eloRating": 1646,
       "sosRating": -4.76,
       "powerRatings": {
-        "adjO": 112.982,
-        "adjD": 105.552,
+        "adjO": 112.979,
+        "adjD": 105.549,
         "adjEM": 7.43,
         "tempo": 71.787,
         "sos": -6.453,
@@ -171380,7 +171380,7 @@
         "adjORank": 64,
         "adjDRank": 160,
         "tempoRank": 98,
-        "sosRank": 178
+        "sosRank": 179
       }
     },
     {
@@ -172108,11 +172108,11 @@
       "eloRating": 1475,
       "sosRating": 4.375000000000001,
       "powerRatings": {
-        "adjO": 103.225,
-        "adjD": 105.043,
-        "adjEM": -1.818,
-        "tempo": 73.48,
-        "sos": -4.746,
+        "adjO": 103.223,
+        "adjD": 105.039,
+        "adjEM": -1.817,
+        "tempo": 73.479,
+        "sos": -4.743,
         "games": 4.5,
         "rawGames": 4,
         "reliability": 0.6,
@@ -172850,10 +172850,10 @@
       "eloRating": 1766,
       "sosRating": -10.65,
       "powerRatings": {
-        "adjO": 107.316,
-        "adjD": 109.255,
+        "adjO": 107.313,
+        "adjD": 109.252,
         "adjEM": -1.939,
-        "tempo": 71.288,
+        "tempo": 71.287,
         "sos": -26.213,
         "games": 3,
         "rawGames": 4,
@@ -173592,11 +173592,11 @@
       "eloRating": 1751,
       "sosRating": -3.674999999999999,
       "powerRatings": {
-        "adjO": 111.487,
-        "adjD": 97.103,
+        "adjO": 111.484,
+        "adjD": 97.1,
         "adjEM": 14.384,
         "tempo": 70.989,
-        "sos": 0.277,
+        "sos": 0.278,
         "games": 5,
         "rawGames": 4,
         "reliability": 0.625,
@@ -173606,7 +173606,7 @@
         "adjORank": 82,
         "adjDRank": 30,
         "tempoRank": 163,
-        "sosRank": 83
+        "sosRank": 82
       }
     },
     {
@@ -174482,11 +174482,11 @@
       "eloRating": 1763,
       "sosRating": -15.233333333333334,
       "powerRatings": {
-        "adjO": 106.73,
-        "adjD": 107.717,
+        "adjO": 106.726,
+        "adjD": 107.714,
         "adjEM": -0.987,
         "tempo": 73.528,
-        "sos": -21.631,
+        "sos": -21.63,
         "games": 4,
         "rawGames": 5,
         "reliability": 0.571,
@@ -175224,10 +175224,10 @@
       "eloRating": 1654,
       "sosRating": -7.366666666666667,
       "powerRatings": {
-        "adjO": 106.008,
-        "adjD": 105.108,
+        "adjO": 106.005,
+        "adjD": 105.105,
         "adjEM": 0.9,
-        "tempo": 71.243,
+        "tempo": 71.242,
         "sos": -5.801,
         "games": 4.5,
         "rawGames": 4,
@@ -175238,7 +175238,7 @@
         "adjORank": 175,
         "adjDRank": 149,
         "tempoRank": 139,
-        "sosRank": 170
+        "sosRank": 171
       }
     },
     {
@@ -176110,10 +176110,10 @@
       "eloRating": 1425,
       "sosRating": 5.8,
       "powerRatings": {
-        "adjO": 97.996,
-        "adjD": 111.975,
+        "adjO": 97.993,
+        "adjD": 111.972,
         "adjEM": -13.979,
-        "tempo": 71.473,
+        "tempo": 71.47,
         "sos": -9.557,
         "games": 5,
         "rawGames": 5,
@@ -176123,8 +176123,8 @@
         "rank": 331,
         "adjORank": 318,
         "adjDRank": 308,
-        "tempoRank": 123,
-        "sosRank": 226
+        "tempoRank": 124,
+        "sosRank": 227
       }
     },
     {
@@ -176708,10 +176708,10 @@
       "eloRating": 1320,
       "sosRating": 3.1666666666666665,
       "powerRatings": {
-        "adjO": 104.107,
-        "adjD": 112.886,
+        "adjO": 104.104,
+        "adjD": 112.882,
         "adjEM": -8.778,
-        "tempo": 70.711,
+        "tempo": 70.709,
         "sos": 11.002,
         "games": 3,
         "rawGames": 3,
@@ -176721,8 +176721,8 @@
         "rank": 278,
         "adjORank": 224,
         "adjDRank": 324,
-        "tempoRank": 179,
-        "sosRank": 6
+        "tempoRank": 178,
+        "sosRank": 5
       }
     },
     {
@@ -177594,8 +177594,8 @@
       "eloRating": 1599,
       "sosRating": -2.3,
       "powerRatings": {
-        "adjO": 102.443,
-        "adjD": 105.91,
+        "adjO": 102.44,
+        "adjD": 105.906,
         "adjEM": -3.466,
         "tempo": 67.895,
         "sos": -9.828,
@@ -177607,8 +177607,8 @@
         "rank": 205,
         "adjORank": 258,
         "adjDRank": 167,
-        "tempoRank": 338,
-        "sosRank": 229
+        "tempoRank": 339,
+        "sosRank": 230
       }
     },
     {
@@ -178336,10 +178336,10 @@
       "eloRating": 1664,
       "sosRating": 2.05,
       "powerRatings": {
-        "adjO": 108.934,
-        "adjD": 97.606,
+        "adjO": 108.931,
+        "adjD": 97.603,
         "adjEM": 11.328,
-        "tempo": 70.612,
+        "tempo": 70.611,
         "sos": -0.035,
         "games": 5,
         "rawGames": 4,
@@ -179082,8 +179082,8 @@
       "eloRating": 1630,
       "sosRating": 14.700000000000001,
       "powerRatings": {
-        "adjO": 120.388,
-        "adjD": 102.897,
+        "adjO": 120.385,
+        "adjD": 102.894,
         "adjEM": 17.491,
         "tempo": 67.422,
         "sos": 6.333,
@@ -179092,11 +179092,11 @@
         "reliability": 0.625,
         "sample": "Developing",
         "model": "D1 Hoops Power Rating v2",
-        "rank": 33,
+        "rank": 34,
         "adjORank": 8,
         "adjDRank": 98,
         "tempoRank": 353,
-        "sosRank": 21
+        "sosRank": 22
       }
     },
     {
@@ -179824,11 +179824,11 @@
       "eloRating": 1595,
       "sosRating": -5.566666666666666,
       "powerRatings": {
-        "adjO": 104.149,
-        "adjD": 111.903,
+        "adjO": 104.145,
+        "adjD": 111.899,
         "adjEM": -7.754,
-        "tempo": 70.603,
-        "sos": -17.567,
+        "tempo": 70.602,
+        "sos": -17.566,
         "games": 3.5,
         "rawGames": 4,
         "reliability": 0.538,
@@ -180710,10 +180710,10 @@
       "eloRating": 1411,
       "sosRating": 3.44,
       "powerRatings": {
-        "adjO": 104.605,
-        "adjD": 109.774,
+        "adjO": 104.602,
+        "adjD": 109.771,
         "adjEM": -5.169,
-        "tempo": 68.406,
+        "tempo": 68.405,
         "sos": -0.057,
         "games": 5,
         "rawGames": 5,
@@ -181452,10 +181452,10 @@
       "eloRating": 1580,
       "sosRating": 7.3,
       "powerRatings": {
-        "adjO": 100.903,
-        "adjD": 108.064,
+        "adjO": 100.899,
+        "adjD": 108.06,
         "adjEM": -7.161,
-        "tempo": 71.202,
+        "tempo": 71.199,
         "sos": -7.939,
         "games": 3.5,
         "rawGames": 4,
@@ -181466,7 +181466,7 @@
         "adjORank": 286,
         "adjDRank": 225,
         "tempoRank": 143,
-        "sosRank": 204
+        "sosRank": 205
       }
     },
     {
@@ -182338,10 +182338,10 @@
       "eloRating": 1707,
       "sosRating": -6.38,
       "powerRatings": {
-        "adjO": 108.757,
-        "adjD": 101.67,
+        "adjO": 108.754,
+        "adjD": 101.667,
         "adjEM": 7.087,
-        "tempo": 69.991,
+        "tempo": 69.99,
         "sos": -10.255,
         "games": 5,
         "rawGames": 5,
@@ -183082,10 +183082,10 @@
       "eloRating": 1645,
       "sosRating": -3.266666666666667,
       "powerRatings": {
-        "adjO": 105.077,
-        "adjD": 108.631,
+        "adjO": 105.074,
+        "adjD": 108.627,
         "adjEM": -3.554,
-        "tempo": 72.145,
+        "tempo": 72.147,
         "sos": -10.18,
         "games": 4.5,
         "rawGames": 4,
@@ -183824,11 +183824,11 @@
       "eloRating": 1839,
       "sosRating": -1.0666666666666664,
       "powerRatings": {
-        "adjO": 109.242,
-        "adjD": 102.852,
-        "adjEM": 6.391,
-        "tempo": 71.337,
-        "sos": -9.183,
+        "adjO": 109.24,
+        "adjD": 102.848,
+        "adjEM": 6.392,
+        "tempo": 71.336,
+        "sos": -9.181,
         "games": 4.5,
         "rawGames": 4,
         "reliability": 0.6,
@@ -183837,7 +183837,7 @@
         "rank": 99,
         "adjORank": 106,
         "adjDRank": 97,
-        "tempoRank": 132,
+        "tempoRank": 133,
         "sosRank": 223
       }
     },
@@ -184710,10 +184710,10 @@
       "eloRating": 1334,
       "sosRating": -3.3249999999999997,
       "powerRatings": {
-        "adjO": 92.823,
-        "adjD": 116.02,
+        "adjO": 92.82,
+        "adjD": 116.016,
         "adjEM": -23.196,
-        "tempo": 70.528,
+        "tempo": 70.526,
         "sos": -5.295,
         "games": 5.5,
         "rawGames": 5,
@@ -184724,7 +184724,7 @@
         "adjORank": 359,
         "adjDRank": 350,
         "tempoRank": 194,
-        "sosRank": 161
+        "sosRank": 162
       }
     },
     {
@@ -185452,10 +185452,10 @@
       "eloRating": 1547,
       "sosRating": 7.5,
       "powerRatings": {
-        "adjO": 99.814,
-        "adjD": 107.55,
+        "adjO": 99.811,
+        "adjD": 107.547,
         "adjEM": -7.736,
-        "tempo": 68.831,
+        "tempo": 68.828,
         "sos": -6.338,
         "games": 3.5,
         "rawGames": 4,
@@ -185466,7 +185466,7 @@
         "adjORank": 297,
         "adjDRank": 209,
         "tempoRank": 300,
-        "sosRank": 175
+        "sosRank": 176
       }
     },
     {
@@ -186050,10 +186050,10 @@
       "eloRating": 1703,
       "sosRating": -12.300000000000002,
       "powerRatings": {
-        "adjO": 112.369,
-        "adjD": 103.527,
+        "adjO": 112.366,
+        "adjD": 103.524,
         "adjEM": 8.842,
-        "tempo": 70.11,
+        "tempo": 70.109,
         "sos": -4.648,
         "games": 4,
         "rawGames": 3,
@@ -186064,7 +186064,7 @@
         "adjORank": 70,
         "adjDRank": 107,
         "tempoRank": 218,
-        "sosRank": 149
+        "sosRank": 150
       }
     },
     {
@@ -186648,21 +186648,21 @@
       "eloRating": 1310,
       "sosRating": 16.833333333333332,
       "powerRatings": {
-        "adjO": 101.081,
-        "adjD": 113.081,
-        "adjEM": -12,
-        "tempo": 69.832,
-        "sos": 11.006,
+        "adjO": 101.064,
+        "adjD": 113.15,
+        "adjEM": -12.086,
+        "tempo": 69.788,
+        "sos": 10.811,
         "games": 4,
         "rawGames": 3,
         "reliability": 0.571,
         "sample": "Developing",
         "model": "D1 Hoops Power Rating v2",
-        "rank": 311,
+        "rank": 312,
         "adjORank": 282,
-        "adjDRank": 327,
-        "tempoRank": 239,
-        "sosRank": 5
+        "adjDRank": 329,
+        "tempoRank": 240,
+        "sosRank": 6
       }
     },
     {
@@ -187534,10 +187534,10 @@
       "eloRating": 1461,
       "sosRating": 14.966666666666667,
       "powerRatings": {
-        "adjO": 98.692,
-        "adjD": 108.012,
+        "adjO": 98.689,
+        "adjD": 108.009,
         "adjEM": -9.32,
-        "tempo": 70.315,
+        "tempo": 70.312,
         "sos": -11.001,
         "games": 5,
         "rawGames": 5,
@@ -187547,8 +187547,8 @@
         "rank": 285,
         "adjORank": 314,
         "adjDRank": 222,
-        "tempoRank": 208,
-        "sosRank": 248
+        "tempoRank": 209,
+        "sosRank": 249
       }
     },
     {
@@ -188276,10 +188276,10 @@
       "eloRating": 1832,
       "sosRating": -13.450000000000001,
       "powerRatings": {
-        "adjO": 113.382,
-        "adjD": 103.063,
+        "adjO": 113.379,
+        "adjD": 103.06,
         "adjEM": 10.319,
-        "tempo": 73.756,
+        "tempo": 73.757,
         "sos": -11.361,
         "games": 5,
         "rawGames": 4,
@@ -188874,10 +188874,10 @@
       "eloRating": 1428,
       "sosRating": 3.8999999999999995,
       "powerRatings": {
-        "adjO": 96.484,
-        "adjD": 106.08,
+        "adjO": 96.481,
+        "adjD": 106.076,
         "adjEM": -9.595,
-        "tempo": 76.136,
+        "tempo": 76.135,
         "sos": -15.306,
         "games": 2.5,
         "rawGames": 3,
@@ -189618,10 +189618,10 @@
       "eloRating": 1689,
       "sosRating": -8.299999999999999,
       "powerRatings": {
-        "adjO": 104.81,
-        "adjD": 112.925,
+        "adjO": 104.806,
+        "adjD": 112.922,
         "adjEM": -8.115,
-        "tempo": 70.997,
+        "tempo": 70.995,
         "sos": -14.168,
         "games": 4.5,
         "rawGames": 4,
@@ -190362,11 +190362,11 @@
       "eloRating": 1567,
       "sosRating": -3.05,
       "powerRatings": {
-        "adjO": 102.876,
-        "adjD": 99.794,
+        "adjO": 102.873,
+        "adjD": 99.791,
         "adjEM": 3.082,
         "tempo": 73.115,
-        "sos": -3.504,
+        "sos": -3.503,
         "games": 5,
         "rawGames": 4,
         "reliability": 0.625,
@@ -190376,7 +190376,7 @@
         "adjORank": 249,
         "adjDRank": 51,
         "tempoRank": 41,
-        "sosRank": 137
+        "sosRank": 138
       }
     },
     {
@@ -191104,10 +191104,10 @@
       "eloRating": 1802,
       "sosRating": -0.275,
       "powerRatings": {
-        "adjO": 117.613,
-        "adjD": 98.092,
+        "adjO": 117.609,
+        "adjD": 98.088,
         "adjEM": 19.521,
-        "tempo": 72.761,
+        "tempo": 72.76,
         "sos": 5.546,
         "games": 4,
         "rawGames": 4,
@@ -191118,7 +191118,7 @@
         "adjORank": 19,
         "adjDRank": 38,
         "tempoRank": 55,
-        "sosRank": 27
+        "sosRank": 28
       }
     },
     {
@@ -191850,8 +191850,8 @@
       "eloRating": 1786,
       "sosRating": 5.525,
       "powerRatings": {
-        "adjO": 119.951,
-        "adjD": 101.537,
+        "adjO": 119.948,
+        "adjD": 101.534,
         "adjEM": 18.414,
         "tempo": 71.236,
         "sos": 2.577,
@@ -192592,11 +192592,11 @@
       "eloRating": 1286,
       "sosRating": -10.025,
       "powerRatings": {
-        "adjO": 91.739,
-        "adjD": 107.1,
-        "adjEM": -15.362,
-        "tempo": 65.997,
-        "sos": -4.046,
+        "adjO": 91.736,
+        "adjD": 107.097,
+        "adjEM": -15.361,
+        "tempo": 65.994,
+        "sos": -4.045,
         "games": 5,
         "rawGames": 4,
         "reliability": 0.625,
@@ -193334,10 +193334,10 @@
       "eloRating": 1608,
       "sosRating": 11.466666666666667,
       "powerRatings": {
-        "adjO": 110.077,
-        "adjD": 106.104,
+        "adjO": 110.074,
+        "adjD": 106.101,
         "adjEM": 3.973,
-        "tempo": 72.81,
+        "tempo": 72.808,
         "sos": 1.591,
         "games": 4.5,
         "rawGames": 4,
@@ -193932,10 +193932,10 @@
       "eloRating": 1472,
       "sosRating": 9.15,
       "powerRatings": {
-        "adjO": 103.577,
-        "adjD": 110.395,
+        "adjO": 103.573,
+        "adjD": 110.392,
         "adjEM": -6.819,
-        "tempo": 71.073,
+        "tempo": 71.07,
         "sos": -12.378,
         "games": 2.5,
         "rawGames": 3,
@@ -194674,8 +194674,8 @@
       "eloRating": 1637,
       "sosRating": -0.1499999999999999,
       "powerRatings": {
-        "adjO": 111.342,
-        "adjD": 99.177,
+        "adjO": 111.338,
+        "adjD": 99.174,
         "adjEM": 12.165,
         "tempo": 71.431,
         "sos": -2.626,
@@ -195418,10 +195418,10 @@
       "eloRating": 1557,
       "sosRating": -1.8999999999999997,
       "powerRatings": {
-        "adjO": 109.418,
-        "adjD": 112.789,
+        "adjO": 109.415,
+        "adjD": 112.786,
         "adjEM": -3.371,
-        "tempo": 68.948,
+        "tempo": 68.947,
         "sos": -17.598,
         "games": 3.5,
         "rawGames": 4,
@@ -196160,8 +196160,8 @@
       "eloRating": 1463,
       "sosRating": -9.1,
       "powerRatings": {
-        "adjO": 105.158,
-        "adjD": 106.08,
+        "adjO": 105.155,
+        "adjD": 106.077,
         "adjEM": -0.923,
         "tempo": 69.688,
         "sos": -4.348,
@@ -196902,10 +196902,10 @@
       "eloRating": 1548,
       "sosRating": 11.150000000000002,
       "powerRatings": {
-        "adjO": 111.383,
-        "adjD": 114.636,
+        "adjO": 111.38,
+        "adjD": 114.633,
         "adjEM": -3.253,
-        "tempo": 70.283,
+        "tempo": 70.284,
         "sos": -5.814,
         "games": 4,
         "rawGames": 4,
@@ -196915,8 +196915,8 @@
         "rank": 202,
         "adjORank": 84,
         "adjDRank": 342,
-        "tempoRank": 210,
-        "sosRank": 171
+        "tempoRank": 211,
+        "sosRank": 172
       }
     },
     {
@@ -197788,10 +197788,10 @@
       "eloRating": 1677,
       "sosRating": 10.540000000000001,
       "powerRatings": {
-        "adjO": 114.963,
-        "adjD": 102.029,
+        "adjO": 114.959,
+        "adjD": 102.026,
         "adjEM": 12.933,
-        "tempo": 73.912,
+        "tempo": 73.913,
         "sos": 2.841,
         "games": 5,
         "rawGames": 5,
@@ -198530,10 +198530,10 @@
       "eloRating": 1416,
       "sosRating": -15.2,
       "powerRatings": {
-        "adjO": 102.329,
-        "adjD": 100.406,
+        "adjO": 102.326,
+        "adjD": 100.403,
         "adjEM": 1.923,
-        "tempo": 70.951,
+        "tempo": 70.95,
         "sos": -6.247,
         "games": 5,
         "rawGames": 4,
@@ -198544,7 +198544,7 @@
         "adjORank": 263,
         "adjDRank": 57,
         "tempoRank": 165,
-        "sosRank": 174
+        "sosRank": 175
       }
     },
     {
@@ -199272,11 +199272,11 @@
       "eloRating": 1609,
       "sosRating": -4.675,
       "powerRatings": {
-        "adjO": 104.957,
-        "adjD": 94.755,
-        "adjEM": 10.202,
-        "tempo": 69.592,
-        "sos": -0.548,
+        "adjO": 104.953,
+        "adjD": 94.753,
+        "adjEM": 10.201,
+        "tempo": 69.589,
+        "sos": -0.55,
         "games": 4,
         "rawGames": 4,
         "reliability": 0.571,
@@ -200014,10 +200014,10 @@
       "eloRating": 1606,
       "sosRating": -11.75,
       "powerRatings": {
-        "adjO": 106.819,
-        "adjD": 106.071,
+        "adjO": 106.816,
+        "adjD": 106.067,
         "adjEM": 0.748,
-        "tempo": 74.686,
+        "tempo": 74.684,
         "sos": -5.798,
         "games": 4,
         "rawGames": 4,
@@ -200028,7 +200028,7 @@
         "adjORank": 155,
         "adjDRank": 170,
         "tempoRank": 14,
-        "sosRank": 169
+        "sosRank": 170
       }
     },
     {
@@ -200904,10 +200904,10 @@
       "eloRating": 1543,
       "sosRating": 0.7000000000000004,
       "powerRatings": {
-        "adjO": 109.902,
-        "adjD": 111.016,
+        "adjO": 109.899,
+        "adjD": 111.013,
         "adjEM": -1.114,
-        "tempo": 66.918,
+        "tempo": 66.916,
         "sos": -7.747,
         "games": 5.5,
         "rawGames": 5,
@@ -200918,7 +200918,7 @@
         "adjORank": 99,
         "adjDRank": 291,
         "tempoRank": 358,
-        "sosRank": 202
+        "sosRank": 203
       }
     },
     {
@@ -201646,11 +201646,11 @@
       "eloRating": 1695,
       "sosRating": -10.450000000000001,
       "powerRatings": {
-        "adjO": 111.618,
-        "adjD": 101.86,
-        "adjEM": 9.758,
-        "tempo": 67.89,
-        "sos": -12.91,
+        "adjO": 111.616,
+        "adjD": 101.849,
+        "adjEM": 9.767,
+        "tempo": 67.905,
+        "sos": -12.889,
         "games": 4,
         "rawGames": 4,
         "reliability": 0.571,
@@ -201659,7 +201659,7 @@
         "rank": 79,
         "adjORank": 80,
         "adjDRank": 84,
-        "tempoRank": 339,
+        "tempoRank": 338,
         "sosRank": 269
       }
     },
@@ -202532,8 +202532,8 @@
       "eloRating": 1504,
       "sosRating": 2.425,
       "powerRatings": {
-        "adjO": 97.885,
-        "adjD": 111.353,
+        "adjO": 97.882,
+        "adjD": 111.35,
         "adjEM": -13.468,
         "tempo": 71.638,
         "sos": -12.95,
@@ -202545,7 +202545,7 @@
         "rank": 328,
         "adjORank": 319,
         "adjDRank": 296,
-        "tempoRank": 108,
+        "tempoRank": 109,
         "sosRank": 270
       }
     },
@@ -203418,8 +203418,8 @@
       "eloRating": 1511,
       "sosRating": -2.8499999999999996,
       "powerRatings": {
-        "adjO": 99.896,
-        "adjD": 110.896,
+        "adjO": 99.893,
+        "adjD": 110.892,
         "adjEM": -10.999,
         "tempo": 70.294,
         "sos": -15.999,
@@ -203431,7 +203431,7 @@
         "rank": 304,
         "adjORank": 296,
         "adjDRank": 285,
-        "tempoRank": 209,
+        "tempoRank": 210,
         "sosRank": 301
       }
     },
@@ -204448,8 +204448,8 @@
       "eloRating": 1622,
       "sosRating": -3.5250000000000004,
       "powerRatings": {
-        "adjO": 103.273,
-        "adjD": 115.729,
+        "adjO": 103.27,
+        "adjD": 115.725,
         "adjEM": -12.455,
         "tempo": 70.817,
         "sos": -20.967,
@@ -204461,7 +204461,7 @@
         "rank": 317,
         "adjORank": 243,
         "adjDRank": 349,
-        "tempoRank": 170,
+        "tempoRank": 171,
         "sosRank": 332
       }
     },
@@ -205190,11 +205190,11 @@
       "eloRating": 1795,
       "sosRating": 8.833333333333334,
       "powerRatings": {
-        "adjO": 106.345,
-        "adjD": 100.984,
+        "adjO": 106.342,
+        "adjD": 100.98,
         "adjEM": 5.362,
-        "tempo": 68.947,
-        "sos": -18.969,
+        "tempo": 68.946,
+        "sos": -18.968,
         "games": 4,
         "rawGames": 4,
         "reliability": 0.571,
@@ -205932,10 +205932,10 @@
       "eloRating": 1597,
       "sosRating": -4.4,
       "powerRatings": {
-        "adjO": 115.098,
-        "adjD": 103.517,
-        "adjEM": 11.581,
-        "tempo": 71.869,
+        "adjO": 115.095,
+        "adjD": 103.514,
+        "adjEM": 11.582,
+        "tempo": 71.87,
         "sos": -0.425,
         "games": 5,
         "rawGames": 4,
@@ -205945,7 +205945,7 @@
         "rank": 66,
         "adjORank": 46,
         "adjDRank": 106,
-        "tempoRank": 95,
+        "tempoRank": 94,
         "sosRank": 93
       }
     },
@@ -206674,11 +206674,11 @@
       "eloRating": 1531,
       "sosRating": 1.3666666666666665,
       "powerRatings": {
-        "adjO": 104.684,
-        "adjD": 107.266,
-        "adjEM": -2.582,
-        "tempo": 72.441,
-        "sos": -19.582,
+        "adjO": 104.682,
+        "adjD": 107.262,
+        "adjEM": -2.581,
+        "tempo": 72.438,
+        "sos": -19.579,
         "games": 4,
         "rawGames": 4,
         "reliability": 0.571,
@@ -207272,9 +207272,9 @@
       "eloRating": 1702,
       "sosRating": 7.85,
       "powerRatings": {
-        "adjO": 106.28,
-        "adjD": 105.594,
-        "adjEM": 0.686,
+        "adjO": 106.277,
+        "adjD": 105.59,
+        "adjEM": 0.687,
         "tempo": 71.267,
         "sos": -13.972,
         "games": 3.5,
@@ -208158,11 +208158,11 @@
       "eloRating": 1200,
       "sosRating": 8.82,
       "powerRatings": {
-        "adjO": 98.773,
-        "adjD": 111.983,
-        "adjEM": -13.21,
-        "tempo": 71.982,
-        "sos": 0.688,
+        "adjO": 98.771,
+        "adjD": 111.979,
+        "adjEM": -13.209,
+        "tempo": 71.979,
+        "sos": 0.689,
         "games": 5.5,
         "rawGames": 5,
         "reliability": 0.647,
@@ -208902,11 +208902,11 @@
       "eloRating": 1519,
       "sosRating": 0.933333333333333,
       "powerRatings": {
-        "adjO": 99.344,
-        "adjD": 107.56,
-        "adjEM": -8.216,
-        "tempo": 71.048,
-        "sos": -8.052,
+        "adjO": 99.342,
+        "adjD": 107.557,
+        "adjEM": -8.215,
+        "tempo": 71.044,
+        "sos": -8.05,
         "games": 4.5,
         "rawGames": 4,
         "reliability": 0.6,
@@ -208916,7 +208916,7 @@
         "adjORank": 304,
         "adjDRank": 210,
         "tempoRank": 157,
-        "sosRank": 205
+        "sosRank": 206
       }
     },
     {
@@ -209788,10 +209788,10 @@
       "eloRating": 1688,
       "sosRating": 3.95,
       "powerRatings": {
-        "adjO": 104.97,
-        "adjD": 110.761,
+        "adjO": 104.966,
+        "adjD": 110.757,
         "adjEM": -5.791,
-        "tempo": 71.771,
+        "tempo": 71.77,
         "sos": -26.661,
         "games": 3.5,
         "rawGames": 5,
@@ -210530,8 +210530,8 @@
       "eloRating": 1734,
       "sosRating": -10.625,
       "powerRatings": {
-        "adjO": 111.835,
-        "adjD": 103.126,
+        "adjO": 111.832,
+        "adjD": 103.123,
         "adjEM": 8.709,
         "tempo": 69.415,
         "sos": -9.129,
@@ -210544,7 +210544,7 @@
         "adjORank": 74,
         "adjDRank": 102,
         "tempoRank": 263,
-        "sosRank": 221
+        "sosRank": 222
       }
     },
     {
@@ -211272,8 +211272,8 @@
       "eloRating": 1785,
       "sosRating": 0.04999999999999982,
       "powerRatings": {
-        "adjO": 115.502,
-        "adjD": 93.165,
+        "adjO": 115.498,
+        "adjD": 93.162,
         "adjEM": 22.337,
         "tempo": 72.84,
         "sos": 0.709,
@@ -211284,7 +211284,7 @@
         "model": "D1 Hoops Power Rating v2",
         "rank": 14,
         "adjORank": 41,
-        "adjDRank": 12,
+        "adjDRank": 13,
         "tempoRank": 49,
         "sosRank": 76
       }
@@ -212158,8 +212158,8 @@
       "eloRating": 1652,
       "sosRating": -0.6499999999999999,
       "powerRatings": {
-        "adjO": 111.738,
-        "adjD": 111.405,
+        "adjO": 111.735,
+        "adjD": 111.402,
         "adjEM": 0.333,
         "tempo": 68.849,
         "sos": -11.101,
@@ -212900,10 +212900,10 @@
       "eloRating": 1622,
       "sosRating": -3.575,
       "powerRatings": {
-        "adjO": 108.385,
-        "adjD": 101.116,
+        "adjO": 108.382,
+        "adjD": 101.113,
         "adjEM": 7.269,
-        "tempo": 69.518,
+        "tempo": 69.519,
         "sos": -1.445,
         "games": 5,
         "rawGames": 4,
@@ -213644,10 +213644,10 @@
       "eloRating": 1873,
       "sosRating": -15.9,
       "powerRatings": {
-        "adjO": 108.495,
-        "adjD": 104.08,
+        "adjO": 108.492,
+        "adjD": 104.077,
         "adjEM": 4.415,
-        "tempo": 69.162,
+        "tempo": 69.158,
         "sos": -29.525,
         "games": 3,
         "rawGames": 4,
@@ -214386,11 +214386,11 @@
       "eloRating": 1276,
       "sosRating": 2.475,
       "powerRatings": {
-        "adjO": 101.845,
-        "adjD": 116.036,
-        "adjEM": -14.191,
-        "tempo": 68.298,
-        "sos": -3.539,
+        "adjO": 101.907,
+        "adjD": 116.018,
+        "adjEM": -14.111,
+        "tempo": 68.268,
+        "sos": -3.386,
         "games": 4.5,
         "rawGames": 4,
         "reliability": 0.6,
@@ -214398,9 +214398,9 @@
         "model": "D1 Hoops Power Rating v2",
         "rank": 332,
         "adjORank": 266,
-        "adjDRank": 352,
+        "adjDRank": 351,
         "tempoRank": 329,
-        "sosRank": 139
+        "sosRank": 136
       }
     },
     {
@@ -215128,10 +215128,10 @@
       "eloRating": 1286,
       "sosRating": 4.5,
       "powerRatings": {
-        "adjO": 91.218,
-        "adjD": 108.846,
+        "adjO": 91.215,
+        "adjD": 108.843,
         "adjEM": -17.628,
-        "tempo": 69.465,
+        "tempo": 69.464,
         "sos": -5.54,
         "games": 3.5,
         "rawGames": 4,
@@ -215142,7 +215142,7 @@
         "adjORank": 362,
         "adjDRank": 247,
         "tempoRank": 260,
-        "sosRank": 163
+        "sosRank": 164
       }
     },
     {
@@ -215726,10 +215726,10 @@
       "eloRating": 1627,
       "sosRating": -3.4,
       "powerRatings": {
-        "adjO": 104.226,
-        "adjD": 107.986,
+        "adjO": 104.222,
+        "adjD": 107.982,
         "adjEM": -3.76,
-        "tempo": 68.549,
+        "tempo": 68.548,
         "sos": -26.42,
         "games": 3,
         "rawGames": 3,
@@ -216468,8 +216468,8 @@
       "eloRating": 1747,
       "sosRating": 9.025,
       "powerRatings": {
-        "adjO": 113.101,
-        "adjD": 99.864,
+        "adjO": 113.097,
+        "adjD": 99.861,
         "adjEM": 13.237,
         "tempo": 71.015,
         "sos": 3.823,
@@ -217214,21 +217214,21 @@
       "eloRating": 1810,
       "sosRating": -4.575000000000001,
       "powerRatings": {
-        "adjO": 112.895,
-        "adjD": 97.532,
+        "adjO": 112.891,
+        "adjD": 97.529,
         "adjEM": 15.363,
-        "tempo": 71.965,
+        "tempo": 71.972,
         "sos": -9.126,
         "games": 4,
         "rawGames": 4,
         "reliability": 0.571,
         "sample": "Developing",
         "model": "D1 Hoops Power Rating v2",
-        "rank": 47,
+        "rank": 46,
         "adjORank": 67,
         "adjDRank": 34,
         "tempoRank": 88,
-        "sosRank": 219
+        "sosRank": 220
       }
     },
     {
@@ -217958,8 +217958,8 @@
       "eloRating": 1596,
       "sosRating": -6.45,
       "powerRatings": {
-        "adjO": 101.148,
-        "adjD": 108.368,
+        "adjO": 101.144,
+        "adjD": 108.364,
         "adjEM": -7.22,
         "tempo": 71.193,
         "sos": -26.981,
@@ -218700,10 +218700,10 @@
       "eloRating": 1521,
       "sosRating": 3.2,
       "powerRatings": {
-        "adjO": 104.786,
-        "adjD": 107.894,
+        "adjO": 104.783,
+        "adjD": 107.891,
         "adjEM": -3.108,
-        "tempo": 70.105,
+        "tempo": 70.106,
         "sos": -2.117,
         "games": 4,
         "rawGames": 4,
@@ -219442,10 +219442,10 @@
       "eloRating": 1804,
       "sosRating": 14.600000000000001,
       "powerRatings": {
-        "adjO": 104.423,
-        "adjD": 106.801,
+        "adjO": 104.42,
+        "adjD": 106.798,
         "adjEM": -2.378,
-        "tempo": 76.717,
+        "tempo": 76.714,
         "sos": -12.697,
         "games": 4,
         "rawGames": 4,
@@ -220328,10 +220328,10 @@
       "eloRating": 1851,
       "sosRating": 20,
       "powerRatings": {
-        "adjO": 106.965,
-        "adjD": 111.791,
+        "adjO": 106.961,
+        "adjD": 111.787,
         "adjEM": -4.826,
-        "tempo": 74.09,
+        "tempo": 74.087,
         "sos": -15.191,
         "games": 4,
         "rawGames": 5,
@@ -220926,10 +220926,10 @@
       "eloRating": 1693,
       "sosRating": -11.166666666666666,
       "powerRatings": {
-        "adjO": 110.307,
-        "adjD": 91.232,
+        "adjO": 110.303,
+        "adjD": 91.228,
         "adjEM": 19.075,
-        "tempo": 69.373,
+        "tempo": 69.384,
         "sos": 1.386,
         "games": 4,
         "rawGames": 3,
@@ -221668,11 +221668,11 @@
       "eloRating": 1967,
       "sosRating": 5.2250000000000005,
       "powerRatings": {
-        "adjO": 115.587,
-        "adjD": 96.346,
-        "adjEM": 19.241,
-        "tempo": 75.808,
-        "sos": -6.542,
+        "adjO": 115.577,
+        "adjD": 96.345,
+        "adjEM": 19.232,
+        "tempo": 75.822,
+        "sos": -6.56,
         "games": 5,
         "rawGames": 4,
         "reliability": 0.625,
@@ -221682,7 +221682,7 @@
         "adjORank": 40,
         "adjDRank": 27,
         "tempoRank": 6,
-        "sosRank": 180
+        "sosRank": 181
       }
     },
     {
@@ -222410,10 +222410,10 @@
       "eloRating": 1568,
       "sosRating": -9.433333333333335,
       "powerRatings": {
-        "adjO": 100.716,
-        "adjD": 103.898,
+        "adjO": 100.712,
+        "adjD": 103.895,
         "adjEM": -3.182,
-        "tempo": 69.271,
+        "tempo": 69.268,
         "sos": -10.533,
         "games": 4.5,
         "rawGames": 4,
@@ -222424,7 +222424,7 @@
         "adjORank": 290,
         "adjDRank": 117,
         "tempoRank": 272,
-        "sosRank": 245
+        "sosRank": 246
       }
     },
     {
@@ -223152,11 +223152,11 @@
       "eloRating": 1905,
       "sosRating": -1.2750000000000008,
       "powerRatings": {
-        "adjO": 120.771,
-        "adjD": 98.793,
+        "adjO": 120.767,
+        "adjD": 98.79,
         "adjEM": 21.977,
-        "tempo": 70.552,
-        "sos": -7.582,
+        "tempo": 70.562,
+        "sos": -7.581,
         "games": 4,
         "rawGames": 4,
         "reliability": 0.571,
@@ -223166,7 +223166,7 @@
         "adjORank": 6,
         "adjDRank": 41,
         "tempoRank": 192,
-        "sosRank": 199
+        "sosRank": 200
       }
     },
     {
@@ -223894,10 +223894,10 @@
       "eloRating": 1360,
       "sosRating": 22,
       "powerRatings": {
-        "adjO": 101.006,
-        "adjD": 113.341,
+        "adjO": 101.003,
+        "adjD": 113.338,
         "adjEM": -12.335,
-        "tempo": 75.227,
+        "tempo": 75.224,
         "sos": -2.007,
         "games": 4.5,
         "rawGames": 4,
@@ -224780,11 +224780,11 @@
       "eloRating": 1924,
       "sosRating": -11.125,
       "powerRatings": {
-        "adjO": 108.972,
-        "adjD": 103.972,
-        "adjEM": 5,
-        "tempo": 70.425,
-        "sos": -15.307,
+        "adjO": 108.969,
+        "adjD": 103.968,
+        "adjEM": 5.001,
+        "tempo": 70.426,
+        "sos": -15.306,
         "games": 4.5,
         "rawGames": 5,
         "reliability": 0.6,
@@ -225522,10 +225522,10 @@
       "eloRating": 1878,
       "sosRating": 2.7249999999999996,
       "powerRatings": {
-        "adjO": 113.398,
-        "adjD": 90.475,
+        "adjO": 113.395,
+        "adjD": 90.472,
         "adjEM": 22.923,
-        "tempo": 70.603,
+        "tempo": 70.61,
         "sos": -0.515,
         "games": 4,
         "rawGames": 4,
@@ -226264,11 +226264,11 @@
       "eloRating": 1848,
       "sosRating": -9.5,
       "powerRatings": {
-        "adjO": 98.703,
-        "adjD": 112.022,
-        "adjEM": -13.319,
-        "tempo": 70.036,
-        "sos": -21.741,
+        "adjO": 98.7,
+        "adjD": 112.019,
+        "adjEM": -13.318,
+        "tempo": 70.034,
+        "sos": -21.739,
         "games": 4,
         "rawGames": 4,
         "reliability": 0.571,
@@ -226277,7 +226277,7 @@
         "rank": 326,
         "adjORank": 313,
         "adjDRank": 312,
-        "tempoRank": 223,
+        "tempoRank": 224,
         "sosRank": 339
       }
     },
@@ -227150,10 +227150,10 @@
       "eloRating": 1481,
       "sosRating": 9.120000000000001,
       "powerRatings": {
-        "adjO": 106.811,
-        "adjD": 104.852,
+        "adjO": 106.808,
+        "adjD": 104.848,
         "adjEM": 1.959,
-        "tempo": 71.719,
+        "tempo": 71.72,
         "sos": 3.722,
         "games": 5,
         "rawGames": 5,
@@ -228036,10 +228036,10 @@
       "eloRating": 1732,
       "sosRating": -2.52,
       "powerRatings": {
-        "adjO": 102.345,
-        "adjD": 97.271,
+        "adjO": 102.342,
+        "adjD": 97.268,
         "adjEM": 5.074,
-        "tempo": 69.409,
+        "tempo": 69.407,
         "sos": -3.092,
         "games": 5,
         "rawGames": 5,
@@ -228780,10 +228780,10 @@
       "eloRating": 1425,
       "sosRating": 4.275,
       "powerRatings": {
-        "adjO": 104.551,
-        "adjD": 108.156,
+        "adjO": 104.549,
+        "adjD": 108.153,
         "adjEM": -3.604,
-        "tempo": 67.665,
+        "tempo": 67.663,
         "sos": 4.856,
         "games": 5,
         "rawGames": 4,
@@ -229526,11 +229526,11 @@
       "eloRating": 1570,
       "sosRating": -2.9499999999999997,
       "powerRatings": {
-        "adjO": 106.744,
-        "adjD": 108.831,
+        "adjO": 106.741,
+        "adjD": 108.828,
         "adjEM": -2.087,
-        "tempo": 70.372,
-        "sos": -3.14,
+        "tempo": 70.374,
+        "sos": -3.141,
         "games": 4,
         "rawGames": 4,
         "reliability": 0.571,
@@ -230124,8 +230124,8 @@
       "eloRating": 1731,
       "sosRating": -10.399999999999999,
       "powerRatings": {
-        "adjO": 113.188,
-        "adjD": 105.118,
+        "adjO": 113.184,
+        "adjD": 105.115,
         "adjEM": 8.07,
         "tempo": 70.956,
         "sos": -15.742,
@@ -230866,10 +230866,10 @@
       "eloRating": 1539,
       "sosRating": -4.800000000000001,
       "powerRatings": {
-        "adjO": 107.353,
-        "adjD": 107.112,
+        "adjO": 107.35,
+        "adjD": 107.109,
         "adjEM": 0.241,
-        "tempo": 71.305,
+        "tempo": 71.307,
         "sos": -5.659,
         "games": 5,
         "rawGames": 4,
@@ -230880,7 +230880,7 @@
         "adjORank": 142,
         "adjDRank": 200,
         "tempoRank": 135,
-        "sosRank": 166
+        "sosRank": 167
       }
     },
     {
@@ -231752,11 +231752,11 @@
       "eloRating": 1409,
       "sosRating": -7.475,
       "powerRatings": {
-        "adjO": 97.013,
-        "adjD": 111.989,
-        "adjEM": -14.976,
+        "adjO": 97.01,
+        "adjD": 111.987,
+        "adjEM": -14.977,
         "tempo": 70.047,
-        "sos": -19.499,
+        "sos": -19.501,
         "games": 4.5,
         "rawGames": 5,
         "reliability": 0.6,
@@ -231765,7 +231765,7 @@
         "rank": 339,
         "adjORank": 329,
         "adjDRank": 310,
-        "tempoRank": 222,
+        "tempoRank": 220,
         "sosRank": 326
       }
     },
@@ -232494,10 +232494,10 @@
       "eloRating": 1627,
       "sosRating": -2.3333333333333344,
       "powerRatings": {
-        "adjO": 98.035,
-        "adjD": 104.353,
+        "adjO": 98.032,
+        "adjD": 104.35,
         "adjEM": -6.319,
-        "tempo": 72.636,
+        "tempo": 72.637,
         "sos": -20.608,
         "games": 4.5,
         "rawGames": 4,
@@ -233092,10 +233092,10 @@
       "eloRating": 1753,
       "sosRating": 13.6,
       "powerRatings": {
-        "adjO": 102.204,
-        "adjD": 99.383,
+        "adjO": 102.2,
+        "adjD": 99.379,
         "adjEM": 2.821,
-        "tempo": 72.392,
+        "tempo": 72.391,
         "sos": -25.263,
         "games": 3,
         "rawGames": 3,
@@ -233105,7 +233105,7 @@
         "rank": 132,
         "adjORank": 264,
         "adjDRank": 46,
-        "tempoRank": 70,
+        "tempoRank": 71,
         "sosRank": 347
       }
     },
@@ -233834,10 +233834,10 @@
       "eloRating": 1698,
       "sosRating": 5.433333333333334,
       "powerRatings": {
-        "adjO": 100.925,
-        "adjD": 103.809,
+        "adjO": 100.922,
+        "adjD": 103.805,
         "adjEM": -2.884,
-        "tempo": 73.686,
+        "tempo": 73.685,
         "sos": -16.504,
         "games": 3.5,
         "rawGames": 4,
@@ -234432,8 +234432,8 @@
       "eloRating": 1510,
       "sosRating": 1.0500000000000007,
       "powerRatings": {
-        "adjO": 107.248,
-        "adjD": 109.98,
+        "adjO": 107.245,
+        "adjD": 109.976,
         "adjEM": -2.732,
         "tempo": 73.065,
         "sos": -11.84,
@@ -235174,10 +235174,10 @@
       "eloRating": 1872,
       "sosRating": 6.65,
       "powerRatings": {
-        "adjO": 110.661,
-        "adjD": 104.546,
+        "adjO": 110.657,
+        "adjD": 104.542,
         "adjEM": 6.115,
-        "tempo": 70.032,
+        "tempo": 70.031,
         "sos": -25.85,
         "games": 3,
         "rawGames": 4,
@@ -235185,9 +235185,9 @@
         "sample": "Early sample",
         "model": "D1 Hoops Power Rating v2",
         "rank": 100,
-        "adjORank": 88,
+        "adjORank": 89,
         "adjDRank": 136,
-        "tempoRank": 225,
+        "tempoRank": 227,
         "sosRank": 349
       }
     },
@@ -235918,11 +235918,11 @@
       "eloRating": 1555,
       "sosRating": -4.6,
       "powerRatings": {
-        "adjO": 114.112,
-        "adjD": 108.186,
-        "adjEM": 5.925,
-        "tempo": 70.732,
-        "sos": 0.576,
+        "adjO": 114.109,
+        "adjD": 108.183,
+        "adjEM": 5.926,
+        "tempo": 70.737,
+        "sos": 0.578,
         "games": 5,
         "rawGames": 4,
         "reliability": 0.625,
@@ -236516,11 +236516,11 @@
       "eloRating": 1939,
       "sosRating": -6.933333333333333,
       "powerRatings": {
-        "adjO": 121.966,
-        "adjD": 94.627,
-        "adjEM": 27.339,
-        "tempo": 72.392,
-        "sos": -6.343,
+        "adjO": 121.954,
+        "adjD": 94.625,
+        "adjEM": 27.329,
+        "tempo": 72.397,
+        "sos": -6.365,
         "games": 4,
         "rawGames": 3,
         "reliability": 0.571,
@@ -236529,8 +236529,8 @@
         "rank": 4,
         "adjORank": 2,
         "adjDRank": 21,
-        "tempoRank": 71,
-        "sosRank": 176
+        "tempoRank": 69,
+        "sosRank": 177
       }
     },
     {
@@ -237258,8 +237258,8 @@
       "eloRating": 1785,
       "sosRating": 4.775,
       "powerRatings": {
-        "adjO": 117.687,
-        "adjD": 91.646,
+        "adjO": 117.684,
+        "adjD": 91.643,
         "adjEM": 26.041,
         "tempo": 69.327,
         "sos": 1.642,
@@ -237271,7 +237271,7 @@
         "rank": 7,
         "adjORank": 18,
         "adjDRank": 7,
-        "tempoRank": 270,
+        "tempoRank": 269,
         "sosRank": 63
       }
     },
@@ -238000,11 +238000,11 @@
       "eloRating": 1644,
       "sosRating": 0.16666666666666666,
       "powerRatings": {
-        "adjO": 108.193,
-        "adjD": 104.422,
+        "adjO": 108.19,
+        "adjD": 104.418,
         "adjEM": 3.771,
         "tempo": 68.123,
-        "sos": -12.741,
+        "sos": -12.74,
         "games": 3.5,
         "rawGames": 4,
         "reliability": 0.538,
@@ -239034,11 +239034,11 @@
       "eloRating": 1363,
       "sosRating": 17.96,
       "powerRatings": {
-        "adjO": 101.092,
-        "adjD": 115.526,
-        "adjEM": -14.434,
-        "tempo": 71.186,
-        "sos": -6.728,
+        "adjO": 101.088,
+        "adjD": 115.524,
+        "adjEM": -14.435,
+        "tempo": 71.181,
+        "sos": -6.729,
         "games": 6,
         "rawGames": 6,
         "reliability": 0.667,
@@ -239048,7 +239048,7 @@
         "adjORank": 281,
         "adjDRank": 346,
         "tempoRank": 146,
-        "sosRank": 181
+        "sosRank": 182
       }
     },
     {
@@ -239920,11 +239920,11 @@
       "eloRating": 1526,
       "sosRating": -0.4750000000000003,
       "powerRatings": {
-        "adjO": 99.63,
-        "adjD": 107.254,
-        "adjEM": -7.624,
+        "adjO": 99.628,
+        "adjD": 107.25,
+        "adjEM": -7.623,
         "tempo": 72.833,
-        "sos": -10.454,
+        "sos": -10.452,
         "games": 5.5,
         "rawGames": 5,
         "reliability": 0.647,
@@ -239934,7 +239934,7 @@
         "adjORank": 302,
         "adjDRank": 203,
         "tempoRank": 50,
-        "sosRank": 244
+        "sosRank": 245
       }
     },
     {
@@ -240662,11 +240662,11 @@
       "eloRating": 1698,
       "sosRating": -1.866666666666667,
       "powerRatings": {
-        "adjO": 101.594,
-        "adjD": 105.31,
-        "adjEM": -3.716,
+        "adjO": 101.591,
+        "adjD": 105.307,
+        "adjEM": -3.717,
         "tempo": 70.382,
-        "sos": -16.009,
+        "sos": -16.011,
         "games": 4.5,
         "rawGames": 4,
         "reliability": 0.6,
@@ -241548,18 +241548,18 @@
       "eloRating": 1504,
       "sosRating": 3.4499999999999997,
       "powerRatings": {
-        "adjO": 104.15,
-        "adjD": 110.924,
-        "adjEM": -6.775,
+        "adjO": 104.147,
+        "adjD": 110.921,
+        "adjEM": -6.774,
         "tempo": 71.606,
-        "sos": -11.997,
+        "sos": -11.996,
         "games": 4.5,
         "rawGames": 5,
         "reliability": 0.6,
         "sample": "Developing",
         "model": "D1 Hoops Power Rating v2",
         "rank": 258,
-        "adjORank": 219,
+        "adjORank": 220,
         "adjDRank": 288,
         "tempoRank": 114,
         "sosRank": 257
@@ -242290,10 +242290,10 @@
       "eloRating": 1661,
       "sosRating": 5.5,
       "powerRatings": {
-        "adjO": 104.706,
-        "adjD": 113.812,
+        "adjO": 104.702,
+        "adjD": 113.808,
         "adjEM": -9.106,
-        "tempo": 69.926,
+        "tempo": 69.923,
         "sos": -25.73,
         "games": 3,
         "rawGames": 4,
@@ -243032,10 +243032,10 @@
       "eloRating": 1942,
       "sosRating": -3.45,
       "powerRatings": {
-        "adjO": 108.514,
-        "adjD": 103.412,
+        "adjO": 108.51,
+        "adjD": 103.408,
         "adjEM": 5.102,
-        "tempo": 72.298,
+        "tempo": 72.296,
         "sos": -28.465,
         "games": 3,
         "rawGames": 4,
@@ -243630,11 +243630,11 @@
       "eloRating": 1578,
       "sosRating": -5.2,
       "powerRatings": {
-        "adjO": 110.53,
-        "adjD": 107.561,
-        "adjEM": 2.97,
-        "tempo": 73.265,
-        "sos": 4.075,
+        "adjO": 110.527,
+        "adjD": 107.558,
+        "adjEM": 2.968,
+        "tempo": 73.264,
+        "sos": 4.073,
         "games": 4,
         "rawGames": 3,
         "reliability": 0.571,
@@ -244372,10 +244372,10 @@
       "eloRating": 1890,
       "sosRating": 1.1000000000000005,
       "powerRatings": {
-        "adjO": 116.519,
-        "adjD": 97.237,
+        "adjO": 116.516,
+        "adjD": 97.234,
         "adjEM": 19.282,
-        "tempo": 72.613,
+        "tempo": 72.614,
         "sos": -5.257,
         "games": 4,
         "rawGames": 4,
@@ -244386,7 +244386,7 @@
         "adjORank": 29,
         "adjDRank": 31,
         "tempoRank": 62,
-        "sosRank": 160
+        "sosRank": 161
       }
     },
     {
@@ -245258,8 +245258,8 @@
       "eloRating": 1674,
       "sosRating": -21.23333333333333,
       "powerRatings": {
-        "adjO": 104.605,
-        "adjD": 103.542,
+        "adjO": 104.602,
+        "adjD": 103.539,
         "adjEM": 1.063,
         "tempo": 73.022,
         "sos": -19.123,
@@ -246148,10 +246148,10 @@
       "eloRating": 1949,
       "sosRating": 0.09999999999999998,
       "powerRatings": {
-        "adjO": 104.904,
-        "adjD": 102.372,
+        "adjO": 104.901,
+        "adjD": 102.369,
         "adjEM": 2.532,
-        "tempo": 71.214,
+        "tempo": 71.213,
         "sos": -23.952,
         "games": 4,
         "rawGames": 5,
@@ -246890,11 +246890,11 @@
       "eloRating": 1595,
       "sosRating": -18.233333333333334,
       "powerRatings": {
-        "adjO": 103.543,
-        "adjD": 106.73,
-        "adjEM": -3.188,
-        "tempo": 69.102,
-        "sos": -15.113,
+        "adjO": 103.539,
+        "adjD": 106.727,
+        "adjEM": -3.187,
+        "tempo": 69.098,
+        "sos": -15.112,
         "games": 3.5,
         "rawGames": 4,
         "reliability": 0.538,
@@ -247632,11 +247632,11 @@
       "eloRating": 1554,
       "sosRating": -12.625,
       "powerRatings": {
-        "adjO": 101.118,
-        "adjD": 104.834,
+        "adjO": 101.115,
+        "adjD": 104.83,
         "adjEM": -3.715,
-        "tempo": 68.512,
-        "sos": -14.214,
+        "tempo": 68.514,
+        "sos": -14.215,
         "games": 4,
         "rawGames": 4,
         "reliability": 0.571,
@@ -248374,8 +248374,8 @@
       "eloRating": 1543,
       "sosRating": -5.425,
       "powerRatings": {
-        "adjO": 101.127,
-        "adjD": 110.541,
+        "adjO": 101.123,
+        "adjD": 110.538,
         "adjEM": -9.414,
         "tempo": 71.413,
         "sos": -2.494,
@@ -249116,8 +249116,8 @@
       "eloRating": 1948,
       "sosRating": -10.825000000000001,
       "powerRatings": {
-        "adjO": 121.854,
-        "adjD": 99.785,
+        "adjO": 121.851,
+        "adjD": 99.782,
         "adjEM": 22.069,
         "tempo": 73.946,
         "sos": -8.415,
@@ -249130,7 +249130,7 @@
         "adjORank": 3,
         "adjDRank": 50,
         "tempoRank": 28,
-        "sosRank": 213
+        "sosRank": 214
       }
     },
     {
@@ -249858,10 +249858,10 @@
       "eloRating": 1482,
       "sosRating": 12.299999999999999,
       "powerRatings": {
-        "adjO": 106.895,
-        "adjD": 112.133,
-        "adjEM": -5.237,
-        "tempo": 71.539,
+        "adjO": 106.892,
+        "adjD": 112.129,
+        "adjEM": -5.238,
+        "tempo": 71.538,
         "sos": -2.646,
         "games": 3.5,
         "rawGames": 4,
@@ -249871,7 +249871,7 @@
         "rank": 238,
         "adjORank": 154,
         "adjDRank": 313,
-        "tempoRank": 118,
+        "tempoRank": 119,
         "sosRank": 124
       }
     },
@@ -250456,10 +250456,10 @@
       "eloRating": 1543,
       "sosRating": -5.766666666666667,
       "powerRatings": {
-        "adjO": 106.173,
-        "adjD": 103.652,
+        "adjO": 106.17,
+        "adjD": 103.649,
         "adjEM": 2.521,
-        "tempo": 69.075,
+        "tempo": 69.082,
         "sos": -2.948,
         "games": 4,
         "rawGames": 3,
@@ -251054,8 +251054,8 @@
       "eloRating": 1602,
       "sosRating": -3.1499999999999995,
       "powerRatings": {
-        "adjO": 108.292,
-        "adjD": 103.802,
+        "adjO": 108.289,
+        "adjD": 103.799,
         "adjEM": 4.49,
         "tempo": 74.158,
         "sos": -17.948,
@@ -251652,11 +251652,11 @@
       "eloRating": 1621,
       "sosRating": -6.6000000000000005,
       "powerRatings": {
-        "adjO": 113.231,
-        "adjD": 101.753,
-        "adjEM": 11.478,
-        "tempo": 71.115,
-        "sos": -7.337,
+        "adjO": 113.227,
+        "adjD": 101.75,
+        "adjEM": 11.477,
+        "tempo": 71.114,
+        "sos": -7.34,
         "games": 3,
         "rawGames": 3,
         "reliability": 0.5,
@@ -251666,7 +251666,7 @@
         "adjORank": 60,
         "adjDRank": 83,
         "tempoRank": 150,
-        "sosRank": 196
+        "sosRank": 197
       }
     },
     {
@@ -252538,10 +252538,10 @@
       "eloRating": 1597,
       "sosRating": -1.5,
       "powerRatings": {
-        "adjO": 95.83,
-        "adjD": 109.477,
+        "adjO": 95.826,
+        "adjD": 109.474,
         "adjEM": -13.648,
-        "tempo": 72.099,
+        "tempo": 72.097,
         "sos": -22.946,
         "games": 4,
         "rawGames": 5,
@@ -253140,11 +253140,11 @@
       "eloRating": 1562,
       "sosRating": 13.4,
       "powerRatings": {
-        "adjO": 106.61,
-        "adjD": 101.341,
+        "adjO": 106.606,
+        "adjD": 101.338,
         "adjEM": 5.268,
         "tempo": 69.543,
-        "sos": -12.115,
+        "sos": -12.114,
         "games": 3.5,
         "rawGames": 3,
         "reliability": 0.538,
@@ -253882,11 +253882,11 @@
       "eloRating": 1840,
       "sosRating": 0.7749999999999995,
       "powerRatings": {
-        "adjO": 121.198,
-        "adjD": 94.163,
+        "adjO": 121.195,
+        "adjD": 94.16,
         "adjEM": 27.035,
-        "tempo": 70.018,
-        "sos": -5.096,
+        "tempo": 70.028,
+        "sos": -5.095,
         "games": 5,
         "rawGames": 4,
         "reliability": 0.625,
@@ -253896,7 +253896,7 @@
         "adjORank": 5,
         "adjDRank": 17,
         "tempoRank": 228,
-        "sosRank": 158
+        "sosRank": 159
       }
     },
     {
@@ -254624,10 +254624,10 @@
       "eloRating": 1722,
       "sosRating": -6.199999999999999,
       "powerRatings": {
-        "adjO": 107.209,
-        "adjD": 109.519,
+        "adjO": 107.206,
+        "adjD": 109.516,
         "adjEM": -2.31,
-        "tempo": 67.736,
+        "tempo": 67.737,
         "sos": -18.842,
         "games": 3.5,
         "rawGames": 4,
@@ -255366,8 +255366,8 @@
       "eloRating": 1734,
       "sosRating": -5.45,
       "powerRatings": {
-        "adjO": 111.755,
-        "adjD": 100.773,
+        "adjO": 111.752,
+        "adjD": 100.77,
         "adjEM": 10.982,
         "tempo": 70.839,
         "sos": -4.884,
@@ -255378,9 +255378,9 @@
         "model": "D1 Hoops Power Rating v2",
         "rank": 70,
         "adjORank": 75,
-        "adjDRank": 62,
-        "tempoRank": 167,
-        "sosRank": 155
+        "adjDRank": 61,
+        "tempoRank": 168,
+        "sosRank": 156
       }
     },
     {
@@ -256252,10 +256252,10 @@
       "eloRating": 1828,
       "sosRating": -8.52,
       "powerRatings": {
-        "adjO": 119.961,
-        "adjD": 97.752,
+        "adjO": 119.958,
+        "adjD": 97.749,
         "adjEM": 22.209,
-        "tempo": 72.358,
+        "tempo": 72.357,
         "sos": -0.243,
         "games": 6,
         "rawGames": 5,
@@ -256996,21 +256996,21 @@
       "eloRating": 1758,
       "sosRating": 2.6999999999999997,
       "powerRatings": {
-        "adjO": 116.347,
-        "adjD": 100.53,
-        "adjEM": 15.817,
-        "tempo": 71.186,
-        "sos": -1.648,
+        "adjO": 116.345,
+        "adjD": 100.52,
+        "adjEM": 15.825,
+        "tempo": 71.19,
+        "sos": -1.631,
         "games": 5,
         "rawGames": 4,
         "reliability": 0.625,
         "sample": "Developing",
         "model": "D1 Hoops Power Rating v2",
         "rank": 44,
-        "adjORank": 34,
+        "adjORank": 33,
         "adjDRank": 60,
         "tempoRank": 145,
-        "sosRank": 109
+        "sosRank": 108
       }
     },
     {
@@ -257738,10 +257738,10 @@
       "eloRating": 1554,
       "sosRating": 20.633333333333333,
       "powerRatings": {
-        "adjO": 98.145,
-        "adjD": 109.962,
+        "adjO": 98.142,
+        "adjD": 109.959,
         "adjEM": -11.817,
-        "tempo": 69.871,
+        "tempo": 69.87,
         "sos": 0.867,
         "games": 4.5,
         "rawGames": 4,
@@ -258480,10 +258480,10 @@
       "eloRating": 1804,
       "sosRating": -3.5,
       "powerRatings": {
-        "adjO": 111.645,
-        "adjD": 100.841,
+        "adjO": 111.642,
+        "adjD": 100.838,
         "adjEM": 10.804,
-        "tempo": 69.535,
+        "tempo": 69.533,
         "sos": 0.019,
         "games": 5,
         "rawGames": 4,
@@ -258492,7 +258492,7 @@
         "model": "D1 Hoops Power Rating v2",
         "rank": 72,
         "adjORank": 78,
-        "adjDRank": 63,
+        "adjDRank": 62,
         "tempoRank": 257,
         "sosRank": 86
       }
@@ -258934,10 +258934,10 @@
       "eloRating": 1546,
       "sosRating": -15.3,
       "powerRatings": {
-        "adjO": 112.033,
-        "adjD": 104.922,
+        "adjO": 112.03,
+        "adjD": 104.918,
         "adjEM": 7.111,
-        "tempo": 70.031,
+        "tempo": 70.032,
         "sos": -12.956,
         "games": 2,
         "rawGames": 2,
@@ -258947,7 +258947,7 @@
         "rank": 96,
         "adjORank": 73,
         "adjDRank": 143,
-        "tempoRank": 226,
+        "tempoRank": 225,
         "sosRank": 271
       }
     },
@@ -259676,11 +259676,11 @@
       "eloRating": 1582,
       "sosRating": -1.7,
       "powerRatings": {
-        "adjO": 110.109,
-        "adjD": 112.878,
-        "adjEM": -2.769,
-        "tempo": 70.412,
-        "sos": -9.517,
+        "adjO": 110.106,
+        "adjD": 112.874,
+        "adjEM": -2.767,
+        "tempo": 70.411,
+        "sos": -9.514,
         "games": 3.5,
         "rawGames": 4,
         "reliability": 0.538,
@@ -259690,7 +259690,7 @@
         "adjORank": 95,
         "adjDRank": 323,
         "tempoRank": 201,
-        "sosRank": 225
+        "sosRank": 226
       }
     },
     {
@@ -260418,10 +260418,10 @@
       "eloRating": 1311,
       "sosRating": -1.033333333333333,
       "powerRatings": {
-        "adjO": 103.252,
-        "adjD": 114.041,
+        "adjO": 103.249,
+        "adjD": 114.038,
         "adjEM": -10.789,
-        "tempo": 71.955,
+        "tempo": 71.953,
         "sos": -9.128,
         "games": 3.5,
         "rawGames": 4,
@@ -260432,7 +260432,7 @@
         "adjORank": 244,
         "adjDRank": 338,
         "tempoRank": 89,
-        "sosRank": 220
+        "sosRank": 221
       }
     },
     {
@@ -261160,9 +261160,9 @@
       "eloRating": 1311,
       "sosRating": -7.325,
       "powerRatings": {
-        "adjO": 95.422,
-        "adjD": 107.903,
-        "adjEM": -12.481,
+        "adjO": 95.419,
+        "adjD": 107.899,
+        "adjEM": -12.48,
         "tempo": 72.681,
         "sos": 1.544,
         "games": 4,
@@ -261758,21 +261758,21 @@
       "eloRating": 1785,
       "sosRating": -9.733333333333333,
       "powerRatings": {
-        "adjO": 110.562,
-        "adjD": 93.635,
-        "adjEM": 16.927,
-        "tempo": 70.722,
-        "sos": -11.051,
-        "games": 3,
+        "adjO": 110.697,
+        "adjD": 93.032,
+        "adjEM": 17.664,
+        "tempo": 70.904,
+        "sos": -4.485,
+        "games": 4,
         "rawGames": 3,
-        "reliability": 0.5,
-        "sample": "Early sample",
+        "reliability": 0.571,
+        "sample": "Developing",
         "model": "D1 Hoops Power Rating v2",
-        "rank": 35,
-        "adjORank": 91,
-        "adjDRank": 14,
-        "tempoRank": 177,
-        "sosRank": 251
+        "rank": 32,
+        "adjORank": 87,
+        "adjDRank": 12,
+        "tempoRank": 166,
+        "sosRank": 148
       }
     },
     {
@@ -262500,11 +262500,11 @@
       "eloRating": 1633,
       "sosRating": 3.6666666666666665,
       "powerRatings": {
-        "adjO": 107.852,
-        "adjD": 109.943,
-        "adjEM": -2.091,
-        "tempo": 70.2,
-        "sos": -7.044,
+        "adjO": 107.849,
+        "adjD": 109.94,
+        "adjEM": -2.09,
+        "tempo": 70.199,
+        "sos": -7.043,
         "games": 4.5,
         "rawGames": 4,
         "reliability": 0.6,
@@ -262513,8 +262513,8 @@
         "rank": 180,
         "adjORank": 139,
         "adjDRank": 266,
-        "tempoRank": 215,
-        "sosRank": 186
+        "tempoRank": 216,
+        "sosRank": 187
       }
     },
     {
@@ -263242,8 +263242,8 @@
       "eloRating": 1586,
       "sosRating": 8.666666666666668,
       "powerRatings": {
-        "adjO": 98.72,
-        "adjD": 117.496,
+        "adjO": 98.717,
+        "adjD": 117.493,
         "adjEM": -18.776,
         "tempo": 69.905,
         "sos": -8.099,
@@ -263256,7 +263256,7 @@
         "adjORank": 312,
         "adjDRank": 360,
         "tempoRank": 235,
-        "sosRank": 208
+        "sosRank": 209
       }
     },
     {
@@ -263984,10 +263984,10 @@
       "eloRating": 1778,
       "sosRating": -2.75,
       "powerRatings": {
-        "adjO": 102.57,
-        "adjD": 101.305,
+        "adjO": 102.567,
+        "adjD": 101.302,
         "adjEM": 1.266,
-        "tempo": 71.876,
+        "tempo": 71.875,
         "sos": -23.034,
         "games": 4,
         "rawGames": 4,
@@ -264870,8 +264870,8 @@
       "eloRating": 1920,
       "sosRating": -7.2749999999999995,
       "powerRatings": {
-        "adjO": 107.866,
-        "adjD": 104.495,
+        "adjO": 107.863,
+        "adjD": 104.491,
         "adjEM": 3.371,
         "tempo": 68.424,
         "sos": -14.809,
@@ -265612,8 +265612,8 @@
       "eloRating": 1791,
       "sosRating": 7.566666666666667,
       "powerRatings": {
-        "adjO": 110.1,
-        "adjD": 101.097,
+        "adjO": 110.097,
+        "adjD": 101.093,
         "adjEM": 9.004,
         "tempo": 71.539,
         "sos": -10.051,
@@ -265625,8 +265625,8 @@
         "rank": 85,
         "adjORank": 96,
         "adjDRank": 68,
-        "tempoRank": 119,
-        "sosRank": 236
+        "tempoRank": 118,
+        "sosRank": 237
       }
     },
     {
@@ -266354,11 +266354,11 @@
       "eloRating": 1458,
       "sosRating": 2.3000000000000007,
       "powerRatings": {
-        "adjO": 107.972,
-        "adjD": 109.512,
-        "adjEM": -1.54,
-        "tempo": 74.579,
-        "sos": -9.684,
+        "adjO": 107.97,
+        "adjD": 109.508,
+        "adjEM": -1.539,
+        "tempo": 74.578,
+        "sos": -9.682,
         "games": 4.5,
         "rawGames": 4,
         "reliability": 0.6,
@@ -266368,7 +266368,7 @@
         "adjORank": 137,
         "adjDRank": 257,
         "tempoRank": 18,
-        "sosRank": 228
+        "sosRank": 229
       }
     },
     {
@@ -267096,10 +267096,10 @@
       "eloRating": 1438,
       "sosRating": -8.75,
       "powerRatings": {
-        "adjO": 104.822,
-        "adjD": 110.907,
+        "adjO": 104.819,
+        "adjD": 110.904,
         "adjEM": -6.085,
-        "tempo": 74.263,
+        "tempo": 74.264,
         "sos": -6.365,
         "games": 4,
         "rawGames": 4,
@@ -267110,7 +267110,7 @@
         "adjORank": 202,
         "adjDRank": 287,
         "tempoRank": 19,
-        "sosRank": 177
+        "sosRank": 178
       }
     },
     {
@@ -267838,10 +267838,10 @@
       "eloRating": 1710,
       "sosRating": 0.7999999999999998,
       "powerRatings": {
-        "adjO": 112.997,
-        "adjD": 100.204,
+        "adjO": 112.993,
+        "adjD": 100.201,
         "adjEM": 12.793,
-        "tempo": 72.089,
+        "tempo": 72.09,
         "sos": -7.539,
         "games": 4,
         "rawGames": 4,
@@ -267851,8 +267851,8 @@
         "rank": 59,
         "adjORank": 63,
         "adjDRank": 54,
-        "tempoRank": 80,
-        "sosRank": 197
+        "tempoRank": 81,
+        "sosRank": 198
       }
     },
     {
@@ -268724,10 +268724,10 @@
       "eloRating": 1590,
       "sosRating": 7.1000000000000005,
       "powerRatings": {
-        "adjO": 106.457,
-        "adjD": 115.35,
-        "adjEM": -8.893,
-        "tempo": 71.148,
+        "adjO": 106.454,
+        "adjD": 115.346,
+        "adjEM": -8.892,
+        "tempo": 71.144,
         "sos": -15.205,
         "games": 4,
         "rawGames": 5,
@@ -269466,10 +269466,10 @@
       "eloRating": 1834,
       "sosRating": -0.1499999999999999,
       "powerRatings": {
-        "adjO": 114.986,
-        "adjD": 102.555,
+        "adjO": 114.983,
+        "adjD": 102.552,
         "adjEM": 12.43,
-        "tempo": 70.209,
+        "tempo": 70.208,
         "sos": -4.604,
         "games": 4,
         "rawGames": 4,
@@ -269479,8 +269479,8 @@
         "rank": 62,
         "adjORank": 48,
         "adjDRank": 93,
-        "tempoRank": 214,
-        "sosRank": 148
+        "tempoRank": 215,
+        "sosRank": 149
       }
     },
     {
@@ -270208,8 +270208,8 @@
       "eloRating": 1805,
       "sosRating": 6.666666666666667,
       "powerRatings": {
-        "adjO": 111.485,
-        "adjD": 101.253,
+        "adjO": 111.482,
+        "adjD": 101.25,
         "adjEM": 10.232,
         "tempo": 69.513,
         "sos": -9.927,
@@ -270222,7 +270222,7 @@
         "adjORank": 83,
         "adjDRank": 71,
         "tempoRank": 259,
-        "sosRank": 232
+        "sosRank": 233
       }
     },
     {
@@ -270950,11 +270950,11 @@
       "eloRating": 1917,
       "sosRating": -0.625,
       "powerRatings": {
-        "adjO": 108.344,
-        "adjD": 94.248,
+        "adjO": 108.341,
+        "adjD": 94.245,
         "adjEM": 14.096,
-        "tempo": 74.628,
-        "sos": -7.214,
+        "tempo": 74.627,
+        "sos": -7.213,
         "games": 5,
         "rawGames": 4,
         "reliability": 0.625,
@@ -270964,7 +270964,7 @@
         "adjORank": 129,
         "adjDRank": 18,
         "tempoRank": 15,
-        "sosRank": 191
+        "sosRank": 192
       }
     },
     {
@@ -271836,21 +271836,21 @@
       "eloRating": 1616,
       "sosRating": -1.2499999999999996,
       "powerRatings": {
-        "adjO": 110.693,
-        "adjD": 110.739,
-        "adjEM": -0.047,
-        "tempo": 67.845,
-        "sos": -7.082,
+        "adjO": 110.69,
+        "adjD": 110.736,
+        "adjEM": -0.046,
+        "tempo": 67.843,
+        "sos": -7.08,
         "games": 4.5,
         "rawGames": 5,
         "reliability": 0.6,
         "sample": "Developing",
         "model": "D1 Hoops Power Rating v2",
         "rank": 159,
-        "adjORank": 87,
+        "adjORank": 88,
         "adjDRank": 281,
         "tempoRank": 342,
-        "sosRank": 187
+        "sosRank": 188
       }
     },
     {
@@ -272578,10 +272578,10 @@
       "eloRating": 1453,
       "sosRating": 7.375,
       "powerRatings": {
-        "adjO": 104.305,
-        "adjD": 105.851,
+        "adjO": 104.302,
+        "adjD": 105.848,
         "adjEM": -1.546,
-        "tempo": 72.143,
+        "tempo": 72.142,
         "sos": 5.384,
         "games": 4,
         "rawGames": 4,
@@ -272592,7 +272592,7 @@
         "adjORank": 216,
         "adjDRank": 166,
         "tempoRank": 77,
-        "sosRank": 28
+        "sosRank": 29
       }
     },
     {
@@ -273464,10 +273464,10 @@
       "eloRating": 1378,
       "sosRating": -3.019999999999999,
       "powerRatings": {
-        "adjO": 114.944,
-        "adjD": 119.406,
+        "adjO": 114.941,
+        "adjD": 119.403,
         "adjEM": -4.463,
-        "tempo": 73.003,
+        "tempo": 72.999,
         "sos": 4.161,
         "games": 5,
         "rawGames": 5,
@@ -274352,10 +274352,10 @@
       "eloRating": 1629,
       "sosRating": -1.2750000000000001,
       "powerRatings": {
-        "adjO": 95.211,
-        "adjD": 105.949,
+        "adjO": 95.208,
+        "adjD": 105.946,
         "adjEM": -10.738,
-        "tempo": 71.528,
+        "tempo": 71.527,
         "sos": -12.595,
         "games": 4.5,
         "rawGames": 5,
@@ -274363,7 +274363,7 @@
         "sample": "Developing",
         "model": "D1 Hoops Power Rating v2",
         "rank": 302,
-        "adjORank": 347,
+        "adjORank": 348,
         "adjDRank": 169,
         "tempoRank": 121,
         "sosRank": 265
@@ -275238,10 +275238,10 @@
       "eloRating": 1639,
       "sosRating": 6.466666666666666,
       "powerRatings": {
-        "adjO": 99.933,
-        "adjD": 106.102,
+        "adjO": 99.929,
+        "adjD": 106.099,
         "adjEM": -6.169,
-        "tempo": 71.829,
+        "tempo": 71.827,
         "sos": -13.319,
         "games": 5,
         "rawGames": 5,
@@ -276126,11 +276126,11 @@
       "eloRating": 1967,
       "sosRating": -23.966666666666665,
       "powerRatings": {
-        "adjO": 106.194,
-        "adjD": 107.084,
-        "adjEM": -0.89,
-        "tempo": 71.775,
-        "sos": -22.208,
+        "adjO": 106.195,
+        "adjD": 107.081,
+        "adjEM": -0.886,
+        "tempo": 71.773,
+        "sos": -22.207,
         "games": 5,
         "rawGames": 5,
         "reliability": 0.625,
@@ -276868,10 +276868,10 @@
       "eloRating": 1425,
       "sosRating": 7.575,
       "powerRatings": {
-        "adjO": 93.75,
-        "adjD": 106.997,
-        "adjEM": -13.248,
-        "tempo": 67.66,
+        "adjO": 93.747,
+        "adjD": 106.994,
+        "adjEM": -13.247,
+        "tempo": 67.659,
         "sos": 5.095,
         "games": 4,
         "rawGames": 4,
@@ -276882,7 +276882,7 @@
         "adjORank": 355,
         "adjDRank": 196,
         "tempoRank": 346,
-        "sosRank": 30
+        "sosRank": 31
       }
     }
   ],
@@ -276890,11 +276890,11 @@
     "name": "D1 Hoops Power Rating",
     "version": "2.0.0",
     "method": "Ridge-regularised additive opponent adjustment (offence, defence, tempo) with conference-mean priors, jointly estimated home edge, pooled non-D-I node, and walk-forward out-of-sample predictions.",
-    "leagueAverage": 106.07,
-    "leagueTempo": 70.712,
+    "leagueAverage": 106.066,
+    "leagueTempo": 70.713,
     "estimatedHomeEdge": 6.207,
     "homeEdgePointsPerGame": 4.39,
-    "gameCoverage": 959,
+    "gameCoverage": 960,
     "rankedTeams": 365,
     "iterations": 0,
     "seasonPrior": {
