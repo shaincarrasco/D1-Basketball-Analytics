@@ -4,7 +4,10 @@
 // Optional whole-row links (`rowHref`): the row is clickable with the mouse,
 // keyboard users reach the same page through the row's own primary link
 // (the row highlights while that link has focus), inner links/buttons keep working.
-import { useMemo, useRef, useState, type KeyboardEvent, type MouseEvent, type ReactNode } from "react";
+// Pinned header: the scroller is overflow-x, which traps `position: sticky` inside it, so a
+// table without its own maxHeight gets a synced copy of the header row that sticks under the
+// site header while the page scrolls (and follows the table's sideways scroll).
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type HTMLAttributes, type KeyboardEvent, type MouseEvent, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowDown, ArrowUp, Download } from "lucide-react";
 import { downloadCsv } from "./format";
@@ -66,13 +69,20 @@ export type Column<T> = {
   sortable?: boolean;
 };
 
-export default function DataTable<T>({ rows, rankRows, columns, rowKey, initialSort, initialDir = "desc", pageSize = 0, csvName, maxHeight, caption, rowHref }: {
+/** Extra props for a body row (e.g. long-press handlers). Mouse/keyboard row-link handlers still apply. */
+export type RowProps = HTMLAttributes<HTMLTableRowElement> & { [k: `data-${string}`]: string | undefined };
+
+const useIsoLayoutEffect = typeof window === "undefined" ? useEffect : useLayoutEffect;
+
+export default function DataTable<T>({ rows, rankRows, columns, rowKey, initialSort, initialDir = "desc", pageSize = 0, csvName, maxHeight, caption, rowHref, rowProps }: {
   rows: T[]; columns: Column<T>[]; rowKey: (row: T) => string; initialSort?: string; initialDir?: "asc" | "desc";
   /** The full list before any search. Rank numbers are positions in this list under the current sort. */
   rankRows?: T[];
   pageSize?: number; csvName?: string; maxHeight?: string; caption?: string;
   /** Make each row a link to this page (mouse: click anywhere; keyboard: the row's own link). */
   rowHref?: (row: T) => string | null;
+  /** Extra props per body row, merged after the row-link props. */
+  rowProps?: (row: T) => RowProps | undefined;
 }) {
   const rowLink = useRowLink();
   const [sort, setSort] = useState<{ key: string | undefined; dir: "asc" | "desc" }>({ key: initialSort, dir: initialDir });
@@ -103,6 +113,73 @@ export default function DataTable<T>({ rows, rankRows, columns, rowKey, initialS
   let stickyLeft = 0;
   const offsets = columns.map(c => { const left = stickyLeft; if (c.sticky) stickyLeft += c.width ?? 0; return left; });
 
+  // ----- pinned header copy (tables that scroll with the page) -----
+  const scroller = useRef<HTMLDivElement>(null);
+  const table = useRef<HTMLTableElement>(null);
+  const pinAnchor = useRef<HTMLDivElement>(null);
+  const pinBox = useRef<HTMLDivElement>(null);
+  const [pin, setPin] = useState<{ widths: number[]; width: number } | null>(null);
+  const colSig = columns.map(c => c.key).join("|"); // columns is often rebuilt each render; resubscribe only when it really changes
+  useEffect(() => {
+    if (maxHeight) return;
+    const box = scroller.current, tbl = table.current, anchor = pinAnchor.current;
+    if (!box || !tbl || !anchor) return;
+    const measure = () => ({ widths: [...(tbl.tHead?.rows[0]?.cells ?? [])].map(c => c.getBoundingClientRect().width), width: tbl.getBoundingClientRect().width });
+    let raf = 0;
+    const check = () => {
+      raf = 0;
+      const head = tbl.tHead?.getBoundingClientRect();
+      if (!head) return;
+      // The anchor is a zero-height sticky line right above the scroller: once it is pushed
+      // below the scroller's top edge, the real header has gone under the site header.
+      const top = anchor.getBoundingClientRect().top, b = box.getBoundingClientRect();
+      const show = top > b.top + 1 && b.bottom - top > head.height * 2;
+      setPin(p => (show ? (p ?? measure()) : null));
+    };
+    const queue = () => { if (!raf) raf = requestAnimationFrame(check); };
+    const sync = () => { if (pinBox.current) pinBox.current.scrollLeft = box.scrollLeft; };
+    const ro = new ResizeObserver(() => { setPin(p => (p ? measure() : p)); queue(); });
+    ro.observe(tbl);
+    for (const c of tbl.tHead?.rows[0]?.cells ?? []) ro.observe(c);
+    window.addEventListener("scroll", queue, { passive: true });
+    window.addEventListener("resize", queue);
+    box.addEventListener("scroll", sync, { passive: true });
+    queue();
+    return () => {
+      cancelAnimationFrame(raf);
+      ro.disconnect();
+      window.removeEventListener("scroll", queue);
+      window.removeEventListener("resize", queue);
+      box.removeEventListener("scroll", sync);
+    };
+  }, [maxHeight, colSig]);
+  useIsoLayoutEffect(() => { if (pin && pinBox.current && scroller.current) pinBox.current.scrollLeft = scroller.current.scrollLeft; }, [pin]);
+
+  const headRow = (copy: boolean) => (
+    <tr>
+      {columns.map((c, i) => {
+        const active = sort.key === c.key;
+        const ariaSort = active ? (sort.dir === "asc" ? "ascending" : "descending") : undefined;
+        const w = copy ? pin?.widths[i] : undefined;
+        return (
+          <th key={c.key} scope={copy ? undefined : "col"} aria-sort={copy ? undefined : ariaSort} title={c.title}
+            className={`${c.align === "l" ? "l" : ""} ${c.sticky ? "sticky-col" : ""} ${c.group === "off" ? "grp-off" : c.group === "def" ? "grp-def" : ""}`}
+            style={{
+              ...(c.sticky ? { left: offsets[i], minWidth: c.width, maxWidth: c.width } : {}), ...(c.width && !c.sticky ? { minWidth: c.width } : {}),
+              ...(w ? { width: w, minWidth: w, maxWidth: w, boxSizing: "border-box" } : {}),
+            }}>
+            {c.sortable === false ? c.label : (
+              <button onClick={() => toggle(c)} tabIndex={copy ? -1 : undefined} onMouseDown={copy ? e => e.preventDefault() : undefined} aria-label={`Sort by ${c.csvLabel ?? (typeof c.label === "string" ? c.label : c.key)}`}>
+                {c.label}
+                {active ? (sort.dir === "asc" ? <ArrowUp size={12} aria-hidden /> : <ArrowDown size={12} aria-hidden />) : null}
+              </button>
+            )}
+          </th>
+        );
+      })}
+    </tr>
+  );
+
   return (
     <div>
       {csvName && (
@@ -112,32 +189,22 @@ export default function DataTable<T>({ rows, rankRows, columns, rowKey, initialS
           </button>
         </div>
       )}
-      <div className="scroll-x rounded-xl border border-line" style={maxHeight ? { maxHeight, overflowY: "auto" } : undefined}>
-        <table className="dt">
+      {!maxHeight && (
+        <div ref={pinAnchor} className="dt-pin" aria-hidden>
+          {pin && (
+            <div ref={pinBox} className="dt-pin-box">
+              <table className="dt" style={{ width: pin.width, tableLayout: "fixed" }}><thead>{headRow(true)}</thead></table>
+            </div>
+          )}
+        </div>
+      )}
+      <div ref={scroller} className="scroll-x rounded-xl border border-line" style={maxHeight ? { maxHeight, overflowY: "auto" } : undefined}>
+        <table ref={table} className="dt">
           {caption && <caption className="sr-only">{caption}</caption>}
-          <thead>
-            <tr>
-              {columns.map((c, i) => {
-                const active = sort.key === c.key;
-                const ariaSort = active ? (sort.dir === "asc" ? "ascending" : "descending") : undefined;
-                return (
-                  <th key={c.key} scope="col" aria-sort={ariaSort} title={c.title}
-                    className={`${c.align === "l" ? "l" : ""} ${c.sticky ? "sticky-col" : ""} ${c.group === "off" ? "grp-off" : c.group === "def" ? "grp-def" : ""}`}
-                    style={{ ...(c.sticky ? { left: offsets[i], minWidth: c.width, maxWidth: c.width } : {}), ...(c.width && !c.sticky ? { minWidth: c.width } : {}) }}>
-                    {c.sortable === false ? c.label : (
-                      <button onClick={() => toggle(c)} aria-label={`Sort by ${c.csvLabel ?? (typeof c.label === "string" ? c.label : c.key)}`}>
-                        {c.label}
-                        {active ? (sort.dir === "asc" ? <ArrowUp size={12} aria-hidden /> : <ArrowDown size={12} aria-hidden />) : null}
-                      </button>
-                    )}
-                  </th>
-                );
-              })}
-            </tr>
-          </thead>
+          <thead>{headRow(false)}</thead>
           <tbody>
             {visible.map((row, ri) => (
-              <tr key={rowKey(row)} {...(rowHref ? rowLink(rowHref(row)) : {})} className={rowHref && rowHref(row) ? LINK_ROW : undefined}>
+              <tr key={rowKey(row)} {...(rowHref ? rowLink(rowHref(row)) : {})} {...rowProps?.(row)} className={rowHref && rowHref(row) ? LINK_ROW : undefined}>
                 {columns.map((c, i) => (
                   <td key={c.key} className={`${c.align === "l" ? "l" : ""} ${c.sticky ? "sticky-col" : ""}`} style={c.sticky ? { left: offsets[i], minWidth: c.width, maxWidth: c.width } : undefined}>
                     {c.render ? c.render(row, rankOf?.get(rowKey(row)) ?? ri) : (c.value(row) ?? "—")}

@@ -79,7 +79,8 @@ export default function FocusTabs({ tabs, param = "tab", sticky = true, classNam
         })}
       </div>
       {tabs.map(t => (
-        <div key={t.id} role="tabpanel" id={`panel-${t.id}`} aria-labelledby={`tab-${t.id}`} data-focus-panel={t.id} hidden={t.id !== active}>
+        <div key={t.id} role="tabpanel" id={`panel-${t.id}`} aria-labelledby={`tab-${t.id}`} data-focus-panel={t.id} hidden={t.id !== active}
+          style={sticky ? ({ "--dt-pin-top": "calc(3.5rem + env(safe-area-inset-top) + 46px)" } as React.CSSProperties) : undefined}>
           {t.content}
         </div>
       ))}

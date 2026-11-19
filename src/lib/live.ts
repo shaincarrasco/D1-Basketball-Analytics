@@ -4,7 +4,7 @@
 // clock and status. It polls every 30 s while a game is live or about to tip, pauses while the
 // tab is hidden, sleeps until shortly before the next tip otherwise, and fails silently: on any
 // error the pages keep showing the static data.
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useJson } from "@sports/ui/client-data";
 import type { Game, TeamSummary } from "./types";
 import { elapsedFrom } from "./win-prob";
@@ -147,9 +147,9 @@ export function liveDay(day: string | null, today: string, games: Game[] | null)
 /** One scoreboard request per day, shared by every live-score hook on the page (the home
  *  page has two: Today and the ticker). A request made in the last few seconds is reused. */
 const shared = new Map<string, { at: number; body: Promise<{ events?: EspnEvent[] }> }>();
-function fetchScoreboard(day: string): Promise<{ events?: EspnEvent[] }> {
+function fetchScoreboard(day: string, force = false): Promise<{ events?: EspnEvent[] }> {
   const hit = shared.get(day);
-  if (hit && Date.now() - hit.at < 5000) return hit.body;
+  if (!force && hit && Date.now() - hit.at < 20000) return hit.body;
   const body = fetch(`${SCOREBOARD}?dates=${espnDate(day)}&groups=50&limit=500`, { cache: "no-store", signal: AbortSignal.timeout(15000) })
     .then(res => { if (!res.ok) throw new Error(String(res.status)); return res.json() as Promise<{ events?: EspnEvent[] }>; });
   body.catch(() => { if (shared.get(day)?.body === body) shared.delete(day); });
@@ -159,7 +159,9 @@ function fetchScoreboard(day: string): Promise<{ events?: EspnEvent[] }> {
 
 /**
  * Live overlay for one day's games. Pass `day` for today (Eastern) or a recent day whose games
- * the published data hasn't marked final yet (see liveDay); pass null to do nothing. Returns the matched live states keyed by our game id.
+ * the published data hasn't marked final yet (see liveDay); pass null to do nothing. Returns the matched live states keyed by our game id,
+ * when they were last updated, and `refresh()`: fetch the scoreboard now (pull to refresh), bypassing the
+ * shared few-second cache. It resolves once that fetch settles (never rejects) and is a no-op when there is nothing to overlay.
  */
 export function useLiveScores(day: string | null, games: Game[] | null) {
   const [byGame, setByGame] = useState<Map<string, LiveGame>>(new Map());
@@ -176,6 +178,7 @@ export function useLiveScores(day: string | null, games: Game[] | null) {
 
   const latest = useRef(byGame);
   latest.current = byGame;
+  const refresher = useRef<(() => Promise<void>) | null>(null);
 
   useEffect(() => {
     setByGame(new Map());
@@ -187,6 +190,7 @@ export function useLiveScores(day: string | null, games: Game[] | null) {
     let timer: ReturnType<typeof setTimeout> | null = null;
     let ctrl: AbortController | null = null;
     let alive = true;
+    let es: EventSource | null = null;
 
     const nextDelay = (): number | null => {
       const now = Date.now();
@@ -207,27 +211,43 @@ export function useLiveScores(day: string | null, games: Game[] | null) {
     };
 
     const schedule = () => {
+      if (timer) clearTimeout(timer);
+      timer = null;
       if (!alive || document.hidden) return;
       const d = nextDelay();
       if (d != null) timer = setTimeout(tick, d);
     };
 
-    const tick = async () => {
-      timer = null;
-      if (!alive || document.hidden) return;
+    /** One scoreboard fetch; false when it was superseded (a newer fetch, the tab hidden, unmount). */
+    const load = async (force: boolean): Promise<boolean> => {
       ctrl?.abort();
-      ctrl = new AbortController();
+      const mine = new AbortController();
+      ctrl = mine;
       try {
-        const body = await fetchScoreboard(day);
-        if (!alive || ctrl.signal.aborted) return;
+        const body = await fetchScoreboard(day, force);
+        if (!alive || mine.signal.aborted) return false;
         const m = matchEvents(games, body.events ?? [], espnByTeam);
         latest.current = m;
         setByGame(m);
         setUpdated(Date.now());
       } catch {
         // Silent: keep whatever we had (static data or the last good poll).
+        if (!alive || mine.signal.aborted) return false;
       }
-      schedule();
+      return true;
+    };
+
+    const tick = async () => {
+      timer = null;
+      if (!alive || document.hidden) return;
+      if (await load(false)) schedule();
+    };
+
+    // Forced refresh: fetch now and restart the polling clock from here (the relay keeps streaming on its own).
+    refresher.current = async () => {
+      if (!alive) return;
+      if (!es && timer) { clearTimeout(timer); timer = null; }
+      if ((await load(true)) && !es) schedule();
     };
 
     const onVis = () => {
@@ -235,7 +255,6 @@ export function useLiveScores(day: string | null, games: Game[] | null) {
       else if (!timer) tick();
     };
     // Push relay for today's slate; falls back to polling on any error.
-    let es: EventSource | null = null;
     if (RELAY_ON && typeof EventSource !== "undefined" && day === etToday()) {
       es = new EventSource(`${RELAY}/events`);
       es.addEventListener("slate", e => {
@@ -258,6 +277,7 @@ export function useLiveScores(day: string | null, games: Game[] | null) {
     }
     return () => {
       alive = false;
+      refresher.current = null;
       es?.close();
       if (timer) clearTimeout(timer);
       ctrl?.abort();
@@ -266,5 +286,6 @@ export function useLiveScores(day: string | null, games: Game[] | null) {
   }, [ready, day, games, espnByTeam]);
 
   const anyLive = useMemo(() => [...byGame.values()].some(l => l.state === "in"), [byGame]);
-  return { byGame, updated, anyLive, hasData: updated != null };
+  const refresh = useCallback(async () => { await refresher.current?.(); }, []);
+  return { byGame, updated, anyLive, hasData: updated != null, refresh };
 }

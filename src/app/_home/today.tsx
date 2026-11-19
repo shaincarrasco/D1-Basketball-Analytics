@@ -3,7 +3,7 @@
 // the best game on a scoreboard card, the rest of the worthwhile games as grouped rows, and
 // last night's finals. On today's slate ESPN's live scores are laid over the static data.
 import Link from "next/link";
-import { useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { Plus } from "lucide-react";
 import TeamLogo from "@sports/ui/team-logo";
 import TvBadges from "@/components/tv-badges";
@@ -17,6 +17,7 @@ import ProjectionToggle from "@/components/projection-toggle";
 import { watchReason } from "@/lib/watch-reasons";
 import type { Game, GameDay, GameIndex, GameSide, TeamSummary } from "@/lib/types";
 import LiveStrip from "./live-strip";
+import PullRefresh, { UpdatedAgo, refetchJson } from "@/components/pull-refresh";
 
 const gameHref = (day: string, id: string) => `/games/?d=${day}&g=${id}`;
 const etDayOf = (iso: string) => new Intl.DateTimeFormat("en-CA", { timeZone: "America/New_York" }).format(new Date(iso));
@@ -46,7 +47,10 @@ export default function Today() {
   const teamsFile = useJson<TeamSummary[]>("teams.json");
   const teamMap = useMemo(() => new Map((teamsFile.data ?? []).map(t => [t.slug, t])), [teamsFile.data]);
   const isToday = day === etToday();
-  const staticGames = slate.status === "ready" && slate.data.day === day ? slate.data.games : null;
+  // A pull to refresh fetches the slate's file again; that copy wins over the cached one for its day.
+  const [freshSlate, setFreshSlate] = useState<GameDay | null>(null);
+  const staticGames = freshSlate && freshSlate.day === day && slate.status === "ready" ? freshSlate.games
+    : slate.status === "ready" && slate.data.day === day ? slate.data.games : null;
   const live = useLiveScores(isToday ? day : null, staticGames);
   const games = useMemo(() => {
     const list = (staticGames ?? []).map(g => withLive(g, live.byGame.get(g.id)));
@@ -67,7 +71,19 @@ export default function Today() {
   }, [prev.data]);
   const failed = index.status === "error" || slate.status === "error";
 
+  // Pull to refresh (phones): live scores now, and the day's published file again.
+  const [refreshedAt, setRefreshedAt] = useState<number | null>(null);
+  const refreshLive = live.refresh, retryIndex = index.retry, retrySlate = slate.retry;
+  const refresh = useCallback(async () => {
+    if (failed) { retryIndex(); retrySlate(); return; }
+    const [, fresh] = await Promise.all([refreshLive(), day ? refetchJson<GameDay>(`games/${day}.json`) : Promise.resolve(null)]);
+    if (fresh?.games) setFreshSlate(fresh);
+    setRefreshedAt(Date.now());
+  }, [failed, retryIndex, retrySlate, refreshLive, day]);
+  const updatedAt = Math.max(live.updated ?? 0, refreshedAt ?? 0) || null;
+
   return (
+    <PullRefresh onRefresh={refresh}>
     <section aria-labelledby="today-h" className="space-y-5">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
@@ -79,6 +95,7 @@ export default function Today() {
             {staticGames ? <>, {games.length} games</> : null}
             {liveCount ? <span className="font-semibold text-hot">, {liveCount} live</span> : null}
           </p>
+          <UpdatedAgo at={updatedAt} className="mt-0.5 block text-xs text-dim sm:hidden" />
         </div>
         {day && <Link href={`/games/?d=${day}`} className="btn hidden sm:inline-flex">Full scoreboard</Link>}
       </div>
@@ -122,6 +139,7 @@ export default function Today() {
       )}
       {staticGames && games.some(g => g.pred) && <div className="flex justify-end"><ProjectionToggle /></div>}
     </section>
+    </PullRefresh>
   );
 }
 

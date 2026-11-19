@@ -13,6 +13,7 @@ import { playerRows } from "@/lib/players";
 import type { PlayerTable, TeamSummary } from "@/lib/types";
 import { derive, DPR_MIN_POSS, makePool, MIN_ATT, POS_WORD, recruitText, starGlyphs, type PlayerRow, type Pos } from "./player-stats";
 import { followRowLink, ROW_LINK_CLASS } from "@sports/ui/row-link";
+import { headlineStats, usePeek } from "@/components/peek";
 
 const VIEWS = ["Scoring", "Impact", "Efficiency", "Playmaking", "Rebounding & defense", "Shooting profile", "Advanced"] as const;
 type View = (typeof VIEWS)[number];
@@ -105,6 +106,7 @@ export default function PlayersBoard() {
   const [q, setQ] = useState("");
   const [hydrated, setHydrated] = useState(false);
   const [open, setOpen] = useState(false);
+  const peek = usePeek(); // touch and hold a row for a quick look
   // ?sort=<key> from a search link. Only applied when the current view has that column; empty = the view's default.
   const [sortKey, setSortKey] = useState<string | null>(null);
   const searchParams = useSearchParams();
@@ -236,7 +238,7 @@ export default function PlayersBoard() {
 
   return (
     <section aria-label="Player leaderboard">
-      <div className="no-scrollbar -mx-1 mb-3 flex gap-1.5 overflow-x-auto px-1" role="group" aria-label="Leaderboard view">
+      <div className="no-scrollbar -mx-1 -mt-1.5 mb-1.5 flex gap-1.5 overflow-x-auto px-1 py-1.5" role="group" aria-label="Leaderboard view">
         {VIEWS.map(v => <button key={v} className="chip" aria-pressed={view === v} onClick={() => { setView(v); setSortKey(null); }}>{v}</button>)}
       </div>
       <div className="mb-3 grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:items-end">
@@ -247,7 +249,7 @@ export default function PlayersBoard() {
         </label>
         <div className="col-span-2 flex items-center gap-3 sm:hidden">
           <button className="btn !py-1.5 text-sm sm:hidden" aria-expanded={open} aria-controls="player-filters" onClick={() => setOpen(o => !o)}>Filters{active ? ` · ${active}` : ""}</button>
-          {active > 0 && <button type="button" className="text-sm font-semibold text-mute hover:text-ink sm:hidden" onClick={resetFilters}>Reset</button>}
+          {active > 0 && <button type="button" className="hit text-sm font-semibold text-mute hover:text-ink sm:hidden" onClick={resetFilters}>Reset</button>}
         </div>
         {/* Phones: collapsed behind the Filters button; `contents` lets the selects join this grid. Desktop: always shown, same flex row as before. */}
         <div id="player-filters" className={`${open ? "contents" : "hidden"} sm:contents`}>
@@ -311,9 +313,11 @@ export default function PlayersBoard() {
       ) : (
         <div className={ROW_LINK_CLASS} onClick={followRowLink}>
         <DataTable key={`${view}:${sort}`} rows={rows} rankRows={ranked} columns={columns} rowKey={r => r.id} initialSort={sort} initialDir={stats.find(s => s.key === sort)?.invert ? "asc" : "desc"}
+          rowProps={r => peek.bind(() => ({ kind: "player", id: r.id, name: r.name, pos: r.posN ? POS_WORD[r.posN] : null, team: r.team ? { name: r.team.name, slug: r.team.slug, logo: r.team.logo } : null, stats: headlineStats(r) }))}
           pageSize={100} csvName={`d1hoops-players-${slugOf(view)}.csv`} caption={`Player leaderboard: ${view}`} maxHeight="78vh" />
         </div>
       )}
+      {peek.sheet}
     </section>
   );
 }

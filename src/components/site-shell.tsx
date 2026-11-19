@@ -4,7 +4,7 @@
 // five hubs in the bottom tab bar, with the section bar as swipeable tabs.
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { ChevronDown, Search, Star } from "lucide-react";
 import AccountButton from "./account-button";
 import CommandSearch from "./command-search";
@@ -12,6 +12,11 @@ import ThemePicker from "@sports/ui/theme-picker";
 import { useTeamSwatches } from "./team-swatches";
 import HubPreview from "./nav/hub-preview";
 import { HUBS, hubFor, sectionFor, type HubKey } from "@/lib/nav";
+import { haptic } from "@/lib/haptics";
+import { isSameTab, tabTopAction } from "@/lib/scroll-memory";
+import PinnedLive from "./pinned-live";
+import OfflineNote from "./offline-note";
+import ScrollMemory from "./scroll-memory";
 
 const OPEN_DELAY = 90, CLOSE_DELAY = 180;
 
@@ -40,6 +45,8 @@ export default function SiteShell({ children, updated }: { children: React.React
     document.addEventListener("focusout", off);
     return () => { document.removeEventListener("focusin", on); document.removeEventListener("focusout", off); };
   }, []);
+  // The pinned live bar (phones) adds height above the tab bar; main gets more bottom room while it shows.
+  const [pinned, setPinned] = useState(false);
   const header = useRef<HTMLElement>(null);
   const timer = useRef<number | undefined>(undefined);
   const activeHub = hubFor(path);
@@ -120,6 +127,8 @@ export default function SiteShell({ children, updated }: { children: React.React
           </div>
         </div>
 
+        <OfflineNote updated={updated} />
+
         {panelHub && (
           <div id="hub-panel" role="region" aria-label={`${panelHub.label} pages`} className="absolute inset-x-0 top-full hidden border-b border-line bg-deck shadow-[0_24px_48px_-24px_rgb(0_0_0/0.45)] lg:block"
             onMouseEnter={() => window.clearTimeout(timer.current)}
@@ -178,7 +187,7 @@ export default function SiteShell({ children, updated }: { children: React.React
         </div>
       )}
 
-      <main id="main" className="mx-auto max-w-[1440px] px-4 pb-28 pt-6 sm:px-6 lg:pb-16">{children}</main>
+      <main id="main" className={`mx-auto max-w-[1440px] px-4 pt-6 sm:px-6 lg:pb-16 ${pinned ? "pb-[calc(11rem+env(safe-area-inset-bottom))]" : "pb-28"}`}>{children}</main>
       <footer className="mx-auto hidden max-w-[1440px] px-6 pb-10 text-xs text-dim lg:block">
         Box scores and schedules from College Basketball Data. Ratings and projections are D1 Hoops originals — see <Link className="underline hover:text-ink" href="/methodology/">methodology</Link>.
       </footer>
@@ -187,7 +196,17 @@ export default function SiteShell({ children, updated }: { children: React.React
           {HUBS.map(h => {
             const Icon = h.icon, active = activeHub?.key === h.key;
             return (
-              <Link key={h.key} href={h.href} aria-current={active ? "page" : undefined} className={`tab-item flex flex-col items-center gap-1 pb-1.5 pt-2.5 text-[11px] font-semibold transition-colors ${active ? "text-bulb-ink" : "text-dim"}`}>
+              <Link key={h.key} href={h.href} aria-current={active ? "page" : undefined}
+                onClick={e => {
+                  // Tapping the tab you're already on goes back to the top (native tab bar behaviour).
+                  if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+                  if (!isSameTab(path, window.location.search, h.href)) return;
+                  e.preventDefault();
+                  if (tabTopAction(window.scrollY) === "none") return;
+                  haptic("tick");
+                  window.scrollTo({ top: 0, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+                }}
+                className={`tab-item flex flex-col items-center gap-1 pb-1.5 pt-2.5 text-[11px] font-semibold transition-colors ${active ? "text-bulb-ink" : "text-dim"}`}>
                 <Icon size={22} strokeWidth={active ? 2.3 : 1.8} aria-hidden />
                 {h.label}
               </Link>
@@ -195,6 +214,8 @@ export default function SiteShell({ children, updated }: { children: React.React
           })}
         </div>
       </nav>
+      <Suspense fallback={null}><PinnedLive suppressed={typing} onVisibleChange={setPinned} /></Suspense>
+      <ScrollMemory />
       {searchOpen && <CommandSearch onClose={() => setSearchOpen(false)} />}
     </>
   );
