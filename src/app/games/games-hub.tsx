@@ -2,7 +2,7 @@
 // Scoreboard + predictions hub. URL is the source of truth for the day (?d=) and the open game (?g=);
 // Next.js keeps useSearchParams in sync with history.pushState / replaceState.
 import { useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import { Empty, ErrorState, Loading } from "@sports/ui/states";
 import { useJson } from "@sports/ui/client-data";
 import { useInjuries } from "@/lib/injury-hooks";
@@ -18,6 +18,11 @@ import GameSheet from "./game-sheet";
 import Link from "next/link";
 import ProjectionToggle from "@/components/projection-toggle";
 import { useShowProjections } from "@/lib/show-projections";
+import PullRefresh, { UpdatedAgo, refetchJson } from "@/components/pull-refresh";
+import SwipeDays from "./swipe-days";
+import { neighbourDays } from "./swipe-days-logic";
+import FilterSheet, { FilterButton } from "./filter-sheet";
+import { activeFilterCount } from "./filter-count";
 import { FILTERS, SORTS, defaultDay, isDay, isLive, liveGames, matchesFilter, nextTip, sortGames, summarize, winner, type FilterId, type SortId } from "./game-utils";
 
 /** A summary older than this (relative to the last scoreboard update) is too stale to quote. */
@@ -44,8 +49,11 @@ export default function GamesHub() {
   const day = isDay(dParam) ? dParam : home;
   const listed = index.data && day ? index.data.days.find(d => d.day === day && d.games > 0) : undefined;
   const dayData = useJson<GameDay>(listed ? `games/${listed.day}.json` : null);
+  // A pull to refresh fetches the day's file again; that copy wins over the cached one for its day.
+  const [freshDay, setFreshDay] = useState<GameDay | null>(null);
   // useJson keeps the previous day's data for one render after the file changes.
-  const staticGames = dayData.status === "ready" && dayData.data.day === day ? dayData.data.games : null;
+  const staticGames = freshDay && freshDay.day === day && dayData.status !== "error" ? freshDay.games
+    : dayData.status === "ready" && dayData.data.day === day ? dayData.data.games : null;
   // Today's slate (and recent days the data hasn't caught up on) gets ESPN's live scores laid over the static data.
   const liveFor = liveDay(day, today, staticGames);
   const live = useLiveScores(liveFor, staticGames);
@@ -62,6 +70,24 @@ export default function GamesHub() {
   const filter: FilterId = !showProj && filterState === "close" ? "all" : filterState;
   const sort: SortId = !showProj && sortState === "close" ? "time" : sortState;
   const [conf, setConf] = useState("all");
+  const [sheetOpen, setSheetOpen] = useState(false);
+  const sheetId = useId();
+  const filterCount = activeFilterCount({ conf, sort, liveView });
+
+  // Pull to refresh: live scores now (past the polling clock) and the day's published file again.
+  const [refreshedAt, setRefreshedAt] = useState<number | null>(null);
+  useEffect(() => setRefreshedAt(null), [day]);
+  const refreshLive = live.refresh;
+  const refreshDay = dayData.retry, refreshIndex = index.retry;
+  const failed = index.status === "error" || dayData.status === "error";
+  const listedFile = listed ? `games/${listed.day}.json` : null;
+  const refresh = useCallback(async () => {
+    if (failed) { refreshIndex(); refreshDay(); return; }
+    const [, fresh] = await Promise.all([refreshLive(), listedFile ? refetchJson<GameDay>(listedFile) : Promise.resolve(null)]);
+    if (fresh?.games) setFreshDay(fresh);
+    setRefreshedAt(Date.now());
+  }, [failed, refreshIndex, refreshDay, refreshLive, listedFile]);
+  const updatedAt = Math.max(live.updated ?? 0, refreshedAt ?? 0) || null;
 
   const pushed = useRef(false);
   const returnFocus = useRef<string | null>(null);
@@ -134,14 +160,27 @@ export default function GamesHub() {
 
   const days = index.data.days;
   const before = [...days].reverse().find(d => d.day < day), after = days.find(d => d.day > day);
+  const near = neighbourDays(days, day);
+
+  const confOptions = (
+    <>
+      <option value="all">All conferences</option>
+      {confs.map(c => <option key={c} value={c}>{c}</option>)}
+      {conf !== "all" && !confs.includes(conf) && <option value={conf}>{conf}</option>}
+    </>
+  );
+  const sortOptions = SORTS.filter(s => showProj || s.id !== "close").map(s => <option key={s.id} value={s.id}>{s.label}</option>);
 
   return (
     <div>
+      <PullRefresh onRefresh={refresh}>
       <DateStrip index={index.data} day={day} today={today} home={home} onSelect={selectDay} />
 
+      <SwipeDays prev={near.prev} next={near.next} onSelect={selectDay}>
       <div className="mb-4 flex flex-wrap items-baseline gap-x-4 gap-y-1">
         <h2 className="h-section">{dayLabel(day, { weekday: "long", month: "long", day: "numeric" })}</h2>
         {summary && games && <DaySummaryLine s={summary} projections={showProj} onOpen={openGame} liveData={live.hasData} updated={live.updated} />}
+        <UpdatedAgo at={updatedAt} className="text-xs text-dim sm:hidden" />
       </div>
 
       {!listed ? (
@@ -159,7 +198,7 @@ export default function GamesHub() {
       ) : (
         <>
           <div className="mb-4 flex flex-wrap items-center gap-2">
-            <div className="no-scrollbar -mx-1 flex max-w-full gap-1.5 overflow-x-auto px-1" role="group" aria-label="Filter games">
+            <div className="no-scrollbar -mx-1 flex max-w-full gap-1.5 overflow-x-auto overflow-y-hidden px-1 py-1 -my-1 max-sm:min-w-0 max-sm:flex-1" role="group" aria-label="Filter games">
               {/* No games in progress and the Live view off: a "Live now 0" chip would only be noise. */}
               {((liveFor && liveList.length > 0) || liveView) && <LiveToggle on={liveView} count={liveList.length} onChange={setLiveView} />}
               {FILTERS.filter(f => showProj || f.id !== "close").map(f => (
@@ -168,24 +207,23 @@ export default function GamesHub() {
                 </button>
               ))}
             </div>
-            {!liveView && <ProjectionToggle className="shrink-0" />}
-            <div className="ml-auto flex w-full items-center gap-2 sm:w-auto">
-              <label className="flex-1 sm:flex-none">
+            {/* Phones: conference, sort and Projections fold into one Filters button and its bottom sheet. */}
+            <FilterButton className="sm:hidden" count={filterCount} open={sheetOpen} onOpen={() => setSheetOpen(true)} controls={sheetId} />
+            {!liveView && <ProjectionToggle className="hidden shrink-0 sm:inline-flex" />}
+            <div className="ml-auto hidden items-center gap-2 sm:flex">
+              <label className="flex-none">
                 <span className="sr-only">Conference</span>
                 <select className="field w-full" value={conf} onChange={e => setConf(e.target.value)}>
-                  <option value="all">All conferences</option>
-                  {confs.map(c => <option key={c} value={c}>{c}</option>)}
-                  {conf !== "all" && !confs.includes(conf) && <option value={conf}>{conf}</option>}
+                  {confOptions}
                 </select>
               </label>
               {liveView ? (
-                <span className="flex-1 text-right text-sm text-mute sm:flex-none" title="Close and late games first, then overtime and underdogs in front">Most exciting first</span>
+                <span className="flex-none text-right text-sm text-mute" title="Close and late games first, then overtime and underdogs in front">Most exciting first</span>
               ) : (
-                <label className="flex flex-1 items-center gap-2 sm:flex-none">
-                  <span className="hidden text-sm text-mute sm:inline">Sort</span>
-                  <span className="sr-only sm:hidden">Sort by</span>
+                <label className="flex flex-none items-center gap-2">
+                  <span className="text-sm text-mute">Sort</span>
                   <select className="field w-full" value={sort} onChange={e => setSort(e.target.value as SortId)}>
-                    {SORTS.filter(s => showProj || s.id !== "close").map(s => <option key={s.id} value={s.id}>{s.label}</option>)}
+                    {sortOptions}
                   </select>
                 </label>
               )}
@@ -217,6 +255,32 @@ export default function GamesHub() {
           )}
         </>
       )}
+      </SwipeDays>
+      </PullRefresh>
+
+      <FilterSheet id={sheetId} open={sheetOpen} onClose={() => setSheetOpen(false)} onReset={() => { setConf("all"); setSort("time"); }} canReset={filterCount > 0}>
+        <div className="space-y-5 py-2">
+          <label className="block">
+            <span className="mb-1.5 block text-sm font-medium text-mute">Conference</span>
+            <select className="field min-h-[44px] w-full" value={conf} onChange={e => setConf(e.target.value)}>{confOptions}</select>
+          </label>
+          {liveView ? (
+            <div>
+              <p className="mb-1.5 text-sm font-medium text-mute">Sort</p>
+              <p className="text-[15px]">Most exciting first <span className="text-mute">in the Live view</span></p>
+            </div>
+          ) : (
+            <label className="block">
+              <span className="mb-1.5 block text-sm font-medium text-mute">Sort</span>
+              <select className="field min-h-[44px] w-full" value={sort} onChange={e => setSort(e.target.value as SortId)}>{sortOptions}</select>
+            </label>
+          )}
+          <div className="flex items-center justify-between gap-3">
+            <p className="text-sm text-mute">Win chances, margins and projected scores</p>
+            <ProjectionToggle className="min-h-[44px] shrink-0" />
+          </div>
+        </div>
+      </FilterSheet>
 
       {open && <GameSheet key={open.id} g={open} live={live.byGame.get(open.id)} onClose={closeGame} />}
     </div>
