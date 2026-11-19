@@ -1,7 +1,8 @@
 "use client";
 // Phone rankings: Apple Sports-style grouped rows. Swipe a row left to reveal Compare and
 // Follow; the actions are real buttons, so keyboard users reach them with Tab (focusing one
-// slides the row open). Tapping a row opens the team.
+// slides the row open). Tapping a row opens the team; touching and holding one peeks at it
+// (the peek cancels as soon as a sideways swipe starts).
 import Link from "next/link";
 import { useMemo, useRef, useState, ViewTransition } from "react";
 import { ArrowLeftRight, Star } from "lucide-react";
@@ -10,6 +11,8 @@ import { Dots } from "@/components/dots";
 import { RankMove } from "@/components/live-ratings-note";
 import { signed } from "@sports/ui/format";
 import { toggleFavorite, useFavorites } from "@/lib/favorites";
+import { haptic } from "@/lib/haptics";
+import { teamPeek, type Peek } from "@/components/peek";
 import type { TeamSummary } from "@/lib/types";
 
 const ACTIONS = 148; // px revealed by a full swipe
@@ -41,7 +44,7 @@ function outlier(top: TeamSummary[]) {
   return null;
 }
 
-export default function RankList({ teams, prevRank, source }: { teams: TeamSummary[]; prevRank: Map<string, number | null | undefined>; source: Source }) {
+export default function RankList({ teams, prevRank, source, peek }: { teams: TeamSummary[]; prevRank: Map<string, number | null | undefined>; source: Source; peek: Peek }) {
   const [open, setOpen] = useState<string | null>(null);
   const [shown, setShown] = useState(50);
   const fav = useFavorites();
@@ -61,7 +64,7 @@ export default function RankList({ teams, prevRank, source }: { teams: TeamSumma
         {rows.slice(0, shown).map(t => (
           <li key={t.id}>
             <Row t={t} rank={source === "dhr" ? t.rank! : source === "ap" ? t.ap!.rank : t.coaches!.rank} prev={source === "dhr" ? prevRank.get(t.id) : undefined}
-              followed={fav.teams.includes(t.slug)} open={open === t.id} setOpen={o => setOpen(o ? t.id : null)} source={source} />
+              followed={fav.teams.includes(t.slug)} open={open === t.id} setOpen={o => setOpen(o ? t.id : null)} source={source} peek={peek} />
             {note?.id === t.id && (
               <p className="note border-b border-line bg-deck2/60 px-4 py-3 text-[14px] leading-snug">{note.text}</p>
             )}
@@ -69,36 +72,42 @@ export default function RankList({ teams, prevRank, source }: { teams: TeamSumma
         ))}
       </ul>
       {shown < rows.length && <button className="btn mt-3 w-full" onClick={() => setShown(s => s + 50)}>Show {Math.min(50, rows.length - shown)} more</button>}
-      <p className="mt-3 text-center text-[13px] text-mute">Swipe a team to follow or compare</p>
+      <p className="mt-3 text-center text-[13px] text-mute">Swipe a team to follow or compare, or hold it to peek</p>
     </div>
   );
 }
 
-function Row({ t, rank, prev, followed, open, setOpen, source }: { t: TeamSummary; rank: number; prev: number | null | undefined; followed: boolean; open: boolean; setOpen: (o: boolean) => void; source: Source }) {
+function Row({ t, rank, prev, followed, open, setOpen, source, peek }: { t: TeamSummary; rank: number; prev: number | null | undefined; followed: boolean; open: boolean; setOpen: (o: boolean) => void; source: Source; peek: Peek }) {
   const [drag, setDrag] = useState<number | null>(null);
   const start = useRef<{ x: number; y: number; base: number; axis: "x" | "y" | null } | null>(null);
   const moved = useRef(false);
   const x = drag ?? (open ? -ACTIONS : 0);
+  const pk = peek.bind(() => teamPeek(t));
 
   const onDown = (e: React.PointerEvent) => {
     moved.current = false;
+    pk.onPointerDown(e);
+    if (open) peek.cancel(); // a held press on an open row just closes it
     if (e.pointerType === "mouse") return; // desktop uses the table; mouse users can Tab or click actions
     start.current = { x: e.clientX, y: e.clientY, base: open ? -ACTIONS : 0, axis: null };
     moved.current = false;
   };
   const onMove = (e: React.PointerEvent) => {
+    pk.onPointerMove(e);
     const s = start.current;
     if (!s) return;
     const dx = e.clientX - s.x, dy = e.clientY - s.y;
     if (!s.axis) { if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return; s.axis = Math.abs(dx) > Math.abs(dy) ? "x" : "y"; }
     if (s.axis !== "x") return;
+    peek.cancel(); // horizontal swipe wins over the long press
     moved.current = true;
     const next = Math.max(-ACTIONS - 24, Math.min(0, s.base + dx));
     // A light tick when the swipe crosses the point where it will stay open (Android; iOS ignores it).
-    if ((next < -ACTIONS / 2.5) !== ((drag ?? s.base) < -ACTIONS / 2.5)) navigator.vibrate?.(8);
+    if ((next < -ACTIONS / 2.5) !== ((drag ?? s.base) < -ACTIONS / 2.5)) haptic("tick");
     setDrag(next);
   };
-  const onUp = () => {
+  const onUp = (e: React.PointerEvent) => {
+    pk.onPointerUp(e);
     const s = start.current;
     start.current = null;
     if (drag !== null) { setOpen(drag < -ACTIONS / 2.5); setDrag(null); }
@@ -115,12 +124,13 @@ function Row({ t, rank, prev, followed, open, setOpen, source }: { t: TeamSummar
           className="flex flex-1 flex-col items-center justify-center gap-1 bg-line2 text-[11px] font-bold text-ink">
           <ArrowLeftRight size={18} aria-hidden />Compare<span className="sr-only"> {t.name}</span>
         </Link>
-        <button type="button" onFocus={() => setOpen(true)} onBlur={() => setOpen(false)} onClick={() => { toggleFavorite("teams", t.slug); setOpen(false); }} aria-pressed={followed}
+        <button type="button" onFocus={() => setOpen(true)} onBlur={() => setOpen(false)} onClick={() => { haptic(followed ? "tick" : "success"); toggleFavorite("teams", t.slug); setOpen(false); }} aria-pressed={followed}
           className="flex flex-1 flex-col items-center justify-center gap-1 bg-bulb text-[11px] font-bold text-scoreboard">
           <Star size={18} aria-hidden fill={followed ? "currentColor" : "none"} />{followed ? "Following" : "Follow"}<span className="sr-only"> {t.name}</span>
         </button>
       </div>
-      <Link href={`/teams/${t.slug}/`} draggable={false}
+      <Link href={`/teams/${t.slug}/`} draggable={false} data-peek=""
+        onClickCapture={pk.onClickCapture} onContextMenu={pk.onContextMenu}
         onClick={e => { if (moved.current) { e.preventDefault(); moved.current = false; } }}
         onPointerDown={onDown} onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={onUp}
         className={`relative flex items-center gap-3 bg-deck py-3 pl-3.5 pr-4 ${drag === null ? "transition-transform duration-200 ease-out" : ""}`}

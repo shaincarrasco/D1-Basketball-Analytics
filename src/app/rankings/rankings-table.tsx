@@ -10,6 +10,7 @@ import type { ProfileKey, TeamSummary } from "@/lib/types";
 import { useLiveTeams } from "@/lib/live-ratings";
 import LiveRatingsNote, { RankMove } from "@/components/live-ratings-note";
 import RankList, { type Source } from "./rank-list";
+import { teamPeek, usePeek } from "@/components/peek";
 import { Tag } from "@/components/form/form-badges";
 import { CONSISTENCY_MIN_GAMES, FORM_MIN_GAMES, FORM_WINDOW_DAYS, MOVER_DAYS, type FormRow } from "@/lib/form";
 
@@ -24,6 +25,7 @@ export default function RankingsTable({ teams: published, total, form = {}, form
   const [conf, setConf] = useState("all");
   const [q, setQ] = useState("");
   const [source, setSource] = useState<Source>("dhr");
+  const peek = usePeek(); // touch and hold a row: one card for the list and the table
 
   // Keep view + conference in the URL so a filtered table can be shared.
   useEffect(() => {
@@ -174,7 +176,7 @@ export default function RankingsTable({ teams: published, total, form = {}, form
   return (
     <section aria-label="Rankings table">
       <div className="mb-4 flex flex-wrap items-center gap-2">
-        <div className="no-scrollbar -mx-1 flex gap-1.5 overflow-x-auto px-1" role="group" aria-label="Table view">
+        <div className="no-scrollbar -mx-1 -my-1.5 flex gap-1.5 overflow-x-auto px-1 py-1.5" role="group" aria-label="Table view">
           {VIEWS.map(v => <button key={v} className="chip" aria-pressed={view === v} onClick={() => setView(v)}>{v}</button>)}
         </div>
         <div className="ml-auto flex w-full flex-wrap gap-2 sm:w-auto">
@@ -200,7 +202,7 @@ export default function RankingsTable({ teams: published, total, form = {}, form
               <button key={k} type="button" aria-pressed={source === k} onClick={() => setSource(k)}>{l}</button>
             ))}
           </div>
-          <RankList teams={rows} prevRank={prevRank} source={source} />
+          <RankList teams={rows} prevRank={prevRank} source={source} peek={peek} />
         </div>
       )}
       <div className={view === "Ratings" ? "hidden lg:block" : ""}>
@@ -215,9 +217,10 @@ export default function RankingsTable({ teams: published, total, form = {}, form
           <span>Rk and small numbers = national rank, even when you search or filter. Shading marks the top and bottom of D-I.</span>
         </div>
       )}
-      <DataTable key={view} rows={rows} columns={columns[view]} rowKey={t => t.id} rowHref={t => `/teams/${t.slug}/`} initialSort={view === "Résumé" ? "rec" : view === "Projections" ? "simW" : "rank"} initialDir={view === "Résumé" || view === "Projections" ? "desc" : "asc"} csvName={`d1hoops-${slug(view)}.csv`} caption="Division I power rankings" />
+      <DataTable key={view} rows={rows} columns={columns[view]} rowKey={t => t.id} rowHref={t => `/teams/${t.slug}/`} rowProps={t => peek.bind(() => teamPeek(t))} initialSort={view === "Résumé" ? "rec" : view === "Projections" ? "simW" : "rank"} initialDir={view === "Résumé" || view === "Projections" ? "desc" : "asc"} csvName={`d1hoops-${slug(view)}.csv`} caption="Division I power rankings" />
       {rows.length === 0 && <p className="mt-4 text-sm text-mute">No teams match “{q}”. Clear the search or pick another conference.</p>}
       </div>
+      {peek.sheet}
     </section>
   );
 }

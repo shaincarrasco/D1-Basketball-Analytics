@@ -471,3 +471,37 @@ html[data-palette="primetime"] header.sticky, html[data-palette="primetime"] nav
   .kt-word { animation: none; }
   .rn-strip { transition: none !important; }
 }
+
+
+/* ==========================================================================
+   Phone QoL: long-press peek, a pinned table header, and 44px touch targets.
+   Touch-only rules sit under (pointer: coarse), so desktop looks the same.
+   ========================================================================== */
+/* Long-press peek (src/components/peek.tsx): no iOS link callout or text selection on held rows. */
+[data-peek], [data-peek] * { -webkit-touch-callout: none; }
+@media (pointer: coarse) {
+  [data-peek], [data-peek] * { -webkit-user-select: none; user-select: none; }
+}
+
+/* DataTable pinned header: the table scroller is overflow-x, which traps the real header's
+   position: sticky, so a zero-height sticky line above the scroller carries a synced copy of the
+   header row under the site header. Pages with their own sticky bar can set --dt-pin-top. */
+.dt-pin { position: sticky; top: var(--dt-pin-top, calc(3.5rem + env(safe-area-inset-top))); height: 0; z-index: 20; }
+.dt-pin-box { position: absolute; top: 0; left: 0; right: 0; overflow: hidden; border: 1px solid var(--line); border-top: 0; background: var(--deck); }
+
+/* Touch targets: at least 44 x 44px on touch screens. Hit areas grow with an invisible ::after
+   (centred on the control), so nothing moves and no text gets bigger. */
+@media (pointer: coarse) {
+  :is(a, button, summary, [role="button"]):is(.chip, .btn, .hit):not(.absolute, .fixed, .sticky),
+  .seg > :is(a, button):not(.absolute, .fixed, .sticky) { position: relative; }
+  :is(a, button, summary, [role="button"]):is(.chip, .btn, .hit)::after,
+  .seg > :is(a, button)::after {
+    content: ""; position: absolute; left: 50%; top: 50%;
+    width: max(100%, 44px); height: max(100%, 44px); transform: translate(-50%, -50%);
+  }
+  /* Table sort buttons fill a 44px header cell; the ::after only widens narrow columns. */
+  .dt thead th:has(> button) { height: 44px; padding-top: 0; padding-bottom: 0; }
+  .dt th button { position: relative; min-height: 44px; }
+  .dt th button::after { content: ""; position: absolute; top: 0; bottom: 0; left: 50%; width: max(100%, 44px); transform: translateX(-50%); }
+  input.field, select.field { min-height: 44px; }
+}
