@@ -14985,7 +14985,7 @@
    "away": "Utica",
    "reason": "no-line",
    "espnEventId": "401920772",
-   "tries": 2
+   "tries": 3
   },
   "375113": {
    "day": "2026-11-18",
@@ -14993,7 +14993,7 @@
    "away": "McMurry",
    "reason": "no-line",
    "espnEventId": "401917965",
-   "tries": 1
+   "tries": 2
   },
   "375117": {
    "day": "2026-11-18",
@@ -15001,7 +15001,7 @@
    "away": "St. Joseph's (NY)",
    "reason": "no-line",
    "espnEventId": "401924763",
-   "tries": 2
+   "tries": 3
   },
   "375123": {
    "day": "2026-11-18",
@@ -15009,7 +15009,7 @@
    "away": "Columbia College (SC)",
    "reason": "no-line",
    "espnEventId": "401917902",
-   "tries": 2
+   "tries": 3
   },
   "375124": {
    "day": "2026-11-18",
@@ -15017,7 +15017,7 @@
    "away": "College Of Biblical Studies",
    "reason": "no-line",
    "espnEventId": "401925109",
-   "tries": 2
+   "tries": 3
   },
   "375125": {
    "day": "2026-11-18",
@@ -15025,7 +15025,7 @@
    "away": "Union (KY)",
    "reason": "no-line",
    "espnEventId": "401920761",
-   "tries": 2
+   "tries": 3
   },
   "375126": {
    "day": "2026-11-18",
@@ -15033,7 +15033,7 @@
    "away": "Lindsey Wilson College",
    "reason": "no-line",
    "espnEventId": "401923394",
-   "tries": 2
+   "tries": 3
   },
   "378037": {
    "day": "2026-11-16",
@@ -15113,7 +15113,7 @@
    "away": "Defiance",
    "reason": "no-line",
    "espnEventId": "401928843",
-   "tries": 2
+   "tries": 3
   },
   "378056": {
    "day": "2026-11-18",
@@ -15121,7 +15121,7 @@
    "away": "Malone",
    "reason": "no-line",
    "espnEventId": "401928829",
-   "tries": 2
+   "tries": 3
   },
   "378059": {
    "day": "2026-11-18",
@@ -15129,7 +15129,7 @@
    "away": "Massachusetts College of Liberal Arts",
    "reason": "no-line",
    "espnEventId": "401929014",
-   "tries": 2
+   "tries": 3
   },
   "378683": {
    "day": "2026-11-17",
@@ -16561,5 +16561,5 @@
    }
   }
  },
- "updatedAt": "2026-11-19T07:22:06.673Z"
+ "updatedAt": "2026-11-19T17:27:11.928Z"
 }
