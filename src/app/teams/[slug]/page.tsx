@@ -19,6 +19,7 @@ import GameLog from "./game-log";
 import { LiveNextGate, LiveRank, LiveRecord, LiveTiles } from "./live-hero";
 import Roster, { type RosterBio } from "./roster";
 import PerfChart from "./perf-chart";
+import SeasonHeatmap from "./season-heatmap";
 import SeasonOutlook from "./season-outlook";
 import ShotProfile from "./shot-profile";
 import ZoneTable from "./zone-table";
@@ -243,6 +244,7 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
         { id: "schedule", label: "Schedule", badge: detail.games.length || null, content: (
 <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_360px]">
 <div className="min-w-0 space-y-6">
+          <SeasonHeatmap games={detail.games} slug={slug} />
           {/* Schedule */}
           <section id="schedule" className="scroll-mt-32">
             <h2 className="h-section mb-3">Schedule &amp; results</h2>

@@ -2,20 +2,19 @@
 // Head-to-head compare: two pickers write ?a= and ?b= with history.replaceState; 14 stats in five groups as mirrored percentile bars.
 // Metrics, direction and sample guards come from the basketball sport pack; the pool is D-I players with 10+ mpg.
 import Link from "next/link";
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import type { Metric } from "@sports/kit";
 import { fmtMetric, val } from "@sports/kit/metrics";
 import { makePool } from "@sports/kit/stats";
-import TeamLogo from "@sports/ui/team-logo";
 import { ErrorState, Loading } from "@sports/ui/states";
 import { useJson } from "@sports/ui/client-data";
-import { fmt } from "@sports/ui/format";
 import { METRICS } from "@/sports/basketball/pack";
 import { playerRows } from "@/lib/players";
 import type { PlayerTable, TeamSummary } from "@/lib/types";
-import { derive, POS_WORD, type PlayerRow } from "../player-stats";
+import { derive, type PlayerRow } from "../player-stats";
 import PlayerPicker from "./player-picker";
+import CompareDeck, { type Tone } from "./compare-deck";
 
 type M = Metric<PlayerRow>;
 type Pool = ReturnType<typeof makePool>;
@@ -62,6 +61,9 @@ export default function CompareClient() {
   const aId = params.get("a"), bId = params.get("b");
   const a = aId ? byId.get(aId) ?? null : null;
   const b = bId ? byId.get(bId) ?? null : null;
+  // The player picked in the card deck; their side of every stat row stays bright, the other side fades.
+  const [focus, setFocus] = useState<Tone | null>(null);
+  useEffect(() => setFocus(null), [aId, bId]);
 
   const pools = useMemo(() => {
     const base = all.filter(r => (r.min ?? 0) >= POOL_MIN);
@@ -155,17 +157,15 @@ export default function CompareClient() {
     <div className="space-y-6">
       {pickers}
 
-      <section aria-label="Players" className="grid grid-cols-2 gap-3 sm:gap-5">
-        <PlayerHead p={a} tone="a" align="left" />
-        <PlayerHead p={b} tone="b" align="right" />
-      </section>
+      <CompareDeck cards={[{ p: a, tone: "a", color: COLOR.a }, { p: b, tone: "b", color: COLOR.b }]} selected={focus} onSelect={setFocus} />
+      <p className="sr-only" aria-live="polite">{focus ? `Highlighting ${focus === "a" ? a.name : b.name} in the comparison.` : ""}</p>
 
       <section aria-label="Stat comparison" className="deck px-3 py-2 sm:px-5">
         {table.map(g => (
           <div key={g.title}>
-            <h3 className="pb-1 pt-3 text-center text-[11px] font-bold uppercase tracking-[0.12em] text-mute">{g.title}</h3>
+            <h3 className="pb-1 pt-3 text-center text-[12.5px] font-semibold text-mute">{g.title}</h3>
             <ul>
-              {g.items.map(({ m, sa, sb }) => <StatRow key={m.key} m={m} sa={sa} sb={sb} />)}
+              {g.items.map(({ m, sa, sb }) => <StatRow key={m.key} m={m} sa={sa} sb={sb} focus={focus} />)}
             </ul>
           </div>
         ))}
@@ -190,26 +190,13 @@ export default function CompareClient() {
   );
 }
 
-function PlayerHead({ p, tone, align }: { p: PlayerRow; tone: "a" | "b"; align: "left" | "right" }) {
-  const right = align === "right";
-  return (
-    <div className={`deck flex min-w-0 items-center gap-2.5 p-3 ${right ? "flex-row-reverse text-right" : ""}`} style={{ borderTop: `3px solid ${COLOR[tone]}` }}>
-      <TeamLogo src={p.team?.logo ?? null} name={p.team?.name ?? p.name} size={40} />
-      <div className="min-w-0">
-        <Link href={`/player/?id=${p.id}`} className="link block truncate font-display text-[17px] font-extrabold leading-tight">{p.name}</Link>
-        <p className="truncate text-[12.5px] text-mute">
-          {[p.team?.short ?? p.team?.name, p.posN ? POS_WORD[p.posN] : p.pos, p.min !== null ? `${fmt(p.min, 1)} mpg` : null].filter(Boolean).join(" · ")}
-        </p>
-      </div>
-    </div>
-  );
-}
-
-function StatRow({ m, sa, sb }: { m: M; sa: Side; sb: Side }) {
+function StatRow({ m, sa, sb, focus }: { m: M; sa: Side; sb: Side; focus: Tone | null }) {
   const pa = sa.pct, pb = sb.pct;
   const lead = pa !== null && pb !== null && pa !== pb ? (pa > pb ? "a" : "b") : null;
   const cls = (s: "a" | "b") => (lead === null ? "text-ink" : lead === s ? "text-ink font-bold" : "text-mute");
   const value = (s: Side) => (s.v === null ? "—" : fmtMetric(m, s.v));
+  // Deck highlight: the other player's half fades back (opacity only, so the layout never moves).
+  const fade = (s: "a" | "b") => `transition-opacity duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none ${focus && focus !== s ? "opacity-30" : ""}`;
 
   const track = (s: "a" | "b", side: Side, anchor: "left" | "right") => {
     const isLoser = lead !== null && lead !== s;
@@ -226,12 +213,12 @@ function StatRow({ m, sa, sb }: { m: M; sa: Side; sb: Side }) {
 
   return (
     <li className="grid h-11 grid-cols-[minmax(0,1fr)_96px_minmax(0,1fr)] items-center gap-2">
-      <div className="flex min-w-0 items-center gap-2">
+      <div className={`flex min-w-0 items-center gap-2 ${fade("a")}`}>
         <span className={`w-14 shrink-0 text-right text-[15px] tnum ${cls("a")}`}>{value(sa)}</span>
         {track("a", sa, "right")}
       </div>
       <span className="truncate text-center text-[12.5px] font-semibold leading-tight text-mute">{m.label}</span>
-      <div className="flex min-w-0 items-center gap-2">
+      <div className={`flex min-w-0 items-center gap-2 ${fade("b")}`}>
         {track("b", sb, "left")}
         <span className={`w-14 shrink-0 text-left text-[15px] tnum ${cls("b")}`}>{value(sb)}</span>
       </div>

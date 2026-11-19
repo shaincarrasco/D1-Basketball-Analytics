@@ -47,6 +47,27 @@ export default function ThemePicker({ useSwatches = noSwatches, swatchesTitle = 
     mq.addEventListener("change", on);
     return () => mq.removeEventListener("change", on);
   }, [choice.palette]);
+  // While the sheet is open the page behind it holds still; it is always released on close.
+  useEffect(() => {
+    if (!open) return;
+    const { overflow } = document.body.style;
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = overflow; };
+  }, [open]);
+  // Phone Back gesture closes the sheet instead of leaving the page.
+  const pushed = useRef(false);
+  useEffect(() => {
+    if (!open) return;
+    history.pushState(history.state, "");
+    pushed.current = true;
+    const onPop = () => { pushed.current = false; setOpen(false); };
+    window.addEventListener("popstate", onPop);
+    return () => {
+      window.removeEventListener("popstate", onPop);
+      // Closed by X, Escape or backdrop: drop the entry we added so Back isn't wasted.
+      if (pushed.current) { pushed.current = false; history.back(); }
+    };
+  }, [open]);
   useEffect(() => {
     if (!open) return;
     panel.current?.querySelector<HTMLElement>("button[aria-pressed='true'], button")?.focus();
@@ -78,9 +99,9 @@ export default function ThemePicker({ useSwatches = noSwatches, swatchesTitle = 
       {open && createPortal(
         <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 sm:items-start sm:justify-end sm:bg-transparent sm:p-4 sm:pt-16" onClick={close}>
           <div ref={panel} role="dialog" aria-modal="true" aria-labelledby="theme-h" onClick={e => e.stopPropagation()} onKeyDown={trapTab}
-            className="sheet-in w-full max-w-md rounded-t-[22px] border border-line2 bg-deck p-5 pb-[calc(1.25rem+env(safe-area-inset-bottom))] shadow-2xl sm:w-[380px] sm:rounded-[22px] sm:pb-5">
+            className="sheet-in max-h-[min(85dvh,calc(100dvh-3rem))] w-full max-w-md overflow-y-auto overscroll-contain rounded-t-[22px] border border-line2 bg-deck p-5 pb-[calc(1.25rem+env(safe-area-inset-bottom))] shadow-2xl sm:max-h-[calc(100dvh-5rem)] sm:w-[380px] sm:rounded-[22px] sm:pb-5">
             <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-line2 sm:hidden" aria-hidden />
-            <div className="flex items-center justify-between">
+            <div className="sticky -top-5 z-10 -mx-5 -mt-5 flex items-center justify-between bg-deck px-5 pb-2 pt-5">
               <h2 id="theme-h" className="font-display text-2xl font-extrabold">Colors</h2>
               <button onClick={close} aria-label="Close" className="grid h-8 w-8 place-items-center rounded-full bg-deck2 text-mute hover:text-ink"><X size={16} aria-hidden /></button>
             </div>
