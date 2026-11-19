@@ -9,6 +9,7 @@ import Today from "./_home/today";
 import MyTeams from "./_home/my-teams";
 import InjuryWire from "./_home/injury-wire";
 import Top25 from "./_home/top25";
+import ScoreTicker from "./_home/score-ticker";
 import FormWatch from "./_home/form-watch";
 import DhrIntro from "@/components/dhr-intro";
 import { IfProjections } from "@/components/projection-toggle";
@@ -198,6 +199,7 @@ export default function Home() {
 
   return (
     <div className="space-y-10">
+      <ScoreTicker />
       <DhrIntro />
       <MyTeams />
       <Today />

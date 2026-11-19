@@ -144,6 +144,19 @@ export function liveDay(day: string | null, today: string, games: Game[] | null)
   return age > 0 && age <= 3 && open ? day : null;
 }
 
+/** One scoreboard request per day, shared by every live-score hook on the page (the home
+ *  page has two: Today and the ticker). A request made in the last few seconds is reused. */
+const shared = new Map<string, { at: number; body: Promise<{ events?: EspnEvent[] }> }>();
+function fetchScoreboard(day: string): Promise<{ events?: EspnEvent[] }> {
+  const hit = shared.get(day);
+  if (hit && Date.now() - hit.at < 5000) return hit.body;
+  const body = fetch(`${SCOREBOARD}?dates=${espnDate(day)}&groups=50&limit=500`, { cache: "no-store", signal: AbortSignal.timeout(15000) })
+    .then(res => { if (!res.ok) throw new Error(String(res.status)); return res.json() as Promise<{ events?: EspnEvent[] }>; });
+  body.catch(() => { if (shared.get(day)?.body === body) shared.delete(day); });
+  shared.set(day, { at: Date.now(), body });
+  return body;
+}
+
 /**
  * Live overlay for one day's games. Pass `day` for today (Eastern) or a recent day whose games
  * the published data hasn't marked final yet (see liveDay); pass null to do nothing. Returns the matched live states keyed by our game id.
@@ -205,10 +218,8 @@ export function useLiveScores(day: string | null, games: Game[] | null) {
       ctrl?.abort();
       ctrl = new AbortController();
       try {
-        const res = await fetch(`${SCOREBOARD}?dates=${espnDate(day)}&groups=50&limit=500`, { signal: ctrl.signal, cache: "no-store" });
-        if (!res.ok) throw new Error(String(res.status));
-        const body = (await res.json()) as { events?: EspnEvent[] };
-        if (!alive) return;
+        const body = await fetchScoreboard(day);
+        if (!alive || ctrl.signal.aborted) return;
         const m = matchEvents(games, body.events ?? [], espnByTeam);
         latest.current = m;
         setByGame(m);
