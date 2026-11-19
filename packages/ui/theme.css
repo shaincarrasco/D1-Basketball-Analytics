@@ -450,3 +450,24 @@ html[data-palette="primetime"] .field { border-color: transparent; background: v
 html[data-palette="primetime"] .seg > [aria-pressed="true"], html[data-palette="primetime"] .seg > [aria-current="page"] { box-shadow: none; }
 html[data-palette="primetime"] .dt th { font-weight: 500; border-bottom-color: var(--line); }
 html[data-palette="primetime"] header.sticky, html[data-palette="primetime"] nav[aria-label="Tabs"] { border-color: var(--line); }
+
+
+/* ==========================================================================
+   Motion, from Componentry (MIT, https://componentry.dev), adapted to the quiet look:
+   movement explains a change, nothing glows or loops. Everything is off for reduced motion.
+   ========================================================================== */
+/* Kinetic title: each word rises out of a soft blur. */
+.kt-mask { display: inline-block; overflow: hidden; padding-bottom: 0.08em; margin-bottom: -0.08em; vertical-align: bottom; }
+.kt-word { display: inline-block; animation: kt-rise 0.72s cubic-bezier(0.22, 1, 0.36, 1) both; }
+@keyframes kt-rise { from { opacity: 0; transform: translateY(0.45em); filter: blur(6px); } to { opacity: 1; transform: none; filter: blur(0); } }
+
+/* Rolling number: a column of digits per place, clipped to one digit. */
+.rn { display: inline-flex; font-variant-numeric: tabular-nums; line-height: 1; }
+.rn-col { display: inline-block; height: 1em; overflow: hidden; line-height: 1; }
+.rn-strip { display: flex; flex-direction: column; will-change: transform; }
+.rn-strip > span { height: 1em; line-height: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .kt-word { animation: none; }
+  .rn-strip { transition: none !important; }
+}
