@@ -4,6 +4,7 @@
 import Link from "next/link";
 import { useMemo } from "react";
 import TeamLogo from "@sports/ui/team-logo";
+import RollingNumber from "@sports/ui/rolling-number";
 import WinProb from "@/components/win-prob";
 import { DHR_RANK_TITLE, fmt, pctFmt } from "@sports/ui/format";
 import type { LiveGame } from "@/lib/live";
@@ -12,6 +13,7 @@ import { gameMoments, momentWhen, type Moment } from "@/lib/moments";
 import type { Game, GameSide } from "@/lib/types";
 import type { KeyAbsence } from "@/components/whos-out";
 import { useShowProjections } from "@/lib/show-projections";
+import GameStatus from "./game-status";
 import { favoriteWon, isFinal, isLive, lineInfo, marginText, statusLabel, teamHref, winner } from "./game-utils";
 
 export function WatchBadge({ value }: { value: number | null }) {
@@ -66,7 +68,8 @@ function Row({ g, side, which, absence }: { g: Game; side: GameSide; which: "hom
       </div>
       {showScore ? (
         <span className={`font-display text-[1.45rem] font-extrabold leading-none tnum ${lost ? "text-mute" : "text-ink"}`}>
-          {side.score}
+          {/* Rolls like an odometer when a live score changes; static on first paint. */}
+          <RollingNumber value={side.score} />
           {final && w === which && <span className="sr-only"> (winner)</span>}
         </span>
       ) : proj != null ? (
@@ -133,6 +136,7 @@ export default function GameCard({ g, live: lg, onOpen, absences, moment }: { g:
             : g.neutral ? <span className="text-dim">Neutral</span> : null}
         </div>
       </div>
+      <GameStatus g={g} live={lg} />
       {live && moment && <MomentLine m={moment} className="mt-1.5" />}
       {showProj && g.pred && (
         <div className="mt-2.5">
