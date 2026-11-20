@@ -3818,7 +3818,19 @@
     "sigma": 11.64,
     "modelUpdatedAt": "2026-11-18T19:30:37.932Z"
    },
-   "closing": null,
+   "closing": {
+    "source": "closing-summary",
+    "capturedAt": "2026-11-20T08:32:07.861Z",
+    "book": "DraftKings",
+    "spread": -28.5,
+    "total": 155.5,
+    "homeML": -100000,
+    "awayML": 5000,
+    "homeSpreadOdds": -110,
+    "awaySpreadOdds": -110,
+    "overOdds": -112,
+    "underOdds": -108
+   },
    "bets": [
     {
      "market": "spread",
@@ -3831,7 +3843,10 @@
      "edge": 0.3115,
      "role": "underdog",
      "spreadBucket": "15+",
-     "pick": "UMBC"
+     "pick": "UMBC",
+     "result": "loss",
+     "profit": -1,
+     "clv": 4
     },
     {
      "market": "total",
@@ -3844,11 +3859,18 @@
      "edge": 0.0434,
      "role": null,
      "spreadBucket": "15+",
-     "pick": "Under"
+     "pick": "Under",
+     "result": "loss",
+     "profit": -1,
+     "clv": 4
     }
    ],
-   "status": "open",
-   "result": null
+   "status": "settled",
+   "result": {
+    "homeScore": 101,
+    "awayScore": 62
+   },
+   "settledAt": "2026-11-20T08:32:07.861Z"
   },
   "372865": {
    "gameId": "372865",
@@ -3881,7 +3903,19 @@
     "sigma": 11.6,
     "modelUpdatedAt": "2026-11-18T19:30:37.932Z"
    },
-   "closing": null,
+   "closing": {
+    "source": "closing-summary",
+    "capturedAt": "2026-11-20T08:32:07.861Z",
+    "book": "DraftKings",
+    "spread": -1.5,
+    "total": 134.5,
+    "homeML": -125,
+    "awayML": 105,
+    "homeSpreadOdds": -105,
+    "awaySpreadOdds": -115,
+    "overOdds": -112,
+    "underOdds": -108
+   },
    "bets": [
     {
      "market": "spread",
@@ -3894,7 +3928,10 @@
      "edge": 0.0284,
      "role": "favorite",
      "spreadBucket": "0–3.5",
-     "pick": "New Mexico State"
+     "pick": "New Mexico State",
+     "result": "loss",
+     "profit": -1,
+     "clv": 0
     },
     {
      "market": "total",
@@ -3907,11 +3944,18 @@
      "edge": 0.0075,
      "role": null,
      "spreadBucket": "0–3.5",
-     "pick": "Over"
+     "pick": "Over",
+     "result": "win",
+     "profit": 0.8929,
+     "clv": -2
     }
    ],
-   "status": "open",
-   "result": null
+   "status": "settled",
+   "result": {
+    "homeScore": 69,
+    "awayScore": 84
+   },
+   "settledAt": "2026-11-20T08:32:07.861Z"
   },
   "372866": {
    "gameId": "372866",
@@ -3944,7 +3988,19 @@
     "sigma": 11.74,
     "modelUpdatedAt": "2026-11-18T19:30:37.932Z"
    },
-   "closing": null,
+   "closing": {
+    "source": "closing-summary",
+    "capturedAt": "2026-11-20T08:32:07.861Z",
+    "book": "DraftKings",
+    "spread": -11.5,
+    "total": 147.5,
+    "homeML": -750,
+    "awayML": 525,
+    "homeSpreadOdds": -118,
+    "awaySpreadOdds": -102,
+    "overOdds": -110,
+    "underOdds": -110
+   },
    "bets": [
     {
      "market": "spread",
@@ -3957,7 +4013,10 @@
      "edge": 0.0739,
      "role": "favorite",
      "spreadBucket": "8–14.5",
-     "pick": "St. Bonaventure"
+     "pick": "St. Bonaventure",
+     "result": "loss",
+     "profit": -1,
+     "clv": 0
     },
     {
      "market": "total",
@@ -3970,11 +4029,18 @@
      "edge": 0.1179,
      "role": null,
      "spreadBucket": "8–14.5",
-     "pick": "Over"
+     "pick": "Over",
+     "result": "win",
+     "profit": 0.8929,
+     "clv": 1
     }
    ],
-   "status": "open",
-   "result": null
+   "status": "settled",
+   "result": {
+    "homeScore": 78,
+    "awayScore": 69
+   },
+   "settledAt": "2026-11-20T08:32:07.861Z"
   },
   "372867": {
    "gameId": "372867",
@@ -4007,7 +4073,19 @@
     "sigma": 11.81,
     "modelUpdatedAt": "2026-11-18T19:30:37.932Z"
    },
-   "closing": null,
+   "closing": {
+    "source": "closing-summary",
+    "capturedAt": "2026-11-20T08:32:07.861Z",
+    "book": "DraftKings",
+    "spread": -35.5,
+    "total": 155.5,
+    "homeML": null,
+    "awayML": null,
+    "homeSpreadOdds": -115,
+    "awaySpreadOdds": -105,
+    "overOdds": -115,
+    "underOdds": -105
+   },
    "bets": [
     {
      "market": "spread",
@@ -4020,7 +4098,10 @@
      "edge": 0.3499,
      "role": "underdog",
      "spreadBucket": "15+",
-     "pick": "Southern Utah"
+     "pick": "Southern Utah",
+     "result": "win",
+     "profit": 0.9259,
+     "clv": 3
     },
     {
      "market": "total",
@@ -4033,11 +4114,18 @@
      "edge": 0.0969,
      "role": null,
      "spreadBucket": "15+",
-     "pick": "Over"
+     "pick": "Over",
+     "result": "win",
+     "profit": 0.9091,
+     "clv": -2
     }
    ],
-   "status": "open",
-   "result": null
+   "status": "settled",
+   "result": {
+    "homeScore": 92,
+    "awayScore": 68
+   },
+   "settledAt": "2026-11-20T08:32:07.861Z"
   },
   "372868": {
    "gameId": "372868",
@@ -4070,7 +4158,19 @@
     "sigma": 11.72,
     "modelUpdatedAt": "2026-11-18T19:30:37.932Z"
    },
-   "closing": null,
+   "closing": {
+    "source": "closing-summary",
+    "capturedAt": "2026-11-20T08:32:07.861Z",
+    "book": "DraftKings",
+    "spread": -16.5,
+    "total": 162.5,
+    "homeML": -1600,
+    "awayML": 900,
+    "homeSpreadOdds": -112,
+    "awaySpreadOdds": -108,
+    "overOdds": -115,
+    "underOdds": -105
+   },
    "bets": [
     {
      "market": "moneyline",
@@ -4083,7 +4183,10 @@
      "edge": 0.0146,
      "role": "favorite",
      "spreadBucket": "15+",
-     "pick": "Butler"
+     "pick": "Butler",
+     "result": "win",
+     "profit": 0.0625,
+     "clv": 0
     },
     {
      "market": "spread",
@@ -4096,7 +4199,10 @@
      "edge": 0.0119,
      "role": "favorite",
      "spreadBucket": "15+",
-     "pick": "Butler"
+     "pick": "Butler",
+     "result": "loss",
+     "profit": -1,
+     "clv": 1
     },
     {
      "market": "total",
@@ -4109,7 +4215,77 @@
      "edge": 0.0693,
      "role": null,
      "spreadBucket": "15+",
-     "pick": "Under"
+     "pick": "Under",
+     "result": "win",
+     "profit": 0.9524,
+     "clv": 2
+    }
+   ],
+   "status": "settled",
+   "result": {
+    "homeScore": 84,
+    "awayScore": 77
+   },
+   "settledAt": "2026-11-20T08:32:07.861Z"
+  },
+  "372870": {
+   "gameId": "372870",
+   "espnEventId": "401916299",
+   "day": "2026-11-20",
+   "date": "2026-11-21T00:00:00.000Z",
+   "home": "Maryland",
+   "away": "Wagner",
+   "neutralSite": false,
+   "backfilled": false,
+   "capturedAt": "2026-11-20T08:32:07.861Z",
+   "line": {
+    "source": "pregame-scoreboard",
+    "capturedAt": "2026-11-20T08:32:07.861Z",
+    "book": "DraftKings",
+    "spread": -35.5,
+    "total": 147.5,
+    "homeML": null,
+    "awayML": null,
+    "homeSpreadOdds": -110,
+    "awaySpreadOdds": -110,
+    "overOdds": -110,
+    "underOdds": -110
+   },
+   "model": {
+    "homeWinProb": 0.956,
+    "margin": 19.96,
+    "homePts": 86.4,
+    "awayPts": 66.4,
+    "sigma": 11.7,
+    "modelUpdatedAt": "2026-11-19T19:35:43.401Z"
+   },
+   "closing": null,
+   "bets": [
+    {
+     "market": "spread",
+     "side": "away",
+     "line": 35.5,
+     "price": -110,
+     "priceAssumed": false,
+     "modelProb": 0.9079,
+     "marketProb": 0.5,
+     "edge": 0.4079,
+     "role": "underdog",
+     "spreadBucket": "15+",
+     "pick": "Wagner"
+    },
+    {
+     "market": "total",
+     "side": "over",
+     "line": 147.5,
+     "price": -110,
+     "priceAssumed": false,
+     "modelProb": 0.6226,
+     "marketProb": 0.5,
+     "edge": 0.1226,
+     "role": null,
+     "spreadBucket": "15+",
+     "pick": "Over"
     }
    ],
    "status": "open",
@@ -12535,7 +12711,19 @@
     "sigma": 11.86,
     "modelUpdatedAt": "2026-11-18T19:30:37.932Z"
    },
-   "closing": null,
+   "closing": {
+    "source": "closing-summary",
+    "capturedAt": "2026-11-20T08:32:07.861Z",
+    "book": "DraftKings",
+    "spread": -16.5,
+    "total": 155.5,
+    "homeML": -1800,
+    "awayML": 1000,
+    "homeSpreadOdds": -115,
+    "awaySpreadOdds": -105,
+    "overOdds": -105,
+    "underOdds": -115
+   },
    "bets": [
     {
      "market": "spread",
@@ -12548,7 +12736,10 @@
      "edge": 0.1605,
      "role": "underdog",
      "spreadBucket": "15+",
-     "pick": "Utah Tech"
+     "pick": "Utah Tech",
+     "result": "win",
+     "profit": 0.9804,
+     "clv": 1
     },
     {
      "market": "total",
@@ -12561,11 +12752,18 @@
      "edge": 0.0355,
      "role": null,
      "spreadBucket": "15+",
-     "pick": "Under"
+     "pick": "Under",
+     "result": "win",
+     "profit": 0.8696,
+     "clv": 5
     }
    ],
-   "status": "open",
-   "result": null
+   "status": "settled",
+   "result": {
+    "homeScore": 82,
+    "awayScore": 69
+   },
+   "settledAt": "2026-11-20T08:32:07.861Z"
   },
   "375129": {
    "gameId": "375129",
@@ -12598,7 +12796,19 @@
     "sigma": 11.83,
     "modelUpdatedAt": "2026-11-18T19:30:37.932Z"
    },
-   "closing": null,
+   "closing": {
+    "source": "closing-summary",
+    "capturedAt": "2026-11-20T08:32:07.861Z",
+    "book": "DraftKings",
+    "spread": -3.5,
+    "total": 152.5,
+    "homeML": -185,
+    "awayML": 154,
+    "homeSpreadOdds": -110,
+    "awaySpreadOdds": -110,
+    "overOdds": -115,
+    "underOdds": -105
+   },
    "bets": [
     {
      "market": "moneyline",
@@ -12611,7 +12821,10 @@
      "edge": 0.0517,
      "role": "favorite",
      "spreadBucket": "0–3.5",
-     "pick": "Houston Christian"
+     "pick": "Houston Christian",
+     "result": "loss",
+     "profit": -1,
+     "clv": 0.0061
     },
     {
      "market": "spread",
@@ -12624,7 +12837,10 @@
      "edge": 0.0508,
      "role": "favorite",
      "spreadBucket": "0–3.5",
-     "pick": "Houston Christian"
+     "pick": "Houston Christian",
+     "result": "loss",
+     "profit": -1,
+     "clv": 0
     },
     {
      "market": "total",
@@ -12637,11 +12853,18 @@
      "edge": 0.1455,
      "role": null,
      "spreadBucket": "0–3.5",
-     "pick": "Over"
+     "pick": "Over",
+     "result": "win",
+     "profit": 0.9091,
+     "clv": 2
     }
    ],
-   "status": "open",
-   "result": null
+   "status": "settled",
+   "result": {
+    "homeScore": 79,
+    "awayScore": 86
+   },
+   "settledAt": "2026-11-20T08:32:07.861Z"
   },
   "375130": {
    "gameId": "375130",
@@ -12674,7 +12897,19 @@
     "sigma": 11.65,
     "modelUpdatedAt": "2026-11-18T19:30:37.932Z"
    },
-   "closing": null,
+   "closing": {
+    "source": "closing-summary",
+    "capturedAt": "2026-11-20T08:32:07.861Z",
+    "book": "DraftKings",
+    "spread": -1.5,
+    "total": 144.5,
+    "homeML": -125,
+    "awayML": 105,
+    "homeSpreadOdds": -112,
+    "awaySpreadOdds": -108,
+    "overOdds": -112,
+    "underOdds": -108
+   },
    "bets": [
     {
      "market": "spread",
@@ -12687,7 +12922,10 @@
      "edge": 0.0471,
      "role": "favorite",
      "spreadBucket": "0–3.5",
-     "pick": "Jacksonville"
+     "pick": "Jacksonville",
+     "result": "loss",
+     "profit": -1,
+     "clv": -1
     },
     {
      "market": "total",
@@ -12700,11 +12938,18 @@
      "edge": 0.2113,
      "role": null,
      "spreadBucket": "0–3.5",
-     "pick": "Over"
+     "pick": "Over",
+     "result": "win",
+     "profit": 0.9259,
+     "clv": 0
     }
    ],
-   "status": "open",
-   "result": null
+   "status": "settled",
+   "result": {
+    "homeScore": 72,
+    "awayScore": 78
+   },
+   "settledAt": "2026-11-20T08:32:07.861Z"
   },
   "375131": {
    "gameId": "375131",
@@ -12737,7 +12982,19 @@
     "sigma": 11.92,
     "modelUpdatedAt": "2026-11-18T19:30:37.932Z"
    },
-   "closing": null,
+   "closing": {
+    "source": "closing-summary",
+    "capturedAt": "2026-11-20T08:32:07.861Z",
+    "book": "DraftKings",
+    "spread": -16.5,
+    "total": 152.5,
+    "homeML": -1800,
+    "awayML": 1000,
+    "homeSpreadOdds": -118,
+    "awaySpreadOdds": -102,
+    "overOdds": -115,
+    "underOdds": -105
+   },
    "bets": [
     {
      "market": "spread",
@@ -12750,7 +13007,10 @@
      "edge": 0.0624,
      "role": "favorite",
      "spreadBucket": "15+",
-     "pick": "Stanford"
+     "pick": "Stanford",
+     "result": "loss",
+     "profit": -1,
+     "clv": 0
     },
     {
      "market": "total",
@@ -12763,11 +13023,18 @@
      "edge": 0.1048,
      "role": null,
      "spreadBucket": "15+",
-     "pick": "Under"
+     "pick": "Under",
+     "result": "win",
+     "profit": 0.9259,
+     "clv": 2
     }
    ],
-   "status": "open",
-   "result": null
+   "status": "settled",
+   "result": {
+    "homeScore": 78,
+    "awayScore": 65
+   },
+   "settledAt": "2026-11-20T08:32:07.861Z"
   },
   "375132": {
    "gameId": "375132",
@@ -12800,7 +13067,19 @@
     "sigma": 11.87,
     "modelUpdatedAt": "2026-11-18T19:30:37.932Z"
    },
-   "closing": null,
+   "closing": {
+    "source": "closing-summary",
+    "capturedAt": "2026-11-20T08:32:07.861Z",
+    "book": "DraftKings",
+    "spread": 1.5,
+    "total": 163.5,
+    "homeML": -102,
+    "awayML": -118,
+    "homeSpreadOdds": -130,
+    "awaySpreadOdds": 110,
+    "overOdds": -105,
+    "underOdds": -115
+   },
    "bets": [
     {
      "market": "moneyline",
@@ -12813,7 +13092,10 @@
      "edge": 0.032,
      "role": "favorite",
      "spreadBucket": "0–3.5",
-     "pick": "TCU"
+     "pick": "TCU",
+     "result": "loss",
+     "profit": -1,
+     "clv": -0.0282
     },
     {
      "market": "spread",
@@ -12826,7 +13108,10 @@
      "edge": -0.0034,
      "role": "underdog",
      "spreadBucket": "0–3.5",
-     "pick": "Texas A&M"
+     "pick": "Texas A&M",
+     "result": "win",
+     "profit": 0.8696,
+     "clv": 3
     },
     {
      "market": "total",
@@ -12839,11 +13124,18 @@
      "edge": 0.0201,
      "role": null,
      "spreadBucket": "0–3.5",
-     "pick": "Under"
+     "pick": "Under",
+     "result": "loss",
+     "profit": -1,
+     "clv": -1
     }
    ],
-   "status": "open",
-   "result": null
+   "status": "settled",
+   "result": {
+    "homeScore": 92,
+    "awayScore": 97
+   },
+   "settledAt": "2026-11-20T08:32:07.861Z"
   },
   "375133": {
    "gameId": "375133",
@@ -12876,7 +13168,19 @@
     "sigma": 11.62,
     "modelUpdatedAt": "2026-11-18T19:30:37.932Z"
    },
-   "closing": null,
+   "closing": {
+    "source": "closing-summary",
+    "capturedAt": "2026-11-20T08:32:07.861Z",
+    "book": "DraftKings",
+    "spread": -2.5,
+    "total": 141.5,
+    "homeML": -135,
+    "awayML": 114,
+    "homeSpreadOdds": -108,
+    "awaySpreadOdds": -112,
+    "overOdds": -112,
+    "underOdds": -108
+   },
    "bets": [
     {
      "market": "moneyline",
@@ -12889,7 +13193,10 @@
      "edge": 0.1363,
      "role": "underdog",
      "spreadBucket": "0–3.5",
-     "pick": "Louisiana Tech"
+     "pick": "Louisiana Tech",
+     "result": "win",
+     "profit": 1,
+     "clv": 0.0731
     },
     {
      "market": "spread",
@@ -12902,7 +13209,10 @@
      "edge": 0.1804,
      "role": "underdog",
      "spreadBucket": "0–3.5",
-     "pick": "Louisiana Tech"
+     "pick": "Louisiana Tech",
+     "result": "win",
+     "profit": 0.9804,
+     "clv": 4
     },
     {
      "market": "total",
@@ -12915,11 +13225,18 @@
      "edge": 0.0402,
      "role": null,
      "spreadBucket": "0–3.5",
-     "pick": "Under"
+     "pick": "Under",
+     "result": "win",
+     "profit": 0.9091,
+     "clv": 2
     }
    ],
-   "status": "open",
-   "result": null
+   "status": "settled",
+   "result": {
+    "homeScore": 74,
+    "awayScore": 67
+   },
+   "settledAt": "2026-11-20T08:32:07.861Z"
   },
   "375134": {
    "gameId": "375134",
@@ -12952,7 +13269,19 @@
     "sigma": 11.7,
     "modelUpdatedAt": "2026-11-18T19:30:37.932Z"
    },
-   "closing": null,
+   "closing": {
+    "source": "closing-summary",
+    "capturedAt": "2026-11-20T08:32:07.861Z",
+    "book": "DraftKings",
+    "spread": -36.5,
+    "total": 154.5,
+    "homeML": null,
+    "awayML": null,
+    "homeSpreadOdds": -108,
+    "awaySpreadOdds": -112,
+    "overOdds": -112,
+    "underOdds": -108
+   },
    "bets": [
     {
      "market": "spread",
@@ -12965,7 +13294,10 @@
      "edge": 0.2317,
      "role": "underdog",
      "spreadBucket": "15+",
-     "pick": "Stetson"
+     "pick": "Stetson",
+     "result": "win",
+     "profit": 0.9091,
+     "clv": -1
     },
     {
      "market": "total",
@@ -12978,11 +13310,18 @@
      "edge": 0.009,
      "role": null,
      "spreadBucket": "15+",
-     "pick": "Under"
+     "pick": "Under",
+     "result": "win",
+     "profit": 0.9259,
+     "clv": -1
     }
    ],
-   "status": "open",
-   "result": null
+   "status": "settled",
+   "result": {
+    "homeScore": 83,
+    "awayScore": 69
+   },
+   "settledAt": "2026-11-20T08:32:07.861Z"
   },
   "375135": {
    "gameId": "375135",
@@ -13015,7 +13354,19 @@
     "sigma": 11.59,
     "modelUpdatedAt": "2026-11-18T19:30:37.932Z"
    },
-   "closing": null,
+   "closing": {
+    "source": "closing-summary",
+    "capturedAt": "2026-11-20T08:32:07.861Z",
+    "book": "DraftKings",
+    "spread": -14.5,
+    "total": 146.5,
+    "homeML": -1050,
+    "awayML": 675,
+    "homeSpreadOdds": -110,
+    "awaySpreadOdds": -110,
+    "overOdds": -115,
+    "underOdds": -105
+   },
    "bets": [
     {
      "market": "spread",
@@ -13028,7 +13379,10 @@
      "edge": 0.0535,
      "role": "underdog",
      "spreadBucket": "8–14.5",
-     "pick": "East Texas A&M"
+     "pick": "East Texas A&M",
+     "result": "loss",
+     "profit": -1,
+     "clv": 0
     },
     {
      "market": "total",
@@ -13041,11 +13395,18 @@
      "edge": 0.019,
      "role": null,
      "spreadBucket": "8–14.5",
-     "pick": "Over"
+     "pick": "Over",
+     "result": "loss",
+     "profit": -1,
+     "clv": 1
     }
    ],
-   "status": "open",
-   "result": null
+   "status": "settled",
+   "result": {
+    "homeScore": 86,
+    "awayScore": 54
+   },
+   "settledAt": "2026-11-20T08:32:07.861Z"
   },
   "375136": {
    "gameId": "375136",
@@ -13078,7 +13439,19 @@
     "sigma": 11.88,
     "modelUpdatedAt": "2026-11-18T19:30:37.932Z"
    },
-   "closing": null,
+   "closing": {
+    "source": "closing-summary",
+    "capturedAt": "2026-11-20T08:32:07.861Z",
+    "book": "DraftKings",
+    "spread": -1.5,
+    "total": 163.5,
+    "homeML": -130,
+    "awayML": 110,
+    "homeSpreadOdds": -118,
+    "awaySpreadOdds": -102,
+    "overOdds": -115,
+    "underOdds": -105
+   },
    "bets": [
     {
      "market": "total",
@@ -13091,11 +13464,18 @@
      "edge": 0.0136,
      "role": null,
      "spreadBucket": null,
-     "pick": "Over"
+     "pick": "Over",
+     "result": "loss",
+     "profit": -1,
+     "clv": -1
     }
    ],
-   "status": "open",
-   "result": null
+   "status": "settled",
+   "result": {
+    "homeScore": 77,
+    "awayScore": 83
+   },
+   "settledAt": "2026-11-20T08:32:07.861Z"
   },
   "375137": {
    "gameId": "375137",
@@ -13128,7 +13508,19 @@
     "sigma": 11.76,
     "modelUpdatedAt": "2026-11-18T19:30:37.932Z"
    },
-   "closing": null,
+   "closing": {
+    "source": "closing-summary",
+    "capturedAt": "2026-11-20T08:32:07.861Z",
+    "book": "DraftKings",
+    "spread": 3.5,
+    "total": 164.5,
+    "homeML": 140,
+    "awayML": -166,
+    "homeSpreadOdds": -110,
+    "awaySpreadOdds": -110,
+    "overOdds": -112,
+    "underOdds": -108
+   },
    "bets": [
     {
      "market": "moneyline",
@@ -13141,7 +13533,10 @@
      "edge": 0.0193,
      "role": "favorite",
      "spreadBucket": "4–7.5",
-     "pick": "NC State"
+     "pick": "NC State",
+     "result": "win",
+     "profit": 0.5405,
+     "clv": -0.0229
     },
     {
      "market": "spread",
@@ -13154,7 +13549,10 @@
      "edge": -0.0096,
      "role": "underdog",
      "spreadBucket": "4–7.5",
-     "pick": "Murray State"
+     "pick": "Murray State",
+     "result": "loss",
+     "profit": -1,
+     "clv": 1
     },
     {
      "market": "total",
@@ -13167,11 +13565,18 @@
      "edge": 0.0281,
      "role": null,
      "spreadBucket": "4–7.5",
-     "pick": "Under"
+     "pick": "Under",
+     "result": "loss",
+     "profit": -1,
+     "clv": -4
     }
    ],
-   "status": "open",
-   "result": null
+   "status": "settled",
+   "result": {
+    "homeScore": 83,
+    "awayScore": 93
+   },
+   "settledAt": "2026-11-20T08:32:07.861Z"
   },
   "375139": {
    "gameId": "375139",
@@ -13204,7 +13609,19 @@
     "sigma": 11.55,
     "modelUpdatedAt": "2026-11-18T19:30:37.932Z"
    },
-   "closing": null,
+   "closing": {
+    "source": "closing-summary",
+    "capturedAt": "2026-11-20T08:32:07.861Z",
+    "book": "DraftKings",
+    "spread": -8.5,
+    "total": 133.5,
+    "homeML": -455,
+    "awayML": 350,
+    "homeSpreadOdds": -108,
+    "awaySpreadOdds": -112,
+    "overOdds": -108,
+    "underOdds": -112
+   },
    "bets": [
     {
      "market": "spread",
@@ -13217,7 +13634,10 @@
      "edge": 0.016,
      "role": "underdog",
      "spreadBucket": "8–14.5",
-     "pick": "Maine"
+     "pick": "Maine",
+     "result": "win",
+     "profit": 0.8929,
+     "clv": 2
     },
     {
      "market": "total",
@@ -13230,11 +13650,18 @@
      "edge": 0.0035,
      "role": null,
      "spreadBucket": "8–14.5",
-     "pick": "Over"
+     "pick": "Over",
+     "result": "loss",
+     "profit": -1,
+     "clv": -3
     }
    ],
-   "status": "open",
-   "result": null
+   "status": "settled",
+   "result": {
+    "homeScore": 67,
+    "awayScore": 69
+   },
+   "settledAt": "2026-11-20T08:32:07.861Z"
   },
   "375140": {
    "gameId": "375140",
@@ -13267,7 +13694,19 @@
     "sigma": 11.54,
     "modelUpdatedAt": "2026-11-18T19:30:37.932Z"
    },
-   "closing": null,
+   "closing": {
+    "source": "closing-summary",
+    "capturedAt": "2026-11-20T08:32:07.861Z",
+    "book": "DraftKings",
+    "spread": -12.5,
+    "total": 143.5,
+    "homeML": -900,
+    "awayML": 600,
+    "homeSpreadOdds": -105,
+    "awaySpreadOdds": -115,
+    "overOdds": -115,
+    "underOdds": -105
+   },
    "bets": [
     {
      "market": "spread",
@@ -13280,7 +13719,10 @@
      "edge": 0.1303,
      "role": "underdog",
      "spreadBucket": "8–14.5",
-     "pick": "Montana State"
+     "pick": "Montana State",
+     "result": "win",
+     "profit": 0.9091,
+     "clv": 1
     },
     {
      "market": "total",
@@ -13293,11 +13735,18 @@
      "edge": 0.1021,
      "role": null,
      "spreadBucket": "8–14.5",
-     "pick": "Under"
+     "pick": "Under",
+     "result": "loss",
+     "profit": -1,
+     "clv": 1
     }
    ],
-   "status": "open",
-   "result": null
+   "status": "settled",
+   "result": {
+    "homeScore": 85,
+    "awayScore": 74
+   },
+   "settledAt": "2026-11-20T08:32:07.861Z"
   },
   "375141": {
    "gameId": "375141",
@@ -13330,7 +13779,19 @@
     "sigma": 11.61,
     "modelUpdatedAt": "2026-11-18T19:30:37.932Z"
    },
-   "closing": null,
+   "closing": {
+    "source": "closing-summary",
+    "capturedAt": "2026-11-20T08:32:07.861Z",
+    "book": "DraftKings",
+    "spread": -6.5,
+    "total": 149.5,
+    "homeML": -298,
+    "awayML": 240,
+    "homeSpreadOdds": -108,
+    "awaySpreadOdds": -112,
+    "overOdds": -108,
+    "underOdds": -112
+   },
    "bets": [
     {
      "market": "spread",
@@ -13343,7 +13804,10 @@
      "edge": -0.0167,
      "role": "favorite",
      "spreadBucket": "4–7.5",
-     "pick": "St. Thomas-Minnesota"
+     "pick": "St. Thomas-Minnesota",
+     "result": "win",
+     "profit": 0.8475,
+     "clv": 0
     },
     {
      "market": "total",
@@ -13356,11 +13820,18 @@
      "edge": 0.1392,
      "role": null,
      "spreadBucket": "4–7.5",
-     "pick": "Over"
+     "pick": "Over",
+     "result": "win",
+     "profit": 0.9091,
+     "clv": 0
     }
    ],
-   "status": "open",
-   "result": null
+   "status": "settled",
+   "result": {
+    "homeScore": 93,
+    "awayScore": 61
+   },
+   "settledAt": "2026-11-20T08:32:07.861Z"
   },
   "375142": {
    "gameId": "375142",
@@ -13393,7 +13864,19 @@
     "sigma": 11.74,
     "modelUpdatedAt": "2026-11-18T19:30:37.932Z"
    },
-   "closing": null,
+   "closing": {
+    "source": "closing-summary",
+    "capturedAt": "2026-11-20T08:32:07.861Z",
+    "book": "DraftKings",
+    "spread": 5.5,
+    "total": 138.5,
+    "homeML": 180,
+    "awayML": -218,
+    "homeSpreadOdds": -112,
+    "awaySpreadOdds": -108,
+    "overOdds": -110,
+    "underOdds": -110
+   },
    "bets": [
     {
      "market": "moneyline",
@@ -13406,7 +13889,10 @@
      "edge": -0.082,
      "role": "favorite",
      "spreadBucket": "4–7.5",
-     "pick": "Wisconsin"
+     "pick": "Wisconsin",
+     "result": "loss",
+     "profit": -1,
+     "clv": 0.0128
     },
     {
      "market": "spread",
@@ -13419,7 +13905,10 @@
      "edge": 0.0893,
      "role": "underdog",
      "spreadBucket": "4–7.5",
-     "pick": "Seton Hall"
+     "pick": "Seton Hall",
+     "result": "win",
+     "profit": 0.9091,
+     "clv": -1
     },
     {
      "market": "total",
@@ -13432,11 +13921,18 @@
      "edge": 0.0359,
      "role": null,
      "spreadBucket": "4–7.5",
-     "pick": "Over"
+     "pick": "Over",
+     "result": "win",
+     "profit": 0.8696,
+     "clv": -2
     }
    ],
-   "status": "open",
-   "result": null
+   "status": "settled",
+   "result": {
+    "homeScore": 74,
+    "awayScore": 69
+   },
+   "settledAt": "2026-11-20T08:32:07.861Z"
   },
   "375144": {
    "gameId": "375144",
@@ -13495,6 +13991,82 @@
      "edge": 0.122,
      "role": null,
      "spreadBucket": "15+",
+     "pick": "Over"
+    }
+   ],
+   "status": "open",
+   "result": null
+  },
+  "375145": {
+   "gameId": "375145",
+   "espnEventId": "401925927",
+   "day": "2026-11-20",
+   "date": "2026-11-21T00:00:00.000Z",
+   "home": "The Citadel",
+   "away": "South Carolina State",
+   "neutralSite": false,
+   "backfilled": false,
+   "capturedAt": "2026-11-20T08:32:07.861Z",
+   "line": {
+    "source": "pregame-scoreboard",
+    "capturedAt": "2026-11-20T08:32:07.861Z",
+    "book": "DraftKings",
+    "spread": -2.5,
+    "total": 144.5,
+    "homeML": -148,
+    "awayML": 124,
+    "homeSpreadOdds": -115,
+    "awaySpreadOdds": -105,
+    "overOdds": -112,
+    "underOdds": -108
+   },
+   "model": {
+    "homeWinProb": 0.6502,
+    "margin": 4.52,
+    "homePts": 76.1,
+    "awayPts": 71.6,
+    "sigma": 11.71,
+    "modelUpdatedAt": "2026-11-19T19:35:43.401Z"
+   },
+   "closing": null,
+   "bets": [
+    {
+     "market": "moneyline",
+     "side": "home",
+     "line": null,
+     "price": -148,
+     "priceAssumed": false,
+     "modelProb": 0.6502,
+     "marketProb": 0.5721,
+     "edge": 0.0781,
+     "role": "favorite",
+     "spreadBucket": "0–3.5",
+     "pick": "The Citadel"
+    },
+    {
+     "market": "spread",
+     "side": "home",
+     "line": -2.5,
+     "price": -115,
+     "priceAssumed": false,
+     "modelProb": 0.5685,
+     "marketProb": 0.5108,
+     "edge": 0.0576,
+     "role": "favorite",
+     "spreadBucket": "0–3.5",
+     "pick": "The Citadel"
+    },
+    {
+     "market": "total",
+     "side": "over",
+     "line": 144.5,
+     "price": -112,
+     "priceAssumed": false,
+     "modelProb": 0.5747,
+     "marketProb": 0.5043,
+     "edge": 0.0704,
+     "role": null,
+     "spreadBucket": "0–3.5",
      "pick": "Over"
     }
    ],
@@ -13653,6 +14225,221 @@
    "status": "open",
    "result": null
   },
+  "375148": {
+   "gameId": "375148",
+   "espnEventId": "401925740",
+   "day": "2026-11-20",
+   "date": "2026-11-21T01:00:00.000Z",
+   "home": "Arkansas",
+   "away": "Mississippi Valley State",
+   "neutralSite": false,
+   "backfilled": false,
+   "capturedAt": "2026-11-20T08:32:07.861Z",
+   "line": {
+    "source": "pregame-scoreboard",
+    "capturedAt": "2026-11-20T08:32:07.861Z",
+    "book": "DraftKings",
+    "spread": -40.5,
+    "total": 150.5,
+    "homeML": null,
+    "awayML": null,
+    "homeSpreadOdds": -115,
+    "awaySpreadOdds": -105,
+    "overOdds": -110,
+    "underOdds": -110
+   },
+   "model": {
+    "homeWinProb": 0.9977,
+    "margin": 33.08,
+    "homePts": 92.5,
+    "awayPts": 59.5,
+    "sigma": 11.65,
+    "modelUpdatedAt": "2026-11-19T19:35:43.401Z"
+   },
+   "closing": null,
+   "bets": [
+    {
+     "market": "spread",
+     "side": "away",
+     "line": 40.5,
+     "price": -105,
+     "priceAssumed": false,
+     "modelProb": 0.7379,
+     "marketProb": 0.4892,
+     "edge": 0.2487,
+     "role": "underdog",
+     "spreadBucket": "15+",
+     "pick": "Mississippi Valley State"
+    },
+    {
+     "market": "total",
+     "side": "over",
+     "line": 150.5,
+     "price": -110,
+     "priceAssumed": false,
+     "modelProb": 0.5354,
+     "marketProb": 0.5,
+     "edge": 0.0354,
+     "role": null,
+     "spreadBucket": "15+",
+     "pick": "Over"
+    }
+   ],
+   "status": "open",
+   "result": null
+  },
+  "375149": {
+   "gameId": "375149",
+   "espnEventId": "401925664",
+   "day": "2026-11-20",
+   "date": "2026-11-21T03:00:00.000Z",
+   "home": "Fresno State",
+   "away": "Alabama State",
+   "neutralSite": false,
+   "backfilled": false,
+   "capturedAt": "2026-11-20T08:32:07.861Z",
+   "line": {
+    "source": "pregame-scoreboard",
+    "capturedAt": "2026-11-20T08:32:07.861Z",
+    "book": "DraftKings",
+    "spread": -10.5,
+    "total": 148.5,
+    "homeML": -535,
+    "awayML": 400,
+    "homeSpreadOdds": -108,
+    "awaySpreadOdds": -112,
+    "overOdds": -110,
+    "underOdds": -110
+   },
+   "model": {
+    "homeWinProb": 0.8399,
+    "margin": 11.62,
+    "homePts": 82.1,
+    "awayPts": 70.5,
+    "sigma": 11.69,
+    "modelUpdatedAt": "2026-11-19T19:35:43.401Z"
+   },
+   "closing": null,
+   "bets": [
+    {
+     "market": "moneyline",
+     "side": "home",
+     "line": null,
+     "price": -535,
+     "priceAssumed": false,
+     "modelProb": 0.8399,
+     "marketProb": 0.8082,
+     "edge": 0.0317,
+     "role": "favorite",
+     "spreadBucket": "8–14.5",
+     "pick": "Fresno State"
+    },
+    {
+     "market": "spread",
+     "side": "home",
+     "line": -10.5,
+     "price": -108,
+     "priceAssumed": false,
+     "modelProb": 0.5382,
+     "marketProb": 0.4957,
+     "edge": 0.0425,
+     "role": "favorite",
+     "spreadBucket": "8–14.5",
+     "pick": "Fresno State"
+    },
+    {
+     "market": "total",
+     "side": "over",
+     "line": 148.5,
+     "price": -110,
+     "priceAssumed": false,
+     "modelProb": 0.5956,
+     "marketProb": 0.5,
+     "edge": 0.0956,
+     "role": null,
+     "spreadBucket": "8–14.5",
+     "pick": "Over"
+    }
+   ],
+   "status": "open",
+   "result": null
+  },
+  "375150": {
+   "gameId": "375150",
+   "espnEventId": "401924844",
+   "day": "2026-11-20",
+   "date": "2026-11-21T00:00:00.000Z",
+   "home": "Delaware State",
+   "away": "Niagara",
+   "neutralSite": false,
+   "backfilled": false,
+   "capturedAt": "2026-11-20T08:32:07.861Z",
+   "line": {
+    "source": "pregame-scoreboard",
+    "capturedAt": "2026-11-20T08:32:07.861Z",
+    "book": "DraftKings",
+    "spread": -2.5,
+    "total": 131.5,
+    "homeML": -142,
+    "awayML": 120,
+    "homeSpreadOdds": -110,
+    "awaySpreadOdds": -110,
+    "overOdds": -112,
+    "underOdds": -108
+   },
+   "model": {
+    "homeWinProb": 0.6149,
+    "margin": 3.4,
+    "homePts": 68.9,
+    "awayPts": 65.5,
+    "sigma": 11.65,
+    "modelUpdatedAt": "2026-11-19T19:35:43.401Z"
+   },
+   "closing": null,
+   "bets": [
+    {
+     "market": "moneyline",
+     "side": "home",
+     "line": null,
+     "price": -142,
+     "priceAssumed": false,
+     "modelProb": 0.6149,
+     "marketProb": 0.5635,
+     "edge": 0.0514,
+     "role": "favorite",
+     "spreadBucket": "0–3.5",
+     "pick": "Delaware State"
+    },
+    {
+     "market": "spread",
+     "side": "home",
+     "line": -2.5,
+     "price": -110,
+     "priceAssumed": false,
+     "modelProb": 0.5308,
+     "marketProb": 0.5,
+     "edge": 0.0308,
+     "role": "favorite",
+     "spreadBucket": "0–3.5",
+     "pick": "Delaware State"
+    },
+    {
+     "market": "total",
+     "side": "over",
+     "line": 131.5,
+     "price": -112,
+     "priceAssumed": false,
+     "modelProb": 0.5682,
+     "marketProb": 0.5043,
+     "edge": 0.0638,
+     "role": null,
+     "spreadBucket": "0–3.5",
+     "pick": "Over"
+    }
+   ],
+   "status": "open",
+   "result": null
+  },
   "375152": {
    "gameId": "375152",
    "espnEventId": "401921757",
@@ -13774,6 +14561,373 @@
      "role": null,
      "spreadBucket": "15+",
      "pick": "Under"
+    }
+   ],
+   "status": "open",
+   "result": null
+  },
+  "375154": {
+   "gameId": "375154",
+   "espnEventId": "401921107",
+   "day": "2026-11-20",
+   "date": "2026-11-21T00:00:00.000Z",
+   "home": "Eastern Kentucky",
+   "away": "Bellarmine",
+   "neutralSite": false,
+   "backfilled": false,
+   "capturedAt": "2026-11-20T08:32:07.861Z",
+   "line": {
+    "source": "pregame-scoreboard",
+    "capturedAt": "2026-11-20T08:32:07.861Z",
+    "book": "DraftKings",
+    "spread": -7.5,
+    "total": 144.5,
+    "homeML": -340,
+    "awayML": 270,
+    "homeSpreadOdds": -110,
+    "awaySpreadOdds": -110,
+    "overOdds": -110,
+    "underOdds": -110
+   },
+   "model": {
+    "homeWinProb": 0.8016,
+    "margin": 9.9,
+    "homePts": 84.3,
+    "awayPts": 74.4,
+    "sigma": 11.68,
+    "modelUpdatedAt": "2026-11-19T19:35:43.401Z"
+   },
+   "closing": null,
+   "bets": [
+    {
+     "market": "moneyline",
+     "side": "home",
+     "line": null,
+     "price": -340,
+     "priceAssumed": false,
+     "modelProb": 0.8016,
+     "marketProb": 0.7409,
+     "edge": 0.0607,
+     "role": "favorite",
+     "spreadBucket": "4–7.5",
+     "pick": "Eastern Kentucky"
+    },
+    {
+     "market": "spread",
+     "side": "home",
+     "line": -7.5,
+     "price": -110,
+     "priceAssumed": false,
+     "modelProb": 0.5814,
+     "marketProb": 0.5,
+     "edge": 0.0814,
+     "role": "favorite",
+     "spreadBucket": "4–7.5",
+     "pick": "Eastern Kentucky"
+    },
+    {
+     "market": "total",
+     "side": "over",
+     "line": 144.5,
+     "price": -110,
+     "priceAssumed": false,
+     "modelProb": 0.7991,
+     "marketProb": 0.5,
+     "edge": 0.2991,
+     "role": null,
+     "spreadBucket": "4–7.5",
+     "pick": "Over"
+    }
+   ],
+   "status": "open",
+   "result": null
+  },
+  "375155": {
+   "gameId": "375155",
+   "espnEventId": "401920818",
+   "day": "2026-11-20",
+   "date": "2026-11-21T00:00:00.000Z",
+   "home": "Kennesaw State",
+   "away": "SE Louisiana",
+   "neutralSite": false,
+   "backfilled": false,
+   "capturedAt": "2026-11-20T08:32:07.861Z",
+   "line": {
+    "source": "pregame-scoreboard",
+    "capturedAt": "2026-11-20T08:32:07.861Z",
+    "book": "DraftKings",
+    "spread": -11.5,
+    "total": 154.5,
+    "homeML": -800,
+    "awayML": 550,
+    "homeSpreadOdds": -110,
+    "awaySpreadOdds": -110,
+    "overOdds": -115,
+    "underOdds": -105
+   },
+   "model": {
+    "homeWinProb": 0.8898,
+    "margin": 14.5,
+    "homePts": 85.4,
+    "awayPts": 70.9,
+    "sigma": 11.83,
+    "modelUpdatedAt": "2026-11-19T19:35:43.401Z"
+   },
+   "closing": null,
+   "bets": [
+    {
+     "market": "moneyline",
+     "side": "home",
+     "line": null,
+     "price": -800,
+     "priceAssumed": false,
+     "modelProb": 0.8898,
+     "marketProb": 0.8525,
+     "edge": 0.0373,
+     "role": "favorite",
+     "spreadBucket": "8–14.5",
+     "pick": "Kennesaw State"
+    },
+    {
+     "market": "spread",
+     "side": "home",
+     "line": -11.5,
+     "price": -110,
+     "priceAssumed": false,
+     "modelProb": 0.6001,
+     "marketProb": 0.5,
+     "edge": 0.1001,
+     "role": "favorite",
+     "spreadBucket": "8–14.5",
+     "pick": "Kennesaw State"
+    },
+    {
+     "market": "total",
+     "side": "over",
+     "line": 154.5,
+     "price": -115,
+     "priceAssumed": false,
+     "modelProb": 0.5418,
+     "marketProb": 0.5108,
+     "edge": 0.031,
+     "role": null,
+     "spreadBucket": "8–14.5",
+     "pick": "Over"
+    }
+   ],
+   "status": "open",
+   "result": null
+  },
+  "375156": {
+   "gameId": "375156",
+   "espnEventId": "401920707",
+   "day": "2026-11-20",
+   "date": "2026-11-21T01:00:00.000Z",
+   "home": "Alabama A&M",
+   "away": "Lipscomb",
+   "neutralSite": false,
+   "backfilled": false,
+   "capturedAt": "2026-11-20T08:32:07.861Z",
+   "line": {
+    "source": "pregame-scoreboard",
+    "capturedAt": "2026-11-20T08:32:07.861Z",
+    "book": "DraftKings",
+    "spread": 5.5,
+    "total": 148.5,
+    "homeML": 205,
+    "awayML": -250,
+    "homeSpreadOdds": -105,
+    "awaySpreadOdds": -115,
+    "overOdds": -112,
+    "underOdds": -108
+   },
+   "model": {
+    "homeWinProb": 0.3245,
+    "margin": -5.32,
+    "homePts": 73.1,
+    "awayPts": 78.4,
+    "sigma": 11.68,
+    "modelUpdatedAt": "2026-11-19T19:35:43.401Z"
+   },
+   "closing": null,
+   "bets": [
+    {
+     "market": "moneyline",
+     "side": "away",
+     "line": null,
+     "price": -250,
+     "priceAssumed": false,
+     "modelProb": 0.6755,
+     "marketProb": 0.6854,
+     "edge": -0.0099,
+     "role": "favorite",
+     "spreadBucket": "4–7.5",
+     "pick": "Lipscomb"
+    },
+    {
+     "market": "spread",
+     "side": "home",
+     "line": 5.5,
+     "price": -105,
+     "priceAssumed": false,
+     "modelProb": 0.5061,
+     "marketProb": 0.4892,
+     "edge": 0.017,
+     "role": "underdog",
+     "spreadBucket": "4–7.5",
+     "pick": "Alabama A&M"
+    },
+    {
+     "market": "total",
+     "side": "over",
+     "line": 148.5,
+     "price": -112,
+     "priceAssumed": false,
+     "modelProb": 0.5703,
+     "marketProb": 0.5043,
+     "edge": 0.066,
+     "role": null,
+     "spreadBucket": "4–7.5",
+     "pick": "Over"
+    }
+   ],
+   "status": "open",
+   "result": null
+  },
+  "375157": {
+   "gameId": "375157",
+   "espnEventId": "401920427",
+   "day": "2026-11-20",
+   "date": "2026-11-21T00:00:00.000Z",
+   "home": "Virginia",
+   "away": "Loyola Maryland",
+   "neutralSite": false,
+   "backfilled": false,
+   "capturedAt": "2026-11-20T08:32:07.861Z",
+   "line": {
+    "source": "pregame-scoreboard",
+    "capturedAt": "2026-11-20T08:32:07.861Z",
+    "book": "DraftKings",
+    "spread": -42.5,
+    "total": 150.5,
+    "homeML": null,
+    "awayML": null,
+    "homeSpreadOdds": -108,
+    "awaySpreadOdds": -112,
+    "overOdds": -110,
+    "underOdds": -110
+   },
+   "model": {
+    "homeWinProb": 0.9984,
+    "margin": 34.1,
+    "homePts": 92.9,
+    "awayPts": 58.8,
+    "sigma": 11.6,
+    "modelUpdatedAt": "2026-11-19T19:35:43.401Z"
+   },
+   "closing": null,
+   "bets": [
+    {
+     "market": "spread",
+     "side": "away",
+     "line": 42.5,
+     "price": -112,
+     "priceAssumed": false,
+     "modelProb": 0.7655,
+     "marketProb": 0.5043,
+     "edge": 0.2612,
+     "role": "underdog",
+     "spreadBucket": "15+",
+     "pick": "Loyola Maryland"
+    },
+    {
+     "market": "total",
+     "side": "over",
+     "line": 150.5,
+     "price": -110,
+     "priceAssumed": false,
+     "modelProb": 0.5284,
+     "marketProb": 0.5,
+     "edge": 0.0284,
+     "role": null,
+     "spreadBucket": "15+",
+     "pick": "Over"
+    }
+   ],
+   "status": "open",
+   "result": null
+  },
+  "375158": {
+   "gameId": "375158",
+   "espnEventId": "401920357",
+   "day": "2026-11-20",
+   "date": "2026-11-21T00:00:00.000Z",
+   "home": "Holy Cross",
+   "away": "Harvard",
+   "neutralSite": false,
+   "backfilled": false,
+   "capturedAt": "2026-11-20T08:32:07.861Z",
+   "line": {
+    "source": "pregame-scoreboard",
+    "capturedAt": "2026-11-20T08:32:07.861Z",
+    "book": "DraftKings",
+    "spread": 12.5,
+    "total": 135.5,
+    "homeML": 650,
+    "awayML": -1000,
+    "homeSpreadOdds": -110,
+    "awaySpreadOdds": -110,
+    "overOdds": -108,
+    "underOdds": -112
+   },
+   "model": {
+    "homeWinProb": 0.2688,
+    "margin": -7.11,
+    "homePts": 65.5,
+    "awayPts": 72.7,
+    "sigma": 11.54,
+    "modelUpdatedAt": "2026-11-19T19:35:43.401Z"
+   },
+   "closing": null,
+   "bets": [
+    {
+     "market": "moneyline",
+     "side": "away",
+     "line": null,
+     "price": -1000,
+     "priceAssumed": false,
+     "modelProb": 0.7312,
+     "marketProb": 0.8721,
+     "edge": -0.1409,
+     "role": "favorite",
+     "spreadBucket": "8–14.5",
+     "pick": "Harvard"
+    },
+    {
+     "market": "spread",
+     "side": "home",
+     "line": 12.5,
+     "price": -110,
+     "priceAssumed": false,
+     "modelProb": 0.6798,
+     "marketProb": 0.5,
+     "edge": 0.1798,
+     "role": "underdog",
+     "spreadBucket": "8–14.5",
+     "pick": "Holy Cross"
+    },
+    {
+     "market": "total",
+     "side": "over",
+     "line": 135.5,
+     "price": -108,
+     "priceAssumed": false,
+     "modelProb": 0.5641,
+     "marketProb": 0.4957,
+     "edge": 0.0684,
+     "role": null,
+     "spreadBucket": "8–14.5",
+     "pick": "Over"
     }
    ],
    "status": "open",
@@ -13926,6 +15080,69 @@
      "role": null,
      "spreadBucket": "4–7.5",
      "pick": "Over"
+    }
+   ],
+   "status": "open",
+   "result": null
+  },
+  "375161": {
+   "gameId": "375161",
+   "espnEventId": "401919784",
+   "day": "2026-11-20",
+   "date": "2026-11-21T01:00:00.000Z",
+   "home": "Missouri",
+   "away": "Le Moyne",
+   "neutralSite": false,
+   "backfilled": false,
+   "capturedAt": "2026-11-20T08:32:07.861Z",
+   "line": {
+    "source": "pregame-scoreboard",
+    "capturedAt": "2026-11-20T08:32:07.861Z",
+    "book": "DraftKings",
+    "spread": -36.5,
+    "total": 155.5,
+    "homeML": null,
+    "awayML": null,
+    "homeSpreadOdds": -110,
+    "awaySpreadOdds": -110,
+    "overOdds": -110,
+    "underOdds": -110
+   },
+   "model": {
+    "homeWinProb": 0.9952,
+    "margin": 30.22,
+    "homePts": 91.6,
+    "awayPts": 61.4,
+    "sigma": 11.66,
+    "modelUpdatedAt": "2026-11-19T19:35:43.401Z"
+   },
+   "closing": null,
+   "bets": [
+    {
+     "market": "spread",
+     "side": "away",
+     "line": 36.5,
+     "price": -110,
+     "priceAssumed": false,
+     "modelProb": 0.7049,
+     "marketProb": 0.5,
+     "edge": 0.2049,
+     "role": "underdog",
+     "spreadBucket": "15+",
+     "pick": "Le Moyne"
+    },
+    {
+     "market": "total",
+     "side": "under",
+     "line": 155.5,
+     "price": -110,
+     "priceAssumed": false,
+     "modelProb": 0.5588,
+     "marketProb": 0.5,
+     "edge": 0.0588,
+     "role": null,
+     "spreadBucket": "15+",
+     "pick": "Under"
     }
    ],
    "status": "open",
@@ -14678,6 +15895,82 @@
    "status": "open",
    "result": null
   },
+  "375176": {
+   "gameId": "375176",
+   "espnEventId": "401925080",
+   "day": "2026-11-20",
+   "date": "2026-11-21T00:30:00.000Z",
+   "home": "Northwestern State",
+   "away": "UT Arlington",
+   "neutralSite": false,
+   "backfilled": false,
+   "capturedAt": "2026-11-20T08:32:07.861Z",
+   "line": {
+    "source": "pregame-scoreboard",
+    "capturedAt": "2026-11-20T08:32:07.861Z",
+    "book": "DraftKings",
+    "spread": 3.5,
+    "total": 146.5,
+    "homeML": 150,
+    "awayML": -180,
+    "homeSpreadOdds": -110,
+    "awaySpreadOdds": -110,
+    "overOdds": -112,
+    "underOdds": -108
+   },
+   "model": {
+    "homeWinProb": 0.3199,
+    "margin": -5.43,
+    "homePts": 69.8,
+    "awayPts": 75.2,
+    "sigma": 11.61,
+    "modelUpdatedAt": "2026-11-19T19:35:43.401Z"
+   },
+   "closing": null,
+   "bets": [
+    {
+     "market": "moneyline",
+     "side": "away",
+     "line": null,
+     "price": -180,
+     "priceAssumed": false,
+     "modelProb": 0.6801,
+     "marketProb": 0.6164,
+     "edge": 0.0637,
+     "role": "favorite",
+     "spreadBucket": "0–3.5",
+     "pick": "UT Arlington"
+    },
+    {
+     "market": "spread",
+     "side": "away",
+     "line": -3.5,
+     "price": -110,
+     "priceAssumed": false,
+     "modelProb": 0.566,
+     "marketProb": 0.5,
+     "edge": 0.066,
+     "role": "favorite",
+     "spreadBucket": "0–3.5",
+     "pick": "UT Arlington"
+    },
+    {
+     "market": "total",
+     "side": "under",
+     "line": 146.5,
+     "price": -108,
+     "priceAssumed": false,
+     "modelProb": 0.5355,
+     "marketProb": 0.4957,
+     "edge": 0.0398,
+     "role": null,
+     "spreadBucket": "0–3.5",
+     "pick": "Under"
+    }
+   ],
+   "status": "open",
+   "result": null
+  },
   "375177": {
    "gameId": "375177",
    "espnEventId": "401920137",
@@ -14746,6 +16039,82 @@
      "modelProb": 0.5924,
      "marketProb": 0.5043,
      "edge": 0.0881,
+     "role": null,
+     "spreadBucket": "0–3.5",
+     "pick": "Over"
+    }
+   ],
+   "status": "open",
+   "result": null
+  },
+  "375206": {
+   "gameId": "375206",
+   "espnEventId": "401919827",
+   "day": "2026-11-20",
+   "date": "2026-11-20T22:30:00.000Z",
+   "home": "Canisius",
+   "away": "Mercyhurst",
+   "neutralSite": false,
+   "backfilled": false,
+   "capturedAt": "2026-11-20T08:32:07.861Z",
+   "line": {
+    "source": "pregame-scoreboard",
+    "capturedAt": "2026-11-20T08:32:07.861Z",
+    "book": "DraftKings",
+    "spread": 2.5,
+    "total": 134.5,
+    "homeML": 120,
+    "awayML": -142,
+    "homeSpreadOdds": -110,
+    "awaySpreadOdds": -110,
+    "overOdds": -108,
+    "underOdds": -112
+   },
+   "model": {
+    "homeWinProb": 0.405,
+    "margin": -2.78,
+    "homePts": 66.6,
+    "awayPts": 69.3,
+    "sigma": 11.56,
+    "modelUpdatedAt": "2026-11-19T19:35:43.401Z"
+   },
+   "closing": null,
+   "bets": [
+    {
+     "market": "moneyline",
+     "side": "away",
+     "line": null,
+     "price": -142,
+     "priceAssumed": false,
+     "modelProb": 0.595,
+     "marketProb": 0.5635,
+     "edge": 0.0315,
+     "role": "favorite",
+     "spreadBucket": "0–3.5",
+     "pick": "Mercyhurst"
+    },
+    {
+     "market": "spread",
+     "side": "away",
+     "line": -2.5,
+     "price": -110,
+     "priceAssumed": false,
+     "modelProb": 0.5097,
+     "marketProb": 0.5,
+     "edge": 0.0097,
+     "role": "favorite",
+     "spreadBucket": "0–3.5",
+     "pick": "Mercyhurst"
+    },
+    {
+     "market": "total",
+     "side": "over",
+     "line": 134.5,
+     "price": -108,
+     "priceAssumed": false,
+     "modelProb": 0.5333,
+     "marketProb": 0.4957,
+     "edge": 0.0376,
      "role": null,
      "spreadBucket": "0–3.5",
      "pick": "Over"
@@ -16406,7 +17775,19 @@
     "sigma": 11.69,
     "modelUpdatedAt": "2026-11-18T19:30:37.932Z"
    },
-   "closing": null,
+   "closing": {
+    "source": "closing-summary",
+    "capturedAt": "2026-11-20T08:32:07.861Z",
+    "book": "DraftKings",
+    "spread": -7.5,
+    "total": 144.5,
+    "homeML": -325,
+    "awayML": 260,
+    "homeSpreadOdds": -108,
+    "awaySpreadOdds": -112,
+    "overOdds": -112,
+    "underOdds": -108
+   },
    "bets": [
     {
      "market": "spread",
@@ -16419,7 +17800,10 @@
      "edge": 0.1,
      "role": "favorite",
      "spreadBucket": "4–7.5",
-     "pick": "Toledo"
+     "pick": "Toledo",
+     "result": "loss",
+     "profit": -1,
+     "clv": 0
     },
     {
      "market": "total",
@@ -16432,11 +17816,18 @@
      "edge": 0.0297,
      "role": null,
      "spreadBucket": "4–7.5",
-     "pick": "Over"
+     "pick": "Over",
+     "result": "win",
+     "profit": 0.9524,
+     "clv": 0
     }
    ],
-   "status": "open",
-   "result": null
+   "status": "settled",
+   "result": {
+    "homeScore": 83,
+    "awayScore": 76
+   },
+   "settledAt": "2026-11-20T08:32:07.861Z"
   },
   "378064": {
    "gameId": "378064",
@@ -16469,7 +17860,19 @@
     "sigma": 11.87,
     "modelUpdatedAt": "2026-11-18T19:30:37.932Z"
    },
-   "closing": null,
+   "closing": {
+    "source": "closing-summary",
+    "capturedAt": "2026-11-20T08:32:07.861Z",
+    "book": "DraftKings",
+    "spread": 1.5,
+    "total": 148.5,
+    "homeML": 110,
+    "awayML": -130,
+    "homeSpreadOdds": -115,
+    "awaySpreadOdds": -105,
+    "overOdds": -105,
+    "underOdds": -115
+   },
    "bets": [
     {
      "market": "moneyline",
@@ -16482,7 +17885,10 @@
      "edge": 0.0208,
      "role": "favorite",
      "spreadBucket": "0–3.5",
-     "pick": "UC Santa Barbara"
+     "pick": "UC Santa Barbara",
+     "result": "win",
+     "profit": 0.6452,
+     "clv": -0.0403
     },
     {
      "market": "spread",
@@ -16495,7 +17901,10 @@
      "edge": 0.0019,
      "role": "underdog",
      "spreadBucket": "0–3.5",
-     "pick": "Pepperdine"
+     "pick": "Pepperdine",
+     "result": "loss",
+     "profit": -1,
+     "clv": 2
     },
     {
      "market": "total",
@@ -16508,11 +17917,18 @@
      "edge": 0.1077,
      "role": null,
      "spreadBucket": "0–3.5",
-     "pick": "Over"
+     "pick": "Over",
+     "result": "win",
+     "profit": 0.8929,
+     "clv": -2
     }
    ],
-   "status": "open",
-   "result": null
+   "status": "settled",
+   "result": {
+    "homeScore": 80,
+    "awayScore": 88
+   },
+   "settledAt": "2026-11-20T08:32:07.861Z"
   },
   "378065": {
    "gameId": "378065",
@@ -16545,7 +17961,19 @@
     "sigma": 11.88,
     "modelUpdatedAt": "2026-11-18T19:30:37.932Z"
    },
-   "closing": null,
+   "closing": {
+    "source": "closing-summary",
+    "capturedAt": "2026-11-20T08:32:07.861Z",
+    "book": "DraftKings",
+    "spread": -1.5,
+    "total": 158.5,
+    "homeML": -130,
+    "awayML": 110,
+    "homeSpreadOdds": -112,
+    "awaySpreadOdds": -108,
+    "overOdds": -108,
+    "underOdds": -112
+   },
    "bets": [
     {
      "market": "moneyline",
@@ -16558,7 +17986,10 @@
      "edge": 0.0601,
      "role": "underdog",
      "spreadBucket": "0–3.5",
-     "pick": "Charleston"
+     "pick": "Charleston",
+     "result": "loss",
+     "profit": -1,
+     "clv": -0.0319
     },
     {
      "market": "spread",
@@ -16571,7 +18002,10 @@
      "edge": 0.0987,
      "role": "underdog",
      "spreadBucket": "0–3.5",
-     "pick": "Charleston"
+     "pick": "Charleston",
+     "result": "loss",
+     "profit": -1,
+     "clv": 0
     },
     {
      "market": "total",
@@ -16584,11 +18018,18 @@
      "edge": 0.0188,
      "role": null,
      "spreadBucket": "0–3.5",
-     "pick": "Under"
+     "pick": "Under",
+     "result": "win",
+     "profit": 0.8929,
+     "clv": 0
     }
    ],
-   "status": "open",
-   "result": null
+   "status": "settled",
+   "result": {
+    "homeScore": 86,
+    "awayScore": 70
+   },
+   "settledAt": "2026-11-20T08:32:07.861Z"
   },
   "378067": {
    "gameId": "378067",
@@ -16621,7 +18062,19 @@
     "sigma": 11.83,
     "modelUpdatedAt": "2026-11-18T19:30:37.932Z"
    },
-   "closing": null,
+   "closing": {
+    "source": "closing-summary",
+    "capturedAt": "2026-11-20T08:32:07.861Z",
+    "book": "DraftKings",
+    "spread": 1.5,
+    "total": 143.5,
+    "homeML": 110,
+    "awayML": -130,
+    "homeSpreadOdds": -110,
+    "awaySpreadOdds": -110,
+    "overOdds": -115,
+    "underOdds": -105
+   },
    "bets": [
     {
      "market": "spread",
@@ -16634,7 +18087,10 @@
      "edge": 0.1074,
      "role": "underdog",
      "spreadBucket": "0–3.5",
-     "pick": "Grambling"
+     "pick": "Grambling",
+     "result": "loss",
+     "profit": -1,
+     "clv": 0
     },
     {
      "market": "total",
@@ -16647,11 +18103,18 @@
      "edge": 0.0147,
      "role": null,
      "spreadBucket": "0–3.5",
-     "pick": "Under"
+     "pick": "Under",
+     "result": "loss",
+     "profit": -1,
+     "clv": 5
     }
    ],
-   "status": "open",
-   "result": null
+   "status": "settled",
+   "result": {
+    "homeScore": 100,
+    "awayScore": 103
+   },
+   "settledAt": "2026-11-20T08:32:07.861Z"
   },
   "378071": {
    "gameId": "378071",
@@ -16684,7 +18147,19 @@
     "sigma": 11.85,
     "modelUpdatedAt": "2026-11-18T19:30:37.932Z"
    },
-   "closing": null,
+   "closing": {
+    "source": "closing-summary",
+    "capturedAt": "2026-11-20T08:32:07.861Z",
+    "book": "DraftKings",
+    "spread": -1.5,
+    "total": 160.5,
+    "homeML": -125,
+    "awayML": 105,
+    "homeSpreadOdds": -108,
+    "awaySpreadOdds": -112,
+    "overOdds": -110,
+    "underOdds": -110
+   },
    "bets": [
     {
      "market": "moneyline",
@@ -16697,7 +18172,10 @@
      "edge": -0.0406,
      "role": "favorite",
      "spreadBucket": "0–3.5",
-     "pick": "Oregon"
+     "pick": "Oregon",
+     "result": "loss",
+     "profit": -1,
+     "clv": -0.0671
     },
     {
      "market": "spread",
@@ -16710,7 +18188,10 @@
      "edge": 0.0423,
      "role": "underdog",
      "spreadBucket": "0–3.5",
-     "pick": "Oregon State"
+     "pick": "Oregon State",
+     "result": "win",
+     "profit": 0.9804,
+     "clv": 1
     },
     {
      "market": "total",
@@ -16723,11 +18204,18 @@
      "edge": 0.0762,
      "role": null,
      "spreadBucket": "0–3.5",
-     "pick": "Over"
+     "pick": "Over",
+     "result": "loss",
+     "profit": -1,
+     "clv": -4
     }
    ],
-   "status": "open",
-   "result": null
+   "status": "settled",
+   "result": {
+    "homeScore": 71,
+    "awayScore": 82
+   },
+   "settledAt": "2026-11-20T08:32:07.861Z"
   },
   "378072": {
    "gameId": "378072",
@@ -16760,7 +18248,19 @@
     "sigma": 11.8,
     "modelUpdatedAt": "2026-11-18T19:30:37.932Z"
    },
-   "closing": null,
+   "closing": {
+    "source": "closing-summary",
+    "capturedAt": "2026-11-20T08:32:07.861Z",
+    "book": "DraftKings",
+    "spread": -28.5,
+    "total": 159.5,
+    "homeML": -100000,
+    "awayML": 5000,
+    "homeSpreadOdds": -110,
+    "awaySpreadOdds": -110,
+    "overOdds": -105,
+    "underOdds": -115
+   },
    "bets": [
     {
      "market": "spread",
@@ -16773,7 +18273,10 @@
      "edge": 0.0763,
      "role": "underdog",
      "spreadBucket": "15+",
-     "pick": "Tarleton State"
+     "pick": "Tarleton State",
+     "result": "loss",
+     "profit": -1,
+     "clv": -1
     },
     {
      "market": "total",
@@ -16786,11 +18289,18 @@
      "edge": 0.1545,
      "role": null,
      "spreadBucket": "15+",
-     "pick": "Under"
+     "pick": "Under",
+     "result": "win",
+     "profit": 0.9524,
+     "clv": 0
     }
    ],
-   "status": "open",
-   "result": null
+   "status": "settled",
+   "result": {
+    "homeScore": 96,
+    "awayScore": 51
+   },
+   "settledAt": "2026-11-20T08:32:07.861Z"
   },
   "378073": {
    "gameId": "378073",
@@ -17603,7 +19113,19 @@
     "sigma": 11.66,
     "modelUpdatedAt": "2026-11-19T19:35:43.401Z"
    },
-   "closing": null,
+   "closing": {
+    "source": "closing-summary",
+    "capturedAt": "2026-11-20T08:32:07.861Z",
+    "book": "DraftKings",
+    "spread": 2.5,
+    "total": 157.5,
+    "homeML": 130,
+    "awayML": -155,
+    "homeSpreadOdds": -105,
+    "awaySpreadOdds": -115,
+    "overOdds": -110,
+    "underOdds": -110
+   },
    "bets": [
     {
      "market": "moneyline",
@@ -17616,7 +19138,10 @@
      "edge": 0.0422,
      "role": "favorite",
      "spreadBucket": "0–3.5",
-     "pick": "Rutgers"
+     "pick": "Rutgers",
+     "result": "win",
+     "profit": 0.6757,
+     "clv": 0.0109
     },
     {
      "market": "spread",
@@ -17629,7 +19154,10 @@
      "edge": 0.0196,
      "role": "favorite",
      "spreadBucket": "0–3.5",
-     "pick": "Rutgers"
+     "pick": "Rutgers",
+     "result": "win",
+     "profit": 0.8696,
+     "clv": 0
     },
     {
      "market": "total",
@@ -17642,11 +19170,18 @@
      "edge": 0.1453,
      "role": null,
      "spreadBucket": "0–3.5",
-     "pick": "Over"
+     "pick": "Over",
+     "result": "win",
+     "profit": 0.9091,
+     "clv": 0
     }
    ],
-   "status": "open",
-   "result": null
+   "status": "settled",
+   "result": {
+    "homeScore": 70,
+    "awayScore": 89
+   },
+   "settledAt": "2026-11-20T08:32:07.861Z"
   },
   "378688": {
    "gameId": "378688",
@@ -17777,7 +19312,19 @@
     "sigma": 11.68,
     "modelUpdatedAt": "2026-11-19T19:35:43.401Z"
    },
-   "closing": null,
+   "closing": {
+    "source": "closing-summary",
+    "capturedAt": "2026-11-20T08:32:07.861Z",
+    "book": "DraftKings",
+    "spread": 3.5,
+    "total": 151.5,
+    "homeML": 140,
+    "awayML": -166,
+    "homeSpreadOdds": -112,
+    "awaySpreadOdds": -108,
+    "overOdds": -108,
+    "underOdds": -112
+   },
    "bets": [
     {
      "market": "moneyline",
@@ -17790,7 +19337,10 @@
      "edge": 0.0157,
      "role": "favorite",
      "spreadBucket": "0–3.5",
-     "pick": "Houston"
+     "pick": "Houston",
+     "result": "win",
+     "profit": 0.6024,
+     "clv": 0
     },
     {
      "market": "spread",
@@ -17803,7 +19353,10 @@
      "edge": -0.0016,
      "role": "underdog",
      "spreadBucket": "0–3.5",
-     "pick": "Kansas"
+     "pick": "Kansas",
+     "result": "loss",
+     "profit": -1,
+     "clv": 0
     },
     {
      "market": "total",
@@ -17816,11 +19369,18 @@
      "edge": 0.071,
      "role": null,
      "spreadBucket": "0–3.5",
-     "pick": "Over"
+     "pick": "Over",
+     "result": "win",
+     "profit": 0.8696,
+     "clv": 1
     }
    ],
-   "status": "open",
-   "result": null
+   "status": "settled",
+   "result": {
+    "homeScore": 83,
+    "awayScore": 92
+   },
+   "settledAt": "2026-11-20T08:32:07.861Z"
   }
  },
  "skipped": {
@@ -17831,6 +19391,14 @@
    "reason": "no-line",
    "espnEventId": "401911211",
    "tries": 3
+  },
+  "372869": {
+   "day": "2026-11-19",
+   "home": "American University",
+   "away": "Mary Baldwin",
+   "reason": "no-line",
+   "espnEventId": "401912211",
+   "tries": 1
   },
   "375029": {
    "day": "2026-11-16",
@@ -17992,6 +19560,22 @@
    "espnEventId": "401923394",
    "tries": 3
   },
+  "375138": {
+   "day": "2026-11-19",
+   "home": "SIU Edwardsville",
+   "away": "North Park",
+   "reason": "no-line",
+   "espnEventId": "401926144",
+   "tries": 1
+  },
+  "375143": {
+   "day": "2026-11-19",
+   "home": "Portland State",
+   "away": "Northwest Indian",
+   "reason": "no-line",
+   "espnEventId": "401925916",
+   "tries": 1
+  },
   "378037": {
    "day": "2026-11-16",
    "home": "North Alabama",
@@ -18088,6 +19672,38 @@
    "espnEventId": "401929014",
    "tries": 3
   },
+  "378066": {
+   "day": "2026-11-19",
+   "home": "Northern Kentucky",
+   "away": "Berea",
+   "reason": "no-line",
+   "espnEventId": "401928812",
+   "tries": 1
+  },
+  "378068": {
+   "day": "2026-11-19",
+   "home": "North Alabama",
+   "away": "Tusculum",
+   "reason": "no-line",
+   "espnEventId": "401929373",
+   "tries": 1
+  },
+  "378069": {
+   "day": "2026-11-19",
+   "home": "North Dakota",
+   "away": "Mayville State",
+   "reason": "no-line",
+   "espnEventId": "401929409",
+   "tries": 1
+  },
+  "378070": {
+   "day": "2026-11-19",
+   "home": "Illinois State",
+   "away": "Eureka",
+   "reason": "no-line",
+   "espnEventId": "401927375",
+   "tries": 1
+  },
   "378683": {
    "day": "2026-11-17",
    "home": "Washington",
@@ -18099,43 +19715,43 @@
  },
  "since": "2026-11-16",
  "stats": {
-  "gamesInWindow": 265,
-  "finals": 174,
-  "entries": 203,
-  "liveCaptured": 201,
+  "gamesInWindow": 320,
+  "finals": 208,
+  "entries": 216,
+  "liveCaptured": 214,
   "backfilled": 2,
-  "settled": 140,
-  "open": 63,
+  "settled": 167,
+  "open": 49,
   "void": 0,
-  "withClosing": 138,
-  "noLine": 34,
+  "withClosing": 165,
+  "noLine": 41,
   "unmatched": 0,
   "noPrediction": 0,
-  "awaitingLine": 24,
+  "awaitingLine": 63,
   "awaitingResult": 0
  },
  "summary": {
   "live": {
    "overall": {
-    "bets": 367,
-    "wins": 225,
-    "losses": 142,
+    "bets": 431,
+    "wins": 260,
+    "losses": 171,
     "pushes": 0,
-    "open": 162,
+    "open": 133,
     "void": 0,
-    "units": 25.887,
-    "roi": 0.0705,
+    "units": 26.848,
+    "roi": 0.0623,
     "roiCI": [
-     -0.0205,
-     0.1616
+     -0.0224,
+     0.1469
     ],
-    "winPct": 0.6131,
+    "winPct": 0.6032,
     "winPctCI": [
-     0.5623,
-     0.6615
+     0.5563,
+     0.6483
     ],
-    "breakEvenPct": 0.5776,
-    "avgEdge": 0.0862,
+    "breakEvenPct": 0.5725,
+    "avgEdge": 0.0834,
     "sample": null
    },
    "markets": {
@@ -18144,193 +19760,193 @@
       {
        "key": "all",
        "label": "All bets",
-       "bets": 92,
-       "wins": 69,
-       "losses": 23,
+       "bets": 103,
+       "wins": 75,
+       "losses": 28,
        "pushes": 0,
-       "open": 37,
+       "open": 35,
        "void": 0,
-       "units": 3.815,
-       "roi": 0.0415,
+       "units": 2.341,
+       "roi": 0.0227,
        "roiCI": [
-        -0.1019,
-        0.1849
+        -0.1158,
+        0.1612
        ],
-       "winPct": 0.75,
+       "winPct": 0.7282,
        "winPctCI": [
-        0.6527,
-        0.8272
+        0.6352,
+        0.8047
        ],
-       "breakEvenPct": 0.7363,
-       "avgEdge": 0.018,
-       "sample": "small sample"
+       "breakEvenPct": 0.7247,
+       "avgEdge": 0.0187,
+       "sample": null
       },
       {
        "key": "edge2",
        "label": "Edge ≥ 2 pts",
-       "bets": 38,
-       "wins": 26,
-       "losses": 12,
+       "bets": 44,
+       "wins": 29,
+       "losses": 15,
        "pushes": 0,
-       "open": 21,
+       "open": 22,
        "void": 0,
-       "units": 7.459,
-       "roi": 0.1963,
+       "units": 6.78,
+       "roi": 0.1541,
        "roiCI": [
-        -0.0855,
-        0.4781
+        -0.11,
+        0.4182
        ],
-       "winPct": 0.6842,
+       "winPct": 0.6591,
        "winPctCI": [
-        0.5254,
-        0.8092
+        0.5114,
+        0.7812
        ],
-       "breakEvenPct": 0.5676,
-       "avgEdge": 0.1122,
+       "breakEvenPct": 0.5673,
+       "avgEdge": 0.1047,
        "sample": "small sample"
       },
       {
        "key": "edge5",
        "label": "Edge ≥ 5 pts",
-       "bets": 29,
-       "wins": 18,
-       "losses": 11,
+       "bets": 32,
+       "wins": 19,
+       "losses": 13,
        "pushes": 0,
-       "open": 13,
+       "open": 14,
        "void": 0,
-       "units": 3.633,
-       "roi": 0.1253,
+       "units": 2.633,
+       "roi": 0.0823,
        "roiCI": [
-        -0.2221,
-        0.4726
+        -0.2514,
+        0.4159
        ],
-       "winPct": 0.6207,
+       "winPct": 0.5938,
        "winPctCI": [
-        0.44,
-        0.7731
+        0.4226,
+        0.7448
        ],
-       "breakEvenPct": 0.5394,
-       "avgEdge": 0.1348,
-       "sample": "too few to read"
+       "breakEvenPct": 0.5406,
+       "avgEdge": 0.1299,
+       "sample": "small sample"
       },
       {
        "key": "edge10",
        "label": "Edge ≥ 10 pts",
-       "bets": 16,
-       "wins": 7,
+       "bets": 17,
+       "wins": 8,
        "losses": 9,
        "pushes": 0,
-       "open": 6,
+       "open": 5,
        "void": 0,
-       "units": -2.138,
-       "roi": -0.1336,
+       "units": -1.138,
+       "roi": -0.0669,
        "roiCI": [
-        -0.6619,
-        0.3947
+        -0.5801,
+        0.4462
        ],
-       "winPct": 0.4375,
+       "winPct": 0.4706,
        "winPctCI": [
-        0.231,
-        0.6682
+        0.2616,
+        0.6904
        ],
-       "breakEvenPct": 0.5038,
-       "avgEdge": 0.1793,
+       "breakEvenPct": 0.5035,
+       "avgEdge": 0.1767,
        "sample": "too few to read"
       },
       {
        "key": "favorite",
        "label": "Picked the favorite",
-       "bets": 79,
-       "wins": 63,
-       "losses": 16,
+       "bets": 88,
+       "wins": 68,
+       "losses": 20,
        "pushes": 0,
        "open": 28,
        "void": 0,
-       "units": 2.875,
-       "roi": 0.0364,
+       "units": 1.401,
+       "roi": 0.0159,
        "roiCI": [
-        -0.093,
-        0.1658
+        -0.1118,
+        0.1436
        ],
-       "winPct": 0.7975,
+       "winPct": 0.7727,
        "winPctCI": [
-        0.696,
-        0.8713
+        0.6749,
+        0.8478
        ],
-       "breakEvenPct": 0.7873,
-       "avgEdge": -0.0065,
+       "breakEvenPct": 0.7738,
+       "avgEdge": -0.005,
        "sample": "small sample"
       },
       {
        "key": "underdog",
        "label": "Picked the underdog",
-       "bets": 13,
-       "wins": 6,
-       "losses": 7,
+       "bets": 15,
+       "wins": 7,
+       "losses": 8,
        "pushes": 0,
-       "open": 9,
+       "open": 7,
        "void": 0,
        "units": 0.94,
-       "roi": 0.0723,
+       "roi": 0.0627,
        "roiCI": [
-        -0.5923,
-        0.7369
+        -0.5414,
+        0.6667
        ],
-       "winPct": 0.4615,
+       "winPct": 0.4667,
        "winPctCI": [
-        0.2321,
-        0.7086
+        0.2481,
+        0.6988
        ],
-       "breakEvenPct": 0.4259,
-       "avgEdge": 0.1668,
+       "breakEvenPct": 0.4366,
+       "avgEdge": 0.1576,
        "sample": "too few to read"
       },
       {
        "key": "spread:0–3.5",
        "label": "Spread 0–3.5",
-       "bets": 35,
-       "wins": 22,
-       "losses": 13,
+       "bets": 43,
+       "wins": 26,
+       "losses": 17,
        "pushes": 0,
-       "open": 22,
+       "open": 18,
        "void": 0,
-       "units": 5.081,
-       "roi": 0.1452,
+       "units": 4.004,
+       "roi": 0.0931,
        "roiCI": [
-        -0.1577,
-        0.448
+        -0.1798,
+        0.366
        ],
-       "winPct": 0.6286,
+       "winPct": 0.6047,
        "winPctCI": [
-        0.4634,
-        0.7683
+        0.4558,
+        0.7363
        ],
-       "breakEvenPct": 0.5503,
-       "avgEdge": 0.0772,
+       "breakEvenPct": 0.5559,
+       "avgEdge": 0.0702,
        "sample": "small sample"
       },
       {
        "key": "spread:4–7.5",
        "label": "Spread 4–7.5",
-       "bets": 19,
-       "wins": 14,
-       "losses": 5,
+       "bets": 21,
+       "wins": 15,
+       "losses": 6,
        "pushes": 0,
        "open": 9,
        "void": 0,
-       "units": 2.064,
-       "roi": 0.1086,
+       "units": 1.604,
+       "roi": 0.0764,
        "roiCI": [
-        -0.2334,
-        0.4507
+        -0.2523,
+        0.4051
        ],
-       "winPct": 0.7368,
+       "winPct": 0.7143,
        "winPctCI": [
-        0.5121,
-        0.8819
+        0.5004,
+        0.8619
        ],
-       "breakEvenPct": 0.6586,
-       "avgEdge": 0.0365,
+       "breakEvenPct": 0.6588,
+       "avgEdge": 0.03,
        "sample": "too few to read"
       },
       {
@@ -18340,7 +19956,7 @@
        "wins": 8,
        "losses": 4,
        "pushes": 0,
-       "open": 3,
+       "open": 6,
        "void": 0,
        "units": -2.942,
        "roi": -0.2452,
@@ -18360,32 +19976,32 @@
       {
        "key": "spread:15+",
        "label": "Spread 15+",
-       "bets": 26,
-       "wins": 25,
+       "bets": 27,
+       "wins": 26,
        "losses": 1,
        "pushes": 0,
-       "open": 3,
+       "open": 2,
        "void": 0,
-       "units": -0.387,
-       "roi": -0.0149,
+       "units": -0.325,
+       "roi": -0.012,
        "roiCI": [
-        -0.0925,
-        0.0627
+        -0.0869,
+        0.0629
        ],
-       "winPct": 0.9615,
+       "winPct": 0.963,
        "winPctCI": [
-        0.8111,
-        0.9932
+        0.8172,
+        0.9934
        ],
-       "breakEvenPct": 0.9749,
-       "avgEdge": -0.0444,
+       "breakEvenPct": 0.9736,
+       "avgEdge": -0.0422,
        "sample": "too few to read"
       }
      ],
      "clv": {
-      "bets": 92,
-      "avg": -0.001,
-      "beatPct": 0.3913
+      "bets": 103,
+      "avg": -0.002,
+      "beatPct": 0.3883
      }
     },
     "spread": {
@@ -18393,248 +20009,248 @@
       {
        "key": "all",
        "label": "All bets",
-       "bets": 138,
-       "wins": 79,
-       "losses": 59,
+       "bets": 164,
+       "wins": 90,
+       "losses": 74,
        "pushes": 0,
-       "open": 62,
+       "open": 49,
        "void": 0,
-       "units": 12.425,
-       "roi": 0.09,
+       "units": 7.499,
+       "roi": 0.0457,
        "roiCI": [
-        -0.0678,
-        0.2478
+        -0.0999,
+        0.1914
        ],
-       "winPct": 0.5725,
+       "winPct": 0.5488,
        "winPctCI": [
-        0.4891,
-        0.6519
+        0.4724,
+        0.623
        ],
-       "breakEvenPct": 0.5248,
-       "avgEdge": 0.1399,
+       "breakEvenPct": 0.525,
+       "avgEdge": 0.1311,
        "sample": null
       },
       {
        "key": "edge2",
        "label": "Edge ≥ 2 pts",
-       "bets": 128,
-       "wins": 71,
-       "losses": 57,
+       "bets": 146,
+       "wins": 78,
+       "losses": 68,
        "pushes": 0,
-       "open": 50,
+       "open": 43,
        "void": 0,
-       "units": 7.293,
-       "roi": 0.057,
+       "units": 2.887,
+       "roi": 0.0198,
        "roiCI": [
-        -0.1078,
-        0.2217
+        -0.1353,
+        0.1748
        ],
-       "winPct": 0.5547,
+       "winPct": 0.5342,
        "winPctCI": [
-        0.4682,
-        0.6379
+        0.4535,
+        0.6132
        ],
-       "breakEvenPct": 0.5242,
-       "avgEdge": 0.1495,
+       "breakEvenPct": 0.5238,
+       "avgEdge": 0.1461,
        "sample": null
       },
       {
        "key": "edge5",
        "label": "Edge ≥ 5 pts",
-       "bets": 109,
-       "wins": 60,
-       "losses": 49,
+       "bets": 124,
+       "wins": 66,
+       "losses": 58,
        "pushes": 0,
-       "open": 39,
+       "open": 33,
        "void": 0,
-       "units": 5.373,
-       "roi": 0.0493,
+       "units": 1.987,
+       "roi": 0.016,
        "roiCI": [
-        -0.1296,
-        0.2282
+        -0.1524,
+        0.1844
        ],
-       "winPct": 0.5505,
+       "winPct": 0.5323,
        "winPctCI": [
-        0.4569,
-        0.6405
+        0.4448,
+        0.6178
        ],
-       "breakEvenPct": 0.5247,
-       "avgEdge": 0.1696,
+       "breakEvenPct": 0.5243,
+       "avgEdge": 0.1658,
        "sample": null
       },
       {
        "key": "edge10",
        "label": "Edge ≥ 10 pts",
-       "bets": 79,
-       "wins": 38,
-       "losses": 41,
+       "bets": 87,
+       "wins": 43,
+       "losses": 44,
        "pushes": 0,
-       "open": 24,
+       "open": 22,
        "void": 0,
-       "units": -6.525,
-       "roi": -0.0826,
+       "units": -4.82,
+       "roi": -0.0554,
        "roiCI": [
-        -0.2941,
-        0.1289
+        -0.2574,
+        0.1466
        ],
-       "winPct": 0.481,
+       "winPct": 0.4943,
        "winPctCI": [
-        0.3743,
-        0.5895
+        0.3917,
+        0.5973
        ],
-       "breakEvenPct": 0.5248,
-       "avgEdge": 0.2055,
+       "breakEvenPct": 0.5244,
+       "avgEdge": 0.2047,
        "sample": "small sample"
       },
       {
        "key": "favorite",
        "label": "Picked the favorite",
-       "bets": 31,
-       "wins": 20,
-       "losses": 11,
+       "bets": 40,
+       "wins": 22,
+       "losses": 18,
        "pushes": 0,
-       "open": 22,
+       "open": 20,
        "void": 0,
-       "units": 7.024,
-       "roi": 0.2266,
+       "units": 1.742,
+       "roi": 0.0435,
        "roiCI": [
-        -0.0991,
-        0.5523
+        -0.2528,
+        0.3399
        ],
-       "winPct": 0.6452,
+       "winPct": 0.55,
        "winPctCI": [
-        0.4695,
-        0.7888
+        0.3983,
+        0.6929
        ],
-       "breakEvenPct": 0.5238,
-       "avgEdge": 0.0776,
+       "breakEvenPct": 0.5248,
+       "avgEdge": 0.0695,
        "sample": "small sample"
       },
       {
        "key": "underdog",
        "label": "Picked the underdog",
-       "bets": 107,
-       "wins": 59,
-       "losses": 48,
+       "bets": 124,
+       "wins": 68,
+       "losses": 56,
        "pushes": 0,
-       "open": 40,
+       "open": 29,
        "void": 0,
-       "units": 5.401,
-       "roi": 0.0505,
+       "units": 5.758,
+       "roi": 0.0464,
        "roiCI": [
-        -0.13,
-        0.2309
+        -0.1215,
+        0.2143
        ],
-       "winPct": 0.5514,
+       "winPct": 0.5484,
        "winPctCI": [
-        0.457,
-        0.6422
+        0.4607,
+        0.6332
        ],
-       "breakEvenPct": 0.5251,
-       "avgEdge": 0.1581,
+       "breakEvenPct": 0.525,
+       "avgEdge": 0.1512,
        "sample": null
       },
       {
        "key": "spread:0–3.5",
        "label": "Spread 0–3.5",
-       "bets": 35,
-       "wins": 23,
-       "losses": 12,
+       "bets": 46,
+       "wins": 27,
+       "losses": 19,
        "pushes": 0,
-       "open": 25,
+       "open": 18,
        "void": 0,
-       "units": 8.683,
-       "roi": 0.2481,
+       "units": 5.383,
+       "roi": 0.117,
        "roiCI": [
-        -0.0551,
-        0.5512
+        -0.1569,
+        0.3909
        ],
-       "winPct": 0.6571,
+       "winPct": 0.587,
        "winPctCI": [
-        0.4915,
-        0.7917
+        0.4434,
+        0.7171
        ],
-       "breakEvenPct": 0.5276,
-       "avgEdge": 0.0823,
+       "breakEvenPct": 0.5272,
+       "avgEdge": 0.0751,
        "sample": "small sample"
       },
       {
        "key": "spread:4–7.5",
        "label": "Spread 4–7.5",
-       "bets": 19,
-       "wins": 7,
-       "losses": 12,
+       "bets": 23,
+       "wins": 9,
+       "losses": 14,
        "pushes": 0,
-       "open": 11,
+       "open": 9,
        "void": 0,
-       "units": -5.661,
-       "roi": -0.298,
+       "units": -5.905,
+       "roi": -0.2567,
        "roiCI": [
-        -0.7227,
-        0.1268
+        -0.6442,
+        0.1308
        ],
-       "winPct": 0.3684,
+       "winPct": 0.3913,
        "winPctCI": [
-        0.1915,
-        0.5896
+        0.2216,
+        0.5921
        ],
-       "breakEvenPct": 0.5226,
-       "avgEdge": 0.1167,
+       "breakEvenPct": 0.5241,
+       "avgEdge": 0.1035,
        "sample": "too few to read"
       },
       {
        "key": "spread:8–14.5",
        "label": "Spread 8–14.5",
-       "bets": 25,
-       "wins": 14,
-       "losses": 11,
+       "bets": 29,
+       "wins": 16,
+       "losses": 13,
        "pushes": 0,
-       "open": 9,
+       "open": 8,
        "void": 0,
-       "units": 1.776,
-       "roi": 0.071,
+       "units": 1.578,
+       "roi": 0.0544,
        "roiCI": [
-        -0.3091,
-        0.4512
+        -0.2979,
+        0.4067
        ],
-       "winPct": 0.56,
+       "winPct": 0.5517,
        "winPctCI": [
-        0.3707,
-        0.7333
+        0.3755,
+        0.7159
        ],
-       "breakEvenPct": 0.5227,
-       "avgEdge": 0.1002,
+       "breakEvenPct": 0.5223,
+       "avgEdge": 0.0957,
        "sample": "too few to read"
       },
       {
        "key": "spread:15+",
        "label": "Spread 15+",
-       "bets": 59,
-       "wins": 35,
-       "losses": 24,
+       "bets": 66,
+       "wins": 38,
+       "losses": 28,
        "pushes": 0,
-       "open": 17,
+       "open": 14,
        "void": 0,
-       "units": 7.627,
-       "roi": 0.1293,
+       "units": 6.443,
+       "roi": 0.0976,
        "roiCI": [
-        -0.1115,
-        0.37
+        -0.1315,
+        0.3267
        ],
-       "winPct": 0.5932,
+       "winPct": 0.5758,
        "winPctCI": [
-        0.4659,
-        0.7091
+        0.4556,
+        0.6876
        ],
        "breakEvenPct": 0.5249,
-       "avgEdge": 0.1976,
+       "avgEdge": 0.1949,
        "sample": "small sample"
       }
      ],
      "clv": {
-      "bets": 138,
-      "avg": 0.493,
-      "beatPct": 0.4638
+      "bets": 164,
+      "avg": 0.53,
+      "beatPct": 0.4573
      }
     },
     "total": {
@@ -18642,248 +20258,248 @@
       {
        "key": "all",
        "label": "All bets",
-       "bets": 137,
-       "wins": 77,
-       "losses": 60,
+       "bets": 164,
+       "wins": 95,
+       "losses": 69,
        "pushes": 0,
-       "open": 63,
+       "open": 49,
        "void": 0,
-       "units": 9.647,
-       "roi": 0.0704,
+       "units": 17.008,
+       "roi": 0.1037,
        "roiCI": [
-        -0.0884,
-        0.2293
+        -0.0407,
+        0.2482
        ],
-       "winPct": 0.562,
+       "winPct": 0.5793,
        "winPctCI": [
-        0.4784,
-        0.6423
+        0.5027,
+        0.6522
        ],
-       "breakEvenPct": 0.5242,
-       "avgEdge": 0.0782,
+       "breakEvenPct": 0.5244,
+       "avgEdge": 0.0767,
        "sample": null
       },
       {
        "key": "edge2",
        "label": "Edge ≥ 2 pts",
-       "bets": 115,
-       "wins": 64,
-       "losses": 51,
+       "bets": 135,
+       "wins": 79,
+       "losses": 56,
        "pushes": 0,
-       "open": 51,
+       "open": 44,
        "void": 0,
-       "units": 6.985,
-       "roi": 0.0607,
+       "units": 15.634,
+       "roi": 0.1158,
        "roiCI": [
-        -0.1131,
-        0.2346
+        -0.0433,
+        0.2749
        ],
-       "winPct": 0.5565,
+       "winPct": 0.5852,
        "winPctCI": [
-        0.4654,
-        0.644
+        0.5008,
+        0.6648
        ],
-       "breakEvenPct": 0.5236,
-       "avgEdge": 0.0919,
+       "breakEvenPct": 0.5237,
+       "avgEdge": 0.0914,
        "sample": null
       },
       {
        "key": "edge5",
        "label": "Edge ≥ 5 pts",
-       "bets": 83,
-       "wins": 45,
-       "losses": 38,
+       "bets": 96,
+       "wins": 56,
+       "losses": 40,
        "pushes": 0,
-       "open": 36,
+       "open": 31,
        "void": 0,
-       "units": 2.738,
-       "roi": 0.033,
+       "units": 10.787,
+       "roi": 0.1124,
        "roiCI": [
-        -0.1725,
-        0.2385
+        -0.0767,
+        0.3015
        ],
-       "winPct": 0.5422,
+       "winPct": 0.5833,
        "winPctCI": [
-        0.4355,
-        0.6451
+        0.4834,
+        0.6769
        ],
        "breakEvenPct": 0.5236,
-       "avgEdge": 0.1133,
+       "avgEdge": 0.114,
        "sample": "small sample"
       },
       {
        "key": "edge10",
        "label": "Edge ≥ 10 pts",
-       "bets": 41,
-       "wins": 23,
-       "losses": 18,
+       "bets": 50,
+       "wins": 31,
+       "losses": 19,
        "pushes": 0,
-       "open": 23,
+       "open": 16,
        "void": 0,
-       "units": 2.93,
-       "roi": 0.0715,
+       "units": 9.247,
+       "roi": 0.1849,
        "roiCI": [
-        -0.2224,
-        0.3653
+        -0.0749,
+        0.4448
        ],
-       "winPct": 0.561,
+       "winPct": 0.62,
        "winPctCI": [
-        0.4104,
-        0.7011
+        0.4815,
+        0.7414
        ],
-       "breakEvenPct": 0.5232,
-       "avgEdge": 0.1484,
+       "breakEvenPct": 0.5233,
+       "avgEdge": 0.1462,
        "sample": "small sample"
       },
       {
        "key": "over",
        "label": "Over",
-       "bets": 77,
-       "wins": 47,
-       "losses": 30,
+       "bets": 92,
+       "wins": 58,
+       "losses": 34,
        "pushes": 0,
-       "open": 42,
+       "open": 38,
        "void": 0,
-       "units": 12.603,
-       "roi": 0.1637,
+       "units": 18.536,
+       "roi": 0.2015,
        "roiCI": [
-        -0.0454,
-        0.3728
+        0.0124,
+        0.3905
        ],
-       "winPct": 0.6104,
+       "winPct": 0.6304,
        "winPctCI": [
-        0.4987,
-        0.7116
+        0.5284,
+        0.722
        ],
-       "breakEvenPct": 0.5243,
-       "avgEdge": 0.0885,
+       "breakEvenPct": 0.5245,
+       "avgEdge": 0.0874,
        "sample": "small sample"
       },
       {
        "key": "under",
        "label": "Under",
-       "bets": 60,
-       "wins": 30,
-       "losses": 30,
+       "bets": 72,
+       "wins": 37,
+       "losses": 35,
        "pushes": 0,
-       "open": 21,
+       "open": 11,
        "void": 0,
-       "units": -2.956,
-       "roi": -0.0493,
+       "units": -1.528,
+       "roi": -0.0212,
        "roiCI": [
-        -0.2919,
-        0.1934
+        -0.2427,
+        0.2003
        ],
-       "winPct": 0.5,
+       "winPct": 0.5139,
        "winPctCI": [
-        0.3773,
-        0.6227
+        0.4007,
+        0.6257
        ],
        "breakEvenPct": 0.5242,
-       "avgEdge": 0.065,
+       "avgEdge": 0.0631,
        "sample": "small sample"
       },
       {
        "key": "spread:0–3.5",
        "label": "Spread 0–3.5",
-       "bets": 35,
-       "wins": 22,
-       "losses": 13,
+       "bets": 46,
+       "wins": 30,
+       "losses": 16,
        "pushes": 0,
-       "open": 25,
+       "open": 18,
        "void": 0,
-       "units": 7.02,
-       "roi": 0.2006,
+       "units": 11.222,
+       "roi": 0.244,
        "roiCI": [
-        -0.1097,
-        0.5109
+        -0.0216,
+        0.5095
        ],
-       "winPct": 0.6286,
+       "winPct": 0.6522,
        "winPctCI": [
-        0.4634,
-        0.7683
+        0.5077,
+        0.7732
        ],
-       "breakEvenPct": 0.5239,
-       "avgEdge": 0.0726,
+       "breakEvenPct": 0.5243,
+       "avgEdge": 0.0739,
        "sample": "small sample"
       },
       {
        "key": "spread:4–7.5",
        "label": "Spread 4–7.5",
-       "bets": 19,
-       "wins": 11,
-       "losses": 8,
+       "bets": 23,
+       "wins": 14,
+       "losses": 9,
        "pushes": 0,
-       "open": 11,
+       "open": 9,
        "void": 0,
-       "units": 1.9,
-       "roi": 0.1,
+       "units": 3.631,
+       "roi": 0.1579,
        "roiCI": [
-        -0.3335,
-        0.5334
+        -0.2302,
+        0.5459
        ],
-       "winPct": 0.5789,
+       "winPct": 0.6087,
        "winPctCI": [
-        0.3628,
-        0.7686
+        0.4079,
+        0.7784
        ],
-       "breakEvenPct": 0.5257,
-       "avgEdge": 0.0831,
+       "breakEvenPct": 0.5254,
+       "avgEdge": 0.0787,
        "sample": "too few to read"
       },
       {
        "key": "spread:8–14.5",
        "label": "Spread 8–14.5",
-       "bets": 25,
-       "wins": 10,
-       "losses": 15,
+       "bets": 29,
+       "wins": 11,
+       "losses": 18,
        "pushes": 0,
-       "open": 9,
+       "open": 8,
        "void": 0,
-       "units": -6.042,
-       "roi": -0.2417,
+       "units": -8.149,
+       "roi": -0.281,
        "roiCI": [
-        -0.6134,
-        0.13
+        -0.6218,
+        0.0598
        ],
-       "winPct": 0.4,
+       "winPct": 0.3793,
        "winPctCI": [
-        0.234,
-        0.5926
+        0.2269,
+        0.56
        ],
-       "breakEvenPct": 0.5252,
-       "avgEdge": 0.0697,
+       "breakEvenPct": 0.526,
+       "avgEdge": 0.0685,
        "sample": "too few to read"
       },
       {
        "key": "spread:15+",
        "label": "Spread 15+",
-       "bets": 58,
-       "wins": 34,
-       "losses": 24,
+       "bets": 65,
+       "wins": 40,
+       "losses": 25,
        "pushes": 0,
-       "open": 17,
+       "open": 14,
        "void": 0,
-       "units": 6.769,
-       "roi": 0.1167,
+       "units": 11.304,
+       "roi": 0.1739,
        "roiCI": [
-        -0.127,
-        0.3604
+        -0.0536,
+        0.4014
        ],
-       "winPct": 0.5862,
+       "winPct": 0.6154,
        "winPctCI": [
-        0.458,
-        0.7037
+        0.4938,
+        0.7241
        ],
-       "breakEvenPct": 0.5236,
-       "avgEdge": 0.0837,
+       "breakEvenPct": 0.5234,
+       "avgEdge": 0.0826,
        "sample": "small sample"
       }
      ],
      "clv": {
-      "bets": 137,
-      "avg": 0.255,
-      "beatPct": 0.4672
+      "bets": 164,
+      "avg": 0.238,
+      "beatPct": 0.4573
      }
     }
    }
@@ -19554,5 +21170,5 @@
    }
   }
  },
- "updatedAt": "2026-11-20T00:36:54.851Z"
+ "updatedAt": "2026-11-20T08:32:07.861Z"
 }
