@@ -19381,6 +19381,158 @@
     "awayScore": 92
    },
    "settledAt": "2026-11-20T08:32:07.861Z"
+  },
+  "378691": {
+   "gameId": "378691",
+   "espnEventId": "401921692",
+   "day": "2026-11-20",
+   "date": "2026-11-21T00:00:00.000Z",
+   "home": "Murray State",
+   "away": "Wisconsin",
+   "neutralSite": true,
+   "backfilled": false,
+   "capturedAt": "2026-11-20T19:15:56.156Z",
+   "line": {
+    "source": "pregame-scoreboard",
+    "capturedAt": "2026-11-20T19:15:56.156Z",
+    "book": "DraftKings",
+    "spread": 3.5,
+    "total": 162.5,
+    "homeML": 145,
+    "awayML": -175,
+    "homeSpreadOdds": -110,
+    "awaySpreadOdds": -110,
+    "overOdds": -115,
+    "underOdds": -105
+   },
+   "model": {
+    "homeWinProb": 0.3943,
+    "margin": -3.13,
+    "homePts": 80,
+    "awayPts": 83.1,
+    "sigma": 11.69,
+    "modelUpdatedAt": "2026-11-20T19:14:19.749Z"
+   },
+   "closing": null,
+   "bets": [
+    {
+     "market": "moneyline",
+     "side": "away",
+     "line": null,
+     "price": -175,
+     "priceAssumed": false,
+     "modelProb": 0.6057,
+     "marketProb": 0.6092,
+     "edge": -0.0035,
+     "role": "favorite",
+     "spreadBucket": "0–3.5",
+     "pick": "Wisconsin"
+    },
+    {
+     "market": "spread",
+     "side": "home",
+     "line": 3.5,
+     "price": -110,
+     "priceAssumed": false,
+     "modelProb": 0.5126,
+     "marketProb": 0.5,
+     "edge": 0.0126,
+     "role": "underdog",
+     "spreadBucket": "0–3.5",
+     "pick": "Murray State"
+    },
+    {
+     "market": "total",
+     "side": "over",
+     "line": 162.5,
+     "price": -115,
+     "priceAssumed": false,
+     "modelProb": 0.5141,
+     "marketProb": 0.5108,
+     "edge": 0.0033,
+     "role": null,
+     "spreadBucket": "0–3.5",
+     "pick": "Over"
+    }
+   ],
+   "status": "open",
+   "result": null
+  },
+  "378692": {
+   "gameId": "378692",
+   "espnEventId": "401921691",
+   "day": "2026-11-20",
+   "date": "2026-11-21T02:30:00.000Z",
+   "home": "NC State",
+   "away": "Seton Hall",
+   "neutralSite": true,
+   "backfilled": false,
+   "capturedAt": "2026-11-20T19:15:56.156Z",
+   "line": {
+    "source": "pregame-scoreboard",
+    "capturedAt": "2026-11-20T19:15:56.156Z",
+    "book": "DraftKings",
+    "spread": -3.5,
+    "total": 140.5,
+    "homeML": -170,
+    "awayML": 142,
+    "homeSpreadOdds": -112,
+    "awaySpreadOdds": -108,
+    "overOdds": -110,
+    "underOdds": -110
+   },
+   "model": {
+    "homeWinProb": 0.6463,
+    "margin": 4.34,
+    "homePts": 73.2,
+    "awayPts": 68.9,
+    "sigma": 11.56,
+    "modelUpdatedAt": "2026-11-20T19:14:19.749Z"
+   },
+   "closing": null,
+   "bets": [
+    {
+     "market": "moneyline",
+     "side": "home",
+     "line": null,
+     "price": -170,
+     "priceAssumed": false,
+     "modelProb": 0.6463,
+     "marketProb": 0.6038,
+     "edge": 0.0425,
+     "role": "favorite",
+     "spreadBucket": "0–3.5",
+     "pick": "NC State"
+    },
+    {
+     "market": "spread",
+     "side": "home",
+     "line": -3.5,
+     "price": -112,
+     "priceAssumed": false,
+     "modelProb": 0.529,
+     "marketProb": 0.5043,
+     "edge": 0.0246,
+     "role": "favorite",
+     "spreadBucket": "0–3.5",
+     "pick": "NC State"
+    },
+    {
+     "market": "total",
+     "side": "over",
+     "line": 140.5,
+     "price": -110,
+     "priceAssumed": false,
+     "modelProb": 0.538,
+     "marketProb": 0.5,
+     "edge": 0.038,
+     "role": null,
+     "spreadBucket": "0–3.5",
+     "pick": "Over"
+    }
+   ],
+   "status": "open",
+   "result": null
   }
  },
  "skipped": {
@@ -19398,7 +19550,7 @@
    "away": "Mary Baldwin",
    "reason": "no-line",
    "espnEventId": "401912211",
-   "tries": 1
+   "tries": 2
   },
   "375029": {
    "day": "2026-11-16",
@@ -19566,7 +19718,7 @@
    "away": "North Park",
    "reason": "no-line",
    "espnEventId": "401926144",
-   "tries": 1
+   "tries": 2
   },
   "375143": {
    "day": "2026-11-19",
@@ -19574,6 +19726,22 @@
    "away": "Northwest Indian",
    "reason": "no-line",
    "espnEventId": "401925916",
+   "tries": 2
+  },
+  "375162": {
+   "day": "2026-11-20",
+   "home": "William & Mary",
+   "away": "Averett",
+   "reason": "no-line",
+   "espnEventId": "401918454",
+   "tries": 1
+  },
+  "375163": {
+   "day": "2026-11-20",
+   "home": "Maryland Eastern Shore",
+   "away": "Bloomfield",
+   "reason": "no-line",
+   "espnEventId": "401925841",
    "tries": 1
   },
   "378037": {
@@ -19678,7 +19846,7 @@
    "away": "Berea",
    "reason": "no-line",
    "espnEventId": "401928812",
-   "tries": 1
+   "tries": 2
   },
   "378068": {
    "day": "2026-11-19",
@@ -19686,7 +19854,7 @@
    "away": "Tusculum",
    "reason": "no-line",
    "espnEventId": "401929373",
-   "tries": 1
+   "tries": 2
   },
   "378069": {
    "day": "2026-11-19",
@@ -19694,7 +19862,7 @@
    "away": "Mayville State",
    "reason": "no-line",
    "espnEventId": "401929409",
-   "tries": 1
+   "tries": 2
   },
   "378070": {
    "day": "2026-11-19",
@@ -19702,7 +19870,7 @@
    "away": "Eureka",
    "reason": "no-line",
    "espnEventId": "401927375",
-   "tries": 1
+   "tries": 2
   },
   "378683": {
    "day": "2026-11-17",
@@ -19715,19 +19883,19 @@
  },
  "since": "2026-11-16",
  "stats": {
-  "gamesInWindow": 320,
-  "finals": 208,
-  "entries": 216,
-  "liveCaptured": 214,
+  "gamesInWindow": 322,
+  "finals": 210,
+  "entries": 218,
+  "liveCaptured": 216,
   "backfilled": 2,
   "settled": 167,
-  "open": 49,
+  "open": 51,
   "void": 0,
   "withClosing": 165,
-  "noLine": 41,
+  "noLine": 43,
   "unmatched": 0,
   "noPrediction": 0,
-  "awaitingLine": 63,
+  "awaitingLine": 61,
   "awaitingResult": 0
  },
  "summary": {
@@ -19737,7 +19905,7 @@
     "wins": 260,
     "losses": 171,
     "pushes": 0,
-    "open": 133,
+    "open": 139,
     "void": 0,
     "units": 26.848,
     "roi": 0.0623,
@@ -19764,7 +19932,7 @@
        "wins": 75,
        "losses": 28,
        "pushes": 0,
-       "open": 35,
+       "open": 37,
        "void": 0,
        "units": 2.341,
        "roi": 0.0227,
@@ -19788,7 +19956,7 @@
        "wins": 29,
        "losses": 15,
        "pushes": 0,
-       "open": 22,
+       "open": 23,
        "void": 0,
        "units": 6.78,
        "roi": 0.1541,
@@ -19860,7 +20028,7 @@
        "wins": 68,
        "losses": 20,
        "pushes": 0,
-       "open": 28,
+       "open": 30,
        "void": 0,
        "units": 1.401,
        "roi": 0.0159,
@@ -19908,7 +20076,7 @@
        "wins": 26,
        "losses": 17,
        "pushes": 0,
-       "open": 18,
+       "open": 20,
        "void": 0,
        "units": 4.004,
        "roi": 0.0931,
@@ -20013,7 +20181,7 @@
        "wins": 90,
        "losses": 74,
        "pushes": 0,
-       "open": 49,
+       "open": 51,
        "void": 0,
        "units": 7.499,
        "roi": 0.0457,
@@ -20037,7 +20205,7 @@
        "wins": 78,
        "losses": 68,
        "pushes": 0,
-       "open": 43,
+       "open": 44,
        "void": 0,
        "units": 2.887,
        "roi": 0.0198,
@@ -20109,7 +20277,7 @@
        "wins": 22,
        "losses": 18,
        "pushes": 0,
-       "open": 20,
+       "open": 21,
        "void": 0,
        "units": 1.742,
        "roi": 0.0435,
@@ -20133,7 +20301,7 @@
        "wins": 68,
        "losses": 56,
        "pushes": 0,
-       "open": 29,
+       "open": 30,
        "void": 0,
        "units": 5.758,
        "roi": 0.0464,
@@ -20157,7 +20325,7 @@
        "wins": 27,
        "losses": 19,
        "pushes": 0,
-       "open": 18,
+       "open": 20,
        "void": 0,
        "units": 5.383,
        "roi": 0.117,
@@ -20262,7 +20430,7 @@
        "wins": 95,
        "losses": 69,
        "pushes": 0,
-       "open": 49,
+       "open": 51,
        "void": 0,
        "units": 17.008,
        "roi": 0.1037,
@@ -20286,7 +20454,7 @@
        "wins": 79,
        "losses": 56,
        "pushes": 0,
-       "open": 44,
+       "open": 45,
        "void": 0,
        "units": 15.634,
        "roi": 0.1158,
@@ -20358,7 +20526,7 @@
        "wins": 58,
        "losses": 34,
        "pushes": 0,
-       "open": 38,
+       "open": 40,
        "void": 0,
        "units": 18.536,
        "roi": 0.2015,
@@ -20406,7 +20574,7 @@
        "wins": 30,
        "losses": 16,
        "pushes": 0,
-       "open": 18,
+       "open": 20,
        "void": 0,
        "units": 11.222,
        "roi": 0.244,
@@ -21170,5 +21338,5 @@
    }
   }
  },
- "updatedAt": "2026-11-20T08:32:07.861Z"
+ "updatedAt": "2026-11-20T19:15:56.156Z"
 }
